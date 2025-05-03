@@ -1,100 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora Evolución</title>
-  <style>
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    input { width: 100%; box-sizing: border-box; }
-    button { margin-top: 15px; padding: 10px 20px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Evolución</title>
 </head>
 <body>
-  <h2>Calculadora Evolución</h2>
-  <div id="status"></div>
-  <table id="data-table"></table>
-  <button onclick="guardarCambios()">Guardar Cambios</button>
+    <h1>Calculadora de Evolución</h1>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxtx9ptZ42Tutmr7tBEYjH9_vIuNTiddEASrjQAt6_8S5YLZG0TEK6YrNluivOT_QK9/exec"; // 🔁 Reemplaza esto con tu URL
+    <!-- Campos modificables de la hoja -->
+    <form id="inputForm">
+        <label for="B3">B3:</label><input type="text" id="B3" name="B3"><br>
+        <label for="C3">C3:</label><input type="text" id="C3" name="C3"><br>
+        <label for="D3">D3:</label><input type="text" id="D3" name="D3"><br>
+        <label for="E3">E3:</label><input type="text" id="E3" name="E3"><br>
+        <label for="F3">F3:</label><input type="text" id="F3" name="F3"><br>
+        <label for="G3">G3:</label><input type="text" id="G3" name="G3"><br>
+        <label for="H3">H3:</label><input type="text" id="H3" name="H3"><br>
+        <label for="I3">I3:</label><input type="text" id="I3" name="I3"><br>
+        <label for="J3">J3:</label><input type="text" id="J3" name="J3"><br>
+        <label for="L3">L3:</label><input type="text" id="L3" name="L3"><br>
 
-    let originalData = [];
-    let inputsMap = [];
+        <label for="A7">A7:</label><input type="text" id="A7" name="A7"><br>
+        <label for="B7">B7:</label><input type="text" id="B7" name="B7"><br>
+        <label for="C7">C7:</label><input type="text" id="C7" name="C7"><br>
+        <label for="D7">D7:</label><input type="text" id="D7" name="D7"><br>
+    </form>
 
-    // Leer datos desde la hoja
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        originalData = data;
-        const table = document.getElementById("data-table");
+    <!-- Sección para mostrar las tablas -->
+    <h2>Tablas de Resultados</h2>
+    <div id="table1"></div>
+    <div id="table2"></div>
+    <div id="table3"></div>
 
-        data.forEach((row, rowIndex) => {
-          const tr = document.createElement("tr");
-          inputsMap[rowIndex] = [];
-
-          row.forEach((cell, colIndex) => {
-            const td = document.createElement("td");
-
-            // Fila de encabezado
-            if (rowIndex === 0) {
-              td.innerHTML = `<strong>${cell}</strong>`;
-            }
-            // Hacer editables solo columna 2 y 3 (index 1 y 2)
-            else if (colIndex === 1 || colIndex === 2) {
-              const input = document.createElement("input");
-              input.value = cell;
-              td.appendChild(input);
-              inputsMap[rowIndex][colIndex] = input;
-            } else {
-              td.textContent = cell;
-            }
-
-            tr.appendChild(td);
-          });
-
-          table.appendChild(tr);
-        });
-      });
-
-    function guardarCambios() {
-      const cambios = [];
-
-      for (let row = 1; row < inputsMap.length; row++) {
-        for (let col = 0; col < inputsMap[row].length; col++) {
-          const input = inputsMap[row][col];
-          if (input) {
-            const nuevoValor = input.value;
-            const valorOriginal = originalData[row][col];
-            if (nuevoValor !== valorOriginal) {
-              cambios.push({ row: row + 1, col: col + 1, value: nuevoValor });
-            }
-          }
-        }
-      }
-
-      if (cambios.length === 0) {
-        document.getElementById("status").textContent = "No hay cambios para guardar.";
-        return;
-      }
-
-      fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cambios)
-      })
-      .then(res => res.json())
-      .then(result => {
-        if (result.status === "ok") {
-          document.getElementById("status").textContent = "Cambios guardados correctamente.";
-        } else {
-          document.getElementById("status").textContent = "Error al guardar cambios: " + result.message;
-        }
-      })
-      .catch(err => {
-        document.getElementById("status").textContent = "Error de red: " + err.message;
-      });
-    }
-  </script>
+    <script src="app.js"></script>
 </body>
 </html>

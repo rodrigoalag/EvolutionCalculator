@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Función para enviar los datos a Google Apps Script
     function sendDataToSheet(data) {
-        fetch('https://script.google.com/macros/s/AKfycbxT0-Vx8W1FuwqZOSfg-rTvnX5_bZL9-vfdAovH_bO21YvPkhP-kkd9STz6J2XX-_g8/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbxtx9ptZ42Tutmr7tBEYjH9_vIuNTiddEASrjQAt6_8S5YLZG0TEK6YrNluivOT_QK9/exec', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

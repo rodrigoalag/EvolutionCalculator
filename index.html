@@ -4,28 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Evolución</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .form-group {
+            margin: 10px 0;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        select, input[type="number"] {
+            padding: 5px;
+            margin: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Calculadora de Evolución</h1>
 
-    <!-- Campos modificables de la hoja -->
-    <form id="inputForm">
-        <label for="B3">B3:</label><input type="text" id="B3" name="B3"><br>
-        <label for="C3">C3:</label><input type="text" id="C3" name="C3"><br>
-        <label for="D3">D3:</label><input type="text" id="D3" name="D3"><br>
-        <label for="E3">E3:</label><input type="text" id="E3" name="E3"><br>
-        <label for="F3">F3:</label><input type="text" id="F3" name="F3"><br>
-        <label for="G3">G3:</label><input type="text" id="G3" name="G3"><br>
-        <label for="H3">H3:</label><input type="text" id="H3" name="H3"><br>
-        <label for="I3">I3:</label><input type="text" id="I3" name="I3"><br>
-        <label for="J3">J3:</label><input type="text" id="J3" name="J3"><br>
-        <label for="L3">L3:</label><input type="text" id="L3" name="L3"><br>
-
-        <label for="A7">A7:</label><input type="text" id="A7" name="A7"><br>
-        <label for="B7">B7:</label><input type="text" id="B7" name="B7"><br>
-        <label for="C7">C7:</label><input type="text" id="C7" name="C7"><br>
-        <label for="D7">D7:</label><input type="text" id="D7" name="D7"><br>
-    </form>
+    <div class="container">
+        <!-- Campos modificables de la hoja -->
+        <div class="form-group">
+            <label for="B3">B3:</label>
+            <input type="number" id="B3" name="B3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="C3">C3:</label>
+            <input type="number" id="C3" name="C3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="D3">D3:</label>
+            <input type="number" id="D3" name="D3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="E3">E3:</label>
+            <input type="number" id="E3" name="E3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="F3">F3:</label>
+            <input type="number" id="F3" name="F3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="G3">G3:</label>
+            <input type="number" id="G3" name="G3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="H3">H3:</label>
+            <input type="number" id="H3" name="H3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="I3">I3:</label>
+            <input type="number" id="I3" name="I3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="J3">J3:</label>
+            <input type="number" id="J3" name="J3" step="any">
+        </div>
+        <div class="form-group">
+            <label for="L3">L3:</label>
+            <input type="number" id="L3" name="L3" step="any">
+        </div>
+        
+        <!-- Campos para las filas A7, B7, C7, D7 -->
+        <div class="form-group">
+            <label for="A7">A7:</label>
+            <select id="A7">
+                <option value="Option1">Opción 1</option>
+                <option value="Option2">Opción 2</option>
+                <option value="Option3">Opción 3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="B7">B7:</label>
+            <select id="B7">
+                <option value="Option1">Opción 1</option>
+                <option value="Option2">Opción 2</option>
+                <option value="Option3">Opción 3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="C7">C7:</label>
+            <select id="C7">
+                <option value="Option1">Opción 1</option>
+                <option value="Option2">Opción 2</option>
+                <option value="Option3">Opción 3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="D7">D7:</label>
+            <select id="D7">
+                <option value="Option1">Opción 1</option>
+                <option value="Option2">Opción 2</option>
+                <option value="Option3">Opción 3</option>
+            </select>
+        </div>
+    </div>
 
     <!-- Sección para mostrar las tablas -->
     <h2>Tablas de Resultados</h2>

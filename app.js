@@ -27,16 +27,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Función para crear una tabla HTML desde un array
         function createTable(data) {
-            let tableHTML = '<table border="1"><tr>';
+            let tableHTML = '<table><tr>';
             // Crear encabezados a partir de la primera columna
-            for (let i = 1; i < data[0].length; i++) {  // Comienza en la columna 1 (salta la columna A)
-                tableHTML += `<th>${data[0][i]}</th>`; // Usa la primera fila para los encabezados
+            for (let i = 0; i < data[0].length; i++) {  
+                tableHTML += `<th>${data[0][i]}</th>`; 
             }
             tableHTML += '</tr>';
             // Mostrar las filas restantes
             for (let i = 1; i < data.length; i++) {
                 tableHTML += '<tr>';
-                for (let j = 1; j < data[i].length; j++) {  // Saltar la primera columna
+                for (let j = 0; j < data[i].length; j++) {  
                     tableHTML += `<td>${data[i][j]}</td>`;
                 }
                 tableHTML += '</tr>';

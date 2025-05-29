@@ -1,8 +1,8 @@
 const digimonReqDict = {
   "Botamon": { ID: 0, Tama: "V0", Nivel: 1, Peso: 4 },
   "Koromon": { ID: 1, Tama: "V0", Nivel: 2, Peso: 6 },
-  "Agumon": { ID: 2, Tama: "V0", Nivel: 2, Peso: 15, "Error Maximo": 6, EntrenamientoHecho: "Si", "Stat Superior": "Vel", "Stat Superior 2": "ATK" },
-  "Kokuwamon": { ID: 3, Tama: "V0", Nivel: 2, Peso: 20, EntrenamientoHecho: "No", "Stat Superior": "HP" }
+  "Agumon": { ID: 2, Tama: "V0", Nivel: 3, Peso: 15, "Error Maximo": 6, EntrenamientoHecho: "Si", "Stat Superior": "Vel", "Stat Superior 2": "ATK" },
+  "Kokuwamon": { ID: 3, Tama: "V0", Nivel: 3, Peso: 20, EntrenamientoHecho: "No", "Stat Superior": "HP" }
 };
 
 const digimonSelect = document.getElementById("digimonSelect");
@@ -11,7 +11,7 @@ const infoTama = document.getElementById("infoTama");
 const infoNivel = document.getElementById("infoNivel");
 const form = document.getElementById("evolutionForm");
 
-// Cargar opciones en el selector
+// Rellenar el select
 for (const name in digimonReqDict) {
   const option = document.createElement("option");
   option.value = name;
@@ -19,46 +19,53 @@ for (const name in digimonReqDict) {
   digimonSelect.appendChild(option);
 }
 
-// Función para manejar cambios en el selector
+// Evento al seleccionar un Digimon
 digimonSelect.addEventListener("change", function () {
-  const selected = digimonSelect.value;
-  const data = digimonReqDict[selected];
+  const selectedName = digimonSelect.value;
+  const selectedData = digimonReqDict[selectedName];
 
-  if (!data) return;
+  if (!selectedData) return;
 
-  // Mostrar datos automáticos
-  infoId.textContent = data.ID ?? "—";
-  infoTama.textContent = data.Tama ?? "—";
-  infoNivel.textContent = data.Nivel ?? "—";
+  // Mostrar info automática
+  infoId.textContent = selectedData.ID ?? "—";
+  infoTama.textContent = selectedData.Tama ?? "—";
+  infoNivel.textContent = selectedData.Nivel ?? "—";
 
-  // Calcular nivel siguiente
-  const nextLevel = (data.Nivel ?? 0) + 1;
+  // Calcular siguiente nivel
+  const currentLevel = parseInt(selectedData.Nivel);
+  const nextLevel = currentLevel + 1;
 
-  // Limpiar el formulario
+  // Limpiar formulario
   form.innerHTML = "";
 
-  // Buscar todos los Digimon del siguiente nivel
-  const nextDigimon = Object.entries(digimonReqDict)
-    .filter(([_, v]) => v.Nivel === nextLevel);
+  // Filtrar Digimon del siguiente nivel
+  const nextDigimons = Object.entries(digimonReqDict).filter(
+    ([_, data]) => parseInt(data.Nivel) === nextLevel
+  );
 
-  // Determinar todos los campos editables del siguiente nivel
+  if (nextDigimons.length === 0) {
+    form.innerHTML = "<p>No hay evoluciones conocidas para este nivel.</p>";
+    return;
+  }
+
+  // Determinar campos editables
   const camposEditables = new Set();
-  nextDigimon.forEach(([_, info]) => {
-    for (const key in info) {
-      if (!["ID", "Tama", "Nivel"].includes(key)) {
+  nextDigimons.forEach(([_, data]) => {
+    for (const key in data) {
+      if (!["ID", "Tama", "Nivel", "Stat Superior 2"].includes(key)) {
         camposEditables.add(key);
       }
     }
   });
 
-  // Crear campos editables
+  // Crear inputs
   camposEditables.forEach(field => {
     const label = document.createElement("label");
     label.textContent = field + ": ";
     const input = document.createElement("input");
+    input.type = "text";
     input.name = field;
     input.id = `field_${field}`;
-    input.type = "text";
     label.appendChild(input);
     form.appendChild(label);
     form.appendChild(document.createElement("br"));

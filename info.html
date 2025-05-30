@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculadora de Evolución Digimon</title>
+
+  <!-- ✅ Estilo de simple.css -->
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+
+</head>
+<body>
+  <h1>Calculadora de Evolución Digimon</h1>
+
+  <label for="digimonSelect">Selecciona un Digimon:</label>
+  <select id="digimonSelect"></select>
+
+  <h3>Datos del Digimon</h3>
+  <table id="autoFieldsTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tama</th>
+        <th>Nivel</th>
+        <th>Etapa</th> <!-- NUEVO -->
+        <th>Atributo</th> <!-- NUEVO -->
+        <th>Tipo</th> <!-- NUEVO -->
+      </tr>
+    </thead>
+    <tbody id="autoFields"></tbody>
+  </table>
+
+  <h3>Campos a completar</h3>
+  <table id="editableFieldsTable">
+    <thead>
+      <tr id="editableFieldsHeaders"></tr>
+    </thead>
+    <tbody>
+      <tr id="editableFields"></tr>
+    </tbody>
+  </table>
+
+  <button id="calcularBtn">Calcular evolución</button>
+
+  <div id="resultados"></div>
+  <p id="evolucionTexto" style="margin-top:15px; font-weight:bold;"></p>
+  <script src="digimonReqDict.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

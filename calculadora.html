@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es" id="htmlLang">
+<head>
+  <meta charset="UTF-8" />
+  <title id="pageTitle">Calculadora de Evolución Digimon</title>
+
+  <!-- ✅ Estilo de simple.css -->
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+  <style>
+	#languageSelector {
+	  float: none;              /* quitar float */
+	  display: inline-flex;     /* inline-flex para que no ocupe todo el ancho */
+	  justify-content: center;  /* centrar contenido interno */
+	  align-items: center;      /* centrar vertical */
+	  margin: 0 auto;           /* centrar el bloque */
+	  width: auto;              /* ancho automático, no 100% */
+	}
+
+    
+    nav a {
+      margin-right: 10px;
+    }
+    
+    /* Ajustar el ancho de las columnas de la tabla editable */
+    #editableFieldsTable {
+      table-layout: fixed;
+      width: 100%;
+    }
+    /* Ajustar anchos específicos para cada columna */
+    #editableFieldsTable th,
+    #editableFieldsTable td {
+      padding: 8px 6px;
+      text-align: center;
+      font-size: 16px; /* Aumentado de 13px a 16px */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    /* Permitir que los headers se ajusten en múltiples líneas */
+    #editableFieldsTable th {
+      line-height: 1.3;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+    /* Los anchos específicos se manejan dinámicamente con JavaScript */
+    /* Estilos base para campos numéricos y dropdowns */
+    #editableFieldsTable input[type="number"] {
+      text-align: center;
+    }
+    
+    #editableFieldsTable select {
+      text-align: left;
+    }
+    /* Ajustar inputs y selects para que se adapten al ancho de la celda */
+    #editableFieldsTable input,
+    #editableFieldsTable select {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      font-size: 15px; /* Aumentado de 14px a 15px */
+      padding: 4px 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    /* Campos específicos más pequeños */
+    #editableFieldsTable input[id*="Peso"],
+    #editableFieldsTable input[id*="Weight"],
+    #editableFieldsTable input[id*="Errores"],
+    #editableFieldsTable input[id*="Errors"],
+    #editableFieldsTable input[id*="WinRate"]
+	{
+      text-align: center;
+    }
+    
+    /* Separador visual entre campos numéricos y dropdowns */
+    #editableFieldsTable .dropdown-separator {
+      border-left: 2px solid #ddd;
+    }
+    /* Tabla de datos del digimon también más compacta */
+    #autoFieldsTable {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    #autoFieldsTable th,
+    #autoFieldsTable td {
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 16px; /* Mantener consistencia */
+    }
+    #autoFieldsTable th {
+      font-weight: bold;
+    }
+    /* Responsive: en pantallas pequeñas permitir scroll horizontal */
+    @media (max-width: 768px) {
+      #editableFieldsTable th,
+      #editableFieldsTable td {
+        font-size: 14px; /* Reducir solo en móvil */
+        padding: 6px 4px;
+      }
+      
+      #editableFieldsTable input,
+      #editableFieldsTable select {
+        font-size: 13px;
+      }
+      
+      .table-container {
+        overflow-x: auto;
+      }
+      
+      #languageSelector {
+        float: none;
+        display: block;
+        margin: 10px auto;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      #editableFieldsTable th,
+      #editableFieldsTable td {
+        font-size: 12px;
+        padding: 4px 2px;
+      }
+      
+      #editableFieldsTable input,
+      #editableFieldsTable select {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="mainTitle" data-translate="title">Calculadora de Evolución Digimon</h1>
+	<p id="mainSubtitle" data-translate="subtitle">Creado por Rodrigoalag</p>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Tamer_Assist_V0,7">WhiteRickle Website - Stat Distribution</a>
+    </nav>
+	  <select id="languageSelector">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+<section>
+	<p id="disclaimer">
+	  DISCLAIMER: Ciertos requisitos, específicamente los Bonus, pueden ser que no estén representados correctamente. Esto debido a que se hacen rebalanceos cada cierto tiempo como en el caso de VDramon que su requisito bonus pasó de 25 batallas a 70% de WR. Los requisitos se irán actualizando conforme veamos que lo que tenemos no concuerda o se diga en el changelog que proporcione Kuha. Si encuentran algo raro, por favor haganme ping en el discord de Net Driver a @rodrigoalag para revisar el caso.
+	</p>
+</section>
+
+  <label for="digimonSelect" data-translate="selectDigimon">Selecciona las opciones:</label>
+  <select id="digimonSelect"></select>
+  
+  <h3 id="digimonDataTitle" data-translate="digimonData">Datos del Digimon</h3>
+  <table id="autoFieldsTable">
+    <thead>
+      <tr>
+        <th data-translate="id">ID</th>
+        <th data-translate="tama">Tama</th>
+        <th data-translate="level">Nivel</th>
+        <th data-translate="stage">Etapa</th>
+        <th data-translate="attribute">Atributo</th>
+        <th data-translate="type">Tipo</th>
+      </tr>
+    </thead>
+    <tbody id="autoFields"></tbody>
+  </table>
+  
+  <h3 id="fieldsToCompleteTitle" data-translate="fieldsToComplete">Campos a completar</h3>
+  <div class="table-container">
+    <table id="editableFieldsTable">
+      <thead>
+        <tr id="editableFieldsHeaders"></tr>
+      </thead>
+      <tbody>
+        <tr id="editableFields"></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <button id="calcularBtn" data-translate="calculate">Calcular evolución</button>
+  <div id="resultados"></div>
+  <p id="evolucionTexto" style="margin-top:15px; font-weight:bold;"></p>
+  
+
+  <script>
+  
+    // ============================================
+    // SISTEMA DE TRADUCCIONES - IMPLEMENTACIÓN COMPLETA
+    // ============================================
+    
+    // Diccionario de traducciones
+    const translations = {
+      es: {
+        // Textos de interfaz
+        title: "Calculadora de Evolución Digimon",
+		subtitle: "Creado por Rodrigoalag",
+        selectDigimon: "Selecciona las opciones:",
+        digimonData: "Datos del Digimon",
+        fieldsToComplete: "Campos a completar",
+        calculate: "Calcular evolución",
+		disclaimer: "DISCLAIMER: Ciertos requisitos, específicamente los Bonus, pueden ser que no estén representados correctamente. Esto debido a que se hacen rebalanceos cada cierto tiempo como en el caso de VDramon que su requisito bonus pasó de 25 batallas a 70% de WR. Los requisitos se irán actualizando conforme veamos que lo que tenemos no concuerda o se diga en el changelog que proporcione Kuha. Si encuentran algo raro, por favor haganme ping en el discord de Net Driver a @rodrigoalag para revisar el caso.",
+        // Headers de tabla
+        id: "ID",
+        tama: "Tama",
+        level: "Nivel",
+        stage: "Etapa",
+        attribute: "Atributo",
+        type: "Tipo",
+        // Campos editables comunes
+        peso: "Peso",
+        errores: "Errores",
+        entrenamiento: "% Entrenamiento",
+        vinculo: "Vínculo",
+        batallas: "Batallas",
+        winRate: "WinRate",
+		entrenamientopregunta: '¿Realizó Entrenamiento?',
+		statsuperior: 'Stat Superior',
+		agumon06: '¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?',
+		driverequip: 'Driver Equipado',
+		victorias: 'Victorias',
+		bonus: 'Bonus',
+        // Opciones de selects
+        si: "Sí",
+        no: "No",
+		Balanceado: "Balanceado",
+		Ninguno: "Ninguno",
+		Compuesto: "Compuesto", 
+		Dinosaurio: "Dinosaurio",
+		Vacuna: "Vacuna",
+		Maquina: "Maquina",
+		Hielo: "Hielo",
+		Mutante: "Mutante",
+		caca: "5 Caca",
+		sardina: "5 Sardinas",
+		bellotad: "Bellota Dorada",
+		Chatarra: "Chatarra",
+		insekimid: "Starmon o ShootingStarmon Driver",
+		insekihigh: "SuperStarmon y DarkSuperStarmon Driver",
+		selecciona: "--Selecciona--",
+		puntaje: "Puntaje Total",
+		program: "Program",
+		xross: "Xross"
+      },
+      en: {
+        // Interface texts
+        title: "Digimon Evolution Calculator",
+		subtitle: "Created by Rodrigoalag",
+        selectDigimon: "Select your options:",
+        digimonData: "Digimon Data",
+        fieldsToComplete: "Fields to Complete",
+        calculate: "Calculate evolution",
+		disclaimer:"DISCLAIMER: Certain requirements, specifically Bonuses, may not be represented accurately. This is because rebalances happen from time to time, like VDramon case where the bonus went from 25 battles to 70% WR. Requirements will be updated as we notice discrepancies or when Kuha provides changelogs. If you notice anything weird, please tag me on Net Driver Discord with @rodrigoalag, and ill check the case.",
+        // Table headers
+        id: "ID",
+        tama: "Tama",
+        level: "Level",
+        stage: "Stage",
+        attribute: "Attribute",
+        type: "Type",
+        // Common editable fields
+        peso: "Weight",
+        errores: "Care Mistakes",
+        entrenamiento: "% Training",
+        vinculo: "Bond",
+        batallas: "Battles",
+        winRate: "WinRate",
+		entrenamientopregunta: 'Did you make a training?',
+		statsuperior: 'Superior Stat',
+		agumon06: 'Did you have 2 perfects on last two generations/Did you obtain Agumon 06?',
+		driverequip: 'Driver equipped',
+		victorias: 'Victories',
+		bonus: 'Bonus',
+        // Select options
+        si: "Yes",
+        no: "No",
+		Balanceado: "Balanced",
+		Ninguno: "None",
+		Compuesto: "Composite", 
+		Dinosaurio: "Dinosaur",
+		Vacuna: "Vaccine",
+		Maquina: "Machine",
+		Hielo: "Ice",
+		Mutante: "Mutant",
+		caca: "5 Poop",
+		sardina: "5 DigiSardine",
+		bellotad: "Golden Acorn",
+		Chatarra: "Metal Scrap",
+		insekimid: "Starmon or ShootingStarmon Driver",
+		insekihigh: "SuperStarmon and DarkSuperStarmon Driver",
+		selecciona: "--Select--",
+		puntaje: "Total Points",
+		program: "Program",
+		xross: "Xross"
+      }
+    };
+    
+    // Variable para idioma actual
+    let currentLanguage = 'es';
+    
+    // Función para traducir texto
+    function translate(key, lang = currentLanguage) {
+      return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+    }
+    
+    // Función para actualizar interfaz cuando cambie idioma
+    function updateInterfaceLanguage() {
+      // Actualizar título de página
+      document.title = translate('title');
+      document.getElementById('pageTitle').textContent = translate('title');
+	  // Actualizar párrafo de disclaimer
+	document.getElementById('disclaimer').textContent = translate('disclaimer');
+      
+      // Actualizar elementos con data-translate
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        element.textContent = translate(key);
+      });
+      
+      // Actualizar headers de tablas
+      updateTableHeaders();
+      
+      // Actualizar campos dinámicos si existen
+      updateEditableFieldsHeaders();
+      
+      // Traducir opciones de todos los selects
+      const selects = document.querySelectorAll('#editableFields select');
+      selects.forEach(select => translateSelectOptions(select));
+	  // ✅ NUEVO: Traducir contenido de tabla de datos del Digimon
+	  translateAutoFieldsContent();
+      
+      // Actualizar atributo lang del HTML
+      document.getElementById('htmlLang').setAttribute('lang', currentLanguage);
+    }
+    
+	function updateTableHeaders() {
+	  // Headers de la tabla de autoFields
+	  const autoHeaders = document.querySelectorAll('#autoFieldsTable th[data-translate]');
+	  autoHeaders.forEach(header => {
+		const key = header.getAttribute('data-translate');
+		header.textContent = translate(key);
+	  });
+
+	  // Headers de la tabla de resultados
+	  const resultadosHeaders = document.querySelectorAll('#resultados th[data-translate]');
+	  resultadosHeaders.forEach(header => {
+		const key = header.getAttribute('data-translate');
+		header.textContent = translate(key);
+	  });
+	}
+
+    
+ function updateEditableFieldsHeaders() {
+  const headersRow = document.getElementById('editableFieldsHeaders');
+  const resultados = document.getElementById('resultados');
+
+  // Mapeo de textos en español a claves de traducción
+  const headerMapping = {
+    'Peso': 'peso',
+    'Weight': 'peso',
+    'Errores': 'errores',
+    'Errors': 'errores',
+    '% Entrenamiento': 'entrenamiento',
+    '% Training': 'entrenamiento',
+    'Vínculo': 'vinculo',
+    'Vinculo': 'vinculo',
+    'Bond': 'vinculo',
+    'Batallas': 'batallas',
+    'Battles': 'batallas',
+    'WinRate': 'winRate',
+    '¿Realizó Entrenamiento?': 'entrenamientopregunta',
+    'Did you make a training?': 'entrenamientopregunta',
+    'Stat Superior': 'statsuperior',
+    'Superior Stat': 'statsuperior',
+    '¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?': 'agumon06',
+    'Did you have 2 perfects on last two generations/Did you obtain Agumon 06?': 'agumon06',
+    'Driver Equipado': 'driverequip',
+    'Driver equipped': 'driverequip',
+    'Victorias': 'victorias',
+    'Victories': 'victorias',
+	'Puntaje Total': 'puntaje',
+	'Total Poiunts': 'puntaje',
+	'Etapa': 'etapa',
+	'Stage': 'etapa',
+	'Digimon': 'digimon',
+	'Program': 'program',
+	'Bonus': 'bonus',
+	'Xross': 'xross'
+	
+  };
+
+  // Traducir encabezados
+  if (headersRow) {
+    Array.from(headersRow.children).forEach(header => {
+      const currentText = header.textContent.trim();
+      const translationKey = headerMapping[currentText];
+      if (translationKey) {
+        header.textContent = translate(translationKey);
+      }
+    });
+  }
+
+  // Traducir texto del elemento 'resultados' si es texto simple
+  if (resultados) {
+    const text = resultados.textContent.trim();
+    const translationKey = headerMapping[text];
+    if (translationKey) {
+      resultados.textContent = translate(translationKey);
+    }
+  }
+}
+
+
+    function translateSelectOptions(select) {
+      if (!select) return;
+      
+		Array.from(select.options).forEach(option => {
+		  const value = option.value.toLowerCase();
+		  const text = option.textContent.trim().toLowerCase();
+				
+        // Traducir opciones comunes
+        /*if (value === 'si' || value === 'sí' || value === 'yes') {
+          option.textContent = translate('si');
+        } else if (value === 'no') {
+          option.textContent = translate('no');
+        }*/
+		// Traducir opciones comunes
+		if (value === 'si' || value === 'sí' || value === 'yes') {
+		  option.textContent = translate('si');
+		} else if (value === 'no') {
+		  option.textContent = translate('no');
+		} else if (value === 'balanceado' || value === 'balanced') {
+		  option.textContent = translate('Balanceado');
+		} else if (value === 'ninguno' || value === 'none') {
+		  option.textContent = translate('Ninguno');
+		} else if (value === 'compuesto' || value === 'composite') {
+		  option.textContent = translate('Compuesto');
+		} else if (value === 'dinosaurio' || value === 'dinosaur') {
+		  option.textContent = translate('Dinosaurio');
+		} else if (value === 'vacuna' || value === 'vaccine') {
+		  option.textContent = translate('Vacuna');
+		} else if (value === 'maquina' || value === 'machine') {
+		  option.textContent = translate('Maquina');
+		} else if (value === 'hielo' || value === 'ice') {
+		  option.textContent = translate('Hielo');
+		} else if (value === 'mutante' || value === 'mutant') {
+		  option.textContent = translate('Mutante');
+		} else if (value === '5 caca' || value === '5 poop') {
+		  option.textContent = translate('caca');
+		} else if (value === '5 sardinas' || value === '5 digisardine') {
+		  option.textContent = translate('sardina');
+		} else if (value === 'bellota dorada' || value === 'golden acorn') {
+		  option.textContent = translate('bellotad');
+		} else if (value === 'chatarra' || value === 'metal scrap') {
+		  option.textContent = translate('Chatarra');
+		} else if (value === 'starmon o shootingstarmon driver' || value === 'starmon or shootingstarmon driver') {
+		  option.textContent = translate('insekimid');
+		} else if (value === 'superstarmon y darksuperstarmon driver' || value === 'superstarmon and darksuperstarmon driver') {
+		  option.textContent = translate('insekihigh');
+		} else if (text === '--selecciona--' || text === '--select--') {
+		  option.textContent = translate('selecciona');
+		}
+		
+        // Aquí puedes agregar más traducciones para otros valores específicos
+      });
+    }
+		function translateAutoFieldsContent() {
+		  const autoFields = document.getElementById('autoFields');
+		  if (!autoFields) return;
+
+		  const cells = autoFields.querySelectorAll('td');
+		  cells.forEach(cell => {
+			const rawText = cell.textContent.trim();
+			const key = Object.keys(translations[currentLanguage]).find(k => k.toLowerCase() === rawText.toLowerCase());
+
+			if (key) {
+			  cell.textContent = translate(key);
+			}
+		  });
+		}
+		function translateresultadosContent() {
+		  const resultados = document.getElementById('resultados');
+		  if (!resultados) return;
+
+		  const cells = resultados.querySelectorAll('th');
+		  cells.forEach(cell => {
+			const rawText = cell.textContent.trim();
+			const key = Object.keys(translations[currentLanguage]).find(k => k.toLowerCase() === rawText.toLowerCase());
+
+			if (key) {
+			  cell.textContent = translate(key);
+			}
+		  });
+		}
+    // Función para reorganizar campos con dropdowns a la derecha
+    function reorganizeFields() {
+      const originalScript = document.createElement('script');
+      originalScript.src = 'script.js';
+      originalScript.onload = function() {
+        // Sobrescribir la función que crea los campos editables
+        const originalPopulateEditableFields = window.populateEditableFields || function() {};
+        
+        window.populateEditableFields = function(digimon) {
+          if (originalPopulateEditableFields && typeof originalPopulateEditableFields === 'function') {
+            originalPopulateEditableFields(digimon);
+          }
+          
+          // Reorganizar después de crear los campos
+          setTimeout(() => {
+            reorganizeTableColumns();
+            updateEditableFieldsHeaders();
+            
+            // Traducir opciones de todos los selects
+            const selects = document.querySelectorAll('#editableFields select');
+            selects.forEach(select => translateSelectOptions(select));
+          }, 50);
+        };
+      };
+      document.head.appendChild(originalScript);
+    }
+    
+    function reorganizeTableColumns() {
+      const headersRow = document.getElementById('editableFieldsHeaders');
+      const fieldsRow = document.getElementById('editableFields');
+      
+      if (!headersRow || !fieldsRow) return;
+      
+      const headers = Array.from(headersRow.children);
+      const fields = Array.from(fieldsRow.children);
+      
+      // Crear mapa de campos por nombre del header
+      const fieldMap = {};
+      
+      for (let i = 0; i < headers.length; i++) {
+        const fieldCell = fields[i];
+        const headerCell = headers[i];
+        
+        if (fieldCell && headerCell) {
+          const headerText = headerCell.textContent.trim();
+          fieldMap[headerText] = { header: headerCell, field: fieldCell };
+        }
+      }
+      
+      // Orden específico requerido (en español, se traducirán después)
+      const specificOrder = [
+        'Peso', 
+        'Errores', 
+        '% Entrenamiento', 
+        'Vinculo',
+        'Vínculo', 
+        'Batallas', 
+        'WinRate'
+      ];
+      
+      // Separar campos ordenados y dropdowns restantes
+      const orderedFields = [];
+      const remainingDropdowns = [];
+      
+      // Primero, agregar campos en el orden específico
+      specificOrder.forEach(fieldName => {
+        if (fieldMap[fieldName]) {
+          orderedFields.push(fieldMap[fieldName]);
+          delete fieldMap[fieldName]; // Remover del mapa para no duplicar
+        }
+      });
+      
+      // Agregar dropdowns restantes (los que no están en el orden específico)
+      Object.values(fieldMap).forEach(item => {
+        const hasSelect = item.field.querySelector('select');
+        if (hasSelect) {
+          remainingDropdowns.push(item);
+        }
+      });
+      
+      // Limpiar las filas
+      headersRow.innerHTML = '';
+      fieldsRow.innerHTML = '';
+      
+      // Agregar campos en orden específico
+      orderedFields.forEach(item => {
+        headersRow.appendChild(item.header);
+        fieldsRow.appendChild(item.field);
+      });
+      
+      // Agregar dropdowns restantes
+      remainingDropdowns.forEach((item, index) => {
+        // Añadir clase separadora al primer dropdown
+        if (index === 0 && orderedFields.length > 0) {
+          item.header.classList.add('dropdown-separator');
+          item.field.classList.add('dropdown-separator');
+        }
+        headersRow.appendChild(item.header);
+        fieldsRow.appendChild(item.field);
+      });
+      
+      // Actualizar estilos CSS para la nueva organización
+      updateColumnStyles();
+    }
+    
+    function updateColumnStyles() {
+      // Contar cuántas columnas tenemos de cada tipo
+      const fieldsRow = document.getElementById('editableFields');
+      if (!fieldsRow) return;
+      
+      const totalCols = fieldsRow.children.length;
+      
+      // Los primeros 6 campos son siempre los específicos en orden
+      const specificFieldsCount = 6;
+      const dropdownStartIndex = specificFieldsCount + 1;
+      
+      // Crear estilos dinámicos
+      const style = document.createElement('style');
+      style.id = 'dynamic-column-styles';
+      
+      let css = '';
+      
+      // Estilos para campos específicos (más estrechos)
+      for (let i = 1; i <= Math.min(specificFieldsCount, totalCols); i++) {
+        css += `
+          #editableFieldsTable th:nth-child(${i}),
+          #editableFieldsTable td:nth-child(${i}) {
+            width: 95px;
+          }
+        `;
+      }
+      
+      // Estilos para dropdowns (más anchos)
+      for (let i = dropdownStartIndex; i <= totalCols; i++) {
+        css += `
+          #editableFieldsTable th:nth-child(${i}),
+          #editableFieldsTable td:nth-child(${i}) {
+            width: 130px;
+          }
+        `;
+      }
+      
+      style.textContent = css;
+      
+      // Remover estilo anterior si existe
+      const oldStyle = document.getElementById('dynamic-column-styles');
+      if (oldStyle) {
+        oldStyle.remove();
+      }
+      
+      document.head.appendChild(style);
+    }
+
+    // Event listener para cambio de idioma
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageSelector = document.getElementById('languageSelector');
+      
+      // Cargar idioma guardado o usar español por defecto
+      const savedLanguage = localStorage.getItem('digilang') || 'es';
+      currentLanguage = savedLanguage;
+      languageSelector.value = savedLanguage;
+      
+      // Aplicar idioma inicial
+      updateInterfaceLanguage();
+      
+      // Event listener para cambio de idioma
+      languageSelector.addEventListener('change', function() {
+        currentLanguage = this.value;
+        localStorage.setItem('digilang', currentLanguage);
+        updateInterfaceLanguage();
+      });
+      
+      // Inicializar reorganización de campos
+      reorganizeFields();
+    });
+  </script>
+  <script src="digimonReqDict.js"></script>
+
+</body>
+</html>

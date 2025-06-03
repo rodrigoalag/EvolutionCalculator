@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Información del Digimon</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+    .digimon-image {
+      flex: 1;
+      text-align: center;
+      min-width: 300px; /* Ancho mínimo para el contenedor */
+    }
+    
+    /* Estilos mejorados para las imágenes de Digimon */
+    .digimon-image img {
+      width: 280px !important;        /* Ancho fijo estándar */
+      height: 280px !important;       /* Alto fijo estándar */
+      object-fit: contain;            /* Mantiene proporción sin recortar */
+      border: 2px solid #transparent;         /* Borde decorativo */
+      border-radius: 12px;            /* Esquinas redondeadas */
+      background-color: #transparent;      /* Fondo sutil */
+      padding: 10px;                  /* Espaciado interno */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
+      transition: transform 0.2s ease; /* Animación suave */
+    }
+    
+    /* Efecto hover para las imágenes */
+    .digimon-image img:hover {
+      transform: scale(1.05);         /* Ligero zoom al pasar el mouse */
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    /* Placeholder mejorado */
+    #imagePlaceholder {
+      width: 280px;
+      height: 280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      color: #666;
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    .digimon-tables {
+      flex: 2;
+    }
+    table {
+      margin-bottom: 2rem;
+    }
+    select:disabled {
+      opacity: 0.5;
+    }
+    
+    #selectorContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 2rem auto;
+    }
+
+    .selectorItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Responsividad para pantallas pequeñas */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .digimon-image {
+        min-width: unset;
+        width: 100%;
+      }
+      
+      .digimon-image img {
+        width: 250px !important;
+        height: 250px !important;
+      }
+      
+      #imagePlaceholder {
+        width: 250px;
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="titleMain">Información del Digimon</h1>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Tamer_Assist_V0,7">WhiteRickle Website - Stat Distribution</a>
+    </nav>
+	  <label for="languageSelector">Idioma / Language:</label>
+	  <select id="languageSelector">
+		<option value="es">Español</option>
+		<option value="en">English</option>
+	  </select>
+
+  </header>
+
+  <main>
+  
+<section>
+  <div id="selectorContainer">
+    <div class="selectorItem">
+      <label for="selectTama">Seleccionar Tama:</label>
+      <select id="selectTama">
+        <option value="">-- Elige un Tama --</option>
+      </select>
+    </div>
+
+    <div class="selectorItem">
+      <label for="selectNivel">Seleccionar Nivel:</label>
+      <select id="selectNivel" disabled>
+        <option value="">-- Elige un Nivel --</option>
+      </select>
+    </div>
+
+    <div class="selectorItem">
+      <label for="selectDigimon">Seleccionar Digimon:</label>
+      <select id="selectDigimon" disabled>
+        <option value="">-- Elige un Digimon --</option>
+      </select>
+    </div>
+  </div>
+</section>
+<section id="disclaimerSection">
+	<p id="disclaimer">
+	  DISCLAIMER: Ciertos requisitos, específicamente los Bonus, pueden ser que no estén representados correctamente. Esto debido a que se hacen rebalanceos cada cierto tiempo como en el caso de VDramon que su requisito bonus pasó de 25 batallas a 70% de WR. Los requisitos se irán actualizando conforme veamos que lo que tenemos no concuerda o se diga en el changelog que proporcione Kuha. Si encuentran algo raro, por favor haganme ping en el discord de Net Driver a @rodrigoalag para revisar el caso.
+	</p>
+</section>
+
+    <section class="container">
+      <div class="digimon-image">
+        <div id="imagePlaceholder">
+          <p>Selecciona un Digimon para ver su imagen</p>
+        </div>
+        <img id="digimonImage" alt="Imagen del Digimon" style="display: none;" />
+      </div>
+
+      <div class="digimon-tables">
+        <h2 id="subtitle">Datos Generales del Digimon</h2>
+        <table id="tablaGenerales">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tama</th>
+              <th>Nivel</th>
+              <th>Atributo</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <h2 id="subtitle2">Datos de requisitos del Digimon</h2>
+        <table id="tablaRequisitos">
+          <thead>
+            <tr id="headersRequisitos"></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="DigimonReqDict.js"></script>
+<script>
+  const dict = digimonReqDict;
+  const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
+
+  const nivelAEtapa = {
+    1: "Baby I",
+    2: "Baby II", 
+    3: "Child",
+    4: "Adult",
+    5: "Perfect"
+  };
+
+  const selectTama = document.getElementById("selectTama");
+  const selectNivel = document.getElementById("selectNivel");
+  const selectDigimon = document.getElementById("selectDigimon");
+
+  const tablaGenerales = document.querySelector("#tablaGenerales tbody");
+  const tablaHeaders = document.getElementById("headersRequisitos");
+  const tablaRequisitos = document.querySelector("#tablaRequisitos tbody");
+  const digimonImage = document.getElementById("digimonImage");
+  const imagePlaceholder = document.getElementById("imagePlaceholder");
+
+  const uniqueValues = (array) => [...new Set(array)];
+	 const traducciones = {
+	  es: {
+	    titleMain: "Información del Digimon",
+		subtitle: "Datos Generales del Digimon",
+		subtitle2: "Datos de requisitos del Digimon", 
+		disclaimer: "DISCLAIMER: Ciertos requisitos, específicamente los Bonus, pueden ser que no estén representados correctamente. Esto debido a que se hacen rebalanceos cada cierto tiempo como en el caso de VDramon que su requisito bonus pasó de 25 batallas a 70% de WR. Los requisitos se irán actualizando conforme veamos que lo que tenemos no concuerda o se diga en el changelog que proporcione Kuha. Si encuentran algo raro, por favor haganme ping en el discord de Net Driver a @rodrigoalag para revisar el caso.",
+		Tama: "Tama",
+		Nivel: "Nivel",
+		Atributo: "Atributo",
+		Tipo: "Tipo",
+		ID: "ID",
+		"selectTama": "Seleccionar Tama",
+		"selectNivel": "Seleccionar Nivel",
+		"selectDigimon": "Seleccionar Digimon",
+		"selectTamaDefault": "-- Elige un Tama --",
+		"selectNivelDefault": "-- Elige un Nivel --",
+		"selectDigimonDefault": "-- Elige un Digimon --",
+	    "Bellota dorada": "Bellota dorada",	
+		"Ninguno":"Ninguno",
+		"Si":"Si",
+		"No":"No",
+		"Balanceado":"Balanceado",
+		"Compuesto": "Compuesto", 
+		"Dinosaurio": "Dinosaurio",
+		"Vacuna": "Vacuna",
+		"Maquina": "Maquina",
+		"Hielo": "Hielo",
+		"Mutante": "Mutante",
+		"5 Caca": "5 Caca",
+		"5 Sardinas": "5 Sardinas",
+		"Chatarra": "Chatarra",
+		"Starmon o ShootingStarmon Driver": "Starmon o ShootingStarmon Driver",
+		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon y DarkSuperStarmon Driver",
+		"Vel":"Vel",
+		    campos: {
+      "Peso": "Peso",
+      "Error Maximo": "Errores de Cuido",
+      "EntrenamientoHecho": "Entrenamiento Hecho",
+      "Stat Superior": "Stat Superior",
+      "Stat Superior 2": "Stat Superior 2",
+      "2Ciclos": "Haber Conseguido 2 perfects en las ultimas dos generaciones / Haber tenido Agumon 06 antes",
+      "Program": "Program",
+      "% de Entrenamiento": "% de Entrenamiento",
+      "Digimon Bonus": "Bonus Digimon",
+      "Vinculo Minimo alcanzado": "Vínculo Mínimo Alcanzado",
+      "Win Rate": "Win Rate",
+      "Combates Minimos": "Combates Mínimos",
+	  "% Entrenamiento": "% Entrenamiento Minimo",
+	  "Bonus Batallas": "Bonus Batallas",
+	  "Comida" : "Comida",
+	  "Victorias": "Victorias",
+	  "Driver Equipado": "Driver Equipado",
+
+    }
+	  },
+	  en: {
+	  	titleMain: "Digimon Information",
+		subtitle: "General Digimon Data",
+		subtitle2: "Digimon Requirements Data",
+		disclaimer:"DISCLAIMER: Certain requirements, specifically Bonuses, may not be represented accurately. This is because rebalances happen from time to time, like VDramon case where the bonus went from 25 battles to 70% WR. Requirements will be updated as we notice discrepancies or when Kuha provides changelogs. If you notice anything weird, please tag me on Net Driver Discord with @rodrigoalag, and ill check the case.",
+		Tama: "Tama",
+		Nivel: "Level",
+		Atributo: "Attribute",
+		Tipo: "Type",
+		ID: "ID",
+		"selectTama": "Select Tama",
+		"selectNivel": "Select Level",
+		"selectDigimon": "Select Digimon",
+		"selectTamaDefault": "-- Choose a Size --",
+		"selectNivelDefault": "-- Choose a Level --",
+		"selectDigimonDefault": "-- Choose a Digimon --",
+	    "Bellota dorada": "Golden Acorn",
+		"Ninguno":"None",
+		"Si":"Yes",
+		"No":"No",
+		"Balanceado":"Balanced",	
+		"Compuesto": "Composite", 
+		"Dinosaurio": "Dinosaur",
+		"Vacuna": "Vaccine",
+		"Maquina": "Machine",
+		"Hielo": "Ice",
+		"Mutante": "Mutant",		  
+		"5 Caca": "5 Poop",
+		"5 Sardinas": "5 DigiSardine",
+		"Chatarra": "Metal Scrap",
+		"Starmon o ShootingStarmon Driver": "Starmon or ShootingStarmon Driver",
+		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon and DarkSuperStarmon Driver",
+		"Vel":"SPD",
+		    campos: {
+      "Peso": "Weight",
+      "Error Maximo": "Care Mistakes",
+      "EntrenamientoHecho": "Training Done",
+      "Stat Superior": "Highest Stat",
+      "Stat Superior 2": "Highest Stat 2",
+      "2Ciclos": "Have obtain 2 perfects on last two generations / Have obtain Agumon 06",
+      "Program": "Program",
+      "% de Entrenamiento": "% Training",
+      "Digimon Bonus": "Digimon Bonus",
+      "Vinculo Minimo alcanzado": "Bond Reached",
+      "Combates Minimos": "Minimum Battles",
+	  "% Entrenamiento": "Training Cap %",
+	  "Bonus Batallas": "Battle Bonus",
+	  "Comida" : "Food",
+	  "Victorias": "Battle Victories",
+	  "Driver Equipado": "Driver Equipped",
+    }
+	  }
+	};
+
+let currentLanguage = "es";
+
+function t(key) {
+  return traducciones[currentLanguage][key] || key;
+}
+
+// Función para generar múltiples variaciones del nombre de archivo
+function generarVariacionesNombre(nombre) {
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+  
+  // Variaciones para probar
+  const variaciones = [
+    nombreLimpio,                    // darktyranomon (original)
+    nombreEspacios,                  // darktyranomon (sin espacios)
+    nombreGuiones,                   // dark-tyranomon (con guiones)
+    nombreOriginal.toLowerCase(),    // darktyranomon (preservando estructura)
+    nombreOriginal,                  // DarkTyranomon (con mayúsculas)
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase(), // sin símbolos especiales
+  ];
+  
+  // Eliminar duplicados
+  return [...new Set(variaciones)];
+}
+
+// Función para intentar cargar imagen con múltiples variaciones
+function cargarImagenConVariaciones(nombre, elementoImg, callback) {
+  const variaciones = generarVariacionesNombre(nombre);
+  
+  console.log(`Intentando cargar imagen para: ${nombre}`);
+  console.log(`Variaciones a probar:`, variaciones);
+  
+  let indiceActual = 0;
+  
+  const intentarSiguiente = () => {
+    if (indiceActual >= variaciones.length) {
+      console.log(`❌ No se encontró imagen para ${nombre}. Usando placeholder.`);
+      elementoImg.style.display = 'none';
+      imagePlaceholder.style.display = 'flex';
+      if (callback) callback(false);
+      return;
+    }
+    
+    const variacionActual = variaciones[indiceActual];
+    const ruta = `img/${variacionActual}.png`;
+    
+    console.log(`Probando: ${ruta}`);
+    
+    const imgTest = new Image();
+    imgTest.onload = function() {
+      console.log(`✅ Imagen encontrada: ${ruta}`);
+      elementoImg.src = ruta;
+      elementoImg.style.display = 'block';
+      imagePlaceholder.style.display = 'none';
+      if (callback) callback(true, ruta);
+    };
+    imgTest.onerror = function() {
+      console.log(`❌ No encontrada: ${ruta}`);
+      indiceActual++;
+      intentarSiguiente();
+    };
+    imgTest.src = ruta;
+  };
+  
+  intentarSiguiente();
+}
+
+  // Llenar Tama inicial
+  const allTamas = uniqueValues(Object.values(dict).map(d => d.Tama));
+  allTamas.forEach(tama => {
+    const opt = document.createElement("option");
+    opt.value = tama;
+    opt.textContent = tama;
+    selectTama.appendChild(opt);
+  });
+
+  selectTama.addEventListener("change", () => {
+    selectNivel.innerHTML = '<option value="">-- Elige un Nivel --</option>';
+    selectDigimon.innerHTML = '<option value="">-- Elige un Digimon --</option>';
+    selectNivel.disabled = true;
+    selectDigimon.disabled = true;
+    
+    // Mostrar placeholder cuando se cambie Tama
+    digimonImage.style.display = 'none';
+    imagePlaceholder.style.display = 'flex';
+
+    const tamSelected = selectTama.value;
+    if (!tamSelected) return;
+
+    const niveles = uniqueValues(Object.values(dict)
+      .filter(d => d.Tama === tamSelected)
+      .map(d => d.Nivel))
+      .sort((a, b) => a - b);
+
+    niveles.forEach(nivel => {
+      const opt = document.createElement("option");
+      opt.value = nivel;
+      opt.textContent = nivelAEtapa[nivel] || `Nivel ${nivel}`;
+      selectNivel.appendChild(opt);
+    });
+
+    selectNivel.disabled = false;
+  });
+
+  selectNivel.addEventListener("change", () => {
+    selectDigimon.innerHTML = '<option value="">-- Elige un Digimon --</option>';
+    selectDigimon.disabled = true;
+    
+    // Mostrar placeholder cuando se cambie Nivel
+    digimonImage.style.display = 'none';
+    imagePlaceholder.style.display = 'flex';
+
+    const tamSelected = selectTama.value;
+    const nivelSelected = parseInt(selectNivel.value);
+    if (!tamSelected || isNaN(nivelSelected)) return;
+
+    const digimons = Object.entries(dict)
+      .filter(([_, d]) => d.Tama === tamSelected && d.Nivel === nivelSelected);
+
+    digimons.forEach(([nombre]) => {
+      const opt = document.createElement("option");
+      opt.value = nombre;
+      opt.textContent = nombre;
+      selectDigimon.appendChild(opt);
+    });
+
+    selectDigimon.disabled = false;
+  });
+
+  // Event listener mejorado para selectDigimon
+  selectDigimon.addEventListener("change", () => {
+    const nombre = selectDigimon.value;
+    if (!nombre || !dict[nombre]) {
+      // Si no hay selección, mostrar placeholder y limpiar tablas
+      digimonImage.style.display = 'none';
+      imagePlaceholder.style.display = 'flex';
+      tablaGenerales.innerHTML = "";
+      tablaHeaders.innerHTML = "";
+      tablaRequisitos.innerHTML = "";
+      return;
+    }
+
+    const digimon = dict[nombre];
+
+    // Cargar imagen solo después de seleccionar Digimon
+    console.log(`Digimon seleccionado: ${nombre}`);
+    cargarImagenConVariaciones(nombre, digimonImage, (exito, rutaUsada) => {
+      if (exito) {
+        console.log(`Imagen cargada exitosamente desde: ${rutaUsada}`);
+      } else {
+        console.log(`No se pudo cargar imagen para: ${nombre}`);
+      }
+    });
+
+    // Actualizar tabla de datos generales
+    tablaGenerales.innerHTML = "";
+    const filaGen = document.createElement("tr");
+    generales.forEach(campo => {
+      const td = document.createElement("td");
+      let valorOriginal = digimon[campo] ?? "-";
+      if (campo === "Nivel") {
+        valorOriginal = nivelAEtapa[valorOriginal] || valorOriginal;
+      }
+      td.textContent = traducirValor(campo, valorOriginal);
+      filaGen.appendChild(td);
+    });
+    tablaGenerales.appendChild(filaGen);
+
+    // Actualizar tabla de requisitos
+    tablaHeaders.innerHTML = "";
+    tablaRequisitos.innerHTML = "";
+    const filaReq = document.createElement("tr");
+
+    Object.keys(digimon).forEach(campo => {
+      if (!generales.includes(campo)) {
+        const th = document.createElement("th");
+        th.setAttribute("data-orig", campo);
+        th.textContent = traducirCampo(campo);
+        tablaHeaders.appendChild(th);
+
+        const td = document.createElement("td");
+        const valorOriginal = digimon[campo];
+        td.textContent = traducirValor(campo, valorOriginal);
+        filaReq.appendChild(td);
+      }
+    });
+
+    tablaRequisitos.appendChild(filaReq);
+  });
+
+function actualizarTextosUI() {
+  // Actualizar títulos principales
+  document.getElementById("titleMain").textContent = t("titleMain");
+  document.getElementById("subtitle").textContent = t("subtitle");
+  document.getElementById("subtitle2").textContent = t("subtitle2");
+  document.getElementById("disclaimer").textContent = t("disclaimer");
+
+  // Actualizar labels de selectores
+  document.querySelector('label[for="selectTama"]').textContent = t("selectTama");
+  document.querySelector('label[for="selectNivel"]').textContent = t("selectNivel");
+  document.querySelector('label[for="selectDigimon"]').textContent = t("selectDigimon");
+
+  // Actualizar opciones por defecto de selectores
+  selectTama.options[0].textContent = t("selectTamaDefault");
+  selectNivel.options[0].textContent = t("selectNivelDefault");
+  selectDigimon.options[0].textContent = t("selectDigimonDefault");
+
+  // Actualiza encabezados de tabla generales
+  const headersGen = document.querySelectorAll("#tablaGenerales thead th");
+  const claves = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
+  headersGen.forEach((th, idx) => th.textContent = t(claves[idx]));
+
+  // Vuelve a traducir cabeceras de requisitos si existen
+  const headersReq = document.querySelectorAll("#headersRequisitos th");
+  headersReq.forEach(th => {
+    const original = th.getAttribute("data-orig") || th.textContent;
+    th.textContent = traducirCampo(original);
+    th.setAttribute("data-orig", original);
+  });
+
+  // Re-traducir los valores de tablaGenerales
+  const filaGen = tablaGenerales.querySelector("tr");
+  if (filaGen && selectDigimon.value && dict[selectDigimon.value]) {
+    const digimon = dict[selectDigimon.value];
+    [...filaGen.children].forEach((td, idx) => {
+      const campo = generales[idx];
+      td.textContent = traducirValor(campo, digimon[campo]);
+    });
+  }
+
+  // Re-traducir los valores de tablaRequisitos
+  const filaReq = tablaRequisitos.querySelector("tr");
+  if (filaReq && selectDigimon.value && dict[selectDigimon.value]) {
+    const digimon = dict[selectDigimon.value];
+    let i = 0;
+    Object.keys(digimon).forEach(campo => {
+      if (!generales.includes(campo)) {
+        const td = filaReq.children[i];
+        td.textContent = traducirValor(campo, digimon[campo]);
+        i++;
+      }
+    });
+  }
+}
+
+const languageSelector = document.getElementById("languageSelector");
+languageSelector.addEventListener("change", () => {
+  currentLanguage = languageSelector.value;
+  actualizarTextosUI();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  actualizarTextosUI();
+});
+
+function traducirCampo(campo) {
+  return traducciones[currentLanguage]?.campos?.[campo] || campo;
+}
+
+function traducirValor(campo, valor) {
+  // Traducción fija para "Nivel"
+  if (campo === "Nivel" && nivelAEtapa[valor]) {
+    return nivelAEtapa[valor];
+  }
+
+  const idioma = traducciones[currentLanguage] || {};
+  const traduccionesCampo = idioma.campos || {};
+
+  const valorLimpio = String(valor).trim();
+
+  if (traduccionesCampo[valorLimpio]) {
+    return traduccionesCampo[valorLimpio];
+  }
+
+  if (idioma[valorLimpio]) {
+    return idioma[valorLimpio];
+  }
+
+  return valor;
+}
+
+</script>
+
+</body>
+</html>

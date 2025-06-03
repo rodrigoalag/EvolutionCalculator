@@ -1,0 +1,152 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Main Hub - Digimon Tools</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+  <style>
+    nav a {
+      margin-right: 10px;
+    }
+
+    #languageSelector {
+      float: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      width: auto;
+    }
+
+    header {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    header * {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    h1, p, nav, select {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+  </style>
+</head>
+<body>
+ <header>
+    <h1 id="mainTitle">Main Hub de las diferentes herramientas para Net Driver</h1>
+    <p id="mainSubtitle">Creado por Rodrigoalag</p>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Tamer_Assist_V0,7">WhiteRickle Website - Stat Distribution</a>
+    </nav>
+    <select id="languageSelector">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+
+  <section id="explanation1"></section>
+  <section id="explanation2"></section>
+
+  <script>
+    const explanationHTML1 = {
+      es: `
+        <h2>Cómo usar Digimon Evo Calc</h2>
+        <p>En el tab de <strong>Digimon Evo Calc</strong> te vas a encontrar una calculadora para determinar cuáles son las evoluciones posibles de tu Digimon a la hora de evolucionar.</p>
+        <p>Como se muestra en la siguiente imagen de ejemplo, encontrarás una <strong>tabla dinámica</strong> con los resultados una vez aprietes el botón <strong>Calcular Evolución</strong>.</p>
+        <ul>
+          <li><code>1</code> si el requisito se cumple</li>
+          <li><code>0</code> si el requisito no se cumple, pero no es obligatorio</li>
+          <li><code>-10</code> si el requisito es obligatorio, y no se cumple</li>
+        </ul>
+        <h3>Puntaje Total</h3>
+        <ul>
+          <li>El puntaje debe ser <strong>mayor a 3</strong> para evolucionar.</li>
+          <li>En empate (3 puntos), se muestran <strong>todas las posibles evoluciones</strong>.</li>
+          <li>Con más de 3 puntos, se da <strong>prioridad</strong>.</li>
+          <li>Algunas tienen <strong>prioridad absoluta</strong>, como GeoGreymon.</li>
+        </ul>
+       <img src="img/ExplicaciontablaES.png" alt="Ejemplo de tabla de evolución" style="max-width: 100%; height: auto;">
+      `,
+      en: `
+        <h2>How to use Digimon Evo Calc</h2>
+        <p>In the <strong>Digimon Evo Calc</strong> tab, you will find a calculator to determine the possible evolutions of your Digimon.</p>
+        <p>As shown in the example image, you will see a <strong>dynamic table</strong> with results after clicking <strong>Calculate Evolution</strong>.</p>
+        <ul>
+          <li><code>1</code> if the requisite is met</li>
+          <li><code>0</code> if the requisite is not met but its not obligatory</li>
+          <li><code>-10</code> if it's an obligatory requisite</li>
+        </ul>
+        <h3>Total Score</h3>
+        <ul>
+          <li>You need a score <strong>greater than 3</strong> to evolve.</li>
+          <li>On tie (3 points), <strong>all evolutions</strong> are shown.</li>
+          <li>Higher score (e.g., <code>4</code>) gives <strong>priority</strong>.</li>
+          <li>Some evolutions have <strong>absolute priority</strong>, like GeoGreymon.</li>
+        </ul>
+        <img src="img/ExplicaciontablaEN.png" alt="Ejemplo de tabla de evolución" style="max-width: 100%; height: auto;">
+      `
+    };
+
+    const explanationHTML2 = {
+      es: `
+        <h2>Prioridades de Evolución</h2>
+        <p>En caso de empate entre 2 Digimon (ambos con 3 puntos), el juego considera lo siguiente:</p>
+        <ol>
+          <li><strong>Programs / Evoluciones exclusivas* / Condiciones como “ATK > al resto de stats”**</strong></li>
+          <li><strong>Digimon no registrados</strong> en el Digidex</li>
+          <li><strong>Mayor cantidad de stat base</strong></li>
+          <li><strong>Moneda al azar</strong></li>
+        </ol>
+        <p><strong>*</strong> Ej: Agumon (2006) → GeoGreymon o BlackVeedramon → BAeroVeedramon, con prioridad incluso con 4 puntos.</p>
+        <p><strong>**</strong> No comprobado aún – requiere más pruebas.</p>
+        <p>Si 3 o más Digimon empatan, el juego elige <strong>al azar</strong>.</p>
+      `,
+      en: `
+        <h2>Evolution Priorities</h2>
+        <p>If 2 Digimon are tied (both with 3 points), the game considers:</p>
+        <ol>
+          <li><strong>Programs / Exclusive evolutions* / Conditions like “ATK > other stats”**</strong></li>
+          <li><strong>Unregistered Digimon</strong> in the Digidex</li>
+          <li><strong>Higher base stat total</strong></li>
+          <li><strong>Coin flip</strong></li>
+        </ol>
+        <p><strong>*</strong> E.g., Agumon (2006) → GeoGreymon or BlackVeedramon → BAeroVeedramon, gets priority even if another has 4 points.</p>
+        <p><strong>**</strong> Not confirmed yet – needs more testing.</p>
+        <p>If 3 or more Digimon tie, the game chooses <strong>randomly</strong>.</p>
+      `
+    };
+
+    const langTexts = {
+      es: {
+        mainTitle: "Main Hub de las diferentes herramientas para Net Driver",
+        subtitle: "Creado por Rodrigoalag"
+      },
+      en: {
+        mainTitle: "Main hub for the different Net Driver tools",
+        subtitle: "Created by Rodrigoalag"
+      }
+    };
+
+    const selector = document.getElementById("languageSelector");
+    function updateLanguage(lang) {
+      const text = langTexts[lang];
+      document.getElementById("mainTitle").textContent = text.mainTitle;
+      document.getElementById("mainSubtitle").textContent = text.subtitle;
+      document.getElementById("explanation1").innerHTML = explanationHTML1[lang];
+      document.getElementById("explanation2").innerHTML = explanationHTML2[lang];
+      localStorage.setItem("digilang", lang);
+    }
+
+    const savedLang = localStorage.getItem("digilang") || "es";
+    selector.value = savedLang;
+    updateLanguage(savedLang);
+    selector.addEventListener("change", () => updateLanguage(selector.value));
+  </script>
+</body>
+</html>

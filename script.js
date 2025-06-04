@@ -867,24 +867,23 @@ console.log("Campos finales:", Array.from(fieldSet));
     return;
   }
 
- let tabla = "<table border='1' style='border-collapse: collapse; width: 100%; text-align: center;'><thead><tr>" +
-            "<th data-translate='digimon'>Digimon</th>" +
-            "<th data-translate='etapa'>Etapa</th>" +
-            "<th data-translate='puntaje'>Puntaje Total</th>";  fieldSet.forEach(field => {
+let tabla = "<table border='1' style='border-collapse: collapse; width: 100%; text-align: center;'><thead><tr>" +
+            `<th data-translate='digimon'>${translate('digimon')}</th>` +
+            `<th data-translate='etapa'>${translate('etapa')}</th>` +
+            `<th data-translate='puntaje'>${translate('puntaje')}</th>`;
+
+fieldSet.forEach(field => {
     const header = field === "Error Maximo" ? "Errores" :
       field === "EntrenamientoHecho" ? "¿Realizó Entrenamiento?" : 
-	  field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
-	  field === "Combates Minimos" ? "Batallas":
-	  field === "Vinculo Minimo alcanzado"?"Vinculo":
+      field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
+      field === "Combates Minimos" ? "Batallas":
+      field === "Vinculo Minimo alcanzado"?"Vinculo":
       field;
- //   tabla += `<th>${header}</th>`;
-	//tabla += `<th data-field-key="${header}">${header}</th>`;
-	const translateKey = headerMappingJS[header] || header.toLowerCase();
-	const translatedHeader = translate(translateKey);
-	tabla += `<th data-translate="${translateKey}">${translatedHeader}</th>`;
-
-
-  });
+    
+    const translateKey = headerMappingJS[header] || header.toLowerCase();
+    const translatedHeader = translate(translateKey);
+    tabla += `<th data-translate="${translateKey}">${translatedHeader}</th>`;
+});
   tabla += "</tr></thead><tbody>";
 
   let puntajes = [];

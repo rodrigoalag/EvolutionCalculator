@@ -195,7 +195,7 @@
       es: {
         // Textos de interfaz
         title: "Calculadora de Evolución Digimon",
-		subtitle: "Creado por Rodrigoalag, basdao en la informacion dada por JorgeTitor, Ramon y otros usuarios. Imagenes de Artes hechas/recortadas por Panoli",
+		subtitle: "Creado por Rodrigoalag",
         selectDigimon: "Selecciona las opciones:",
         digimonData: "Datos del Digimon",
         fieldsToComplete: "Campos a completar",
@@ -236,17 +236,20 @@
 		sardina: "5 Sardinas",
 		bellotad: "Bellota Dorada",
 		Chatarra: "Chatarra",
-		insekimid: "Starmon o ShootingStarmon Driver",
+		insekilow: "Starmon o ShootingStarmon Driver",
+		insekimid: "superstarmon y darksuperstarmon driver",
 		insekihigh: "SuperStarmon y DarkSuperStarmon Driver",
 		selecciona: "--Selecciona--",
 		puntaje: "Puntaje Total",
 		program: "Program",
-		xross: "Xross"
+		xross: "Xross",
+		etapa: "Etapa",
+		digimon: "Digimon"
       },
       en: {
         // Interface texts
         title: "Digimon Evolution Calculator",
-		subtitle:  "Created by Rodrigoalag, based on JorgeTitor, Ramon, and other users information. Art images done by Panoli.",
+		subtitle: "Created by Rodrigoalag",
         selectDigimon: "Select your options:",
         digimonData: "Digimon Data",
         fieldsToComplete: "Fields to Complete",
@@ -287,12 +290,15 @@
 		sardina: "5 DigiSardine",
 		bellotad: "Golden Acorn",
 		Chatarra: "Metal Scrap",
-		insekimid: "Starmon or ShootingStarmon Driver",
+		insekilow: "Starmon or ShootingStarmon Driver",
+		insekimid: "superstarmon or darksuperstarmon driver",
 		insekihigh: "SuperStarmon and DarkSuperStarmon Driver",
 		selecciona: "--Select--",
 		puntaje: "Total Points",
 		program: "Program",
-		xross: "Xross"
+		xross: "Xross",
+		etapa: "Stage",
+		digimon: "Digimon"
       }
     };
     
@@ -455,7 +461,9 @@
 		} else if (value === 'chatarra' || value === 'metal scrap') {
 		  option.textContent = translate('Chatarra');
 		} else if (value === 'starmon o shootingstarmon driver' || value === 'starmon or shootingstarmon driver') {
-		  option.textContent = translate('insekimid');
+		  option.textContent = translate('insekilow');
+		} else if (value === 'superstarmon o darksuperstarmon driver' || value === 'superstarmon or darksuperstarmon driver') {
+		  option.textContent = translate('insekimid');		  
 		} else if (value === 'superstarmon y darksuperstarmon driver' || value === 'superstarmon and darksuperstarmon driver') {
 		  option.textContent = translate('insekihigh');
 		} else if (text === '--selecciona--' || text === '--select--') {

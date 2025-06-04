@@ -120,7 +120,7 @@ const digimonReqDict = {
   },  
 	"Mamemon": {
 	"ID": 24, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
-	"Peso": 5, "Error Maximo": 6, "% Entrenamiento": 50, "WinRate": 70, "Combates Minimos": 25
+	"Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 70, "Combates Minimos": 25, "Bonus Errores": 5
   },
     "MetalGreymon Alterous": {
 	"ID": 26, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
@@ -133,7 +133,7 @@ const digimonReqDict = {
   },
     "Triceramon": {
 	"ID": 37, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
-    "Peso": 50, "Error Maximo": 3, "% Entrenamiento": 50, "Digimon Bonus": "Tyranomon", "WinRate": 70, "Combates Minimos": 25
+    "Peso": 50, "Error Maximo": 2, "% Entrenamiento": 50, "Digimon Bonus": "Tyranomon", "WinRate": 70, "Combates Minimos": 25
   },
     "BigMamemon": {
 	"ID": 38, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
@@ -154,7 +154,7 @@ const digimonReqDict = {
   },
     "Megadramon": {
 	"ID": 18, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
-    "Peso": 55, "Error Maximo": "1-2", "% Entrenamiento": 60, "Bonus Batallas": 30, "WinRate": 70, "Combates Minimos": 25
+    "Peso": 55, "Error Maximo": "1-2", "% Entrenamiento": 75, "Bonus Batallas": 30, "WinRate": 70, "Combates Minimos": 25
 	},
     "Gigadramon": {
 	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",

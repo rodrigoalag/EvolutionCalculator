@@ -6,101 +6,329 @@
   <title>Información del Digimon</title>
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
   <style>
-    .container {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 2rem;
-    }
-    .digimon-image {
-      flex: 1;
-      text-align: center;
-      min-width: 300px; /* Ancho mínimo para el contenedor */
-    }
-    
-    /* Estilos mejorados para las imágenes de Digimon */
-    .digimon-image img {
-      width: 280px !important;        /* Ancho fijo estándar */
-      height: 280px !important;       /* Alto fijo estándar */
-      object-fit: contain;            /* Mantiene proporción sin recortar */
-      border: 2px solid #transparent;         /* Borde decorativo */
-      border-radius: 12px;            /* Esquinas redondeadas */
-      background-color: #transparent;      /* Fondo sutil */
-      padding: 10px;                  /* Espaciado interno */
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
-      transition: transform 0.2s ease; /* Animación suave */
-    }
-    
-    /* Efecto hover para las imágenes */
-    .digimon-image img:hover {
-      transform: scale(1.05);         /* Ligero zoom al pasar el mouse */
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-    
-    /* Placeholder mejorado */
-    #imagePlaceholder {
-      width: 280px;
-      height: 280px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-      border: 2px dashed #ccc;
-      border-radius: 12px;
-      color: #666;
-      font-weight: 500;
-      text-align: center;
-    }
-    
-    .digimon-tables {
-      flex: 2;
-    }
-    table {
-      margin-bottom: 2rem;
-    }
-    select:disabled {
-      opacity: 0.5;
-    }
-    
-    #selectorContainer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-      margin: 2rem auto;
-    }
+/* Estilos base */
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-    .selectorItem {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+.digimon-image {
+  flex: 1;
+  text-align: center;
+  min-width: 300px;
+}
 
-    /* Responsividad para pantallas pequeñas */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .digimon-image {
-        min-width: unset;
-        width: 100%;
-      }
-      
-      .digimon-image img {
-        width: 250px !important;
-        height: 250px !important;
-      }
-      
-      #imagePlaceholder {
-        width: 250px;
-        height: 250px;
-      }
-    }
+/* Estilos mejorados para las imágenes de Digimon */
+.digimon-image img {
+  width: 280px !important;
+  height: 280px !important;
+  object-fit: contain;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background-color: transparent;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Efecto hover para las imágenes */
+.digimon-image img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Placeholder mejorado */
+#imagePlaceholder {
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  color: #666;
+  font-weight: 500;
+  text-align: center;
+  max-width: 100%;
+}
+
+.digimon-tables {
+  flex: 2;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+/* ESTILOS DE TABLA MEJORADOS */
+table {
+  margin-bottom: 2rem;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* Cambiado de fixed a auto */
+}
+
+table th,
+table td {
+  padding: 0.4rem;
+  text-align: center;
+  border: 1px solid #ddd;
+  word-wrap: break-word;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  white-space: normal;
+  line-height: 1.3;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+table th {
+  font-weight: bold;
+}
+
+select:disabled {
+  opacity: 0.5;
+}
+
+#selectorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 2rem auto;
+}
+
+.selectorItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Wrapper para scroll horizontal de tablas */
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 1rem;
+  -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+}
+
+.table-wrapper table {
+  margin-bottom: 0;
+  min-width: 400px; /* Aumentado para mejor legibilidad */
+  width: 100%;
+}
+
+/* Responsividad para tablets */
+@media (max-width: 1024px) {
+  .container {
+    gap: 1.5rem;
+  }
+  
+  .digimon-image {
+    min-width: 250px;
+  }
+  
+  .digimon-image img {
+    width: 240px !important;
+    height: 240px !important;
+  }
+  
+  #imagePlaceholder {
+    width: 240px;
+    height: 240px;
+  }
+  
+  table {
+    font-size: 0.9rem;
+  }
+  
+  table th,
+  table td {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .digimon-image {
+    min-width: unset;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .digimon-image img {
+    width: 220px !important;
+    height: 220px !important;
+  }
+  
+  #imagePlaceholder {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .digimon-tables {
+    width: 100%;
+    overflow-x: visible; /* Permitir que el wrapper maneje el scroll */
+  }
+  
+  table {
+    font-size: 0.8rem;
+  }
+  
+  table th,
+  table td {
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+  
+  /* Hacer que las tablas sean más compactas */
+  .table-wrapper table {
+    min-width: 350px; /* Balance entre compacto y legible */
+  }
+  
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  nav a {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsividad para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  #selectorContainer {
+    padding: 0 0.5rem;
+  }
+  
+  .digimon-image img {
+    width: 180px !important;
+    height: 180px !important;
+  }
+  
+  #imagePlaceholder {
+    width: 180px;
+    height: 180px;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+  
+  table {
+    font-size: 0.75rem;
+  }
+  
+  table th,
+  table td {
+    padding: 0.2rem;
+    font-size: 0.7rem;
+    line-height: 1.1;
+  }
+  
+  /* Tabla compacta pero legible para móviles pequeños */
+  .table-wrapper table {
+    min-width: 320px;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+  }
+  
+  #disclaimer {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+  }
+}
+
+/* NUEVOS ESTILOS PARA TEXTO LARGO EN CELDAS */
+@media (max-width: 600px) {
+  /* Para textos largos como "Errores de Cuidado" y "Entrenamiento Mínimo" */
+  table th,
+  table td {
+    font-size: 0.7rem;
+    line-height: 1.2;
+    padding: 0.2rem;
+    max-width: 80px; /* Más espacio para legibilidad */
+  }
+  
+  /* Permitir que el texto se ajuste en múltiples líneas */
+  table th {
+    white-space: normal;
+    word-break: break-word;
+  }
+  
+  table td {
+    white-space: normal;
+    word-break: break-word;
+  }
+  
+  .table-wrapper table {
+    min-width: 300px; /* Balance entre compacto y scroll */
+  }
+}
+
+/* Mejoras generales para mejor UX móvil */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+main {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Asegurar que las tablas no se desborden */
+.digimon-tables {
+  overflow: hidden;
+}
+
+/* Indicador visual de scroll horizontal */
+.table-wrapper::after {
+  content: "← Desliza para ver más →";
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  color: #999;
+  padding: 0.5rem;
+}
+
+@media (min-width: 769px) {
+  .table-wrapper::after {
+    display: none;
+  }
+}
   </style>
 </head>
+<script src="digimonReqDict.js"></script>
 <body>
   <header>
     <h1 id="titleMain">Información del Digimon</h1>
@@ -184,7 +412,6 @@
       </div>
     </section>
   </main>
-<script src="digimonReqDict.js"></script>
 <script>
   const dict = digimonReqDict;
   const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
@@ -250,9 +477,9 @@
       "Stat Superior 2": "Stat Superior 2",
       "2Ciclos": "Haber Conseguido 2 perfects en las ultimas dos generaciones / Haber tenido Agumon 06 antes",
       "Program": "Program",
-      "% de Entrenamiento": "% de Entrenamiento",
+      "% de Entrenamiento": "% Entrenamiento",
       "Digimon Bonus": "Bonus Digimon",
-      "Vinculo Minimo alcanzado": "Vínculo Mínimo Alcanzado",
+      "Vinculo Minimo alcanzado": "Vínculo Alcanzado",
       "Win Rate": "Win Rate",
       "Combates Minimos": "Combates Mínimos",
 	  "% Entrenamiento": "% Entrenamiento Minimo",

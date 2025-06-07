@@ -1639,7 +1639,7 @@ if (nextLevel === 6) {
   // Filtrar Digimon del nivel 6 con puntaje >= 3
   const digimonNivel6 = puntajes.filter(d => {
     const req = digimonReqDict[d.name];
-    return req?.Nivel === nextLevel && d.puntaje >= 3;
+    return req?.Nivel === nextLevel && d.puntaje >= 2;
   });
 
   console.log("🔍 Digimon válidos Nivel 6 (puntaje >= 3):", digimonNivel6.map(d => `${d.name} (${d.puntaje})`));

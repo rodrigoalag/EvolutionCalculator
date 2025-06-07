@@ -29,7 +29,8 @@
 	'Digimon': 'digimon',
 	'Program': 'program',
 	'Bonus': 'bonus',
-	'Xross': 'xross',
+	'Xross o Install': 'xross',
+	'Xross or Install': 'xross',
 	'Comida':'comida',
 	'Food':'comida'
 	

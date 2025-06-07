@@ -388,6 +388,58 @@ translateAutoFieldsContent();
 	  
 	  console.log("Lista después de filtrar por Tama:", nextDigimons.map(([name]) => name));
 	}	
+	// Buscar si el digimon actual tiene excepciones absolutas
+	let tieneExcepcionAbsoluta = false;
+	let digimonExcepcion = null;
+
+	for (const [resultado, permitido] of Object.entries(bloqueosexcepciones)) {
+	  if (permitido.toLowerCase().trim() === selected.toLowerCase().trim()) {
+		tieneExcepcionAbsoluta = true;
+		digimonExcepcion = resultado;
+		break;
+	  }
+	}
+	if (tieneExcepcionAbsoluta) {
+	  console.log(`EXCEPCIÓN ABSOLUTA: ${selected} solo puede evolucionar a ${digimonExcepcion}`);
+	  
+	  // Filtrar para mostrar ÚNICAMENTE el digimon de excepción
+	  nextDigimons = nextDigimons.filter(([name, _]) => {
+		const nameNormalizado = name.toLowerCase().trim();
+		const excepcionNormalizada = digimonExcepcion.toLowerCase().trim();
+		return nameNormalizado === excepcionNormalizada;
+	  });
+	  
+	  console.log("Lista después de aplicar excepción absoluta:", nextDigimons.map(([name]) => name));
+	} else {
+	  // Si no hay excepción absoluta, aplicar lógica normal de bloqueos
+	  console.log(`No hay excepciones absolutas para ${selected}, aplicando bloqueos normales`);
+	  nextDigimons = nextDigimons.filter(([name, _]) => {
+		// Si el digimon resultado está en la lista de bloqueos
+		if (bloqueosEvolucion.hasOwnProperty(name)) {
+		  const permitidos = bloqueosEvolucion[name] || [];
+		  
+		  // Normalizar nombres para comparación
+		  const permitidosNormalizados = permitidos.map(perm => perm.toLowerCase().trim());
+		  const selectedNormalizado = selected.toLowerCase().trim();
+		  
+		  // Si el digimon actual NO está en la lista de permitidos, se bloquea
+		  if (!permitidosNormalizados.includes(selectedNormalizado)) {
+			console.log(`Bloqueando ${name} porque ${selected} no está en su lista de permitidos: [${permitidos.join(", ")}]`);
+			return false;
+		  } else {
+			console.log(`Permitiendo ${name} porque ${selected} SÍ está en su lista de permitidos`);
+		  }
+		}
+		
+		return true; // Mantener si no está en bloqueos o si está permitido
+	  });
+	  
+	  console.log("Lista después del filtro de bloqueos:", nextDigimons.map(([name]) => name));
+	}
+
+
+
+
 		
 	// Si el seleccionado tiene side evolutions definidas, las añadimos	
 	console.log(`Digimon: ${selected}`);
@@ -876,7 +928,6 @@ for (const [resultado, permitido] of Object.entries(bloqueosexcepciones)) {
     break;
   }
 }
-
 if (tieneExcepcionAbsoluta) {
   console.log(`EXCEPCIÓN ABSOLUTA: ${selected} solo puede evolucionar a ${digimonExcepcion}`);
   
@@ -888,7 +939,32 @@ if (tieneExcepcionAbsoluta) {
   });
   
   console.log("Lista después de aplicar excepción absoluta:", nextDigimons.map(([name]) => name));
-} 
+} else {
+  // Si no hay excepción absoluta, aplicar lógica normal de bloqueos
+  console.log(`No hay excepciones absolutas para ${selected}, aplicando bloqueos normales`);
+  nextDigimons = nextDigimons.filter(([name, _]) => {
+    // Si el digimon resultado está en la lista de bloqueos
+    if (bloqueosEvolucion.hasOwnProperty(name)) {
+      const permitidos = bloqueosEvolucion[name] || [];
+      
+      // Normalizar nombres para comparación
+      const permitidosNormalizados = permitidos.map(perm => perm.toLowerCase().trim());
+      const selectedNormalizado = selected.toLowerCase().trim();
+      
+      // Si el digimon actual NO está en la lista de permitidos, se bloquea
+      if (!permitidosNormalizados.includes(selectedNormalizado)) {
+        console.log(`Bloqueando ${name} porque ${selected} no está en su lista de permitidos: [${permitidos.join(", ")}]`);
+        return false;
+      } else {
+        console.log(`Permitiendo ${name} porque ${selected} SÍ está en su lista de permitidos`);
+      }
+    }
+    
+    return true; // Mantener si no está en bloqueos o si está permitido
+  });
+  
+  console.log("Lista después del filtro de bloqueos:", nextDigimons.map(([name]) => name));
+}
 
 // CASO 1: Filtrado por Tama
 if (!tieneExcepcionAbsoluta && tamaElegido !== "Todos") {
@@ -918,7 +994,7 @@ if (!tieneExcepcionAbsoluta && tamaElegido !== "Todos") {
 }
 
 // CASO 2: Cross Tama Evolution
-else if (!tieneExcepcionAbsoluta) {
+if (!tieneExcepcionAbsoluta) {
   console.log(`Verificando Cross Tama Evolution para: ${selected}`);
   
   // Buscar si el digimon actual puede hacer cross tama evolution
@@ -965,35 +1041,6 @@ else if (!tieneExcepcionAbsoluta) {
 }
 
 
-
-
-else {
-  // Si no hay excepción absoluta, aplicar lógica normal de bloqueos
-  console.log(`No hay excepciones absolutas para ${selected}, aplicando bloqueos normales`);
-  
-  nextDigimons = nextDigimons.filter(([name, _]) => {
-    // Si el digimon resultado está en la lista de bloqueos
-    if (bloqueosEvolucion.hasOwnProperty(name)) {
-      const permitidos = bloqueosEvolucion[name] || [];
-      
-      // Normalizar nombres para comparación
-      const permitidosNormalizados = permitidos.map(perm => perm.toLowerCase().trim());
-      const selectedNormalizado = selected.toLowerCase().trim();
-      
-      // Si el digimon actual NO está en la lista de permitidos, se bloquea
-      if (!permitidosNormalizados.includes(selectedNormalizado)) {
-        console.log(`Bloqueando ${name} porque ${selected} no está en su lista de permitidos: [${permitidos.join(", ")}]`);
-        return false;
-      } else {
-        console.log(`Permitiendo ${name} porque ${selected} SÍ está en su lista de permitidos`);
-      }
-    }
-    
-    return true; // Mantener si no está en bloqueos o si está permitido
-  });
-  
-  console.log("Lista después del filtro de bloqueos:", nextDigimons.map(([name]) => name));
-}
 console.log("Lista después del filtro de bloqueos:", nextDigimons.map(([name]) => name));
 fieldSet = new Set();
 let hayBonus = false;

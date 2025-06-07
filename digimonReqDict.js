@@ -123,7 +123,7 @@ const digimonReqDict = {
   },
     "Andromon": {
 	"ID": 13, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
-    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 70, "Combates Minimos": 25
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
   },
     "Mametyramon": {
 	"ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",

@@ -519,6 +519,7 @@ fieldSet.forEach(field => {
                 "3 Mamemon Driver",
                 "4 Pickmon Driver",
                 "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
+				"5 PlatinumNumemon Driver",
                 "Ninguno"
             ];
             console.log("opciones 2 de asignar:", opciones);
@@ -1182,7 +1183,7 @@ punto = totalBonus;}
 	}
 	else if (esperado !== undefined) {
 	  if (field === "Peso") {
-		if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)","Kokuwamon","Pillomon", "Numemon"].includes(name)) {
+		if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)","Kokuwamon","Pillomon", "Numemon","Daipenmon","Mugendramon","MetalEtemon", "PlatinumNumemon"].includes(name)) {
 		  punto = 0;
 		} else {
 		  const ingNum = Number(ingresado);

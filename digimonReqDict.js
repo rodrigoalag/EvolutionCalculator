@@ -217,8 +217,12 @@ const digimonReqDict = {
 	"% Entrenamiento": 100
   },	
     "MetalEtemon": {
-	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante",
+	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":40,
 	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Program": "Mecha","Digimon Bonus":"Etemon"
-  },	
+  },
+    "PlatinumNumemon": {
+	"ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":55,
+	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumNumemon Driver","Digimon Bonus":"Black King Numemon"
+  },  
   
 };

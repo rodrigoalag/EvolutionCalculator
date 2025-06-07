@@ -29,10 +29,11 @@
 	'Digimon': 'digimon',
 	'Program': 'program',
 	'Bonus': 'bonus',
-	'Xross o Install': 'xross',
 	'Xross or Install': 'xross',
 	'Comida':'comida',
-	'Food':'comida'
+	'Food':'comida',
+	'Reached negative bond?': 'vnegativo',
+	'Alcanzo vinculo negativo?': 'vnegativo'
 	
   };
 
@@ -579,6 +580,8 @@ fieldSet.forEach(field => {
             ];
             console.log("opciones 2 de asignar:", opciones);
         } else if (field === "2Ciclos") {
+		opciones = ["Si", "No"];}
+		  else if (field === "Alcanzo vinculo negativo?") {
             opciones = ["Si", "No"];
         } else {
             opciones = Array.from(new Set(nextDigimons.map(([_, info]) => info[field]).filter(v => v !== undefined)));
@@ -1319,13 +1322,25 @@ punto = totalBonus;}
 		  } else {
 			punto = 0;
 	  }}
-	  else if (field === "Vinculo Minimo alcanzado") {
-		  const ingNum = Number(ingresado);
-		  if (!isNaN(ingNum) && ingNum < esperado) {
-			punto = -10;
+		else if (field === "Vinculo Minimo alcanzado") {
+		const ingNum = Number(ingresado);
+		  if (["RedVDramon"].includes(name)) {
+			// Condición especial para RedVDramon: debe coincidir exactamente
+			if (!isNaN(ingNum) && ingNum === esperado) {
+			  punto = 0;
+			} else {
+			  punto = -10;
+			}
 		  } else {
-			punto = 0;
-	  }}
+			// Lógica normal para otros Digimon: menor que esperado = -10
+
+			if (!isNaN(ingNum) && ingNum < esperado) {
+			  punto = -10;
+			} else {
+			  punto = 0;
+			}
+		  }
+		}
 		else if (field === "WinRate") {
 		  const ingNum = Number(ingresado);
 		  const bonusBatallas = requisitos["Bonus Batallas"];
@@ -1387,6 +1402,13 @@ punto = totalBonus;}
 	}
 
 	else if (field === "Victorias") {
+	  if (ingresado === esperado) {
+		punto = 0;
+	  } else {
+		punto = -10;
+	  }
+	}
+	else if (field === "Alcanzo vinculo negativo?") {
 	  if (ingresado === esperado) {
 		punto = 0;
 	  } else {

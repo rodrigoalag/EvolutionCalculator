@@ -149,7 +149,9 @@ const bloqueosEvolucion = {
   "GoldNumemon": ["Numemon"],
   "Monzaemon": ["Numemon"],
   "Black King Numemon": ["Numemon"],
-  "Etemon": ["Scumon","PlatinumScumon"]
+  "Etemon": ["Scumon","PlatinumScumon"],
+  "MetalEtemon" : ["Etemon"],
+  "PlatinumNumemon": ["Black King Numemon"]
 };
 const bloqueosexcepciones = {
 	"Aero V-dramon (Black)":"RedVdramon",

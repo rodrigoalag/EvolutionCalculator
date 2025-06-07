@@ -1373,7 +1373,11 @@ punto = totalBonus;}
 		}
 	else if (field === "Comida") {
 	  if (["Scumon"].includes(name)) {
-		punto = 3;
+		if (ingresado.toLowerCase() === esperado.toLowerCase()) {
+		  punto = 3;
+		} else {
+		  punto = -10;
+		}
 	  } else if (ingresado.toLowerCase() === esperado.toLowerCase()) {
 		punto = 0;
 	  } else {

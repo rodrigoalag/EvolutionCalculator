@@ -29,7 +29,9 @@
 	'Digimon': 'digimon',
 	'Program': 'program',
 	'Bonus': 'bonus',
-	'Xross': 'xross'
+	'Xross': 'xross',
+	'Comida':'comida',
+	'Food':'comida'
 	
   };
 
@@ -140,7 +142,14 @@ const bloqueosEvolucion = {
   "RizeGreymon":["GeoGreymon"],
   "Polarbearmon": ["Yukidarumon"],
   "Master Tyranomon": ["Tyranomon"],
-  "Aero V-dramon (Black)": ["Tuskmon","Dark Tyranomon", "V-dramon (Black)"]
+  "Aero V-dramon (Black)": ["Tuskmon","Dark Tyranomon", "V-dramon (Black)"],
+  "Aero V-dramon": ["Greymon","Tyranomon", "V-dramon", "Deltamon","Thunderballmon","Guardromon","Gold Guardromon","GeoGreymon","Clockmon","Yukidarumon"],
+  "Geremon": ["Numemon"],
+  "KaratsukiNumemon": ["Numemon"],
+  "GoldNumemon": ["Numemon"],
+  "Monzaemon": ["Numemon"],
+  "Black King Numemon": ["Numemon"],
+  "Etemon": ["Scumon","PlatinumScumon"]
 };
 const bloqueosexcepciones = {
 	"Aero V-dramon (Black)":"RedVdramon",
@@ -152,15 +161,28 @@ const SideEvolutionSelected = {
   "V-Dramon": ["RedVdramon"],
   "Metal Greymon": ["MetalGreymon Alterous"],
   "Mamemon": ["BigMamemon","MetalMamemon"],
-  "Megadramon": ["Gigadramon"]
+  "Megadramon": ["Gigadramon"],
+  "Numemon": ["Karatsukinumemon","GoldNumemon","Geremon"],
+  "Scumon": ["PlatinumScumon"],
+  "Monzaemon": ["WaruMonzaemon"],
+  "Monzaemon": ["GigaWaruMonzaemon"],
+  "WaruMonzaemon": ["GigaWaruMonzaemon"]
 };
-
+const crosstamaevo = {
+"Icemon":"Yuki Agumon"}
+	
 const SideEvolutionlist = {
   "Dark Tyranomon": [4],
   "GoldGuardromon": [4],
+  "Karatsukinumemon": [4],
+  "Geremon": [4],
+  "GoldNumemon": [4],
+  "PlatinumScumon": [4],
   "RedVDramon": [4],
   "MetalGreymon Alterous": [5],
   "BigMamemon": [5],
+  "WaruMonzaemon": [5],
+  "GigaWaruMonzaemon": [5],
   "MetalMamemon":[5],
   "Gigadramon":[5]
 };
@@ -177,7 +199,7 @@ const excepcionesProgram = {
 	"RizeGreymon": ["GeoGreymon"]
   };
 
-const comidalistaside = ["Bellota Dorada", "Chatarra", "5 Sardinas", "Ninguno"];
+const comidalistaside = ["Bellota Dorada", "Chatarra", "5 Sardinas", "5 caca","Ninguno"];
 
 
 const nivelAEtapa = {
@@ -185,7 +207,8 @@ const nivelAEtapa = {
   2: "Baby II",
   3: "Child",
   4: "Adult",
-  5: "Perfect"
+  5: "Perfect",
+  6: "Ultimate"
 };
 
 ///// SELECTOR CON HTML?
@@ -281,11 +304,11 @@ tamaSelect.addEventListener("change", () => {
   });
 });
 
-
+let tamaElegido 
 // Manejar cambio en Nivel (MODIFICADO)
 nivelSelect.addEventListener("change", () => {
   const nivelElegido = parseInt(nivelSelect.value);
-  const tamaElegido = tamaSelect.value;
+  tamaElegido = tamaSelect.value;
 
   // Limpiar digimon
   digimonSelect.innerHTML = "";
@@ -337,15 +360,71 @@ translateAutoFieldsContent();
 
   const nextLevel = data["Nivel"] + 1;
   let nextDigimons = Object.entries(digimonReqDict).filter(([_, info]) => info["Nivel"] === nextLevel);
-	// Si el seleccionado tiene side evolutions definidas, las añadimos
-	if (SideEvolutionSelected.hasOwnProperty(selected)) {
+	console.log("Lista ANTES de filtrar por Tama:", nextDigimons.map(([name]) => name));
+	if (tamaElegido !== "Todos") {
+	  console.log(`Filtrando por Tama: ${tamaElegido}`);
+	  
+	  nextDigimons = nextDigimons.filter(([name, _]) => {
+		// Excepción especial para Numemon - nunca eliminar
+		if (name === "Numemon" || name === "Scumon") {
+		  console.log(`${name} mantenido por excepción especial`);
+		  return true;
+		}
+		
+		// Buscar el digimon en digimonReqDict (mismo que usas para el select)
+		const digimonData = digimonReqDict[name];
+		
+		if (digimonData && digimonData["Tama"]) {
+		  const tamaDigimon = digimonData["Tama"];
+		  console.log(`${name} tiene Tama: ${tamaDigimon}`);
+		  return tamaDigimon === tamaElegido;
+		}
+		
+		console.log(`${name} no encontrado en digimonReqDict o sin Tama`);
+		return false; // Si no tiene info de Tama, no incluir
+	  });
+	  
+	  console.log("Lista después de filtrar por Tama:", nextDigimons.map(([name]) => name));
+	}	
+		
+	// Si el seleccionado tiene side evolutions definidas, las añadimos	
+	console.log(`Digimon: ${selected}`);
+	if (selected in SideEvolutionSelected) {
 	  const sideEvos = SideEvolutionSelected[selected]; // Array de nombres de side evolutions
+	  console.log(`Side evolutions encontradas:`, sideEvos); // Debug
 
 	  // Filtrar solo los side evolutions que existen en digimonReqDict
-	  const sideDigimons = Object.entries(digimonReqDict).filter(
-		([name, _]) => sideEvos.includes(name)
-	  );
+	//  const sideDigimons = Object.entries(digimonReqDict).filter(
+		//([name, _]) => sideEvos.includes(name)
+	//  );
+	// Función de normalización avanzada
+	function normalizeDigimonName(str) {
+	  return str
+		.trim()                           // Eliminar espacios al inicio/final
+		.toLowerCase()                    // Convertir a minúsculas
+		.replace(/\s+/g, ' ')            // Múltiples espacios a uno solo
+		.replace(/[^\w\s]/g, '')         // Eliminar caracteres especiales
+		.replace(/\s/g, '');             // Eliminar todos los espacios (opcional)
+	}
 
+	// Filtrar solo los side evolutions que existen en digimonReqDict
+	const sideDigimons = Object.entries(digimonReqDict).filter(
+	  ([name, _]) => {
+		const normalizedName = normalizeDigimonName(name);
+		
+		return sideEvos.some(sideEvo => {
+		  const normalizedSideEvo = normalizeDigimonName(sideEvo);
+		  const matches = normalizedName === normalizedSideEvo;
+		  
+		  // Debug detallado
+		  console.log(`Comparando: "${name}" (${normalizedName}) vs "${sideEvo}" (${normalizedSideEvo}) = ${matches}`);
+		  
+		  return matches;
+		});
+	  }
+	);
+
+console.log(`Side digimons encontrados:`, sideDigimons.map(([name]) => name));
 	  // Combinar nextDigimons y sideDigimons sin duplicados usando un Map
 	  const uniqueDigimons = new Map();
 
@@ -354,7 +433,7 @@ translateAutoFieldsContent();
 
 	  nextDigimons = Array.from(uniqueDigimons.entries());
 	}
-
+	console.log("Lista después de añadir sides por Tama:", nextDigimons.map(([name]) => name));
 	// nextDigimons ya incluye las evoluciones normales y, si aplicaba, las laterales
 	  
 		const sideNames = Object.keys(SideEvolutionlist);
@@ -439,8 +518,7 @@ fieldSet.forEach(field => {
             opciones = [
                 "3 Mamemon Driver",
                 "4 Pickmon Driver",
-                "3 Monzaemon Driver",
-                "3 WaruMonzaemon Driver",
+                "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
                 "Ninguno"
             ];
             console.log("opciones 2 de asignar:", opciones);
@@ -702,49 +780,82 @@ calcularBtn.addEventListener("click", () => {
 
   const nextLevel = data["Nivel"] + 1;
   let nextDigimons = Object.entries(digimonReqDict).filter(([_, info]) => info["Nivel"] === nextLevel);
-// Si el seleccionado tiene side evolutions definidas, las añadimos
-if (SideEvolutionSelected.hasOwnProperty(selected)) {
-  const sideEvos = SideEvolutionSelected[selected]; // Array de nombres de side evolutions
-
-  // Filtrar solo los side evolutions que existen en digimonReqDict
-  const sideDigimons = Object.entries(digimonReqDict).filter(
-    ([name, _]) => sideEvos.includes(name)
-  );
-
-  // Combinar nextDigimons y sideDigimons sin duplicados usando un Map
-  const uniqueDigimons = new Map();
-
-  nextDigimons.forEach(([name, info]) => uniqueDigimons.set(name, info));
-  sideDigimons.forEach(([name, info]) => uniqueDigimons.set(name, info));
-
-  nextDigimons = Array.from(uniqueDigimons.entries());
-}
-
-// nextDigimons ya incluye las evoluciones normales y, si aplicaba, las laterales
   
-	const sideNames = Object.keys(SideEvolutionlist);
-	//Elimina las sides del mismo nivel, falta poner un excepcion para los de Nivel 5
-	nextDigimons = nextDigimons.filter(([name, info]) => {
-	  // Normalizar el nombre para comparación
-	  const nameNormalizado = name.toLowerCase().trim();
-	  
-	  // Buscar coincidencia en SideEvolutionlist con nombres normalizados
-	  const sideKey = Object.keys(SideEvolutionlist).find(key => 
-		key.toLowerCase().trim() === nameNormalizado
-	  );
-	  
-	  // Verifica si está en la lista de side evolutions
-	  if (sideKey) {
-		// Compara el nivel actual con el nivel de la side evolution
-		const sideLevel = SideEvolutionlist[sideKey][0];
-		if (sideLevel === (data["Nivel"] + 1)) {
-		  console.log(`Eliminando side evolution: "${name}" (nivel ${sideLevel})`);
-		  return false; // Elimina si el nivel coincide
-		}
+//Elimina las sides que NO están permitidas para el digimon seleccionado
+nextDigimons = nextDigimons.filter(([name, info]) => {
+  // Verifica si está en la lista de side evolutions
+  if (SideEvolutionlist.hasOwnProperty(name)) {
+    console.log(`${name} es una side evolution`);
+    
+    // Si el digimon seleccionado tiene side evolutions definidas
+    if (selected in SideEvolutionSelected) {
+      const allowedSides = SideEvolutionSelected[selected];
+      
+      // Solo mantener si está en la lista de sides permitidas para este digimon
+      if (allowedSides.includes(name)) {
+        console.log(`✓ Manteniendo ${name} porque está permitida para ${selected}`);
+        return true;
+      } else {
+        console.log(`✗ Eliminando ${name} porque NO está permitida para ${selected}`);
+        return false;
+      }
+    } else {
+      // Si el digimon seleccionado no tiene sides definidas, eliminar todas las sides
+      console.log(`✗ Eliminando ${name} porque ${selected} no tiene sides definidas`);
+      return false;
+    }
+  }
+  
+  // Si no es una side evolution, mantener
+  return true;
+});
+	// Si el seleccionado tiene side evolutions definidas, las añadimos	
+	console.log(`Digimon: ${selected}`);
+	if (selected in SideEvolutionSelected) {
+	  const sideEvos = SideEvolutionSelected[selected]; // Array de nombres de side evolutions
+	  console.log(`Side evolutions encontradas:`, sideEvos); // Debug
+
+	  // Filtrar solo los side evolutions que existen en digimonReqDict
+	//  const sideDigimons = Object.entries(digimonReqDict).filter(
+		//([name, _]) => sideEvos.includes(name)
+	//  );
+	// Función de normalización avanzada
+	function normalizeDigimonName(str) {
+	  return str
+		.trim()                           // Eliminar espacios al inicio/final
+		.toLowerCase()                    // Convertir a minúsculas
+		.replace(/\s+/g, ' ')            // Múltiples espacios a uno solo
+		.replace(/[^\w\s]/g, '')         // Eliminar caracteres especiales
+		.replace(/\s/g, '');             // Eliminar todos los espacios (opcional)
+	}
+
+	// Filtrar solo los side evolutions que existen en digimonReqDict
+	const sideDigimons = Object.entries(digimonReqDict).filter(
+	  ([name, _]) => {
+		const normalizedName = normalizeDigimonName(name);
+		
+		return sideEvos.some(sideEvo => {
+		  const normalizedSideEvo = normalizeDigimonName(sideEvo);
+		  const matches = normalizedName === normalizedSideEvo;
+		  
+		  // Debug detallado
+		  console.log(`Comparando: "${name}" (${normalizedName}) vs "${sideEvo}" (${normalizedSideEvo}) = ${matches}`);
+		  
+		  return matches;
+		});
 	  }
-	  return true; // Mantiene si no está en la lista o si el nivel no coincide
-	});
-  
+	);
+
+console.log(`Side digimons encontrados:`, sideDigimons.map(([name]) => name));
+	  // Combinar nextDigimons y sideDigimons sin duplicados usando un Map
+	  const uniqueDigimons = new Map();
+
+	  nextDigimons.forEach(([name, info]) => uniqueDigimons.set(name, info));
+	  sideDigimons.forEach(([name, info]) => uniqueDigimons.set(name, info));
+
+	  nextDigimons = Array.from(uniqueDigimons.entries());
+	}
+	console.log("Lista después de añadir sides por Tama:", nextDigimons.map(([name]) => name));
   console.log("Seleccionado:", selected);
   console.log("Digis:", nextDigimons);
 
@@ -774,7 +885,86 @@ if (tieneExcepcionAbsoluta) {
   });
   
   console.log("Lista después de aplicar excepción absoluta:", nextDigimons.map(([name]) => name));
-} else {
+} 
+
+// CASO 1: Filtrado por Tama
+if (!tieneExcepcionAbsoluta && tamaElegido !== "Todos") {
+  console.log(`Filtrando por Tama: ${tamaElegido}`);
+  
+  nextDigimons = nextDigimons.filter(([name, _]) => {
+    // Excepción especial para Numemon - nunca eliminar
+    if (name === "Numemon" || name === "Scumon") {
+      console.log(`${name} mantenido por excepción especial`);
+      return true;
+    }
+    
+    // Buscar el digimon en digimonReqDict (mismo que usas para el select)
+    const digimonData = digimonReqDict[name];
+    
+    if (digimonData && digimonData["Tama"]) {
+      const tamaDigimon = digimonData["Tama"];
+      console.log(`${name} tiene Tama: ${tamaDigimon}`);
+      return tamaDigimon === tamaElegido;
+    }
+    
+    console.log(`${name} no encontrado en digimonReqDict o sin Tama`);
+    return false; // Si no tiene info de Tama, no incluir
+  });
+  
+  console.log("Lista después de filtrar por Tama:", nextDigimons.map(([name]) => name));
+}
+
+// CASO 2: Cross Tama Evolution
+else if (!tieneExcepcionAbsoluta) {
+  console.log(`Verificando Cross Tama Evolution para: ${selected}`);
+  
+  // Buscar si el digimon actual puede hacer cross tama evolution
+  const crossEvosDisponibles = [];
+  
+  for (const [crossEvoTarget, crossEvoSource] of Object.entries(crosstamaevo)) {
+    const sourceNormalizado = crossEvoSource.toLowerCase().trim();
+    const selectedNormalizado = selected.toLowerCase().trim();
+    
+    if (sourceNormalizado === selectedNormalizado) {
+      console.log(`Cross Tama Evo encontrada: ${selected} puede evolucionar a ${crossEvoTarget}`);
+      crossEvosDisponibles.push(crossEvoTarget);
+    }
+  }
+  
+  // Si hay cross evolutions disponibles, agregarlas a nextDigimons
+  if (crossEvosDisponibles.length > 0) {
+    crossEvosDisponibles.forEach(crossEvoName => {
+      // Verificar si ya está en la lista
+      const yaExiste = nextDigimons.some(([name, _]) => 
+        name.toLowerCase().trim() === crossEvoName.toLowerCase().trim()
+      );
+      
+      if (!yaExiste) {
+        // Buscar los requisitos del cross evo target en digimonReqDict
+        const crossEvoData = digimonReqDict[crossEvoName];
+        if (crossEvoData) {
+          // Crear requisitos básicos para cross evo
+          const crossEvoRequisitos = {
+            "Nivel": crossEvoData["Nivel"] || 0,
+            "Atributo": crossEvoData["Atributo"] || "",
+            "Tipo": crossEvoData["Tipo"] || "",
+            "CrossTamaEvo": true // Marcar como cross tama evolution
+          };
+          
+          nextDigimons.push([crossEvoName, crossEvoRequisitos]);
+          console.log(`Agregado Cross Tama Evo: ${crossEvoName}`);
+        }
+      }
+    });
+    
+    console.log("Lista después de agregar Cross Tama Evolutions:", nextDigimons.map(([name]) => name));
+  }
+}
+
+
+
+
+else {
   // Si no hay excepción absoluta, aplicar lógica normal de bloqueos
   console.log(`No hay excepciones absolutas para ${selected}, aplicando bloqueos normales`);
   
@@ -887,10 +1077,13 @@ fieldSet.forEach(field => {
   tabla += "</tr></thead><tbody>";
 
   let puntajes = [];
-  nextDigimons.forEach(([name, requisitos]) => {
+nextDigimons.forEach(([name, requisitos]) => {
     let puntaje = 0;
     let etapa = nivelAEtapa[requisitos["Nivel"]] || "Desconocida";
     let fila = `<tr><td>${name}</td><td>${etapa}</td>`;
+
+// Agregar esta variable ANTES del map
+let pillomonEvaluated = false;
 
 const celdas = Array.from(fieldSet).map(field => {
   const esperado = requisitos[field];
@@ -906,12 +1099,16 @@ bonusFields.forEach(bonusField => {
   const esperadoBonus = requisitos[bonusField];
   const ingresadoBonus = inputValues[bonusField];
   
-  if (bonusField === "Bonus Errores") {
-    const ingNum = Number(inputValues["Error Maximo"]);
-    if (!isNaN(ingNum) && ingNum === esperadoBonus) {
-      totalBonus += 1;
-    }
-  } else if (bonusField === "Digimon Bonus") {
+if (bonusField === "Bonus Errores") {
+  const ingNum = Number(inputValues["Error Maximo"]);
+
+  if (esperadoBonus.toString().includes("+")) {
+    const valorEsperado = Number(esperadoBonus.toString().replace("+", ""));
+    totalBonus += (ingNum >= valorEsperado) ? 1 : 0;
+  } else {
+    totalBonus += (ingNum === Number(esperadoBonus)) ? 1 : 0;
+  }
+} else if (bonusField === "Digimon Bonus") {
     const digimonBonus = selected;
     if (digimonBonus && typeof digimonBonus === 'string') {
       // Normalizar ambos valores para comparación
@@ -955,10 +1152,39 @@ bonusFields.forEach(bonusField => {
   }
 });
 
+punto = totalBonus;}
 
-  punto = totalBonus;}
+
+	// Dentro del map, después de "Driver Equipado":
+	if (name === "Pillomon" && (field === "% Entrenamiento" || field === "EntrenamientoHecho") && !pillomonEvaluated) {
+	  // Caso especial para Pillomon: evaluar ambos campos juntos
+	  const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
+	  const entrenamientoHecho = inputValues["EntrenamientoHecho"];
+	  
+	  const esperadoPorcentaje = requisitos["% Entrenamiento"];
+	  const esperadoEntrenamiento = requisitos["EntrenamientoHecho"];
+	  
+	  // Verificar si ambos campos coinciden con lo esperado
+	  const porcentajeCorrecto = Number(porcentajeEntrenamiento) === esperadoPorcentaje;
+	  const entrenamientoCorrecto = entrenamientoHecho && entrenamientoHecho.toLowerCase() === String(esperadoEntrenamiento).toLowerCase();
+	  
+	  if (porcentajeCorrecto && entrenamientoCorrecto) {
+		punto = 1;
+	  } else {
+		punto = -10;
+	  }
+	  
+	  pillomonEvaluated = true; // Marcar como evaluado
+	}
+	else if (name === "Pillomon" && (field === "% Entrenamiento" || field === "EntrenamientoHecho") && pillomonEvaluated) {
+	  // Ya se evaluó, no hacer nada
+	  punto = 0;
+	}
 	else if (esperado !== undefined) {
-		if (field === "Peso") {
+	  if (field === "Peso") {
+		if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)","Kokuwamon","Pillomon", "Numemon"].includes(name)) {
+		  punto = 0;
+		} else {
 		  const ingNum = Number(ingresado);
 		  const minPeso = esperado - 5;
 		  const maxPeso = esperado + 5;
@@ -968,11 +1194,13 @@ bonusFields.forEach(bonusField => {
 			punto = 0;
 		  }
 		}
+	  }
 
 	else if (field === "Error Maximo") {
 	  const ingNum = Number(ingresado);
-
-	  if (typeof esperado === "string" && esperado.includes("-")) {
+	  if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)","Kokuwamon","Pillomon","Numemon"].includes(name)) {
+	  punto = 0;}
+	  else if (typeof esperado === "string" && esperado.includes("-")) {
 		const [min, max] = esperado.split("-").map(Number);
 		if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) {
 		  punto = 1;
@@ -989,9 +1217,11 @@ bonusFields.forEach(bonusField => {
 	}
 
 	  else if (field === "EntrenamientoHecho") {
-		if (ingresado.toLowerCase() === esperado.toLowerCase()) {
-		punto = 0; }
-		if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)"].includes(name) && ingresado.toLowerCase() === "no") {
+		if (name.toLowerCase().trim() === "pillomon") {
+	    punto = 0;}
+		else if (["Kokuwamon"].includes(name) && ingresado.toLowerCase() === "no") {
+		punto = 1; }
+		else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)"].includes(name) && ingresado.toLowerCase() === "no") {
 		punto = -10 } 
 		else {
 		punto = 0; 
@@ -1031,7 +1261,9 @@ bonusFields.forEach(bonusField => {
 			}
 	  else if (field === "% Entrenamiento") {
 		  const ingNum = Number(ingresado);
-		  if (!isNaN(ingNum) && ingNum >= esperado) {
+		  if (["Pillomon","Numemon"].includes(name)) {
+		  punto = 0;}
+		  else if (!isNaN(ingNum) && ingNum >= esperado) {
 			punto = 1;
 		  } else {
 			punto = 0;
@@ -1090,12 +1322,15 @@ bonusFields.forEach(bonusField => {
 		  }
 		}
 	else if (field === "Comida") {
-		  if (ingresado.toLowerCase() === esperado.toLowerCase()) {
-			punto = 0;
-		  } else {
-			punto = -10;
-		  }
-		}
+	  if (["Scumon"].includes(name)) {
+		punto = 3;
+	  } else if (ingresado.toLowerCase() === esperado.toLowerCase()) {
+		punto = 0;
+	  } else {
+		punto = -10;
+	  }
+	}
+
 	else if (field === "Victorias") {
 	  if (ingresado === esperado) {
 		punto = 0;
@@ -1110,6 +1345,7 @@ bonusFields.forEach(bonusField => {
 		punto = -10;
 	  }
 	}
+
 	else if (field === "Driver Equipado") {
 	  if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
 		punto = 0;
@@ -1117,7 +1353,6 @@ bonusFields.forEach(bonusField => {
 		punto = -10;
 	  }
 	}
-
 
 
 	}
@@ -1134,11 +1369,50 @@ bonusFields.forEach(bonusField => {
     tabla += fila + "</tr>";
     puntajes.push({ name, puntaje });
   });
+  
 
 	tabla += "</tbody></table>";
 	resultados.innerHTML = tabla;
 	translateresultadosContent();
-	
+	// AQUÍ es donde debes colocar tu lógica de Numemon
+puntajes.forEach((digi, index) => {
+    if (digi.name === "Numemon") {
+        // Buscar todos los digis de nivel 4
+        const digisNivel4 = puntajes.filter(d => {
+            const digimonData = nextDigimons.find(([nombre, req]) => nombre === d.name);
+            if (digimonData) {
+                const [nombre, requisitosDigimon] = digimonData;
+                return requisitosDigimon["Nivel"] === 4;
+            }
+            return false;
+        });
+
+        // Verifica si todos tienen puntaje menor a 3
+        const todosMenorA3 = digisNivel4.every(d => d.puntaje < 3);
+
+        // Buscar Scumon
+        const scumon = puntajes.find(d => d.name === "Scumon");
+        const scumonPuntajeMenorA0 = !scumon || scumon.puntaje < 0;
+
+        if (todosMenorA3 && scumonPuntajeMenorA0) {
+            // Asigna puntaje a Numemon
+            puntajes[index].puntaje = 3;
+
+            // Actualiza HTML
+            const numemonRow = Array.from(document.querySelectorAll('tr')).find(row => {
+                const firstCell = row.querySelector('td');
+                return firstCell && firstCell.textContent.trim() === "Numemon";
+            });
+            if (numemonRow) {
+                const scoreCell = numemonRow.querySelector('td strong');
+                if (scoreCell) {
+                    scoreCell.textContent = '3';
+                }
+            }
+        }
+    }
+});
+
 	const maxPuntaje = Math.max(...puntajes.map(d => d.puntaje));
 	let mejoresDigimons;
 	
@@ -1178,9 +1452,31 @@ if (nextLevel === 3) {
   }
 }
 
+// --- utilitario de normalización -------------
+function normalizar(txt = "") {
+  return String(txt)                     // asegura que sea texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");    // quita tildes
+}
+// ---------------------------------------------
+
 const sideEvosValidas = puntajes.filter(d => {
-  const nivelesPermitidos = SideEvolutionlist[d.name];
-  return nivelesPermitidos?.includes(data["Nivel"]) && d.puntaje >= 0;
+  const nombreNormalizado = normalizar(d.name);
+
+  const nivelNormalizado = normalizar(data["Nivel"]);   // o data.Nivel
+
+  // Buscamos la clave equivalente dentro de SideEvolutionlist
+  const keyNormalizada = Object.keys(SideEvolutionlist)
+    .find(k => normalizar(k) === nombreNormalizado);
+
+  const nivelesPermitidos = keyNormalizada
+    ? SideEvolutionlist[keyNormalizada]
+    : undefined;
+
+  return nivelesPermitidos?.some(
+           nivel => normalizar(nivel) === nivelNormalizado
+         ) && d.puntaje >= 0;
 });
 
 // Evaluación Nivel 4 o 5
@@ -1268,6 +1564,7 @@ if (data["Nivel"] === 5) {
   const sideEvosValidas5 = puntajes.filter(d => {
     const nivelesPermitidos = SideEvolutionlist[d.name];
     const esSideValido = nivelesPermitidos?.includes(data["Nivel"]) && d.puntaje >= 0;
+	console.log(`valido ${esSideValido}`)
     if (esSideValido) {
       console.log(`✅ Side Evolution válida: ${d.name} (Puntaje: ${d.puntaje})`);
     }
@@ -1284,6 +1581,31 @@ if (data["Nivel"] === 5) {
   }
 }
 
+// Evaluación Nivel 6
+if (nextLevel === 6) {
+  console.log(`🧪 Evaluando evoluciones para Nivel ${nextLevel}`);
+  console.log("📋 Nivel actual:", data["Nivel"]);
+
+  // Filtrar Digimon del nivel 6 con puntaje >= 3
+  const digimonNivel6 = puntajes.filter(d => {
+    const req = digimonReqDict[d.name];
+    return req?.Nivel === nextLevel && d.puntaje >= 3;
+  });
+
+  console.log("🔍 Digimon válidos Nivel 6 (puntaje >= 3):", digimonNivel6.map(d => `${d.name} (${d.puntaje})`));
+
+  if (digimonNivel6.length > 0) {
+    const maxPuntajeNivel6 = Math.max(...digimonNivel6.map(d => d.puntaje));
+    mejoresDigimons = digimonNivel6.filter(d => d.puntaje === maxPuntajeNivel6).map(d => d.name);
+    console.log("🏆 Mejor(es) Digimon Nivel 6:", mejoresDigimons);
+  } else {
+    mejoresDigimons = ["Ninguno"];
+    console.log("🚫 No se encontraron evoluciones válidas para Nivel 6 con puntaje >= 3.");
+  }
+
+  console.log("🧾 Resultado final Nivel 6:", mejoresDigimons);
+}
+
 // --- Construcción del texto según idioma y resultado ---
 let texto;
 
@@ -1298,8 +1620,6 @@ if (sideEvosValidas.length > 0) {
 if (mejoresDigimons.length >= 2) {
   texto += textTranslations[currentLanguage]?.consultGuide;
 }
-
-
 
  // Función para actualizar el texto de evolución
   function actualizarTextoEvolucion() {

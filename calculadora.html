@@ -244,7 +244,8 @@
 		program: "Program",
 		xross: "Xross",
 		etapa: "Etapa",
-		digimon: "Digimon"
+		digimon: "Digimon",
+		gigawaruxross: "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"
       },
       en: {
         // Interface texts
@@ -298,7 +299,8 @@
 		program: "Program",
 		xross: "Xross",
 		etapa: "Stage",
-		digimon: "Digimon"
+		digimon: "Digimon",
+		gigawaruxross: "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon"
       }
     };
     
@@ -468,8 +470,9 @@
 		  option.textContent = translate('insekihigh');
 		} else if (text === '--selecciona--' || text === '--select--') {
 		  option.textContent = translate('selecciona');
-		}
-		
+		} else if (value === '3 monzaemon driver en warumonzaemon o 3 warumonzaemon driver en monzaemon' || value === '3 monzaemon driver in warumonzaemon or 3 warumonzaemon driver in monzaemon') {
+		  option.textContent = translate('gigawaruxross');
+		  }
         // Aquí puedes agregar más traducciones para otros valores específicos
       });
     }

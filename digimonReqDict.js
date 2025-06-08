@@ -1,6 +1,8 @@
 const digimonReqDict = { 
   "Botamon": { "ID": 0, "Tama": "V0", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 4 },
+  "Chibickmon": { "ID": 55, "Tama": "VS", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5 },
   "Koromon": { "ID": 1, "Tama": "V0", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 6 },
+  "Pickmon": { "ID": 56, "Tama": "VS", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 10 },
   "Agumon": {
     "ID": 2, "Tama": "V0", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "Peso": 15, "Error Maximo": 6, "EntrenamientoHecho": "Si",
@@ -30,6 +32,14 @@ const digimonReqDict = {
 	"ID": 71, "Tama": "V0", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "Peso": 15, "Error Maximo": 6, "EntrenamientoHecho": "Si",
     "Stat Superior": "Vel", "Stat Superior 2": "ATK", "Program": "Combat", "2Ciclos": "Si"
+  },
+  "Starmons": {
+	"ID": 84, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Mutante",
+    "Peso": 15, "Error Maximo": 6
+  },
+  "Gotsumon": {
+	"ID": 85, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Tierra",
+    "Peso": 15, "Error Maximo": 6, "Program": "Ore"
   },
   "Numemon": {
     "ID": 11, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
@@ -117,6 +127,18 @@ const digimonReqDict = {
 	"ID": 43, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
 	"Comida": "Chatarra"
 	},	
+    "ShootingStarmon": {
+	"ID": 57, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
+    "Peso": 30, "Error Maximo": 6, "% Entrenamiento": 80, "WinRate": 65, "Combates Minimos": 20, "Xross": "4 Pickmon Driver"
+	},
+    "Icemon": {
+	"ID": 86, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Hielo",
+    "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15, "Program": "Frost"
+	},
+    "Starmon": {
+	"ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
+    "Peso": 15, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 60, "Combates Minimos": 15
+	},
     "Metal Greymon (Virus)": {
 	"ID": 12, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
     "Peso": 65, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25
@@ -154,7 +176,7 @@ const digimonReqDict = {
 	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
 	"Vinculo Minimo alcanzado": -50
   },
-     "GigaWaruMonzaemon": {
+    "GigaWaruMonzaemon": {
 	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
 	"Xross":"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"
   }, 
@@ -215,7 +237,31 @@ const digimonReqDict = {
     "Gigadramon": {
 	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
 	"% Entrenamiento": 100
-  },	
+  },
+    "SuperStarmon": {
+	"ID": 59, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
+  },  
+    "DarkSuperStarmon": {
+	"ID": 60, "Tama": "VS", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25
+  },  
+    "Insekimon Low Tier": {
+	"ID": 87, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
+    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "Starmon o ShootingStarmon Driver"
+  }, 
+    "Insekimon Mid Tier Dark": {
+	"ID": 88, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
+    "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "DarkSuperStarmon Driver"
+  }, 
+    "Insekimon Mid Tier Super": {
+	"ID": 88, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
+    "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "SuperStarmon Driver"
+  }, 
+    "Insekimon High Tier": {
+	"ID": 90, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
+    "Peso": 30, "Error Maximo": 0, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "SuperStarmon y DarkSuperStarmon Driver"
+  },
     "MetalEtemon": {
 	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":40,
 	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Program": "Mecha"
@@ -223,6 +269,22 @@ const digimonReqDict = {
     "PlatinumNumemon": {
 	"ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":55,
 	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumNumemon Driver"
+  },
+    "Mugendramon": {
+	"ID": 27, "Tama": "V0", "Nivel": 6, "Atributo": "Virus", "Tipo": "Maquina","Peso":55,
+	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
+  },
+     "Chackmon": {
+	"ID": 27, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Hielo","Peso":10,
+	"% Entrenamiento": 80,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "Ice Spirit H"
+  },
+    "Blizzarmon": {
+	"ID": 27, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Hielo","Peso":30,
+	"% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 25, "WinRate": 70, "Xross": "Ice Spirit B"
+  },
+    "Daipenmon": {
+	"ID": 27, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
+	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
   },  
   
 };

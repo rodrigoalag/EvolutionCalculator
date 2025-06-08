@@ -230,6 +230,7 @@
 		Dinosaurio: "Dinosaurio",
 		Vacuna: "Vacuna",
 		Maquina: "Maquina",
+		Tierra: "Tierra",
 		Hielo: "Hielo",
 		Mutante: "Mutante",
 		caca: "5 Caca",
@@ -237,7 +238,7 @@
 		bellotad: "Bellota Dorada",
 		Chatarra: "Chatarra",
 		insekilow: "Starmon o ShootingStarmon Driver",
-		insekimid: "superstarmon y darksuperstarmon driver",
+		insekimid: "SuperStarmon o DarkSuperStarmon Driver",
 		insekihigh: "SuperStarmon y DarkSuperStarmon Driver",
 		selecciona: "--Selecciona--",
 		puntaje: "Puntaje Total",
@@ -289,12 +290,13 @@
 		Maquina: "Machine",
 		Hielo: "Ice",
 		Mutante: "Mutant",
+		Tierra: "Earth",
 		caca: "5 Poop",
 		sardina: "5 DigiSardine",
 		bellotad: "Golden Acorn",
 		Chatarra: "Metal Scrap",
 		insekilow: "Starmon or ShootingStarmon Driver",
-		insekimid: "superstarmon or darksuperstarmon driver",
+		insekimid: "SuperStarmon or DarkSuperStarmon Driver",
 		insekihigh: "SuperStarmon and DarkSuperStarmon Driver",
 		selecciona: "--Select--",
 		puntaje: "Total Points",
@@ -398,7 +400,8 @@
 	'Digimon': 'digimon',
 	'Program': 'program',
 	'Bonus': 'bonus',
-	'Xross': 'xross'
+	'Xross': 'xross',
+	'Comida':'comida'
 	
   };
 
@@ -457,6 +460,8 @@
 		} else if (value === 'hielo' || value === 'ice') {
 		  option.textContent = translate('Hielo');
 		} else if (value === 'mutante' || value === 'mutant') {
+		  option.textContent = translate('Mutante');
+		}  else if (value === 'tierra' || value === 'earth') {
 		  option.textContent = translate('Mutante');
 		} else if (value === '5 caca' || value === '5 poop') {
 		  option.textContent = translate('caca');

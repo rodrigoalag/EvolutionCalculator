@@ -276,7 +276,7 @@ const digimonReqDict = {
   },
      "Chackmon": {
 	"ID": 27, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Hielo","Peso":10,
-	"% Entrenamiento": 80,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "Ice Spirit H"
+	"% Entrenamiento": 80,"Error Maximo": 0, "Combates Minimos": 15, "WinRate": 60, "Xross": "Ice Spirit H"
   },
     "Blizzarmon": {
 	"ID": 27, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Hielo","Peso":30,

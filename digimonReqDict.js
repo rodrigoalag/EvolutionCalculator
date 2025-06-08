@@ -58,7 +58,7 @@ const digimonReqDict = {
 	"Program": "Virus"
   },
     "V-Dramon": {
-	"ID": 7, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Dinosaurio",
+	"ID": 7, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Dragon",
     "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Bonus WinRate": 70, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100
   }, 
     "Deltamon": {
@@ -74,16 +74,16 @@ const digimonReqDict = {
     "Peso": 35, "Error Maximo": 2, "% Entrenamiento": 50, "Bonus Batallas": "15-20", "WinRate": 60, "Combates Minimos": 15
   },
     "V-Dramon (Black)": {
-	"ID": 34, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
+	"ID": 34, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dragon",
     "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Bonus Batallas": 25, "WinRate": 60, "Combates Minimos": 15, 
 	"Vinculo Minimo alcanzado": 100, "Program" : "Virus"
   },
     "RedVDramon": {
-	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Dinosaurio",
+	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Dragon",
 	"Vinculo Minimo alcanzado": -50
 	},
     "GoldGuardromon": {
-	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Dinosaurio",
+	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Maquina",
 	"Comida": "Bellota Dorada"
 	},	
     "V-Dramon (Black)": {
@@ -153,7 +153,7 @@ const digimonReqDict = {
 	"WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "Tyranomon Driver"
   },
     "Aero V-dramon": {
-	"ID": 15, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
+	"ID": 15, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dragon",
     "Peso": 50, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon",
 	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25
   },
@@ -201,7 +201,7 @@ const digimonReqDict = {
 	"% Entrenamiento": 100, "Victorias":50
   },
     "Aero V-dramon (Black)": {
-	"ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
+	"ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dragon",
     "Peso": 50, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon (Black)",
 	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25
   },

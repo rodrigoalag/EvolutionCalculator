@@ -201,7 +201,7 @@ const digimonReqDict = {
 	"% Entrenamiento": 100, "Victorias":50
   },
     "Aero V-dramon (Black)": {
-	"ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
+	"ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
     "Peso": 50, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon (Black)",
 	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25
   },
@@ -227,11 +227,11 @@ const digimonReqDict = {
 	"Program":"Combat", "WinRate": 70, "Combates Minimos": 25
   },
     "Megadramon": {
-	"ID": 18, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
+	"ID": 18, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Peso": 55, "Error Maximo": "1-2", "% Entrenamiento": 75, "Bonus Batallas": 30, "WinRate": 70, "Combates Minimos": 25
 	},
     "Gigadramon": {
-	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
+	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
 	"% Entrenamiento": 100
   },
     "Gigadramon": {

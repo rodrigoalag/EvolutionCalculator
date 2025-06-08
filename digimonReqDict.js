@@ -86,11 +86,6 @@ const digimonReqDict = {
 	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Maquina",
 	"Comida": "Bellota Dorada"
 	},	
-    "V-Dramon (Black)": {
-	"ID": 34, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
-    "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Bonus Batallas": 25, "WinRate": 60, "Combates Minimos": 15, 
-	"Vinculo Minimo alcanzado": 100, "Program" : "Virus"
-  },
     "GeoGreymon": {
 	"ID": 72, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "Peso": 20, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Agumon (2006)", "Vinculo Minimo alcanzado": 70, "WinRate": 60, "Combates Minimos": 15

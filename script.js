@@ -7,7 +7,7 @@
     '% Entrenamiento': 'entrenamiento',
     '% Training': 'entrenamiento',
     'Vínculo máximo alcanzado': 'vinculo',
-    'Vínculo máximo alcanzado': 'vinculo',
+    'Vinculo': 'vinculo',
     'Max Bond Achieved': 'vinculo',
     'Batallas': 'batallas',
     'Battles': 'batallas',

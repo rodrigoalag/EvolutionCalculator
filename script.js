@@ -145,7 +145,7 @@ const bloqueosEvolucion = {
   "Polarbearmon": ["Yukidarumon"],
   "Master Tyranomon": ["Tyranomon"],
   "Aero V-dramon (Black)": ["Tuskmon","Dark Tyranomon", "V-dramon (Black)"],
-  "Aero V-dramon": ["Greymon","Tyranomon", "V-dramon", "Deltamon","Thunderballmon","Guardromon","Gold Guardromon","GeoGreymon","Clockmon","Yukidarumon"],
+  "Aero V-dramon": ["Greymon","Tyranomon", "V-dramon", "Deltamon","Thunderballmon","Guardromon","GoldGuardromon","GeoGreymon","Clockmon","Yukidarumon"],
   "Geremon": ["Numemon"],
   "KaratsukiNumemon": ["Numemon"],
   "GoldNumemon": ["Numemon"],

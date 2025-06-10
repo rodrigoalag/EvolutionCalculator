@@ -259,19 +259,19 @@ const digimonReqDict = {
   },
     "MetalEtemon": {
 	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":40,
-	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Program": "Mecha"
+	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Program": "Mecha"
   },
     "PlatinumNumemon": {
 	"ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":55,
-	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumNumemon Driver"
+	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumNumemon Driver"
   },
     "Mugendramon": {
 	"ID": 27, "Tama": "V0", "Nivel": 6, "Atributo": "Virus", "Tipo": "Maquina","Peso":55,
-	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
+	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
   },
      "Chackmon": {
 	"ID": 27, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Hielo","Peso":10,
-	"% Entrenamiento": 80,"Error Maximo": 0, "Combates Minimos": 15, "WinRate": 60, "Xross": "Ice Spirit H"
+	"% Entrenamiento": 80,"Error Maximo": 6, "Combates Minimos": 15, "WinRate": 60, "Xross": "Ice Spirit H"
   },
     "Blizzarmon": {
 	"ID": 27, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Hielo","Peso":30,
@@ -279,7 +279,7 @@ const digimonReqDict = {
   },
     "Daipenmon": {
 	"ID": 27, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
-	"% Entrenamiento": 100,"Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
+	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
   },  
   
 };

@@ -92,7 +92,7 @@ const digimonReqDict = {
   },
     "Clockmon": {
 	"ID": 79, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",
-    "Peso": 20, "Error Maximo": "1-3", "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 15, "Bonus Batallas": 0
+    "Peso": 18, "Error Maximo": "1-3", "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 15, "Bonus Batallas": 0
   },
     "Tuskmon": {
 	"ID": 80, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -229,10 +229,6 @@ const digimonReqDict = {
 	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
 	"% Entrenamiento": 100
   },
-    "Gigadramon": {
-	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
-	"% Entrenamiento": 100
-  },
     "SuperStarmon": {
 	"ID": 59, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
     "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
@@ -270,15 +266,15 @@ const digimonReqDict = {
 	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
   },
      "Chackmon": {
-	"ID": 27, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Hielo","Peso":10,
+	"ID": 93, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Hielo","Peso":10,
 	"% Entrenamiento": 80,"Error Maximo": 6, "Combates Minimos": 15, "WinRate": 60, "Xross": "Ice Spirit H"
   },
     "Blizzarmon": {
-	"ID": 27, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Hielo","Peso":30,
+	"ID": 94, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Hielo","Peso":30,
 	"% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 25, "WinRate": 70, "Xross": "Ice Spirit B"
   },
     "Daipenmon": {
-	"ID": 27, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
+	"ID": 95, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
 	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
   },  
   

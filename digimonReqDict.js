@@ -193,7 +193,7 @@ const digimonReqDict = {
   },
     "MetalGreymon Alterous": {
 	"ID": 26, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
-	"% Entrenamiento": 100, "Victorias":50
+	"% Entrenamiento": 100, "Victorias":40, "Program":"Mecha"
   },
     "Aero V-dramon (Black)": {
 	"ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dragon",

@@ -70,7 +70,7 @@ const digimonReqDict = {
     "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 60, "Digimon Bonus": "Kokuwamon", "WinRate": 60, "Combates Minimos": 15, "Stat Superior": "Vel"
   },
     "Guardromon": {
-	"ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",
+	"ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Maquina",
     "Peso": 35, "Error Maximo": 2, "% Entrenamiento": 50, "Bonus Batallas": "15-20", "WinRate": 60, "Combates Minimos": 15
   },
     "V-Dramon (Black)": {
@@ -79,11 +79,11 @@ const digimonReqDict = {
 	"Vinculo Minimo alcanzado": 100, "Program" : "Virus"
   },
     "RedVDramon": {
-	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Dragon",
+	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dragon",
 	"Vinculo Minimo alcanzado": -50
 	},
     "GoldGuardromon": {
-	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Maquina",
+	"ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Free", "Tipo": "Maquina",
 	"Comida": "Bellota Dorada"
 	},	
     "GeoGreymon": {

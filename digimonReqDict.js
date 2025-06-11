@@ -168,11 +168,11 @@ const digimonReqDict = {
 	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25
   },
     "WaruMonzaemon": {
-	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
 	"Vinculo Minimo alcanzado": -50
   },
     "GigaWaruMonzaemon": {
-	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
 	"Xross":"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"
   }, 
     "Metal Tyranomon": {

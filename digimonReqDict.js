@@ -235,7 +235,7 @@ const digimonReqDict = {
   },  
     "DarkSuperStarmon": {
 	"ID": 60, "Tama": "VS", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
-    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "Si"
   },  
     "Insekimon Low Tier": {
 	"ID": 87, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",

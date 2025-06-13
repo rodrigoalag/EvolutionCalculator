@@ -180,7 +180,7 @@ const digimonReqDict = {
     "Peso": 65, "Error Maximo": "3-6", "% Entrenamiento": 60, "Digimon Bonus": "Dark Tyranomon", "WinRate": 70, "Combates Minimos": 25
   },
     "MetalMamemon": {
-	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
 	"% Entrenamiento": 100, "Program": "Mecha"
   },
     "Metal Greymon": {

@@ -207,6 +207,14 @@ function inicializarSelector() {
 // Función para obtener clasificación
 function obtenerClasificacion(digipuntos, nivel) {
   // Casos especiales para Digimon con pocos digipuntos pero que deben ser mutantes
+  if (digipuntos < 15 && nivel <= 1) { // Nivel 3 o superior (Child+) con pocos digipuntos
+    return { min: 0, max: 10.00, nombre: "Standard Baby 1", clase: "tier-low" };
+  }  
+  if (digipuntos < 15 && nivel <= 2) { // Nivel 3 o superior (Child+) con pocos digipuntos
+    return { min: 0, max: 10.00, nombre: "Standard Baby 2", clase: "tier-low" };
+  }
+
+  
   if (digipuntos < 15 && nivel >= 3) { // Nivel 3 o superior (Child+) con pocos digipuntos
     return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
   }

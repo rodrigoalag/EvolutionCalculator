@@ -128,7 +128,7 @@ const digimonReqDict = {
 	},
     "Icemon": {
 	"ID": 86, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Hielo",
-    "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15, "Program": "Frost"
+    "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15, "Program": "Frost", "Comida": "Verdura Congelada"
 	},
     "Starmon": {
 	"ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",

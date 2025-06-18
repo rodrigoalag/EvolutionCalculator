@@ -236,7 +236,7 @@ const excepcionesProgram = {
 	"RizeGreymon": ["GeoGreymon"]
   };
 
-const comidalistaside = ["Bellota Dorada", "Chatarra", "5 Sardinas", "5 caca","Ninguno"];
+const comidalistaside = ["Bellota Dorada", "Chatarra", "5 Sardinas", "5 caca", "Verdura Congelada","Hongo Congelado","Ninguno"];
 
 const PesoSet = new Set([
     "Botamon", "Koromon", "Chibickmon", "Pickmon", "Agumon", 
@@ -276,6 +276,12 @@ const specialxrossCases = {
 		"Polarbearmon": ["Ice Spirit B + Ice Spirit H","Ice Spirit A"]
 	}
 };
+const specialfoodcases = {
+    "Icemon": {
+		"Gotsumon": ["Verdura Congelada", "Hongo Congelado"],
+		"Yuki Agumon": ["Verdura Congelada", "Hongo Congelado"]
+	}
+}
 const specialEntrenamientoCases = {
     "Chackmon": {
         "Icemon": 100,
@@ -1691,7 +1697,43 @@ else if (field === "Xross") {
 		}
 	}
 }}
-
+// CÓDIGO DE EVALUACIÓN PARA COMIDA
+else if (field === "Comida") {
+    // Verificar si es un caso especial
+    if (specialfoodcases[name]) {
+        const validFood = specialfoodcases[name];
+        
+        // Si hay un digimon seleccionado y existe comida válida para él
+        if (selected && validFood[selected]) {
+            const expectedFood = validFood[selected];
+            let isValid = false;
+            
+            // Verificar si expectedFood es un array o un string
+            if (Array.isArray(expectedFood)) {
+                // Si es un array, verificar si ingresado coincide con alguno de los elementos
+                isValid = expectedFood.some(food => 
+                    ingresado.toLowerCase() === food.toLowerCase()
+                );
+            } else {
+                // Si es un string, comparar directamente
+                isValid = ingresado.toLowerCase() === expectedFood.toLowerCase();
+            }
+            
+            if (isValid) {
+                punto = 1; // Punto positivo para casos especiales correctos
+            } else {
+                punto = 0; // Sin puntos para casos especiales incorrectos
+            }
+        }
+    } else {
+        // Para casos normales (no especiales)
+        if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
+            punto = 0; // Sin puntos si coincide con lo esperado
+        } else {
+            punto = -10; // Penalización si no coincide
+        }
+    }
+}
 
 	else if (field === "Driver Equipado") {
 	  if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {

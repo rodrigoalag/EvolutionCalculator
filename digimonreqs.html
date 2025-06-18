@@ -461,6 +461,12 @@ const specialEntrenamientoCases = {
 		"Polarbearmon": 100
 	}
 };
+const specialfoodcases = {
+    "Icemon": {
+		"Gotsumon": ["Verdura Congelada", "Hongo Congelado"],
+		"Yuki Agumon": ["Verdura Congelada", "Hongo Congelado"]
+	}
+};
   const dict = digimonReqDict;
   const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
 
@@ -501,7 +507,9 @@ const specialEntrenamientoCases = {
 		"selectTamaDefault": "-- Elige un Tama --",
 		"selectNivelDefault": "-- Elige un Nivel --",
 		"selectDigimonDefault": "-- Elige un Digimon --",
-	    "Bellota dorada": "Bellota dorada",	
+	    "Bellota dorada": "Bellota dorada",
+		"Verdura Congelada": "Verdura Congelada como última comida antes de la evolución",
+		"Hongo Congelado": "Hongo Congelado como última comida antes de al evolución",
 		"Ninguno":"Ninguno",
 		"Si":"Si",
 		"No":"No",
@@ -558,6 +566,8 @@ const specialEntrenamientoCases = {
 		"selectNivelDefault": "-- Choose a Level --",
 		"selectDigimonDefault": "-- Choose a Digimon --",
 	    "Bellota dorada": "Golden Acorn",
+		"Verdura Congelada": "Frozen Vegetable as last food eaten before evolving.",
+		"Hongo Congelado": "Frozen Mushroom as last food eaten before evolving.",
 		"Ninguno":"None",
 		"Si":"Yes",
 		"No":"No",
@@ -923,7 +933,26 @@ function traducirValor(campo, valor) {
         "</ul>";
     }
   }
-
+	// Manejo especial para "Comida"
+	if (campo === "Comida") {
+	  const digimonSeleccionado = selectDigimon.value;
+	  if (digimonSeleccionado && specialfoodcases[digimonSeleccionado]) {
+		const foodForDigimon = specialfoodcases[digimonSeleccionado];
+		return "<ul>" +
+		  Object.entries(foodForDigimon)
+			.map(function([digimon, comida]) {
+			  if (Array.isArray(comida)) {
+				return comida.map(function(c) {
+				  return "<li>" + digimon + ": " + c + "</li>";
+				}).join('');
+			  } else {
+				return "<li>" + digimon + ": " + comida + "</li>";
+			  }
+			})
+			.join('') +
+		  "</ul>";
+	  }
+	}
   // Traducciones generales
   const idioma = traducciones[currentLanguage] || {};
   const traduccionesCampo = idioma.campos || {};

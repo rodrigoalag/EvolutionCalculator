@@ -237,6 +237,8 @@
 		caca: "5 Caca",
 		sardina: "5 Sardinas",
 		bellotad: "Bellota Dorada",
+		verduracongelada: "Verdura Congelada como última comida antes de la evolución",
+		hongocongelado: "Hongo Congelado como última comida antes de la evolución",
 		Chatarra: "Chatarra",
 		insekilow: "Starmon o ShootingStarmon Driver",
 		insekimid: "SuperStarmon o DarkSuperStarmon Driver",
@@ -295,6 +297,8 @@
 		caca: "5 Poop",
 		sardina: "5 DigiSardine",
 		bellotad: "Golden Acorn",
+		verduracongelada: "Frozen Vegetable as last food eaten before evolving.",
+		hongocongelado: "Frozen Mushroom as last food eaten before evolving.",
 		Chatarra: "Metal Scrap",
 		insekilow: "Starmon or ShootingStarmon Driver",
 		insekimid: "SuperStarmon or DarkSuperStarmon Driver",
@@ -469,7 +473,11 @@
 		} else if (value === '5 sardinas' || value === '5 digisardine') {
 		  option.textContent = translate('sardina');
 		} else if (value === 'bellota dorada' || value === 'golden acorn') {
-		  option.textContent = translate('bellotad');
+		  option.textContent = translate('bellotad');  
+		} else if (value === 'verdura congelada como ultima comida antes de la evolucion' || value === 'Frozen Vegetable as last food eaten before evolving.') {
+		  option.textContent = translate('verduracongelada');
+		} else if (value === 'hongo congelado como ultima comida antes de la evolucion' || value === 'Frozen Mushroom as last food eaten before evolving.') {
+		  option.textContent = translate('hongocongelado');
 		} else if (value === 'chatarra' || value === 'metal scrap') {
 		  option.textContent = translate('Chatarra');
 		} else if (value === 'starmon o shootingstarmon driver' || value === 'starmon or shootingstarmon driver') {

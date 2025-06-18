@@ -132,7 +132,7 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida"];
 
 
 const bloqueosEvolucion = {
@@ -236,7 +236,6 @@ const excepcionesProgram = {
 	"RizeGreymon": ["GeoGreymon"]
   };
 
-const comidalistaside = ["Bellota Dorada", "Chatarra", "5 Sardinas", "5 caca", "Ninguno"];
 
 const PesoSet = new Set([
     "Botamon", "Koromon", "Chibickmon", "Pickmon", "Agumon", 
@@ -276,12 +275,16 @@ const specialxrossCases = {
 		"Polarbearmon": ["Ice Spirit B + Ice Spirit H","Ice Spirit A"]
 	}
 };
-const specialfoodcases = {
+/*const specialfoodcases = {
     "Icemon": {
 		"Gotsumon": ["Verdura Congelada", "Hongo Congelado"],
 		"Yuki Agumon": ["Verdura Congelada", "Hongo Congelado"]
 	}
-}
+}*/
+
+const specialfoodcases = {
+    "Icemon": ["Verdura Congelada", "Hongo Congelado"]
+};
 const specialEntrenamientoCases = {
     "Chackmon": {
         "Icemon": 100,
@@ -729,12 +732,20 @@ function getBonusComidaOptions(selected) {
     let opciones = [];
     
     // Buscar en nextDigimons el digimon actual y obtener sus opciones de comida
-    nextDigimons.forEach(([name, _]) => {
-        // Si el digimon tiene comidas específicas para el selected, usarlas
-        if (specialfoodcases[name] && specialfoodcases[name][selected]) {
-            opciones = [...specialfoodcases[name][selected]];
+    nextDigimons.forEach(([name, requisitos]) => {
+        // Primero, agregar comidas de specialfoodcases si existen
+        if (specialfoodcases[name] && Array.isArray(specialfoodcases[name])) {
+            opciones.push(...specialfoodcases[name]);
+        }
+        
+        // Luego, buscar en requisitos para obtener su comida requerida
+        if (requisitos && requisitos["Comida"]) {
+            opciones.push(requisitos["Comida"]);
         }
     });
+    
+    // Eliminar duplicados usando Set
+    opciones = [...new Set(opciones)];
     
     // Siempre agregar "Ninguno" al final
     opciones.push("Ninguno");
@@ -756,16 +767,13 @@ if (typeof sampleValue === "string") {
         console.log("opciones 1 de asignar:", opciones);
         console.log("Digimon seleccionado para Driver:", selected);
     } else if (field === "Comida") {
-        opciones = comidalistaside;
+    // Usar las opciones dinámicas en lugar de la lista fija
+    opciones = getBonusComidaOptions();
+	console.log("REVISAR OPCIONES:", opciones);
     } else if (field === "Xross") {
         opciones = getXrossOptions(selected);
         console.log("opciones 2 de asignar:", opciones);
         console.log("Digimon seleccionado para Xross:", selected);
-    } else if (field === "Bonus Comida") {
-        // NUEVO: Usar la función con el digimon selected
-        opciones = getBonusComidaOptions(selected);
-        console.log("opciones 3 de asignar:", opciones);
-        console.log("Digimon seleccionado para Bonus Comida:", selected);
     } else if (field === "2Ciclos") {
         opciones = ["Si", "No"];
     } else if (field === "Alcanzo vinculo negativo?") {
@@ -1385,61 +1393,29 @@ bonusFields.forEach(bonusField => {
     if (!isNaN(winRateNum) && winRateNum >= 70) {
       totalBonus += 1;
     }
-  } else if (bonusField === "Bonus Comida") {
-    // Nueva lógica para Bonus Comida - ignora el valor del diccionario y usa specialfoodcases
-    const digimonName = name; // Nombre del digimon actual (ej: "Icemon")
-    const comidaIngresada = inputValues["Bonus Comida"]; // Comida ingresada por el usuario
-    
-    console.log(`🔍 === DEBUGGING BONUS COMIDA ===`);
-    console.log(`🔍 digimonName (name):`, digimonName);
-    console.log(`🔍 selected:`, selected);
-    console.log(`🔍 comidaIngresada:`, comidaIngresada);
-    console.log(`🔍 esperadoBonus (del diccionario):`, esperadoBonus);
-    console.log(`🔍 specialfoodcases completo:`, specialfoodcases);
-    console.log(`🔍 specialfoodcases[${digimonName}]:`, specialfoodcases[digimonName]);
-    
-    // Verificar si existe el digimon en specialfoodcases
-    if (specialfoodcases[digimonName]) {
-      const validFood = specialfoodcases[digimonName];
-      console.log(`🔍 validFood encontrado:`, validFood);
-      
-      // Si hay un digimon seleccionado y existe comida válida para él
-      if (selected && validFood[selected]) {
-        const expectedFood = validFood[selected];
-        console.log(`🔍 expectedFood para ${selected}:`, expectedFood);
-        console.log(`🔍 tipo de expectedFood:`, typeof expectedFood, Array.isArray(expectedFood) ? '(array)' : '(no array)');
-        
-        let isValid = false;
-        
-        // Verificar si expectedFood es un array o un string
-        if (Array.isArray(expectedFood)) {
-          console.log(`🔍 Comparando array:`, expectedFood.map(food => `"${comidaIngresada.toLowerCase()}" === "${food.toLowerCase()}"`));
-          // Si es un array, verificar si la comida ingresada coincide con alguno de los elementos
-          isValid = expectedFood.some(food => 
-            comidaIngresada.toLowerCase() === food.toLowerCase()
-          );
-        } else {
-          console.log(`🔍 Comparando string: "${comidaIngresada.toLowerCase()}" === "${expectedFood.toLowerCase()}"`);
-          // Si es un string, comparar directamente
-          isValid = comidaIngresada.toLowerCase() === expectedFood.toLowerCase();
-        }
-        
-        console.log(`🔍 isValid:`, isValid);
-        
-        if (isValid) {
-          totalBonus += 1;
-          console.log(`✅ Bonus Comida correcto: +1 bonus otorgado`);
-        } else {
-          console.log(`❌ Bonus Comida incorrecto: sin bonus`);
-        }
-      } else {
-        console.log(`⚠️ Condición no cumplida - selected: ${selected}, validFood[selected]: ${validFood[selected]}`);
-      }
-    } else {
-      console.log(`⚠️ No existe specialfoodcases[${digimonName}]`);
+  } else if (bonusField === "Bonus WinRate") {
+    const winRateNum = Number(inputValues["WinRate"]);
+    if (!isNaN(winRateNum) && winRateNum >= 70) {
+      totalBonus += 1;
     }
-    console.log(`🔍 === FIN DEBUGGING ===`);
-  }
+  } else if (bonusField === "Bonus Comida") {
+    const digimonName = name;
+    const comidaIngresada = inputValues["Comida"];
+    
+    if (specialfoodcases[digimonName] && comidaIngresada && comidaIngresada !== "Ninguno") {
+        const validFood = specialfoodcases[digimonName];
+        
+        if (Array.isArray(validFood)) {
+            const isValid = validFood.some(food => 
+                comidaIngresada.toLowerCase() === food.toLowerCase()
+            );
+            
+            if (isValid) {
+                totalBonus += 1;
+            }
+        }
+    }
+}
 });
 punto = totalBonus;}
 	// Dentro del map, después de "Driver Equipado":

@@ -337,6 +337,52 @@ main {
     display: none;
   }
 }
+/* Estilos para headers agrupados */
+#headersGrupos th {
+  background-color: transparent;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #333;
+  padding: 0.4rem;
+  text-align: center;
+  border: 1px solid #ddd;
+  word-wrap: break-word;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  white-space: normal;
+  line-height: 1.3;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+#headersRequisitos th {
+  background-color: transparent;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  padding: 0.4rem;
+  text-align: center;
+  border: 1px solid #ddd;
+  word-wrap: break-word;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  white-space: normal;
+  line-height: 1.3;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+/* Responsive para headers agrupados */
+@media (max-width: 768px) {
+  #headersGrupos th {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.2rem;
+  }
+  
+  #headersRequisitos th {
+    font-size: 0.7rem;
+    padding: 0.25rem;
+  }
+}
   </style>
 </head>
 <script src="digimonReqDict.js"></script>
@@ -419,12 +465,17 @@ main {
 
   <div class="digimon-tables full-width">
     <h2 id="subtitle2">Datos de requisitos del Digimon</h2>
-    <table id="tablaRequisitos">
-      <thead>
-        <tr id="headersRequisitos"></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+	<table id="tablaRequisitos">
+	  <thead>
+		<tr id="headersGrupos">
+		  <!-- Los headers agrupados se generarán dinámicamente -->
+		</tr>
+		<tr id="headersRequisitos">
+		  <!-- Los headers individuales se generarán dinámicamente -->
+		</tr>
+	  </thead>
+	  <tbody></tbody>
+	</table>
   </div>
 </section>
   </main>
@@ -467,6 +518,12 @@ const specialfoodcases = {
 		"Yuki Agumon": ["Verdura Congelada", "Hongo Congelado"]
 	}
 };
+// Configuración de agrupación de columnas
+const gruposColumnas = {
+  "Quota/Key Points": ["Peso", "Error Maximo", "EntrenamientoHecho", "% Entrenamiento", "Bonus Batallas", "Victorias", "Digimon Bonus"],
+  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida"]
+};
+
   const dict = digimonReqDict;
   const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
 
@@ -547,6 +604,10 @@ const specialfoodcases = {
 	  "Driver Equipado": "Driver Equipado",
 	  "Xross":"Xross/Install"
 
+    },
+	    grupos: {
+      "Quota/Key Points": "Quota/Key Points",
+      "Requisitos Obligatorios": "Requisitos Obligatorios"
     }
 	  },
 	  en: {
@@ -603,6 +664,10 @@ const specialfoodcases = {
 	  "Victorias": "Battle Victories",
 	  "Driver Equipado": "Driver Equipped",
 	  "Xross":"Xross/Install"
+    },
+	    grupos: {
+      "Quota/Key Points": "Quota/Key Points", 
+      "Requisitos Obligatorios": "Mandatory Requirements"
     }
 	  }
 	};
@@ -777,33 +842,46 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     });
     tablaGenerales.appendChild(filaGen);
 
-    // Actualizar tabla de requisitos
-    tablaHeaders.innerHTML = "";
-    tablaRequisitos.innerHTML = "";
-    const filaReq = document.createElement("tr");
+// Actualizar tabla de requisitos
+const headersGrupos = document.getElementById("headersGrupos");
+const tablaHeaders = document.getElementById("headersRequisitos");
+const tablaRequisitos = document.querySelector("#tablaRequisitos tbody");
 
-Object.keys(digimon).forEach(campo => {
-  if (!generales.includes(campo)) {
-    const th = document.createElement("th");
-    th.setAttribute("data-orig", campo);
-    th.textContent = traducirCampo(campo);
-    tablaHeaders.appendChild(th);
+headersGrupos.innerHTML = "";
+tablaHeaders.innerHTML = "";
+tablaRequisitos.innerHTML = "";
 
-    const td = document.createElement("td");
-    const valorOriginal = digimon[campo];
-    const valorTraducido = traducirValor(campo, valorOriginal);
+const filaReq = document.createElement("tr");
+const camposDisponibles = Object.keys(digimon).filter(campo => !generales.includes(campo));
 
-	if ((campo === "Program" && nombre && specialProgramCases[nombre]) || 
-		(campo === "Xross" && nombre && specialxrossCases[nombre])) {
-	  td.innerHTML = valorTraducido;
-	} else {
-	  td.innerHTML = valorTraducido;
-	}
-    filaReq.appendChild(td);
+// Crear headers agrupados y individuales
+Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
+  const camposEncontrados = camposGrupo.filter(campo => camposDisponibles.includes(campo));
+  
+  if (camposEncontrados.length > 0) {
+    // Header agrupado
+    const thGrupo = document.createElement("th");
+    thGrupo.setAttribute("colspan", camposEncontrados.length);
+    thGrupo.textContent = traducciones[currentLanguage]?.grupos?.[nombreGrupo] || nombreGrupo;
+    headersGrupos.appendChild(thGrupo);
+    
+    // Headers individuales
+    camposEncontrados.forEach(campo => {
+      const th = document.createElement("th");
+      th.setAttribute("data-orig", campo);
+      th.textContent = traducirCampo(campo);
+      tablaHeaders.appendChild(th);
+      
+      // Celda de datos
+      const td = document.createElement("td");
+      const valorOriginal = digimon[campo];
+      td.innerHTML = traducirValor(campo, valorOriginal);
+      filaReq.appendChild(td);
+    });
   }
 });
 
-    tablaRequisitos.appendChild(filaReq);
+tablaRequisitos.appendChild(filaReq);
   });
 
 function actualizarTextosUI() {
@@ -835,7 +913,19 @@ function actualizarTextosUI() {
     th.textContent = traducirCampo(original);
     th.setAttribute("data-orig", original);
   });
-
+// Dentro de actualizarTextosUI(), después de re-traducir headers de requisitos:
+const headersGrupos = document.querySelectorAll("#headersGrupos th");
+headersGrupos.forEach(th => {
+  const colspan = th.getAttribute("colspan");
+  const textoOriginal = th.textContent;
+  
+  // Buscar en grupos de traducciones
+  Object.entries(traducciones[currentLanguage]?.grupos || {}).forEach(([key, value]) => {
+    if (th.textContent.includes(key.split('/')[0]) || th.textContent === key) {
+      th.textContent = value;
+    }
+  });
+});
   // Re-traducir los valores de tablaGenerales
   const filaGen = tablaGenerales.querySelector("tr");
   if (filaGen && selectDigimon.value && dict[selectDigimon.value]) {

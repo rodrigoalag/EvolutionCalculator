@@ -186,191 +186,240 @@
   
 
   <script>
+  // ============================================
+// SISTEMA DE TRADUCCIONES - IMPLEMENTACIÓN COMPLETA CON DETECCIÓN AUTOMÁTICA
+// ============================================
+
+// Diccionario de traducciones
+const translations = {
+  es: {
+    // Textos de interfaz
+    title: "Calculadora de Evolución Digimon",
+    subtitle: "Creado por Rodrigoalag",
+    selectDigimon: "Selecciona las opciones:",
+    digimonData: "Datos del Digimon",
+    fieldsToComplete: "Campos a completar",
+    calculate: "Calcular evolución",
+    disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
+    // Headers de tabla
+    id: "ID",
+    tama: "Tama",
+    level: "Nivel",
+    stage: "Etapa",
+    attribute: "Atributo",
+    type: "Tipo",
+    // Campos editables comunes
+    peso: "Peso",
+    errores: "Errores",
+    entrenamiento: "% Entrenamiento",
+    vinculo: "Vínculo máximo alcanzado",
+    batallas: "Batallas",
+    winRate: "WinRate",
+    entrenamientopregunta: '¿Realizó Entrenamiento?',
+    statsuperior: 'Stat Superior',
+    agumon06: '¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?',
+    driverequip: 'Driver Equipado',
+    victorias: 'Victorias',
+    bonus: 'Bonus',
+    // Opciones de selects
+    si: "Sí",
+    no: "No",
+    Balanceado: "Balanceado",
+    Ninguno: "Ninguno",
+    Compuesto: "Compuesto", 
+    Dinosaurio: "Dinosaurio",
+    Vacuna: "Vacuna",
+    Maquina: "Maquina",
+    Tierra: "Tierra",
+    Hielo: "Hielo",
+    Mutante: "Mutante",
+    caca: "5 Caca",
+    sardina: "5 Sardinas",
+    bellotad: "Bellota Dorada",
+    verduracongelada: "Verdura Congelada como ultima comida antes de la evolucion",
+    hongocongelado: "Hongo Congelado como ultima comida antes de la evolucion",
+    Chatarra: "Chatarra",
+    insekilow: "Starmon o ShootingStarmon Driver",
+    insekimid: "SuperStarmon o DarkSuperStarmon Driver",
+    insekihigh: "SuperStarmon y DarkSuperStarmon Driver",
+    selecciona: "--Selecciona--",
+    puntaje: "Puntaje Total",
+    program: "Program",
+    xross: "Xross o Install",
+    etapa: "Etapa",
+    digimon: "Digimon",
+    gigawaruxross: "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
+    comida: "Comida",
+    vnegativo: "Alcanzo vinculo negativo?",
+  },
+  en: {
+    // Interface texts
+    title: "Digimon Evolution Calculator",
+    subtitle: "Created by Rodrigoalag",
+    selectDigimon: "Select your options:",
+    digimonData: "Digimon Data",
+    fieldsToComplete: "Fields to Complete",
+    calculate: "Calculate evolution",
+    disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
+    // Table headers
+    id: "ID",
+    tama: "Tama",
+    level: "Level",
+    stage: "Stage",
+    attribute: "Attribute",
+    type: "Type",
+    // Common editable fields
+    peso: "Weight",
+    errores: "Care Mistakes",
+    entrenamiento: "% Training",
+    vinculo: "Max Bond Achieved",
+    batallas: "Battles",
+    winRate: "WinRate",
+    entrenamientopregunta: 'Did you make a training?',
+    statsuperior: 'Superior Stat',
+    agumon06: 'Did you have 2 perfects on last two generations/Did you obtain Agumon 06?',
+    driverequip: 'Driver equipped',
+    victorias: 'Victories',
+    bonus: 'Bonus',
+    // Select options
+    si: "Yes",
+    no: "No",
+    Balanceado: "Balanced",
+    Ninguno: "None",
+    Compuesto: "Composite", 
+    Dinosaurio: "Dinosaur",
+    Vacuna: "Vaccine",
+    Maquina: "Machine",
+    Hielo: "Ice",
+    Mutante: "Mutant",
+    Tierra: "Earth",
+    caca: "5 Poop",
+    sardina: "5 DigiSardine",
+    bellotad: "Golden Acorn",
+    verduracongelada: "Frozen Vegetable as last food eaten before evolving.",
+    hongocongelado: "Frozen Mushroom as last food eaten before evolving.",
+    Chatarra: "Metal Scrap",
+    insekilow: "Starmon or ShootingStarmon Driver",
+    insekimid: "SuperStarmon or DarkSuperStarmon Driver",
+    insekihigh: "SuperStarmon and DarkSuperStarmon Driver",
+    selecciona: "--Select--",
+    puntaje: "Total Points",
+    program: "Program",
+    xross: "Xross or Install",
+    etapa: "Stage",
+    digimon: "Digimon",
+    gigawaruxross: "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon",
+    comida:"Food",
+    vnegativo: "Reached negative bond?"
+  }
+};
+
+// Variable para idioma actual
+let currentLanguage = 'es';
+
+// ✅ NUEVA FUNCIÓN: Detectar idioma automáticamente
+function detectLanguage() {
+  // Logger 1: Ver el valor del atributo lang del HTML
+  const htmlLangElement = document.getElementById('htmlLang');
+  const htmlLangValue = document.documentElement.getAttribute('lang') || htmlLangElement?.getAttribute('lang');
+  console.log('🔍 HTML Lang detectado:', htmlLangValue);
   
-    // ============================================
-    // SISTEMA DE TRADUCCIONES - IMPLEMENTACIÓN COMPLETA
-    // ============================================
-    
-    // Diccionario de traducciones
-    const translations = {
-      es: {
-        // Textos de interfaz
-        title: "Calculadora de Evolución Digimon",
-		subtitle: "Creado por Rodrigoalag",
-        selectDigimon: "Selecciona las opciones:",
-        digimonData: "Datos del Digimon",
-        fieldsToComplete: "Campos a completar",
-        calculate: "Calcular evolución",
-		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
-        // Headers de tabla
-        id: "ID",
-        tama: "Tama",
-        level: "Nivel",
-        stage: "Etapa",
-        attribute: "Atributo",
-        type: "Tipo",
-        // Campos editables comunes
-        peso: "Peso",
-        errores: "Errores",
-        entrenamiento: "% Entrenamiento",
-        vinculo: "Vínculo máximo alcanzado",
-        batallas: "Batallas",
-        winRate: "WinRate",
-		entrenamientopregunta: '¿Realizó Entrenamiento?',
-		statsuperior: 'Stat Superior',
-		agumon06: '¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?',
-		driverequip: 'Driver Equipado',
-		victorias: 'Victorias',
-		bonus: 'Bonus',
-        // Opciones de selects
-        si: "Sí",
-        no: "No",
-		Balanceado: "Balanceado",
-		Ninguno: "Ninguno",
-		Compuesto: "Compuesto", 
-		Dinosaurio: "Dinosaurio",
-		Vacuna: "Vacuna",
-		Maquina: "Maquina",
-		Tierra: "Tierra",
-		Hielo: "Hielo",
-		Mutante: "Mutante",
-		caca: "5 Caca",
-		sardina: "5 Sardinas",
-		bellotad: "Bellota Dorada",
-		verduracongelada: "Verdura Congelada como ultima comida antes de la evolucion",
-		hongocongelado: "Hongo Congelado como ultima comida antes de la evolucion",
-		Chatarra: "Chatarra",
-		insekilow: "Starmon o ShootingStarmon Driver",
-		insekimid: "SuperStarmon o DarkSuperStarmon Driver",
-		insekihigh: "SuperStarmon y DarkSuperStarmon Driver",
-		selecciona: "--Selecciona--",
-		puntaje: "Puntaje Total",
-		program: "Program",
-		xross: "Xross o Install",
-		etapa: "Etapa",
-		digimon: "Digimon",
-		gigawaruxross: "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
-		comida: "Comida",
-		vnegativo: "Alcanzo vinculo negativo?",
-      },
-      en: {
-        // Interface texts
-        title: "Digimon Evolution Calculator",
-		subtitle: "Created by Rodrigoalag",
-        selectDigimon: "Select your options:",
-        digimonData: "Digimon Data",
-        fieldsToComplete: "Fields to Complete",
-        calculate: "Calculate evolution",
-		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
-        // Table headers
-        id: "ID",
-        tama: "Tama",
-        level: "Level",
-        stage: "Stage",
-        attribute: "Attribute",
-        type: "Type",
-        // Common editable fields
-        peso: "Weight",
-        errores: "Care Mistakes",
-        entrenamiento: "% Training",
-        vinculo: "Max Bond Achieved",
-        batallas: "Battles",
-        winRate: "WinRate",
-		entrenamientopregunta: 'Did you make a training?',
-		statsuperior: 'Superior Stat',
-		agumon06: 'Did you have 2 perfects on last two generations/Did you obtain Agumon 06?',
-		driverequip: 'Driver equipped',
-		victorias: 'Victories',
-		bonus: 'Bonus',
-        // Select options
-        si: "Yes",
-        no: "No",
-		Balanceado: "Balanced",
-		Ninguno: "None",
-		Compuesto: "Composite", 
-		Dinosaurio: "Dinosaur",
-		Vacuna: "Vaccine",
-		Maquina: "Machine",
-		Hielo: "Ice",
-		Mutante: "Mutant",
-		Tierra: "Earth",
-		caca: "5 Poop",
-		sardina: "5 DigiSardine",
-		bellotad: "Golden Acorn",
-		verduracongelada: "Frozen Vegetable as last food eaten before evolving.",
-		hongocongelado: "Frozen Mushroom as last food eaten before evolving.",
-		Chatarra: "Metal Scrap",
-		insekilow: "Starmon or ShootingStarmon Driver",
-		insekimid: "SuperStarmon or DarkSuperStarmon Driver",
-		insekihigh: "SuperStarmon and DarkSuperStarmon Driver",
-		selecciona: "--Select--",
-		puntaje: "Total Points",
-		program: "Program",
-		xross: "Xross or Install",
-		etapa: "Stage",
-		digimon: "Digimon",
-		gigawaruxross: "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon",
-	    comida:"Food",
-		vnegativo: "Reached negative bond?"
-      }
-    };
-    
-    // Variable para idioma actual
-    let currentLanguage = 'es';
-    
-    // Función para traducir texto
-    function translate(key, lang = currentLanguage) {
-      return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
-    }
-    
-    // Función para actualizar interfaz cuando cambie idioma
-    function updateInterfaceLanguage() {
-      // Actualizar título de página
-      document.title = translate('title');
-      document.getElementById('pageTitle').textContent = translate('title');
-	  // Actualizar párrafo de disclaimer
-	document.getElementById('disclaimer').textContent = translate('disclaimer');
-      
-      // Actualizar elementos con data-translate
-      document.querySelectorAll('[data-translate]').forEach(element => {
-        const key = element.getAttribute('data-translate');
-        element.textContent = translate(key);
-      });
-      
-      // Actualizar headers de tablas
-      updateTableHeaders();
-      
-      // Actualizar campos dinámicos si existen
-      updateEditableFieldsHeaders();
-      
-      // Traducir opciones de todos los selects
-      const selects = document.querySelectorAll('#editableFields select');
-      selects.forEach(select => translateSelectOptions(select));
-	  // ✅ NUEVO: Traducir contenido de tabla de datos del Digimon
-	  translateAutoFieldsContent();
-      
-      // Actualizar atributo lang del HTML
-      document.getElementById('htmlLang').setAttribute('lang', currentLanguage);
-    }
-    
-	function updateTableHeaders() {
-	  // Headers de la tabla de autoFields
-	  const autoHeaders = document.querySelectorAll('#autoFieldsTable th[data-translate]');
-	  autoHeaders.forEach(header => {
-		const key = header.getAttribute('data-translate');
-		header.textContent = translate(key);
-	  });
+  // 1. Verificar si hay un idioma guardado (ahora desde HTML)
+  const savedLanguage = document.documentElement.getAttribute('lang') || document.getElementById('htmlLang')?.getAttribute('lang');
+  
+  // Logger 2: Ver el savedLanguage que se está usando
+  console.log('💾 Saved Language obtenido:', savedLanguage);
+  
+  if (savedLanguage && translations[savedLanguage]) {
+    console.log('✅ Usando idioma guardado:', savedLanguage);
+    return savedLanguage;
+  }
+  
+  // 2. Detectar idioma del navegador
+  const browserLanguage = navigator.language || navigator.userLanguage;
+  const languageCode = browserLanguage.split('-')[0].toLowerCase();
+  console.log('🌐 Idioma del navegador:', languageCode);
+  
+  // 3. Verificar si el idioma del navegador está soportado
+  if (translations[languageCode]) {
+    console.log('✅ Usando idioma del navegador:', languageCode);
+    return languageCode;
+  }
+  
+  // 4. Fallback a español por defecto
+  console.log('⚠️ Usando fallback a español');
+  return 'es';
+}
 
-	  // Headers de la tabla de resultados
-	  const resultadosHeaders = document.querySelectorAll('#resultados th[data-translate]');
-	  resultadosHeaders.forEach(header => {
-		const key = header.getAttribute('data-translate');
-		header.textContent = translate(key);
-	  });
-	}
+// Función para traducir texto
+function translate(key, lang = currentLanguage) {
+  return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+}
 
-    
- function updateEditableFieldsHeaders() {
+// Función para actualizar interfaz cuando cambie idioma
+function updateInterfaceLanguage() {
+  // Actualizar título de página
+  document.title = translate('title');
+  const pageTitle = document.getElementById('pageTitle');
+  if (pageTitle) {
+    pageTitle.textContent = translate('title');
+  }
+  
+  // Actualizar párrafo de disclaimer
+  const disclaimer = document.getElementById('disclaimer');
+  if (disclaimer) {
+    disclaimer.textContent = translate('disclaimer');
+  }
+  
+  // Actualizar elementos con data-translate
+  document.querySelectorAll('[data-translate]').forEach(element => {
+    const key = element.getAttribute('data-translate');
+    element.textContent = translate(key);
+  });
+  
+  // Actualizar headers de tablas
+  updateTableHeaders();
+  
+  // Actualizar campos dinámicos si existen
+  updateEditableFieldsHeaders();
+  
+  // Traducir opciones de todos los selects
+  const selects = document.querySelectorAll('#editableFields select');
+  selects.forEach(select => translateSelectOptions(select));
+  
+  // Traducir contenido de tabla de datos del Digimon
+  translateAutoFieldsContent();
+  
+  // Actualizar atributo lang del HTML
+  const htmlLang = document.getElementById('htmlLang');
+  if (htmlLang) {
+    htmlLang.setAttribute('lang', currentLanguage);
+  }
+  
+  // ✅ NUEVO: Actualizar el selector de idioma sin disparar el evento
+  const languageSelector = document.getElementById('languageSelector');
+  if (languageSelector && languageSelector.value !== currentLanguage) {
+    languageSelector.value = currentLanguage;
+  }
+}
+
+function updateTableHeaders() {
+  // Headers de la tabla de autoFields
+  const autoHeaders = document.querySelectorAll('#autoFieldsTable th[data-translate]');
+  autoHeaders.forEach(header => {
+    const key = header.getAttribute('data-translate');
+    header.textContent = translate(key);
+  });
+
+  // Headers de la tabla de resultados
+  const resultadosHeaders = document.querySelectorAll('#resultados th[data-translate]');
+  resultadosHeaders.forEach(header => {
+    const key = header.getAttribute('data-translate');
+    header.textContent = translate(key);
+  });
+}
+
+function updateEditableFieldsHeaders() {
   const headersRow = document.getElementById('editableFieldsHeaders');
   const resultados = document.getElementById('resultados');
 
@@ -398,16 +447,16 @@
     'Driver equipped': 'driverequip',
     'Victorias': 'victorias',
     'Victories': 'victorias',
-	'Puntaje Total': 'puntaje',
-	'Total Poiunts': 'puntaje',
-	'Etapa': 'etapa',
-	'Stage': 'etapa',
-	'Digimon': 'digimon',
-	'Program': 'program',
-	'Bonus': 'bonus',
-	'Xross': 'xross',
-	'Comida':'comida'
-	
+    'Puntaje Total': 'puntaje',
+    'Total Points': 'puntaje',
+    'Etapa': 'etapa',
+    'Stage': 'etapa',
+    'Digimon': 'digimon',
+    'Program': 'program',
+    'Bonus': 'bonus',
+    'Xross': 'xross',
+    'Comida':'comida',
+    'Food': 'comida'
   };
 
   // Traducir encabezados
@@ -431,272 +480,336 @@
   }
 }
 
+function translateSelectOptions(select) {
+  if (!select) return;
 
-    function translateSelectOptions(select) {
-      if (!select) return;
-      
-		Array.from(select.options).forEach(option => {
-		  const value = option.value.toLowerCase();
-		  const text = option.textContent.trim().toLowerCase();
-				
-        // Traducir opciones comunes
-        /*if (value === 'si' || value === 'sí' || value === 'yes') {
-          option.textContent = translate('si');
-        } else if (value === 'no') {
-          option.textContent = translate('no');
-        }*/
-		// Traducir opciones comunes
-		if (value === 'si' || value === 'sí' || value === 'yes') {
-		  option.textContent = translate('si');
-		} else if (value === 'no') {
-		  option.textContent = translate('no');
-		} else if (value === 'balanceado' || value === 'balanced') {
-		  option.textContent = translate('Balanceado');
-		} else if (value === 'ninguno' || value === 'none') {
-		  option.textContent = translate('Ninguno');
-		} else if (value === 'compuesto' || value === 'composite') {
-		  option.textContent = translate('Compuesto');
-		} else if (value === 'dinosaurio' || value === 'dinosaur') {
-		  option.textContent = translate('Dinosaurio');
-		} else if (value === 'vacuna' || value === 'vaccine') {
-		  option.textContent = translate('Vacuna');
-		} else if (value === 'maquina' || value === 'machine') {
-		  option.textContent = translate('Maquina');
-		} else if (value === 'hielo' || value === 'ice') {
-		  option.textContent = translate('Hielo');
-		} else if (value === 'mutante' || value === 'mutant') {
-		  option.textContent = translate('Mutante');
-		}  else if (value === 'tierra' || value === 'earth') {
-		  option.textContent = translate('Mutante');
-		} else if (value === '5 caca' || value === '5 poop') {
-		  option.textContent = translate('caca');
-		} else if (value === '5 sardinas' || value === '5 digisardine') {
-		  option.textContent = translate('sardina');
-		} else if (value === 'bellota dorada' || value === 'golden acorn') {
-		  option.textContent = translate('bellotad');  
-		} else if (value === 'verdura congelada' || value === 'frozen vegetable') {
-		  option.textContent = translate('verduracongelada');
-		} else if (value === 'hongo congelado' || value === 'frozen mushroom') {
-		  option.textContent = translate('hongocongelado');
-		} else if (value === 'chatarra' || value === 'metal scrap') {
-		  option.textContent = translate('Chatarra');
-		} else if (value === 'starmon o shootingstarmon driver' || value === 'starmon or shootingstarmon driver') {
-		  option.textContent = translate('insekilow');
-		} else if (value === 'superstarmon o darksuperstarmon driver' || value === 'superstarmon or darksuperstarmon driver') {
-		  option.textContent = translate('insekimid');		  
-		} else if (value === 'superstarmon y darksuperstarmon driver' || value === 'superstarmon and darksuperstarmon driver') {
-		  option.textContent = translate('insekihigh');
-		} else if (text === '--selecciona--' || text === '--select--') {
-		  option.textContent = translate('selecciona');
-		} else if (value === '3 monzaemon driver en warumonzaemon o 3 warumonzaemon driver en monzaemon' || value === '3 monzaemon driver in warumonzaemon or 3 warumonzaemon driver in monzaemon') {
-		  option.textContent = translate('gigawaruxross');
-		  }
-        // Aquí puedes agregar más traducciones para otros valores específicos
-      });
+  Array.from(select.options).forEach(option => {
+    const text = option.textContent.trim().toLowerCase();
+
+    // Mapear posibles textos (español e inglés) a claves del diccionario
+    const matchTable = {
+      'sí': 'si',
+      'si': 'si',
+      'yes': 'si',
+      'no': 'no',
+      'balanceado': 'Balanceado',
+      'balanced': 'Balanceado',
+      'ninguno': 'Ninguno',
+      'none': 'Ninguno',
+      'compuesto': 'Compuesto',
+      'composite': 'Compuesto',
+      'dinosaurio': 'Dinosaurio',
+      'dinosaur': 'Dinosaurio',
+      'vacuna': 'Vacuna',
+      'vaccine': 'Vacuna',
+      'maquina': 'Maquina',
+      'machine': 'Maquina',
+      'hielo': 'Hielo',
+      'ice': 'Hielo',
+      'mutante': 'Mutante',
+      'mutant': 'Mutante',
+      'tierra': 'Tierra',
+      'earth': 'Tierra',
+      '5 caca': 'caca',
+      '5 poop': 'caca',
+      '5 sardinas': 'sardina',
+      '5 digisardine': 'sardina',
+      'bellota dorada': 'bellotad',
+      'golden acorn': 'bellotad',
+      'verdura congelada': 'verduracongelada',
+      'frozen vegetable': 'verduracongelada',
+      'hongo congelado': 'hongocongelado',
+      'frozen mushroom': 'hongocongelado',
+      'chatarra': 'Chatarra',
+      'metal scrap': 'Chatarra',
+      'starmon o shootingstarmon driver': 'insekilow',
+      'starmon or shootingstarmon driver': 'insekilow',
+      'superstarmon o darksuperstarmon driver': 'insekimid',
+      'superstarmon or darksuperstarmon driver': 'insekimid',
+      'superstarmon y darksuperstarmon driver': 'insekihigh',
+      'superstarmon and darksuperstarmon driver': 'insekihigh',
+      '--selecciona--': 'selecciona',
+      '--select--': 'selecciona',
+      '3 monzaemon driver en warumonzaemon o 3 warumonzaemon driver en monzaemon': 'gigawaruxross',
+      '3 monzaemon driver in warumonzaemon or 3 warumonzaemon driver in monzaemon': 'gigawaruxross'
+    };
+
+    const key = matchTable[text];
+    if (key) {
+      option.textContent = translate(key);
     }
-		function translateAutoFieldsContent() {
-		  const autoFields = document.getElementById('autoFields');
-		  if (!autoFields) return;
+  });
+}
 
-		  const cells = autoFields.querySelectorAll('td');
-		  cells.forEach(cell => {
-			const rawText = cell.textContent.trim();
-			const key = Object.keys(translations[currentLanguage]).find(k => k.toLowerCase() === rawText.toLowerCase());
 
-			if (key) {
-			  cell.textContent = translate(key);
-			}
-		  });
-		}
-		function translateresultadosContent() {
-		  const resultados = document.getElementById('resultados');
-		  if (!resultados) return;
+function translateAutoFieldsContent() {
+  const autoFields = document.getElementById('autoFields');
+  if (!autoFields) return;
 
-		  const cells = resultados.querySelectorAll('th');
-		  cells.forEach(cell => {
-			const rawText = cell.textContent.trim();
-			const key = Object.keys(translations[currentLanguage]).find(k => k.toLowerCase() === rawText.toLowerCase());
+  const cells = autoFields.querySelectorAll('td');
+  cells.forEach(cell => {
+    const rawText = cell.textContent.trim();
+    const key = Object.keys(translations[currentLanguage]).find(k => k.toLowerCase() === rawText.toLowerCase());
 
-			if (key) {
-			  cell.textContent = translate(key);
-			}
-		  });
-		}
-    // Función para reorganizar campos con dropdowns a la derecha
-    function reorganizeFields() {
-      const originalScript = document.createElement('script');
-      originalScript.src = 'script.js';
-      originalScript.onload = function() {
-        // Sobrescribir la función que crea los campos editables
-        const originalPopulateEditableFields = window.populateEditableFields || function() {};
-        
+    if (key) {
+      cell.textContent = translate(key);
+    }
+  });
+}
+
+function translateresultadosContent() {
+  const resultados = document.getElementById('resultados');
+  if (!resultados) return;
+
+  const cells = resultados.querySelectorAll('th');
+  cells.forEach(cell => {
+    const rawText = cell.textContent.trim();
+    const key = Object.keys(translations[currentLanguage]).find(k => k.toLowerCase() === rawText.toLowerCase());
+
+    if (key) {
+      cell.textContent = translate(key);
+    }
+  });
+}
+
+// Función para reorganizar campos con dropdowns a la derecha
+function reorganizeFields() {
+  const originalScript = document.createElement('script');
+  originalScript.src = 'script.js';
+
+  originalScript.onload = function() {
+    const retryInterval = setInterval(() => {
+      if (typeof window.populateEditableFields === 'function') {
+        const originalPopulateEditableFields = window.populateEditableFields;
+
         window.populateEditableFields = function(digimon) {
-          if (originalPopulateEditableFields && typeof originalPopulateEditableFields === 'function') {
-            originalPopulateEditableFields(digimon);
-          }
-          
-          // Reorganizar después de crear los campos
+          originalPopulateEditableFields(digimon);
+
           setTimeout(() => {
             reorganizeTableColumns();
             updateEditableFieldsHeaders();
-            
-            // Traducir opciones de todos los selects
+
             const selects = document.querySelectorAll('#editableFields select');
             selects.forEach(select => translateSelectOptions(select));
-          }, 50);
+
+            updateInterfaceLanguage();
+          }, 100); // puedes ajustar a 50 si te parece suficiente
         };
-      };
-      document.head.appendChild(originalScript);
-    }
+
+        clearInterval(retryInterval);
+      }
+    }, 50); // Revisa cada 50ms hasta que populateEditableFields exista
+  };
+
+  document.head.appendChild(originalScript);
+}
+
+
+function reorganizeTableColumns() {
+  const headersRow = document.getElementById('editableFieldsHeaders');
+  const fieldsRow = document.getElementById('editableFields');
+  
+  if (!headersRow || !fieldsRow) return;
+  
+  const headers = Array.from(headersRow.children);
+  const fields = Array.from(fieldsRow.children);
+  
+  // Crear mapa de campos por nombre del header
+  const fieldMap = {};
+  
+  for (let i = 0; i < headers.length; i++) {
+    const fieldCell = fields[i];
+    const headerCell = headers[i];
     
-    function reorganizeTableColumns() {
-      const headersRow = document.getElementById('editableFieldsHeaders');
-      const fieldsRow = document.getElementById('editableFields');
-      
-      if (!headersRow || !fieldsRow) return;
-      
-      const headers = Array.from(headersRow.children);
-      const fields = Array.from(fieldsRow.children);
-      
-      // Crear mapa de campos por nombre del header
-      const fieldMap = {};
-      
-      for (let i = 0; i < headers.length; i++) {
-        const fieldCell = fields[i];
-        const headerCell = headers[i];
-        
-        if (fieldCell && headerCell) {
-          const headerText = headerCell.textContent.trim();
-          fieldMap[headerText] = { header: headerCell, field: fieldCell };
-        }
-      }
-      
-      // Orden específico requerido (en español, se traducirán después)
-      const specificOrder = [
-        'Peso', 
-        'Errores', 
-        '% Entrenamiento', 
-        'Vinculo',
-        'Vínculo máximo alcanzado', 
-        'Batallas', 
-        'WinRate'
-      ];
-      
-      // Separar campos ordenados y dropdowns restantes
-      const orderedFields = [];
-      const remainingDropdowns = [];
-      
-      // Primero, agregar campos en el orden específico
-      specificOrder.forEach(fieldName => {
-        if (fieldMap[fieldName]) {
-          orderedFields.push(fieldMap[fieldName]);
-          delete fieldMap[fieldName]; // Remover del mapa para no duplicar
-        }
-      });
-      
-      // Agregar dropdowns restantes (los que no están en el orden específico)
-      Object.values(fieldMap).forEach(item => {
-        const hasSelect = item.field.querySelector('select');
-        if (hasSelect) {
-          remainingDropdowns.push(item);
-        }
-      });
-      
-      // Limpiar las filas
-      headersRow.innerHTML = '';
-      fieldsRow.innerHTML = '';
-      
-      // Agregar campos en orden específico
-      orderedFields.forEach(item => {
-        headersRow.appendChild(item.header);
-        fieldsRow.appendChild(item.field);
-      });
-      
-      // Agregar dropdowns restantes
-      remainingDropdowns.forEach((item, index) => {
-        // Añadir clase separadora al primer dropdown
-        if (index === 0 && orderedFields.length > 0) {
-          item.header.classList.add('dropdown-separator');
-          item.field.classList.add('dropdown-separator');
-        }
-        headersRow.appendChild(item.header);
-        fieldsRow.appendChild(item.field);
-      });
-      
-      // Actualizar estilos CSS para la nueva organización
-      updateColumnStyles();
+    if (fieldCell && headerCell) {
+      const headerText = headerCell.textContent.trim();
+      fieldMap[headerText] = { header: headerCell, field: fieldCell };
     }
-    
-    function updateColumnStyles() {
-      // Contar cuántas columnas tenemos de cada tipo
-      const fieldsRow = document.getElementById('editableFields');
-      if (!fieldsRow) return;
-      
-      const totalCols = fieldsRow.children.length;
-      
-      // Los primeros 6 campos son siempre los específicos en orden
-      const specificFieldsCount = 6;
-      const dropdownStartIndex = specificFieldsCount + 1;
-      
-      // Crear estilos dinámicos
-      const style = document.createElement('style');
-      style.id = 'dynamic-column-styles';
-      
-      let css = '';
-      
-      // Estilos para campos específicos (más estrechos)
-      for (let i = 1; i <= Math.min(specificFieldsCount, totalCols); i++) {
-        css += `
-          #editableFieldsTable th:nth-child(${i}),
-          #editableFieldsTable td:nth-child(${i}) {
-            width: 95px;
-          }
-        `;
+  }
+  
+  // Orden específico requerido (en español, se traducirán después)
+  const specificOrder = [
+    'Peso', 
+    'Errores', 
+    '% Entrenamiento', 
+    'Vinculo',
+    'Vínculo máximo alcanzado', 
+    'Batallas', 
+    'WinRate'
+  ];
+  
+  // Separar campos ordenados y dropdowns restantes
+  const orderedFields = [];
+  const remainingDropdowns = [];
+  
+  // Primero, agregar campos en el orden específico
+  specificOrder.forEach(fieldName => {
+    if (fieldMap[fieldName]) {
+      orderedFields.push(fieldMap[fieldName]);
+      delete fieldMap[fieldName]; // Remover del mapa para no duplicar
+    }
+  });
+  
+  // Agregar dropdowns restantes (los que no están en el orden específico)
+  Object.values(fieldMap).forEach(item => {
+    const hasSelect = item.field.querySelector('select');
+    if (hasSelect) {
+      remainingDropdowns.push(item);
+    }
+  });
+  
+  // Limpiar las filas
+  headersRow.innerHTML = '';
+  fieldsRow.innerHTML = '';
+  
+  // Agregar campos en orden específico
+  orderedFields.forEach(item => {
+    headersRow.appendChild(item.header);
+    fieldsRow.appendChild(item.field);
+  });
+  
+  // Agregar dropdowns restantes
+  remainingDropdowns.forEach((item, index) => {
+    // Añadir clase separadora al primer dropdown
+    if (index === 0 && orderedFields.length > 0) {
+      item.header.classList.add('dropdown-separator');
+      item.field.classList.add('dropdown-separator');
+    }
+    headersRow.appendChild(item.header);
+    fieldsRow.appendChild(item.field);
+  });
+  
+  // Actualizar estilos CSS para la nueva organización
+  updateColumnStyles();
+}
+
+function updateColumnStyles() {
+  // Contar cuántas columnas tenemos de cada tipo
+  const fieldsRow = document.getElementById('editableFields');
+  if (!fieldsRow) return;
+  
+  const totalCols = fieldsRow.children.length;
+  
+  // Los primeros 6 campos son siempre los específicos en orden
+  const specificFieldsCount = 6;
+  const dropdownStartIndex = specificFieldsCount + 1;
+  
+  // Crear estilos dinámicos
+  const style = document.createElement('style');
+  style.id = 'dynamic-column-styles';
+  
+  let css = '';
+  
+  // Estilos para campos específicos (más estrechos)
+  for (let i = 1; i <= Math.min(specificFieldsCount, totalCols); i++) {
+    css += `
+      #editableFieldsTable th:nth-child(${i}),
+      #editableFieldsTable td:nth-child(${i}) {
+        width: 95px;
       }
-      
-      // Estilos para dropdowns (más anchos)
-      for (let i = dropdownStartIndex; i <= totalCols; i++) {
-        css += `
-          #editableFieldsTable th:nth-child(${i}),
-          #editableFieldsTable td:nth-child(${i}) {
-            width: 130px;
-          }
-        `;
+    `;
+  }
+  
+  // Estilos para dropdowns (más anchos)
+  for (let i = dropdownStartIndex; i <= totalCols; i++) {
+    css += `
+      #editableFieldsTable th:nth-child(${i}),
+      #editableFieldsTable td:nth-child(${i}) {
+        width: 130px;
       }
-      
-      style.textContent = css;
-      
-      // Remover estilo anterior si existe
-      const oldStyle = document.getElementById('dynamic-column-styles');
-      if (oldStyle) {
-        oldStyle.remove();
+    `;
+  }
+  
+  style.textContent = css;
+  
+  // Remover estilo anterior si existe
+  const oldStyle = document.getElementById('dynamic-column-styles');
+  if (oldStyle) {
+    oldStyle.remove();
+  }
+  
+  document.head.appendChild(style);
+}
+function observarSelectsDinamicos() {
+  const target = document.getElementById('editableFields');
+  if (!target) return;
+
+  const observer = new MutationObserver((mutationsList, observer) => {
+    let changed = false;
+
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        changed = true;
       }
-      
-      document.head.appendChild(style);
     }
 
-    // Event listener para cambio de idioma
-    document.addEventListener('DOMContentLoaded', function() {
-      const languageSelector = document.getElementById('languageSelector');
-      
-      // Cargar idioma guardado o usar español por defecto
-      const savedLanguage = localStorage.getItem('digilang') || 'es';
-      currentLanguage = savedLanguage;
-      languageSelector.value = savedLanguage;
-      
-      // Aplicar idioma inicial
-      updateInterfaceLanguage();
-      
-      // Event listener para cambio de idioma
-      languageSelector.addEventListener('change', function() {
-        currentLanguage = this.value;
-        localStorage.setItem('digilang', currentLanguage);
-        updateInterfaceLanguage();
+    if (changed) {
+      // Solo traducir selects si se agregaron nuevos nodos
+      const selects = target.querySelectorAll('select:not([data-translated])');
+      selects.forEach(select => {
+        translateSelectOptions(select);
+        select.setAttribute('data-translated', 'true'); // Marcar como traducido
       });
-      
-      // Inicializar reorganización de campos
-      reorganizeFields();
+    }
+  });
+
+  observer.observe(target, { childList: true, subtree: true });
+}
+
+
+
+// ✅ MODIFICADO: Event listener mejorado para inicialización automática
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Detectar idioma automáticamente
+  currentLanguage = detectLanguage();
+  
+  // 2. Configurar el selector de idioma
+  const languageSelector = document.getElementById('languageSelector');
+  if (languageSelector) {
+    // Establecer el valor del selector sin disparar el evento
+    languageSelector.value = currentLanguage;
+    
+    // Event listener para cambio manual de idioma
+    languageSelector.addEventListener('change', function() {
+      currentLanguage = this.value;
+      localStorage.setItem('digilang', currentLanguage);
+      updateInterfaceLanguage();
     });
+  }
+  
+  // 3. Aplicar traducción automáticamente
+  updateInterfaceLanguage();
+  
+  // 4. Guardar el idioma detectado
+  localStorage.setItem('digilang', currentLanguage);
+  
+  // 5. Inicializar reorganización de campos
+  reorganizeFields();
+  // ✅ Añadir observador para detectar cambios y traducir selects nuevos
+  observarSelectsDinamicos();
+});
+
+// ✅ NUEVO: Función para forzar actualización de traducciones cuando sea necesario
+window.forceTranslationUpdate = function() {
+  updateInterfaceLanguage();
+};
+
+// ✅ NUEVO: Función específica para traducir elementos dinámicos sin bucles
+window.translateNewElements = function(container) {
+  if (!container) return;
+  
+  // Traducir solo los elementos dentro del contenedor específico
+  const elementsToTranslate = container.querySelectorAll('[data-translate]');
+  elementsToTranslate.forEach(element => {
+    const key = element.getAttribute('data-translate');
+    element.textContent = translate(key);
+  });
+  
+  // Traducir selects dentro del contenedor
+  const selects = container.querySelectorAll('select');
+  selects.forEach(select => translateSelectOptions(select));
+};
+
   </script>
   <script src="digimonReqDict.js"></script>
 

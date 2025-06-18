@@ -236,7 +236,7 @@ const excepcionesProgram = {
 	"RizeGreymon": ["GeoGreymon"]
   };
 
-const comidalistaside = ["Bellota Dorada", "Chatarra", "5 Sardinas", "5 caca", "Verdura Congelada","Hongo Congelado","Ninguno"];
+const comidalistaside = ["Bellota Dorada", "Chatarra", "5 Sardinas", "5 caca", "Ninguno"];
 
 const PesoSet = new Set([
     "Botamon", "Koromon", "Chibickmon", "Pickmon", "Agumon", 
@@ -724,7 +724,23 @@ function getDriverEquipadoOptions(selected) {
     
     return opciones;
 }
-
+// Función para obtener opciones de Bonus Comida
+function getBonusComidaOptions(selected) {
+    let opciones = [];
+    
+    // Buscar en nextDigimons el digimon actual y obtener sus opciones de comida
+    nextDigimons.forEach(([name, _]) => {
+        // Si el digimon tiene comidas específicas para el selected, usarlas
+        if (specialfoodcases[name] && specialfoodcases[name][selected]) {
+            opciones = [...specialfoodcases[name][selected]];
+        }
+    });
+    
+    // Siempre agregar "Ninguno" al final
+    opciones.push("Ninguno");
+    
+    return opciones;
+}
 // Tu código modificado:
 if (typeof sampleValue === "string") {
     let opciones = [];
@@ -745,6 +761,11 @@ if (typeof sampleValue === "string") {
         opciones = getXrossOptions(selected);
         console.log("opciones 2 de asignar:", opciones);
         console.log("Digimon seleccionado para Xross:", selected);
+    } else if (field === "Bonus Comida") {
+        // NUEVO: Usar la función con el digimon selected
+        opciones = getBonusComidaOptions(selected);
+        console.log("opciones 3 de asignar:", opciones);
+        console.log("Digimon seleccionado para Bonus Comida:", selected);
     } else if (field === "2Ciclos") {
         opciones = ["Si", "No"];
     } else if (field === "Alcanzo vinculo negativo?") {
@@ -752,16 +773,13 @@ if (typeof sampleValue === "string") {
     } else {
         opciones = Array.from(new Set(nextDigimons.map(([_, info]) => info[field]).filter(v => v !== undefined)));
     }
-
-
-
         // Agregar "--Selecciona--" si aplica
-        if (field !== "Program" && field !== "Comida" && field !== "Driver Equipado" && field !== "Xross") {
+        if (field !== "Program" && field !== "Comida" && field !== "Driver Equipado" && field !== "Xross" && field !== "Bonus Comida") {
             let defaultOption = document.createElement("option");
             defaultOption.value = "";
             defaultOption.textContent = "--Selecciona--";
             select.appendChild(defaultOption);
-			translateSelectOptions(select);
+            translateSelectOptions(select);
         }
         // Agregar opciones
         opciones.forEach(op => {
@@ -770,9 +788,8 @@ if (typeof sampleValue === "string") {
             option.textContent = op;
             select.appendChild(option);
         });
-
         // Auto seleccionar "Ninguno" si aplica
-        if (field === "Program" || field === "Comida" || field === "Driver Equipado" || field === "Xross") {
+        if (field === "Program" || field === "Comida" || field === "Driver Equipado" || field === "Xross" || field === "Bonus Comida") {
             setTimeout(() => {
                 const ningunoOption = Array.from(select.options).find(opt => opt.textContent === "Ninguno");
                 if (ningunoOption) {
@@ -780,18 +797,17 @@ if (typeof sampleValue === "string") {
                 }
             });
         }
-
         td.appendChild(select);
         editableFields.appendChild(td);
-
         // 🆕 Forzar reorganización justo después de agregar el campo
         setTimeout(() => {
             if (typeof reorganizeTableColumns === "function") {
                 reorganizeTableColumns();
             }
         }, 0);
+    }
 
-    } else {
+ else {
         let input = document.createElement("input");
         input.type = field === "Vinculo Minimo alcanzado" ? "text" : "number";
         input.id = `field_${field}`;
@@ -1320,16 +1336,15 @@ bonusFields.forEach(bonusField => {
   const esperadoBonus = requisitos[bonusField];
   const ingresadoBonus = inputValues[bonusField];
   
-if (bonusField === "Bonus Errores") {
-  const ingNum = Number(inputValues["Error Maximo"]);
-
-  if (esperadoBonus.toString().includes("+")) {
-    const valorEsperado = Number(esperadoBonus.toString().replace("+", ""));
-    totalBonus += (ingNum >= valorEsperado) ? 1 : 0;
-  } else {
-    totalBonus += (ingNum === Number(esperadoBonus)) ? 1 : 0;
-  }
-} else if (bonusField === "Digimon Bonus") {
+  if (bonusField === "Bonus Errores") {
+    const ingNum = Number(inputValues["Error Maximo"]);
+    if (esperadoBonus.toString().includes("+")) {
+      const valorEsperado = Number(esperadoBonus.toString().replace("+", ""));
+      totalBonus += (ingNum >= valorEsperado) ? 1 : 0;
+    } else {
+      totalBonus += (ingNum === Number(esperadoBonus)) ? 1 : 0;
+    }
+  } else if (bonusField === "Digimon Bonus") {
     const digimonBonus = selected;
     if (digimonBonus && typeof digimonBonus === 'string') {
       // Normalizar ambos valores para comparación
@@ -1370,9 +1385,62 @@ if (bonusField === "Bonus Errores") {
     if (!isNaN(winRateNum) && winRateNum >= 70) {
       totalBonus += 1;
     }
+  } else if (bonusField === "Bonus Comida") {
+    // Nueva lógica para Bonus Comida - ignora el valor del diccionario y usa specialfoodcases
+    const digimonName = name; // Nombre del digimon actual (ej: "Icemon")
+    const comidaIngresada = inputValues["Bonus Comida"]; // Comida ingresada por el usuario
+    
+    console.log(`🔍 === DEBUGGING BONUS COMIDA ===`);
+    console.log(`🔍 digimonName (name):`, digimonName);
+    console.log(`🔍 selected:`, selected);
+    console.log(`🔍 comidaIngresada:`, comidaIngresada);
+    console.log(`🔍 esperadoBonus (del diccionario):`, esperadoBonus);
+    console.log(`🔍 specialfoodcases completo:`, specialfoodcases);
+    console.log(`🔍 specialfoodcases[${digimonName}]:`, specialfoodcases[digimonName]);
+    
+    // Verificar si existe el digimon en specialfoodcases
+    if (specialfoodcases[digimonName]) {
+      const validFood = specialfoodcases[digimonName];
+      console.log(`🔍 validFood encontrado:`, validFood);
+      
+      // Si hay un digimon seleccionado y existe comida válida para él
+      if (selected && validFood[selected]) {
+        const expectedFood = validFood[selected];
+        console.log(`🔍 expectedFood para ${selected}:`, expectedFood);
+        console.log(`🔍 tipo de expectedFood:`, typeof expectedFood, Array.isArray(expectedFood) ? '(array)' : '(no array)');
+        
+        let isValid = false;
+        
+        // Verificar si expectedFood es un array o un string
+        if (Array.isArray(expectedFood)) {
+          console.log(`🔍 Comparando array:`, expectedFood.map(food => `"${comidaIngresada.toLowerCase()}" === "${food.toLowerCase()}"`));
+          // Si es un array, verificar si la comida ingresada coincide con alguno de los elementos
+          isValid = expectedFood.some(food => 
+            comidaIngresada.toLowerCase() === food.toLowerCase()
+          );
+        } else {
+          console.log(`🔍 Comparando string: "${comidaIngresada.toLowerCase()}" === "${expectedFood.toLowerCase()}"`);
+          // Si es un string, comparar directamente
+          isValid = comidaIngresada.toLowerCase() === expectedFood.toLowerCase();
+        }
+        
+        console.log(`🔍 isValid:`, isValid);
+        
+        if (isValid) {
+          totalBonus += 1;
+          console.log(`✅ Bonus Comida correcto: +1 bonus otorgado`);
+        } else {
+          console.log(`❌ Bonus Comida incorrecto: sin bonus`);
+        }
+      } else {
+        console.log(`⚠️ Condición no cumplida - selected: ${selected}, validFood[selected]: ${validFood[selected]}`);
+      }
+    } else {
+      console.log(`⚠️ No existe specialfoodcases[${digimonName}]`);
+    }
+    console.log(`🔍 === FIN DEBUGGING ===`);
   }
 });
-
 punto = totalBonus;}
 	// Dentro del map, después de "Driver Equipado":
 	if (name === "Pillomon" && (field === "% Entrenamiento" || field === "EntrenamientoHecho") && !pillomonEvaluated) {
@@ -1697,41 +1765,13 @@ else if (field === "Xross") {
 		}
 	}
 }}
-// CÓDIGO DE EVALUACIÓN PARA COMIDA
+// CÓDIGO DE EVALUACIÓN PARA COMIDA (SIMPLIFICADO)
 else if (field === "Comida") {
-    // Verificar si es un caso especial
-    if (specialfoodcases[name]) {
-        const validFood = specialfoodcases[name];
-        
-        // Si hay un digimon seleccionado y existe comida válida para él
-        if (selected && validFood[selected]) {
-            const expectedFood = validFood[selected];
-            let isValid = false;
-            
-            // Verificar si expectedFood es un array o un string
-            if (Array.isArray(expectedFood)) {
-                // Si es un array, verificar si ingresado coincide con alguno de los elementos
-                isValid = expectedFood.some(food => 
-                    ingresado.toLowerCase() === food.toLowerCase()
-                );
-            } else {
-                // Si es un string, comparar directamente
-                isValid = ingresado.toLowerCase() === expectedFood.toLowerCase();
-            }
-            
-            if (isValid) {
-                punto = 1; // Punto positivo para casos especiales correctos
-            } else {
-                punto = 0; // Sin puntos para casos especiales incorrectos
-            }
-        }
+    // Solo evaluación normal (casos especiales se manejan en "Bonus Comida")
+    if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
+        punto = 0; // Sin puntos si coincide con lo esperado
     } else {
-        // Para casos normales (no especiales)
-        if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
-            punto = 0; // Sin puntos si coincide con lo esperado
-        } else {
-            punto = -10; // Penalización si no coincide
-        }
+        punto = -10; // Penalización si no coincide
     }
 }
 

@@ -386,6 +386,7 @@ main {
   </style>
 </head>
 <script src="digimonReqDict.js"></script>
+<script src="digimonstattier.js"></script>
 <body>
   <header>
     <h1 id="titleMain">Información del Digimon</h1>
@@ -393,6 +394,8 @@ main {
       <a href="./index.html">Main Hub</a>
       <a href="./calculadora.html">Digimon Evo Calc</a>
       <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+	  <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
       <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
       <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
 	  <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
@@ -466,7 +469,23 @@ main {
       </table>
     </div>
   </div>
-
+	<div class="digimon-tables full-width">
+	  <h2 id="subtitle3">Stat Base y Evoluciones</h2>
+	  <table id="tablaStats">
+		<thead>
+		  <tr>
+			<th>ATK</th>
+			<th>DEF</th>
+			<th>HP</th>
+			<th>Vel</th>
+			<th>Digipuntos</th>
+			<th>Evoluciona</th>
+			<th>Viene</th>
+		  </tr>
+		</thead>
+		<tbody></tbody>
+	  </table>
+	</div>
   <div class="digimon-tables full-width">
     <h2 id="subtitle2">Datos de requisitos del Digimon</h2>
 	<table id="tablaRequisitos">
@@ -610,7 +629,15 @@ const gruposColumnas = {
 	    grupos: {
       "Quota/Key Points": "Quota/Key Points",
       "Requisitos Obligatorios": "Requisitos Obligatorios"
-    }
+    },
+	  subtitle3: "Stat Base y Evoluciones",
+	  ATK: "ATK",
+	  DEF: "DEF", 
+	  HP: "HP",
+	  Vel: "Vel",
+	  Digipuntos: "Digipuntos",
+	  Evoluciona: "Evoluciona a",
+	  Viene: "Viene de"
 	  },
 	  en: {
 	  	titleMain: "Digimon Information",
@@ -671,7 +698,15 @@ const gruposColumnas = {
 	    grupos: {
       "Quota/Key Points": "Quota/Key Points", 
       "Requisitos Obligatorios": "Mandatory Requirements"
-    }
+    },
+	  subtitle3: "Base Stats and Evolutions", 
+	  ATK: "ATK",
+	  DEF: "DEF",
+	  HP: "HP", 
+	  Vel: "SPD",
+	  Digipuntos: "Digipoints",
+	  Evoluciona: "Evolves To",
+	  Viene: "Comes From"
 	  }
 	};
 
@@ -844,7 +879,52 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       filaGen.appendChild(td);
     });
     tablaGenerales.appendChild(filaGen);
+	// Actualizar tabla de stats
+	const tablaStats = document.querySelector("#tablaStats tbody");
+	tablaStats.innerHTML = "";
 
+	if (digimonstattier[nombre]) {
+	  const statsDigimon = digimonstattier[nombre];
+	  const filaStats = document.createElement("tr");
+	  
+	  // Campos básicos (ATK, DEF, HP, Vel, Digipuntos)
+	  ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(campo => {
+		const td = document.createElement("td");
+		td.textContent = statsDigimon[campo] ?? "-";
+		filaStats.appendChild(td);
+	  });
+	  
+	  // Campo Evoluciona (como lista)
+	  const tdEvoluciona = document.createElement("td");
+	  if (statsDigimon.Evoluciona && statsDigimon.Evoluciona.length > 0) {
+		const lista = statsDigimon.Evoluciona.map(evo => `• ${evo}`).join('<br>');
+		tdEvoluciona.innerHTML = lista;
+	  } else {
+		tdEvoluciona.textContent = "-";
+	  }
+	  filaStats.appendChild(tdEvoluciona);
+	  
+	  // Campo Viene (como lista)
+	  const tdViene = document.createElement("td");
+	  if (statsDigimon.Viene && statsDigimon.Viene.length > 0) {
+		const lista = statsDigimon.Viene.map(viene => `• ${viene}`).join('<br>');
+		tdViene.innerHTML = lista;
+	  } else {
+		tdViene.textContent = "-";
+	  }
+	  filaStats.appendChild(tdViene);
+	  
+	  tablaStats.appendChild(filaStats);
+	} else {
+	  // Si no hay datos de stats, mostrar fila vacía
+	  const filaVacia = document.createElement("tr");
+	  for (let i = 0; i < 7; i++) {
+		const td = document.createElement("td");
+		td.textContent = "-";
+		filaVacia.appendChild(td);
+	  }
+	  tablaStats.appendChild(filaVacia);
+	}
 // Actualizar tabla de requisitos
 const headersGrupos = document.getElementById("headersGrupos");
 const tablaHeaders = document.getElementById("headersRequisitos");
@@ -953,6 +1033,13 @@ headersGrupos.forEach(th => {
       }
     });
   }
+	// Actualizar título de stats
+	document.getElementById("subtitle3").textContent = t("subtitle3");
+
+	// Actualizar headers de tabla stats
+	const headersStats = document.querySelectorAll("#tablaStats thead th");
+	const clavesStats = ["ATK", "DEF", "HP", "Vel", "Digipuntos", "Evoluciona", "Viene"];
+	headersStats.forEach((th, idx) => th.textContent = t(clavesStats[idx]));
 }
 
 languageSelector.addEventListener("change", () => {

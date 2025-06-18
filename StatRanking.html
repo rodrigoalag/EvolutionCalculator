@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ranking de Digimon por Digipuntos</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+  <style>
+    /* Estilos similares al HTML original */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    #selectorContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 2rem auto;
+    }
+
+    /* Estilos para la tabla de ranking */
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+
+    .ranking-table th,
+    .ranking-table td {
+      padding: 0.5rem;
+      text-align: center;
+      border: 1px solid #ddd;
+      vertical-align: middle;
+    }
+
+    .ranking-table th {
+      background-color: transparent;
+      font-weight: bold;
+    }
+
+    /* Estilos para las imágenes en la tabla */
+    .digimon-img {
+      width: 60px !important;
+      height: 60px !important;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: transparent;
+    }
+
+    /* Estilos para clasificaciones */
+    .tier-low { background-color: transparent; }
+    .tier-mid-low { background-color: transparent; }
+    .tier-mid { background-color: transparent; }
+    .tier-mid-high { background-color: transparent; }
+    .tier-high { background-color: transparent; }
+    .tier-high-plus { background-color: transparent; }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+      .digimon-img {
+        width: 40px !important;
+        height: 40px !important;
+      }
+      
+      .ranking-table th,
+      .ranking-table td {
+        padding: 0.3rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <script src="digimonReqDict.js"></script>
+  <script src="digimonstattier.js"></script>
+
+  <header>
+    <h1>Ranking de Digimon por Digipuntos</h1>
+	<p id="mainSubtitle" data-translate="subtitle">Creado por Rodrigoalag</p>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
+	  <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <div id="selectorContainer">
+        <div class="selectorItem">
+          <label for="selectNivel">Seleccionar Nivel:</label>
+          <select id="selectNivel">
+            <option value="">-- Elige un Nivel --</option>
+          </select>
+        </div>
+		<div class="selectorItem">
+		  <label for="selectIdioma" id="labelIdioma">Idioma:</label>
+		  <select id="selectIdioma">
+			<option value="es">Español</option>
+			<option value="en">English</option>
+		  </select>
+		</div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div id="rankingContainer">
+        <table id="rankingTable" class="ranking-table" style="display: none;">
+          <thead>
+            <tr>
+              <th>Digimon</th>
+              <th>Clasificación</th>
+              <th>Imagen</th>
+              <th>Digipuntos</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+// Traducciones
+const traducciones = {
+  es: {
+    titulo: "Ranking de Digimon por Digipuntos",
+    seleccionarNivel: "Seleccionar Nivel:",
+    eligeNivel: "-- Elige un Nivel --",
+    idioma: "Idioma:",
+    digimon: "Digimon",
+    clasificacion: "Clasificación",
+    imagen: "Imagen",
+    digipuntos: "Digipuntos",
+	subtitle: "Creado por Rodrigoalag",
+ },
+  en: {
+    titulo: "Digimon Ranking by Digipoints",
+    seleccionarNivel: "Select Level:",
+    eligeNivel: "-- Choose a Level --",
+    idioma: "Language:",
+    digimon: "Digimon",
+    clasificacion: "Classification",
+    imagen: "Image",
+    digipuntos: "Digipoints",
+	subtitle: "Created by Rodrigoalag",
+ }
+};
+
+let idiomaActual = 'es';
+// Mapeo de niveles
+const nivelAEtapa = {
+  1: "Baby I",
+  2: "Baby II", 
+  3: "Child",
+  4: "Adult",
+  5: "Perfect",
+  6: "Ultimate"
+};
+
+// Clasificaciones de Digipuntos
+const clasificacionDigipuntos = [
+  { min: 0, max: 15.01, nombre: "Standard Child", clase: "tier-low" },
+  { min: 15.02, max: 16.01, nombre: "High Child", clase: "tier-mid-low" },
+  { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" },
+  { min: 30, max: 31.99, nombre: "Low Adult", clase: "tier-low" },
+  { min: 32, max: 32.49, nombre: "Mid Low Adult", clase: "tier-mid-low" },
+  { min: 32.5, max: 33.99, nombre: "Mid Adult", clase: "tier-mid" },
+  { min: 34, max: 34.99, nombre: "Mid-High Adult", clase: "tier-mid-high" },
+  { min: 35, max: 59.99, nombre: "High Adult", clase: "tier-high" },
+  { min: 60, max: 62.49, nombre: "Low Perfect", clase: "tier-low" },
+  { min: 62.5, max: 64.99, nombre: "Mid Low Perfect", clase: "tier-mid-low" },
+  { min: 65, max: 67.49, nombre: "Mid Perfect", clase: "tier-mid" },
+  { min: 67.5, max: 69.99, nombre: "Mid-High Perfect", clase: "tier-mid-high" },
+  { min: 70, max: 74.99, nombre: "High Perfect", clase: "tier-high" },
+  { min: 75, max: Infinity, nombre: "High+ Perfect", clase: "tier-high-plus" }
+];
+
+const selectNivel = document.getElementById("selectNivel");
+const rankingTable = document.getElementById("rankingTable");
+const rankingTableBody = document.querySelector("#rankingTable tbody");
+
+// Inicializar selector de niveles
+function inicializarSelector() {
+  const niveles = [...new Set(Object.values(digimonReqDict).map(d => d.Nivel))].sort((a, b) => a - b);
+  
+  niveles.forEach(nivel => {
+    const opt = document.createElement("option");
+    opt.value = nivel;
+    opt.textContent = nivelAEtapa[nivel] || `Nivel ${nivel}`;
+    selectNivel.appendChild(opt);
+  });
+}
+
+// Función para obtener clasificación
+function obtenerClasificacion(digipuntos, nivel) {
+  // Casos especiales para Digimon con pocos digipuntos pero que deben ser mutantes
+  if (digipuntos < 15 && nivel >= 3) { // Nivel 3 o superior (Child+) con pocos digipuntos
+    return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+  
+  // Caso especial para Ultimate (nivel 6)
+  if (nivel === 6) {
+    if (digipuntos >= 50 && digipuntos <= 59.99) {
+      return { min: 50, max: 59.99, nombre: "Standard Ultimate", clase: "tier-low" };
+    }
+    if (digipuntos >= 60 && digipuntos <= 69.99) {
+      return { min: 60, max: 69.99, nombre: "High Ultimate", clase: "tier-high" };
+    }
+    if (digipuntos >= 70) {
+      return { min: 70, max: Infinity, nombre: "High+ Ultimate", clase: "tier-high-plus" };
+    }
+  }
+  
+  return clasificacionDigipuntos.find(c => digipuntos >= c.min && digipuntos < c.max) || 
+         clasificacionDigipuntos[clasificacionDigipuntos.length - 1];
+}
+
+// Función para cargar imagen (reutilizar del HTML original)
+function generarVariacionesNombre(nombre) {
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+  
+  return [...new Set([
+    nombreLimpio,
+    nombreEspacios,
+    nombreGuiones,
+    nombreOriginal.toLowerCase(),
+    nombreOriginal,
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase()
+  ])];
+}
+
+// Event listener para el selector
+selectNivel.addEventListener("change", () => {
+  const nivelSeleccionado = parseInt(selectNivel.value);
+  
+  if (!nivelSeleccionado) {
+    rankingTable.style.display = "none";
+    return;
+  }
+
+  // Obtener Digimon del nivel seleccionado
+  const digimonDelNivel = Object.entries(digimonReqDict)
+    .filter(([_, data]) => data.Nivel === nivelSeleccionado)
+    .map(([nombre, _]) => nombre);
+
+  // Crear array de ranking con datos
+  const rankingData = digimonDelNivel
+    .map(nombre => {
+      const statsData = digimonstattier[nombre];
+      if (!statsData) return null;
+      
+      return {
+        nombre,
+        digipuntos: statsData.Digipuntos || 0,
+        clasificacion: obtenerClasificacion(statsData.Digipuntos || 0, nivelSeleccionado)
+      };
+    })
+    .filter(item => item !== null)
+    .sort((a, b) => b.digipuntos - a.digipuntos); // Ordenar de mayor a menor
+
+  // Generar tabla
+  generarTablaRanking(rankingData);
+  rankingTable.style.display = "table";
+});
+
+function generarTablaRanking(data) {
+  rankingTableBody.innerHTML = "";
+  
+  data.forEach((item, index) => {
+    const fila = document.createElement("tr");
+    fila.className = item.clasificacion.clase;
+    
+    // Nombre del Digimon
+    const tdNombre = document.createElement("td");
+    tdNombre.textContent = item.nombre;
+    fila.appendChild(tdNombre);
+    
+    // Clasificación
+    const tdClasificacion = document.createElement("td");
+	tdClasificacion.textContent = traducciones[idiomaActual][item.clasificacion.nombre] || item.clasificacion.nombre;
+    fila.appendChild(tdClasificacion);
+    
+    // Imagen
+    const tdImagen = document.createElement("td");
+    const img = document.createElement("img");
+    img.className = "digimon-img";
+    img.alt = item.nombre;
+    
+    // Intentar cargar imagen
+    const variaciones = generarVariacionesNombre(item.nombre);
+    let imagenCargada = false;
+    
+    const intentarCargarImagen = (indice = 0) => {
+      if (indice >= variaciones.length) {
+        img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjMwIiB5PSIzNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
+        return;
+      }
+      
+      const testImg = new Image();
+      testImg.onload = () => {
+        img.src = `img/${variaciones[indice]}.png`;
+      };
+      testImg.onerror = () => {
+        intentarCargarImagen(indice + 1);
+      };
+      testImg.src = `img/${variaciones[indice]}.png`;
+    };
+    
+    intentarCargarImagen();
+    tdImagen.appendChild(img);
+    fila.appendChild(tdImagen);
+    
+    // Digipuntos
+    const tdDigipuntos = document.createElement("td");
+    tdDigipuntos.textContent = item.digipuntos;
+    fila.appendChild(tdDigipuntos);
+    
+    rankingTableBody.appendChild(fila);
+  });
+}
+// Función para actualizar traducciones
+function actualizarTraducciones() {
+  const t = traducciones[idiomaActual];
+  
+  // Actualizar título
+  document.querySelector('h1').textContent = t.titulo;
+  
+  // Actualizar labels
+  document.querySelector('label[for="selectNivel"]').textContent = t.seleccionarNivel;
+  document.querySelector('#labelIdioma').textContent = t.idioma;
+  
+  // Actualizar opción por defecto del selector de nivel
+  const opcionPorDefecto = document.querySelector('#selectNivel option[value=""]');
+  if (opcionPorDefecto) {
+    opcionPorDefecto.textContent = t.eligeNivel;
+  }
+  
+  // Actualizar headers de la tabla
+  const headers = document.querySelectorAll('#rankingTable th');
+  if (headers.length > 0) {
+    headers[0].textContent = t.digimon;
+    headers[1].textContent = t.clasificacion;
+    headers[2].textContent = t.imagen;
+    headers[3].textContent = t.digipuntos;
+  }
+  
+  // Recargar tabla si hay datos
+  if (selectNivel.value) {
+    selectNivel.dispatchEvent(new Event('change'));
+  }
+}
+
+// Event listener para el selector de idioma
+document.addEventListener("DOMContentLoaded", () => {
+  const selectIdioma = document.getElementById("selectIdioma");
+  
+  selectIdioma.addEventListener("change", () => {
+    idiomaActual = selectIdioma.value;
+    actualizarTraducciones();
+  });
+  
+  inicializarSelector();
+  actualizarTraducciones();
+});
+  </script>
+</body>
+</html>

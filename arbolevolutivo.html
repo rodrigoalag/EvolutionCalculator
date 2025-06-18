@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Árbol Evolutivo de Digimon</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+  <style>
+	body {
+	  overflow-x: auto;
+	}
+	.container {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  gap: 2rem;
+	  width: 100%;
+	  margin: 0 auto; /* Cambiar de margin: 0 */
+	  position: relative;
+	  justify-content: center; /* Agregar */
+	}
+
+    #selectorContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 2rem auto;
+    }
+
+    .selectorItem {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Estilos para el árbol evolutivo */
+	.evolution-tree {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  gap: 3rem;
+	  margin: 2rem auto;
+	  width: 100%;
+	  position: relative;
+	  overflow: visible; /* Agregar esta línea */
+	  padding: 20px 0; /* Agregar padding vertical */
+	}
+
+	.evolution-level {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  gap: 1rem;
+	  width: 100%; /* Asegurar que tome el ancho completo */
+	}
+
+    .level-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+	.evolution-row {
+	  display: flex;
+	  justify-content: center; /* Asegurar que esté centrado */
+	  align-items: center;
+	  gap: 2rem;
+	  flex-wrap: nowrap;
+	  width: 100%;
+	  min-height: 120px;
+	  margin: 0 auto; /* Agregar esta línea */
+	}
+
+	.digimon-card {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  gap: 0.5rem;
+	  padding: 1rem;
+	  border: 2px solid #ddd;
+	  border-radius: 12px;
+	  background-color: #f9f9f9;
+	  min-width: 120px;
+	  flex-shrink: 0; /* Evitar que se compriman */
+	  transition: transform 0.2s, box-shadow 0.2s;
+	}
+
+    .digimon-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .digimon-img {
+      width: 80px !important;
+      height: 80px !important;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: transparent;
+    }
+
+    .digimon-name {
+      font-weight: bold;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+	/* Responsividad mejorada */
+	@media (max-width: 1200px) {
+	  .evolution-row {
+		gap: 1.5rem;
+	  }
+	  
+	  .digimon-card {
+		min-width: 100px;
+		padding: 0.8rem;
+	  }
+	}
+
+	@media (max-width: 768px) {
+	  .evolution-row {
+		gap: 1rem;
+		width: max-content;
+		justify-content: flex-start;
+		padding: 0 1rem;
+	  }
+	  
+	  .digimon-img {
+		width: 60px !important;
+		height: 60px !important;
+	  }
+	  
+	  .digimon-card {
+		min-width: 90px;
+		padding: 0.5rem;
+	  }
+	}
+
+	@media (max-width: 480px) {
+	  .evolution-row {
+		gap: 0.5rem;
+	  }
+	  
+	  .digimon-card {
+		min-width: 80px;
+		padding: 0.4rem;
+	  }
+	}
+
+    /* Colores por nivel */
+    .baby1-card { border-color: #ffb3ba; background-color: #ffebee; }
+    .baby2-card { border-color: #ffdfba; background-color: #fff8e1; }
+    .child-card { border-color: #ffffba; background-color: #fffde7; }
+    .adult-card { border-color: #baffc9; background-color: #e8f5e8; }
+    .perfect-card { border-color: #bae1ff; background-color: #e3f2fd; }
+    .ultimate-card { border-color: #dfc5fe; background-color: #f3e5f5; }
+	.evolution-line {
+	  pointer-events: none;
+	  position: absolute !important;
+	}
+
+	.evolution-arrow-tip {
+	  pointer-events: none;
+	}
+	#evolutionTreeContainer {
+	  position: relative;
+	  width: 100%;
+	  overflow: visible; /* Cambiar de sin especificar a visible */
+	  padding: 20px; /* Agregar padding para dar espacio a las flechas */
+	}
+  </style>
+</head>
+
+<body>
+  <script src="digimonReqDict.js"></script>
+  <script src="digimonstattier.js"></script>
+
+  <header>
+    <h1 id="titulo">Árbol Evolutivo de Digimon</h1>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+	  <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
+	  <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <div id="selectorContainer">
+        <div class="selectorItem">
+          <label for="selectIdioma" id="labelIdioma">Idioma:</label>
+          <select id="selectIdioma">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+        
+        <div class="selectorItem">
+          <label for="selectTama" id="labelTama">Seleccionar Tama:</label>
+          <select id="selectTama">
+            <option value="">-- Elige un Tama --</option>
+          </select>
+        </div>
+
+        <div class="selectorItem">
+          <label for="selectNivel" id="labelNivel">Seleccionar Nivel:</label>
+          <select id="selectNivel" disabled>
+            <option value="">-- Elige un Nivel --</option>
+          </select>
+        </div>
+
+        <div class="selectorItem">
+          <label for="selectDigimon" id="labelDigimon">Seleccionar Digimon:</label>
+          <select id="selectDigimon" disabled>
+            <option value="">-- Elige un Digimon --</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div id="evolutionTreeContainer">
+        <!-- El árbol evolutivo se generará aquí -->
+      </div>
+    </section>
+  </main>
+
+  <script>
+// Traducciones
+const traducciones = {
+  es: {
+    titulo: "Árbol Evolutivo de Digimon",
+    seleccionarTama: "Seleccionar Tama:",
+    seleccionarNivel: "Seleccionar Nivel:",
+    seleccionarDigimon: "Seleccionar Digimon:",
+    eligeTama: "-- Elige un Tama --",
+    eligeNivel: "-- Elige un Nivel --",
+    eligeDigimon: "-- Elige un Digimon --",
+    idioma: "Idioma:",
+  },
+  en: {
+    titulo: "Digimon Evolution Tree",
+    seleccionarTama: "Select Tama:",
+    seleccionarNivel: "Select Level:",
+    seleccionarDigimon: "Select Digimon:",
+    eligeTama: "-- Choose a Tama --",
+    eligeNivel: "-- Choose a Level --",
+    eligeDigimon: "-- Choose a Digimon --",
+    idioma: "Language:",
+  }
+};
+
+let idiomaActual = 'es';
+
+// Mapeo de niveles
+const nivelAEtapa = {
+  1: "Baby I",
+  2: "Baby II", 
+  3: "Child",
+  4: "Adult",
+  5: "Perfect",
+  6: "Ultimate"
+};
+
+const etapaAClase = {
+  1: "baby1-card",
+  2: "baby2-card",
+  3: "child-card",
+  4: "adult-card",
+  5: "perfect-card",
+  6: "ultimate-card"
+};
+
+// Referencias a elementos
+const selectTama = document.getElementById("selectTama");
+const selectNivel = document.getElementById("selectNivel");
+const selectDigimon = document.getElementById("selectDigimon");
+const evolutionTreeContainer = document.getElementById("evolutionTreeContainer");
+
+// Función para generar variaciones de nombre (reutilizada)
+function generarVariacionesNombre(nombre) {
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+  
+  return [...new Set([
+    nombreLimpio,
+    nombreEspacios,
+    nombreGuiones,
+    nombreOriginal.toLowerCase(),
+    nombreOriginal,
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase()
+  ])];
+}
+
+// Función para crear imagen de Digimon
+function crearImagenDigimon(nombre) {
+  const img = document.createElement("img");
+  img.className = "digimon-img";
+  img.alt = nombre;
+  
+  const variaciones = generarVariacionesNombre(nombre);
+  
+  const intentarCargarImagen = (indice = 0) => {
+    if (indice >= variaciones.length) {
+      img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
+      return;
+    }
+    
+    const testImg = new Image();
+    testImg.onload = () => {
+      img.src = `img/${variaciones[indice]}.png`;
+    };
+    testImg.onerror = () => {
+      intentarCargarImagen(indice + 1);
+    };
+    testImg.src = `img/${variaciones[indice]}.png`;
+  };
+  
+  intentarCargarImagen();
+  return img;
+}
+
+// Función para construir el árbol evolutivo
+function construirArbolEvolutivo(digimonInicial) {
+  const arbol = {};
+  const conexiones = [];
+  const visitados = new Set();
+  
+  function explorarEvoluciones(nombre, nivel, nivelInicial) {
+    if (visitados.has(nombre)) return;
+    visitados.add(nombre);
+    
+    // Agregar al árbol
+    if (!arbol[nivel]) arbol[nivel] = [];
+    arbol[nivel].push(nombre);
+    
+    // Explorar evoluciones del nivel inicial y sides del siguiente nivel
+    if (nivel <= nivelInicial + 1) {
+      const statsData = digimonstattier[nombre];
+      if (statsData && statsData.Evoluciona) {
+        let evoluciones = [];
+        
+        if (typeof statsData.Evoluciona === 'string') {
+          evoluciones = statsData.Evoluciona.split(',').map(e => e.trim()).filter(e => e);
+        } else if (Array.isArray(statsData.Evoluciona)) {
+          evoluciones = statsData.Evoluciona.filter(e => e && e.trim());
+        }
+        
+        evoluciones.forEach(evolucion => {
+          const reqData = digimonReqDict[evolucion];
+          if (reqData) {
+            // Solo procesar si es side del nivel actual o evolución al siguiente nivel
+            // Evitar ir más allá del siguiente nivel
+            if ((reqData.Nivel === nivel) || (reqData.Nivel === nivel + 1 && reqData.Nivel <= nivelInicial + 1)) {
+              conexiones.push({
+                desde: nombre,
+                hacia: evolucion,
+                nivelDesde: nivel,
+                nivelHacia: reqData.Nivel
+              });
+              explorarEvoluciones(evolucion, reqData.Nivel, nivelInicial);
+            }
+          }
+        });
+      }
+    }
+  }
+  
+  const reqInicial = digimonReqDict[digimonInicial];
+  if (reqInicial) {
+    explorarEvoluciones(digimonInicial, reqInicial.Nivel, reqInicial.Nivel);
+  }
+  
+  return { arbol, conexiones };
+}
+
+// Función para generar el HTML del árbol
+function generarArbolHTML(data) {
+  const { arbol, conexiones } = data;
+  evolutionTreeContainer.innerHTML = "";
+  
+  if (Object.keys(arbol).length === 0) {
+    evolutionTreeContainer.innerHTML = "<p>No se encontraron evoluciones para este Digimon.</p>";
+    return;
+  }
+  
+  const treeDiv = document.createElement("div");
+  treeDiv.className = "evolution-tree";
+  treeDiv.style.position = "relative"; // Para posicionamiento absoluto de líneas
+  
+  const nivelesOrdenados = Object.keys(arbol).sort((a, b) => parseInt(a) - parseInt(b));
+  
+  nivelesOrdenados.forEach((nivel, index) => {
+    const levelDiv = document.createElement("div");
+    levelDiv.className = "evolution-level";
+    levelDiv.setAttribute("data-nivel", nivel);
+    
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "level-title";
+    const etapa = nivelAEtapa[nivel] || `Nivel ${nivel}`;
+    titleDiv.textContent = traducciones[idiomaActual][etapa] || etapa;
+    levelDiv.appendChild(titleDiv);
+    
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "evolution-row";
+    
+    arbol[nivel].forEach(digimon => {
+      const cardDiv = document.createElement("div");
+      cardDiv.className = `digimon-card ${etapaAClase[nivel] || ''}`;
+      cardDiv.setAttribute("data-digimon", digimon);
+      cardDiv.setAttribute("data-nivel", nivel);
+      
+      const img = crearImagenDigimon(digimon);
+      cardDiv.appendChild(img);
+      
+      const nameDiv = document.createElement("div");
+      nameDiv.className = "digimon-name";
+      nameDiv.textContent = digimon;
+      cardDiv.appendChild(nameDiv);
+      
+      rowDiv.appendChild(cardDiv);
+    });
+    
+    levelDiv.appendChild(rowDiv);
+    treeDiv.appendChild(levelDiv);
+  });
+  
+  evolutionTreeContainer.appendChild(treeDiv);
+  
+  // Dibujar líneas específicas después de que el DOM esté listo
+  setTimeout(() => dibujarLineasEspecificas(conexiones), 100);
+}
+
+// Función para actualizar traducciones
+function actualizarTraducciones() {
+  const t = traducciones[idiomaActual];
+  
+  document.querySelector('#titulo').textContent = t.titulo;
+  document.querySelector('#labelIdioma').textContent = t.idioma;
+  document.querySelector('#labelTama').textContent = t.seleccionarTama;
+  document.querySelector('#labelNivel').textContent = t.seleccionarNivel;
+  document.querySelector('#labelDigimon').textContent = t.seleccionarDigimon;
+  
+  // Actualizar opciones por defecto
+  document.querySelector('#selectTama option[value=""]').textContent = t.eligeTama;
+  document.querySelector('#selectNivel option[value=""]').textContent = t.eligeNivel;
+  document.querySelector('#selectDigimon option[value=""]').textContent = t.eligeDigimon;
+  
+  // Regenerar árbol si existe
+  if (selectDigimon.value) {
+    const arbol = construirArbolEvolutivo(selectDigimon.value);
+    generarArbolHTML(arbol);
+  }
+}
+
+// Inicializar selectores
+function inicializarSelectores() {
+  // Obtener Tamas únicos
+  const tamas = [...new Set(Object.values(digimonReqDict).map(d => d.Tama))].sort();
+  
+  tamas.forEach(tama => {
+    const opt = document.createElement("option");
+    opt.value = tama;
+    opt.textContent = tama;
+    selectTama.appendChild(opt);
+  });
+}
+
+// Event listeners
+selectTama.addEventListener("change", () => {
+  const tamaSeleccionado = selectTama.value;
+  
+  selectNivel.innerHTML = '<option value="">-- Elige un Nivel --</option>';
+  selectDigimon.innerHTML = '<option value="">-- Elige un Digimon --</option>';
+  selectNivel.disabled = !tamaSeleccionado;
+  selectDigimon.disabled = true;
+  evolutionTreeContainer.innerHTML = "";
+  
+  if (tamaSeleccionado) {
+    const niveles = [...new Set(Object.values(digimonReqDict)
+      .filter(d => d.Tama === tamaSeleccionado)
+      .map(d => d.Nivel))].sort((a, b) => a - b);
+    
+    niveles.forEach(nivel => {
+      const opt = document.createElement("option");
+      opt.value = nivel;
+      opt.textContent = nivelAEtapa[nivel] || `Nivel ${nivel}`;
+      selectNivel.appendChild(opt);
+    });
+  }
+  
+  actualizarTraducciones();
+});
+
+selectNivel.addEventListener("change", () => {
+  const tamaSeleccionado = selectTama.value;
+  const nivelSeleccionado = parseInt(selectNivel.value);
+  
+  selectDigimon.innerHTML = '<option value="">-- Elige un Digimon --</option>';
+  selectDigimon.disabled = !nivelSeleccionado;
+  evolutionTreeContainer.innerHTML = "";
+  
+  if (tamaSeleccionado && nivelSeleccionado) {
+    const digimon = Object.keys(digimonReqDict)
+      .filter(nombre => {
+        const data = digimonReqDict[nombre];
+        return data.Tama === tamaSeleccionado && 
+               data.Nivel === nivelSeleccionado;
+      })
+      .sort();
+    
+    digimon.forEach(nombre => {
+      const opt = document.createElement("option");
+      opt.value = nombre;
+      opt.textContent = nombre;
+      selectDigimon.appendChild(opt);
+    });
+  }
+  
+  actualizarTraducciones();
+});
+
+selectDigimon.addEventListener("change", () => {
+  const digimonSeleccionado = selectDigimon.value;
+  
+  if (digimonSeleccionado) {
+    const data = construirArbolEvolutivo(digimonSeleccionado);
+    generarArbolHTML(data);
+  } else {
+    evolutionTreeContainer.innerHTML = "";
+  }
+});
+// Selector de idioma
+document.getElementById("selectIdioma").addEventListener("change", (e) => {
+  idiomaActual = e.target.value;
+  actualizarTraducciones();
+});
+
+// Inicializar al cargar
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarSelectores();
+  actualizarTraducciones();
+});
+function dibujarLineasEspecificas(conexiones) {
+  // Limpiar líneas existentes
+  const lineasExistentes = document.querySelectorAll('.evolution-line');
+  lineasExistentes.forEach(linea => linea.remove());
+  
+  conexiones.forEach(conexion => {
+    const cardDesde = document.querySelector(`[data-digimon="${conexion.desde}"]`);
+    const cardHacia = document.querySelector(`[data-digimon="${conexion.hacia}"]`);
+    
+    if (cardDesde && cardHacia) {
+      // Obtener posiciones relativas al contenedor del árbol
+      const containerRect = evolutionTreeContainer.getBoundingClientRect();
+      const rectDesde = cardDesde.getBoundingClientRect();
+      const rectHacia = cardHacia.getBoundingClientRect();
+      
+      // Calcular coordenadas relativas al contenedor
+      let x1, y1, x2, y2;
+      
+      // Verificar si es una evolución side (mismo nivel)
+      if (conexion.nivelDesde === conexion.nivelHacia) {
+        // Evolución horizontal (side evolution)
+        x1 = rectDesde.right - containerRect.left;
+        y1 = rectDesde.top + rectDesde.height / 2 - containerRect.top;
+        x2 = rectHacia.left - containerRect.left;
+        y2 = rectHacia.top + rectHacia.height / 2 - containerRect.top;
+      } else {
+        // Evolución vertical (nivel diferente)
+        x1 = rectDesde.left + rectDesde.width / 2 - containerRect.left;
+        y1 = rectDesde.bottom - containerRect.top;
+        x2 = rectHacia.left + rectHacia.width / 2 - containerRect.left;
+        y2 = rectHacia.top - containerRect.top;
+      }
+      
+      // Crear SVG para líneas más precisas
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.style.position = 'absolute';
+      svg.style.top = '0';
+      svg.style.left = '0';
+      svg.style.width = '100%';
+      svg.style.height = '100%';
+      svg.style.pointerEvents = 'none';
+      svg.style.zIndex = '1';
+      svg.style.overflow = 'visible';
+      svg.classList.add('evolution-line');
+      
+      // Crear línea
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#666');
+      line.setAttribute('stroke-width', '2');
+      line.setAttribute('marker-end', 'url(#arrowhead)');
+      
+      // Crear marcador de flecha
+      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+      marker.setAttribute('id', 'arrowhead');
+      marker.setAttribute('markerWidth', '10');
+      marker.setAttribute('markerHeight', '7');
+      marker.setAttribute('refX', '9');
+      marker.setAttribute('refY', '3.5');
+      marker.setAttribute('orient', 'auto');
+      
+      const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+      polygon.setAttribute('fill', '#666');
+      
+      marker.appendChild(polygon);
+      defs.appendChild(marker);
+      svg.appendChild(defs);
+      svg.appendChild(line);
+      
+      evolutionTreeContainer.appendChild(svg);
+    }
+  });
+}
+  </script>
+</body>
+</html>

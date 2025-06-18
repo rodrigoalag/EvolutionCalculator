@@ -109,7 +109,7 @@ function updateLevelOptions() {
   levelOptions.forEach(option => {
     const levelNumber = option.value;
     if (levelNumber) {
-      option.textContent = `${getSelectText('level')} ${levelNumber}`;
+      option.textContent = nivelAEtapa[levelNumber];
     }
   });
 }
@@ -415,7 +415,7 @@ tamaSelect.addEventListener("change", () => {
   nivelesFiltrados.forEach(nivel => {
     const option = document.createElement("option");
     option.value = nivel;
-    option.textContent = nivelAEtapa[nivel] || `${getSelectText('level')} ${nivel}`;
+    option.textContent = nivelAEtapa[nivel];
     nivelSelect.appendChild(option);
   });
 });

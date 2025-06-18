@@ -942,11 +942,15 @@ function traducirValor(campo, valor) {
 		  Object.entries(foodForDigimon)
 			.map(function([digimon, comida]) {
 			  if (Array.isArray(comida)) {
-				return comida.map(function(c) {
-				  return "<li>" + digimon + ": " + c + "</li>";
-				}).join('');
+				// Traducir cada comida y agruparlas para el mismo digimon
+				const comidasTraducidas = comida.map(function(c) {
+				  return traducciones[c] || c;
+				});
+				return "<li>" + digimon + ": " + comidasTraducidas.join(', ') + "</li>";
 			  } else {
-				return "<li>" + digimon + ": " + comida + "</li>";
+				// Traducir la comida individual
+				const comidaTraducida = traducciones[comida] || comida;
+				return "<li>" + digimon + ": " + comidaTraducida + "</li>";
 			  }
 			})
 			.join('') +

@@ -854,17 +854,21 @@ function actualizarTextosUI() {
     Object.keys(digimon).forEach(campo => {
       if (!generales.includes(campo)) {
         const td = filaReq.children[i];
-        td.textContent = traducirValor(campo, digimon[campo]);
+        td.innerHTML = traducirValor(campo, digimon[campo]);
         i++;
       }
     });
   }
 }
 
-const languageSelector = document.getElementById("languageSelector");
 languageSelector.addEventListener("change", () => {
   currentLanguage = languageSelector.value;
   actualizarTextosUI();
+  
+  // Agregar estas líneas para forzar actualización de la tabla
+  if (selectDigimon.value) {
+    selectDigimon.dispatchEvent(new Event('change'));
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -933,30 +937,32 @@ function traducirValor(campo, valor) {
         "</ul>";
     }
   }
-	// Manejo especial para "Comida"
-	if (campo === "Comida") {
-	  const digimonSeleccionado = selectDigimon.value;
-	  if (digimonSeleccionado && specialfoodcases[digimonSeleccionado]) {
-		const foodForDigimon = specialfoodcases[digimonSeleccionado];
-		return "<ul>" +
-		  Object.entries(foodForDigimon)
-			.map(function([digimon, comida]) {
-			  if (Array.isArray(comida)) {
-				// Traducir cada comida y agruparlas para el mismo digimon
-				const comidasTraducidas = comida.map(function(c) {
-				  return traducciones[c] || c;
-				});
-				return "<li>" + digimon + ": " + comidasTraducidas.join(', ') + "</li>";
-			  } else {
-				// Traducir la comida individual
-				const comidaTraducida = traducciones[comida] || comida;
-				return "<li>" + digimon + ": " + comidaTraducida + "</li>";
-			  }
-			})
-			.join('') +
-		  "</ul>";
-	  }
-	}
+// Reemplaza la sección de "Comida" en la función traducirValor con esto:
+
+// Manejo especial para "Comida"
+if (campo === "Comida") {
+  const digimonSeleccionado = selectDigimon.value;
+  if (digimonSeleccionado && specialfoodcases[digimonSeleccionado]) {
+    const foodForDigimon = specialfoodcases[digimonSeleccionado];
+    return "<ul>" +
+      Object.entries(foodForDigimon)
+        .map(function([digimon, comida]) {
+          if (Array.isArray(comida)) {
+            // Traducir cada comida y agruparlas para el mismo digimon
+            const comidasTraducidas = comida.map(function(c) {
+              return traducciones[currentLanguage][c] || c; // Cambio aquí
+            });
+            return "<li>" + digimon + ": " + comidasTraducidas.join(', ') + "</li>";
+          } else {
+            // Traducir la comida individual
+            const comidaTraducida = traducciones[currentLanguage][comida] || comida; // Cambio aquí
+            return "<li>" + digimon + ": " + comidaTraducida + "</li>";
+          }
+        })
+        .join('') +
+      "</ul>";
+  }
+}
   // Traducciones generales
   const idioma = traducciones[currentLanguage] || {};
   const traduccionesCampo = idioma.campos || {};

@@ -513,10 +513,7 @@ const specialEntrenamientoCases = {
 	}
 };
 const specialfoodcases = {
-    "Icemon": {
-		"Gotsumon": ["Verdura Congelada", "Hongo Congelado"],
-		"Yuki Agumon": ["Verdura Congelada", "Hongo Congelado"]
-	}
+    "Icemon": ["Verdura Congelada", "Hongo Congelado"]
 };
 // Configuración de agrupación de columnas
 const gruposColumnas = {
@@ -1029,28 +1026,38 @@ function traducirValor(campo, valor) {
   }
 // Reemplaza la sección de "Comida" en la función traducirValor con esto:
 
-// Manejo especial para "Comida"
+// Manejo especial para "Bonus Comida" (flexible para ambos formatos)
 if (campo === "Bonus Comida") {
   const digimonSeleccionado = selectDigimon.value;
   if (digimonSeleccionado && specialfoodcases[digimonSeleccionado]) {
     const foodForDigimon = specialfoodcases[digimonSeleccionado];
-    return "<ul>" +
-      Object.entries(foodForDigimon)
-        .map(function([digimon, comida]) {
-          if (Array.isArray(comida)) {
-            // Traducir cada comida y agruparlas para el mismo digimon
-            const comidasTraducidas = comida.map(function(c) {
-              return traducciones[currentLanguage][c] || c; // Cambio aquí
-            });
-            return "<li>" + digimon + ": " + comidasTraducidas.join(', ') + "</li>";
-          } else {
-            // Traducir la comida individual
-            const comidaTraducida = traducciones[currentLanguage][comida] || comida; // Cambio aquí
-            return "<li>" + digimon + ": " + comidaTraducida + "</li>";
-          }
-        })
-        .join('') +
-      "</ul>";
+    
+    // Formato nuevo simplificado: "Icemon": ["Verdura Congelada", "Hongo Congelado"]
+    if (Array.isArray(foodForDigimon)) {
+      const comidasTraducidas = foodForDigimon.map(function(comida) {
+        return traducciones[currentLanguage][comida] || comida;
+      });
+      return comidasTraducidas.join(', ');
+    }
+    
+    // Formato anterior complejo: "Icemon": { "Gotsumon": ["Verdura Congelada"], "Yuki Agumon": [...] }
+    if (typeof foodForDigimon === 'object' && !Array.isArray(foodForDigimon)) {
+      return "<ul>" +
+        Object.entries(foodForDigimon)
+          .map(function([digimon, comida]) {
+            if (Array.isArray(comida)) {
+              const comidasTraducidas = comida.map(function(c) {
+                return traducciones[currentLanguage][c] || c;
+              });
+              return "<li>" + digimon + ": " + comidasTraducidas.join(', ') + "</li>";
+            } else {
+              const comidaTraducida = traducciones[currentLanguage][comida] || comida;
+              return "<li>" + digimon + ": " + comidaTraducida + "</li>";
+            }
+          })
+          .join('') +
+        "</ul>";
+    }
   }
 }
   // Traducciones generales

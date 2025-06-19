@@ -168,7 +168,7 @@ const digimonstattier = {
     "ATK": 210, "DEF": 80, "HP": 1750, "Vel": 135, "Digipuntos": 60, "Evoluciona": ["Gigadramon", "Mugendramon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]
   },
   "Gigadramon": {
-    "ATK": 220, "DEF": 80, "HP": 1800, "Vel": 140, "Digipuntos": 62, "Evoluciona": ["Mugendramon"], "Viene": ["Megadramon"]
+    "ATK": 220, "DEF": 110, "HP": 1800, "Vel": 140, "Digipuntos": 65, "Evoluciona": ["Mugendramon"], "Viene": ["Megadramon"]
   },
   "SuperStarmon": { // Cambiar
     "ATK": 160, "DEF": 90, "HP": 1902, "Vel": 159, "Digipuntos": 60, "Viene": ["Starmon", "ShootingStarmon"]

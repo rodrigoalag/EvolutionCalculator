@@ -234,31 +234,31 @@ function centrarYZoom(zoomFactor = 1) {
 
   let scale = Math.min(scaleX, scaleY);
 
-  // Detectar móvil (simple)
   const isMobile = window.innerWidth <= 600;
 
-  // Ajustar zoomFactor y posición para móvil
   if (isMobile) {
-    zoomFactor = 0.85;  // menos zoom para evitar "pegado"
+    zoomFactor = 0.85;
+    scale *= zoomFactor;
+
+    scale = Math.min(Math.max(scale, 0.4), 2);
+
+    // En móvil no aplicar translate, solo zoom en 0,0
+    svg.transition().duration(700)
+      .call(zoom.transform, d3.zoomIdentity.scale(scale));
+
+  } else {
+    scale *= zoomFactor;
+
+    scale = Math.min(Math.max(scale, 0.4), 2);
+
+    const translateX = (svgWidth - scale * (minY + maxY)) / 2;
+    const translateY = (svgHeight - scale * (minX + maxX)) / 2;
+
+    svg.transition().duration(700)
+      .call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
   }
-
-  scale *= zoomFactor;
-
-  // Limitar escala para no zoom muy pequeño ni muy grande
-  scale = Math.min(Math.max(scale, 0.4), 2);
-
-  // Centrar con offset distinto para móvil
-  const translateX = isMobile
-    ? (svgWidth - scale * (minY + maxY)) / 2 + 50  // un poco más a la derecha
-    : (svgWidth - scale * (minY + maxY)) / 2;
-
-  const translateY = isMobile
-    ? (svgHeight - scale * (minX + maxX)) / 2 - 30  // un poco más arriba
-    : (svgHeight - scale * (minX + maxX)) / 2;
-
-  svg.transition().duration(700)
-    .call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
 }
+
 
 
 function obtenerTamas() {

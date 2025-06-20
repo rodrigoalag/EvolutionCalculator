@@ -157,29 +157,35 @@ function traducirUI() {
   mensajeInicial.textContent = t.mensajeInicial;
 }
 
+// Función para cargar imagen (reutilizar del HTML original)
 function generarVariacionesNombre(nombre) {
-  const base = nombre.toLowerCase().replace(/\s+/g, '').replace(/[()]/g, '');
-  return [base, base.replace(/-/g, ''), base.replace(/’/g, '')];
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+  
+  return [...new Set([
+    nombreLimpio,
+    nombreEspacios,
+    nombreGuiones,
+    nombreOriginal.toLowerCase(),
+    nombreOriginal,
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase()
+  ])];
 }
+
 
 function crearImagenDigimon(nombre) {
   const img = document.createElement("img");
   img.className = "digimon-img";
   img.alt = nombre;
 
-  // Normaliza: minúsculas, sin espacios, paréntesis, guiones, apóstrofes
-  const normalizar = n =>
-    n.toLowerCase().replace(/\s+/g, '')
-                   .replace(/[()\-\’]/g, '');
-
-  const variaciones = [
-    normalizar(nombre) // ejemplo: "metalgreymonvirus"
-  ];
+  const variaciones = generarVariacionesNombre(nombre);
 
   let i = 0;
   function intentar() {
     if (i >= variaciones.length) {
-      // No encontró imagen, placeholder
+      // No se encontró imagen, poner placeholder SVG
       img.src = "data:image/svg+xml;base64,PHN2ZyB3a..."; 
       return;
     }
@@ -196,6 +202,7 @@ function crearImagenDigimon(nombre) {
 
   return img;
 }
+
 
 
 

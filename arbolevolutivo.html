@@ -166,20 +166,34 @@ function crearImagenDigimon(nombre) {
   const img = document.createElement("img");
   img.className = "digimon-img";
   img.alt = nombre;
-  const variaciones = generarVariacionesNombre(nombre);
-  const intentar = (i = 0) => {
+
+  // Variaciones para probar nombres posibles de archivos
+  const variaciones = [
+    nombre.toLowerCase().replace(/\s+/g, '').replace(/[()]/g, ''),  // todo pegado y limpio
+    nombre.toLowerCase().replace(/\s+/g, ''),                     // sin espacios
+    nombre.toLowerCase().replace(/([A-Z])/g, (m) => m.toLowerCase()), // nombre tal cual en minúscula (camel case bajado)
+  ];
+
+  let i = 0;
+  function intentar() {
     if (i >= variaciones.length) {
-      img.src = "data:image/svg+xml;base64,PHN2ZyB3a..."; // placeholder imagen no encontrada
+      // No se encontró imagen, poner placeholder SVG base64 o vacío
+      img.src = "data:image/svg+xml;base64,PHN2ZyB3a..."; 
       return;
     }
+    const srcTry = `icon/${variaciones[i]}.png`;
     const testImg = new Image();
-    testImg.onload = () => { img.src = `icon/${variaciones[i]}.png`; };
-    testImg.onerror = () => intentar(i + 1);
-    testImg.src = `icon/${variaciones[i]}.png`;
-  };
+    testImg.onload = () => { img.src = srcTry; };
+    testImg.onerror = () => {
+      i++;
+      intentar();
+    };
+    testImg.src = srcTry;
+  }
   intentar();
   return img;
 }
+
 
 function obtenerTamas() {
   const set = new Set();

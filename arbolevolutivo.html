@@ -167,18 +167,18 @@ function crearImagenDigimon(nombre) {
   img.className = "digimon-img";
   img.alt = nombre;
 
-  // Variaciones para probar nombres posibles de archivos
+  // Variaciones a probar:
+  // 1. Nombre original tal cual (sin cambios)
+  // 2. Nombre en minúsculas sin espacios ni paréntesis
   const variaciones = [
-    nombre.toLowerCase().replace(/\s+/g, '').replace(/[()]/g, ''),  // todo pegado y limpio
-    nombre.toLowerCase().replace(/\s+/g, ''),                     // sin espacios
-    nombre.toLowerCase().replace(/([A-Z])/g, (m) => m.toLowerCase()), // nombre tal cual en minúscula (camel case bajado)
+    nombre, // original exacto, para cargar "VDramonBlack.png"
+    nombre.toLowerCase().replace(/\s+/g, '').replace(/[()]/g, '') // todo pegado y limpio minúsculas
   ];
 
   let i = 0;
   function intentar() {
     if (i >= variaciones.length) {
-      // No se encontró imagen, poner placeholder SVG base64 o vacío
-      img.src = "data:image/svg+xml;base64,PHN2ZyB3a..."; 
+      img.src = "data:image/svg+xml;base64,PHN2ZyB3a..."; // placeholder
       return;
     }
     const srcTry = `icon/${variaciones[i]}.png`;
@@ -191,8 +191,10 @@ function crearImagenDigimon(nombre) {
     testImg.src = srcTry;
   }
   intentar();
+
   return img;
 }
+
 
 
 function obtenerTamas() {

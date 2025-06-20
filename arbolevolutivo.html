@@ -203,6 +203,54 @@ function crearImagenDigimon(nombre) {
   return img;
 }
 
+function isMobile() {
+  return window.innerWidth <= 600;
+}
+
+function centrarYZoom(zoomFactor = 1) {
+  if (!d3Root) return;
+
+  const treeLayout = d3.tree().nodeSize([80, 225]);
+  treeLayout(d3Root);
+
+  const nodes = d3Root.descendants();
+
+  const xVals = nodes.map(d => d.x);
+  const yVals = nodes.map(d => d.y);
+
+  const minX = Math.min(...xVals);
+  const maxX = Math.max(...xVals);
+  const minY = Math.min(...yVals);
+  const maxY = Math.max(...yVals);
+
+  const width = maxY - minY;
+  const height = maxX - minX;
+
+  const svgWidth = svg.node().clientWidth;
+  const svgHeight = svg.node().clientHeight;
+
+  const scaleX = svgWidth / (width * 1.1);
+  const scaleY = svgHeight / (height * 1.1);
+
+  let scale = Math.min(scaleX, scaleY);
+
+  // Aplica el factor de zoom (ajusta este valor para acercar/alejar)
+  scale *= zoomFactor;
+
+  // Limita la escala para no hacer zoom muy pequeño ni muy grande
+  scale = Math.min(Math.max(scale, 0.4), 2);
+
+  const translateX = (svgWidth - scale * (minY + maxY)) / 2;
+  const translateY = (svgHeight - scale * (minX + maxX)) / 2;
+
+  svg.transition().duration(700)
+    .call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
+}
+
+
+
+
+
 
 
 
@@ -358,6 +406,7 @@ function update(source, inicial = false) {
 
     svg.transition().duration(700)
       .call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
+	centrarYZoom();
   }
 
   g.selectAll(".link")

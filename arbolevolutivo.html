@@ -167,40 +167,23 @@ function crearImagenDigimon(nombre) {
   img.className = "digimon-img";
   img.alt = nombre;
 
-  // Función para normalizar el nombre al formato típico de archivos:
-  // todo minúsculas, sin espacios, paréntesis, guiones ni apóstrofes.
+  // Normaliza: minúsculas, sin espacios, paréntesis, guiones, apóstrofes
   const normalizar = n =>
     n.toLowerCase().replace(/\s+/g, '')
                    .replace(/[()\-\’]/g, '');
 
-  // Lista de variaciones a probar:
   const variaciones = [
-    normalizar(nombre), // ejemplo: "metalgreymonvirus"
-    // Por si acaso, prueba sin los sufijos comunes, ej "vdramonblack" -> "vdramon"
-    ...(() => {
-      const sufijos = ['black', 'white', 'virus', 'ver', 'v', 'vd', '2006', '2000'];
-      const base = normalizar(nombre);
-      const variacionesSufijosQuitados = [];
-      sufijos.forEach(sufijo => {
-        if (base.endsWith(sufijo)) {
-          variacionesSufijosQuitados.push(base.slice(0, -sufijo.length));
-        }
-      });
-      return variacionesSufijosQuitados;
-    })()
+    normalizar(nombre) // ejemplo: "metalgreymonvirus"
   ];
-
-  // Eliminar duplicados por si acaso
-  const variacionesUnicas = [...new Set(variaciones)];
 
   let i = 0;
   function intentar() {
-    if (i >= variacionesUnicas.length) {
-      // No encontró imagen, poner placeholder (svg base64 o vacío)
+    if (i >= variaciones.length) {
+      // No encontró imagen, placeholder
       img.src = "data:image/svg+xml;base64,PHN2ZyB3a..."; 
       return;
     }
-    const srcTry = `icon/${variacionesUnicas[i]}.png`;
+    const srcTry = `icon/${variaciones[i]}.png`;
     const testImg = new Image();
     testImg.onload = () => { img.src = srcTry; };
     testImg.onerror = () => {
@@ -213,6 +196,7 @@ function crearImagenDigimon(nombre) {
 
   return img;
 }
+
 
 
 

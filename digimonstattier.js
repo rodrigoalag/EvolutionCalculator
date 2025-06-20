@@ -6,10 +6,10 @@ const digimonstattier = {
     "ATK": 7, "DEF": 6, "HP": 40, "Vel": 6, "Digipuntos": 2, "Evoluciona": ["Pickmon"], "Viene": []
   },
   "Koromon": {
-    "ATK": 9, "DEF": 6, "HP": 90, "Vel": 6, "Digipuntos": 3,  "Evoluciona": ["Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon"], "Viene": ["Botamon"]
+    "ATK": 9, "DEF": 6, "HP": 90, "Vel": 6, "Digipuntos": 3,  "Evoluciona": ["Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)"], "Viene": ["Botamon"]
   },
   "Pickmon": {
-    "ATK": 10, "DEF": 5, "HP": 40, "Vel": 6, "Digipuntos": 3, "Evoluciona": ["Chibickmon"], "Viene": ["Chibickmon"]
+    "ATK": 10, "DEF": 5, "HP": 40, "Vel": 6, "Digipuntos": 3, "Evoluciona": ["Starmons", "Gotsumon"], "Viene": ["Chibickmon"]
   },
   "Agumon": {
     "ATK": 50, "DEF": 25, "HP": 250, "Vel": 50, "Digipuntos": 15,  "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon"], "Viene": ["Koromon"]

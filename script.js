@@ -7,7 +7,7 @@
     '% Entrenamiento': 'entrenamiento',
     '% Training': 'entrenamiento',
     'Vínculo máximo alcanzado': 'vinculo',
-	'Menos de 15 entrenamientos': 'entrenos25',
+	'Menos de 15 entrenamientos?': 'entrenos25',
 	'Less than 15 trainings?': 'entrenos25',
     'Vinculo': 'vinculo',
     'Max Bond Achieved': 'vinculo',

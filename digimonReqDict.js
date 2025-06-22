@@ -227,7 +227,7 @@ const digimonReqDict = {
 	},
     "Gigadramon": {
 	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
-	"% Entrenamiento": 100
+	"% Entrenamiento": 100, "Program": "Mecha"
   },
     "SuperStarmon": {
 	"ID": 59, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",

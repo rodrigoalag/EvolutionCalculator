@@ -90,10 +90,10 @@ const digimonstattier = {
     "ATK": 50, "DEF": 50, "HP": 750, "Vel": 45, "Digipuntos": 22, "Evoluciona": ["Monzaemon", "Black King Numemon"], "Viene": ["Numemon"]
   },
   "Scumon": { // Cambiar Poner todos?
-    "ATK": 23, "DEF": 18, "HP": 188, "Vel": 23, "Digipuntos": 8, "Evoluciona": ["KingEtemon","Etemon", "PlatinumScumon"], "Viene": ["Agumon","Pillomon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)", "Starmons", "Gotsumon"]
+    "ATK": 23, "DEF": 18, "HP": 188, "Vel": 23, "Digipuntos": 8, "Evoluciona": ["GreatKingScumon","Etemon", "PlatinumScumon"], "Viene": ["Agumon","Pillomon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)", "Starmons", "Gotsumon"]
   },
   "PlatinumScumon": { // Cambiar Poner todos?
-    "ATK": 23, "DEF": 18, "HP": 188, "Vel": 23, "Digipuntos": 8, "Evoluciona": ["KingEtemon","Etemon"], "Viene": ["Scumon"]
+    "ATK": 23, "DEF": 18, "HP": 188, "Vel": 23, "Digipuntos": 8, "Evoluciona": ["GreatKingScumon","Etemon"], "Viene": ["Scumon"]
   },
   "ShootingStarmon": { // Cambiar
     "ATK": 120, "DEF": 40, "HP": 904, "Vel": 76, "Digipuntos": 32.5, "Evoluciona": ["SuperStarmon", "DarkSuperStarmon"], "Viene": ["Starmons"]
@@ -188,6 +188,9 @@ const digimonstattier = {
   "Insekimon High Tier": { // Cambiar
     "ATK": 160, "DEF": 200, "HP": 2000, "Vel": 140, "Digipuntos": 70, "Viene": ["Icemon"]
   }, 
+  "GreatKingScumon": { // Cambiar
+    "ATK": 38, "DEF": 94, "HP": 820, "Vel": 24, "Digipuntos": 24, "Viene": ["Scumon","PlatinumScumon"]
+  },
   "MetalEtemon": { // Cambiar
     "ATK": 179, "DEF": 163, "HP": 1300, "Digipuntos": 70, "Vel": 76, "Digipuntos": 55, "Viene": ["Etemon"]
   },

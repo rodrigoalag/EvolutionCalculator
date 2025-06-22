@@ -236,7 +236,11 @@ const digimonReqDict = {
     "DarkSuperStarmon": {
 	"ID": 60, "Tama": "VS", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
     "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "Si"
-  },  
+  }, 
+    "GreatKingScumon": {
+	"ID": 45, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
+    "Peso": 45, "Error Maximo": 6, "% Entrenamiento": 100, "Menos de 25 entrenamientos?": "Si"
+  },   
     "Insekimon Low Tier": {
 	"ID": 87, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
     "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "Starmon o ShootingStarmon Driver"

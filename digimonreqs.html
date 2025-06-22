@@ -541,7 +541,7 @@ const specialfoodcases = {
 // Configuración de agrupación de columnas
 const gruposColumnas = {
   "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida"],
-  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias"]
+  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Menos de 25 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias"]
 };
 
   const dict = digimonReqDict;
@@ -573,7 +573,7 @@ const gruposColumnas = {
 		subtitle: "Datos Generales del Digimon",
 		subtitle2: "Datos de requisitos del Digimon", 
 		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
-		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar. Los stats base de Scumon/PlatScumon son un promedio.",
+		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar. Los stats base de Scumon/PlatScumon son un promedio. GreatKingScumon son los 'base' proveniente de Kokuwamon",
 		Tama: "Tama",
 		Nivel: "Nivel",
 		Atributo: "Atributo",
@@ -616,6 +616,7 @@ const gruposColumnas = {
       "% de Entrenamiento": "% Entrenamiento",
       "Digimon Bonus": "Bonus Digimon",
       "Vinculo Minimo alcanzado": "Vínculo Alcanzado",
+	  "Menos de 25 entrenamientos?": "Menos de 25 entrenamientos?",
       "Win Rate": "Win Rate",
       "Combates Minimos": "Combates Mínimos",
 	  "% Entrenamiento": "% Entrenamiento Minimo",
@@ -687,6 +688,7 @@ const gruposColumnas = {
       "% de Entrenamiento": "% Training",
       "Digimon Bonus": "Digimon Bonus",
       "Vinculo Minimo alcanzado": "Bond Reached",
+	  "Menos de 25 entrenamientos?": "Less than 25 trainings?",
       "Combates Minimos": "Minimum Battles",
 	  "% Entrenamiento": "Training Cap %",
 	  "Bonus Batallas": "Battle Bonus",

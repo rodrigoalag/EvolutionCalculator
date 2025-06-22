@@ -196,7 +196,8 @@ const EvoListSpecial = {
   "Polarbearmon": ["Blizzarmon"],
   "Icemon": ["Chackmon"],
   "Yukidarumon":["Chackmon"],
-  "Blizzarmon":["Chackmon"]
+  "Blizzarmon":["Chackmon"],
+  "GreatKingScumon": ["Scumon", "PlatinumScumon"]
 };
 const crosstamaevo = {
   "Icemon": ["Yuki Agumon"],
@@ -643,34 +644,36 @@ console.log(`Side digimons encontrados:`, sideDigimons.map(([name]) => name));
 	// nextDigimons ya incluye las evoluciones normales y, si aplicaba, las laterales
 	  
 		const sideNames = Object.keys(SideEvolutionlist);
-
 		//Elimina las sides del mismo nivel, falta poner un excepcion para los de Nivel 5
-		nextDigimons = nextDigimons.filter(([name, info]) => {
-		  // Verifica si está en la lista de side evolutions
-		  if (SideEvolutionlist.hasOwnProperty(name)) {
-			const sideLevel = SideEvolutionlist[name][0];
-			
-/*			// Si es del mismo nivel (nivel + 1), eliminar
-			if (sideLevel === (data["Nivel"] + 1)) {
-			  return false;
-			}
-			
-			// Si es de nivel más alto (nivel + 2 o más), verificar excepciones
-			if (sideLevel > (data["Nivel"] + 1)) {
-			  // Verificar si está en la lista de excepciones (side y evo natural)
-			  if (SideandEvoList.hasOwnProperty(selected) && 
-				  SideandEvoList[selected].includes(name)) {
-				console.log(`Manteniendo ${name} porque ${selected} está en SideandEvoList`);
-				return true; // Mantener por ser excepción
-			  }
-			  
-			  console.log(`Eliminando side evolution de nivel superior: ${name} (nivel ${sideLevel})`);
-			  return false; // Eliminar side de nivel superior
-			}*/
-		  }
-		  
-		  return true; // Mantiene si no está en la lista o si no aplican las condiciones
-		});
+	
+nextDigimons = nextDigimons.filter(([name, info]) => {
+  console.log(`🔎 Evaluando posible evolución: ${name}`);
+
+  // Buscar todas las entradas donde 'name' es evolución lateral
+  const entradas = Object.entries(SideEvolutionSelected).filter(([origen, evoluciones]) => evoluciones.includes(name));
+
+  if (entradas.length === 0) {
+    console.log(`✔️ ${name} no es una evolución lateral, se mantiene`);
+    return true; // no es side evolution, se mantiene
+  }
+
+  // Verificamos si alguna entrada coincide con el seleccionado
+  const algunoCoincide = entradas.some(([origen, evoluciones]) => {
+    const coincide = selected === origen;
+    console.log(`${coincide ? "✅" : "❌"} Evaluando origen ${origen} para ${name}: seleccionado = ${selected} ${coincide ? "(coincide)" : "(no coincide)"}`);
+    return coincide;
+  });
+
+  if (algunoCoincide) {
+    console.log(`✔️ ${name} se mantiene porque al menos un origen coincide con el seleccionado`);
+    return true; // al menos un origen válido
+  } else {
+    console.log(`❌ ${name} se elimina porque ningún origen coincide con el seleccionado ${selected}`);
+    return false; // ningún origen válido
+  }
+});
+
+		console.log("Lista después de filtrar sides por Tama:", nextDigimons.map(([name]) => name));
  const fieldSet = new Set();
   nextDigimons.forEach(([_, info]) => {
     for (const key in info) {
@@ -778,6 +781,9 @@ if (typeof sampleValue === "string") {
         opciones = ["Si", "No"];
     } else if (field === "Alcanzo vinculo negativo?") {
         opciones = ["Si", "No"];
+	
+	}else if (field === "Menos de 25 entrenamientos?") {
+			opciones = ["Si", "No"];
     } else {
         opciones = Array.from(new Set(nextDigimons.map(([_, info]) => info[field]).filter(v => v !== undefined)));
     }
@@ -1477,7 +1483,7 @@ punto = totalBonus;}
 		
 		if (isSpecialCase) {
 			punto = 0;
-		} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons"].includes(name)) {
+		} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons", "GreatKingScumon"].includes(name)) {
 			punto = 0;
 		} else {
 			const ingNum = Number(ingresado);
@@ -1688,6 +1694,15 @@ else if (field === "Combates Minimos") {
 		punto = -10;
 	  }
 	}
+	else if (field === "Menos de 25 entrenamientos?") {
+	  if (ingresado === esperado) {
+		punto = 0;
+	  } else {
+		punto = -10;
+	  }
+	}
+	
+	
 // CÓDIGO DE EVALUACIÓN MODIFICADO PARA XROSS
 else if (field === "Xross") {
 	// Verificar si es un caso especial
@@ -1888,80 +1903,91 @@ const sideEvosValidas = puntajes.filter(d => {
 if (nextLevel === 4 || nextLevel === 5) {
   console.log(`🧪 Evaluando evoluciones para Nivel ${nextLevel}`);
   console.log("📋 Nivel actual:", data["Nivel"]);
-  console.log("🔍 Side Evolutions válidas encontradas:", sideEvosValidas.map(d => `${d.name} (${d.puntaje})`));
 
-  if (sideEvosValidas.length > 0) {
-    const maxPuntajeSide = Math.max(...sideEvosValidas.map(d => d.puntaje));
-    mejoresDigimons = sideEvosValidas.filter(d => d.puntaje === maxPuntajeSide).map(d => d.name);
-    console.log("🎯 Mejor(es) Side Evolution:", mejoresDigimons);
+  // Excepción especial: si GreatKingScumon tiene puntaje >= 1, se elige solo ese
+  const gks = puntajes.find(d => d.name === "GreatKingScumon" && d.puntaje >= 1);
+  if (gks) {
+    mejoresDigimons = ["GreatKingScumon"];
+    console.log("👑 Excepción: GreatKingScumon tiene puntaje >= 1, se selecciona directamente.");
+    console.log("🧾 Resultado final:", mejoresDigimons);
+    // Si querés salir aquí (por ejemplo, dentro de función), pon return; 
+    // sino solo continúa y saldrá con este resultado
   } else {
-    console.log("⛔ No hay Side Evolutions válidas. Buscando evoluciones normales...");
+    console.log("🔍 Side Evolutions válidas encontradas:", sideEvosValidas.map(d => `${d.name} (${d.puntaje})`));
 
-    // ✅ PRIMERO: Evaluar Driver Equipado y Xross
-    const conDriverXross = puntajes.filter(d => {
-      const req = digimonReqDict[d.name];
-      return (
-        req?.Nivel === nextLevel &&
-        d.puntaje >= 3 &&
-        (req["Driver Equipado"] !== undefined || req["Xross"] !== undefined)
-      );
-    });
-
-    console.log("🚀 Digimons con Driver Equipado o Xross:", conDriverXross.map(d => `${d.name} (${d.puntaje})`));
-
-    if (conDriverXross.length > 0) {
-      const maxPuntajePrioridad = Math.max(...conDriverXross.map(d => d.puntaje));
-      mejoresDigimons = conDriverXross.filter(d => d.puntaje === maxPuntajePrioridad).map(d => d.name);
-      console.log("🏆 Mejor(es) con Driver/Xross:", mejoresDigimons);
+    if (sideEvosValidas.length > 0) {
+      const maxPuntajeSide = Math.max(...sideEvosValidas.map(d => d.puntaje));
+      mejoresDigimons = sideEvosValidas.filter(d => d.puntaje === maxPuntajeSide).map(d => d.name);
+      console.log("🎯 Mejor(es) Side Evolution:", mejoresDigimons);
     } else {
-      // Luego: evaluar Program
-      const conProgram = puntajes.filter(d => {
+      console.log("⛔ No hay Side Evolutions válidas. Buscando evoluciones normales...");
+
+      // ✅ PRIMERO: Evaluar Driver Equipado y Xross
+      const conDriverXross = puntajes.filter(d => {
         const req = digimonReqDict[d.name];
-        return req?.Nivel === nextLevel && req.Program !== undefined && d.puntaje >= 3;
+        return (
+          req?.Nivel === nextLevel &&
+          d.puntaje >= 3 &&
+          (req["Driver Equipado"] !== undefined || req["Xross"] !== undefined)
+        );
       });
 
-      console.log("🔍 Digimon válidos con Program:", conProgram.map(d => `${d.name} (${d.puntaje})`));
+      console.log("🚀 Digimons con Driver Equipado o Xross:", conDriverXross.map(d => `${d.name} (${d.puntaje})`));
 
-      const conProgramYExcepciones = [
-        ...conProgram,
-        ...puntajes.filter(d => {
-          const req = digimonReqDict[d.name];
-          if (req?.Nivel !== nextLevel || d.puntaje < 3) return false;
-
-          const selectedNormalizado = selected.toLowerCase().trim();
-          return Object.entries(excepcionesProgram).some(([resultado, permitidos]) => {
-            const resultadoNormalizado = resultado.toLowerCase().trim();
-            const nombreDigimonNormalizado = d.name.toLowerCase().trim();
-            return (
-              nombreDigimonNormalizado === resultadoNormalizado &&
-              permitidos.some(permitido => permitido.toLowerCase().trim() === selectedNormalizado)
-            );
-          });
-        }),
-      ];
-
-      console.log("🔍 Evaluando Program y excepciones Program:", conProgramYExcepciones.map(d => `${d.name} (${d.puntaje})`));
-
-      if (conProgramYExcepciones.length > 0) {
-        const maxPuntajePrioridad = Math.max(...conProgramYExcepciones.map(d => d.puntaje));
-        mejoresDigimons = conProgramYExcepciones.filter(d => d.puntaje === maxPuntajePrioridad).map(d => d.name);
-        console.log("🏆 Mejor(es) con Program/Excepciones:", mejoresDigimons);
+      if (conDriverXross.length > 0) {
+        const maxPuntajePrioridad = Math.max(...conDriverXross.map(d => d.puntaje));
+        mejoresDigimons = conDriverXross.filter(d => d.puntaje === maxPuntajePrioridad).map(d => d.name);
+        console.log("🏆 Mejor(es) con Driver/Xross:", mejoresDigimons);
       } else {
-        // Finalmente: evaluar sin Program
-        const sinProgram = puntajes.filter(d => {
+        // Luego: evaluar Program
+        const conProgram = puntajes.filter(d => {
           const req = digimonReqDict[d.name];
-          return req?.Nivel === nextLevel && d.puntaje >= 3;
+          return req?.Nivel === nextLevel && req.Program !== undefined && d.puntaje >= 3;
         });
 
-        console.log("🔍 Digimon válidos sin Program:", sinProgram.map(d => `${d.name} (${d.puntaje})`));
+        console.log("🔍 Digimon válidos con Program:", conProgram.map(d => `${d.name} (${d.puntaje})`));
 
-        if (sinProgram.length > 0) {
-          const maxPuntajeSinProgram = Math.max(...sinProgram.map(d => d.puntaje));
-          mejoresDigimons = sinProgram.filter(d => d.puntaje === maxPuntajeSinProgram).map(d => d.name);
-          console.log("✅ Mejor(es) sin Program:", mejoresDigimons);
+        const conProgramYExcepciones = [
+          ...conProgram,
+          ...puntajes.filter(d => {
+            const req = digimonReqDict[d.name];
+            if (req?.Nivel !== nextLevel || d.puntaje < 3) return false;
+
+            const selectedNormalizado = selected.toLowerCase().trim();
+            return Object.entries(excepcionesProgram).some(([resultado, permitidos]) => {
+              const resultadoNormalizado = resultado.toLowerCase().trim();
+              const nombreDigimonNormalizado = d.name.toLowerCase().trim();
+              return (
+                nombreDigimonNormalizado === resultadoNormalizado &&
+                permitidos.some(permitido => permitido.toLowerCase().trim() === selectedNormalizado)
+              );
+            });
+          }),
+        ];
+
+        console.log("🔍 Evaluando Program y excepciones Program:", conProgramYExcepciones.map(d => `${d.name} (${d.puntaje})`));
+
+        if (conProgramYExcepciones.length > 0) {
+          const maxPuntajePrioridad = Math.max(...conProgramYExcepciones.map(d => d.puntaje));
+          mejoresDigimons = conProgramYExcepciones.filter(d => d.puntaje === maxPuntajePrioridad).map(d => d.name);
+          console.log("🏆 Mejor(es) con Program/Excepciones:", mejoresDigimons);
         } else {
-          mejoresDigimons = ["Ninguno"];
-          console.log("🚫 No se encontraron evoluciones válidas con puntaje >= 3.");
+          // Finalmente: evaluar sin Program
+          const sinProgram = puntajes.filter(d => {
+            const req = digimonReqDict[d.name];
+            return req?.Nivel === nextLevel && d.puntaje >= 3;
+          });
+
+          console.log("🔍 Digimon válidos sin Program:", sinProgram.map(d => `${d.name} (${d.puntaje})`));
+
+          if (sinProgram.length > 0) {
+            const maxPuntajeSinProgram = Math.max(...sinProgram.map(d => d.puntaje));
+            mejoresDigimons = sinProgram.filter(d => d.puntaje === maxPuntajeSinProgram).map(d => d.name);
+            console.log("✅ Mejor(es) sin Program:", mejoresDigimons);
+          } else {
+            mejoresDigimons = ["Ninguno"];
+            console.log("🚫 No se encontraron evoluciones válidas con puntaje >= 3.");
+          }
         }
       }
     }
@@ -1969,7 +1995,6 @@ if (nextLevel === 4 || nextLevel === 5) {
 
   console.log("🧾 Resultado final:", mejoresDigimons);
 }
-
 
 // Nivel 5
 if (data["Nivel"] === 5) {

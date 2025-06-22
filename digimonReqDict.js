@@ -239,7 +239,7 @@ const digimonReqDict = {
   }, 
     "GreatKingScumon": {
 	"ID": 45, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
-    "Peso": 45, "Error Maximo": 6, "% Entrenamiento": 100, "Menos de 25 entrenamientos?": "Si"
+    "Peso": 45, "Error Maximo": 6, "% Entrenamiento": 100, "Menos de 15 entrenamientos?": "Si"
   },   
     "Insekimon Low Tier": {
 	"ID": 87, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",

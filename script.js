@@ -782,7 +782,7 @@ if (typeof sampleValue === "string") {
     } else if (field === "Alcanzo vinculo negativo?") {
         opciones = ["Si", "No"];
 	
-	}else if (field === "Menos de 25 entrenamientos?") {
+	}else if (field === "Menos de 15 entrenamientos?") {
 			opciones = ["Si", "No"];
     } else {
         opciones = Array.from(new Set(nextDigimons.map(([_, info]) => info[field]).filter(v => v !== undefined)));
@@ -1694,7 +1694,7 @@ else if (field === "Combates Minimos") {
 		punto = -10;
 	  }
 	}
-	else if (field === "Menos de 25 entrenamientos?") {
+	else if (field === "Menos de 15 entrenamientos?") {
 	  if (ingresado === esperado) {
 		punto = 0;
 	  } else {

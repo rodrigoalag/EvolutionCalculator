@@ -166,7 +166,7 @@ const bloqueosEvolucion = {
   "DarkSuperStarmon": ["Starmon","ShootingStarmon"],
   "Starmon": ["Starmons"],
   "ShootingStarmon": ["Starmons"],
-  "Mugendramon": ["Metal Greymon (Virus)","Megadramon", "Andromon", "Metal Tyranomon", "MetalMamemon"],
+  "Mugendramon": ["Metal Greymon (Virus)","Megadramon", "Andromon", "Metal Tyranomon", "MetalMamemon","Gigadramon"],
   "Chackmon": ["Icemon","Yuki Agumon","Yukidarumon"],
   "Blizzarmon": ["Polarbearmon", "Icemon", "Chackmon", "Yukidarumon"],
   "Daipenmon": ["Polarbearmon", "Blizzarmon"]

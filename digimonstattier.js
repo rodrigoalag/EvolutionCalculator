@@ -201,7 +201,7 @@ const digimonstattier = {
     "ATK": 100, "DEF": 190, "HP": 2000, "Digipuntos": 70, "Vel": 55, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Black King Numemon"]
   },
   "Mugendramon": { // Cambiar
-    "ATK": 170, "DEF": 140, "HP": 1700, "Digipuntos": 70, "Vel": 55, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Metal Greymon (Virus)", "MetalMamemon", "Metal Tyranomon", "Megadramon", "Andromon"]
+    "ATK": 170, "DEF": 140, "HP": 1700, "Digipuntos": 70, "Vel": 55, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Metal Greymon (Virus)", "MetalMamemon", "Metal Tyranomon", "Megadramon", "Andromon", "Gigadramon"]
   },
   "Chackmon": { // Cambiar
     "ATK": 80, "DEF": 79, "HP": 950, "Vel": 70, "Digipuntos": 32.5, "Evoluciona": ["Blizzarmon", "Burpmon"], "Viene": ["Yuki Agumon", "Icemon", "Yukidarumon"]

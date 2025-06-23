@@ -281,5 +281,12 @@ const digimonReqDict = {
 	"ID": 95, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
 	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
   },  
+    "Daipenmon": {
+	"ID": 95, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
+	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
+  }, 
+    "Burpmon": {
+	"ID": 33, "Tama": "M", "Nivel": 3, "Atributo": "Free", "Tipo": "Mutante", "Peso": 99
+  }, 
   
 };

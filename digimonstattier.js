@@ -150,7 +150,7 @@ const digimonstattier = {
     "ATK": 235, "DEF": 125, "HP": 2050, "Vel": 135, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["MetalGreymon"]
   },
   "Aero V-dramon (Black)": {
-    "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["V-Dramon (Black)", "RedVDramon"]
+    "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["V-Dramon (Black)", "RedVDramon","Tuskmon","Dark Tyranomon"]
   },
   "Triceramon": {
     "ATK": 125, "DEF": 190, "HP": 2100, "Vel": 75, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]

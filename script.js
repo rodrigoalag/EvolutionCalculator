@@ -310,7 +310,7 @@ const xrossinstallop = {
     "Starmons": ["4 Pickmon Driver"],
     "Monzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"],
     "WaruMonzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"],
-    "Black King Numemon": ["5 PlatinumNumemon Driver"],
+    "Black King Numemon": ["5 PlatinumScumon Driver"],
     "Megadramon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
 	"Gigadramon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
     "Metal Greymon (Virus)": ["Megadramon Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],

@@ -262,7 +262,7 @@ const digimonReqDict = {
   },
     "PlatinumNumemon": {
 	"ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":55,
-	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumNumemon Driver"
+	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumScumon Driver"
   },
     "Mugendramon": {
 	"ID": 27, "Tama": "V0", "Nivel": 6, "Atributo": "Virus", "Tipo": "Maquina","Peso":55,

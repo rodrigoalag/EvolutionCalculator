@@ -164,8 +164,7 @@ const digimonReqDict = {
   },
     "Etemon": {
 	"ID": 44, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
-    "Peso": 20, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Scumon",
-	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25
+    "Peso": 20, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Scumon", "WinRate": 70, "Combates Minimos": 25
   },
     "WaruMonzaemon": {
 	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",

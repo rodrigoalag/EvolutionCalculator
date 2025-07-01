@@ -213,7 +213,7 @@ const digimonReqDict = {
   },
     "Polarbearmon": {
 	"ID": 82, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Hielo",
-    "Peso": 45, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Yukidarumon", "WinRate": 70, "Combates Minimos": 25
+    "Peso": 45, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25
   },
     "Master Tyranomon": {
 	"ID": 83, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",

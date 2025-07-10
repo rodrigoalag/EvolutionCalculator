@@ -51,7 +51,7 @@ const digimonReqDict = {
   },
     "Tyranomon": {
 	"ID": 5, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
-    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 40,"Stat Superior": "Balanceado", "WinRate": 60, "Combates Minimos": 15
+    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 40,"Stat Superior": "Balanceado", "WinRate": 50, "Combates Minimos": 15
   },
     "Dark Tyranomon": {
 	"ID": 6, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -63,15 +63,15 @@ const digimonReqDict = {
   }, 
     "Deltamon": {
 	"ID": 8, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Compuesto",
-    "Peso": 30, "Error Maximo": "3-6", "% Entrenamiento": 60, "Bonus Errores": 5, "WinRate": 60, "Combates Minimos": 15, "Stat Superior": "ATK"
+    "Peso": 30, "Error Maximo": "3-6", "% Entrenamiento": 60, "Bonus Errores": 5, "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "ATK"
   },
     "Thunderballmon": {
 	"ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",
-    "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 60, "Digimon Bonus": "Kokuwamon", "WinRate": 60, "Combates Minimos": 15, "Stat Superior": "Vel"
+    "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 60, "Digimon Bonus": "Kokuwamon", "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "Vel"
   },
     "Guardromon": {
 	"ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Maquina",
-    "Peso": 35, "Error Maximo": 2, "% Entrenamiento": 50, "Bonus Batallas": "15-20", "WinRate": 60, "Combates Minimos": 15
+    "Peso": 35, "Error Maximo": 2, "% Entrenamiento": 50, "Bonus Batallas": "15-20", "WinRate": 50, "Combates Minimos": 15
   },
     "V-Dramon (Black)": {
 	"ID": 34, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dragon",
@@ -92,7 +92,7 @@ const digimonReqDict = {
   },
     "Clockmon": {
 	"ID": 79, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",
-    "Peso": 18, "Error Maximo": "1-3", "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 15, "Bonus Batallas": 0
+    "Peso": 18, "Error Maximo": "1-3", "% Entrenamiento": 50, "WinRate": 50, "Combates Minimos": 15, "Bonus Batallas": 0
   },
     "Tuskmon": {
 	"ID": 80, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -128,11 +128,11 @@ const digimonReqDict = {
 	},
     "Icemon": {
 	"ID": 86, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Hielo",
-    "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15, "Program": "Frost", "Bonus Comida": "Verdura Congelada"
+    "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 50, "Combates Minimos": 15, "Program": "Frost", "Bonus Comida": "Verdura Congelada"
 	},
     "Starmon": {
 	"ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
-    "Peso": 15, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 60, "Combates Minimos": 15
+    "Peso": 15, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 50, "Combates Minimos": 15
 	},
     "Metal Greymon (Virus)": {
 	"ID": 12, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -140,7 +140,7 @@ const digimonReqDict = {
   },
     "Andromon": {
 	"ID": 13, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
-    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 60, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 60, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
   },
     "Mametyramon": {
 	"ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
@@ -160,7 +160,7 @@ const digimonReqDict = {
     "Black King Numemon": {
 	"ID": 46, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
     "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "KaratsukiNumemon",
-	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25, "Program" : "Royal"
+	"Vinculo Minimo alcanzado": 100, "WinRate": 60, "Combates Minimos": 25, "Program" : "Royal"
   },
     "Etemon": {
 	"ID": 44, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
@@ -176,7 +176,7 @@ const digimonReqDict = {
   }, 
     "Metal Tyranomon": {
 	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
-    "Peso": 65, "Error Maximo": "3-6", "% Entrenamiento": 60, "Digimon Bonus": "Dark Tyranomon", "WinRate": 70, "Combates Minimos": 25
+    "Peso": 65, "Error Maximo": "3-6", "% Entrenamiento": 60, "Digimon Bonus": "Dark Tyranomon", "WinRate": 60, "Combates Minimos": 25
   },
     "MetalMamemon": {
 	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
@@ -188,7 +188,7 @@ const digimonReqDict = {
   },  
 	"Mamemon": {
 	"ID": 24, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
-	"Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 70, "Combates Minimos": 25, "Bonus Errores": "1+"
+	"Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 25, "Bonus Errores": "1+"
   },
     "MetalGreymon Alterous": {
 	"ID": 26, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
@@ -201,7 +201,7 @@ const digimonReqDict = {
   },
     "Triceramon": {
 	"ID": 37, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
-    "Peso": 50, "Error Maximo": 2, "% Entrenamiento": 50, "Digimon Bonus": "Tyranomon", "WinRate": 70, "Combates Minimos": 25
+    "Peso": 50, "Error Maximo": 2, "% Entrenamiento": 50, "Digimon Bonus": "Tyranomon", "WinRate": 60, "Combates Minimos": 25
   },
     "BigMamemon": {
 	"ID": 38, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
@@ -222,7 +222,7 @@ const digimonReqDict = {
   },
     "Megadramon": {
 	"ID": 18, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
-    "Peso": 55, "Error Maximo": "1-2", "% Entrenamiento": 75, "Bonus Batallas": 30, "WinRate": 70, "Combates Minimos": 25
+    "Peso": 55, "Error Maximo": "1-2", "% Entrenamiento": 75, "Bonus Batallas": 30, "WinRate": 60, "Combates Minimos": 25
 	},
     "Gigadramon": {
 	"ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
@@ -230,11 +230,11 @@ const digimonReqDict = {
   },
     "SuperStarmon": {
 	"ID": 59, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
-    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
   },  
     "DarkSuperStarmon": {
 	"ID": 60, "Tama": "VS", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
-    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "Si"
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "Si"
   }, 
     "GreatKingScumon": {
 	"ID": 45, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
@@ -242,7 +242,7 @@ const digimonReqDict = {
   },   
     "Insekimon Low Tier": {
 	"ID": 87, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
-    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "Starmon o ShootingStarmon Driver"
+    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Driver Equipado": "Starmon o ShootingStarmon Driver"
   }, 
     "Insekimon Mid Tier Dark": {
 	"ID": 88, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",

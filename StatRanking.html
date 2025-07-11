@@ -214,7 +214,10 @@ function obtenerClasificacion(digipuntos, nivel) {
   if (digipuntos < 15 && nivel >= 3) { // Nivel 3 o superior (Child+) con pocos digipuntos
     return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
   }
-  
+  if (digipuntos < 60 && nivel >= 5) { // Nivel 3 o superior (Child+) con pocos digipuntos
+    return { min: 20, max: 59.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+    
   // Caso especial para Ultimate (nivel 6)
   if (nivel === 6) {
     if (digipuntos >= 50 && digipuntos <= 59.99) {

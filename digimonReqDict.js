@@ -135,7 +135,7 @@ const digimonReqDict = {
     "Peso": 15, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 50, "Combates Minimos": 15
 	},
     "Metal Greymon (Virus)": {
-	"ID": 12, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
+	"ID": 12, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Peso": 65, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25
   },
     "Andromon": {
@@ -175,7 +175,7 @@ const digimonReqDict = {
 	"Xross":"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"
   }, 
     "Metal Tyranomon": {
-	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dinosaurio",
+	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Peso": 65, "Error Maximo": "3-6", "% Entrenamiento": 60, "Digimon Bonus": "Dark Tyranomon", "WinRate": 60, "Combates Minimos": 25
   },
     "MetalMamemon": {
@@ -183,7 +183,7 @@ const digimonReqDict = {
 	"% Entrenamiento": 100, "Program": "Mecha"
   },
     "Metal Greymon": {
-	"ID": 23, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
+	"ID": 23, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Peso": 65, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Program":"Vaccine"
   },  
 	"Mamemon": {
@@ -191,7 +191,7 @@ const digimonReqDict = {
 	"Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 25, "Bonus Errores": "1+"
   },
     "MetalGreymon Alterous": {
-	"ID": 26, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
+	"ID": 26, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
 	"% Entrenamiento": 100, "Victorias":40, "Program":"Mecha"
   },
     "Aero V-dramon (Black)": {
@@ -208,7 +208,7 @@ const digimonReqDict = {
 	"Xross":"3 Mamemon Driver"
   },
     "RizeGreymon": {
-	"ID": 73, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
+	"ID": 73, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Peso": 55, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "GeoGreymon", "WinRate": 70, "Combates Minimos": 25
   },
     "Polarbearmon": {

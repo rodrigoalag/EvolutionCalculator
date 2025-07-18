@@ -143,7 +143,7 @@ const digimonReqDict = {
     "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 60, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No"
   },
     "Mametyramon": {
-	"ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Peso": 10, "Error Maximo": 2, "% Entrenamiento": 60, "Bonus Errores": "1+",
 	"WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "Tyranomon Driver"
   },

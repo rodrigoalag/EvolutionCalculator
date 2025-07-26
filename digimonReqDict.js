@@ -92,7 +92,7 @@ const digimonReqDict = {
   },
     "Clockmon": {
 	"ID": 79, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",
-    "Peso": 18, "Error Maximo": "1-3", "% Entrenamiento": 50, "WinRate": 50, "Combates Minimos": 15, "Bonus Batallas": 0
+    "Peso": 18, "Error Maximo": 6, "% Entrenamiento": 50, "WinRate": 50, "Combates Minimos": 15, "Bonus Batallas": 0
   },
     "Tuskmon": {
 	"ID": 80, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",

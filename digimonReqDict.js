@@ -234,8 +234,8 @@ const digimonReqDict = {
   },  
     "DarkSuperStarmon": {
 	"ID": 60, "Tama": "VS", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
-    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "Si"
-  }, 
+    "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "Si", "Bonus Vinculo al momento de evolucionar": "< 0" 
+	},  
     "GreatKingScumon": {
 	"ID": 45, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
     "Peso": 45, "Error Maximo": 6, "% Entrenamiento": 100, "Menos de 15 entrenamientos?": "Si"

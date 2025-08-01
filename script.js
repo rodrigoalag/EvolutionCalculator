@@ -11,6 +11,9 @@
 	'Less than 15 trainings?': 'entrenos25',
     'Vinculo': 'vinculo',
     'Max Bond Achieved': 'vinculo',
+	'Vinculo al momento de evolucionar':'vinculo2',
+	'Bond at evolution':'vinculo2',
+	'Bonus Vinculo al momento de evolucionar':'vinculo2',
     'Batallas': 'batallas',
     'Battles': 'batallas',
     'WinRate': 'winRate',
@@ -776,6 +779,32 @@ function getBonusComidaOptions(selected) {
     
     return opciones;
 }
+
+
+// ANTES de cualquier if, agrega estos console.log para debug:
+console.log("=== DEBUG FIELD ===");
+console.log("Field:", field);
+console.log("Sample value:", sampleValue);
+console.log("typeof sampleValue:", typeof sampleValue);
+console.log("td existe:", td);
+console.log("editableFields existe:", editableFields);
+
+// Al inicio, antes del if principal
+if (field === "Bonus Vinculo al momento de evolucionar") {
+    let input = document.createElement("input");
+    input.type = "text";
+    input.id = `field_${field}`;
+    td.appendChild(input);
+    editableFields.appendChild(td);
+    
+    setTimeout(() => {
+        if (typeof reorganizeTableColumns === "function") {
+            reorganizeTableColumns();
+        }
+    }, 0);
+    
+    return; // Salir temprano
+}
 // Tu código modificado:
 if (typeof sampleValue === "string") {
     let opciones = [];
@@ -896,7 +925,7 @@ editableFields.addEventListener('input', (e) => {
 // SOLUCIÓN: El problema es que input type="number" rechaza guiones automáticamente
 // Necesitas cambiar el input a type="text" en el HTML
 
-if (e.target.id === 'field_Vinculo Minimo alcanzado') {
+if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar') {
   console.log('🔍 === INICIO VALIDACIÓN ===');
   console.log('⚡ Tipo de evento:', e.type);
   
@@ -1394,23 +1423,27 @@ bonusFields.forEach(bonusField => {
     } else {
       totalBonus += (ingNum === Number(esperadoBonus)) ? 1 : 0;
     }
-  } else if (bonusField === "Digimon Bonus") {
-    const digimonBonus = selected;
-    if (digimonBonus && typeof digimonBonus === 'string') {
-      // Normalizar ambos valores para comparación
-      const digimonBonusNormalizado = digimonBonus.toLowerCase().trim();
-      const esperadoBonusNormalizado = esperadoBonus.toLowerCase().trim();
-      
-      if (digimonBonusNormalizado === esperadoBonusNormalizado) {
-        totalBonus += 1;
-        console.log(`✅ Digimon Bonus correcto: "${digimonBonus}" coincide con "${esperadoBonus}"`);
-      } else {
-        console.log(`❌ Digimon Bonus incorrecto: "${digimonBonus}" no coincide con "${esperadoBonus}"`);
-      }
-    } else {
-      console.log(`⚠️ Digimon Bonus vacío o inválido`);
-    }
-  } else if (bonusField === "Bonus Batallas") {
+  } else if (bonusField === "Bonus Vinculo al momento de evolucionar") {
+  const vinculoValue = document.getElementById("field_Bonus Vinculo al momento de evolucionar")?.value;
+  const cleanValue = vinculoValue?.replace(/[<>=\s]/g, '') || '0';
+  const ingNum = Number(cleanValue);
+  
+  if (esperadoBonus.toString().includes("<=")) {
+    const valorEsperado = Number(esperadoBonus.toString().replace(/[<=\s]/g, ''));
+    totalBonus += (ingNum <= valorEsperado) ? 1 : 0;
+  } else if (esperadoBonus.toString().includes(">=")) {
+    const valorEsperado = Number(esperadoBonus.toString().replace(/[>=\s]/g, ''));
+    totalBonus += (ingNum >= valorEsperado) ? 1 : 0;
+  } else if (esperadoBonus.toString().includes("<")) {
+    const valorEsperado = Number(esperadoBonus.toString().replace(/[<\s]/g, ''));
+    totalBonus += (ingNum < valorEsperado) ? 1 : 0;
+  } else if (esperadoBonus.toString().includes(">")) {
+    const valorEsperado = Number(esperadoBonus.toString().replace(/[>\s]/g, ''));
+    totalBonus += (ingNum > valorEsperado) ? 1 : 0;
+  } else {
+    totalBonus += (ingNum === Number(esperadoBonus)) ? 1 : 0;
+  }
+} else if (bonusField === "Bonus Batallas") {
     const ingNum = Number(inputValues["Combates Minimos"]);
     if (typeof esperadoBonus === "string" && esperadoBonus.includes("-")) {
       const [min, max] = esperadoBonus.split("-").map(Number);

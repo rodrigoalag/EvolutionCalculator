@@ -254,7 +254,7 @@ const digimonReqDict = {
   }, 
     "Insekimon High Tier": {
 	"ID": 90, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
-    "Peso": 30, "Error Maximo": 0, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "SuperStarmon y DarkSuperStarmon Driver"
+    "Peso": 30, "Error Maximo": 0, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "SuperStarmon y DarkSuperStarmon Driver"
   },
     "MetalEtemon": {
 	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":40,

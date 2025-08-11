@@ -174,10 +174,10 @@ const digimonstattier = {
     "ATK": 220, "DEF": 110, "HP": 1800, "Vel": 140, "Digipuntos": 65, "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Megadramon"]
   },
   "SuperStarmon": { // Cambiar
-    "ATK": 160, "DEF": 90, "HP": 1902, "Vel": 159, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon"]
+    "ATK": 160, "DEF": 90, "HP": 1900, "Vel": 160, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon"]
   },
   "DarkSuperStarmon": { // Cambiar
-    "ATK": 150, "DEF": 160, "HP": 2002, "Vel": 89, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon"]
+    "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon"]
   },
   "Insekimon Low Tier": { // Cambiar
     "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Icemon"]

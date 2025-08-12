@@ -240,7 +240,8 @@ const excepcionesProgram = {
     "V-Dramon (Black)": ["Agumon (Black)"],
 	"GeoGreymon": ["Agumon (2006)"],
 	"Yukidarumon": ["Yuki Agumon"],
-	"RizeGreymon": ["GeoGreymon"]
+	"RizeGreymon": ["GeoGreymon"],
+	"Aero V-dramon (Black)": ["V-Dramon (Black)"],
   };
 
 

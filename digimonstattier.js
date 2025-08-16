@@ -21,16 +21,16 @@ const digimonstattier = {
     "ATK": 25, "DEF": 55, "HP": 500, "Vel": 20, "Digipuntos": 15, "Evoluciona": ["Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
   },
   "Kokuwamon": {
-    "ATK": 30, "DEF": 45, "HP": 450, "Vel": 30, "Digipuntos": 15, "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
+    "ATK": 30, "DEF": 45, "HP": 450, "Vel": 30, "Digipuntos": 15, "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon"]
   },
   "Agumon (Black)": {
-    "ATK": 55, "DEF": 25, "HP": 300, "Vel": 40, "Digipuntos": 15, "Evoluciona": ["Tyranomon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Tuskmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
+    "ATK": 55, "DEF": 25, "HP": 300, "Vel": 40, "Digipuntos": 15, "Evoluciona": ["Tyranomon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Tuskmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon"]
   },
   "Yuki Agumon": {
-    "ATK": 40, "DEF": 30, "HP": 350, "Vel": 45, "Digipuntos": 15, "Evoluciona": ["Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon","Yukidarumon", "Icemon", "Chackmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
+    "ATK": 40, "DEF": 30, "HP": 350, "Vel": 45, "Digipuntos": 15, "Evoluciona": ["Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon","Yukidarumon", "Icemon", "Chackmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon"]
   },
   "Agumon (2006)": {
-    "ATK": 55, "DEF": 25, "HP": 250, "Vel": 55, "Digipuntos": 16, "Evoluciona": ["GeoGreymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
+    "ATK": 55, "DEF": 25, "HP": 250, "Vel": 55, "Digipuntos": 16, "Evoluciona": ["GeoGreymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon"]
   },
   "Starmons": { // Cambiar
     "ATK": 40, "DEF": 20, "HP": 300, "Vel": 60, "Digipuntos": 15,  "Evoluciona": ["ShootingStarmon","Starmon", "Burpmon"], "Viene": ["Pickmon"]

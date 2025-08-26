@@ -225,7 +225,7 @@ const digimonstattier = {
     "ATK": 90, "DEF": 50, "HP": 1000, "Vel": 100, "Digipuntos": 34, "Evoluciona": ["Fantomon", "Metal Fantomon", "Burpmon"], "Viene": ["Bakemon MT"]
   },
     "Ghostmon": { // Cambiar
-    "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65, "Digipuntos": 16, "Evoluciona": ["Bakemon LT", "Soulmon LT", "Bakemon MT", "Soulmon MT", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
+    "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65, "Digipuntos": 16, "Evoluciona": ["Bakemon LT", "Bakemon MT", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
   },
     "SkullGreymon": { // Cambiar
     "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"]

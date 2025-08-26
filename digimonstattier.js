@@ -213,16 +213,16 @@ const digimonstattier = {
     "ATK": 160, "DEF": 160, "HP": 1200, "Vel": 110, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Polarbearmon", "Blizzarmon"]
   },
   "Bakemon LT": { // Cambiar
-    "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60, "Digipuntos": 20, "Evoluciona": ["Soulmon LT", "Fantomon", "Metal Fantomon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon"]
+    "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60, "Digipuntos": 20, "Evoluciona": ["Soulmon LT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon"]
   },
     "Soulmon LT": { // Cambiar
-    "ATK": 50, "DEF": 40, "HP": 600, "Vel": 70, "Digipuntos": 22, "Evoluciona": ["Fantomon", "Metal Fantomon", "Burpmon"], "Viene": ["Bakemon LT"]
+    "ATK": 50, "DEF": 40, "HP": 600, "Vel": 70, "Digipuntos": 22, "Evoluciona": ["Fantomon", "Burpmon"], "Viene": ["Bakemon LT"]
   },
     "Bakemon MT": { // Cambiar
-    "ATK": 80, "DEF": 50, "HP": 1000, "Vel": 90, "Digipuntos": 32, "Evoluciona": ["Soulmon MT", "Fantomon", "Metal Fantomon", "Burpmon"], "Viene": ["Ghostmon"]
+    "ATK": 80, "DEF": 50, "HP": 1000, "Vel": 90, "Digipuntos": 32, "Evoluciona": ["Soulmon MT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon"]
   },
     "Soulmon MT": { // Cambiar
-    "ATK": 90, "DEF": 50, "HP": 1000, "Vel": 100, "Digipuntos": 34, "Evoluciona": ["Fantomon", "Metal Fantomon", "Burpmon"], "Viene": ["Bakemon MT"]
+    "ATK": 90, "DEF": 50, "HP": 1000, "Vel": 100, "Digipuntos": 34, "Evoluciona": ["Fantomon", "Burpmon"], "Viene": ["Bakemon MT"]
   },
     "Ghostmon": { // Cambiar
     "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65, "Digipuntos": 16, "Evoluciona": ["Bakemon LT", "Bakemon MT", "Numemon", "Scumon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]

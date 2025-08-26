@@ -503,6 +503,134 @@ main {
 </section>
   </main>
 <script>
+// CONFIGURACIÓN DE EXCEPCIONES ESPECIALES
+const specialDigimonConfig = {
+  "SkullGreymon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program o Comida"]
+    },
+    procesarCampos: function(digimon) {
+      const procesado = {...digimon};
+      if (digimon.Program && digimon.Comida) {
+        procesado["Program o Comida"] = "Death o Carne X";
+        delete procesado.Program;
+        delete procesado.Comida;
+      }
+      return procesado;
+    }
+  },
+  "Bakemon LT": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Evolucion por muerte inducida": ["Muerte inducida sin Carne X o Program (30% de salir)", "Program / Comida (Asegura evolucion)"]
+    },
+    procesarCampos: function(digimon) {
+      const procesado = {...digimon};
+      // Combinar Program y Comida
+      if (digimon.Program && digimon.Comida) {
+        procesado["Program / Comida (Asegura evolucion)"] = "Death / Carne X";
+        delete procesado.Program;
+        delete procesado.Comida;
+      }
+      // Agregar campo de muerte inducida
+      procesado["Muerte inducida sin Carne X o Program (30% de salir)"] = "Si";
+      return procesado;
+    }
+  },
+  "PlatinumScumon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["Comida"]
+    }
+  },
+  "GoldNumemon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["Comida"]
+    }
+  },
+  "Geremon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["Program"]
+    }
+  },
+  "Scumon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["Comida"]
+    }
+  },
+   "KaratsukiNumemon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["Comida"]
+    }
+  },
+   "Numemon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"]
+	} 
+  },
+   "Pillomon": {
+    gruposColumnas: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["% Entrenamiento", "EntrenamientoHecho"]
+	} 
+  },
+   "Burpmon": {
+    gruposColumnas: {
+      "Requisitos Obligatorios": ["Peso"]
+	} 
+  },
+   "GreatKingScumon": {
+    gruposColumnas: {
+	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
+      "Requisitos Obligatorios": ["% Entrenamiento", "Menos de 15 entrenamientos?"]
+	} 
+  },
+   "Kokuwamon": {
+    gruposColumnas: {
+	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
+	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior"]
+	} 
+  },
+   "Agumon": {
+    gruposColumnas: {
+	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
+	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"]
+	} 
+  },
+   "Agumon (Black)": {
+    gruposColumnas: {
+	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
+	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["Program"]
+	} 
+  },
+   "Yuki Agumon": {
+    gruposColumnas: {
+	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
+	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["Program"]
+	} 
+  },
+    "Agumon (2006)": {
+    gruposColumnas: {
+	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
+	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["Program", "2Ciclos"]
+	} 
+  }
+};
+
+// Configuración por defecto (la original)
+const gruposColumnasDefault = {
+  "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar"],
+  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Vinculo al momento de evolucionar","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias"]
+};
+
 const specialProgramCases = { 
   "Icemon": { 
     "Yuki Agumon": "Ore", 
@@ -539,11 +667,6 @@ const specialEntrenamientoCases = {
 const specialfoodcases = {
     "Icemon": ["Verdura Congelada", "Hongo Congelado"]
 };
-// Configuración de agrupación de columnas
-const gruposColumnas = {
-  "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar"],
-  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias"]
-};
 
   const dict = digimonReqDict;
   const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
@@ -574,24 +697,28 @@ const gruposColumnas = {
 		subtitle: "Datos Generales del Digimon",
 		subtitle2: "Datos de requisitos del Digimon", 
 		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
-		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar. Los stats base de Scumon/PlatScumon son un promedio. GreatKingScumon son los 'base' proveniente de Kokuwamon sin los stats heredados de baby 1, baby 2 y child",
+		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar. Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.",
 		Tama: "Tama",
 		Nivel: "Nivel",
 		Atributo: "Atributo",
 		Tipo: "Tipo",
 		ID: "ID",
-		"selectTama": "Seleccionar Tama",
-		"selectNivel": "Seleccionar Nivel",
-		"selectDigimon": "Seleccionar Digimon",
+		"selectTama": "Seleccionar Tama:",
+		"selectNivel": "Seleccionar Nivel:",
+		"selectDigimon": "Seleccionar Digimon:",
 		"selectTamaDefault": "-- Elige un Tama --",
 		"selectNivelDefault": "-- Elige un Nivel --",
 		"selectDigimonDefault": "-- Elige un Digimon --",
-	    "Bellota dorada": "Bellota dorada",
+	    "Bellota Dorada": "Bellota Dorada",
 		"Verdura Congelada": "Verdura Congelada como última comida antes de la evolución",
 		"Hongo Congelado": "Hongo Congelado como última comida antes de al evolución",
 		"Ninguno":"Ninguno",
 		"Si":"Si",
 		"No":"No",
+		"No Muerto": "No Muerto",
+		"Death o Carne X": "Death o Carne X",
+		"Death / Carne X": "Death / Carne X",
+		"Nuez Magica": "Nuez Magica",
 		"Balanceado":"Balanceado",
 		"Compuesto": "Compuesto", 
 		"Dinosaurio": "Dinosaurio",
@@ -605,15 +732,20 @@ const gruposColumnas = {
 		"Chatarra": "Chatarra",
 		"Starmon o ShootingStarmon Driver": "Starmon o ShootingStarmon Driver",
 		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon y DarkSuperStarmon Driver",
+		"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon": "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
 		"Vel":"Vel",
 		    campos: {
       "Peso": "Peso",
       "Error Maximo": "Errores de Cuido Maximos",
+	  "Errores Minimos": "Errores Mínimos",
       "EntrenamientoHecho": "Entrenamiento Hecho",
       "Stat Superior": "Stat Superior",
       "Stat Superior 2": "Stat Superior 2",
       "2Ciclos": "Haber Conseguido 2 perfects en las ultimas dos generaciones / Haber tenido Agumon 06 antes",
       "Program": "Program",
+	  "Program o Comida": "Program o Comida",
+	  "Program / Comida (Asegura evolucion)": "Program / Comida (Asegura evolucion)",
+	  "Muerte inducida sin Carne X o Program (30% de salir)": "Muerte inducida sin Carne X o Program (30% de salir)",
       "% de Entrenamiento": "% Entrenamiento",
       "Digimon Bonus": "Bonus Digimon",
       "Vinculo Minimo alcanzado": "Vínculo Alcanzado",
@@ -626,12 +758,15 @@ const gruposColumnas = {
 	  "Victorias": "Victorias",
 	  "Driver Equipado": "Driver Equipado",
 	  "Xross":"Xross/Install",
-	  "Bonus Vinculo al momento de evolucionar":"Bonus Vinculo al momento de evolucionar"
-
+	  "Bonus Vinculo al momento de evolucionar":"Bonus Vinculo al momento de evolucionar",
+	  "Vinculo al momento de evolucionar": "Vínculo al momento de evolucionar",
+	  "Alcanzo vinculo negativo?": "Alcanzo vinculo negativo?",
     },
 	    grupos: {
       "Quota/Key Points": "Quota/Key Points",
-      "Requisitos Obligatorios": "Requisitos Obligatorios"
+      "Requisitos Obligatorios": "Requisitos Obligatorios",
+	  "No se considera en el puntaje": "No se considera en el puntaje",
+	  "Evolucion por muerte inducida": "Evolucion por muerte inducida"
     },
 	  subtitle3: "Stat Base y Evoluciones",
 	  ATK: "ATK",
@@ -647,24 +782,28 @@ const gruposColumnas = {
 		subtitle: "General Digimon Data",
 		subtitle2: "Digimon Requirements Data",
 		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",		
-		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve. The base stats from Scumon/PlatScumon are an average. GreatKingScumon ´base stats´ comes from a Kokuwamon Child, hereditary stats or nato from baby 1, baby 2 and child has been reducted.", 
+		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve. The base stats from Scumon/PlatScumon and GreatKingScumon are an average. Contrary to the rest of Digimon, Scumon/PlatScumon and GreatKingScumon already have their hereditary (NATO) stats added in the avg.", 
 		Tama: "Tama",
 		Nivel: "Level",
 		Atributo: "Attribute",
 		Tipo: "Type",
 		ID: "ID",
-		"selectTama": "Select Tama",
-		"selectNivel": "Select Level",
-		"selectDigimon": "Select Digimon",
+		"selectTama": "Select Tama:",
+		"selectNivel": "Select Level:",
+		"selectDigimon": "Select Digimon:",
 		"selectTamaDefault": "-- Choose a Size --",
 		"selectNivelDefault": "-- Choose a Level --",
 		"selectDigimonDefault": "-- Choose a Digimon --",
-	    "Bellota dorada": "Golden Acorn",
+	    "Bellota Dorada": "Golden Acorn",
 		"Verdura Congelada": "Frozen Vegetable as last food eaten before evolving.",
 		"Hongo Congelado": "Frozen Mushroom as last food eaten before evolving.",
 		"Ninguno":"None",
 		"Si":"Yes",
 		"No":"No",
+		"No Muerto": "Undead",
+		"Death o Carne X": "Death or X Meat",
+		"Death / Carne X": "Death / X Meat",
+		"Nuez Magica": "Magical Nut",
 		"Balanceado":"Balanced",	
 		"Compuesto": "Composite", 
 		"Dinosaurio": "Dinosaur",
@@ -678,15 +817,20 @@ const gruposColumnas = {
 		"Chatarra": "Metal Scrap",
 		"Starmon o ShootingStarmon Driver": "Starmon or ShootingStarmon Driver",
 		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon and DarkSuperStarmon Driver",
+		"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon": "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon",
 		"Vel":"SPD",
 		    campos: {
       "Peso": "Weight",
       "Error Maximo": "Max Care Mistakes",
+	  "Errores Minimos": "Minimum Errors",
       "EntrenamientoHecho": "Training Done",
       "Stat Superior": "Highest Stat",
       "Stat Superior 2": "Highest Stat 2",
       "2Ciclos": "Have obtain 2 perfects on last two generations / Have obtain Agumon 06",
       "Program": "Program",
+	  "Program o Comida": "Program or Food",
+	  "Program / Comida (Asegura evolucion)": "Program / Food (Ensures evolution)",
+	  "Muerte inducida sin Carne X o Program (30% de salir)": "Induced death without X Meat or Program (30% chance)",
       "% de Entrenamiento": "% Training",
       "Digimon Bonus": "Digimon Bonus",
       "Vinculo Minimo alcanzado": "Bond Reached",
@@ -698,11 +842,15 @@ const gruposColumnas = {
 	  "Victorias": "Battle Victories",
 	  "Driver Equipado": "Driver Equipped",
 	  "Xross":"Xross/Install",
-	  "Bonus Vinculo al momento de evolucionar":"Bond at evolution"
+	  "Bonus Vinculo al momento de evolucionar":"Bond at evolution",
+	  "Vinculo al momento de evolucionar": "Bond at evolution",
+	  "Alcanzo vinculo negativo?": "Reached negative bond?",
     },
 	    grupos: {
       "Quota/Key Points": "Quota/Key Points", 
-      "Requisitos Obligatorios": "Mandatory Requirements"
+      "Requisitos Obligatorios": "Mandatory Requirements",
+	  "No se considera en el puntaje": "Not considered in scoring",
+	  "Evolucion por muerte inducida": "Evolution by induced death"
     },
 	  subtitle3: "Base Stats and Evolutions", 
 	  ATK: "ATK",
@@ -719,6 +867,22 @@ let currentLanguage = "es";
 
 function t(key) {
   return traducciones[currentLanguage][key] || key;
+}
+
+// Función para obtener la configuración de columnas para un digimon específico
+function obtenerGruposColumnas(nombreDigimon) {
+  if (specialDigimonConfig[nombreDigimon] && specialDigimonConfig[nombreDigimon].gruposColumnas) {
+    return specialDigimonConfig[nombreDigimon].gruposColumnas;
+  }
+  return gruposColumnasDefault;
+}
+
+// Función para procesar los datos del digimon si tiene configuración especial
+function procesarDatosDigimon(nombreDigimon, datosOriginales) {
+  if (specialDigimonConfig[nombreDigimon] && specialDigimonConfig[nombreDigimon].procesarCampos) {
+    return specialDigimonConfig[nombreDigimon].procesarCampos(datosOriginales);
+  }
+  return datosOriginales;
 }
 
 // Función para generar múltiples variaciones del nombre de archivo
@@ -856,10 +1020,21 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       tablaGenerales.innerHTML = "";
       tablaHeaders.innerHTML = "";
       tablaRequisitos.innerHTML = "";
+	  // Restaurar título por defecto cuando no hay selección
+      document.getElementById("subtitle").textContent = t("subtitle");
       return;
     }
+	
+	// Actualizar el título con el nombre del Digimon
+	if (currentLanguage === 'es') {
+	  document.getElementById("subtitle").textContent = `Datos Generales de ${nombre}`;
+	} else {
+	  document.getElementById("subtitle").textContent = `${nombre} General Data`;
+	}
 
-    const digimon = dict[nombre];
+	// Procesar datos del digimon si tiene configuración especial
+    const datosOriginales = dict[nombre];
+    const digimon = procesarDatosDigimon(nombre, datosOriginales);
 
     // Cargar imagen solo después de seleccionar Digimon
     console.log(`Digimon seleccionado: ${nombre}`);
@@ -933,7 +1108,7 @@ tablaStats.appendChild(filaStats);
   tablaStats.appendChild(filaVacia);
 }
 
-// Actualizar tabla de requisitos
+// Actualizar tabla de requisitos con configuración especial
 const headersGrupos = document.getElementById("headersGrupos");
 const tablaHeaders = document.getElementById("headersRequisitos");
 const tablaRequisitos = document.querySelector("#tablaRequisitos tbody");
@@ -944,6 +1119,9 @@ tablaRequisitos.innerHTML = "";
 
 const filaReq = document.createElement("tr");
 const camposDisponibles = Object.keys(digimon).filter(campo => !generales.includes(campo));
+
+// Obtener la configuración de columnas para este digimon específico
+const gruposColumnas = obtenerGruposColumnas(nombre);
 
 // Crear headers agrupados y individuales
 Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
@@ -978,10 +1156,21 @@ tablaRequisitos.appendChild(filaReq);
 function actualizarTextosUI() {
   // Actualizar títulos principales
   document.getElementById("titleMain").textContent = t("titleMain");
-  document.getElementById("subtitle").textContent = t("subtitle");
   document.getElementById("subtitle2").textContent = t("subtitle2");
   document.getElementById("disclaimer").textContent = t("disclaimer");
   document.getElementById("explanation").textContent = t("explanation");
+  
+  // Actualizar el subtitle dinámicamente si hay un Digimon seleccionado
+  const nombreDigimon = selectDigimon.value;
+  if (nombreDigimon && dict[nombreDigimon]) {
+    if (currentLanguage === 'es') {
+      document.getElementById("subtitle").textContent = `Datos Generales de ${nombreDigimon}`;
+    } else {
+      document.getElementById("subtitle").textContent = `${nombreDigimon} General Data`;
+    }
+  } else {
+    document.getElementById("subtitle").textContent = t("subtitle");
+  }
 
   // Actualizar labels de selectores
   document.querySelector('label[for="selectTama"]').textContent = t("selectTama");
@@ -1031,12 +1220,16 @@ headersGrupos.forEach(th => {
   // Re-traducir los valores de tablaRequisitos
   const filaReq = tablaRequisitos.querySelector("tr");
   if (filaReq && selectDigimon.value && dict[selectDigimon.value]) {
-    const digimon = dict[selectDigimon.value];
+	const nombreDigimon = selectDigimon.value;
+    const datosOriginales = dict[nombreDigimon];
+    const digimon = procesarDatosDigimon(nombreDigimon, datosOriginales);
     let i = 0;
     Object.keys(digimon).forEach(campo => {
       if (!generales.includes(campo)) {
         const td = filaReq.children[i];
-        td.innerHTML = traducirValor(campo, digimon[campo]);
+		if (td) {
+          td.innerHTML = traducirValor(campo, digimon[campo]);
+        }
         i++;
       }
     });

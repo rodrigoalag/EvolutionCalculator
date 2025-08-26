@@ -201,7 +201,11 @@ function inicializarSelector() {
 }
 
 // Función para obtener clasificación
-function obtenerClasificacion(digipuntos, nivel) {
+function obtenerClasificacion(digipuntos, nivel, nombre) {
+  // ✅ Casos especiales: GreatKingScumon y Scumon siempre son mutantes
+  if (nombre === "GreatKingScumon" || nombre === "Scumon") {
+    return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
+  }
   // Casos especiales para Digimon con pocos digipuntos pero que deben ser mutantes
   if (digipuntos < 15 && nivel <= 1) { // Nivel 3 o superior (Child+) con pocos digipuntos
     return { min: 0, max: 10.00, nombre: "Standard Baby 1", clase: "tier-low" };
@@ -276,7 +280,7 @@ selectNivel.addEventListener("change", () => {
       return {
         nombre,
         digipuntos: statsData.Digipuntos || 0,
-        clasificacion: obtenerClasificacion(statsData.Digipuntos || 0, nivelSeleccionado)
+        clasificacion: obtenerClasificacion(statsData.Digipuntos || 0, nivelSeleccionado, nombre)
       };
     })
     .filter(item => item !== null)

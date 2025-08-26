@@ -6,7 +6,7 @@
 
   <!-- ✅ Estilo de simple.css -->
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-  <style>
+<style>
 	#languageSelector {
 	  float: none;              /* quitar float */
 	  display: inline-flex;     /* inline-flex para que no ocupe todo el ancho */
@@ -15,17 +15,16 @@
 	  margin: 0 auto;           /* centrar el bloque */
 	  width: auto;              /* ancho automático, no 100% */
 	}
-
     
     nav a {
       margin-right: 10px;
     }
     
-    /* Ajustar el ancho de las columnas de la tabla editable */
-    #editableFieldsTable {
-      table-layout: fixed;
-      width: 100%;
-    }
+/* Ajustar el ancho de las columnas de la tabla editable */
+	#editableFieldsTable {
+	  table-layout: auto;  /* Cambiar de 'fixed' a 'auto' */
+	  width: 100%;
+	}
     /* Ajustar anchos específicos para cada columna */
     #editableFieldsTable th,
     #editableFieldsTable td {
@@ -42,6 +41,34 @@
       font-weight: bold;
     }
     /* Los anchos específicos se manejan dinámicamente con JavaScript */
+    
+    /* Anchos específicos para campos estáticos */
+    #editableFieldsTable th:nth-child(1), /* HP Base */
+    #editableFieldsTable td:nth-child(1) {
+      min-width: 90px;
+      width: 90px;
+    }
+
+    #editableFieldsTable th:nth-child(2), /* HP Entrenado */
+    #editableFieldsTable th:nth-child(3), /* ATK Entrenado */
+    #editableFieldsTable th:nth-child(4), /* SPD Entrenado */
+    #editableFieldsTable td:nth-child(2),
+    #editableFieldsTable td:nth-child(3),
+    #editableFieldsTable td:nth-child(4) {
+      min-width: 110px;
+      width: 110px;
+    }
+
+    #editableFieldsTable th:nth-child(5), /* Stat Superior */
+    #editableFieldsTable td:nth-child(5) {
+      min-width: 140px;
+      width: 140px;
+    }
+	#editableFieldsTable th:nth-child(6), /* Peso */
+	#editableFieldsTable td:nth-child(6) {
+	  min-width: 80px;
+	  width: 80px;
+	}    
     /* Estilos base para campos numéricos y dropdowns */
     #editableFieldsTable input[type="number"] {
       text-align: center;
@@ -89,6 +116,107 @@
     #autoFieldsTable th {
       font-weight: bold;
     }
+
+    /* ====================== ESTILOS PARA HELP POPUP ====================== */
+    /* Estilos para el icono de ayuda */
+    .help-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 12px;
+      line-height: 16px;
+      cursor: pointer;
+      margin-left: 5px;
+      user-select: none;
+      vertical-align: middle;
+    }
+
+    .help-icon:hover {
+      background-color: #0056b3;
+    }
+
+    /* Overlay del popup */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 10000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .popup-overlay.show {
+      display: flex;
+    }
+
+    /* Contenedor del popup */
+    .popup-container {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: popupIn 0.3s ease-out;
+    }
+
+    /* Animación de entrada */
+    @keyframes popupIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Botón de cerrar */
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-close:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Imagen del popup */
+    .popup-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+    /* ====================== FIN ESTILOS HELP POPUP ====================== */
+
     /* Responsive: en pantallas pequeñas permitir scroll horizontal */
     @media (max-width: 768px) {
       #editableFieldsTable th,
@@ -102,6 +230,33 @@
         font-size: 13px;
       }
       
+      /* Reducir anchos en móvil */
+      #editableFieldsTable th:nth-child(1),
+      #editableFieldsTable td:nth-child(1) {
+        min-width: 70px;
+        width: 70px;
+      }
+      
+      #editableFieldsTable th:nth-child(2),
+      #editableFieldsTable th:nth-child(3),
+      #editableFieldsTable th:nth-child(4),
+      #editableFieldsTable td:nth-child(2),
+      #editableFieldsTable td:nth-child(3),
+      #editableFieldsTable td:nth-child(4) {
+        min-width: 85px;
+        width: 85px;
+      }
+      
+      #editableFieldsTable th:nth-child(5),
+      #editableFieldsTable td:nth-child(5) {
+        min-width: 110px;
+        width: 110px;
+      }
+	 #editableFieldsTable th:nth-child(6), /* Peso móvil */
+	#editableFieldsTable td:nth-child(6) {
+	  min-width: 65px;
+	  width: 65px;
+	}     
       .table-container {
         overflow-x: auto;
       }
@@ -110,6 +265,27 @@
         float: none;
         display: block;
         margin: 10px auto;
+      }
+
+      /* Help popup responsive */
+      .popup-container {
+        max-width: 95vw;
+        max-height: 85vh;
+      }
+      
+      .popup-close {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+        top: 5px;
+        right: 10px;
+      }
+
+      .help-icon {
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        font-size: 13px;
       }
     }
     
@@ -123,6 +299,16 @@
       #editableFieldsTable input,
       #editableFieldsTable select {
         font-size: 11px;
+      }
+
+      /* Help popup móvil pequeño */
+      .popup-overlay {
+        padding: 10px;
+      }
+      
+      .popup-container {
+        max-width: 98vw;
+        max-height: 90vh;
       }
     }
   </style>
@@ -185,11 +371,165 @@
   <button id="calcularBtn" data-translate="calculate">Calcular evolución</button>
   <div id="resultados"></div>
   <p id="evolucionTexto" style="margin-top:15px; font-weight:bold;"></p>
-  
+
+  <!-- Popup de ayuda para HP Base -->
+  <div id="helpPopupOverlay" class="popup-overlay" onclick="closeHelpPopup(event)">
+    <div class="popup-container">
+      <button class="popup-close" onclick="closeHelpPopup()" aria-label="Cerrar">×</button>
+      <img id="helpPopupImage" class="popup-image" src="" alt="Imagen de ayuda">
+    </div>
+  </div>
 
   <script>
   // ============================================
-// SISTEMA DE TRADUCCIONES - IMPLEMENTACIÓN COMPLETA CON DETECCIÓN AUTOMÁTICA
+// FUNCIONES DEL POPUP DE AYUDA - SOLO AÑADIDAS, SIN MODIFICAR CÓDIGO EXISTENTE
+// ============================================
+
+// Configuración de imagen de ayuda para HP Base
+const helpImages = {
+  hpbase: 'img/explicacionentrenamientobaseen.png' // ← Ruta de la imagen actualizada
+};
+
+// Función para mostrar el popup
+function showHelpPopup(helpKey) {
+  const overlay = document.getElementById('helpPopupOverlay');
+  const image = document.getElementById('helpPopupImage');
+  
+  // Configurar la imagen
+  if (helpImages[helpKey]) {
+    image.src = helpImages[helpKey];
+    image.alt = `Ayuda para ${helpKey}`;
+    
+    // Mostrar el popup
+    overlay.classList.add('show');
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+    
+    // Focus en el popup para accesibilidad
+    overlay.focus();
+  }
+}
+
+// Función para cerrar el popup
+function closeHelpPopup(event) {
+  const overlay = document.getElementById('helpPopupOverlay');
+  
+  // Solo cerrar si se hace click en el overlay o en el botón de cerrar
+  if (!event || event.target === overlay || event.target.classList.contains('popup-close')) {
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+    
+    // Limpiar la imagen
+    document.getElementById('helpPopupImage').src = '';
+  }
+}
+
+// Cerrar popup con tecla Escape
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeHelpPopup();
+  }
+});
+
+// Prevenir cierre accidental al hacer click en la imagen
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.querySelector('.popup-container');
+  if (container) {
+    container.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+  }
+
+  // Manejar carga de imagen con error
+  const helpImage = document.getElementById('helpPopupImage');
+  if (helpImage) {
+    helpImage.addEventListener('error', function() {
+      this.alt = 'Error al cargar la imagen de ayuda';
+      this.style.minHeight = '200px';
+      this.style.display = 'flex';
+      this.style.alignItems = 'center';
+      this.style.justifyContent = 'center';
+      this.style.backgroundColor = '#f0f0f0';
+    });
+  }
+
+  // Touch events para mejor experiencia móvil
+  let touchStartY = 0;
+  const overlay = document.getElementById('helpPopupOverlay');
+  if (overlay) {
+    overlay.addEventListener('touchstart', function(e) {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    overlay.addEventListener('touchend', function(e) {
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchEndY - touchStartY;
+      
+      // Si desliza hacia abajo más de 50px, cerrar popup
+      if (deltaY > 50) {
+        closeHelpPopup();
+      }
+    });
+  }
+});
+
+// ✅ FUNCIÓN PARA AGREGAR EL HELP ICON AL HP BASE CUANDO SE CREE LA TABLA
+function addHelpIconToHPBase() {
+  // Esperar un poco y buscar el header de HP Base
+  setTimeout(() => {
+    const headersRow = document.getElementById('editableFieldsHeaders');
+    if (!headersRow) return;
+
+    Array.from(headersRow.children).forEach(header => {
+      const headerText = header.textContent.trim();
+      
+      // Buscar HP Base en cualquier idioma y agregar help icon si no lo tiene
+      if ((headerText === 'HP Base' || headerText.includes('HP Base')) && !header.querySelector('.help-icon')) {
+        const helpIcon = document.createElement('span');
+        helpIcon.className = 'help-icon';
+        helpIcon.onclick = () => showHelpPopup('hpbase');
+        helpIcon.title = 'Ver ayuda / Show help';
+        helpIcon.textContent = '?';
+        helpIcon.setAttribute('aria-label', 'Ver ayuda');
+        
+        // Agregar el icono al header
+        header.appendChild(document.createTextNode(' '));
+        header.appendChild(helpIcon);
+      }
+    });
+  }, 500); // Dar tiempo suficiente para que se cree la tabla
+}
+
+// Observador para detectar cuando se crea/modifica la tabla
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+      // Verificar si se agregaron headers a la tabla
+      const headersRow = document.getElementById('editableFieldsHeaders');
+      if (headersRow && headersRow.children.length > 0) {
+        addHelpIconToHPBase();
+      }
+    }
+  });
+});
+
+// Observar cambios en la tabla
+document.addEventListener('DOMContentLoaded', () => {
+  const tableContainer = document.querySelector('.table-container');
+  if (tableContainer) {
+    observer.observe(tableContainer, {
+      childList: true,
+      subtree: true
+    });
+  }
+  
+  // También intentar agregar el icono inmediatamente por si la tabla ya existe
+  addHelpIconToHPBase();
+});
+
+// ============================================
+// SISTEMA DE TRADUCCIONES ORIGINAL - SIN MODIFICACIONES
 // ============================================
 
 // Diccionario de traducciones
@@ -212,7 +552,8 @@ const translations = {
     type: "Tipo",
     // Campos editables comunes
     peso: "Peso",
-    errores: "Errores",
+    errores: "Errores de Crianza",
+	induceddeath: "Muerte inducida sin Carne X o Program",
     entrenamiento: "% Entrenamiento",
     vinculo: "Vínculo máximo alcanzado",
 	vinculo2: "Vinculo al momento de evolucionar",
@@ -255,6 +596,9 @@ const translations = {
     gigawaruxross: "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
     comida: "Comida",
     vnegativo: "Alcanzo vinculo negativo?",
+	trainedhp: "HP Entrenado",
+	trainedatk: "ATK Entrenado",
+	trainedspd: "SPD Entrenado"
   },
   en: {
     // Interface texts
@@ -277,6 +621,7 @@ const translations = {
     errores: "Care Mistakes",
     entrenamiento: "% Training",
     vinculo: "Max Bond Achieved",
+	induceddeath: "Induced death without Meat X or Death Program",
 	vinculo2: "Bond at evolution",
 	entrenos25: "Less than 15 trainings?",
     batallas: "Battles",
@@ -316,7 +661,10 @@ const translations = {
     digimon: "Digimon",
     gigawaruxross: "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon",
     comida:"Food",
-    vnegativo: "Reached negative bond?"
+    vnegativo: "Reached negative bond?",
+	trainedhp: "Trained HP",
+	trainedatk: "Trained ATK",
+	trainedspd: "Trained SPD"
   }
 };
 
@@ -435,9 +783,14 @@ function updateEditableFieldsHeaders() {
     'Weight': 'peso',
     'Errores': 'errores',
     'Errors': 'errores',
+	'Muerte inducida sin Carne X o Program (30% de salir)': 'induceddeath',
+    'Induced death without Meat X or Death Program (30% Chance)': 'induceddeath',
+    'Muerte inducida sin Carne X o Program': 'induceddeath',
+    'Induced death without Meat X or Death Program': 'induceddeath',
     '% Entrenamiento': 'entrenamiento',
     '% Training': 'entrenamiento',
     'Vínculo máximo alcanzado': 'vinculo',
+	'Vinculo Maximo Alcanzado': 'vinculo',
 	'Alcanzo vinculo negativo?':'vnegativo',
     'Vinculo': 'vinculo',
 	'Vinculo al momento de evolucionar':'vinculo2',
@@ -468,7 +821,13 @@ function updateEditableFieldsHeaders() {
     'Bonus': 'bonus',
     'Xross': 'xross',
     'Comida':'comida',
-    'Food': 'comida'
+    'Food': 'comida',
+	"HP Entrenado":'trainedhp',
+	"Trained HP":'trainedhp',
+    "ATK Entrenado":'trainedatk',
+    "Trained ATK":'trainedatk',
+    "SPD Entrenado":'trainedspd',
+    "Trained SPD":'trainedspd'
   };
 
   // Traducir encabezados
@@ -522,17 +881,17 @@ function translateSelectOptions(select) {
       'mutant': 'Mutante',
       'tierra': 'Tierra',
       'earth': 'Tierra',
-      '5 caca': 'caca',
+      '5 Caca': 'caca',
       '5 poop': 'caca',
       '5 sardinas': 'sardina',
       '5 digisardine': 'sardina',
       'bellota dorada': 'bellotad',
       'golden acorn': 'bellotad',
 	 'verdura congelada': 'verduracongelada',
-	  'verdura congelada como ultima comida antes de la evolucion': 'verduracongelada', // ← Agregar esta línea
+	  'verdura congelada como ultima comida antes de la evolucion': 'verduracongelada',
 	  'frozen vegetable as last food eaten before evolving.': 'verduracongelada',
 	  'hongo congelado': 'hongocongelado',
-	  'hongo congelado como ultima comida antes de la evolucion': 'hongocongelado', // ← Agregar esta línea  
+	  'hongo congelado como ultima comida antes de la evolucion': 'hongocongelado',
 	  'frozen mushroom as last food eaten before evolving.': 'hongocongelado',
       'chatarra': 'Chatarra',
       'metal scrap': 'Chatarra',
@@ -607,17 +966,21 @@ function reorganizeFields() {
             selects.forEach(select => translateSelectOptions(select));
 
             updateInterfaceLanguage();
-          }, 100); // puedes ajustar a 50 si te parece suficiente
+            
+            // ✅ Agregar help icon después de reorganizar y actualizar estilos
+            setTimeout(() => {
+              addHelpIconToHPBase();
+            }, 200);
+          }, 150);
         };
 
         clearInterval(retryInterval);
       }
-    }, 50); // Revisa cada 50ms hasta que populateEditableFields exista
+    }, 50);
   };
 
   document.head.appendChild(originalScript);
 }
-
 
 function reorganizeTableColumns() {
   const headersRow = document.getElementById('editableFieldsHeaders');
@@ -663,11 +1026,11 @@ function reorganizeTableColumns() {
   specificOrder.forEach(fieldName => {
     if (fieldMap[fieldName]) {
       orderedFields.push(fieldMap[fieldName]);
-      delete fieldMap[fieldName]; // Remover del mapa para no duplicar
+      delete fieldMap[fieldName];
     }
   });
   
-  // Agregar dropdowns restantes (los que no están en el orden específico)
+  // Agregar dropdowns restantes
   Object.values(fieldMap).forEach(item => {
     const hasSelect = item.field.querySelector('select');
     if (hasSelect) {
@@ -687,7 +1050,6 @@ function reorganizeTableColumns() {
   
   // Agregar dropdowns restantes
   remainingDropdowns.forEach((item, index) => {
-    // Añadir clase separadora al primer dropdown
     if (index === 0 && orderedFields.length > 0) {
       item.header.classList.add('dropdown-separator');
       item.field.classList.add('dropdown-separator');
@@ -701,52 +1063,127 @@ function reorganizeTableColumns() {
 }
 
 function updateColumnStyles() {
-  // Contar cuántas columnas tenemos de cada tipo
   const fieldsRow = document.getElementById('editableFields');
-  if (!fieldsRow) return;
+  const headersRow = document.getElementById('editableFieldsHeaders');
+  if (!fieldsRow || !headersRow) return;
   
   const totalCols = fieldsRow.children.length;
   
-  // Los primeros 6 campos son siempre los específicos en orden
-  const specificFieldsCount = 6;
-  const dropdownStartIndex = specificFieldsCount + 1;
-  
-  // Crear estilos dinámicos
   const style = document.createElement('style');
   style.id = 'dynamic-column-styles';
   
   let css = '';
   
-  // Estilos para campos específicos (más estrechos)
-  for (let i = 1; i <= Math.min(specificFieldsCount, totalCols); i++) {
-    css += `
-      #editableFieldsTable th:nth-child(${i}),
-      #editableFieldsTable td:nth-child(${i}) {
-        width: 95px;
+  // Iterar por cada columna
+  for (let i = 1; i <= totalCols; i++) {
+    const field = fieldsRow.children[i-1];
+    
+    if (field) {
+      const hasSelect = field.querySelector('select');
+      
+      if (hasSelect) {
+        // TODOS los dropdowns del mismo tamaño que HP Entrenado, ATK Entrenado, SPD Entrenado
+        css += `
+          #editableFieldsTable th:nth-child(${i}),
+          #editableFieldsTable td:nth-child(${i}) {
+            min-width: 110px !important;
+            width: 110px !important;
+          }
+        `;
+        
+        // Responsive móvil - mismo tamaño que HP/ATK/SPD Entrenado en móvil
+        css += `
+          @media (max-width: 768px) {
+            #editableFieldsTable th:nth-child(${i}),
+            #editableFieldsTable td:nth-child(${i}) {
+              min-width: 85px !important;
+              width: 85px !important;
+            }
+          }
+        `;
+      } else {
+        // Campos numéricos - mantener tamaños originales según el CSS base
+        const header = headersRow.children[i-1];
+        if (header) {
+          const headerText = header.textContent.trim().toLowerCase();
+          
+          if (headerText.includes('hp') && headerText.includes('base')) {
+            // HP Base - tamaño original del CSS
+            css += `
+              #editableFieldsTable th:nth-child(${i}),
+              #editableFieldsTable td:nth-child(${i}) {
+                min-width: 90px !important;
+                width: 90px !important;
+              }
+              @media (max-width: 768px) {
+                #editableFieldsTable th:nth-child(${i}),
+                #editableFieldsTable td:nth-child(${i}) {
+                  min-width: 70px !important;
+                  width: 70px !important;
+                }
+              }
+            `;
+          } else if (headerText.includes('peso') || headerText.includes('weight')) {
+            // Peso - tamaño original del CSS
+            css += `
+              #editableFieldsTable th:nth-child(${i}),
+              #editableFieldsTable td:nth-child(${i}) {
+                min-width: 80px !important;
+                width: 80px !important;
+              }
+              @media (max-width: 768px) {
+                #editableFieldsTable th:nth-child(${i}),
+                #editableFieldsTable td:nth-child(${i}) {
+                  min-width: 65px !important;
+                  width: 65px !important;
+                }
+              }
+            `;
+          } else {
+            // Otros campos numéricos - tamaño como HP/ATK/SPD Entrenado
+            css += `
+              #editableFieldsTable th:nth-child(${i}),
+              #editableFieldsTable td:nth-child(${i}) {
+                min-width: 110px !important;
+                width: 110px !important;
+              }
+              @media (max-width: 768px) {
+                #editableFieldsTable th:nth-child(${i}),
+                #editableFieldsTable td:nth-child(${i}) {
+                  min-width: 85px !important;
+                  width: 85px !important;
+                }
+              }
+            `;
+          }
+        }
       }
-    `;
+    }
   }
   
-  // Estilos para dropdowns (más anchos)
-  for (let i = dropdownStartIndex; i <= totalCols; i++) {
-    css += `
-      #editableFieldsTable th:nth-child(${i}),
-      #editableFieldsTable td:nth-child(${i}) {
-        width: 130px;
-      }
-    `;
-  }
+  // Asegurar que inputs y selects ocupen todo el ancho disponible
+  css += `
+    #editableFieldsTable input,
+    #editableFieldsTable select {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+  `;
   
   style.textContent = css;
   
-  // Remover estilo anterior si existe
+  // Remover estilo anterior
   const oldStyle = document.getElementById('dynamic-column-styles');
   if (oldStyle) {
     oldStyle.remove();
   }
   
   document.head.appendChild(style);
+  
+  console.log('✅ Dropdowns ajustados al mismo tamaño que HP/ATK/SPD Entrenado (110px)');
 }
+
 function observarSelectsDinamicos() {
   const target = document.getElementById('editableFields');
   if (!target) return;
@@ -761,19 +1198,16 @@ function observarSelectsDinamicos() {
     }
 
     if (changed) {
-      // Solo traducir selects si se agregaron nuevos nodos
       const selects = target.querySelectorAll('select:not([data-translated])');
       selects.forEach(select => {
         translateSelectOptions(select);
-        select.setAttribute('data-translated', 'true'); // Marcar como traducido
+        select.setAttribute('data-translated', 'true');
       });
     }
   });
 
   observer.observe(target, { childList: true, subtree: true });
 }
-
-
 
 // ✅ MODIFICADO: Event listener mejorado para inicialización automática
 document.addEventListener('DOMContentLoaded', function() {
@@ -783,10 +1217,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // 2. Configurar el selector de idioma
   const languageSelector = document.getElementById('languageSelector');
   if (languageSelector) {
-    // Establecer el valor del selector sin disparar el evento
     languageSelector.value = currentLanguage;
     
-    // Event listener para cambio manual de idioma
     languageSelector.addEventListener('change', function() {
       currentLanguage = this.value;
       localStorage.setItem('digilang', currentLanguage);
@@ -802,7 +1234,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 5. Inicializar reorganización de campos
   reorganizeFields();
-  // ✅ Añadir observador para detectar cambios y traducir selects nuevos
+  
+  // 6. Añadir observador para detectar cambios y traducir selects nuevos
   observarSelectsDinamicos();
 });
 
@@ -815,20 +1248,19 @@ window.forceTranslationUpdate = function() {
 window.translateNewElements = function(container) {
   if (!container) return;
   
-  // Traducir solo los elementos dentro del contenedor específico
   const elementsToTranslate = container.querySelectorAll('[data-translate]');
   elementsToTranslate.forEach(element => {
     const key = element.getAttribute('data-translate');
     element.textContent = translate(key);
   });
   
-  // Traducir selects dentro del contenedor
   const selects = container.querySelectorAll('select');
   selects.forEach(select => translateSelectOptions(select));
 };
 
   </script>
   <script src="digimonReqDict.js"></script>
+  <script src="digimonstattier.js"></script>
 
 </body>
 </html>

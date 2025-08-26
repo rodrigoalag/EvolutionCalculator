@@ -104,23 +104,22 @@ const digimonReqDict = {
   },
     "KaratsukiNumemon": {
 	"ID": 40, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
-	"Comida": "5 Sardinas"
+	"Peso": 10, "Comida": "5 Sardinas"
 	},	
     "Geremon": {
 	"ID": 20, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
-	"Program": "Trash"
+	"Peso": 10, "Program": "Trash"
 	},
     "GoldNumemon": {
 	"ID": 42, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
-	"Comida": "Bellota Dorada"
+	"Peso": 10, "Comida": "Bellota Dorada"
 	},
     "Scumon": {
 	"ID": 41, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
-	"Comida": "5 caca"
+	"Peso": 10, "Comida": "5 Caca"
 	},
     "PlatinumScumon": {
-	"ID": 43, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
-	"Comida": "Chatarra"
+	"ID": 43, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 10, "Comida": "Chatarra"
 	},	
     "ShootingStarmon": {
 	"ID": 57, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
@@ -257,15 +256,15 @@ const digimonReqDict = {
     "Peso": 30, "Error Maximo": 0, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "SuperStarmon y DarkSuperStarmon Driver"
   },
     "MetalEtemon": {
-	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":40,
+	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso": 40,
 	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Mecha"
   },
     "PlatinumNumemon": {
-	"ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso":55,
+	"ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 55,
 	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumScumon Driver"
   },
     "Mugendramon": {
-	"ID": 27, "Tama": "V0", "Nivel": 6, "Atributo": "Virus", "Tipo": "Maquina","Peso":55,
+	"ID": 27, "Tama": "V0", "Nivel": 6, "Atributo": "Virus", "Tipo": "Maquina", "Peso": 40,
 	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Xross": "DriverInstall"
   },
      "Chackmon": {
@@ -283,5 +282,37 @@ const digimonReqDict = {
     "Burpmon": {
 	"ID": 33, "Tama": "M", "Nivel": 3, "Atributo": "Free", "Tipo": "Mutante", "Peso": 99
   }, 
+      "Bakemon LT": {
+	"ID": 100, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 10, "Muerte inducida sin Carne X o Program (30% de salir)": "Si", "Comida": "Carne X", "Program":"Death"
+  }, 
   
+      "Soulmon LT": {
+	"ID": 101, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 10, "Comida": "Nuez Magica"
+  }, 
+  
+      "Bakemon MT": {
+	"ID": 100, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 10, 
+	"% Entrenamiento": 80,"Error Maximo": 1, "Combates Minimos": 15, "WinRate": 60, "Digimon Bonus": "Ghostmon",
+  },
+  
+      "Soulmon MT": {
+	"ID": 101, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 10, "Comida": "Nuez Magica"
+  }, 
+  
+      "Ghostmon": {
+	"ID": 99, "Tama": "D", "Nivel": 3, "Atributo": "Data", "Tipo": "No Muerto", "Peso": 10, "Program": "Death"
+  }, 
+  
+      "SkullGreymon": {
+	"ID": 104, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 20,
+	"% Entrenamiento": 50,"Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program":"Death", "Comida": "Carne X"
+  }, 
+      "Fantomon": {
+	"ID": 102, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",
+    "Peso": 15, "Error Maximo": 0, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Digimon Bonus": "Bakemon",
+  },
+      "Metal Fantomon": {
+	"ID": 103, "Tama": "D", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
+    "Peso": 35, "% Entrenamiento": 100, "Program":"Mecha"
+  },
 };

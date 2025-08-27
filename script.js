@@ -4,6 +4,7 @@
     'Peso': 'peso',
     'Weight': 'peso',
     'Errores': 'errores',
+	'Errores de Crianza': 'errores',
     'Care Mistakes': 'errores',
     '% Entrenamiento': 'entrenamiento',
     '% Training': 'entrenamiento',

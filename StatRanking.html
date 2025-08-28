@@ -13,7 +13,7 @@
       align-items: center;
       gap: 2rem;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -30,6 +30,7 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 2rem;
+      overflow-x: auto;
     }
 
     .ranking-table th,
@@ -43,6 +44,8 @@
     .ranking-table th {
       background-color: transparent;
       font-weight: bold;
+      position: sticky;
+      top: 0;
     }
 
     /* Estilos para las imágenes en la tabla */
@@ -62,18 +65,68 @@
     .tier-high { background-color: transparent; }
     .tier-high-plus { background-color: transparent; }
 
+    /* Estilos para headers ordenables */
+    .sortable-header {
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      transition: background-color 0.2s ease;
+    }
+
+    .sortable-header:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .sortable-header.active {
+      background-color: transparent;
+      font-weight: bold;
+    }
+
+    .sort-icon {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 0.9em;
+      opacity: 0.4;
+      transition: opacity 0.2s ease;
+    }
+
+    .sortable-header.active .sort-icon {
+      opacity: 1;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .sortable-header:hover .sort-icon {
+      opacity: 0.7;
+    }
+
     /* Responsividad */
     @media (max-width: 768px) {
+      .container {
+        max-width: 100%;
+        overflow-x: auto;
+      }
+      
       .digimon-img {
         width: 40px !important;
         height: 40px !important;
       }
       
+      .ranking-table {
+        font-size: 0.8rem;
+      }
+      
       .ranking-table th,
       .ranking-table td {
         padding: 0.3rem;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
       }
+    }
+
+    /* Wrapper para scroll horizontal en móviles */
+    .table-wrapper {
+      overflow-x: auto;
+      width: 100%;
     }
   </style>
 </head>
@@ -118,22 +171,35 @@
 
     <section class="container">
       <div id="rankingContainer">
-        <table id="rankingTable" class="ranking-table" style="display: none;">
-          <thead>
-            <tr>
-              <th>Digimon</th>
-              <th>Clasificación</th>
-              <th>Imagen</th>
-              <th>Digipuntos</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-wrapper">
+          <table id="rankingTable" class="ranking-table" style="display: none;">
+            <thead>
+              <tr>
+                <th>Digimon</th>
+                <th>Clasificación</th>
+                <th>Imagen</th>
+                <th class="sortable-header" data-sort="hp">HP<span class="sort-icon">↓</span></th>
+                <th class="sortable-header" data-sort="atk">ATK<span class="sort-icon">↓</span></th>
+                <th class="sortable-header" data-sort="def">DEF<span class="sort-icon">↓</span></th>
+                <th class="sortable-header" data-sort="vel">SPD<span class="sort-icon">↓</span></th>
+                <th class="sortable-header active" data-sort="digipuntos">Digipuntos<span class="sort-icon">↓</span></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </section>
   </main>
 
   <script>
+// Variables globales
+let idiomaActual = 'es';
+let campoOrdenamiento = 'digipuntos';
+let ordenDescendente = true;
+let datosActuales = [];
+let procesandoClick = false;
+
 // Traducciones
 const traducciones = {
   es: {
@@ -144,6 +210,10 @@ const traducciones = {
     digimon: "Digimon",
     clasificacion: "Clasificación",
     imagen: "Imagen",
+    atk: "ATK",
+    def: "DEF",
+    hp: "HP",
+    spd: "SPD",
     digipuntos: "Digipuntos",
 	subtitle: "Creado por Rodrigoalag",
  },
@@ -155,12 +225,15 @@ const traducciones = {
     digimon: "Digimon",
     clasificacion: "Classification",
     imagen: "Image",
+    atk: "ATK",
+    def: "DEF",
+    hp: "HP",
+    spd: "SPD",
     digipuntos: "Digipoints",
 	subtitle: "Created by Rodrigoalag",
  }
 };
 
-let idiomaActual = 'es';
 // Mapeo de niveles
 const nivelAEtapa = {
   1: "Baby I",
@@ -188,6 +261,40 @@ const selectNivel = document.getElementById("selectNivel");
 const rankingTable = document.getElementById("rankingTable");
 const rankingTableBody = document.querySelector("#rankingTable tbody");
 
+// Función para configurar delegación de eventos
+function configurarDelegacionEventos() {
+  const tablaContainer = document.getElementById('rankingContainer');
+  
+  tablaContainer.addEventListener('click', function(event) {
+    const header = event.target.closest('.sortable-header');
+    
+    if (!header || procesandoClick) return;
+    
+    procesandoClick = true;
+    
+    const campo = header.dataset.sort;
+    console.log(`Click en: ${campo}`);
+    
+    if (campoOrdenamiento === campo) {
+      ordenDescendente = !ordenDescendente;
+    } else {
+      campoOrdenamiento = campo;
+      ordenDescendente = true;
+    }
+    
+    if (datosActuales.length > 0) {
+      const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+      const tbody = document.querySelector('#rankingTable tbody');
+      generarTablaRankingSegura(datosOrdenados, tbody);
+      actualizarHeadersActivos();
+    }
+    
+    setTimeout(() => {
+      procesandoClick = false;
+    }, 300);
+  });
+}
+
 // Inicializar selector de niveles
 function inicializarSelector() {
   const niveles = [...new Set(Object.values(digimonReqDict).map(d => d.Nivel))].sort((a, b) => a - b);
@@ -202,27 +309,24 @@ function inicializarSelector() {
 
 // Función para obtener clasificación
 function obtenerClasificacion(digipuntos, nivel, nombre) {
-  // ✅ Casos especiales: GreatKingScumon y Scumon siempre son mutantes
   if (nombre === "GreatKingScumon" || nombre === "Scumon") {
     return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
   }
-  // Casos especiales para Digimon con pocos digipuntos pero que deben ser mutantes
-  if (digipuntos < 15 && nivel <= 1) { // Nivel 3 o superior (Child+) con pocos digipuntos
+  
+  if (digipuntos < 15 && nivel <= 1) {
     return { min: 0, max: 10.00, nombre: "Standard Baby 1", clase: "tier-low" };
   }  
-  if (digipuntos < 15 && nivel <= 2) { // Nivel 3 o superior (Child+) con pocos digipuntos
+  if (digipuntos < 15 && nivel <= 2) {
     return { min: 0, max: 10.00, nombre: "Standard Baby 2", clase: "tier-low" };
   }
-
   
-  if (digipuntos < 15 && nivel >= 3) { // Nivel 3 o superior (Child+) con pocos digipuntos
+  if (digipuntos < 15 && nivel >= 3) {
     return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
   }
-  if (digipuntos < 60 && nivel === 5) { // Nivel 5 (Perfect) con stats de mutante/GKScumon
+  if (digipuntos < 60 && nivel === 5) {
     return { min: 20, max: 59.99, nombre: "Mutant", clase: "tier-mid" };
   }
     
-  // Caso especial para Ultimate (nivel 6)
   if (nivel === 6) {
     if (digipuntos >= 50 && digipuntos <= 59.99) {
       return { min: 50, max: 59.99, nombre: "Standard Ultimate", clase: "tier-low" };
@@ -239,7 +343,7 @@ function obtenerClasificacion(digipuntos, nivel, nombre) {
          clasificacionDigipuntos[clasificacionDigipuntos.length - 1];
 }
 
-// Función para cargar imagen (reutilizar del HTML original)
+// Función para cargar imagen
 function generarVariacionesNombre(nombre) {
   const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
   const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
@@ -256,43 +360,37 @@ function generarVariacionesNombre(nombre) {
   ])];
 }
 
-// Event listener para el selector
-selectNivel.addEventListener("change", () => {
-  const nivelSeleccionado = parseInt(selectNivel.value);
+// Función para ordenar datos
+function ordenarDatos(datos, campo, descendente = true) {
+  return [...datos].sort((a, b) => {
+    const valorA = a[campo] || 0;
+    const valorB = b[campo] || 0;
+    return descendente ? (valorB - valorA) : (valorA - valorB);
+  });
+}
+
+// Función para actualizar headers activos
+function actualizarHeadersActivos() {
+  document.querySelectorAll('.sortable-header').forEach(header => {
+    header.classList.remove('active');
+    const icon = header.querySelector('.sort-icon');
+    if (icon) {
+      icon.textContent = '↓';
+    }
+  });
   
-  if (!nivelSeleccionado) {
-    rankingTable.style.display = "none";
-    return;
+  const headerActivo = document.querySelector(`[data-sort="${campoOrdenamiento}"]`);
+  if (headerActivo) {
+    headerActivo.classList.add('active');
+    const icon = headerActivo.querySelector('.sort-icon');
+    if (icon) {
+      icon.textContent = ordenDescendente ? '↓' : '↑';
+    }
   }
+}
 
-  // Obtener Digimon del nivel seleccionado
-  const digimonDelNivel = Object.entries(digimonReqDict)
-    .filter(([_, data]) => data.Nivel === nivelSeleccionado)
-    .map(([nombre, _]) => nombre);
-
-  // Crear array de ranking con datos
-  const rankingData = digimonDelNivel
-  .filter(nombre => nombre.toLowerCase() !== "burpmon") // ❌ excluir burpmon
-    .map(nombre => {
-      const statsData = digimonstattier[nombre];
-      if (!statsData) return null;
-      
-      return {
-        nombre,
-        digipuntos: statsData.Digipuntos || 0,
-        clasificacion: obtenerClasificacion(statsData.Digipuntos || 0, nivelSeleccionado, nombre)
-      };
-    })
-    .filter(item => item !== null)
-    .sort((a, b) => b.digipuntos - a.digipuntos); // Ordenar de mayor a menor
-
-  // Generar tabla
-  generarTablaRanking(rankingData);
-  rankingTable.style.display = "table";
-});
-
-function generarTablaRanking(data) {
-  rankingTableBody.innerHTML = "";
+function generarTablaRankingSegura(data, tbody) {
+  tbody.innerHTML = "";
   
   data.forEach((item, index) => {
     const fila = document.createElement("tr");
@@ -316,7 +414,6 @@ function generarTablaRanking(data) {
     
     // Intentar cargar imagen
     const variaciones = generarVariacionesNombre(item.nombre);
-    let imagenCargada = false;
     
     const intentarCargarImagen = (indice = 0) => {
       if (indice >= variaciones.length) {
@@ -338,47 +435,101 @@ function generarTablaRanking(data) {
     tdImagen.appendChild(img);
     fila.appendChild(tdImagen);
     
+    // HP
+    const tdHP = document.createElement("td");
+    tdHP.textContent = item.hp;
+    fila.appendChild(tdHP);
+    
+    // ATK
+    const tdATK = document.createElement("td");
+    tdATK.textContent = item.atk;
+    fila.appendChild(tdATK);
+    
+    // DEF
+    const tdDEF = document.createElement("td");
+    tdDEF.textContent = item.def;
+    fila.appendChild(tdDEF);
+    
+    // SPD (Vel)
+    const tdSPD = document.createElement("td");
+    tdSPD.textContent = item.vel;
+    fila.appendChild(tdSPD);
+    
     // Digipuntos
     const tdDigipuntos = document.createElement("td");
     tdDigipuntos.textContent = item.digipuntos;
     fila.appendChild(tdDigipuntos);
     
-    rankingTableBody.appendChild(fila);
+    tbody.appendChild(fila);
   });
 }
+
+// Event listener para el selector
+selectNivel.addEventListener("change", () => {
+  const nivelSeleccionado = parseInt(selectNivel.value);
+  
+  if (!nivelSeleccionado) {
+    rankingTable.style.display = "none";
+    return;
+  }
+
+  // Obtener Digimon del nivel seleccionado
+  const digimonDelNivel = Object.entries(digimonReqDict)
+    .filter(([_, data]) => data.Nivel === nivelSeleccionado)
+    .map(([nombre, _]) => nombre);
+
+  // Crear array de ranking con datos
+  datosActuales = digimonDelNivel
+  .filter(nombre => nombre.toLowerCase() !== "burpmon")
+    .map(nombre => {
+      const statsData = digimonstattier[nombre];
+      if (!statsData) return null;
+      
+      return {
+        nombre,
+        atk: statsData.ATK || 0,
+        def: statsData.DEF || 0,
+        hp: statsData.HP || 0,
+        vel: statsData.Vel || 0,
+        digipuntos: statsData.Digipuntos || 0,
+        clasificacion: obtenerClasificacion(statsData.Digipuntos || 0, nivelSeleccionado, nombre)
+      };
+    })
+    .filter(item => item !== null);
+
+  // Ordenar datos y generar tabla
+  const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+  const tbody = document.querySelector('#rankingTable tbody');
+  
+  generarTablaRankingSegura(datosOrdenados, tbody);
+  actualizarHeadersActivos();
+  rankingTable.style.display = "table";
+});
+
 // Función para actualizar traducciones
 function actualizarTraducciones() {
   const t = traducciones[idiomaActual];
   
-  // Actualizar título
   document.querySelector('h1').textContent = t.titulo;
-  
-  // Actualizar labels
   document.querySelector('label[for="selectNivel"]').textContent = t.seleccionarNivel;
   document.querySelector('#labelIdioma').textContent = t.idioma;
   
-  // Actualizar opción por defecto del selector de nivel
   const opcionPorDefecto = document.querySelector('#selectNivel option[value=""]');
   if (opcionPorDefecto) {
     opcionPorDefecto.textContent = t.eligeNivel;
   }
   
-  // Actualizar headers de la tabla
-  const headers = document.querySelectorAll('#rankingTable th');
-  if (headers.length > 0) {
-    headers[0].textContent = t.digimon;
-    headers[1].textContent = t.clasificacion;
-    headers[2].textContent = t.imagen;
-    headers[3].textContent = t.digipuntos;
-  }
-  
-  // Recargar tabla si hay datos
-  if (selectNivel.value) {
-    selectNivel.dispatchEvent(new Event('change'));
+  if (selectNivel.value && datosActuales.length > 0) {
+    const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+    const tbody = document.querySelector('#rankingTable tbody');
+    if (tbody) {
+      generarTablaRankingSegura(datosOrdenados, tbody);
+      actualizarHeadersActivos();
+    }
   }
 }
 
-// Event listener para el selector de idioma
+// Inicializar
 document.addEventListener("DOMContentLoaded", () => {
   const selectIdioma = document.getElementById("selectIdioma");
   
@@ -389,6 +540,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
   inicializarSelector();
   actualizarTraducciones();
+  configurarDelegacionEventos();
+  console.log('Delegación de eventos configurada');
 });
   </script>
 </body>

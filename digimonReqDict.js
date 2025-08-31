@@ -88,7 +88,7 @@ const digimonReqDict = {
 	},	
     "GeoGreymon": {
 	"ID": 72, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
-    "Peso": 20, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Agumon (2006)", "Vinculo Minimo alcanzado": 70, "WinRate": 60, "Combates Minimos": 15
+    "Peso": 20, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Agumon (2006)", "WinRate": 60, "Combates Minimos": 15
   },
     "Clockmon": {
 	"ID": 79, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",

@@ -2593,46 +2593,40 @@ if (nextLevel === 2) {
   console.log("🧾 Resultado final:", mejoresDigimons);
 }
 
-// --- EVALUACIÓN A NIVEL 3 ---
+// --- EVALUACIÓN A NIVEL 3 (CORREGIDO) ---
 if (nextLevel === 3) {
   const burpmon = puntajes.find(d => d.name === "Burpmon" && d.puntaje >= 3);
   if (burpmon) {
     mejoresDigimons = ["Burpmon"];
     console.log("👑 Excepción: Burpmon tiene puntaje >= 3, se selecciona directamente.");
   } else {
-    // Filtrar todos los candidatos válidos (puntaje >= 2 para nivel 3)
+    // Filtrar todos los candidatos válidos (puntaje >= 1 para nivel 3)
     const candidatosValidos = puntajes.filter(d => {
       const req = digimonReqDict[d.name];
       return req?.Nivel === 3 && d.puntaje >= 1;
     });
     
     if (candidatosValidos.length > 0) {
-      // Encontrar el puntaje máximo
-      const maxPuntajeNivel3 = Math.max(...candidatosValidos.map(d => d.puntaje));
-      
-      // Filtrar solo los que tienen el puntaje máximo
-      const conMaxPuntaje = candidatosValidos.filter(d => d.puntaje === maxPuntajeNivel3);
-      
-      // Separar los que tienen Program de los que no
-      const conProgram = conMaxPuntaje.filter(d => {
+      // CORRECCIÓN: Programs tienen prioridad absoluta sin importar puntaje
+      const conProgram = candidatosValidos.filter(d => {
         const req = digimonReqDict[d.name];
         return req.Program !== undefined;
       });
       
-      const sinProgram = conMaxPuntaje.filter(d => {
-        const req = digimonReqDict[d.name];
-        return req.Program === undefined;
-      });
-      
-      // Si hay con Program, priorizar esos
       if (conProgram.length > 0) {
-        const candidatos = conProgram.map(d => d.name);
+        // Si hay Programs, elegir solo de esos (el de mayor puntaje entre Programs)
+        const maxPuntajeProgram = Math.max(...conProgram.map(d => d.puntaje));
+        const mejoresProgram = conProgram.filter(d => d.puntaje === maxPuntajeProgram);
+        const candidatos = mejoresProgram.map(d => d.name);
         mejoresDigimons = desempatarPorDigipuntos(candidatos);
-        console.log("🏆 Mejor(es) con Program (puntaje máximo):", mejoresDigimons);
+        console.log("🏆 Programs encontrados - Mejor(es) con Program:", mejoresDigimons);
       } else {
-        const candidatos = sinProgram.map(d => d.name);
+        // Si no hay Programs, aplicar lógica original por puntaje máximo
+        const maxPuntajeNivel3 = Math.max(...candidatosValidos.map(d => d.puntaje));
+        const conMaxPuntaje = candidatosValidos.filter(d => d.puntaje === maxPuntajeNivel3);
+        const candidatos = conMaxPuntaje.map(d => d.name);
         mejoresDigimons = desempatarPorDigipuntos(candidatos);
-        console.log("✅ Mejor(es) sin Program (puntaje máximo):", mejoresDigimons);
+        console.log("✅ Sin Programs - Mejor(es) por puntaje máximo:", mejoresDigimons);
       }
     } else {
       mejoresDigimons = ["Ninguno"];
@@ -2667,7 +2661,7 @@ const sideEvosValidas = puntajes.filter(d => {
   ) && d.puntaje >= 0;
 });
 
-// --- EVALUACIÓN NIVEL 4 o 5 ---
+// --- EVALUACIÓN NIVEL 4 o 5 (CORREGIDO) ---
 if (nextLevel === 4 || nextLevel === 5) {
  console.log(`🧪 Evaluando evoluciones para Nivel ${nextLevel}`);
  console.log("📋 Nivel actual:", data["Nivel"]);
@@ -2698,15 +2692,8 @@ if (nextLevel === 4 || nextLevel === 5) {
        });
        
        if (todosLosCandidatos.length > 0) {
-         const maxPuntajeGlobal = Math.max(...todosLosCandidatos.map(d => d.puntaje));
-         const conMaxPuntaje = todosLosCandidatos.filter(d => d.puntaje === maxPuntajeGlobal);
-         
-         const conDriverXross = conMaxPuntaje.filter(d => {
-           const req = digimonReqDict[d.name];
-           return req["Driver Equipado"] !== undefined || req["Xross"] !== undefined;
-         });
-         
-         const conProgram = conMaxPuntaje.filter(d => {
+         // CORRECCIÓN: Programs/excepciones tienen prioridad absoluta sin importar puntaje
+         const conProgram = todosLosCandidatos.filter(d => {
            const req = digimonReqDict[d.name];
            const tieneProgram = req.Program !== undefined;
            const selectedNormalizado = selected.toLowerCase().trim();
@@ -2717,30 +2704,38 @@ if (nextLevel === 4 || nextLevel === 5) {
            return tieneProgram || esExcepcion;
          });
          
-         const normales = conMaxPuntaje.filter(d => {
-           const req = digimonReqDict[d.name];
-           const tieneDriverXross = req["Driver Equipado"] !== undefined || req["Xross"] !== undefined;
-           const tieneProgram = req.Program !== undefined;
-           const selectedNormalizado = selected.toLowerCase().trim();
-           const esExcepcion = Object.entries(excepcionesProgram).some(([resultado, permitidos]) => {
-             return d.name.toLowerCase().trim() === resultado.toLowerCase().trim() &&
-                    permitidos.some(p => p.toLowerCase().trim() === selectedNormalizado);
+         if (conProgram.length > 0) {
+           // Si hay Programs/excepciones, elegir solo de esos (el de mayor puntaje entre Programs)
+           const maxPuntajeProgram = Math.max(...conProgram.map(d => d.puntaje));
+           const mejoresProgram = conProgram.filter(d => d.puntaje === maxPuntajeProgram);
+           const candidatos = mejoresProgram.map(d => d.name);
+           mejoresDigimons = desempatarPorDigipuntos(candidatos);
+           console.log("🏆 Programs/Excepciones encontrados - Mejor(es) con Program/Excepciones:", mejoresDigimons);
+         } else {
+           // Si no hay Programs, aplicar lógica original: puntaje máximo primero, luego desempates
+           const maxPuntajeGlobal = Math.max(...todosLosCandidatos.map(d => d.puntaje));
+           const conMaxPuntaje = todosLosCandidatos.filter(d => d.puntaje === maxPuntajeGlobal);
+           
+           const conDriverXross = conMaxPuntaje.filter(d => {
+             const req = digimonReqDict[d.name];
+             return req["Driver Equipado"] !== undefined || req["Xross"] !== undefined;
            });
-           return !tieneDriverXross && !tieneProgram && !esExcepcion;
-         });
-         
-         if (conDriverXross.length > 0) {
-           const candidatos = conDriverXross.map(d => d.name);
-           mejoresDigimons = desempatarPorDigipuntos(candidatos);
-           console.log("🏆 Mejor(es) con Driver/Xross (con desempate):", mejoresDigimons);
-         } else if (conProgram.length > 0) {
-           const candidatos = conProgram.map(d => d.name);
-           mejoresDigimons = desempatarPorDigipuntos(candidatos);
-           console.log("🏆 Mejor(es) con Program/Excepciones (con desempate):", mejoresDigimons);
-         } else if (normales.length > 0) {
-           const candidatos = normales.map(d => d.name);
-           mejoresDigimons = desempatarPorDigipuntos(candidatos);
-           console.log("✅ Mejor(es) normal(es) (con desempate):", mejoresDigimons);
+           
+           const normales = conMaxPuntaje.filter(d => {
+             const req = digimonReqDict[d.name];
+             const tieneDriverXross = req["Driver Equipado"] !== undefined || req["Xross"] !== undefined;
+             return !tieneDriverXross;
+           });
+           
+           if (conDriverXross.length > 0) {
+             const candidatos = conDriverXross.map(d => d.name);
+             mejoresDigimons = desempatarPorDigipuntos(candidatos);
+             console.log("🏆 Sin Programs - Mejor(es) con Driver/Xross (desempate):", mejoresDigimons);
+           } else if (normales.length > 0) {
+             const candidatos = normales.map(d => d.name);
+             mejoresDigimons = desempatarPorDigipuntos(candidatos);
+             console.log("✅ Sin Programs - Mejor(es) normal(es) (desempate):", mejoresDigimons);
+           }
          }
        } else {
          mejoresDigimons = ["Ninguno"];
@@ -2751,6 +2746,7 @@ if (nextLevel === 4 || nextLevel === 5) {
  }
  console.log("🧾 Resultado final:", mejoresDigimons);
 }
+
 // --- NIVEL 5 (desde nivel 5) ---
 if (data["Nivel"] === 5) {
   console.log(`🧪 Evaluando evoluciones para Nivel ${data["Nivel"]}`);

@@ -153,8 +153,7 @@ const digimonReqDict = {
   },
     "Monzaemon": {
 	"ID": 19, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Mutante",
-    "Peso": 40, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Numemon",
-	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25
+    "Peso": 40, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Numemon", "WinRate": 70, "Combates Minimos": 25
   },
     "Black King Numemon": {
 	"ID": 46, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",

@@ -2083,35 +2083,43 @@ punto = totalBonus;}
 	}
 
 	// Error Maximo - Actualizado
-	else if (field === "Error Maximo") {
-		// Verificar caso especial usando EvoListSpecial
-		let isSpecialCase = false;
-		if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) {
-			isSpecialCase = true;
-		}
-		
-		if (isSpecialCase) {
-			punto = 0;
-		} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons", "GreatKingScumon"].includes(name)) {
-			punto = 0;
+else if (field === "Error Maximo") { 
+	// Verificar caso especial usando EvoListSpecial 
+	let isSpecialCase = false; 
+	if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) { 
+		isSpecialCase = true; 
+	} 
+	if (isSpecialCase) { 
+		punto = 0; 
+	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Black King Numemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon"].includes(name)) {
+		// Nuevo caso especial: penalización por error
+		const ingNum = Number(ingresado);
+		const espNum = Number(esperado);
+		if (!isNaN(ingNum) && !isNaN(espNum) && ingNum === espNum) {
+			punto = 1;
 		} else {
-			const ingNum = Number(ingresado);
-			if (typeof esperado === "string" && esperado.includes("-")) {
-				const [min, max] = esperado.split("-").map(Number);
-				if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) {
-					punto = 1;
-				} else {
-					punto = 0;
-				}
-			} else {
-				if (!isNaN(ingNum) && ingNum <= esperado) {
-					punto = 1;
-				} else {
-					punto = 0;
-				}
-			}
+			punto = -10;
 		}
-	}
+	} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons", "GreatKingScumon"].includes(name)) { 
+		punto = 0; 
+	} else { 
+		const ingNum = Number(ingresado); 
+		if (typeof esperado === "string" && esperado.includes("-")) { 
+			const [min, max] = esperado.split("-").map(Number); 
+			if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) { 
+				punto = 1; 
+			} else { 
+				punto = 0; 
+			} 
+		} else { 
+			if (!isNaN(ingNum) && ingNum <= esperado) { 
+				punto = 1; 
+			} else { 
+				punto = 0; 
+			} 
+		} 
+	} 
+}
 
 	  else if (field === "EntrenamientoHecho") {
 		if (name.toLowerCase().trim() === "pillomon") {

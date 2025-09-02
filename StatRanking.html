@@ -415,21 +415,36 @@ function generarTablaRankingSegura(data, tbody) {
     // Intentar cargar imagen
     const variaciones = generarVariacionesNombre(item.nombre);
     
-    const intentarCargarImagen = (indice = 0) => {
-      if (indice >= variaciones.length) {
-        img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjMwIiB5PSIzNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
-        return;
-      }
-      
-      const testImg = new Image();
-      testImg.onload = () => {
-        img.src = `img/${variaciones[indice]}.png`;
-      };
-      testImg.onerror = () => {
-        intentarCargarImagen(indice + 1);
-      };
-      testImg.src = `img/${variaciones[indice]}.png`;
-    };
+	const intentarCargarImagen = (indice = 0) => {
+	  if (indice >= variaciones.length) {
+		// Si fallan todas las variaciones, intentar con placeholder.png
+		console.log(`❌ No se encontró imagen específica para ${item.nombre}. Intentando placeholder.png...`);
+		
+		const testPlaceholder = new Image();
+		testPlaceholder.onload = () => {
+		  console.log(`✅ Usando placeholder.png para ${item.nombre}`);
+		  img.src = "img/placeholder.png";
+		};
+		testPlaceholder.onerror = () => {
+		  console.log(`❌ No se encontró placeholder.png. Usando placeholder SVG.`);
+		  // No se encontró imagen ni placeholder, usar SVG por defecto
+		  img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjMwIiB5PSIzNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
+		};
+		testPlaceholder.src = "img/placeholder.png";
+		return;
+	  }
+	  
+	  const testImg = new Image();
+	  testImg.onload = () => {
+		console.log(`✅ Imagen encontrada: img/${variaciones[indice]}.png`);
+		img.src = `img/${variaciones[indice]}.png`;
+	  };
+	  testImg.onerror = () => {
+		console.log(`❌ No encontrada: img/${variaciones[indice]}.png`);
+		intentarCargarImagen(indice + 1);
+	  };
+	  testImg.src = `img/${variaciones[indice]}.png`;
+	};
     
     intentarCargarImagen();
     tdImagen.appendChild(img);

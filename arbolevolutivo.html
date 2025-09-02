@@ -185,14 +185,31 @@ function crearImagenDigimon(nombre) {
   let i = 0;
   function intentar() {
     if (i >= variaciones.length) {
-      // No se encontró imagen, poner placeholder SVG
-      img.src = "data:image/svg+xml;base64,PHN2ZyB3a..."; 
+      // Si fallan todas las variaciones, intentar con placeholder.png
+      console.log(`❌ No se encontró imagen específica para ${nombre}. Intentando placeholder.png...`);
+      
+      const testPlaceholder = new Image();
+      testPlaceholder.onload = () => {
+        console.log(`✅ Usando placeholder.png para ${nombre}`);
+        img.src = "icon/placeholder.png";
+      };
+      testPlaceholder.onerror = () => {
+        console.log(`❌ No se encontró placeholder.png. Usando placeholder SVG.`);
+        // No se encontró imagen ni placeholder, poner placeholder SVG
+        img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM0ZWNkYzQiLz4KPHN2ZyB4PSI4IiB5PSI4IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IndoaXRlIj4KICA8cGF0aCBkPSJNMTIgMTJoOHY4aC04eiIvPgo8L3N2Zz4KPC9zdmc+";
+      };
+      testPlaceholder.src = "icon/placeholder.png";
       return;
     }
+    
     const srcTry = `icon/${variaciones[i]}.png`;
     const testImg = new Image();
-    testImg.onload = () => { img.src = srcTry; };
+    testImg.onload = () => { 
+      console.log(`✅ Imagen encontrada: ${srcTry}`);
+      img.src = srcTry; 
+    };
     testImg.onerror = () => {
+      console.log(`❌ No encontrada: ${srcTry}`);
       i++;
       intentar();
     };

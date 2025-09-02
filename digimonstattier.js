@@ -39,7 +39,7 @@ const digimonstattier = {
     "ATK": 35, "DEF": 40, "HP": 400, "Vel": 35, "Digipuntos": 15, "Evoluciona": ["Icemon", "Burpmon", "Bakemon LT", "Starmon"], "Viene": ["Pickmon"]
   },
   "Numemon": {
-    "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40, "Digipuntos": 20, "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Burpmon"], "Viene": ["Agumon","Pillomon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)", "Starmons", "Gotsumon"]
+    "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40, "Digipuntos": 20, "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Mushmon"]
   },
   "Greymon": {
     "ATK": 100, "DEF": 60, "HP": 1000, "Vel": 65, "Digipuntos": 32.5, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Kokuwamon"]
@@ -93,7 +93,7 @@ const digimonstattier = {
     "ATK": 50, "DEF": 50, "HP": 750, "Vel": 45, "Digipuntos": 22, "Evoluciona": ["Monzaemon", "Black King Numemon", "Burpmon"], "Viene": ["Numemon"]
   },
   "Scumon": { // Cambiar Poner todos?
-    "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "PlatinumScumon", "Burpmon"], "Viene": ["Agumon","Pillomon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)", "Starmons", "Gotsumon"]
+    "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "PlatinumScumon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Mushmon"]
   },
   "PlatinumScumon": { // Cambiar Poner todos?
     "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "Burpmon"], "Viene": ["Scumon"]
@@ -213,7 +213,7 @@ const digimonstattier = {
     "ATK": 160, "DEF": 160, "HP": 1200, "Vel": 110, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Polarbearmon", "Blizzarmon"]
   },
   "Bakemon LT": { // Cambiar
-    "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60, "Digipuntos": 20, "Evoluciona": ["Soulmon LT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon"]
+    "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60, "Digipuntos": 20, "Evoluciona": ["Soulmon LT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon","Mushmon"]
   },
     "Soulmon LT": { // Cambiar
     "ATK": 50, "DEF": 40, "HP": 600, "Vel": 70, "Digipuntos": 22, "Evoluciona": ["Fantomon", "Burpmon"], "Viene": ["Bakemon LT"]
@@ -235,6 +235,20 @@ const digimonstattier = {
   },
 	"Metal Fantomon": { // Cambiar
     "ATK": 240, "DEF": 140, "HP": 2200, "Vel": 150, "Digipuntos": 75, "Evoluciona": ["Burpmon"], "Viene": ["Fantomon"]
-  }
-  
+  },
+	"Mushmon": { // Cambiar
+    "ATK": 30, "DEF": 25, "HP": 550, "Vel": 40, "Digipuntos": 15, "Evoluciona": ["Chamblemon","Burpmon"], "Viene": ["Koromon","Pickmon"]
+  },  
+	"Chamblemon": { // Cambiar
+    "ATK": 50, "DEF": 50, "HP": 1300, "Vel": 70, "Digipuntos": 30, "Evoluciona": ["Burpmon"], "Viene": ["Mushmon"]
+  },  
+	"Nanimon": { // Cambiar
+    "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55, "Digipuntos": 20, "Evoluciona": ["BomberNanimon","Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Mushmon"]
+  },  
+	"BomberNanimon": { // Cambiar
+    "ATK": 45, "DEF": 40, "HP": 700, "Vel": 45, "Digipuntos": 20, "Evoluciona": ["Burpmon"], "Viene": ["Nanimon"]
+  },  
+	"PrinceMamemon": { // Cambiar
+    "ATK": 150, "DEF": 205, "HP": 750, "Vel": 205, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"]
+  }, 
 };

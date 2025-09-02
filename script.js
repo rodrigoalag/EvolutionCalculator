@@ -192,6 +192,11 @@ const bloqueosEvolucion = {
   "Soulmon LT": ["Bakemon LT"],
   "Soulmon MT": ["Bakemon MT"],
   "Metal Fantomon": ["Fantomon"],
+  "Chamblemon":["Mushmon"],
+  "BomberNanimon": ["Nanimon"],
+  "Digitamamon": ["Nanimon","BomberNanimon"],
+  "Devitamamon": ["Digitamamon"],
+  "PrinceMamemon":["Mamemon"]
   
 };
 const bloqueosexcepciones = {
@@ -217,6 +222,7 @@ const SideEvolutionSelected = {
   "Fantomon":["Metal Fantomon"],
   "Bakemon LT":["Soulmon LT"],
   "Bakemon MT":["Soulmon MT"],
+  "Nanimon":["BomberNanimon"]
 };
 
 const EvoListSpecial = { 
@@ -234,7 +240,8 @@ const crosstamaevo = {
   "Daipenmon": ["Polarbearmon"],
   "Ghostmon": ["Koromon", "Pickmon"],
   "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon"],
-  "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"]
+  "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"],
+  "Mushmon": ["Koromon","Pickmon"]
 };
 	
 const SideEvolutionlist = {
@@ -255,7 +262,8 @@ const SideEvolutionlist = {
   "Chackmon":[4],
   "Soulmon LT":[4],
   "Soulmon MT":[4],
-  "Metal Fantomon":[5]
+  "Metal Fantomon":[5],
+  "BomberNanimon":[4]
 };
 
 const SideandEvoList = {
@@ -277,7 +285,7 @@ const PesoSet = new Set([
     "Botamon", "Koromon", "Chibickmon", "Pickmon", "Agumon", 
     "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon",
     "Pillomon", "Numemon", "Daipenmon", "Mugendramon", "MetalEtemon", 
-    "PlatinumNumemon", "Gotsumon", "Starmons", "ShootingStarmon"
+    "PlatinumNumemon", "Gotsumon", "Starmons", "ShootingStarmon","Devitamamon","PrinceMamemon","Nanimon","BomberNanimon"
 ]);
 
 
@@ -355,7 +363,8 @@ const xrossinstallop = {
     "Yukidarumon": ["Ice Spirit H", "Ice Spirit B"], // Combinando ambos valores
     "Blizzarmon": ["Ice Spirit H"],
     "Chackmon": ["Ice Spirit B"],
-    "Polarbearmon": ["Ice Spirit A", "Ice Spirit B + Ice Spirit H"] // Combinando ambos valores
+    "Polarbearmon": ["Ice Spirit A", "Ice Spirit B + Ice Spirit H"], // Combinando ambos valores
+    "Nanimon": ["1 Mamemon Driver"]
 };
 //Lo mismo pero para driver equipado
 const driverEquipadoOp = {
@@ -712,7 +721,7 @@ function generarFormulario() {
     
     nextDigimons = nextDigimons.filter(([name, _]) => {
       // Excepción especial para Numemon y Scumon - nunca eliminar
-      if (name === "Numemon" || name === "Scumon") {
+      if (name === "Numemon" || name === "Scumon" || name === "Nanimon") {
         console.log(`${name} mantenido por excepción especial`);
         return true;
       }
@@ -1098,7 +1107,7 @@ function generarFormulario() {
         if (field === "EntrenamientoHecho") {
             opciones = ["Si", "No"];
         } else if (field === "Program") {
-            opciones = ["Virus", "Frost", "Combat", "Vaccine", "Royal", "Trash", "Ore", "Mecha", "Death", "Ninguno"];
+            opciones = ["Virus", "Frost", "Combat", "Vaccine", "Royal", "Trash", "Ore", "Mecha", "Death","Mushroom", "Ninguno"];
         } else if (field === "Driver Equipado") {
             opciones = getDriverEquipadoOptions(selected);
             console.log("opciones 1 de asignar:", opciones);
@@ -1609,7 +1618,7 @@ if (!tieneExcepcionAbsoluta && tamaElegido !== "Todos") {
   
   nextDigimons = nextDigimons.filter(([name, _]) => {
     // Excepción especial para Numemon y Scumon - nunca eliminar
-    if (name === "Numemon" || name === "Scumon") {
+    if (name === "Numemon" || name === "Scumon" || name === "Nanimon") {
       console.log(`${name} mantenido por excepción especial`);
       return true;
     }
@@ -2091,7 +2100,7 @@ else if (field === "Error Maximo") {
 	} 
 	if (isSpecialCase) { 
 		punto = 0; 
-	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Black King Numemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon"].includes(name)) {
+	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon"].includes(name)) {
 		// Nuevo caso especial: penalización por error
 		const ingNum = Number(ingresado);
 		const espNum = Number(esperado);
@@ -2313,34 +2322,42 @@ else if (field === "Combates Minimos") {
         }
     }
 }
-	// CÓDIGO DE EVALUACIÓN MODIFICADO
-	else if (field === "Program") {
-		// Verificar si es un caso especial
-		if (specialProgramCases[name]) {
-			const validPrograms = specialProgramCases[name];
-			
-			// Si hay un digimon seleccionado y existe un programa válido para él
-			if (selected && validPrograms[selected]) {
-				const expectedProgram = validPrograms[selected];
-				if (ingresado.toLowerCase() === expectedProgram.toLowerCase()) {
-					punto = 0;
-				} else {
-					punto = -10;
-				  }
-			}
-		} else {
-			// Código original para casos normales
-			const excepcionesOrigen = excepcionesProgram[name] || [];
-			if (
-				(esperado && ingresado.toLowerCase() === esperado.toLowerCase()) ||
-				excepcionesOrigen.map(e => e.toLowerCase()).includes(selected.toLowerCase())
-			) {
-				punto = 0;
-			} else {
-			punto = -10;
-		  }
-		}
-	}
+// CÓDIGO DE EVALUACIÓN MODIFICADO
+else if (field === "Program") {
+    // NUEVO: Caso especial para Mushmon
+    if (["Mushmon"].includes(name)) {
+        if (esperado && ingresado.toLowerCase() === esperado.toLowerCase()) {
+            punto = 3;  // +3 si el program es igual
+        } else {
+            punto = -10; // -10 si el program es desigual
+        }
+    }
+    // Verificar si es un caso especial
+    else if (specialProgramCases[name]) {
+        const validPrograms = specialProgramCases[name];
+        
+        // Si hay un digimon seleccionado y existe un programa válido para él
+        if (selected && validPrograms[selected]) {
+            const expectedProgram = validPrograms[selected];
+            if (ingresado.toLowerCase() === expectedProgram.toLowerCase()) {
+                punto = 0;
+            } else {
+                punto = -10;
+            }
+        }
+    } else {
+        // Código original para casos normales
+        const excepcionesOrigen = excepcionesProgram[name] || [];
+        if (
+            (esperado && ingresado.toLowerCase() === esperado.toLowerCase()) ||
+            excepcionesOrigen.map(e => e.toLowerCase()).includes(selected.toLowerCase())
+        ) {
+            punto = 0;
+        } else {
+            punto = -10;
+        }
+    }
+}
 
 	else if (field === "Victorias") {
 	  if (ingresado === esperado) {
@@ -2421,7 +2438,9 @@ else if (field === "Xross") {
 // CÓDIGO DE EVALUACIÓN PARA COMIDA (SIMPLIFICADO)
 else if (field === "Comida") {
     // Solo evaluación normal (casos especiales se manejan en "Bonus Comida")
-    if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
+    if (["Scumon"].includes(name) && ingresado.toLowerCase() === String(esperado).toLowerCase()) {
+		punto = 3} 
+    else if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
         punto = 0; // Sin puntos si coincide con lo esperado
     } else {
         punto = -10; // Penalización si no coincide
@@ -2456,45 +2475,107 @@ else if (field === "Comida") {
 	tabla += "</tbody></table>";
 	resultados.innerHTML = tabla;
 	translateresultadosContent();
-	// AQUÍ es donde debes colocar tu lógica de Numemon
-puntajes.forEach((digi, index) => {
-if (digi.name === "Numemon") {
-    // Buscar todos los digis de nivel 4 o que sean Burpmon
-    const digisNivel4yBurpmon = puntajes.filter(d => {
-        const digimonData = nextDigimons.find(([nombre, req]) => nombre === d.name);
-        if (digimonData) {
-            const [nombre, requisitosDigimon] = digimonData;
-            return requisitosDigimon["Nivel"] === 4 || nombre === "Burpmon";
-        }
-        return false;
-    });
 
-    // Verifica si todos tienen puntaje menor a 3
-    const todosMenorA3 = digisNivel4yBurpmon.every(d => d.puntaje < 3);
+// AQUÍ es donde debes colocar tu lógica de Numemon, Nanimon y Scumon
+puntajes.forEach((digi, index) => {
+    if (digi.name === "Numemon" || digi.name === "Nanimon" || digi.name === "Scumon") {
+        // Buscar todos los digis de nivel 4 o que sean Burpmon
+        const digisNivel4yBurpmon = puntajes.filter(d => {
+            const digimonData = nextDigimons.find(([nombre, req]) => nombre === d.name);
+            if (digimonData) {
+                const [nombre, requisitosDigimon] = digimonData;
+                return requisitosDigimon["Nivel"] === 4 || nombre === "Burpmon";
+            }
+            return false;
+        });
+
+        // Verifica si todos tienen puntaje menor a 3
+        const todosMenorA3 = digisNivel4yBurpmon.every(d => d.puntaje < 3);
 
         // Buscar Scumon
         const scumon = puntajes.find(d => d.name === "Scumon");
         const scumonPuntajeMenorA0 = !scumon || scumon.puntaje < 0;
 
         if (todosMenorA3 && scumonPuntajeMenorA0) {
-            // Asigna puntaje a Numemon
-            puntajes[index].puntaje = 3;
-
-            // Actualiza HTML
-            const numemonRow = Array.from(document.querySelectorAll('tr')).find(row => {
-                const firstCell = row.querySelector('td');
-                return firstCell && firstCell.textContent.trim() === "Numemon";
-            });
-            if (numemonRow) {
-                const scoreCell = numemonRow.querySelector('td strong');
-                if (scoreCell) {
-                    scoreCell.textContent = '3';
+            
+            // Función auxiliar para obtener el vínculo desde el input del formulario
+            function obtenerVinculoDOM() {
+                const vinculoInput = document.getElementById('field_Vinculo al momento de evolucionar');
+                if (vinculoInput && vinculoInput.value.trim() !== '') {
+                    return parseInt(vinculoInput.value);
+                }
+                return null;
+            }
+            
+            // Función auxiliar para actualizar HTML
+            function actualizarHTML(nombreDigimon, puntaje) {
+                const row = Array.from(document.querySelectorAll('tr')).find(row => {
+                    const firstCell = row.querySelector('td');
+                    return firstCell && firstCell.textContent.trim() === nombreDigimon;
+                });
+                if (row) {
+                    const scoreCell = row.querySelector('td strong');
+                    if (scoreCell) {
+                        scoreCell.textContent = puntaje.toString();
+                    }
                 }
             }
+
+            // Lógica específica según el digimon
+            if (digi.name === "Nanimon") {
+                const vinculoEvolucion = obtenerVinculoDOM();
+                const numemonIndex = puntajes.findIndex(d => d.name === "Numemon");
+                
+                if (vinculoEvolucion === -50) {
+                    // Vínculo = -50: Nanimon recibe +3, Numemon recibe 0
+                    puntajes[index].puntaje = 3;
+                    
+                    if (numemonIndex !== -1) {
+                        puntajes[numemonIndex].puntaje = 0;
+                        actualizarHTML("Numemon", 0);
+                    }
+                    
+                } else if (vinculoEvolucion > -50) {
+                    // Vínculo > -50: Nanimon recibe -10, Numemon recibe +3
+                    puntajes[index].puntaje = -10;
+                    
+                    if (numemonIndex !== -1) {
+                        puntajes[numemonIndex].puntaje = 3;
+                        actualizarHTML("Numemon", 3);
+                    }
+                }
+                
+                // Actualizar HTML de Nanimon
+                actualizarHTML("Nanimon", puntajes[index].puntaje);
+                
+            } else if (digi.name === "Numemon") {
+                // Para Numemon, verificar si Nanimon existe
+                const nanimon = puntajes.find(d => d.name === "Nanimon");
+                
+                if (nanimon) {
+                    const vinculoNanimon = obtenerVinculoDOM();
+                    
+                    if (vinculoNanimon === -50) {
+                        // Si Nanimon tiene vínculo = -50, Numemon recibe 0
+                        puntajes[index].puntaje = 0;
+                    } else if (vinculoNanimon > -50) {
+                        // Si Nanimon tiene vínculo > -50, Numemon recibe +3
+                        puntajes[index].puntaje = 3;
+                    }
+                } else {
+                    // Si no hay Nanimon, Numemon funciona normalmente
+                    puntajes[index].puntaje = 3;
+                }
+
+                // Actualizar HTML de Numemon
+                actualizarHTML("Numemon", puntajes[index].puntaje);
+                
+            }              
         }
     }
 });
 
+  
 	const maxPuntaje = Math.max(...puntajes.map(d => d.puntaje));
 	let mejoresDigimons;
 

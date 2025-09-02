@@ -157,8 +157,8 @@ const digimonReqDict = {
   },
     "Black King Numemon": {
 	"ID": 46, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
-    "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "KaratsukiNumemon",
-	"Vinculo Minimo alcanzado": 100, "WinRate": 60, "Combates Minimos": 25, "Program" : "Royal"
+    "Peso": 25, "Error Maximo": 1, "% Entrenamiento": 100, "Digimon Bonus": "KaratsukiNumemon",
+	"WinRate": 60, "Combates Minimos": 25, "Program" : "Royal"
   },
     "Etemon": {
 	"ID": 44, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
@@ -314,4 +314,26 @@ const digimonReqDict = {
 	"ID": 103, "Tama": "D", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
     "Peso": 35, "% Entrenamiento": 100, "Program":"Mecha"
   },
+       "Mushmon": {
+	"ID": 112 , "Tama": "P", "Nivel": 3, "Atributo": "Virus", "Tipo": "Planta",
+    "Peso": 12, "Program":"Mushroom"
+  }, 
+       "Nanimon": {
+	"ID": 110 , "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
+    "Peso": 10, "Vinculo al momento de evolucionar": -50
+  },   
+       "BomberNanimon": {
+	"ID": 111 , "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
+    "Peso": 15, "Xross": "1 Mamemon Driver"
+  },   
+     "PrinceMamemon": {
+	"ID": 107, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante","Peso": 60,
+	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal"
+  }, 
+      "Chamblemon": {
+	"ID": 107, "Tama": "P", "Nivel": 4, "Atributo": "Virus", "Tipo": "Planta", "Peso": 16,
+	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 15, "WinRate": 50
+  },  
+  
+  
 };

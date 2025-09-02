@@ -684,10 +684,56 @@ const specialDigimonConfig = {
     "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
     "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"]
   } 
-}  
-  
+},
+"Nanimon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Vinculo al momento de evolucionar"]
+  }
+  },
+"BomberNanimon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Xross"]
+  }
+  },
+"Mushmon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Program"]
+  }
+  },
+"PrinceMamemon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"]
+  }
+  },  
+"Daipenmon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
+  }
+  },  
+"Mugendramon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
+  }
+  },  
+"MetalEtemon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"]
+  }
+  },  
+"PlatinumNumemon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
+  }
+  },  
 };
-
 // Configuración por defecto (la original)
 const gruposColumnasDefault = {
   "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar"],
@@ -980,10 +1026,24 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   
   const intentarSiguiente = () => {
     if (indiceActual >= variaciones.length) {
-      console.log(`❌ No se encontró imagen para ${nombre}. Usando placeholder.`);
-      elementoImg.style.display = 'none';
-      imagePlaceholder.style.display = 'flex';
-      if (callback) callback(false);
+      // Si fallan todas las variaciones, intentar con placeholder.png
+      console.log(`❌ No se encontró imagen específica para ${nombre}. Intentando placeholder.png...`);
+      
+      const imgPlaceholder = new Image();
+      imgPlaceholder.onload = function() {
+        console.log(`✅ Usando placeholder.png para ${nombre}`);
+        elementoImg.src = 'img/placeholder.png';
+        elementoImg.style.display = 'block';
+        imagePlaceholder.style.display = 'none';
+        if (callback) callback(true, 'img/placeholder.png');
+      };
+      imgPlaceholder.onerror = function() {
+        console.log(`❌ No se encontró placeholder.png. Usando placeholder de texto.`);
+        elementoImg.style.display = 'none';
+        imagePlaceholder.style.display = 'flex';
+        if (callback) callback(false);
+      };
+      imgPlaceholder.src = 'img/placeholder.png';
       return;
     }
     

@@ -2100,7 +2100,7 @@ else if (field === "Error Maximo") {
 	} 
 	if (isSpecialCase) { 
 		punto = 0; 
-	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon"].includes(name)) {
+	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon", "Digitamamon"].includes(name)) {
 		// Nuevo caso especial: penalización por error
 		const ingNum = Number(ingresado);
 		const espNum = Number(esperado);

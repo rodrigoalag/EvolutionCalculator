@@ -144,7 +144,7 @@ const digimonstattier = {
     "ATK": 225, "DEF": 120, "HP": 2000, "Vel": 130, "Digipuntos": 67.5, "Evoluciona": ["MetalGreymon Alterous", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]
   },
   "Mamemon": {
-    "ATK": 185, "DEF": 75, "HP": 2000, "Vel": 140, "Digipuntos": 60, "Evoluciona": ["MetalMamemon", "BigMamemon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]
+    "ATK": 185, "DEF": 75, "HP": 2000, "Vel": 140, "Digipuntos": 60, "Evoluciona": ["MetalMamemon", "BigMamemon", "PrinceMamemon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]
   },
   "MetalGreymon Alterous": {
     "ATK": 235, "DEF": 125, "HP": 2050, "Vel": 135, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["MetalGreymon"]

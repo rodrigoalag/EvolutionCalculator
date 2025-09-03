@@ -338,5 +338,9 @@ const digimonReqDict = {
 	"ID": 108, "Tama": "M", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante", "Peso": 10,
 	"% Entrenamiento": 100, "Error Maximo": 0, "Combates Minimos": 25, "WinRate": 70, "Digimon Bonus": "Nanimon"
   },  	
+      "Devitamamon": {
+	"ID": 109, "Tama": "M", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": 20,
+	"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Vinculo al momento de evolucionar": -50
+  }	
   
 };

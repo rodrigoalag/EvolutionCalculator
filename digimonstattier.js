@@ -246,7 +246,7 @@ const digimonstattier = {
     "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55, "Digipuntos": 20, "Evoluciona": ["Digitamamon","BomberNanimon","Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Mushmon"]
   },  
 	"BomberNanimon": { // Cambiar
-    "ATK": 45, "DEF": 40, "HP": 700, "Vel": 45, "Digipuntos": 20, "Evoluciona": ["Digitamamon","Burpmon"], "Viene": ["Nanimon"]
+    "ATK": 70, "DEF": 10, "HP": 400, "Vel": 80, "Digipuntos": 20, "Evoluciona": ["Digitamamon","Burpmon"], "Viene": ["Nanimon"]
   },  
 	"PrinceMamemon": { // Cambiar
     "ATK": 150, "DEF": 205, "HP": 750, "Vel": 120, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"]

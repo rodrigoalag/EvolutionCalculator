@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digimon Collection Checklist</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    #selectorContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 2rem auto;
+    }
+
+    .selectorItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Estilos para la tabla de checklist */
+    .checklist-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      overflow-x: auto;
+    }
+
+    .checklist-table th,
+    .checklist-table td {
+      padding: 0.75rem;
+      text-align: center;
+      border: 1px solid #ddd;
+      vertical-align: middle;
+    }
+
+    .checklist-table th {
+      background-color: transparent;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+
+    /* Estilos para las imágenes en la tabla */
+    .digimon-img {
+      width: 80px !important;
+      height: 80px !important;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: transparent;
+    }
+
+    /* Estilos para filas obtenidas */
+    .row-obtained {
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    .stats-header {
+      background-color: transparent;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .stats-header h2 {
+      margin: 0 0 0.5rem 0;
+    }
+
+    .total-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      font-size: 1.1rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .controls button {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+      .container {
+        max-width: 100%;
+        overflow-x: auto;
+      }
+      
+      .digimon-img {
+        width: 60px !important;
+        height: 60px !important;
+      }
+      
+      .checklist-table {
+        font-size: 0.8rem;
+      }
+      
+      .checklist-table th,
+      .checklist-table td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Wrapper para scroll horizontal en móviles */
+    .table-wrapper {
+      overflow-x: auto;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="digimonReqDict.js"></script>
+
+  <header>
+    <h1>Digidex Progress Checklist</h1>
+    <p>Creado por Rodrigoalag</p>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
+	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
+      <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <div id="selectorContainer">
+        <div class="selectorItem">
+          <label for="selectTama">Seleccionar Tama:</label>
+          <select id="selectTama">
+            <option value="">-- Elige un Tama --</option>
+          </select>
+        </div>
+        <div class="selectorItem">
+          <label for="selectIdioma">Idioma:</label>
+          <select id="selectIdioma">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="stats-header" id="statsHeader" style="display: none;">
+        <h2>Progreso del Tama</h2>
+        <div class="total-stats">
+          <div class="stat-item">
+            Obtenidos: <strong id="levelObtained">0</strong> / <strong id="levelTotal">0</strong>
+          </div>
+          <div class="stat-item">
+            Porcentaje: <strong id="levelPercentage">0%</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls" id="controls" style="display: none;">
+        <button onclick="marcarTodosTama()">Marcar Todos</button>
+        <button onclick="desmarcarTodosTama()">Desmarcar Todos</button>
+        <button onclick="exportarDatos()">Exportar Datos</button>
+        <button onclick="importarDatos()">Importar Datos</button>
+      </div>
+
+      <div id="checklistContainer">
+        <div class="table-wrapper">
+          <table id="checklistTable" class="checklist-table" style="display: none;">
+            <thead>
+              <tr>
+                <th>Obtenido</th>
+                <th>Digimon</th>
+                <th>Nivel</th>
+                <th>Imagen</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+// Variables globales
+let idiomaActual = 'es';
+let checklistState = {};
+
+// Mapeo de niveles
+const nivelAEtapa = {
+  1: "Baby I",
+  2: "Baby II", 
+  3: "Child",
+  4: "Adult",
+  5: "Perfect",
+  6: "Ultimate"
+};
+
+// Traducciones
+const traducciones = {
+  es: {
+    titulo: "Digimon Collection Checklist",
+    seleccionarTama: "Seleccionar Tama:",
+    eligeTama: "-- Elige un Tama --",
+    idioma: "Idioma:",
+    obtenido: "Obtenido",
+    digimon: "Digimon",
+    nivel: "Nivel",
+    imagen: "Imagen",
+    progresoTama: "Progreso del Tama",
+    obtenidos: "Obtenidos:",
+    porcentaje: "Porcentaje:",
+  },
+  en: {
+    titulo: "Digimon Collection Checklist",
+    seleccionarTama: "Select Tama:",
+    eligeTama: "-- Choose a Tama --",
+    idioma: "Language:",
+    obtenido: "Obtained",
+    digimon: "Digimon",
+    nivel: "Level",
+    imagen: "Image",
+    progresoTama: "Tama Progress",
+    obtenidos: "Obtained:",
+    porcentaje: "Percentage:",
+  }
+};
+
+// Función para generar variaciones de nombre de imagen
+function generarVariacionesNombre(nombre) {
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+  
+  return [...new Set([
+    nombreLimpio,
+    nombreEspacios,
+    nombreGuiones,
+    nombreOriginal.toLowerCase(),
+    nombreOriginal,
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase()
+  ])];
+}
+
+// Cargar estado guardado
+function cargarEstado() {
+  const saved = localStorage.getItem('digimonChecklist');
+  return saved ? JSON.parse(saved) : {};
+}
+
+// Guardar estado
+function guardarEstado(estado) {
+  localStorage.setItem('digimonChecklist', JSON.stringify(estado));
+}
+
+// Función para obtener todos los Digimon de un Tama ORDENADOS POR NIVEL
+function obtenerDigimonDelTama(tamaSeleccionado) {
+  const digimonDelTama = Object.entries(digimonReqDict)
+    .filter(([nombre, data]) => data.Tama === tamaSeleccionado && nombre.toLowerCase() !== "burpmon")
+    .map(([nombre, data]) => ({
+      nombre: nombre,
+      nivel: data.Nivel
+    }))
+    .sort((a, b) => a.nivel - b.nivel); // Ordenar por nivel
+  
+  return digimonDelTama;
+}
+
+// Función para actualizar estadísticas del tama
+function actualizarEstadisticas(digimonDelTama) {
+  const obtenidos = digimonDelTama.filter(d => checklistState[d.nombre]).length;
+  const total = digimonDelTama.length;
+  const porcentaje = total > 0 ? ((obtenidos / total) * 100).toFixed(1) : 0;
+  
+  document.getElementById('levelObtained').textContent = obtenidos;
+  document.getElementById('levelTotal').textContent = total;
+  document.getElementById('levelPercentage').textContent = `${porcentaje}%`;
+}
+
+// Función para manejar el toggle del checkbox
+function toggleDigimon(nombre, tamaSeleccionado) {
+  checklistState[nombre] = !checklistState[nombre];
+  guardarEstado(checklistState);
+  
+  const row = document.getElementById(`row-${nombre}`);
+  if (row) {
+    if (checklistState[nombre]) {
+      row.classList.add('row-obtained');
+    } else {
+      row.classList.remove('row-obtained');
+    }
+  }
+  
+  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
+  actualizarEstadisticas(digimonDelTama);
+}
+
+// Función para generar la tabla
+function generarTabla(digimonDelTama, tbody, tamaSeleccionado) {
+  tbody.innerHTML = "";
+  
+  digimonDelTama.forEach(digimon => {
+    const nombre = digimon.nombre;
+    const nivel = digimon.nivel;
+    
+    const fila = document.createElement("tr");
+    fila.id = `row-${nombre}`;
+    if (checklistState[nombre]) {
+      fila.classList.add('row-obtained');
+    }
+    
+    // Checkbox
+    const tdCheckbox = document.createElement("td");
+    const checkboxContainer = document.createElement("div");
+    checkboxContainer.className = "checkbox-container";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = `check-${nombre}`;
+    checkbox.checked = checklistState[nombre] || false;
+    checkbox.addEventListener('change', () => toggleDigimon(nombre, tamaSeleccionado));
+    checkboxContainer.appendChild(checkbox);
+    tdCheckbox.appendChild(checkboxContainer);
+    fila.appendChild(tdCheckbox);
+    
+    // Nombre del Digimon
+    const tdNombre = document.createElement("td");
+    tdNombre.textContent = nombre;
+    fila.appendChild(tdNombre);
+    
+    // Nivel del Digimon
+    const tdNivel = document.createElement("td");
+    tdNivel.textContent = nivelAEtapa[nivel] || nivel;
+    fila.appendChild(tdNivel);
+    
+    // Imagen
+    const tdImagen = document.createElement("td");
+    const img = document.createElement("img");
+    img.className = "digimon-img";
+    img.alt = nombre;
+    
+    const variaciones = generarVariacionesNombre(nombre);
+    const intentarCargarImagen = (indice = 0) => {
+      if (indice >= variaciones.length) {
+        const testPlaceholder = new Image();
+        testPlaceholder.onload = () => {
+          img.src = "img/placeholder.png";
+        };
+        testPlaceholder.onerror = () => {
+          img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
+        };
+        testPlaceholder.src = "img/placeholder.png";
+        return;
+      }
+      
+      const testImg = new Image();
+      testImg.onload = () => {
+        img.src = `img/${variaciones[indice]}.png`;
+      };
+      testImg.onerror = () => {
+        intentarCargarImagen(indice + 1);
+      };
+      testImg.src = `img/${variaciones[indice]}.png`;
+    };
+    
+    intentarCargarImagen();
+    tdImagen.appendChild(img);
+    fila.appendChild(tdImagen);
+    
+    tbody.appendChild(fila);
+  });
+}
+
+// Inicializar selector de tamas
+function inicializarSelector() {
+  const selectTama = document.getElementById("selectTama");
+  const allTamas = [...new Set(Object.values(digimonReqDict).map(d => d.Tama))];
+  
+  allTamas.forEach(tama => {
+    const opt = document.createElement("option");
+    opt.value = tama;
+    opt.textContent = tama;
+    selectTama.appendChild(opt);
+  });
+}
+
+// Funciones de control
+function marcarTodosTama() {
+  const tamaSeleccionado = document.getElementById("selectTama").value;
+  if (!tamaSeleccionado) return;
+  
+  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
+  
+  digimonDelTama.forEach(digimon => {
+    checklistState[digimon.nombre] = true;
+  });
+  
+  guardarEstado(checklistState);
+  
+  const tbody = document.querySelector('#checklistTable tbody');
+  generarTabla(digimonDelTama, tbody, tamaSeleccionado);
+  actualizarEstadisticas(digimonDelTama);
+}
+
+function desmarcarTodosTama() {
+  const tamaSeleccionado = document.getElementById("selectTama").value;
+  if (!tamaSeleccionado) return;
+  
+  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
+  
+  digimonDelTama.forEach(digimon => {
+    checklistState[digimon.nombre] = false;
+  });
+  
+  guardarEstado(checklistState);
+  
+  const tbody = document.querySelector('#checklistTable tbody');
+  generarTabla(digimonDelTama, tbody, tamaSeleccionado);
+  actualizarEstadisticas(digimonDelTama);
+}
+
+function exportarDatos() {
+  const dataStr = JSON.stringify(checklistState, null, 2);
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'digimon-checklist.json';
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function importarDatos() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const importedData = JSON.parse(event.target.result);
+        checklistState = importedData;
+        guardarEstado(checklistState);
+        
+        const selectTama = document.getElementById("selectTama");
+        if (selectTama.value) {
+          selectTama.dispatchEvent(new Event('change'));
+        }
+        
+        alert('Datos importados correctamente!');
+      } catch (error) {
+        alert('Error al importar datos. Verifica que el archivo sea válido.');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// Función para actualizar traducciones
+function actualizarTraducciones() {
+  const t = traducciones[idiomaActual];
+  
+  document.querySelector('h1').textContent = t.titulo;
+  document.querySelector('label[for="selectTama"]').textContent = t.seleccionarTama;
+  document.querySelector('label[for="selectIdioma"]').textContent = t.idioma;
+  
+  const opcionPorDefecto = document.querySelector('#selectTama option[value=""]');
+  if (opcionPorDefecto) {
+    opcionPorDefecto.textContent = t.eligeTama;
+  }
+  
+  const headers = document.querySelectorAll('#checklistTable thead th');
+  if (headers.length > 0) {
+    headers[0].textContent = t.obtenido;
+    headers[1].textContent = t.digimon;
+    headers[2].textContent = t.nivel;
+    headers[3].textContent = t.imagen;
+  }
+  
+  const statsHeader = document.querySelector('.stats-header h2');
+  if (statsHeader) {
+    statsHeader.textContent = t.progresoTama;
+  }
+}
+
+// Event listener para el selector de tama
+document.getElementById("selectTama").addEventListener("change", function() {
+  const tamaSeleccionado = this.value;
+  
+  if (!tamaSeleccionado) {
+    document.getElementById("checklistTable").style.display = "none";
+    document.getElementById("statsHeader").style.display = "none";
+    document.getElementById("controls").style.display = "none";
+    return;
+  }
+
+  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
+
+  const tbody = document.querySelector('#checklistTable tbody');
+  generarTabla(digimonDelTama, tbody, tamaSeleccionado);
+  actualizarEstadisticas(digimonDelTama);
+  
+  // Actualizar título de progreso con el nombre del Tama
+  const statsHeader = document.querySelector('.stats-header h2');
+  if (statsHeader) {
+    statsHeader.textContent = `${traducciones[idiomaActual].progresoTama} - ${tamaSeleccionado}`;
+  }
+  
+  document.getElementById("checklistTable").style.display = "table";
+  document.getElementById("statsHeader").style.display = "block";
+  document.getElementById("controls").style.display = "flex";
+});
+
+// Inicializar
+document.addEventListener("DOMContentLoaded", () => {
+  checklistState = cargarEstado();
+  
+  const selectIdioma = document.getElementById("selectIdioma");
+  selectIdioma.addEventListener("change", () => {
+    idiomaActual = selectIdioma.value;
+    actualizarTraducciones();
+  });
+  
+  inicializarSelector();
+  actualizarTraducciones();
+});
+  </script>
+</body>
+</html>

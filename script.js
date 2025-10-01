@@ -1965,11 +1965,13 @@ bonusFields.forEach(bonusField => {
 else if (bonusField === "Digimon Bonus") {
     const digimonBonus = selected;
     if (digimonBonus && typeof digimonBonus === 'string') {
-      // Normalizar ambos valores para comparación
+      // Normalizar valores
       const digimonBonusNormalizado = digimonBonus.toLowerCase().trim();
       const esperadoBonusNormalizado = esperadoBonus.toLowerCase().trim();
       
-      if (digimonBonusNormalizado === esperadoBonusNormalizado) {
+      // Comparar: exacto o si el digimon seleccionado incluye el nombre esperado
+      if (digimonBonusNormalizado === esperadoBonusNormalizado || 
+          digimonBonusNormalizado.includes(esperadoBonusNormalizado)) {
         totalBonus += 1;
         console.log(`✅ Digimon Bonus correcto: "${digimonBonus}" coincide con "${esperadoBonus}"`);
       } else {
@@ -1978,7 +1980,7 @@ else if (bonusField === "Digimon Bonus") {
     } else {
       console.log(`⚠️ Digimon Bonus vacío o inválido`);
     }
-	}
+}
 
 
 

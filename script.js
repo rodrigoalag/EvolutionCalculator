@@ -155,7 +155,7 @@ const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo
 
 const bloqueosEvolucion = {
   "V-Dramon": ["Agumon", "Yuki Agumon", "Agumon (2006)", "Kokuwamon"],
-  "Greymon": ["Agumon", "Kokuwamon", "Agumon (2006)"],
+  "Greymon": ["Agumon", "Kokuwamon", "Agumon"],
   "Tuskmon": ["Agumon (Black)"],
   "Yukidarumon": ["Yuki Agumon"],
   "GeoGreymon": ["Agumon (2006)"],
@@ -179,9 +179,9 @@ const bloqueosEvolucion = {
   "Insekimon Mid Tier Dark": ["Icemon"],
   "Insekimon Mid Tier Super": ["Icemon"],
   "Insekimon High Tier": ["Icemon"],
-  "SuperStarmon": ["Starmon","ShootingStarmon"],
-  "DarkSuperStarmon": ["Starmon","ShootingStarmon"],
-  "Starmon": ["Starmons"],
+  "SuperStarmon": ["Starmon","ShootingStarmon", "Icemon"],
+  "DarkSuperStarmon": ["Starmon","ShootingStarmon", "Icemon"],
+  "Starmon": ["Starmons","Gotsumon"],
   "ShootingStarmon": ["Starmons"],
   "Mugendramon": ["Metal Greymon (Virus)","Megadramon", "Andromon", "Metal Tyranomon", "MetalMamemon","Gigadramon"],
   "Chackmon": ["Icemon","Yuki Agumon","Yukidarumon"],
@@ -1254,6 +1254,21 @@ function generarFormulario() {
 // Event listeners actualizados
 digimonSelect.addEventListener("change", () => {
   localStorage.setItem('selectedDigimon', digimonSelect.value);
+
+  // Actualizar el título con el nombre del Digimon seleccionado
+  const digimonDataTitle = document.getElementById('digimonDataTitle');
+  if (digimonDataTitle) {
+    const selectedDigimon = digimonSelect.value;
+    if (selectedDigimon && selectedDigimon !== '') {
+      // Actualizar título según el idioma
+      const titlePrefix = currentLanguage === 'es' ? 'Datos de' : 'Data of';
+      digimonDataTitle.textContent = `${titlePrefix} ${selectedDigimon}`;
+    } else {
+      // Restaurar título por defecto si no hay selección
+      digimonDataTitle.textContent = currentLanguage === 'es' ? 'Datos del Digimon' : 'Digimon Data';
+    }
+  }
+
   generarFormulario();
 });
 

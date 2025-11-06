@@ -105,7 +105,7 @@ const digimonstattier = {
     "ATK": 60, "DEF": 90, "HP": 1000, "Vel": 50, "Digipuntos": 30, "Evoluciona": ["Insekimon Low Tier", "Insekimon Mid Tier Dark", "Insekimon Mid Tier Super", "Insekimon High Tier", "Chackmon", "Blizzarmon","SuperStarmon", "DarkSuperStarmon", "Burpmon"], "Viene": ["Yuki Agumon", "Gotsumon"]
   },
   "Starmon": { // Cambiar
-    "ATK": 70, "DEF": 50, "HP": 1100, "Vel": 70, "Digipuntos": 30, "Evoluciona": ["SuperStarmon", "DarkSuperStarmon", "Burpmon"], "Viene": ["Starmons"]
+    "ATK": 70, "DEF": 50, "HP": 1100, "Vel": 70, "Digipuntos": 30, "Evoluciona": ["SuperStarmon", "DarkSuperStarmon", "Burpmon"], "Viene": ["Starmons", "Gotsumon"]
   },
   "Metal Greymon (Virus)": {
     "ATK": 220, "DEF": 110, "HP": 1900, "Vel": 130, "Digipuntos": 65, "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon"]
@@ -174,10 +174,10 @@ const digimonstattier = {
     "ATK": 220, "DEF": 110, "HP": 1800, "Vel": 140, "Digipuntos": 65, "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Megadramon"]
   },
   "SuperStarmon": { // Cambiar
-    "ATK": 160, "DEF": 90, "HP": 1900, "Vel": 160, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon"]
+    "ATK": 160, "DEF": 90, "HP": 1900, "Vel": 160, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon", "Icemon"]
   },
   "DarkSuperStarmon": { // Cambiar
-    "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon"]
+    "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Starmon", "ShootingStarmon", "Icemon"]
   },
   "Insekimon Low Tier": { // Cambiar
     "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Icemon"]

@@ -22,7 +22,7 @@
     
 /* Ajustar el ancho de las columnas de la tabla editable */
 	#editableFieldsTable {
-	  table-layout: auto;  /* Cambiar de 'fixed' a 'auto' */
+	  table-layout: auto;  /* Auto para ajustar según contenido */
 	  width: 100%;
 	}
     /* Ajustar anchos específicos para cada columna */
@@ -30,45 +30,17 @@
     #editableFieldsTable td {
       padding: 8px 6px;
       text-align: center;
-      font-size: 16px; /* Aumentado de 13px a 16px */
+      font-size: 15px;
       word-wrap: break-word;
       overflow-wrap: break-word;
+      white-space: normal;
     }
     /* Permitir que los headers se ajusten en múltiples líneas */
     #editableFieldsTable th {
       line-height: 1.3;
       vertical-align: middle;
       font-weight: bold;
-    }
-    /* Los anchos específicos se manejan dinámicamente con JavaScript */
-    
-    /* Anchos específicos para campos estáticos */
-    #editableFieldsTable th:nth-child(1), /* HP Base */
-    #editableFieldsTable td:nth-child(1) {
-      min-width: 90px;
-      width: 90px;
-    }
-
-    #editableFieldsTable th:nth-child(2), /* HP Entrenado */
-    #editableFieldsTable th:nth-child(3), /* ATK Entrenado */
-    #editableFieldsTable th:nth-child(4), /* SPD Entrenado */
-    #editableFieldsTable td:nth-child(2),
-    #editableFieldsTable td:nth-child(3),
-    #editableFieldsTable td:nth-child(4) {
-      min-width: 110px;
-      width: 110px;
-    }
-
-    #editableFieldsTable th:nth-child(5), /* Stat Superior */
-    #editableFieldsTable td:nth-child(5) {
-      min-width: 140px;
-      width: 140px;
-    }
-	#editableFieldsTable th:nth-child(6), /* Peso */
-	#editableFieldsTable td:nth-child(6) {
-	  min-width: 80px;
-	  width: 80px;
-	}    
+    }    
     /* Estilos base para campos numéricos y dropdowns */
     #editableFieldsTable input[type="number"] {
       text-align: center;
@@ -83,8 +55,8 @@
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
-      font-size: 15px; /* Aumentado de 14px a 15px */
-      padding: 4px 6px;
+      font-size: 14px;
+      padding: 5px 6px;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
@@ -217,48 +189,59 @@
     }
     /* ====================== FIN ESTILOS HELP POPUP ====================== */
 
+    /* Contenedor de la tabla editable - romper el max-width de simple.css */
+    .table-container {
+      width: 100vw; /* Ancho completo del viewport */
+      max-width: 100vw;
+      margin-left: calc(-50vw + 50%); /* Centrar y extender a los bordes */
+      margin-right: calc(-50vw + 50%);
+      overflow-x: auto;
+      padding: 0 20px; /* Padding lateral para que no toque los bordes */
+      box-sizing: border-box;
+    }
+
+    /* Contenedor de resultados también extendido */
+    #resultados {
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      overflow-x: auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    /* Tabla dentro de resultados */
+    #resultados table {
+      width: 100%;
+      table-layout: auto;
+    }
+
+    /* Texto de evolución también extendido */
+    #evolucionTexto {
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
     /* Responsive: en pantallas pequeñas permitir scroll horizontal */
     @media (max-width: 768px) {
       #editableFieldsTable th,
       #editableFieldsTable td {
-        font-size: 14px; /* Reducir solo en móvil */
-        padding: 6px 4px;
+        font-size: 12px; /* Reducir solo en móvil */
+        padding: 4px 2px;
       }
-      
+
       #editableFieldsTable input,
       #editableFieldsTable select {
-        font-size: 13px;
+        font-size: 11px;
       }
-      
-      /* Reducir anchos en móvil */
-      #editableFieldsTable th:nth-child(1),
-      #editableFieldsTable td:nth-child(1) {
-        min-width: 70px;
-        width: 70px;
-      }
-      
-      #editableFieldsTable th:nth-child(2),
-      #editableFieldsTable th:nth-child(3),
-      #editableFieldsTable th:nth-child(4),
-      #editableFieldsTable td:nth-child(2),
-      #editableFieldsTable td:nth-child(3),
-      #editableFieldsTable td:nth-child(4) {
-        min-width: 85px;
-        width: 85px;
-      }
-      
-      #editableFieldsTable th:nth-child(5),
-      #editableFieldsTable td:nth-child(5) {
-        min-width: 110px;
-        width: 110px;
-      }
-	 #editableFieldsTable th:nth-child(6), /* Peso móvil */
-	#editableFieldsTable td:nth-child(6) {
-	  min-width: 65px;
-	  width: 65px;
-	}     
+
       .table-container {
-        overflow-x: auto;
+        overflow-x: auto; /* Permitir scroll en móvil si es necesario */
       }
       
       #languageSelector {
@@ -729,7 +712,21 @@ function updateInterfaceLanguage() {
   // Actualizar elementos con data-translate
   document.querySelectorAll('[data-translate]').forEach(element => {
     const key = element.getAttribute('data-translate');
-    element.textContent = translate(key);
+
+    // Caso especial para el título de datos del Digimon
+    if (element.id === 'digimonDataTitle') {
+      const digimonSelect = document.getElementById('digimonSelect');
+      if (digimonSelect && digimonSelect.value && digimonSelect.value !== '') {
+        // Mantener el nombre del Digimon seleccionado
+        const titlePrefix = currentLanguage === 'es' ? 'Datos de' : 'Data of';
+        element.textContent = `${titlePrefix} ${digimonSelect.value}`;
+      } else {
+        // Usar la traducción por defecto si no hay Digimon seleccionado
+        element.textContent = translate(key);
+      }
+    } else {
+      element.textContent = translate(key);
+    }
   });
   
   // Actualizar headers de tablas

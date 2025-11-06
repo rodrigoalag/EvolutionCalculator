@@ -128,10 +128,59 @@
       overflow-x: auto;
       width: 100%;
     }
+
+    /* Estilos para botones de descarga */
+    .download-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .download-btn {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 2px solid #4CAF50;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .download-btn:hover {
+      background-color: #45a049;
+      border-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+    }
+
+    .download-btn.xlsx {
+      background-color: #2196F3;
+      border-color: #2196F3;
+    }
+
+    .download-btn.xlsx:hover {
+      background-color: #0b7dda;
+      border-color: #0b7dda;
+    }
   </style>
 </head>
 
 <body>
+  <!-- Librería para exportar a XLSX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <script src="digimonReqDict.js"></script>
   <script src="digimonstattier.js"></script>
 
@@ -167,6 +216,21 @@
 			<option value="en">English</option>
 		  </select>
 		</div>
+
+        <!-- Texto explicativo -->
+        <p id="explanationText" data-translate="explanation" style="display: none; max-width: 800px; margin: 1rem auto; text-align: center; font-style: italic; color: #666; line-height: 1.5;">
+          Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.
+        </p>
+
+        <!-- Botones de descarga -->
+        <div class="download-buttons" id="downloadButtons" style="display: none;">
+          <button class="download-btn csv" id="downloadCSV">
+            📥 Descargar CSV
+          </button>
+          <button class="download-btn xlsx" id="downloadXLSX">
+            📊 Descargar XLSX
+          </button>
+        </div>
       </div>
     </section>
 
@@ -217,6 +281,7 @@ const traducciones = {
     spd: "SPD",
     digipuntos: "Digipuntos",
 	subtitle: "Creado por Rodrigoalag",
+    explanation: "Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.",
  },
   en: {
     titulo: "Digimon Ranking by Digipoints",
@@ -232,6 +297,7 @@ const traducciones = {
     spd: "SPD",
     digipuntos: "Digipoints",
 	subtitle: "Created by Rodrigoalag",
+    explanation: "The base stats of Scumon/PlatScumon and GreatKingScumon are an average of all children, these already have inherited stats unlike other Digimon.",
  }
 };
 
@@ -483,9 +549,13 @@ function generarTablaRankingSegura(data, tbody) {
 // Event listener para el selector
 selectNivel.addEventListener("change", () => {
   const nivelSeleccionado = parseInt(selectNivel.value);
-  
+  const downloadButtons = document.getElementById('downloadButtons');
+  const explanationText = document.getElementById('explanationText');
+
   if (!nivelSeleccionado) {
     rankingTable.style.display = "none";
+    if (downloadButtons) downloadButtons.style.display = "none";
+    if (explanationText) explanationText.style.display = "none";
     return;
   }
 
@@ -520,19 +590,29 @@ selectNivel.addEventListener("change", () => {
   generarTablaRankingSegura(datosOrdenados, tbody);
   actualizarHeadersActivos();
   rankingTable.style.display = "table";
+
+  // Mostrar texto explicativo y botones de descarga
+  if (explanationText) explanationText.style.display = "block";
+  if (downloadButtons) downloadButtons.style.display = "flex";
 });
 
 // Función para actualizar traducciones
 function actualizarTraducciones() {
   const t = traducciones[idiomaActual];
-  
+
   document.querySelector('h1').textContent = t.titulo;
   document.querySelector('label[for="selectNivel"]').textContent = t.seleccionarNivel;
   document.querySelector('#labelIdioma').textContent = t.idioma;
-  
+
   const opcionPorDefecto = document.querySelector('#selectNivel option[value=""]');
   if (opcionPorDefecto) {
     opcionPorDefecto.textContent = t.eligeNivel;
+  }
+
+  // Actualizar texto explicativo
+  const explanationText = document.getElementById('explanationText');
+  if (explanationText) {
+    explanationText.textContent = t.explanation;
   }
   
   if (selectNivel.value && datosActuales.length > 0) {
@@ -545,15 +625,127 @@ function actualizarTraducciones() {
   }
 }
 
+// ============================================
+// FUNCIONES DE DESCARGA
+// ============================================
+
+function descargarCSV() {
+  const table = document.getElementById('rankingTable');
+  if (!table || table.style.display === 'none') {
+    alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
+    return;
+  }
+
+  let csv = [];
+  const rows = table.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll('td, th');
+    const rowData = [];
+
+    cols.forEach((col, index) => {
+      // Saltar la columna de imagen (índice 2)
+      if (index === 2) return;
+
+      let text = col.textContent.trim();
+      // Escapar comillas y envolver en comillas si contiene comas
+      text = text.replace(/"/g, '""');
+      if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+        text = `"${text}"`;
+      }
+      rowData.push(text);
+    });
+
+    csv.push(rowData.join(','));
+  });
+
+  const csvContent = csv.join('\n');
+  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+
+  const nivel = document.getElementById('selectNivel').value;
+  link.setAttribute('href', url);
+  link.setAttribute('download', `ranking_digimon_nivel_${nivel}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function descargarXLSX() {
+  const table = document.getElementById('rankingTable');
+  if (!table || table.style.display === 'none') {
+    alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
+    return;
+  }
+
+  // Crear un array de datos de la tabla
+  const data = [];
+  const rows = table.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    const rowData = [];
+    const cols = row.querySelectorAll('td, th');
+
+    cols.forEach((col, index) => {
+      // Saltar la columna de imagen (índice 2)
+      if (index === 2) return;
+      rowData.push(col.textContent.trim());
+    });
+
+    data.push(rowData);
+  });
+
+  // Crear workbook y worksheet
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(data);
+
+  // Ajustar anchos de columnas
+  const colWidths = [
+    { wch: 20 }, // Digimon
+    { wch: 15 }, // Clasificación
+    { wch: 8 },  // HP
+    { wch: 8 },  // ATK
+    { wch: 8 },  // DEF
+    { wch: 8 },  // SPD
+    { wch: 12 }  // Digipuntos
+  ];
+  ws['!cols'] = colWidths;
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Ranking');
+
+  const nivel = document.getElementById('selectNivel').value;
+  XLSX.writeFile(wb, `ranking_digimon_nivel_${nivel}.xlsx`);
+}
+
 // Inicializar
 document.addEventListener("DOMContentLoaded", () => {
   const selectIdioma = document.getElementById("selectIdioma");
-  
+  const downloadCSVBtn = document.getElementById('downloadCSV');
+  const downloadXLSXBtn = document.getElementById('downloadXLSX');
+
   selectIdioma.addEventListener("change", () => {
     idiomaActual = selectIdioma.value;
     actualizarTraducciones();
+
+    // Actualizar textos de botones
+    if (downloadCSVBtn) {
+      downloadCSVBtn.textContent = idiomaActual === 'es' ? '📥 Descargar CSV' : '📥 Download CSV';
+    }
+    if (downloadXLSXBtn) {
+      downloadXLSXBtn.textContent = idiomaActual === 'es' ? '📊 Descargar XLSX' : '📊 Download XLSX';
+    }
   });
-  
+
+  // Event listeners para botones de descarga
+  if (downloadCSVBtn) {
+    downloadCSVBtn.addEventListener('click', descargarCSV);
+  }
+  if (downloadXLSXBtn) {
+    downloadXLSXBtn.addEventListener('click', descargarXLSX);
+  }
+
   inicializarSelector();
   actualizarTraducciones();
   configurarDelegacionEventos();

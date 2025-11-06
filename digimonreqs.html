@@ -738,8 +738,20 @@ const specialDigimonConfig = {
   gruposColumnas: {
     "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
     "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"]
-  } 
-},  
+  }
+},
+"Chackmon": {
+  gruposColumnas: {
+    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+  }
+},
+"Blizzarmon": {
+  gruposColumnas: {
+    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+  }
+},
 "Tyranomon": {
   gruposColumnas: {
     "Quota/Key Points": ["Peso", "% Entrenamiento", "Stat Superior", "Error Maximo"],
@@ -777,6 +789,11 @@ const specialxrossCases = {
 	"Daipenmon": {
 		"Blizzarmon":["Ice Spirit H"],
 		"Polarbearmon": ["Ice Spirit B + Ice Spirit H","Ice Spirit A"]
+	},
+	"Chackmon": {
+		"Icemon": "Ice Spirit H",
+		"Yukidarumon": "Ice Spirit H",
+		"Yuki Agumon": "Ice Spirit H"
 	}
 };
 const specialEntrenamientoCases = {
@@ -794,6 +811,20 @@ const specialEntrenamientoCases = {
 };
 const specialfoodcases = {
     "Icemon": ["Verdura Congelada", "Hongo Congelado"]
+};
+
+// Configuración de campos que deben estar vacíos para ciertas evoluciones
+// Solo para slide evolutions (mismo nivel) - las evoluciones normales mantienen todos los requisitos
+const camposVaciosPorEvolucion = {
+    "Chackmon": {
+        "Icemon": ["WinRate", "Combates Minimos"],        // Nivel 4 → 4 (slide)
+        "Yukidarumon": ["WinRate", "Combates Minimos"]    // Nivel 4 → 4 (slide)
+        // Yuki Agumon es nivel 3 → 4 (normal), por lo tanto requiere WinRate y Combates
+    },
+    "Blizzarmon": {
+        "Polarbearmon": ["WinRate", "Combates Minimos"]   // Nivel 5 → 5 (slide)
+        // Icemon, Chackmon, Yukidarumon son nivel 4 → 5 (normal), requieren WinRate y Combates
+    }
 };
 
   const dict = digimonReqDict;
@@ -864,7 +895,7 @@ const specialfoodcases = {
 		"Vel":"Vel",
 		    campos: {
       "Peso": "Peso",
-      "Error Maximo": "Errores de Cuido Maximos",
+      "Error Maximo": "Rango de Errores de Cuido",
 	  "Errores Minimos": "Errores Mínimos",
       "EntrenamientoHecho": "Entrenamiento Hecho",
       "Stat Superior": "Stat Superior",
@@ -949,7 +980,7 @@ const specialfoodcases = {
 		"Vel":"SPD",
 		    campos: {
       "Peso": "Weight",
-      "Error Maximo": "Max Care Mistakes",
+      "Error Maximo": "Care Mistakes Range",
 	  "Errores Minimos": "Minimum Errors",
       "EntrenamientoHecho": "Training Done",
       "Stat Superior": "Highest Stat",
@@ -964,7 +995,7 @@ const specialfoodcases = {
       "Vinculo Minimo alcanzado": "Bond Reached",
 	  "Menos de 15 entrenamientos?": "Less than 15 trainings?",
       "Combates Minimos": "Minimum Battles",
-	  "% Entrenamiento": "Training Cap %",
+	  "% Entrenamiento": "Minimum Training %",
 	  "Bonus Batallas": "Battle Bonus",
 	  "Comida" : "Food",
 	  "Victorias": "Battle Victories",
@@ -995,6 +1026,82 @@ let currentLanguage = "es";
 
 function t(key) {
   return traducciones[currentLanguage][key] || key;
+}
+
+// Función para detectar si un Digimon tiene múltiples evoluciones
+function detectarEvolucionesMultiples(nombreDigimon) {
+  const evoluciones = new Set();
+
+  // Revisar casos especiales de entrenamiento
+  if (specialEntrenamientoCases[nombreDigimon]) {
+    Object.keys(specialEntrenamientoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
+  // Revisar casos especiales de program
+  if (specialProgramCases[nombreDigimon]) {
+    Object.keys(specialProgramCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
+  // Revisar casos especiales de xross
+  if (specialxrossCases[nombreDigimon]) {
+    Object.keys(specialxrossCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
+  // Revisar casos especiales de comida
+  if (specialfoodcases[nombreDigimon]) {
+    if (typeof specialfoodcases[nombreDigimon] === 'object' && !Array.isArray(specialfoodcases[nombreDigimon])) {
+      Object.keys(specialfoodcases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+    }
+  }
+
+  return Array.from(evoluciones);
+}
+
+// Función para obtener el valor específico de un campo para una evolución
+function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigimon) {
+  // Verificar si este campo debe estar vacío para esta evolución específica
+  if (camposVaciosPorEvolucion[nombreDigimon]?.[evolucionDigimon]?.includes(campo)) {
+    return "-";
+  }
+
+  // Casos especiales de entrenamiento
+  if (campo === "% Entrenamiento" && specialEntrenamientoCases[nombreDigimon]) {
+    const valor = specialEntrenamientoCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) return valor;
+  }
+
+  // Casos especiales de program
+  if (campo === "Program" && specialProgramCases[nombreDigimon]) {
+    const valor = specialProgramCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) return valor;
+    // Si no está definido para esta evolución, devolver vacío
+    return "-";
+  }
+
+  // Casos especiales de xross
+  if (campo === "Xross" && specialxrossCases[nombreDigimon]) {
+    const valor = specialxrossCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) {
+      return Array.isArray(valor) ? valor.join(", ") : valor;
+    }
+    // Si no está definido para esta evolución, devolver vacío
+    return "-";
+  }
+
+  // Casos especiales de comida
+  if (campo === "Bonus Comida" && specialfoodcases[nombreDigimon]) {
+    if (typeof specialfoodcases[nombreDigimon] === 'object' && !Array.isArray(specialfoodcases[nombreDigimon])) {
+      const valor = specialfoodcases[nombreDigimon][evolucionDigimon];
+      if (valor !== undefined) {
+        return Array.isArray(valor) ? valor.join(", ") : valor;
+      }
+      // Si no está definido para esta evolución, devolver vacío
+      return "-";
+    }
+  }
+
+  // Devolver el valor original del campo
+  return digimon[campo];
 }
 
 // Función para obtener la configuración de columnas para un digimon específico
@@ -1259,40 +1366,162 @@ headersGrupos.innerHTML = "";
 tablaHeaders.innerHTML = "";
 tablaRequisitos.innerHTML = "";
 
-const filaReq = document.createElement("tr");
 const camposDisponibles = Object.keys(digimon).filter(campo => !generales.includes(campo));
 
 // Obtener la configuración de columnas para este digimon específico
 const gruposColumnas = obtenerGruposColumnas(nombre);
 
+// Detectar si hay casos especiales que requieren múltiples filas
+const evolucionesMultiples = detectarEvolucionesMultiples(nombre);
+
 // Crear headers agrupados y individuales
+let camposOrdenados = [];
+
+// Si hay múltiples evoluciones, agregar columna de nombre
+if (evolucionesMultiples.length > 0) {
+  // Header agrupado para nombre de Digimon
+  const thGrupoNombre = document.createElement("th");
+  thGrupoNombre.setAttribute("rowspan", "2");
+  thGrupoNombre.textContent = "Digimon";
+  thGrupoNombre.style.verticalAlign = "middle";
+  headersGrupos.appendChild(thGrupoNombre);
+}
+
 Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
   const camposEncontrados = camposGrupo.filter(campo => camposDisponibles.includes(campo));
-  
+
   if (camposEncontrados.length > 0) {
     // Header agrupado
     const thGrupo = document.createElement("th");
     thGrupo.setAttribute("colspan", camposEncontrados.length);
     thGrupo.textContent = traducciones[currentLanguage]?.grupos?.[nombreGrupo] || nombreGrupo;
     headersGrupos.appendChild(thGrupo);
-    
+
     // Headers individuales
     camposEncontrados.forEach(campo => {
       const th = document.createElement("th");
       th.setAttribute("data-orig", campo);
       th.textContent = traducirCampo(campo);
       tablaHeaders.appendChild(th);
-      
-      // Celda de datos
-      const td = document.createElement("td");
-      const valorOriginal = digimon[campo];
-      td.innerHTML = traducirValor(campo, valorOriginal);
-      filaReq.appendChild(td);
+      camposOrdenados.push(campo);
     });
   }
 });
 
-tablaRequisitos.appendChild(filaReq);
+// Crear filas según si hay múltiples evoluciones o no
+if (evolucionesMultiples.length > 0) {
+  // Primero, recopilar todos los valores para cada campo y cada evolución
+  const valoresPorCampo = {};
+  camposOrdenados.forEach(campo => {
+    valoresPorCampo[campo] = evolucionesMultiples.map(evo => {
+      window.currentEvolutionDigimon = evo;
+      let valorOriginal = obtenerValorParaEvolucion(digimon, campo, nombre, evo);
+
+      // Formatear Error Maximo como rango
+      if (campo === "Error Maximo") {
+        valorOriginal = formatearErrorMaximo(valorOriginal);
+      }
+
+      // Formatear WinRate agregando %
+      if (campo === "WinRate") {
+        valorOriginal = formatearWinRate(valorOriginal);
+      }
+
+      // Para campos con casos especiales
+      const camposEspeciales = ["% Entrenamiento", "Xross", "Program", "Bonus Comida"];
+      const esCampoEspecial = camposEspeciales.includes(campo) &&
+        (specialEntrenamientoCases[nombre] || specialxrossCases[nombre] ||
+         specialProgramCases[nombre] || specialfoodcases[nombre]);
+
+      if (esCampoEspecial) {
+        if (campo === "% Entrenamiento" && valorOriginal !== "-") {
+          return valorOriginal + "%";
+        } else {
+          return valorOriginal;
+        }
+      } else {
+        return traducirValor(campo, valorOriginal);
+      }
+    });
+  });
+  window.currentEvolutionDigimon = null;
+
+  // Determinar qué campos tienen valores idénticos en todas las filas
+  const camposParaFusionar = {};
+  camposOrdenados.forEach(campo => {
+    const valores = valoresPorCampo[campo];
+    const primerValor = valores[0];
+    const todosSonIguales = valores.every(v => v === primerValor);
+    if (todosSonIguales) {
+      camposParaFusionar[campo] = true;
+    }
+  });
+
+  // Crear las filas
+  evolucionesMultiples.forEach((evolucionDigimon, indice) => {
+    const filaReq = document.createElement("tr");
+
+    // Agregar celda con nombre del Digimon
+    const tdNombre = document.createElement("td");
+    tdNombre.textContent = evolucionDigimon;
+    tdNombre.style.fontWeight = "bold";
+    filaReq.appendChild(tdNombre);
+
+    camposOrdenados.forEach(campo => {
+      // Si el campo debe fusionarse, solo agregarlo en la primera fila
+      if (camposParaFusionar[campo]) {
+        if (indice === 0) {
+          const td = document.createElement("td");
+          td.setAttribute("rowspan", evolucionesMultiples.length);
+          td.style.verticalAlign = "middle";
+
+          const valor = valoresPorCampo[campo][0];
+          td.innerHTML = valor;
+
+          filaReq.appendChild(td);
+        }
+        // Si no es la primera fila, no agregar celda (ya está fusionada)
+      } else {
+        // Valor diferente, agregar celda normal
+        const td = document.createElement("td");
+        const valor = valoresPorCampo[campo][indice];
+        td.innerHTML = valor;
+        filaReq.appendChild(td);
+      }
+    });
+
+    tablaRequisitos.appendChild(filaReq);
+  });
+} else {
+  // Una sola fila
+  const filaReq = document.createElement("tr");
+
+  camposOrdenados.forEach(campo => {
+    const td = document.createElement("td");
+    let valorOriginal = digimon[campo];
+
+    // Formatear Error Maximo como rango
+    if (campo === "Error Maximo") {
+      valorOriginal = formatearErrorMaximo(valorOriginal);
+    }
+
+    // Formatear WinRate agregando %
+    if (campo === "WinRate") {
+      valorOriginal = formatearWinRate(valorOriginal);
+    }
+
+    // Agregar "%" para campos de entrenamiento
+    if (campo === "% Entrenamiento" && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
+      td.textContent = valorOriginal + "%";
+    } else {
+      td.innerHTML = traducirValor(campo, valorOriginal);
+    }
+
+    filaReq.appendChild(td);
+  });
+
+  tablaRequisitos.appendChild(filaReq);
+}
   });
 
 function actualizarTextosUI() {
@@ -1403,9 +1632,63 @@ function traducirCampo(campo) {
   return traducciones[currentLanguage]?.campos?.[campo] || campo;
 }
 
+// Función para formatear el valor de Error Maximo como rango
+function formatearErrorMaximo(valor) {
+  if (valor === undefined || valor === null || valor === "-") {
+    return valor;
+  }
+
+  const valorStr = String(valor);
+
+  // Si ya es un rango (contiene "-"), devolverlo tal cual
+  if (valorStr.includes("-")) {
+    return valorStr;
+  }
+
+  // Si es un número simple, convertirlo a rango 0-x
+  if (!isNaN(valorStr) && valorStr.trim() !== "") {
+    return "0-" + valorStr;
+  }
+
+  // Si no es ninguno de los anteriores, devolverlo sin cambios
+  return valor;
+}
+
+// Función para formatear el valor de WinRate agregando %
+function formatearWinRate(valor) {
+  if (valor === undefined || valor === null || valor === "-" || valor === "") {
+    return valor;
+  }
+
+  const valorStr = String(valor).trim();
+
+  // Si ya tiene %, devolverlo tal cual
+  if (valorStr.includes("%")) {
+    return valorStr;
+  }
+
+  // Si es un número, agregar %
+  if (!isNaN(valorStr) && valorStr !== "") {
+    return valorStr + "%";
+  }
+
+  // Si no es ninguno de los anteriores, devolverlo sin cambios
+  return valor;
+}
+
 function traducirValor(campo, valor) {
   if (campo === "Nivel" && nivelAEtapa[valor]) {
     return nivelAEtapa[valor];
+  }
+
+  // Formatear Error Maximo como rango
+  if (campo === "Error Maximo") {
+    valor = formatearErrorMaximo(valor);
+  }
+
+  // Formatear WinRate agregando %
+  if (campo === "WinRate") {
+    valor = formatearWinRate(valor);
   }
 
   // Manejo especial para "Program"

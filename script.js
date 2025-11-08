@@ -1983,10 +1983,31 @@ else if (bonusField === "Digimon Bonus") {
       // Normalizar valores
       const digimonBonusNormalizado = digimonBonus.toLowerCase().trim();
       const esperadoBonusNormalizado = esperadoBonus.toLowerCase().trim();
-      
-      // Comparar: exacto o si el digimon seleccionado incluye el nombre esperado
-      if (digimonBonusNormalizado === esperadoBonusNormalizado || 
-          digimonBonusNormalizado.includes(esperadoBonusNormalizado)) {
+
+      // Excepciones conocidas: casos donde variantes LT/MT/etc son válidas
+      const excepciones = [
+        { base: 'bakemon', variantes: ['bakemon lt', 'bakemon mt'] },
+        { base: 'soulmon', variantes: ['soulmon lt', 'soulmon mt'] }
+      ];
+
+      let coincide = false;
+
+      // Primero verificar coincidencia exacta
+      if (digimonBonusNormalizado === esperadoBonusNormalizado) {
+        coincide = true;
+      } else {
+        // Solo verificar excepciones si no hay coincidencia exacta
+        for (const excepcion of excepciones) {
+          const enVariantes = excepcion.variantes.includes(digimonBonusNormalizado) &&
+                              excepcion.variantes.includes(esperadoBonusNormalizado);
+          if (enVariantes) {
+            coincide = true;
+            break;
+          }
+        }
+      }
+
+      if (coincide) {
         totalBonus += 1;
         console.log(`✅ Digimon Bonus correcto: "${digimonBonus}" coincide con "${esperadoBonus}"`);
       } else {

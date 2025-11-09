@@ -46,10 +46,13 @@
 	'Reached negative bond?': 'vnegativo',
 	'Alcanzo vinculo negativo?': 'vnegativo',
   "HP Entrenado":'trainedhp',
+  "HP %":'trainedhp',
 	"Trained HP":'trainedhp',
   "ATK Entrenado":'trainedatk',
+  "ATK %":'trainedatk',
   "Trained ATK":'trainedatk',
   "SPD Entrenado":'trainedspd',
+  "SPD %":'trainedspd',
   "Trained SPD":'trainedspd'
 
   };
@@ -144,8 +147,17 @@ if (languageSelector) {
 
 const digimonSelect = document.getElementById("digimonSelect");
 const autoFields = document.getElementById('autoFields');
-const editableFields = document.getElementById('editableFields');
-const editableFieldsHeaders = document.getElementById('editableFieldsHeaders');
+// Tres filas de campos
+const editableFields1 = document.getElementById('editableFields1');
+const editableFields2 = document.getElementById('editableFields2');
+const editableFields3 = document.getElementById('editableFields3');
+const editableFieldsHeaders1 = document.getElementById('editableFieldsHeaders1');
+const editableFieldsHeaders2 = document.getElementById('editableFieldsHeaders2');
+const editableFieldsHeaders3 = document.getElementById('editableFieldsHeaders3');
+// Mantener compatibilidad con código existente (usar fila 1 por defecto)
+const editableFields = editableFields1;
+const editableFieldsHeaders = editableFieldsHeaders1;
+
 const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
@@ -512,6 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // #region Configuración de Campos Estáticos
 const CAMPOS_ESTATICOS = {
+  /* DEPRECATED - Se opta por usar %, config de esto guardada para en caso de emergencia
   "HP Base": {
     tipo: "input",
     header: "HP Base",
@@ -519,26 +532,27 @@ const CAMPOS_ESTATICOS = {
     min: 0,
     max: 99999
   },
+  */
   "HP Entrenado": {
-    tipo: "input", 
-    header: "HP Entrenado",
+    tipo: "input",
+    header: "HP %",
     inputType: "number",
     min: 0,
-    max: 99999
+    max: 100
   },
   "ATK Entrenado": {
     tipo: "input",
-    header: "ATK Entrenado", 
+    header: "ATK %",
     inputType: "number",
     min: 0,
-    max: 700
+    max: 100
   },
   "SPD Entrenado": {
     tipo: "input",
-    header: "SPD Entrenado",
+    header: "SPD %",
     inputType: "number",
     min: 0,
-    max: 700
+    max: 100
   },
   "Stat Superior": {
     tipo: "calculado",
@@ -547,13 +561,14 @@ const CAMPOS_ESTATICOS = {
   }
 };
 
-// Función de cálculo para Stat Superior (MEJORADA - dos resultados)
-function calcularStatSuperior(datosActuales) {
+/* DEPRECATED - Se opta por usar %, config de esto guardada para en caso de emergencia
+// Función de cálculo para Stat Superior (MEJORADA - dos resultados) - VERSIÓN ANTIGUA CON HP BASE
+function calcularStatSuperiorOLD(datosActuales) {
   const hpBase = parseFloat(datosActuales["HP Base"]) || 0;
   const hpEntrenado = parseFloat(datosActuales["HP Entrenado"]) || 0;
   const atkEntrenado = parseFloat(datosActuales["ATK Entrenado"]) || 0;
   const spdEntrenado = parseFloat(datosActuales["SPD Entrenado"]) || 0;
-  
+
   // 🔍 LOGS DE INPUTS
   console.log("🧮 === CÁLCULO STAT SUPERIOR ===");
   console.log("📊 Inputs recibidos:");
@@ -561,46 +576,83 @@ function calcularStatSuperior(datosActuales) {
   console.log(`  HP Entrenado: ${hpEntrenado}`);
   console.log(`  ATK Entrenado: ${atkEntrenado}`);
   console.log(`  SPD Entrenado: ${spdEntrenado}`);
-  
+
   // Validar que HP Base no sea 0 para evitar división por cero
   if (hpBase === 0) {
     console.log("❌ HP Base es 0 - no se puede calcular HP Equivalente");
     return { texto: "", estaBalanceado: false, statSuperior: "" };
   }
-  
+
   // Calcular HP Equivalente usando la nueva fórmula
   const hpEquivalente = Math.round(hpEntrenado * 75 / hpBase);
-  
+
   // 🔍 LOGS DE FÓRMULA
   console.log("🧮 Cálculo HP Equivalente:");
   console.log(`  Fórmula: ROUND(${hpEntrenado} * 75 / ${hpBase})`);
   console.log(`  Paso a paso: ${hpEntrenado * 75} / ${hpBase} = ${hpEntrenado * 75 / hpBase}`);
   console.log(`  HP Equivalente final: ${hpEquivalente}`);
-  
+
   const stats = [
     { nombre: "HP", valor: hpEquivalente },
     { nombre: "ATK", valor: atkEntrenado },
     { nombre: "SPD", valor: spdEntrenado }
   ].filter(stat => stat.valor > 0);
-  
+
   // 🔍 LOGS DE STATS
   console.log("📊 Stats para comparación:");
   stats.forEach(stat => {
     console.log(`  ${stat.nombre}: ${stat.valor}`);
   });
-  
+
   if (stats.length === 0) {
     console.log("❌ No hay stats válidos (todos son 0)");
     return { texto: "", estaBalanceado: false, statSuperior: "" };
   }
-  
+
   // Encontrar el stat más alto
   const maxStat = Math.max(...stats.map(s => s.valor));
   const minStat = Math.min(...stats.map(s => s.valor));
   const statSuperior = stats.find(s => s.valor === maxStat).nombre;
-  
+
   // 🔍 LOGS DE ANÁLISIS
   console.log("🎯 Análisis de balance:");
+*/
+
+// Función de cálculo para Stat Superior (NUEVA - basada en %)
+function calcularStatSuperior(datosActuales) {
+  const hpPct = parseFloat(datosActuales["HP Entrenado"]) || 0;
+  const atkPct = parseFloat(datosActuales["ATK Entrenado"]) || 0;
+  const spdPct = parseFloat(datosActuales["SPD Entrenado"]) || 0;
+
+  console.log("🧮 === CÁLCULO STAT SUPERIOR (PORCENTAJES) ===");
+  console.log("📊 Inputs recibidos:");
+  console.log(`  HP %: ${hpPct}`);
+  console.log(`  ATK %: ${atkPct}`);
+  console.log(`  SPD %: ${spdPct}`);
+
+  const stats = [
+    { nombre: "HP", valor: hpPct },
+    { nombre: "ATK", valor: atkPct },
+    { nombre: "SPD", valor: spdPct }
+  ].filter(stat => stat.valor > 0);
+
+  if (stats.length === 0) {
+    console.log("❌ No hay stats válidos (todos son 0)");
+    return { texto: "", estaBalanceado: false, statSuperior: "" };
+  }
+
+  // Encontrar el stat más alto y más bajo
+  const maxStat = Math.max(...stats.map(s => s.valor));
+  const minStat = Math.min(...stats.map(s => s.valor));
+  const statSuperior = stats.find(s => s.valor === maxStat).nombre;
+
+  // Calcular la diferencia porcentual
+  const diferencia = maxStat - minStat;
+
+  console.log("🎯 Análisis de balance:");
+  console.log(`  Máximo: ${maxStat}% (${statSuperior})`);
+  console.log(`  Mínimo: ${minStat}%`);
+  console.log(`  Diferencia: ${diferencia}%`);
   console.log(`  Stat máximo: ${maxStat} (${statSuperior})`);
   console.log(`  Stat mínimo: ${minStat}`);
   console.log(`  Diferencia: ${maxStat - minStat}`);
@@ -637,6 +689,94 @@ if (estaBalanceado) {
     estaBalanceado: estaBalanceado,
     statSuperior: statSuperior
   };
+}
+
+// Función para validar rangos de inputs numéricos
+function validarRangoInput(input, fieldName, min, max) {
+  const valor = parseFloat(input.value);
+
+  if (isNaN(valor)) return true; // Si está vacío o no es número, es válido
+
+  console.log(`🔍 Validando ${fieldName}: valor=${valor}, min=${min}, max=${max}`);
+
+  if (valor < min || valor > max) {
+    console.log(`❌ Error: ${fieldName} fuera de rango (${min}-${max})`);
+
+    // Mostrar error visual
+    input.style.border = '2px solid red';
+    input.style.backgroundColor = '#ffe6e6';
+
+    // Limpiar el valor
+    input.value = '';
+
+    // Mostrar mensaje de error
+    let mensaje = '';
+    if (fieldName === 'Peso') {
+      mensaje = 'Error: El Peso debe estar entre 1 y 99.\n\nSe ha limpiado el valor.';
+    } else if (fieldName === 'Error Maximo' || fieldName === 'Errores') {
+      mensaje = 'Error: Los Errores deben estar entre 0 y 6.\n\nSe ha limpiado el valor.';
+    } else if (fieldName === '% Entrenamiento') {
+      mensaje = 'Error: El % Entrenamiento debe estar entre 0 y 100.\n\nSe ha limpiado el valor.';
+    } else if (fieldName === 'WinRate') {
+      mensaje = 'Error: El WinRate debe estar entre 0 y 100.\n\nSe ha limpiado el valor.';
+    } else if (fieldName === 'Vinculo Minimo alcanzado' || fieldName === 'Bonus Vinculo al momento de evolucionar' || fieldName === 'Vinculo al momento de evolucionar') {
+      mensaje = 'Error: El Vínculo debe estar entre -50 y 100.\n\nSe ha limpiado el valor.';
+    } else if (fieldName === 'Combates Minimos' || fieldName === 'Batallas') {
+      mensaje = `Error: Las Batallas deben ser mayor o igual a 0.\n\nSe ha limpiado el valor.`;
+    } else {
+      mensaje = `Error: El valor debe estar entre ${min} y ${max}.\n\nSe ha limpiado el valor.`;
+    }
+
+    alert(mensaje);
+    return false;
+  } else {
+    // Remover estilos de error si el valor es válido
+    input.style.border = '';
+    input.style.backgroundColor = '';
+    console.log(`✅ ${fieldName} válido: ${valor}`);
+    return true;
+  }
+}
+
+// Función para validar que la suma de HP%, ATK% y SPD% no exceda 100%
+function validarSumaStats() {
+  const hpInput = document.getElementById('field_HP Entrenado');
+  const atkInput = document.getElementById('field_ATK Entrenado');
+  const spdInput = document.getElementById('field_SPD Entrenado');
+
+  if (!hpInput || !atkInput || !spdInput) return;
+
+  const hpPct = parseFloat(hpInput.value) || 0;
+  const atkPct = parseFloat(atkInput.value) || 0;
+  const spdPct = parseFloat(spdInput.value) || 0;
+
+  const suma = hpPct + atkPct + spdPct;
+
+  console.log(`🔍 Validación de suma de stats: HP=${hpPct}% + ATK=${atkPct}% + SPD=${spdPct}% = ${suma}%`);
+
+  if (suma > 100) {
+    console.log(`❌ Error: La suma de stats (${suma}%) excede 100%`);
+    // Mostrar error visual
+    [hpInput, atkInput, spdInput].forEach(input => {
+      input.style.border = '2px solid red';
+      input.style.backgroundColor = '#ffe6e6';
+    });
+
+    // Limpiar todos los valores
+    hpInput.value = '';
+    atkInput.value = '';
+    spdInput.value = '';
+
+    // Mostrar mensaje de error
+    alert('Error: La suma de HP%, ATK% y SPD% no puede exceder 100%.\n\nSe han limpiado los valores.');
+  } else {
+    // Remover estilos de error si la suma es válida
+    [hpInput, atkInput, spdInput].forEach(input => {
+      input.style.border = '';
+      input.style.backgroundColor = '';
+    });
+    console.log(`✅ Suma de stats válida: ${suma}%`);
+  }
 }
 
 // Función para recalcular campos calculados (ACTUALIZADA)
@@ -950,48 +1090,92 @@ function generarFormulario() {
   console.log(`CHEQUEAR NEXT DIGIMON RAR: ${nextDigimons}`);
 
   console.log("🏗️ Limpiando y generando headers...");
-  editableFieldsHeaders.innerHTML = "";
-  editableFields.innerHTML = "";
-  
+  // Limpiar las 3 filas
+  editableFieldsHeaders1.innerHTML = "";
+  editableFields1.innerHTML = "";
+  editableFieldsHeaders2.innerHTML = "";
+  editableFields2.innerHTML = "";
+  editableFieldsHeaders3.innerHTML = "";
+  editableFields3.innerHTML = "";
+
   // NUEVO: Verificar que los elementos existen antes de continuar
-  if (!editableFieldsHeaders || !editableFields) {
-    console.error("❌ ERROR: editableFieldsHeaders o editableFields no existen!");
+  if (!editableFieldsHeaders1 || !editableFields1 ||
+      !editableFieldsHeaders2 || !editableFields2 ||
+      !editableFieldsHeaders3 || !editableFields3) {
+    console.error("❌ ERROR: Alguna de las 3 filas de campos no existe!");
     return;
   }
-  
-  console.log("✅ Elementos DOM confirmados como existentes");
 
-  // Generar headers (lógica original + campos estáticos)
-  console.log("🏷️ Creando headers...");
+  console.log("✅ Elementos DOM de 3 filas confirmados como existentes");
+
+  // Definir qué campos van a cada fila
+  const fila1Fields = ['HP Entrenado', 'ATK Entrenado', 'SPD Entrenado', 'Stat Superior'];
+  const fila2Fields = ['Peso', 'Error Maximo', '% Entrenamiento', 'Vinculo Minimo alcanzado', 'WinRate', 'Combates Minimos'];
+
+  // DEBUG: Imprimir todos los campos disponibles
+  console.log("🔍 === CAMPOS DISPONIBLES ===");
+  console.log("Todos los campos en fieldSet:", Array.from(fieldSet));
+  console.log("Fila 1 esperada:", fila1Fields);
+  console.log("Fila 2 esperada:", fila2Fields);
+
+  // Función auxiliar para determinar a qué fila pertenece un campo
+  function getRowForField(field) {
+    const row1 = fila1Fields.includes(field);
+    const row2 = fila2Fields.includes(field);
+
+    console.log(`Campo "${field}": ¿en fila1? ${row1}, ¿en fila2? ${row2}, va a fila: ${row1 ? 1 : row2 ? 2 : 3}`);
+
+    if (row1) return 1;
+    if (row2) return 2;
+    return 3; // Todo lo demás va a la fila 3
+  }
+
+  // Generar headers y campos para las 3 filas
+  console.log("🏷️ Creando headers y campos...");
   fieldSet.forEach(field => {
-    console.log(`🏷️ Procesando header para: ${field}`);
+    console.log(`🏷️ Procesando campo: ${field}`);
+
     const header = field === "Error Maximo" ? "Errores" :
-      field === "EntrenamientoHecho" ? "¿Realizó Entrenamiento?" : 
+      field === "EntrenamientoHecho" ? "¿Realizó Entrenamiento?" :
       field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
       field === "Combates Minimos" ? "Batallas":
       field === "Vinculo Minimo alcanzado"?"Vinculo Maximo Alcanzado":
       field === "Muerte inducida sin Carne X o Program (30% de salir)" ? "Muerte inducida sin Carne X o Program":
       CAMPOS_ESTATICOS[field]?.header || field; // Usar header personalizado si existe
+
+    // Determinar en qué fila va el campo
+    const rowNumber = getRowForField(field);
+    const targetHeaders = rowNumber === 1 ? editableFieldsHeaders1 :
+                         rowNumber === 2 ? editableFieldsHeaders2 : editableFieldsHeaders3;
+    const targetFields = rowNumber === 1 ? editableFields1 :
+                        rowNumber === 2 ? editableFields2 : editableFields3;
+
+    // Crear header
     const th = document.createElement("th");
     th.textContent = header;
-    editableFieldsHeaders.appendChild(th);
-    console.log(`✅ Header creado: ${header}`);
+    targetHeaders.appendChild(th);
+    console.log(`✅ Header creado en fila ${rowNumber}: ${header}`);
   });
 
   console.log("🔧 Creando campos de input...");
   // Generar campos (lógica mejorada)
   fieldSet.forEach(field => {
     console.log(`🔧 Procesando campo: ${field}`);
-    
+
+    // Determinar en qué fila va el campo
+    const rowNumber = getRowForField(field);
+    const targetFields = rowNumber === 1 ? editableFields1 :
+                        rowNumber === 2 ? editableFields2 : editableFields3;
+
     // Verificar si es campo estático primero
     if (CAMPOS_ESTATICOS[field]) {
-      console.log(`🎯 ${field} es campo ESTÁTICO`);
+      console.log(`🎯 ${field} es campo ESTÁTICO en fila ${rowNumber}`);
       const config = CAMPOS_ESTATICOS[field];
       
       const td = document.createElement("td");
       
       if (config.tipo === "calculado") {
-        console.log(`⚙️ Creando campo calculado: ${field}`);
+        console.log(`⚙️ Creando campo calculado: ${field} en fila ${rowNumber}`);
         // Campo calculado - mostrar resultado
         const span = document.createElement("span");
         span.id = `calc_${field}`;
@@ -1008,25 +1192,32 @@ function generarFormulario() {
         span.style.lineHeight = "1.2";
         span.title = "Formato: [Balanceado /] Stat Superior"; // Tooltip explicativo
         td.appendChild(span);
-        editableFields.appendChild(td);
-        console.log(`✅ Campo calculado creado: ${field}`);
-        console.log(`📊 DOM: Headers count=${editableFieldsHeaders.children.length}, Fields count=${editableFields.children.length}`);
+        targetFields.appendChild(td);
+        console.log(`✅ Campo calculado creado: ${field} en fila ${rowNumber}`);
         return; // Salir temprano para campos calculados
       } else if (config.tipo === "input") {
-        console.log(`📝 Creando campo input estático: ${field}`);
+        console.log(`📝 Creando campo input estático: ${field} en fila ${rowNumber}`);
         // Campo estático input
         const input = document.createElement("input");
         input.type = config.inputType || "text";
         input.id = `field_${field}`;
-        input.addEventListener('input', recalcularCamposCalculados);
-        
+
+        // Validación especial para HP%, ATK% y SPD%
+        if (field === "HP Entrenado" || field === "ATK Entrenado" || field === "SPD Entrenado") {
+          input.addEventListener('input', function() {
+            validarSumaStats();
+            recalcularCamposCalculados();
+          });
+        } else {
+          input.addEventListener('input', recalcularCamposCalculados);
+        }
+
         if (config.min !== undefined) input.min = config.min;
         if (config.max !== undefined) input.max = config.max;
-        
+
         td.appendChild(input);
-        editableFields.appendChild(td);
-        console.log(`✅ Campo input estático creado: ${field}`);
-        console.log(`📊 DOM: Headers count=${editableFieldsHeaders.children.length}, Fields count=${editableFields.children.length}`);
+        targetFields.appendChild(td);
+        console.log(`✅ Campo input estático creado: ${field} en fila ${rowNumber}`);
         return; // Salir temprano para campos estáticos
       }
     } else {
@@ -1088,16 +1279,24 @@ function generarFormulario() {
         let input = document.createElement("input");
         input.type = "text";
         input.id = `field_${field}`;
-        input.addEventListener('input', recalcularCamposCalculados);
+        input.min = -50;
+        input.max = 100;
+
+        // Agregar validación con limpieza automática
+        input.addEventListener('input', function() {
+          validarRangoInput(input, field, -50, 100);
+          recalcularCamposCalculados();
+        });
+
         td.appendChild(input);
-        editableFields.appendChild(td);
-        
+        targetFields.appendChild(td);
+
         setTimeout(() => {
             if (typeof reorganizeTableColumns === "function") {
                 reorganizeTableColumns();
             }
         }, 0);
-        
+
         return; // Salir temprano
     }
 
@@ -1159,7 +1358,7 @@ function generarFormulario() {
         }
         
         td.appendChild(select);
-        editableFields.appendChild(td);
+        targetFields.appendChild(td);
         
         // Forzar reorganización justo después de agregar el campo
         setTimeout(() => {
@@ -1170,19 +1369,32 @@ function generarFormulario() {
     } else {
         // Input numérico (lógica original exacta)
         let input = document.createElement("input");
-        input.type = field === "Vinculo Minimo alcanzado" ? "text" : "number";
+        input.type = (field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? "text" : "number";
         input.id = `field_${field}`;
-        input.addEventListener('input', recalcularCamposCalculados); // Agregar recálculo
-        input.min =
-            field === "Vinculo Minimo alcanzado" ? -999 :
-            field === "Peso" ? 1 : 0;
-        input.max =
-            field === "Peso" ? 99 :
-            field === "Error Maximo" ? 6 :
-            (field === "% Entrenamiento" || field === "WinRate" || field === "Vinculo Minimo alcanzado") ? 100 :
-            undefined;
+
+        // Definir rangos de validación
+        const min = (field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? -50 :
+                    field === "Peso" ? 1 : 0;
+        const max = field === "Peso" ? 99 :
+                    field === "Error Maximo" ? 6 :
+                    (field === "% Entrenamiento" || field === "WinRate" || field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? 100 :
+                    undefined;
+
+        input.min = min;
+        input.max = max;
+
+        // Agregar validación con limpieza automática para campos con límites definidos
+        if (max !== undefined) {
+          input.addEventListener('input', function() {
+            validarRangoInput(input, field, min, max);
+            recalcularCamposCalculados();
+          });
+        } else {
+          input.addEventListener('input', recalcularCamposCalculados);
+        }
+
         td.appendChild(input);
-        editableFields.appendChild(td);
+        targetFields.appendChild(td);
     }
   });
 
@@ -1787,30 +1999,75 @@ fieldSet.forEach(field => {
     return;
   }
 
-let tabla = "<table border='1' style='border-collapse: collapse; width: 100%; text-align: center;'><thead><tr>" +
+// Crear dos tablas: una simple y una completa
+// Tabla simple (solo 3 columnas)
+let tablaSimple = `
+<div style="text-align: center; margin-bottom: 10px;">
+  <button id="toggleDetailsBtn" style="
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+    <span id="toggleIcon">▶</span> <span id="toggleText">${currentLanguage === 'es' ? 'Mostrar Detalles' : 'Show Details'}</span>
+  </button>
+</div>
+<div class="table-container">
+<table border='1' style='border-collapse: collapse; width: 100%; text-align: center;'><thead><tr>` +
+            `<th data-translate='digimon'>${translate('digimon')}</th>` +
+            `<th data-translate='etapa'>${translate('etapa')}</th>` +
+            `<th data-translate='puntaje'>${translate('puntaje')}</th>`;
+tablaSimple += "</tr></thead><tbody>";
+
+// Tabla completa (todas las columnas)
+let tablaCompleta = `
+<div style="text-align: center; margin-bottom: 10px;">
+  <button id="toggleDetailsBtn2" style="
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+    <span id="toggleIcon2">▼</span> <span id="toggleText2">${currentLanguage === 'es' ? 'Ocultar Detalles' : 'Hide Details'}</span>
+  </button>
+</div>
+<table border='1' style='border-collapse: collapse; width: 100%; text-align: center;'><thead><tr>` +
             `<th data-translate='digimon'>${translate('digimon')}</th>` +
             `<th data-translate='etapa'>${translate('etapa')}</th>` +
             `<th data-translate='puntaje'>${translate('puntaje')}</th>`;
 
 fieldSet.forEach(field => {
     const header = field === "Error Maximo" ? "Errores" :
-      field === "EntrenamientoHecho" ? "¿Realizó Entrenamiento?" : 
+      field === "EntrenamientoHecho" ? "¿Realizó Entrenamiento?" :
       field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
       field === "Combates Minimos" ? "Batallas":
       field === "Vinculo Minimo alcanzado"?"Vinculo":
       field;
-    
+
     const translateKey = headerMappingJS[header] || header.toLowerCase();
     const translatedHeader = translate(translateKey);
-    tabla += `<th data-translate="${translateKey}">${translatedHeader}</th>`;
+    tablaCompleta += `<th data-translate="${translateKey}">${translatedHeader}</th>`;
 });
-  tabla += "</tr></thead><tbody>";
+tablaCompleta += "</tr></thead><tbody>";
 
   let puntajes = [];
 nextDigimons.forEach(([name, requisitos]) => {
     let puntaje = 0;
     let etapa = nivelAEtapa[requisitos["Nivel"]] || "Desconocida";
-    let fila = `<tr><td>${name}</td><td>${etapa}</td>`;
+    let filaSimple = `<tr><td>${name}</td><td>${etapa}</td>`;
+    let filaCompleta = `<tr><td>${name}</td><td>${etapa}</td>`;
 
 // Agregar esta variable ANTES del map
 let pillomonEvaluated = false;
@@ -1883,14 +2140,14 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             
             // Para SkullGreymon, mostrar "Evaluado" en sus campos especiales
             if (["% Entrenamiento", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-                return `<td>Evaluado</td>`;
+                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
             }
         }
 
         // Si ya se evaluó SkullGreymon y es uno de sus campos especiales, no evaluar de nuevo
-        if (name === "SkullGreymon" && skullGreymonEvaluated && 
+        if (name === "SkullGreymon" && skullGreymonEvaluated &&
             ["% Entrenamiento", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-            return `<td>-</td>`;
+            return `<td class="detail-column" style="display: none;">-</td>`;
         }
         // FIN LÓGICA ESPECIAL PARA SKULLGREYMON
 
@@ -1927,14 +2184,14 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             
             // Para Bakemon LT, mostrar "Evaluado" en sus campos especiales
             if (["Muerte inducida sin Carne X o Program (30% de salir)", "Comida", "Program"].includes(field)) {
-                return `<td>Evaluado</td>`;
+                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
             }
         }
 
         // Si ya se evaluó Bakemon LT y es uno de sus campos especiales, no evaluar de nuevo
-        if (name === "Bakemon LT" && bakemonLTEvaluated && 
+        if (name === "Bakemon LT" && bakemonLTEvaluated &&
             ["Muerte inducida sin Carne X o Program (30% de salir)", "Comida", "Program"].includes(field)) {
-            return `<td>-</td>`;
+            return `<td class="detail-column" style="display: none;">-</td>`;
         }
         // FIN LÓGICA ESPECIAL PARA BAKEMON LT
 
@@ -2504,17 +2761,23 @@ else if (field === "Comida") {
       puntaje += 3;
     }
 
-    fila += `<td><strong>${puntaje}</strong></td>` + celdas.join("");
-    tabla += fila + "</tr>";
-    puntajes.push({ name, puntaje });
+    // Penalización por muerte inducida sin Carne X o Program X (excepto Bakemon LT)
+    const muerteInducida = inputValues["Muerte inducida sin Carne X o Program (30% de salir)"];
+    if (muerteInducida && muerteInducida.toLowerCase() === "si" && name !== "Bakemon LT") {
+      puntaje += -10;
+      console.log(`⚠️ ${name} - Penalización por muerte inducida: -10 puntos`);
+    }
+
+    // Completar fila simple (solo puntaje)
+    filaSimple += `<td><strong>${puntaje}</strong></td></tr>`;
+
+    // Completar fila completa (puntaje + todas las celdas de detalles)
+    filaCompleta += `<td><strong>${puntaje}</strong></td>` + celdas.join("") + "</tr>";
+
+    puntajes.push({ name, puntaje, filaSimple, filaCompleta, etapa });
   });
-  
 
-	tabla += "</tbody></table>";
-	resultados.innerHTML = tabla;
-	translateresultadosContent();
-
-// AQUÍ es donde debes colocar tu lógica de Numemon, Nanimon y Scumon
+// APLICAR LÓGICA DE NUMEMON, NANIMON Y SCUMON ANTES DEL ORDENAMIENTO
 puntajes.forEach((digi, index) => {
     if (digi.name === "Numemon" || digi.name === "Nanimon" || digi.name === "Scumon") {
         // Buscar todos los digis de nivel 4 o que sean Burpmon
@@ -2535,7 +2798,7 @@ puntajes.forEach((digi, index) => {
         const scumonPuntajeMenorA0 = !scumon || scumon.puntaje < 0;
 
         if (todosMenorA3 && scumonPuntajeMenorA0) {
-            
+
             // Función auxiliar para obtener el vínculo desde el input del formulario
             function obtenerVinculoDOM() {
                 const vinculoInput = document.getElementById('field_Vinculo al momento de evolucionar');
@@ -2544,55 +2807,36 @@ puntajes.forEach((digi, index) => {
                 }
                 return null;
             }
-            
-            // Función auxiliar para actualizar HTML
-            function actualizarHTML(nombreDigimon, puntaje) {
-                const row = Array.from(document.querySelectorAll('tr')).find(row => {
-                    const firstCell = row.querySelector('td');
-                    return firstCell && firstCell.textContent.trim() === nombreDigimon;
-                });
-                if (row) {
-                    const scoreCell = row.querySelector('td strong');
-                    if (scoreCell) {
-                        scoreCell.textContent = puntaje.toString();
-                    }
-                }
-            }
 
             // Lógica específica según el digimon
             if (digi.name === "Nanimon") {
                 const vinculoEvolucion = obtenerVinculoDOM();
                 const numemonIndex = puntajes.findIndex(d => d.name === "Numemon");
-                
+
                 if (vinculoEvolucion === -50) {
                     // Vínculo = -50: Nanimon recibe +3, Numemon recibe 0
                     puntajes[index].puntaje = 3;
-                    
+
                     if (numemonIndex !== -1) {
                         puntajes[numemonIndex].puntaje = 0;
-                        actualizarHTML("Numemon", 0);
                     }
-                    
+
                 } else if (vinculoEvolucion > -50) {
                     // Vínculo > -50: Nanimon recibe -10, Numemon recibe +3
                     puntajes[index].puntaje = -10;
-                    
+
                     if (numemonIndex !== -1) {
                         puntajes[numemonIndex].puntaje = 3;
-                        actualizarHTML("Numemon", 3);
                     }
                 }
-                
-                // Actualizar HTML de Nanimon
-                actualizarHTML("Nanimon", puntajes[index].puntaje);
-                
+
             } else if (digi.name === "Numemon") {
                 // Para Numemon, verificar si Nanimon existe
                 const nanimon = puntajes.find(d => d.name === "Nanimon");
-                
+
                 if (nanimon) {
                     const vinculoNanimon = obtenerVinculoDOM();
-                    
+
                     if (vinculoNanimon === -50) {
                         // Si Nanimon tiene vínculo = -50, Numemon recibe 0
                         puntajes[index].puntaje = 0;
@@ -2605,15 +2849,67 @@ puntajes.forEach((digi, index) => {
                     puntajes[index].puntaje = 3;
                 }
 
-                // Actualizar HTML de Numemon
-                actualizarHTML("Numemon", puntajes[index].puntaje);
-                
-            }              
+            }
         }
     }
 });
 
-  
+// Reconstruir filas con puntajes actualizados
+puntajes.forEach((digi) => {
+    // Reconstruir filaSimple con el puntaje actualizado
+    digi.filaSimple = `<tr><td>${digi.name}</td><td>${digi.etapa}</td><td><strong>${digi.puntaje}</strong></td></tr>`;
+
+    // Reconstruir filaCompleta con el puntaje actualizado
+    // Necesitamos extraer las celdas de detalles de la filaCompleta original
+    const match = digi.filaCompleta.match(/<td><strong>.*?<\/strong><\/td>(.*?)<\/tr>/);
+    const celdasDetalles = match ? match[1] : '';
+    digi.filaCompleta = `<tr><td>${digi.name}</td><td>${digi.etapa}</td><td><strong>${digi.puntaje}</strong></td>${celdasDetalles}</tr>`;
+});
+
+  // Ordenar puntajes de mayor a menor
+  puntajes.sort((a, b) => b.puntaje - a.puntaje);
+
+  // Reconstruir ambas tablas con el orden correcto
+  puntajes.forEach(({ filaSimple, filaCompleta }) => {
+    tablaSimple += filaSimple;
+    tablaCompleta += filaCompleta;
+  });
+
+	tablaSimple += "</tbody></table></div>";
+	tablaCompleta += "</tbody></table>";
+
+	// Guardar el mensaje de evolución antes de renderizar las tablas
+	const mensajeEvolucion = evolucionTexto.textContent;
+
+	// Renderizar ambas tablas
+	resultados.innerHTML = tablaSimple;
+	const resultadosCompletos = document.getElementById('resultadosCompletos');
+	resultadosCompletos.innerHTML = tablaCompleta;
+
+	translateresultadosContent();
+
+	// Agregar event listeners para ambos botones de toggle
+	setTimeout(() => {
+		const toggleBtn = document.getElementById('toggleDetailsBtn');
+		const toggleBtn2 = document.getElementById('toggleDetailsBtn2');
+
+		if (toggleBtn) {
+			toggleBtn.addEventListener('click', function() {
+				// Mostrar tabla completa, ocultar tabla simple
+				resultados.style.display = 'none';
+				resultadosCompletos.style.display = 'block';
+			});
+		}
+
+		if (toggleBtn2) {
+			toggleBtn2.addEventListener('click', function() {
+				// Mostrar tabla simple, ocultar tabla completa
+				resultados.style.display = 'block';
+				resultadosCompletos.style.display = 'none';
+			});
+		}
+	}, 100);
+
 	const maxPuntaje = Math.max(...puntajes.map(d => d.puntaje));
 	let mejoresDigimons;
 
@@ -2963,6 +3259,7 @@ if (mejoresDigimons.length >= 2) {
             es: `Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a SkullGreymon.`,
             en: `Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to SkullGreymon.`
         };
+
         evolucionTexto.textContent = textTranslationsSkull[currentLanguage];
         return;
     }

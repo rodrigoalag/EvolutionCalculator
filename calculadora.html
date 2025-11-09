@@ -21,58 +21,26 @@
     }
     
 /* Ajustar el ancho de las columnas de la tabla editable */
-	#editableFieldsTable {
-	  table-layout: auto;  /* Auto para ajustar según contenido */
+	#editableFieldsTable,
+	#editableFieldsTable2,
+	#editableFieldsTable3 {
 	  width: 100%;
+	  margin-bottom: 0px;
 	}
-    /* Ajustar anchos específicos para cada columna */
     #editableFieldsTable th,
-    #editableFieldsTable td {
-      padding: 8px 6px;
+    #editableFieldsTable td,
+    #editableFieldsTable2 th,
+    #editableFieldsTable2 td,
+    #editableFieldsTable3 th,
+    #editableFieldsTable3 td {
+      padding: 10px 8px;
       text-align: center;
-      font-size: 15px;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      white-space: normal;
+      font-size: 16px;
     }
-    /* Permitir que los headers se ajusten en múltiples líneas */
-    #editableFieldsTable th {
-      line-height: 1.3;
-      vertical-align: middle;
+    #editableFieldsTable th,
+    #editableFieldsTable2 th,
+    #editableFieldsTable3 th {
       font-weight: bold;
-    }    
-    /* Estilos base para campos numéricos y dropdowns */
-    #editableFieldsTable input[type="number"] {
-      text-align: center;
-    }
-    
-    #editableFieldsTable select {
-      text-align: left;
-    }
-    /* Ajustar inputs y selects para que se adapten al ancho de la celda */
-    #editableFieldsTable input,
-    #editableFieldsTable select {
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-      font-size: 14px;
-      padding: 5px 6px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    /* Campos específicos más pequeños */
-    #editableFieldsTable input[id*="Peso"],
-    #editableFieldsTable input[id*="Weight"],
-    #editableFieldsTable input[id*="Errores"],
-    #editableFieldsTable input[id*="Errors"],
-    #editableFieldsTable input[id*="WinRate"]
-	{
-      text-align: center;
-    }
-    
-    /* Separador visual entre campos numéricos y dropdowns */
-    #editableFieldsTable .dropdown-separator {
-      border-left: 2px solid #ddd;
     }
     /* Tabla de datos del digimon también más compacta */
     #autoFieldsTable {
@@ -189,19 +157,24 @@
     }
     /* ====================== FIN ESTILOS HELP POPUP ====================== */
 
-    /* Contenedor de la tabla editable - romper el max-width de simple.css */
+    /* Contenedor de la tabla editable - centrado como autoFieldsTable */
     .table-container {
-      width: 100vw; /* Ancho completo del viewport */
-      max-width: 100vw;
-      margin-left: calc(-50vw + 50%); /* Centrar y extender a los bordes */
-      margin-right: calc(-50vw + 50%);
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
       overflow-x: auto;
-      padding: 0 20px; /* Padding lateral para que no toque los bordes */
-      box-sizing: border-box;
     }
 
-    /* Contenedor de resultados también extendido */
+    /* Contenedor de resultados - tabla simple centrada */
     #resultados {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+
+    /* Contenedor de tabla completa - ancho completo del viewport */
+    #resultadosCompletos {
       width: 100vw;
       max-width: 100vw;
       margin-left: calc(-50vw + 50%);
@@ -209,6 +182,7 @@
       overflow-x: auto;
       padding: 0 20px;
       box-sizing: border-box;
+      display: none; /* Oculto por defecto */
     }
 
     /* Tabla dentro de resultados */
@@ -217,26 +191,31 @@
       table-layout: auto;
     }
 
-    /* Texto de evolución también extendido */
+    /* Texto de evolución */
     #evolucionTexto {
-      width: 100vw;
-      max-width: 100vw;
-      margin-left: calc(-50vw + 50%);
-      margin-right: calc(-50vw + 50%);
-      padding: 0 20px;
-      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
     }
 
     /* Responsive: en pantallas pequeñas permitir scroll horizontal */
     @media (max-width: 768px) {
       #editableFieldsTable th,
-      #editableFieldsTable td {
+      #editableFieldsTable td,
+      #editableFieldsTable2 th,
+      #editableFieldsTable2 td,
+      #editableFieldsTable3 th,
+      #editableFieldsTable3 td {
         font-size: 12px; /* Reducir solo en móvil */
         padding: 4px 2px;
       }
 
       #editableFieldsTable input,
-      #editableFieldsTable select {
+      #editableFieldsTable select,
+      #editableFieldsTable2 input,
+      #editableFieldsTable2 select,
+      #editableFieldsTable3 input,
+      #editableFieldsTable3 select {
         font-size: 11px;
       }
 
@@ -274,13 +253,21 @@
     
     @media (max-width: 480px) {
       #editableFieldsTable th,
-      #editableFieldsTable td {
+      #editableFieldsTable td,
+      #editableFieldsTable2 th,
+      #editableFieldsTable2 td,
+      #editableFieldsTable3 th,
+      #editableFieldsTable3 td {
         font-size: 12px;
         padding: 4px 2px;
       }
-      
+
       #editableFieldsTable input,
-      #editableFieldsTable select {
+      #editableFieldsTable select,
+      #editableFieldsTable2 input,
+      #editableFieldsTable2 select,
+      #editableFieldsTable3 input,
+      #editableFieldsTable3 select {
         font-size: 11px;
       }
 
@@ -341,20 +328,43 @@
   </table>
   
   <h3 id="fieldsToCompleteTitle" data-translate="fieldsToComplete">Campos a completar</h3>
-  <div class="table-container">
+  <div class="table-container" style="margin-bottom: 2px;">
     <table id="editableFieldsTable">
       <thead>
-        <tr id="editableFieldsHeaders"></tr>
+        <tr id="editableFieldsHeaders1"></tr>
       </thead>
       <tbody>
-        <tr id="editableFields"></tr>
+        <tr id="editableFields1"></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-container" style="margin-bottom: 2px;">
+    <table id="editableFieldsTable2">
+      <thead>
+        <tr id="editableFieldsHeaders2"></tr>
+      </thead>
+      <tbody>
+        <tr id="editableFields2"></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-container" style="margin-bottom: 10px;">
+    <table id="editableFieldsTable3">
+      <thead>
+        <tr id="editableFieldsHeaders3"></tr>
+      </thead>
+      <tbody>
+        <tr id="editableFields3"></tr>
       </tbody>
     </table>
   </div>
   
   <button id="calcularBtn" data-translate="calculate">Calcular evolución</button>
+  <p id="evolucionTexto" style="margin-top:15px; margin-bottom:15px; font-weight:bold; text-align:center;"></p>
   <div id="resultados"></div>
-  <p id="evolucionTexto" style="margin-top:15px; font-weight:bold;"></p>
+  <div id="resultadosCompletos"></div>
 
   <!-- Popup de ayuda para HP Base -->
   <div id="helpPopupOverlay" class="popup-overlay" onclick="closeHelpPopup(event)">
@@ -460,27 +470,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ✅ FUNCIÓN PARA AGREGAR EL HELP ICON AL HP BASE CUANDO SE CREE LA TABLA
 function addHelpIconToHPBase() {
-  // Esperar un poco y buscar el header de HP Base
+  // Esperar un poco y buscar el header de HP Base en todas las tablas
   setTimeout(() => {
-    const headersRow = document.getElementById('editableFieldsHeaders');
-    if (!headersRow) return;
+    const headersRows = [
+      document.getElementById('editableFieldsHeaders1'),
+      document.getElementById('editableFieldsHeaders2'),
+      document.getElementById('editableFieldsHeaders3')
+    ];
 
-    Array.from(headersRow.children).forEach(header => {
-      const headerText = header.textContent.trim();
-      
-      // Buscar HP Base en cualquier idioma y agregar help icon si no lo tiene
-      if ((headerText === 'HP Base' || headerText.includes('HP Base')) && !header.querySelector('.help-icon')) {
-        const helpIcon = document.createElement('span');
-        helpIcon.className = 'help-icon';
-        helpIcon.onclick = () => showHelpPopup('hpbase');
-        helpIcon.title = 'Ver ayuda / Show help';
-        helpIcon.textContent = '?';
-        helpIcon.setAttribute('aria-label', 'Ver ayuda');
-        
-        // Agregar el icono al header
-        header.appendChild(document.createTextNode(' '));
-        header.appendChild(helpIcon);
-      }
+    headersRows.forEach(headersRow => {
+      if (!headersRow) return;
+
+      Array.from(headersRow.children).forEach(header => {
+        const headerText = header.textContent.trim();
+
+        // Buscar HP Base en cualquier idioma y agregar help icon si no lo tiene
+        if ((headerText === 'HP Base' || headerText.includes('HP Base')) && !header.querySelector('.help-icon')) {
+          const helpIcon = document.createElement('span');
+          helpIcon.className = 'help-icon';
+          helpIcon.onclick = () => showHelpPopup('hpbase');
+          helpIcon.title = 'Ver ayuda / Show help';
+          helpIcon.textContent = '?';
+          helpIcon.setAttribute('aria-label', 'Ver ayuda');
+
+          // Agregar el icono al header
+          header.appendChild(document.createTextNode(' '));
+          header.appendChild(helpIcon);
+        }
+      });
     });
   }, 500); // Dar tiempo suficiente para que se cree la tabla
 }
@@ -489,11 +506,18 @@ function addHelpIconToHPBase() {
 const observer = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-      // Verificar si se agregaron headers a la tabla
-      const headersRow = document.getElementById('editableFieldsHeaders');
-      if (headersRow && headersRow.children.length > 0) {
-        addHelpIconToHPBase();
-      }
+      // Verificar si se agregaron headers a cualquiera de las tablas
+      const headersRows = [
+        document.getElementById('editableFieldsHeaders1'),
+        document.getElementById('editableFieldsHeaders2'),
+        document.getElementById('editableFieldsHeaders3')
+      ];
+
+      headersRows.forEach(headersRow => {
+        if (headersRow && headersRow.children.length > 0) {
+          addHelpIconToHPBase();
+        }
+      });
     }
   });
 });
@@ -580,9 +604,9 @@ const translations = {
     gigawaruxross: "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
     comida: "Comida",
     vnegativo: "Alcanzo vinculo negativo?",
-	trainedhp: "HP Entrenado",
-	trainedatk: "ATK Entrenado",
-	trainedspd: "SPD Entrenado"
+	trainedhp: "HP %",
+	trainedatk: "ATK %",
+	trainedspd: "SPD %"
   },
   en: {
     // Interface texts
@@ -646,9 +670,9 @@ const translations = {
     gigawaruxross: "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon",
     comida:"Food",
     vnegativo: "Reached negative bond?",
-	trainedhp: "Trained HP",
-	trainedatk: "Trained ATK",
-	trainedspd: "Trained SPD"
+	trainedhp: "HP %",
+	trainedatk: "ATK %",
+	trainedspd: "SPD %"
   }
 };
 
@@ -772,7 +796,11 @@ function updateTableHeaders() {
 }
 
 function updateEditableFieldsHeaders() {
-  const headersRow = document.getElementById('editableFieldsHeaders');
+  const headersRows = [
+    document.getElementById('editableFieldsHeaders1'),
+    document.getElementById('editableFieldsHeaders2'),
+    document.getElementById('editableFieldsHeaders3')
+  ];
   const resultados = document.getElementById('resultados');
 
   // Mapeo de textos en español a claves de traducción
@@ -821,23 +849,28 @@ function updateEditableFieldsHeaders() {
     'Comida':'comida',
     'Food': 'comida',
 	"HP Entrenado":'trainedhp',
+	"HP %":'trainedhp',
 	"Trained HP":'trainedhp',
     "ATK Entrenado":'trainedatk',
+    "ATK %":'trainedatk',
     "Trained ATK":'trainedatk',
     "SPD Entrenado":'trainedspd',
+    "SPD %":'trainedspd',
     "Trained SPD":'trainedspd'
   };
 
-  // Traducir encabezados
-  if (headersRow) {
-    Array.from(headersRow.children).forEach(header => {
-      const currentText = header.textContent.trim();
-      const translationKey = headerMapping[currentText];
-      if (translationKey) {
-        header.textContent = translate(translationKey);
-      }
-    });
-  }
+  // Traducir encabezados en todas las filas
+  headersRows.forEach(headersRow => {
+    if (headersRow) {
+      Array.from(headersRow.children).forEach(header => {
+        const currentText = header.textContent.trim();
+        const translationKey = headerMapping[currentText];
+        if (translationKey) {
+          header.textContent = translate(translationKey);
+        }
+      });
+    }
+  });
 
   // Traducir texto del elemento 'resultados' si es texto simple
   if (resultados) {
@@ -981,230 +1014,45 @@ function reorganizeFields() {
 }
 
 function reorganizeTableColumns() {
-  const headersRow = document.getElementById('editableFieldsHeaders');
-  const fieldsRow = document.getElementById('editableFields');
-  
-  if (!headersRow || !fieldsRow) return;
-  
-  const headers = Array.from(headersRow.children);
-  const fields = Array.from(fieldsRow.children);
-  
-  // Crear mapa de campos por nombre del header
-  const fieldMap = {};
-  
-  for (let i = 0; i < headers.length; i++) {
-    const fieldCell = fields[i];
-    const headerCell = headers[i];
-    
-    if (fieldCell && headerCell) {
-      const headerText = headerCell.textContent.trim();
-      fieldMap[headerText] = { header: headerCell, field: fieldCell };
-    }
-  }
-  
-  // Orden específico requerido (en español, se traducirán después)
-  const specificOrder = [
-    'Peso', 
-    'Errores', 
-    '% Entrenamiento', 
-    'Vinculo',
-    'Vínculo máximo alcanzado', 
-	'Vinculo maximo alcanzado',
-	'Bonus Vinculo al momento de evolucionar',
-	'vinculo2',
-    'Batallas', 
-    'WinRate'
-  ];
-  
-  // Separar campos ordenados y dropdowns restantes
-  const orderedFields = [];
-  const remainingDropdowns = [];
-  
-  // Primero, agregar campos en el orden específico
-  specificOrder.forEach(fieldName => {
-    if (fieldMap[fieldName]) {
-      orderedFields.push(fieldMap[fieldName]);
-      delete fieldMap[fieldName];
-    }
-  });
-  
-  // Agregar dropdowns restantes
-  Object.values(fieldMap).forEach(item => {
-    const hasSelect = item.field.querySelector('select');
-    if (hasSelect) {
-      remainingDropdowns.push(item);
-    }
-  });
-  
-  // Limpiar las filas
-  headersRow.innerHTML = '';
-  fieldsRow.innerHTML = '';
-  
-  // Agregar campos en orden específico
-  orderedFields.forEach(item => {
-    headersRow.appendChild(item.header);
-    fieldsRow.appendChild(item.field);
-  });
-  
-  // Agregar dropdowns restantes
-  remainingDropdowns.forEach((item, index) => {
-    if (index === 0 && orderedFields.length > 0) {
-      item.header.classList.add('dropdown-separator');
-      item.field.classList.add('dropdown-separator');
-    }
-    headersRow.appendChild(item.header);
-    fieldsRow.appendChild(item.field);
-  });
-  
-  // Actualizar estilos CSS para la nueva organización
-  updateColumnStyles();
+  // Esta función ya no se usa, la distribución en 3 tablas se maneja en script.js
+  return;
 }
 
 function updateColumnStyles() {
-  const fieldsRow = document.getElementById('editableFields');
-  const headersRow = document.getElementById('editableFieldsHeaders');
-  if (!fieldsRow || !headersRow) return;
-  
-  const totalCols = fieldsRow.children.length;
-  
-  const style = document.createElement('style');
-  style.id = 'dynamic-column-styles';
-  
-  let css = '';
-  
-  // Iterar por cada columna
-  for (let i = 1; i <= totalCols; i++) {
-    const field = fieldsRow.children[i-1];
-    
-    if (field) {
-      const hasSelect = field.querySelector('select');
-      
-      if (hasSelect) {
-        // TODOS los dropdowns del mismo tamaño que HP Entrenado, ATK Entrenado, SPD Entrenado
-        css += `
-          #editableFieldsTable th:nth-child(${i}),
-          #editableFieldsTable td:nth-child(${i}) {
-            min-width: 110px !important;
-            width: 110px !important;
-          }
-        `;
-        
-        // Responsive móvil - mismo tamaño que HP/ATK/SPD Entrenado en móvil
-        css += `
-          @media (max-width: 768px) {
-            #editableFieldsTable th:nth-child(${i}),
-            #editableFieldsTable td:nth-child(${i}) {
-              min-width: 85px !important;
-              width: 85px !important;
-            }
-          }
-        `;
-      } else {
-        // Campos numéricos - mantener tamaños originales según el CSS base
-        const header = headersRow.children[i-1];
-        if (header) {
-          const headerText = header.textContent.trim().toLowerCase();
-          
-          if (headerText.includes('hp') && headerText.includes('base')) {
-            // HP Base - tamaño original del CSS
-            css += `
-              #editableFieldsTable th:nth-child(${i}),
-              #editableFieldsTable td:nth-child(${i}) {
-                min-width: 90px !important;
-                width: 90px !important;
-              }
-              @media (max-width: 768px) {
-                #editableFieldsTable th:nth-child(${i}),
-                #editableFieldsTable td:nth-child(${i}) {
-                  min-width: 70px !important;
-                  width: 70px !important;
-                }
-              }
-            `;
-          } else if (headerText.includes('peso') || headerText.includes('weight')) {
-            // Peso - tamaño original del CSS
-            css += `
-              #editableFieldsTable th:nth-child(${i}),
-              #editableFieldsTable td:nth-child(${i}) {
-                min-width: 80px !important;
-                width: 80px !important;
-              }
-              @media (max-width: 768px) {
-                #editableFieldsTable th:nth-child(${i}),
-                #editableFieldsTable td:nth-child(${i}) {
-                  min-width: 65px !important;
-                  width: 65px !important;
-                }
-              }
-            `;
-          } else {
-            // Otros campos numéricos - tamaño como HP/ATK/SPD Entrenado
-            css += `
-              #editableFieldsTable th:nth-child(${i}),
-              #editableFieldsTable td:nth-child(${i}) {
-                min-width: 110px !important;
-                width: 110px !important;
-              }
-              @media (max-width: 768px) {
-                #editableFieldsTable th:nth-child(${i}),
-                #editableFieldsTable td:nth-child(${i}) {
-                  min-width: 85px !important;
-                  width: 85px !important;
-                }
-              }
-            `;
-          }
-        }
-      }
-    }
-  }
-  
-  // Asegurar que inputs y selects ocupen todo el ancho disponible
-  css += `
-    #editableFieldsTable input,
-    #editableFieldsTable select {
-      width: 100% !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-    }
-  `;
-  
-  style.textContent = css;
-  
-  // Remover estilo anterior
-  const oldStyle = document.getElementById('dynamic-column-styles');
-  if (oldStyle) {
-    oldStyle.remove();
-  }
-  
-  document.head.appendChild(style);
-  
-  console.log('✅ Dropdowns ajustados al mismo tamaño que HP/ATK/SPD Entrenado (110px)');
+  // Esta función ya no se usa, los estilos se manejan con CSS estático
+  return;
 }
 
 function observarSelectsDinamicos() {
-  const target = document.getElementById('editableFields');
-  if (!target) return;
+  const targets = [
+    document.getElementById('editableFields1'),
+    document.getElementById('editableFields2'),
+    document.getElementById('editableFields3')
+  ];
 
-  const observer = new MutationObserver((mutationsList, observer) => {
-    let changed = false;
+  targets.forEach(target => {
+    if (!target) return;
 
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-        changed = true;
+    const observer = new MutationObserver((mutationsList, observer) => {
+      let changed = false;
+
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          changed = true;
+        }
       }
-    }
 
-    if (changed) {
-      const selects = target.querySelectorAll('select:not([data-translated])');
-      selects.forEach(select => {
-        translateSelectOptions(select);
-        select.setAttribute('data-translated', 'true');
-      });
-    }
+      if (changed) {
+        const selects = target.querySelectorAll('select:not([data-translated])');
+        selects.forEach(select => {
+          translateSelectOptions(select);
+          select.setAttribute('data-translated', 'true');
+        });
+      }
+    });
+
+    observer.observe(target, { childList: true, subtree: true });
   });
-
-  observer.observe(target, { childList: true, subtree: true });
 }
 
 // ✅ MODIFICADO: Event listener mejorado para inicialización automática

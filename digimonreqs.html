@@ -377,12 +377,130 @@ main {
     font-size: 0.8rem;
     padding: 0.4rem 0.2rem;
   }
-  
+
   #headersRequisitos th {
     font-size: 0.7rem;
     padding: 0.25rem;
   }
 }
+
+/* ====================== ESTILOS PARA WARNING ICON ====================== */
+/* Estilos para el icono de advertencia */
+.warning-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: #4a9eff;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+  user-select: none;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+.warning-icon:hover {
+  background-color: #3182ce;
+}
+
+/* Overlay del popup */
+.warning-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.warning-overlay.show {
+  display: flex;
+}
+
+/* Contenedor del popup */
+.warning-container {
+  position: relative;
+  max-width: 500px;
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: popupIn 0.3s ease-out;
+  color: #333;
+}
+
+/* Animación de entrada */
+@keyframes popupIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Botón de cerrar */
+.warning-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.warning-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Texto del warning */
+.warning-text {
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Responsive para warning popup */
+@media (max-width: 768px) {
+  .warning-container {
+    max-width: 90vw;
+    padding: 25px;
+  }
+
+  .warning-text {
+    font-size: 14px;
+  }
+
+  .warning-icon {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 13px;
+  }
+}
+/* ====================== FIN ESTILOS WARNING ICON ====================== */
   </style>
 </head>
 <script src="digimonReqDict.js"></script>
@@ -503,7 +621,96 @@ main {
   </div>
 </section>
   </main>
+
+<!-- Popup de advertencia para SkullGreymon -->
+<div id="warningPopupOverlay" class="warning-overlay" onclick="closeWarningPopup(event)">
+  <div class="warning-container">
+    <button class="warning-close" onclick="closeWarningPopup()" aria-label="Cerrar">×</button>
+    <p id="warningText" class="warning-text"></p>
+  </div>
+</div>
+
 <script>
+// ============================================
+// FUNCIONES DEL POPUP DE ADVERTENCIA
+// ============================================
+
+// Mensajes de advertencia con traducciones
+const warningMessages = {
+  skullgreymon: {
+    es: "SkullGreymon es un digi que evoluciona con probabilidad, solo con 100% de entreno es 100% seguro de obtenerlo, menos entrenamiento implica que vas a tener probabilidad de morir, revisar con calculadora",
+    en: "SkullGreymon is a digimon that evolves with probability, only with 100% training is 100% guaranteed to get it, less training means you will have a probability of death, check with calculator"
+  }
+};
+
+// Función para mostrar el popup de advertencia
+function showWarningPopup(warningKey) {
+  const overlay = document.getElementById('warningPopupOverlay');
+  const text = document.getElementById('warningText');
+
+  // Configurar el texto según el idioma actual
+  if (warningMessages[warningKey]) {
+    text.textContent = warningMessages[warningKey][currentLanguage] || warningMessages[warningKey]['es'];
+
+    // Mostrar el popup
+    overlay.classList.add('show');
+
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+
+    // Focus en el popup para accesibilidad
+    overlay.focus();
+  }
+}
+
+// Función para cerrar el popup de advertencia
+function closeWarningPopup(event) {
+  const overlay = document.getElementById('warningPopupOverlay');
+
+  // Solo cerrar si se hace click en el overlay o en el botón de cerrar
+  if (!event || event.target === overlay || event.target.classList.contains('warning-close')) {
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+}
+
+// Cerrar popup con tecla Escape
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeWarningPopup();
+  }
+});
+
+// Prevenir cierre accidental al hacer click en el contenedor
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.querySelector('.warning-container');
+  if (container) {
+    container.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+  }
+
+  // Touch events para mejor experiencia móvil
+  let touchStartY = 0;
+  const overlay = document.getElementById('warningPopupOverlay');
+  if (overlay) {
+    overlay.addEventListener('touchstart', function(e) {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    overlay.addEventListener('touchend', function(e) {
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchEndY - touchStartY;
+
+      // Si desliza hacia abajo más de 50px, cerrar popup
+      if (deltaY > 50) {
+        closeWarningPopup();
+      }
+    });
+  }
+});
+
+// ============================================
 // CONFIGURACIÓN DE EXCEPCIONES ESPECIALES
 const specialDigimonConfig = {
   "SkullGreymon": {
@@ -831,12 +1038,22 @@ const camposVaciosPorEvolucion = {
   const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
 
   const nivelAEtapa = {
-    1: "Baby I",
-    2: "Baby II", 
-    3: "Child",
-    4: "Adult",
-    5: "Perfect",
-	6: "Ultimate"
+    es: {
+      1: "Baby I",
+      2: "Baby II",
+      3: "Child",
+      4: "Adult",
+      5: "Perfect",
+      6: "Ultimate"
+    },
+    en: {
+      1: "Baby I",
+      2: "Baby II",
+      3: "Child",
+      4: "Adult",
+      5: "Perfect",
+      6: "Ultimate"
+    }
   };
 
   const selectTama = document.getElementById("selectTama");
@@ -940,8 +1157,8 @@ const camposVaciosPorEvolucion = {
 	  	titleMain: "Digimon Information",
 		subtitle: "General Digimon Data",
 		subtitle2: "Digimon Requirements Data",
-		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",		
-		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve. The base stats from Scumon/PlatScumon and GreatKingScumon are an average. Contrary to the rest of Digimon, Scumon/PlatScumon and GreatKingScumon already have their hereditary (NATO) stats added in the avg.", 
+		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
+		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve. The base stats from Scumon/PlatScumon and GreatKingScumon are an average. Contrary to the rest of Digimon, Scumon/PlatScumon and GreatKingScumon already have their hereditary (NATO) stats added in the avg.",
 		Tama: "Tama",
 		Nivel: "Level",
 		Atributo: "Attribute",
@@ -950,7 +1167,7 @@ const camposVaciosPorEvolucion = {
 		"selectTama": "Select Tama:",
 		"selectNivel": "Select Level:",
 		"selectDigimon": "Select Digimon:",
-		"selectTamaDefault": "-- Choose a Size --",
+		"selectTamaDefault": "-- Choose a Tama --",
 		"selectNivelDefault": "-- Choose a Level --",
 		"selectDigimonDefault": "-- Choose a Digimon --",
 	    "Bellota Dorada": "Golden Acorn",
@@ -1207,8 +1424,8 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   });
 
   selectTama.addEventListener("change", () => {
-    selectNivel.innerHTML = '<option value="">-- Elige un Nivel --</option>';
-    selectDigimon.innerHTML = '<option value="">-- Elige un Digimon --</option>';
+    selectNivel.innerHTML = `<option value="">${t("selectNivelDefault")}</option>`;
+    selectDigimon.innerHTML = `<option value="">${t("selectDigimonDefault")}</option>`;
     selectNivel.disabled = true;
     selectDigimon.disabled = true;
     
@@ -1227,7 +1444,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     niveles.forEach(nivel => {
       const opt = document.createElement("option");
       opt.value = nivel;
-      opt.textContent = nivelAEtapa[nivel] || `Nivel ${nivel}`;
+      opt.textContent = nivelAEtapa[currentLanguage][nivel] || `Nivel ${nivel}`;
       selectNivel.appendChild(opt);
     });
 
@@ -1235,7 +1452,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   });
 
   selectNivel.addEventListener("change", () => {
-    selectDigimon.innerHTML = '<option value="">-- Elige un Digimon --</option>';
+    selectDigimon.innerHTML = `<option value="">${t("selectDigimonDefault")}</option>`;
     selectDigimon.disabled = true;
     
     // Mostrar placeholder cuando se cambie Nivel
@@ -1302,7 +1519,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       const td = document.createElement("td");
       let valorOriginal = digimon[campo] ?? "-";
       if (campo === "Nivel") {
-        valorOriginal = nivelAEtapa[valorOriginal] || valorOriginal;
+        valorOriginal = nivelAEtapa[currentLanguage][valorOriginal] || valorOriginal;
       }
       td.innerHTML = traducirValor(campo, valorOriginal);
       filaGen.appendChild(td);
@@ -1402,6 +1619,19 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
       const th = document.createElement("th");
       th.setAttribute("data-orig", campo);
       th.textContent = traducirCampo(campo);
+
+      // ✅ AGREGAR ICONO DE ADVERTENCIA PARA SKULLGREYMON EN % ENTRENAMIENTO
+      if (nombre === "SkullGreymon" && campo === "% Entrenamiento") {
+        th.textContent = traducirCampo(campo) + " ";
+        const warningIcon = document.createElement("span");
+        warningIcon.className = "warning-icon";
+        warningIcon.onclick = () => showWarningPopup("skullgreymon");
+        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
+        warningIcon.textContent = "!";
+        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+        th.appendChild(warningIcon);
+      }
+
       tablaHeaders.appendChild(th);
       camposOrdenados.push(campo);
     });
@@ -1553,6 +1783,14 @@ function actualizarTextosUI() {
   selectNivel.options[0].textContent = t("selectNivelDefault");
   selectDigimon.options[0].textContent = t("selectDigimonDefault");
 
+  // Actualizar las opciones de nivel si hay alguna seleccionada
+  Array.from(selectNivel.options).forEach(option => {
+    if (option.value !== "") {
+      const nivelNumero = parseInt(option.value);
+      option.textContent = nivelAEtapa[currentLanguage][nivelNumero] || `Nivel ${nivelNumero}`;
+    }
+  });
+
   // Actualiza encabezados de tabla generales
   const headersGen = document.querySelectorAll("#tablaGenerales thead th");
   const claves = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
@@ -1562,7 +1800,19 @@ function actualizarTextosUI() {
   const headersReq = document.querySelectorAll("#headersRequisitos th");
   headersReq.forEach(th => {
     const original = th.getAttribute("data-orig") || th.textContent;
-    th.textContent = traducirCampo(original);
+
+    // ✅ ACTUALIZAR ICONO DE ADVERTENCIA AL CAMBIAR IDIOMA
+    const warningIcon = th.querySelector(".warning-icon");
+    if (warningIcon) {
+      // Preservar el icono y solo actualizar el texto
+      th.textContent = traducirCampo(original) + " ";
+      warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
+      warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+      th.appendChild(warningIcon);
+    } else {
+      th.textContent = traducirCampo(original);
+    }
+
     th.setAttribute("data-orig", original);
   });
 // Dentro de actualizarTextosUI(), después de re-traducir headers de requisitos:
@@ -1677,8 +1927,8 @@ function formatearWinRate(valor) {
 }
 
 function traducirValor(campo, valor) {
-  if (campo === "Nivel" && nivelAEtapa[valor]) {
-    return nivelAEtapa[valor];
+  if (campo === "Nivel" && nivelAEtapa[currentLanguage][valor]) {
+    return nivelAEtapa[currentLanguage][valor];
   }
 
   // Formatear Error Maximo como rango

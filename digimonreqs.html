@@ -1619,45 +1619,21 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 
 	      const linea = lineasEvolutivas[selectedIndex];
 	      const childStats = digimonstattier[linea.child];
-	      const babyIIStats = digimonstattier[linea.babyII];
-	      const babyIStats = digimonstattier[linea.babyI];
 
-	      // Calcular stats heredados del Child
-	      const heredadoBabyI = {
-	        atk: Math.round(babyIStats.ATK * 0.4),
-	        def: Math.round(babyIStats.DEF * 0.4),
-	        hp: Math.round(babyIStats.HP * 0.4),
-	        vel: Math.round(babyIStats.Vel * 0.4)
-	      };
-
-	      const heredadoBabyII = {
-	        atk: Math.round(babyIIStats.ATK * 0.4),
-	        def: Math.round(babyIIStats.DEF * 0.4),
-	        hp: Math.round(babyIIStats.HP * 0.4),
-	        vel: Math.round(babyIIStats.Vel * 0.4)
-	      };
-
-	      const statsChildConHerencia = {
-	        atk: childStats.ATK + heredadoBabyI.atk + heredadoBabyII.atk,
-	        def: childStats.DEF + heredadoBabyI.def + heredadoBabyII.def,
-	        hp: childStats.HP + heredadoBabyI.hp + heredadoBabyII.hp,
-	        vel: childStats.Vel + heredadoBabyI.vel + heredadoBabyII.vel
-	      };
-
-	      // Calcular stats base de Scumon
+	      // CORRECCIÓN: Scumon BASE = Child BASE × 1.34 (SIN heredados)
 	      const scumonStatsBase = {
-	        atk: Math.round(statsChildConHerencia.atk * 1.34),
-	        def: Math.round(statsChildConHerencia.def * 1.34),
-	        hp: Math.round(statsChildConHerencia.hp * 1.34),
-	        vel: Math.round(statsChildConHerencia.vel * 1.34)
+	        atk: Math.round(childStats.ATK * 1.34),
+	        def: Math.round(childStats.DEF * 1.34),
+	        hp: Math.round(childStats.HP * 1.34),
+	        vel: Math.round(childStats.Vel * 1.34)
 	      };
 
 	      let statsFinales;
 	      if (nombre === "Scumon" || nombre === "PlatinumScumon") {
-	        // Scumon y PlatinumScumon usan la misma fórmula
+	        // Scumon y PlatinumScumon: solo BASE (sin heredados)
 	        statsFinales = scumonStatsBase;
 	      } else {
-	        // GreatKingScumon: Scumon base × 2.25
+	        // GreatKingScumon: BASE = Scumon base × 2.25 (sin heredados)
 	        statsFinales = {
 	          atk: Math.round(scumonStatsBase.atk * 2.25),
 	          def: Math.round(scumonStatsBase.def * 2.25),

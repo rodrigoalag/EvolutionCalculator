@@ -256,7 +256,7 @@
                 <th class="sortable-header" data-sort="atk">ATK<span class="sort-icon">↓</span></th>
                 <th class="sortable-header" data-sort="def">DEF<span class="sort-icon">↓</span></th>
                 <th class="sortable-header" data-sort="vel">SPD<span class="sort-icon">↓</span></th>
-                <th class="sortable-header active" data-sort="digipuntos">Digipuntos<span class="sort-icon">↓</span></th>
+                <th id="headerDigipuntos" class="sortable-header active" data-sort="digipuntos">Digipuntos<span class="sort-icon">↓</span></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -1225,11 +1225,17 @@ function actualizarTraducciones() {
   const headerLineaEvolutiva = document.getElementById('headerLineaEvolutiva');
   const headerClasificacion = document.getElementById('headerClasificacion');
   const headerImagen = document.getElementById('headerImagen');
+  const headerDigipuntos = document.getElementById('headerDigipuntos');
 
   if (headerDigimon) headerDigimon.textContent = t.digimon;
   if (headerLineaEvolutiva) headerLineaEvolutiva.textContent = t.lineaEvolutiva;
   if (headerClasificacion) headerClasificacion.textContent = t.clasificacion;
   if (headerImagen) headerImagen.textContent = t.imagen;
+  if (headerDigipuntos) {
+    const sortIcon = headerDigipuntos.querySelector('.sort-icon');
+    headerDigipuntos.textContent = t.digipuntos;
+    if (sortIcon) headerDigipuntos.appendChild(sortIcon);
+  }
   
   if (selectNivel.value && datosActuales.length > 0) {
     const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);

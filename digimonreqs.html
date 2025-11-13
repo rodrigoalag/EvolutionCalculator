@@ -1541,8 +1541,8 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	  const statsDigimon = digimonstattier[nombre];
 	  const filaStats = document.createElement("tr");
 
-	  // Si es Scumon o GreatKingScumon, agregar selector de Child
-	  if (nombre === "Scumon" || nombre === "GreatKingScumon") {
+	  // Si es Scumon, PlatinumScumon o GreatKingScumon, agregar selector de Child
+	  if (nombre === "Scumon" || nombre === "PlatinumScumon" || nombre === "GreatKingScumon") {
 	    // Obtener todos los Children que evolucionan a Scumon
 	    const childsQueEvolucionan = Object.entries(digimonReqDict)
 	      .filter(([nombreDigi, data]) => {
@@ -1653,7 +1653,8 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	      };
 
 	      let statsFinales;
-	      if (nombre === "Scumon") {
+	      if (nombre === "Scumon" || nombre === "PlatinumScumon") {
+	        // Scumon y PlatinumScumon usan la misma fórmula
 	        statsFinales = scumonStatsBase;
 	      } else {
 	        // GreatKingScumon: Scumon base × 2.25

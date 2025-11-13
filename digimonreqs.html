@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Información del Digimon</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
   <style>
 /* Estilos base */
@@ -593,6 +594,7 @@ main {
 	  <table id="tablaStats">
 		<thead>
 		  <tr>
+			<th id="headerLineaEvolutivaStats">Línea Evolutiva</th>
 			<th>ATK</th>
 			<th>DEF</th>
 			<th>HP</th>
@@ -1073,7 +1075,7 @@ const camposVaciosPorEvolucion = {
 		subtitle: "Datos Generales del Digimon",
 		subtitle2: "Datos de requisitos del Digimon", 
 		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
-		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar. Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.",
+		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar.",
 		Tama: "Tama",
 		Nivel: "Nivel",
 		Atributo: "Atributo",
@@ -1146,19 +1148,22 @@ const camposVaciosPorEvolucion = {
     },
 	  subtitle3: "Stat Base y Evoluciones",
 	  ATK: "ATK",
-	  DEF: "DEF", 
+	  DEF: "DEF",
 	  HP: "HP",
 	  Vel: "Vel",
 	  Digipuntos: "Digipuntos",
 	  Evoluciona: "Evoluciona a",
-	  Viene: "Viene de"
+	  Viene: "Viene de",
+	  LineaEvolutiva: "Línea Evolutiva",
+	  eligeLineaEvolutiva: "-- Elige línea evolutiva --",
+	  todosLosDigimon: "Todos los Digimon"
 	  },
 	  en: {
 	  	titleMain: "Digimon Information",
 		subtitle: "General Digimon Data",
 		subtitle2: "Digimon Requirements Data",
 		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
-		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve. The base stats from Scumon/PlatScumon and GreatKingScumon are an average. Contrary to the rest of Digimon, Scumon/PlatScumon and GreatKingScumon already have their hereditary (NATO) stats added in the avg.",
+		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve.",
 		Tama: "Tama",
 		Nivel: "Level",
 		Atributo: "Attribute",
@@ -1228,14 +1233,17 @@ const camposVaciosPorEvolucion = {
 	  "No se considera en el puntaje": "Not considered in scoring",
 	  "Evolucion por muerte inducida": "Evolution by induced death"
     },
-	  subtitle3: "Base Stats and Evolutions", 
+	  subtitle3: "Base Stats and Evolutions",
 	  ATK: "ATK",
 	  DEF: "DEF",
-	  HP: "HP", 
+	  HP: "HP",
 	  Vel: "SPD",
 	  Digipuntos: "Digipoints",
 	  Evoluciona: "Evolves To",
-	  Viene: "Comes From"
+	  Viene: "Comes From",
+	  LineaEvolutiva: "Evolution Line",
+	  eligeLineaEvolutiva: "-- Choose evolution line --",
+	  todosLosDigimon: "All Digimon"
 	  }
 	};
 
@@ -1532,14 +1540,156 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	if (digimonstattier[nombre]) {
 	  const statsDigimon = digimonstattier[nombre];
 	  const filaStats = document.createElement("tr");
-	  
-	  // Campos básicos (ATK, DEF, HP, Vel, Digipuntos)
-	  ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(campo => {
-		const td = document.createElement("td");
-		td.textContent = statsDigimon[campo] ?? "-";
-		filaStats.appendChild(td);
-	  });
-	  
+
+	  // Si es Scumon o GreatKingScumon, agregar selector de Child
+	  if (nombre === "Scumon" || nombre === "GreatKingScumon") {
+	    // Obtener todos los Children que evolucionan a Scumon
+	    const childsQueEvolucionan = Object.entries(digimonReqDict)
+	      .filter(([nombreDigi, data]) => {
+	        const stats = digimonstattier[nombreDigi];
+	        return stats && stats.Evoluciona && stats.Evoluciona.includes("Scumon") && data.Nivel === 3;
+	      })
+	      .map(([nombreDigi]) => nombreDigi);
+
+	    // Obtener todas las líneas evolutivas posibles
+	    const lineasEvolutivas = [];
+	    childsQueEvolucionan.forEach(childNombre => {
+	      const childStats = digimonstattier[childNombre];
+	      if (!childStats.Viene || childStats.Viene.length === 0) return;
+
+	      childStats.Viene.forEach(babyIINombre => {
+	        const babyIIStats = digimonstattier[babyIINombre];
+	        if (!babyIIStats || !babyIIStats.Viene || babyIIStats.Viene.length === 0) return;
+
+	        babyIIStats.Viene.forEach(babyINombre => {
+	          const babyIData = digimonReqDict[babyINombre];
+	          const tamaId = babyIData ? babyIData.Tama : "?";
+	          lineasEvolutivas.push({
+	            child: childNombre,
+	            babyII: babyIINombre,
+	            babyI: babyINombre,
+	            tama: tamaId,
+	            label: `${childNombre} (${tamaId})`
+	          });
+	        });
+	      });
+	    });
+
+	    // Crear celda con selector (columna de Línea Evolutiva)
+	    const tdLineaEvolutiva = document.createElement("td");
+	    const select = document.createElement("select");
+	    select.id = "childSelector";
+	    select.style.width = "100%";
+	    select.style.fontSize = "0.85em";
+
+	    const defaultOption = document.createElement("option");
+	    defaultOption.value = "";
+	    defaultOption.textContent = t("eligeLineaEvolutiva");
+	    select.appendChild(defaultOption);
+
+	    lineasEvolutivas.forEach((linea, index) => {
+	      const option = document.createElement("option");
+	      option.value = index;
+	      option.textContent = linea.label;
+	      option.dataset.child = linea.child;
+	      option.dataset.babyii = linea.babyII;
+	      option.dataset.babyi = linea.babyI;
+	      select.appendChild(option);
+	    });
+
+	    tdLineaEvolutiva.appendChild(select);
+	    filaStats.appendChild(tdLineaEvolutiva);
+
+	    // Celdas para ATK, DEF, HP, Vel, Digipuntos (vacías inicialmente)
+	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(() => {
+	      const td = document.createElement("td");
+	      td.textContent = "-";
+	      td.className = "stat-cell";
+	      filaStats.appendChild(td);
+	    });
+
+	    // Event listener para calcular stats cuando se seleccione una línea
+	    select.addEventListener("change", (e) => {
+	      const selectedIndex = e.target.value;
+	      if (!selectedIndex) {
+	        // Limpiar stats si no hay selección
+	        document.querySelectorAll(".stat-cell").forEach(cell => cell.textContent = "-");
+	        return;
+	      }
+
+	      const linea = lineasEvolutivas[selectedIndex];
+	      const childStats = digimonstattier[linea.child];
+	      const babyIIStats = digimonstattier[linea.babyII];
+	      const babyIStats = digimonstattier[linea.babyI];
+
+	      // Calcular stats heredados del Child
+	      const heredadoBabyI = {
+	        atk: Math.round(babyIStats.ATK * 0.4),
+	        def: Math.round(babyIStats.DEF * 0.4),
+	        hp: Math.round(babyIStats.HP * 0.4),
+	        vel: Math.round(babyIStats.Vel * 0.4)
+	      };
+
+	      const heredadoBabyII = {
+	        atk: Math.round(babyIIStats.ATK * 0.4),
+	        def: Math.round(babyIIStats.DEF * 0.4),
+	        hp: Math.round(babyIIStats.HP * 0.4),
+	        vel: Math.round(babyIIStats.Vel * 0.4)
+	      };
+
+	      const statsChildConHerencia = {
+	        atk: childStats.ATK + heredadoBabyI.atk + heredadoBabyII.atk,
+	        def: childStats.DEF + heredadoBabyI.def + heredadoBabyII.def,
+	        hp: childStats.HP + heredadoBabyI.hp + heredadoBabyII.hp,
+	        vel: childStats.Vel + heredadoBabyI.vel + heredadoBabyII.vel
+	      };
+
+	      // Calcular stats base de Scumon
+	      const scumonStatsBase = {
+	        atk: Math.round(statsChildConHerencia.atk * 1.34),
+	        def: Math.round(statsChildConHerencia.def * 1.34),
+	        hp: Math.round(statsChildConHerencia.hp * 1.34),
+	        vel: Math.round(statsChildConHerencia.vel * 1.34)
+	      };
+
+	      let statsFinales;
+	      if (nombre === "Scumon") {
+	        statsFinales = scumonStatsBase;
+	      } else {
+	        // GreatKingScumon: Scumon base × 2.25
+	        statsFinales = {
+	          atk: Math.round(scumonStatsBase.atk * 2.25),
+	          def: Math.round(scumonStatsBase.def * 2.25),
+	          hp: Math.round(scumonStatsBase.hp * 2.25),
+	          vel: Math.round(scumonStatsBase.vel * 2.25)
+	        };
+	      }
+
+	      // Calcular Digipuntos
+	      statsFinales.digipuntos = parseFloat((((statsFinales.hp / 10) + statsFinales.atk + statsFinales.def + statsFinales.vel) / 10).toFixed(1));
+
+	      // Actualizar celdas
+	      const cells = document.querySelectorAll(".stat-cell");
+	      cells[0].textContent = statsFinales.atk;
+	      cells[1].textContent = statsFinales.def;
+	      cells[2].textContent = statsFinales.hp;
+	      cells[3].textContent = statsFinales.vel;
+	      cells[4].textContent = statsFinales.digipuntos;
+	    });
+
+	  } else {
+	    // Digimon normal: celda vacía para línea evolutiva + stats estáticos
+	    const tdLineaEvolutiva = document.createElement("td");
+	    tdLineaEvolutiva.textContent = "-";
+	    filaStats.appendChild(tdLineaEvolutiva);
+
+	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(campo => {
+	      const td = document.createElement("td");
+	      td.textContent = statsDigimon[campo] ?? "-";
+	      filaStats.appendChild(td);
+	    });
+	  }
+
 	  // Campo Evoluciona (como lista)
 	  const tdEvoluciona = document.createElement("td");
 	  if (statsDigimon.Evoluciona && statsDigimon.Evoluciona.length > 0) {
@@ -1549,11 +1699,11 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 		tdEvoluciona.textContent = "-";
 	  }
 	  filaStats.appendChild(tdEvoluciona);
-	  
+
 // Campo Viene (como lista)
 const tdViene = document.createElement("td");
 if (nombre === "Burpmon") {
-  tdViene.textContent = "Todos los Digimon";
+  tdViene.textContent = t("todosLosDigimon");
 } else if (statsDigimon.Viene && statsDigimon.Viene.length > 0) {
   const lista = statsDigimon.Viene.map(viene => `• ${viene}`).join('<br>');
   tdViene.innerHTML = lista;
@@ -1566,7 +1716,7 @@ tablaStats.appendChild(filaStats);
 } else {
   // Si no hay datos de stats, mostrar fila vacía
   const filaVacia = document.createElement("tr");
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 8; i++) {
     const td = document.createElement("td");
     td.textContent = "-";
     filaVacia.appendChild(td);
@@ -1860,8 +2010,14 @@ headersGrupos.forEach(th => {
 
 	// Actualizar headers de tabla stats
 	const headersStats = document.querySelectorAll("#tablaStats thead th");
-	const clavesStats = ["ATK", "DEF", "HP", "Vel", "Digipuntos", "Evoluciona", "Viene"];
+	const clavesStats = ["LineaEvolutiva", "ATK", "DEF", "HP", "Vel", "Digipuntos", "Evoluciona", "Viene"];
 	headersStats.forEach((th, idx) => th.textContent = t(clavesStats[idx]));
+
+	// Actualizar el selector de Scumon/GreatKingScumon si existe
+	const childSelector = document.getElementById("childSelector");
+	if (childSelector && childSelector.options.length > 0) {
+		childSelector.options[0].textContent = t("eligeLineaEvolutiva");
+	}
 }
 
 languageSelector.addEventListener("change", () => {

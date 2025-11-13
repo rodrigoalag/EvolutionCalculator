@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ranking de Digimon por Digipuntos</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
   <style>
     /* Estilos similares al HTML original */
@@ -210,6 +211,13 @@
           </select>
         </div>
 		<div class="selectorItem">
+		  <label for="selectTipoStats" id="labelTipoStats">Tipo de Stats:</label>
+		  <select id="selectTipoStats">
+			<option value="base">Stats Base</option>
+			<option value="heredados">Stats Heredados</option>
+		  </select>
+		</div>
+		<div class="selectorItem">
 		  <label for="selectIdioma" id="labelIdioma">Idioma:</label>
 		  <select id="selectIdioma">
 			<option value="es">Español</option>
@@ -240,9 +248,10 @@
           <table id="rankingTable" class="ranking-table" style="display: none;">
             <thead>
               <tr>
-                <th>Digimon</th>
-                <th>Clasificación</th>
-                <th>Imagen</th>
+                <th id="headerDigimon">Digimon</th>
+                <th id="headerLineaEvolutiva">Línea Evolutiva</th>
+                <th id="headerClasificacion">Clasificación</th>
+                <th id="headerImagen">Imagen</th>
                 <th class="sortable-header" data-sort="hp">HP<span class="sort-icon">↓</span></th>
                 <th class="sortable-header" data-sort="atk">ATK<span class="sort-icon">↓</span></th>
                 <th class="sortable-header" data-sort="def">DEF<span class="sort-icon">↓</span></th>
@@ -264,6 +273,476 @@ let campoOrdenamiento = 'digipuntos';
 let ordenDescendente = true;
 let datosActuales = [];
 let procesandoClick = false;
+let tipoStatsActual = 'base'; // 'base' o 'heredados'
+
+// Función para calcular stats heredados (40% con redondeo)
+function calcularStatsHeredados(babyIStats, babyIIStats, childBaseStats) {
+  const heredadoBabyI = {
+    atk: Math.round(babyIStats.ATK * 0.4),
+    def: Math.round(babyIStats.DEF * 0.4),
+    hp: Math.round(babyIStats.HP * 0.4),
+    vel: Math.round(babyIStats.Vel * 0.4)
+  };
+
+  const heredadoBabyII = {
+    atk: Math.round(babyIIStats.ATK * 0.4),
+    def: Math.round(babyIIStats.DEF * 0.4),
+    hp: Math.round(babyIIStats.HP * 0.4),
+    vel: Math.round(babyIIStats.Vel * 0.4)
+  };
+
+  return {
+    atk: childBaseStats.ATK + heredadoBabyI.atk + heredadoBabyII.atk,
+    def: childBaseStats.DEF + heredadoBabyI.def + heredadoBabyII.def,
+    hp: childBaseStats.HP + heredadoBabyI.hp + heredadoBabyII.hp,
+    vel: childBaseStats.Vel + heredadoBabyI.vel + heredadoBabyII.vel,
+    heredadoBabyI,
+    heredadoBabyII
+  };
+}
+
+// Función para calcular stats con herencia completa para cualquier Digimon
+function calcularStatsConHerencia(nombreDigimon, lineaEvolutiva) {
+  const statsBase = digimonstattier[nombreDigimon];
+  if (!statsBase) return null;
+
+  const nivel = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Baby I no tiene herencia
+  if (nivel === 1) {
+    return {
+      atk: statsBase.ATK,
+      def: statsBase.DEF,
+      hp: statsBase.HP,
+      vel: statsBase.Vel
+    };
+  }
+
+  // Baby II tiene herencia del Baby I (40%)
+  if (nivel === 2) {
+    // Encontrar Baby I en la línea evolutiva
+    let babyI = null;
+    lineaEvolutiva.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor === 1) babyI = predecesor;
+    });
+
+    if (!babyI) {
+      return {
+        atk: statsBase.ATK,
+        def: statsBase.DEF,
+        hp: statsBase.HP,
+        vel: statsBase.Vel
+      };
+    }
+
+    const babyIStats = digimonstattier[babyI];
+    if (!babyIStats) {
+      return {
+        atk: statsBase.ATK,
+        def: statsBase.DEF,
+        hp: statsBase.HP,
+        vel: statsBase.Vel
+      };
+    }
+
+    // Calcular 40% del Baby I
+    const heredadoBabyI = {
+      atk: Math.round(babyIStats.ATK * 0.4),
+      def: Math.round(babyIStats.DEF * 0.4),
+      hp: Math.round(babyIStats.HP * 0.4),
+      vel: Math.round(babyIStats.Vel * 0.4)
+    };
+
+    return {
+      atk: statsBase.ATK + heredadoBabyI.atk,
+      def: statsBase.DEF + heredadoBabyI.def,
+      hp: statsBase.HP + heredadoBabyI.hp,
+      vel: statsBase.Vel + heredadoBabyI.vel
+    };
+  }
+
+  // CASO ESPECIAL: Etemon y MetalEtemon usan stats calculados de Scumon
+  if (nombreDigimon === "Etemon" || nombreDigimon === "MetalEtemon") {
+    // Encontrar Baby I, Baby II, Child en la línea evolutiva
+    let babyI = null, babyII = null, child = null;
+
+    lineaEvolutiva.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor === 1) babyI = predecesor;
+      else if (nivelPredecesor === 2) babyII = predecesor;
+      else if (nivelPredecesor === 3) child = predecesor;
+    });
+
+    if (!babyI || !babyII || !child) return null;
+
+    const babyIStats = digimonstattier[babyI];
+    const babyIIStats = digimonstattier[babyII];
+    const childStats = digimonstattier[child];
+
+    if (!babyIStats || !babyIIStats || !childStats) return null;
+
+    // Calcular Scumon base: Child BASE × 1.34
+    const scumonBaseCalculado = {
+      atk: Math.round(childStats.ATK * 1.34),
+      def: Math.round(childStats.DEF * 1.34),
+      hp: Math.round(childStats.HP * 1.34),
+      vel: Math.round(childStats.Vel * 1.34)
+    };
+
+    let heredadoTotal = { atk: 0, def: 0, hp: 0, vel: 0 };
+
+    // Para Etemon: 40% × Scumon calculado + 40% × Child + 40% × Baby II + 40% × Baby I
+    if (nombreDigimon === "Etemon") {
+      heredadoTotal.atk = Math.round(scumonBaseCalculado.atk * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(babyIStats.ATK * 0.4);
+      heredadoTotal.def = Math.round(scumonBaseCalculado.def * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(babyIStats.DEF * 0.4);
+      heredadoTotal.hp = Math.round(scumonBaseCalculado.hp * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(babyIStats.HP * 0.4);
+      heredadoTotal.vel = Math.round(scumonBaseCalculado.vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(babyIStats.Vel * 0.4);
+    }
+    // Para MetalEtemon: 40% × Etemon base + 40% × Scumon calculado + 40% × Child + 40% × Baby II + 40% × Baby I
+    else if (nombreDigimon === "MetalEtemon") {
+      const etemonBase = digimonstattier["Etemon"];
+      if (!etemonBase) return null;
+
+      heredadoTotal.atk = Math.round(etemonBase.ATK * 0.4) + Math.round(scumonBaseCalculado.atk * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(babyIStats.ATK * 0.4);
+      heredadoTotal.def = Math.round(etemonBase.DEF * 0.4) + Math.round(scumonBaseCalculado.def * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(babyIStats.DEF * 0.4);
+      heredadoTotal.hp = Math.round(etemonBase.HP * 0.4) + Math.round(scumonBaseCalculado.hp * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(babyIStats.HP * 0.4);
+      heredadoTotal.vel = Math.round(etemonBase.Vel * 0.4) + Math.round(scumonBaseCalculado.vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(babyIStats.Vel * 0.4);
+    }
+
+    return {
+      atk: statsBase.ATK + heredadoTotal.atk,
+      def: statsBase.DEF + heredadoTotal.def,
+      hp: statsBase.HP + heredadoTotal.hp,
+      vel: statsBase.Vel + heredadoTotal.vel
+    };
+  }
+
+  // Calcular herencias basadas en la línea evolutiva (redondeando cada 40%)
+  let heredadoTotal = { atk: 0, def: 0, hp: 0, vel: 0 };
+
+  // Agregar 40% de cada predecesor en la línea (redondeando cada uno)
+  // IMPORTANTE: NO sumar heredados de Digimon del MISMO nivel (slides)
+  lineaEvolutiva.forEach(predecesor => {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+
+    // Si el predecesor es del mismo nivel, es un SLIDE - no sumar heredados
+    if (nivelPredecesor >= nivel) {
+      return; // Saltar este predecesor
+    }
+
+    const statsPredecesor = digimonstattier[predecesor];
+    if (statsPredecesor) {
+      heredadoTotal.atk += Math.round(statsPredecesor.ATK * 0.4);
+      heredadoTotal.def += Math.round(statsPredecesor.DEF * 0.4);
+      heredadoTotal.hp += Math.round(statsPredecesor.HP * 0.4);
+      heredadoTotal.vel += Math.round(statsPredecesor.Vel * 0.4);
+    }
+  });
+
+  return {
+    atk: statsBase.ATK + heredadoTotal.atk,
+    def: statsBase.DEF + heredadoTotal.def,
+    hp: statsBase.HP + heredadoTotal.hp,
+    vel: statsBase.Vel + heredadoTotal.vel
+  };
+}
+
+// Función para obtener TODAS las líneas evolutivas posibles de un Digimon
+function obtenerTodasLasLineasEvolutivas(nombreDigimon) {
+  const statsDigimon = digimonstattier[nombreDigimon];
+
+  if (!statsDigimon || !statsDigimon.Viene || statsDigimon.Viene.length === 0) {
+    return [[]]; // Retorna un array con una línea vacía
+  }
+
+  // Función recursiva para obtener todas las combinaciones
+  function obtenerCombinaciones(digimonActual, nivelActual) {
+    const stats = digimonstattier[digimonActual];
+
+    if (!stats || !stats.Viene || stats.Viene.length === 0) {
+      // Caso base: no hay más predecesores
+      return [[digimonActual]];
+    }
+
+    // Separar predecesores en válidos (nivel < actual) y slides (nivel >= actual)
+    const predecesoresValidos = [];
+    const predecesoresSlide = [];
+
+    stats.Viene.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor < nivelActual) {
+        predecesoresValidos.push(predecesor);
+      } else {
+        predecesoresSlide.push(predecesor);
+      }
+    });
+
+    // Si no hay predecesores válidos (todos son slides), saltar los slides y continuar con SUS predecesores
+    if (predecesoresValidos.length === 0 && predecesoresSlide.length > 0) {
+      const todasLasCombinaciones = [];
+
+      // Para cada slide, obtener las líneas de SUS predecesores (saltando el slide)
+      predecesoresSlide.forEach(slide => {
+        const statsSlide = digimonstattier[slide];
+        if (statsSlide && statsSlide.Viene && statsSlide.Viene.length > 0) {
+          // Recursivamente obtener líneas de los predecesores del slide
+          statsSlide.Viene.forEach(predecesorDelSlide => {
+            const nivelPredecesorDelSlide = digimonReqDict[predecesorDelSlide]?.Nivel || 0;
+            const combinaciones = obtenerCombinaciones(predecesorDelSlide, nivelPredecesorDelSlide);
+            combinaciones.forEach(combinacion => {
+              todasLasCombinaciones.push([...combinacion, digimonActual]);
+            });
+          });
+        }
+      });
+
+      // Si obtuvimos combinaciones saltando slides, retornarlas
+      if (todasLasCombinaciones.length > 0) {
+        return todasLasCombinaciones;
+      }
+
+      // Si no, retornar solo el Digimon actual
+      return [[digimonActual]];
+    }
+
+    // Si no hay predecesores válidos ni slides, detener aquí
+    if (predecesoresValidos.length === 0) {
+      return [[digimonActual]];
+    }
+
+    // Obtener todas las combinaciones para cada predecesor válido
+    const todasLasCombinaciones = [];
+
+    predecesoresValidos.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      const combinacionesPredecesor = obtenerCombinaciones(predecesor, nivelPredecesor);
+      combinacionesPredecesor.forEach(combinacion => {
+        todasLasCombinaciones.push([...combinacion, digimonActual]);
+      });
+    });
+
+    return todasLasCombinaciones;
+  }
+
+  // Obtener todas las combinaciones para cada predecesor directo
+  const todasLasLineas = [];
+  const nivelDigimon = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  statsDigimon.Viene.forEach(predecesor => {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+    const combinaciones = obtenerCombinaciones(predecesor, nivelPredecesor);
+    todasLasLineas.push(...combinaciones);
+  });
+
+  return todasLasLineas;
+}
+
+// Función para formatear la línea evolutiva según el nivel
+function formatearLineaEvolutiva(nombreDigimon, lineaEvolutiva) {
+  const nivel = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Obtener el Tama del Baby I (siempre es el primero en la línea)
+  const babyI = lineaEvolutiva[0] || null;
+  const tama = babyI ? (digimonReqDict[babyI]?.Tama || "?") : (digimonReqDict[nombreDigimon]?.Tama || "?");
+
+  // Baby I y II: solo Tama
+  if (nivel <= 2) {
+    return tama;
+  }
+
+  // La línea evolutiva NO incluye al Digimon actual, solo sus predecesores
+  // Por ejemplo, para Chackmon (Perfect):
+  //   - Si viene de Yuki Agumon (Adult): ['Botamon', 'Koromon', 'Yuki Agumon'] - longitud 3
+  //   - Si viene de Icemon (Perfect): ['Botamon', 'Koromon', 'Yuki Agumon', 'Icemon'] - longitud 4
+
+  // Identificar niveles en la línea según su posición y datos
+  const niveles = lineaEvolutiva.map(digi => digimonReqDict[digi]?.Nivel || 0);
+
+  const child = lineaEvolutiva.find((_, i) => niveles[i] === 3) || null;
+  const adult = lineaEvolutiva.find((_, i) => niveles[i] === 4) || null;
+  const perfect = lineaEvolutiva.find((_, i) => niveles[i] === 5) || null;
+
+  // Child (nivel 3): Child (Tama)
+  if (nivel === 3) {
+    return `${nombreDigimon} (${tama})`;
+  }
+
+  // Adult (nivel 4): Child (Tama)
+  if (nivel === 4) {
+    return child ? `${child} (${tama})` : tama;
+  }
+
+  // Perfect (nivel 5): Child - Adult (Tama)
+  if (nivel === 5) {
+    if (child && adult) {
+      return `${child} - ${adult} (${tama})`;
+    } else if (child) {
+      return `${child} (${tama})`;
+    }
+    return tama;
+  }
+
+  // Ultimate (nivel 6): Child - Adult - Perfect (Tama)
+  if (nivel === 6) {
+    if (child && adult && perfect) {
+      return `${child} - ${adult} - ${perfect} (${tama})`;
+    } else if (child && adult) {
+      return `${child} - ${adult} (${tama})`;
+    } else if (child) {
+      return `${child} (${tama})`;
+    }
+    return tama;
+  }
+
+  return tama;
+}
+
+// Función para generar variantes de Scumon y GreatKingScumon
+function generarVariantesScumon() {
+  const variantes = [];
+
+  // Obtener todos los Child que evolucionan a Scumon
+  const childsQueEvolucionan = Object.entries(digimonReqDict)
+    .filter(([nombre, data]) => {
+      const stats = digimonstattier[nombre];
+      return stats && stats.Evoluciona && stats.Evoluciona.includes("Scumon") && data.Nivel === 3;
+    })
+    .map(([nombre]) => nombre);
+
+  // Para cada Child, generar sus variantes de Scumon
+  childsQueEvolucionan.forEach(childNombre => {
+    const childStats = digimonstattier[childNombre];
+    const childData = digimonReqDict[childNombre];
+
+    // Obtener Baby II que viene antes del Child
+    if (!childStats.Viene || childStats.Viene.length === 0) return;
+
+    childStats.Viene.forEach(babyIINombre => {
+      const babyIIStats = digimonstattier[babyIINombre];
+      const babyIIData = digimonReqDict[babyIINombre];
+
+      if (!babyIIStats || !babyIIStats.Viene || babyIIStats.Viene.length === 0) return;
+
+      // Obtener Baby I que viene antes del Baby II
+      babyIIStats.Viene.forEach(babyINombre => {
+        const babyIStats = digimonstattier[babyINombre];
+
+        if (!babyIStats) return;
+
+        // CORRECCIÓN: Scumon BASE = Child BASE × 1.34 (SIN heredados)
+        const scumonStatsBase = {
+          atk: Math.round(childStats.ATK * 1.34),
+          def: Math.round(childStats.DEF * 1.34),
+          hp: Math.round(childStats.HP * 1.34),
+          vel: Math.round(childStats.Vel * 1.34)
+        };
+
+        // Calcular heredados para Scumon: 40% Baby I + 40% Baby II + 40% Child base
+        const heredadoScumon = {
+          atk: Math.round(babyIStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(childStats.ATK * 0.4),
+          def: Math.round(babyIStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(childStats.DEF * 0.4),
+          hp: Math.round(babyIStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(childStats.HP * 0.4),
+          vel: Math.round(babyIStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(childStats.Vel * 0.4)
+        };
+
+        // Stats finales de Scumon CON heredados
+        const scumonStatsCompletos = {
+          atk: scumonStatsBase.atk + heredadoScumon.atk,
+          def: scumonStatsBase.def + heredadoScumon.def,
+          hp: scumonStatsBase.hp + heredadoScumon.hp,
+          vel: scumonStatsBase.vel + heredadoScumon.vel
+        };
+
+        // Determinar qué stats mostrar según el tipo seleccionado
+        let scumonStatsFinal, gksStatsFinal;
+
+        if (tipoStatsActual === 'heredados') {
+          // Mostrar stats heredados (base + heredados de child)
+          scumonStatsFinal = scumonStatsCompletos;
+        } else {
+          // Mostrar solo stats base
+          scumonStatsFinal = scumonStatsBase;
+        }
+
+        // Calcular Digipuntos para Scumon
+        const scumonDigipuntos = parseFloat((((scumonStatsFinal.hp / 10) + scumonStatsFinal.atk + scumonStatsFinal.def + scumonStatsFinal.vel) / 10).toFixed(1));
+
+        // Crear línea evolutiva en formato: NombreChild (Tama)
+        // Obtenemos el Tama del Baby I desde digimonReqDict
+        const babyIData = digimonReqDict[babyINombre];
+        const tamaId = babyIData ? babyIData.Tama : "?";
+        const lineaEvolutiva = `${childNombre} (${tamaId})`;
+
+        variantes.push({
+          nombre: "Scumon",
+          lineaEvolutiva: lineaEvolutiva,
+          atk: scumonStatsFinal.atk,
+          def: scumonStatsFinal.def,
+          hp: scumonStatsFinal.hp,
+          vel: scumonStatsFinal.vel,
+          digipuntos: scumonDigipuntos,
+          nivel: 4
+        });
+
+        // PlatinumScumon usa la misma fórmula que Scumon (Child base × 1.34)
+        variantes.push({
+          nombre: "PlatinumScumon",
+          lineaEvolutiva: lineaEvolutiva,
+          atk: scumonStatsFinal.atk,
+          def: scumonStatsFinal.def,
+          hp: scumonStatsFinal.hp,
+          vel: scumonStatsFinal.vel,
+          digipuntos: scumonDigipuntos,
+          nivel: 4
+        });
+
+        // Fórmula de GreatKingScumon: Scumon BASE × 2.25
+        const gksStatsBase = {
+          atk: Math.round(scumonStatsBase.atk * 2.25),
+          def: Math.round(scumonStatsBase.def * 2.25),
+          hp: Math.round(scumonStatsBase.hp * 2.25),
+          vel: Math.round(scumonStatsBase.vel * 2.25)
+        };
+
+        if (tipoStatsActual === 'heredados') {
+          // GKS heredados: agregar 40% Baby I + 40% Baby II + 40% Child + 40% Scumon base
+          const heredadoGKS = {
+            atk: Math.round(babyIStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(scumonStatsBase.atk * 0.4),
+            def: Math.round(babyIStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(scumonStatsBase.def * 0.4),
+            hp: Math.round(babyIStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(scumonStatsBase.hp * 0.4),
+            vel: Math.round(babyIStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(scumonStatsBase.vel * 0.4)
+          };
+
+          gksStatsFinal = {
+            atk: gksStatsBase.atk + heredadoGKS.atk,
+            def: gksStatsBase.def + heredadoGKS.def,
+            hp: gksStatsBase.hp + heredadoGKS.hp,
+            vel: gksStatsBase.vel + heredadoGKS.vel
+          };
+        } else {
+          gksStatsFinal = gksStatsBase;
+        }
+
+        // Calcular Digipuntos para GKS
+        const gksDigipuntos = parseFloat((((gksStatsFinal.hp / 10) + gksStatsFinal.atk + gksStatsFinal.def + gksStatsFinal.vel) / 10).toFixed(1));
+
+        variantes.push({
+          nombre: "GreatKingScumon",
+          lineaEvolutiva: lineaEvolutiva,
+          atk: gksStatsFinal.atk,
+          def: gksStatsFinal.def,
+          hp: gksStatsFinal.hp,
+          vel: gksStatsFinal.vel,
+          digipuntos: gksDigipuntos,
+          nivel: 5
+        });
+      });
+    });
+  });
+
+  return variantes;
+}
 
 // Traducciones
 const traducciones = {
@@ -271,8 +750,12 @@ const traducciones = {
     titulo: "Ranking de Digimon por Digipuntos",
     seleccionarNivel: "Seleccionar Nivel:",
     eligeNivel: "-- Elige un Nivel --",
+    tipoStats: "Tipo de Stats:",
+    statsBase: "Stats Base",
+    statsHeredados: "Stats Heredados",
     idioma: "Idioma:",
     digimon: "Digimon",
+    lineaEvolutiva: "Línea Evolutiva",
     clasificacion: "Clasificación",
     imagen: "Imagen",
     atk: "ATK",
@@ -281,14 +764,18 @@ const traducciones = {
     spd: "SPD",
     digipuntos: "Digipuntos",
 	subtitle: "Creado por Rodrigoalag",
-    explanation: "Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.",
+    explanation: "",
  },
   en: {
     titulo: "Digimon Ranking by Digipoints",
     seleccionarNivel: "Select Level:",
     eligeNivel: "-- Choose a Level --",
+    tipoStats: "Stats Type:",
+    statsBase: "Base Stats",
+    statsHeredados: "Inherited Stats",
     idioma: "Language:",
     digimon: "Digimon",
+    lineaEvolutiva: "Evolution Line",
     clasificacion: "Classification",
     imagen: "Image",
     atk: "ATK",
@@ -297,7 +784,7 @@ const traducciones = {
     spd: "SPD",
     digipuntos: "Digipoints",
 	subtitle: "Created by Rodrigoalag",
-    explanation: "The base stats of Scumon/PlatScumon and GreatKingScumon are an average of all children, these already have inherited stats unlike other Digimon.",
+    explanation: "",
  }
 };
 
@@ -374,39 +861,48 @@ function inicializarSelector() {
   });
 }
 
-// Función para obtener clasificación
-function obtenerClasificacion(digipuntos, nivel, nombre) {
+// Función para obtener clasificación (siempre usa stats BASE para determinar tier)
+function obtenerClasificacion(nivel, nombre) {
   if (nombre === "GreatKingScumon" || nombre === "Scumon") {
     return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
   }
-  
-  if (digipuntos < 15 && nivel <= 1) {
+
+  // Obtener stats base del Digimon
+  const statsBase = digimonstattier[nombre];
+  if (!statsBase) {
+    return { min: 0, max: 0, nombre: "Unknown", clase: "tier-low" };
+  }
+
+  // Calcular digipuntos BASE (sin heredados)
+  const digipuntosBase = parseFloat((((statsBase.HP / 10) + statsBase.ATK + statsBase.DEF + statsBase.Vel) / 10).toFixed(1));
+
+  if (digipuntosBase < 15 && nivel <= 1) {
     return { min: 0, max: 10.00, nombre: "Standard Baby 1", clase: "tier-low" };
-  }  
-  if (digipuntos < 15 && nivel <= 2) {
+  }
+  if (digipuntosBase < 15 && nivel <= 2) {
     return { min: 0, max: 10.00, nombre: "Standard Baby 2", clase: "tier-low" };
   }
-  
-  if (digipuntos < 15 && nivel >= 3) {
+
+  if (digipuntosBase < 15 && nivel >= 3) {
     return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
   }
-  if (digipuntos < 60 && nivel === 5) {
+  if (digipuntosBase < 60 && nivel === 5) {
     return { min: 20, max: 59.99, nombre: "Mutant", clase: "tier-mid" };
   }
-    
+
   if (nivel === 6) {
-    if (digipuntos >= 50 && digipuntos <= 59.99) {
+    if (digipuntosBase >= 50 && digipuntosBase <= 59.99) {
       return { min: 50, max: 59.99, nombre: "Standard Ultimate", clase: "tier-low" };
     }
-    if (digipuntos >= 60 && digipuntos <= 69.99) {
+    if (digipuntosBase >= 60 && digipuntosBase <= 69.99) {
       return { min: 60, max: 69.99, nombre: "High Ultimate", clase: "tier-high" };
     }
-    if (digipuntos >= 70) {
+    if (digipuntosBase >= 70) {
       return { min: 70, max: Infinity, nombre: "High+ Ultimate", clase: "tier-high-plus" };
     }
   }
-  
-  return clasificacionDigipuntos.find(c => digipuntos >= c.min && digipuntos < c.max) || 
+
+  return clasificacionDigipuntos.find(c => digipuntosBase >= c.min && digipuntosBase < c.max) ||
          clasificacionDigipuntos[clasificacionDigipuntos.length - 1];
 }
 
@@ -458,21 +954,27 @@ function actualizarHeadersActivos() {
 
 function generarTablaRankingSegura(data, tbody) {
   tbody.innerHTML = "";
-  
+
   data.forEach((item, index) => {
     const fila = document.createElement("tr");
     fila.className = item.clasificacion.clase;
-    
+
     // Nombre del Digimon
     const tdNombre = document.createElement("td");
     tdNombre.textContent = item.nombre;
     fila.appendChild(tdNombre);
-    
+
+    // Línea Evolutiva (solo si tiene)
+    const tdLineaEvolutiva = document.createElement("td");
+    tdLineaEvolutiva.textContent = item.lineaEvolutiva || "-";
+    tdLineaEvolutiva.style.fontSize = "0.85em";
+    fila.appendChild(tdLineaEvolutiva);
+
     // Clasificación
     const tdClasificacion = document.createElement("td");
 	tdClasificacion.textContent = traducciones[idiomaActual][item.clasificacion.nombre] || item.clasificacion.nombre;
     fila.appendChild(tdClasificacion);
-    
+
     // Imagen
     const tdImagen = document.createElement("td");
     const img = document.createElement("img");
@@ -546,8 +1048,8 @@ function generarTablaRankingSegura(data, tbody) {
   });
 }
 
-// Event listener para el selector
-selectNivel.addEventListener("change", () => {
+// Función para generar el ranking (reutilizable)
+function generarRanking() {
   const nivelSeleccionado = parseInt(selectNivel.value);
   const downloadButtons = document.getElementById('downloadButtons');
   const explanationText = document.getElementById('explanationText');
@@ -565,28 +1067,113 @@ selectNivel.addEventListener("change", () => {
     .map(([nombre, _]) => nombre);
 
   // Crear array de ranking con datos
-  datosActuales = digimonDelNivel
-  .filter(nombre => nombre.toLowerCase() !== "burpmon")
-    .map(nombre => {
+  datosActuales = [];
+
+  digimonDelNivel
+    .filter(nombre => nombre.toLowerCase() !== "burpmon")
+    .forEach(nombre => {
       const statsData = digimonstattier[nombre];
-      if (!statsData) return null;
-      
-      return {
-        nombre,
-        atk: statsData.ATK || 0,
-        def: statsData.DEF || 0,
-        hp: statsData.HP || 0,
-        vel: statsData.Vel || 0,
-        digipuntos: statsData.Digipuntos || 0,
-        clasificacion: obtenerClasificacion(statsData.Digipuntos || 0, nivelSeleccionado, nombre)
-      };
-    })
-    .filter(item => item !== null);
+      if (!statsData) return;
+
+      // Excluir Scumon y GreatKingScumon normales (serán reemplazados por variantes)
+      if (nombre === "Scumon" || nombre === "GreatKingScumon" || nombre === "PlatinumScumon") {
+        return;
+      }
+
+      if (tipoStatsActual === 'heredados') {
+        // Obtener TODAS las líneas evolutivas posibles
+        const todasLasLineas = obtenerTodasLasLineasEvolutivas(nombre);
+
+        // Agrupar líneas por los stats que realmente heredan (excluyendo slides)
+        const lineasPorStats = new Map();
+
+        todasLasLineas.forEach(lineaEvolutiva => {
+          // Filtrar solo los predecesores que NO son slides (nivel < nivel actual)
+          const lineaSinSlides = lineaEvolutiva.filter(predecesor => {
+            const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+            return nivelPredecesor < nivelSeleccionado;
+          });
+
+          // Crear clave basada solo en los predecesores que aportan stats
+          const claveStats = lineaSinSlides.join('-');
+
+          // Si ya existe esta combinación de stats, no agregar duplicado
+          if (!lineasPorStats.has(claveStats)) {
+            lineasPorStats.set(claveStats, lineaEvolutiva);
+          }
+        });
+
+        // Generar una entrada por cada combinación ÚNICA de stats
+        lineasPorStats.forEach((lineaEvolutiva, claveStats) => {
+          const statsHeredados = calcularStatsConHerencia(nombre, lineaEvolutiva);
+
+          if (!statsHeredados) return;
+
+          const stats = statsHeredados;
+          const lineaEvo = formatearLineaEvolutiva(nombre, lineaEvolutiva);
+
+          // Calcular digipuntos
+          const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
+
+          datosActuales.push({
+            nombre,
+            lineaEvolutiva: lineaEvo,
+            atk: stats.atk,
+            def: stats.def,
+            hp: stats.hp,
+            vel: stats.vel,
+            digipuntos: digipuntos,
+            clasificacion: obtenerClasificacion(nivelSeleccionado, nombre)
+          });
+        });
+      } else {
+        // Stats base - una sola entrada
+        const stats = {
+          atk: statsData.ATK || 0,
+          def: statsData.DEF || 0,
+          hp: statsData.HP || 0,
+          vel: statsData.Vel || 0
+        };
+
+        // Calcular digipuntos
+        const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
+
+        datosActuales.push({
+          nombre,
+          lineaEvolutiva: null,
+          atk: stats.atk,
+          def: stats.def,
+          hp: stats.hp,
+          vel: stats.vel,
+          digipuntos: digipuntos,
+          clasificacion: obtenerClasificacion(nivelSeleccionado, nombre)
+        });
+      }
+    });
+
+  // Agregar variantes de Scumon y GreatKingScumon para niveles 4 (Adult) y 5 (Perfect)
+  if (nivelSeleccionado === 4 || nivelSeleccionado === 5) {
+    const variantes = generarVariantesScumon();
+    const variantesDelNivel = variantes.filter(v => v.nivel === nivelSeleccionado);
+
+    variantesDelNivel.forEach(variante => {
+      datosActuales.push({
+        nombre: variante.nombre,
+        lineaEvolutiva: variante.lineaEvolutiva,
+        atk: variante.atk,
+        def: variante.def,
+        hp: variante.hp,
+        vel: variante.vel,
+        digipuntos: variante.digipuntos,
+        clasificacion: obtenerClasificacion(nivelSeleccionado, variante.nombre)
+      });
+    });
+  }
 
   // Ordenar datos y generar tabla
   const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
   const tbody = document.querySelector('#rankingTable tbody');
-  
+
   generarTablaRankingSegura(datosOrdenados, tbody);
   actualizarHeadersActivos();
   rankingTable.style.display = "table";
@@ -594,6 +1181,16 @@ selectNivel.addEventListener("change", () => {
   // Mostrar texto explicativo y botones de descarga
   if (explanationText) explanationText.style.display = "block";
   if (downloadButtons) downloadButtons.style.display = "flex";
+}
+
+// Event listener para el selector de nivel
+selectNivel.addEventListener("change", generarRanking);
+
+// Event listener para el selector de tipo de stats
+const selectTipoStats = document.getElementById("selectTipoStats");
+selectTipoStats.addEventListener("change", () => {
+  tipoStatsActual = selectTipoStats.value;
+  generarRanking();
 });
 
 // Función para actualizar traducciones
@@ -602,6 +1199,7 @@ function actualizarTraducciones() {
 
   document.querySelector('h1').textContent = t.titulo;
   document.querySelector('label[for="selectNivel"]').textContent = t.seleccionarNivel;
+  document.querySelector('#labelTipoStats').textContent = t.tipoStats;
   document.querySelector('#labelIdioma').textContent = t.idioma;
 
   const opcionPorDefecto = document.querySelector('#selectNivel option[value=""]');
@@ -609,11 +1207,29 @@ function actualizarTraducciones() {
     opcionPorDefecto.textContent = t.eligeNivel;
   }
 
+  // Actualizar opciones del selector de tipo de stats
+  const selectTipoStats = document.getElementById('selectTipoStats');
+  if (selectTipoStats) {
+    selectTipoStats.options[0].textContent = t.statsBase;
+    selectTipoStats.options[1].textContent = t.statsHeredados;
+  }
+
   // Actualizar texto explicativo
   const explanationText = document.getElementById('explanationText');
   if (explanationText) {
     explanationText.textContent = t.explanation;
   }
+
+  // Actualizar headers de la tabla
+  const headerDigimon = document.getElementById('headerDigimon');
+  const headerLineaEvolutiva = document.getElementById('headerLineaEvolutiva');
+  const headerClasificacion = document.getElementById('headerClasificacion');
+  const headerImagen = document.getElementById('headerImagen');
+
+  if (headerDigimon) headerDigimon.textContent = t.digimon;
+  if (headerLineaEvolutiva) headerLineaEvolutiva.textContent = t.lineaEvolutiva;
+  if (headerClasificacion) headerClasificacion.textContent = t.clasificacion;
+  if (headerImagen) headerImagen.textContent = t.imagen;
   
   if (selectNivel.value && datosActuales.length > 0) {
     const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
@@ -644,8 +1260,8 @@ function descargarCSV() {
     const rowData = [];
 
     cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 2)
-      if (index === 2) return;
+      // Saltar la columna de imagen (índice 3, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Imagen)
+      if (index === 3) return;
 
       let text = col.textContent.trim();
       // Escapar comillas y envolver en comillas si contiene comas
@@ -689,8 +1305,8 @@ function descargarXLSX() {
     const cols = row.querySelectorAll('td, th');
 
     cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 2)
-      if (index === 2) return;
+      // Saltar la columna de imagen (índice 3, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Imagen)
+      if (index === 3) return;
       rowData.push(col.textContent.trim());
     });
 
@@ -704,6 +1320,7 @@ function descargarXLSX() {
   // Ajustar anchos de columnas
   const colWidths = [
     { wch: 20 }, // Digimon
+    { wch: 30 }, // Línea Evolutiva
     { wch: 15 }, // Clasificación
     { wch: 8 },  // HP
     { wch: 8 },  // ATK

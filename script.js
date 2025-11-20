@@ -657,8 +657,8 @@ function calcularStatSuperior(datosActuales) {
   console.log(`  Stat mínimo: ${minStat}`);
   console.log(`  Diferencia: ${maxStat - minStat}`);
   
-  // Verificar si están balanceados (diferencia <= 10)
-  const umbralBalance = 10;
+  // Verificar si están balanceados (diferencia <= 20)
+  const umbralBalance = 20;
   const estaBalanceado = stats.length >= 2 && (maxStat - minStat <= umbralBalance);
   
   // 🔍 LOGS DE RESULTADO

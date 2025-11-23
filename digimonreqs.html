@@ -583,6 +583,7 @@ main {
             <th>Nivel</th>
             <th>Atributo</th>
             <th>Tipo</th>
+            <th>Peso</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -1037,7 +1038,7 @@ const camposVaciosPorEvolucion = {
 };
 
   const dict = digimonReqDict;
-  const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
+  const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo", "Peso"];
 
   const nivelAEtapa = {
     es: {
@@ -1080,6 +1081,7 @@ const camposVaciosPorEvolucion = {
 		Nivel: "Nivel",
 		Atributo: "Atributo",
 		Tipo: "Tipo",
+		Peso: "Peso",
 		ID: "ID",
 		"selectTama": "Seleccionar Tama:",
 		"selectNivel": "Seleccionar Nivel:",
@@ -1113,7 +1115,7 @@ const camposVaciosPorEvolucion = {
 		"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon": "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
 		"Vel":"Vel",
 		    campos: {
-      "Peso": "Peso",
+      "Peso": "Rango de peso",
       "Error Maximo": "Rango de Errores de Cuido",
 	  "Errores Minimos": "Errores Mínimos",
       "EntrenamientoHecho": "Entrenamiento Hecho",
@@ -1168,6 +1170,7 @@ const camposVaciosPorEvolucion = {
 		Nivel: "Level",
 		Atributo: "Attribute",
 		Tipo: "Type",
+		Peso: "Weight",
 		ID: "ID",
 		"selectTama": "Select Tama:",
 		"selectNivel": "Select Level:",
@@ -1201,7 +1204,7 @@ const camposVaciosPorEvolucion = {
 		"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon": "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon",
 		"Vel":"SPD",
 		    campos: {
-      "Peso": "Weight",
+      "Peso": "Weight Range",
       "Error Maximo": "Care Mistakes Range",
 	  "Errores Minimos": "Minimum Errors",
       "EntrenamientoHecho": "Training Done",
@@ -1710,7 +1713,11 @@ headersGrupos.innerHTML = "";
 tablaHeaders.innerHTML = "";
 tablaRequisitos.innerHTML = "";
 
-const camposDisponibles = Object.keys(digimon).filter(campo => !generales.includes(campo));
+// Excluir campos generales de la tabla de requisitos, EXCEPTO "Peso" que aparece en ambas
+const camposDisponibles = Object.keys(digimon).filter(campo => {
+  if (campo === "Peso") return true; // Peso puede aparecer en ambas tablas
+  return !generales.includes(campo);
+});
 
 // Obtener la configuración de columnas para este digimon específico
 const gruposColumnas = obtenerGruposColumnas(nombre);
@@ -1782,6 +1789,11 @@ if (evolucionesMultiples.length > 0) {
       // Formatear WinRate agregando %
       if (campo === "WinRate") {
         valorOriginal = formatearWinRate(valorOriginal);
+      }
+
+      // Formatear Peso como rango (± 5)
+      if (campo === "Peso") {
+        valorOriginal = formatearPeso(valorOriginal);
       }
 
       // Para campos con casos especiales
@@ -1867,6 +1879,11 @@ if (evolucionesMultiples.length > 0) {
       valorOriginal = formatearWinRate(valorOriginal);
     }
 
+    // Formatear Peso como rango (± 5)
+    if (campo === "Peso") {
+      valorOriginal = formatearPeso(valorOriginal);
+    }
+
     // Agregar "%" para campos de entrenamiento
     if (campo === "% Entrenamiento" && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
       td.textContent = valorOriginal + "%";
@@ -1920,7 +1937,7 @@ function actualizarTextosUI() {
 
   // Actualiza encabezados de tabla generales
   const headersGen = document.querySelectorAll("#tablaGenerales thead th");
-  const claves = ["ID", "Tama", "Nivel", "Atributo", "Tipo"];
+  const claves = ["ID", "Tama", "Nivel", "Atributo", "Tipo", "Peso"];
   headersGen.forEach((th, idx) => th.textContent = t(claves[idx]));
 
   // Vuelve a traducir cabeceras de requisitos si existen
@@ -2056,6 +2073,25 @@ function formatearWinRate(valor) {
   }
 
   // Si no es ninguno de los anteriores, devolverlo sin cambios
+  return valor;
+}
+
+// Función para formatear el valor de Peso como rango (± 5)
+function formatearPeso(valor) {
+  if (valor === undefined || valor === null || valor === "-") {
+    return valor;
+  }
+
+  const valorNum = Number(valor);
+
+  // Si es un número válido, crear el rango ± 5
+  if (!isNaN(valorNum)) {
+    const min = Math.max(0, valorNum - 5); // No puede ser negativo
+    const max = valorNum + 5;
+    return `${min}-${max}`;
+  }
+
+  // Si no es un número, devolverlo sin cambios
   return valor;
 }
 

@@ -35,7 +35,7 @@ const digimonReqDict = {
   },
   "Starmons": {
 	"ID": 84, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Mutante",
-    "Peso": 15, "Error Maximo": 6
+    "Peso": 15, "Error Maximo": 6, "% Entrenamiento": "0-79"
   },
   "Gotsumon": {
 	"ID": 85, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Tierra",
@@ -341,6 +341,22 @@ const digimonReqDict = {
       "Devitamamon": {
 	"ID": 109, "Tama": "M", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": 20,
 	"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Vinculo al momento de evolucionar": -50
-  }	
-  
+  },
+  "Shoutmon": {
+	"ID": 158, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 15,
+	"Hora": "Día (12:00-23:59 UTC-3)", "% Entrenamiento": 80
+  },
+  "Shoutmon (Black)": {
+	"ID": 159, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 15,
+	"Hora": "Noche (0:00-11:59 UTC-3)", "% Entrenamiento": 80
+  },
+  "Shoutmon SH": {
+	"ID": 160, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 13,
+	"Xross": "DriverInstall"
+  },
+  "Shoutmon + Star Sword": {
+	"ID": 161, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 17,
+	"Xross": "DriverInstall"
+  }
+
 };

@@ -1,0 +1,387 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculadora de Stats Balanceados</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+  <style>
+    nav a {
+      margin-right: 10px;
+    }
+
+    #languageSelector {
+      float: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      width: auto;
+    }
+
+    header {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    header * {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    h1, p, nav, select {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    .input-container {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .input-row label {
+      min-width: 100px;
+      font-weight: bold;
+    }
+
+    .input-row input {
+      flex: 1;
+      max-width: 200px;
+      padding: 8px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .calculate-btn {
+      background: #4a9eff;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    .calculate-btn:hover {
+      background: #3182ce;
+    }
+
+    .result-container {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      display: none;
+    }
+
+    .result-container.show {
+      display: block;
+    }
+
+    .result-balanced {
+      background: #d4edda;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #28a745;
+      font-weight: bold;
+      color: #155724;
+      margin: 10px 0;
+    }
+
+    .result-not-balanced {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #ffc107;
+      font-weight: bold;
+      color: #856404;
+      margin: 10px 0;
+    }
+
+    .stat-result {
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid #4a9eff;
+      margin: 10px 0;
+    }
+
+    .stat-superior {
+      font-size: 20px;
+      color: #4a9eff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="mainTitle">Calculadora de Stats Balanceados</h1>
+    <p id="mainSubtitle">Creado por Rodrigoalag</p>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
+	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
+	  <a href="./BalanceCalculator.html">Balance Calculator</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
+      <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
+      <a target="_blank" href="https://nd-deck-builder-5188c6.gitlab.io/">Deck Builder</a>
+    </nav>
+    <select id="languageSelector">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+
+  <section>
+    <h2 id="explanationTitle">Cómo usar</h2>
+    <p id="explanationText">Ingresa los porcentajes de entrenamiento de tus stats (HP%, ATK%, SPD%). La calculadora determinará si están balanceados (diferencia ≤ 20) y cuál es tu stat superior.</p>
+
+    <div class="input-container">
+      <div class="input-row">
+        <label for="hpInput">HP %:</label>
+        <input type="number" id="hpInput" min="0" max="100" value="0" placeholder="0-100">
+      </div>
+      <div class="input-row">
+        <label for="atkInput">ATK %:</label>
+        <input type="number" id="atkInput" min="0" max="100" value="0" placeholder="0-100">
+      </div>
+      <div class="input-row">
+        <label for="spdInput">SPD %:</label>
+        <input type="number" id="spdInput" min="0" max="100" value="0" placeholder="0-100">
+      </div>
+
+      <button class="calculate-btn" id="calculateBtn">Calcular</button>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+      <h3 id="resultTitle">Resultado</h3>
+      <div id="balancedResult"></div>
+      <div class="stat-result">
+        <strong id="labelStatSuperior">Stat Superior:</strong>
+        <div class="stat-superior" id="statSuperiorResult">-</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Traducciones
+    const translations = {
+      es: {
+        mainTitle: "Calculadora de Stats Balanceados",
+        mainSubtitle: "Creado por Rodrigoalag",
+        explanationTitle: "Cómo usar",
+        explanationText: "Ingresa los porcentajes de entrenamiento de tus stats (HP%, ATK%, SPD%). La calculadora determinará si están balanceados (diferencia ≤ 20) y cuál es tu stat superior.",
+        calculate: "Calcular",
+        resultTitle: "Resultado",
+        balanced: "Balanceado",
+        statSuperior: "Stat Superior:",
+        balancedMessage: "✓ Tus stats están BALANCEADOS (diferencia ≤ 20)",
+        notBalancedMessage: "✗ Tus stats NO están balanceados (diferencia > 20)",
+        noStats: "Por favor ingresa al menos un stat mayor a 0",
+        sumExceeds: "La suma de los stats no puede superar 100"
+      },
+      en: {
+        mainTitle: "Balanced Stats Calculator",
+        mainSubtitle: "Created by Rodrigoalag",
+        explanationTitle: "How to use",
+        explanationText: "Enter your stats training percentages (HP%, ATK%, SPD%). The calculator will determine if they are balanced (difference ≤ 20) and which is your highest stat.",
+        calculate: "Calculate",
+        resultTitle: "Result",
+        balanced: "Balanced",
+        statSuperior: "Highest Stat:",
+        balancedMessage: "✓ Your stats are BALANCED (difference ≤ 20)",
+        notBalancedMessage: "✗ Your stats are NOT balanced (difference > 20)",
+        noStats: "Please enter at least one stat greater than 0",
+        sumExceeds: "The sum of stats cannot exceed 100"
+      }
+    };
+
+    let currentLanguage = 'es';
+
+    // Función de traducción
+    function translate(key) {
+      return translations[currentLanguage][key] || key;
+    }
+
+    // Actualizar textos de la UI
+    function updateTexts() {
+      document.getElementById('mainTitle').textContent = translate('mainTitle');
+      document.getElementById('mainSubtitle').textContent = translate('mainSubtitle');
+      document.getElementById('explanationTitle').textContent = translate('explanationTitle');
+      document.getElementById('explanationText').textContent = translate('explanationText');
+      document.getElementById('calculateBtn').textContent = translate('calculate');
+      document.getElementById('resultTitle').textContent = translate('resultTitle');
+      document.getElementById('labelStatSuperior').textContent = translate('statSuperior');
+    }
+
+    // Cambiar idioma
+    document.getElementById('languageSelector').addEventListener('change', (e) => {
+      currentLanguage = e.target.value;
+      updateTexts();
+      // Si hay resultado mostrado, recalcular para actualizar textos
+      if (document.getElementById('resultContainer').classList.contains('show')) {
+        calcular();
+      }
+    });
+
+    // FUNCIÓN COPIADA EXACTAMENTE DE script.js (líneas 629-692)
+    function calcularStatSuperior(datosActuales) {
+      const hpPct = parseFloat(datosActuales["HP Entrenado"]) || 0;
+      const atkPct = parseFloat(datosActuales["ATK Entrenado"]) || 0;
+      const spdPct = parseFloat(datosActuales["SPD Entrenado"]) || 0;
+
+      console.log("🧮 === CÁLCULO STAT SUPERIOR (PORCENTAJES) ===");
+      console.log("📊 Inputs recibidos:");
+      console.log(`  HP %: ${hpPct}`);
+      console.log(`  ATK %: ${atkPct}`);
+      console.log(`  SPD %: ${spdPct}`);
+
+      const stats = [
+        { nombre: "HP", valor: hpPct },
+        { nombre: "ATK", valor: atkPct },
+        { nombre: "SPD", valor: spdPct }
+      ].filter(stat => stat.valor > 0);
+
+      if (stats.length === 0) {
+        console.log("❌ No hay stats válidos (todos son 0)");
+        return { texto: "", estaBalanceado: false, statSuperior: "" };
+      }
+
+      // Encontrar el stat más alto y más bajo
+      const maxStat = Math.max(...stats.map(s => s.valor));
+      const minStat = Math.min(...stats.map(s => s.valor));
+      const statSuperior = stats.find(s => s.valor === maxStat).nombre;
+
+      // Calcular la diferencia porcentual
+      const diferencia = maxStat - minStat;
+
+      console.log("🎯 Análisis de balance:");
+      console.log(`  Máximo: ${maxStat}% (${statSuperior})`);
+      console.log(`  Mínimo: ${minStat}%`);
+      console.log(`  Diferencia: ${diferencia}%`);
+      console.log(`  Stat máximo: ${maxStat} (${statSuperior})`);
+      console.log(`  Stat mínimo: ${minStat}`);
+      console.log(`  Diferencia: ${maxStat - minStat}`);
+
+      // Verificar si están balanceados (diferencia <= 20)
+      const umbralBalance = 20;
+      const estaBalanceado = stats.length >= 2 && (maxStat - minStat <= umbralBalance);
+
+      // 🔍 LOGS DE RESULTADO
+      console.log(`  Umbral de balance: ${umbralBalance}`);
+      console.log(`  ¿Está balanceado? ${estaBalanceado} (diferencia ${maxStat - minStat} ${estaBalanceado ? '≤' : '>'} ${umbralBalance})`);
+
+      // Construir el resultado
+      let resultados = [];
+
+      if (estaBalanceado) {
+        resultados.push(translate('balanced'));
+      }
+
+      // Siempre agregar el stat superior
+      resultados.push(statSuperior);
+
+      const textoFinal = resultados.join(" / ");
+
+      // 🔍 LOG FINAL
+      console.log("✅ Resultado final:");
+      console.log(`  Texto: "${textoFinal}"`);
+      console.log(`  Está balanceado: ${estaBalanceado}`);
+      console.log(`  Stat superior: ${statSuperior}`);
+      console.log("🧮 === FIN CÁLCULO ===");
+
+      return {
+        texto: textoFinal,
+        estaBalanceado: estaBalanceado,
+        statSuperior: statSuperior,
+        diferencia: diferencia
+      };
+    }
+
+    // Función principal de cálculo
+    function calcular() {
+      const hp = parseInt(document.getElementById('hpInput').value) || 0;
+      const atk = parseInt(document.getElementById('atkInput').value) || 0;
+      const spd = parseInt(document.getElementById('spdInput').value) || 0;
+
+      console.log(`Input recibido - HP: ${hp}, ATK: ${atk}, SPD: ${spd}`);
+
+      // Validar que al menos un stat sea mayor a 0
+      if (hp === 0 && atk === 0 && spd === 0) {
+        alert(translate('noStats'));
+        return;
+      }
+
+      // Validar que la suma no supere 100
+      const suma = hp + atk + spd;
+      if (suma > 100) {
+        alert(translate('sumExceeds'));
+        return;
+      }
+
+      // Preparar datos en el formato que espera calcularStatSuperior
+      const datosActuales = {
+        "HP Entrenado": hp,
+        "ATK Entrenado": atk,
+        "SPD Entrenado": spd
+      };
+
+      // Calcular resultado usando la función exacta de script.js
+      const resultado = calcularStatSuperior(datosActuales);
+
+      // Mostrar resultado
+      const resultContainer = document.getElementById('resultContainer');
+      const balancedResult = document.getElementById('balancedResult');
+      const statSuperiorResult = document.getElementById('statSuperiorResult');
+
+      if (resultado.estaBalanceado) {
+        balancedResult.className = 'result-balanced';
+        balancedResult.textContent = translate('balancedMessage') + ` (diferencia: ${resultado.diferencia})`;
+      } else {
+        balancedResult.className = 'result-not-balanced';
+        balancedResult.textContent = translate('notBalancedMessage') + ` (diferencia: ${resultado.diferencia})`;
+      }
+
+      statSuperiorResult.textContent = resultado.texto;
+
+      resultContainer.classList.add('show');
+    }
+
+    // Event listener para el botón de calcular
+    document.getElementById('calculateBtn').addEventListener('click', calcular);
+
+    // Permitir calcular con Enter
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          calcular();
+        }
+      });
+
+      // Validar rango 0-100
+      input.addEventListener('input', (e) => {
+        let value = parseInt(e.target.value) || 0;
+        if (value < 0) value = 0;
+        if (value > 100) value = 100;
+        e.target.value = value;
+      });
+    });
+
+    // Inicializar textos
+    updateTexts();
+  </script>
+</body>
+</html>

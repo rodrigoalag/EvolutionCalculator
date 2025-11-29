@@ -234,7 +234,10 @@ const SideEvolutionSelected = {
   "Fantomon":["Metal Fantomon"],
   "Bakemon LT":["Soulmon LT"],
   "Bakemon MT":["Soulmon MT"],
-  "Nanimon":["BomberNanimon"]
+  "Nanimon":["BomberNanimon"],
+  "Shoutmon":["Shoutmon SH","Shoutmon + Star Sword"],
+  "Shoutmon (Black)":["Shoutmon SH","Shoutmon + Star Sword"],
+  "Starmons":["Shoutmon SH","Shoutmon + Star Sword"]
 };
 
 const EvoListSpecial = { 
@@ -275,7 +278,9 @@ const SideEvolutionlist = {
   "Soulmon LT":[4],
   "Soulmon MT":[4],
   "Metal Fantomon":[5],
-  "BomberNanimon":[4]
+  "BomberNanimon":[4],
+  "Shoutmon SH":[3],
+  "Shoutmon + Star Sword":[3]
 };
 
 const SideandEvoList = {
@@ -294,10 +299,11 @@ const excepcionesProgram = {
 
 
 const PesoSet = new Set([
-    "Botamon", "Koromon", "Chibickmon", "Pickmon", "Agumon", 
+    "Botamon", "Koromon", "Chibickmon", "Pickmon", "Agumon",
     "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon",
-    "Pillomon", "Numemon", "Daipenmon", "Mugendramon", "MetalEtemon", 
-    "PlatinumNumemon", "Gotsumon", "Starmons", "ShootingStarmon","Devitamamon","PrinceMamemon","Nanimon","BomberNanimon"
+    "Pillomon", "Numemon", "Daipenmon", "Mugendramon", "MetalEtemon",
+    "PlatinumNumemon", "Gotsumon", "Starmons", "ShootingStarmon","Devitamamon","PrinceMamemon","Nanimon","BomberNanimon",
+    "Shoutmon", "Shoutmon (Black)"
 ]);
 
 
@@ -326,11 +332,21 @@ const specialxrossCases = {
 		"Metal Tyranomon": "Metal Greymon (Virus) Driver + Megadramon Driver + MetalMamemon Driver + Andromon Driver",
 		"MetalMamemon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + Megadramon Driver + Andromon Driver",
 		"Andromon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Megadramon Driver"
-		
+
 },
 	"Daipenmon": {
 		"Blizzarmon":["Ice Spirit H"],
 		"Polarbearmon": ["Ice Spirit B + Ice Spirit H","Ice Spirit A"]
+	},
+	"Shoutmon SH": {
+		"Shoutmon": "Starmons Driver",
+		"Shoutmon (Black)": "Starmons Driver",
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
+	},
+	"Shoutmon + Star Sword": {
+		"Shoutmon": "Starmons Driver",
+		"Shoutmon (Black)": "Starmons Driver",
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
 	}
 };
 /*const specialfoodcases = {
@@ -360,7 +376,7 @@ const specialEntrenamientoCases = {
 // Diccionario corregido - eliminando duplicados y organizando mejor la data
 const xrossinstallop = {
     "Mamemon": ["3 Mamemon Driver"],
-    "Starmons": ["4 Pickmon Driver"],
+    "Starmons": ["4 Pickmon Driver", "Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"],
     "Monzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"],
     "WaruMonzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"],
     "Black King Numemon": ["5 PlatinumScumon Driver"],
@@ -376,7 +392,9 @@ const xrossinstallop = {
     "Blizzarmon": ["Ice Spirit H"],
     "Chackmon": ["Ice Spirit B"],
     "Polarbearmon": ["Ice Spirit A", "Ice Spirit B + Ice Spirit H"], // Combinando ambos valores
-    "Nanimon": ["1 Mamemon Driver"]
+    "Nanimon": ["1 Mamemon Driver"],
+    "Shoutmon": ["Starmons Driver"],
+    "Shoutmon (Black)": ["Starmons Driver"]
 };
 //Lo mismo pero para driver equipado
 const driverEquipadoOp = {
@@ -1301,7 +1319,8 @@ function generarFormulario() {
     }
 
     // Lógica principal para campos string (mantener exacta pero sin Stat Superior)
-    if (typeof sampleValue === "string") {
+    // EXCEPCIÓN: % Entrenamiento y Hora siempre deben ser inputs, incluso si el valor esperado es string
+    if (typeof sampleValue === "string" && field !== "% Entrenamiento" && field !== "Hora") {
         let opciones = [];
         if (field === "EntrenamientoHecho") {
             opciones = ["Si", "No"];
@@ -1369,8 +1388,14 @@ function generarFormulario() {
     } else {
         // Input numérico (lógica original exacta)
         let input = document.createElement("input");
-        input.type = (field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? "text" : "number";
+        input.type = field === "Hora" ? "time" :
+                     (field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? "text" : "number";
         input.id = `field_${field}`;
+
+        // Placeholder para Hora
+        if (field === "Hora") {
+            input.placeholder = "HH:MM";
+        }
 
         // Definir rangos de validación
         const min = (field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? -50 :
@@ -1380,11 +1405,14 @@ function generarFormulario() {
                     (field === "% Entrenamiento" || field === "WinRate" || field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? 100 :
                     undefined;
 
-        input.min = min;
-        input.max = max;
+        // Solo aplicar min/max para campos numéricos, no para Hora
+        if (field !== "Hora") {
+            input.min = min;
+            input.max = max;
+        }
 
         // Agregar validación con limpieza automática para campos con límites definidos
-        if (max !== undefined) {
+        if (max !== undefined && field !== "Hora") {
           input.addEventListener('input', function() {
             validarRangoInput(input, field, min, max);
             recalcularCamposCalculados();
@@ -2404,7 +2432,7 @@ else if (field === "Error Maximo") {
 		} else {
 			punto = -10;
 		}
-	} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons", "GreatKingScumon"].includes(name)) { 
+	} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons", "GreatKingScumon", "Shoutmon", "Shoutmon (Black)"].includes(name)) {
 		punto = 0; 
 	} else { 
 		const ingNum = Number(ingresado); 
@@ -2517,7 +2545,7 @@ if (esperadoLower === "balanceado" || esperadoLower === "balanced") {
 				// Verificar si es un caso especial
 				if (specialEntrenamientoCases[name]) {
 					const validEntrenamiento = specialEntrenamientoCases[name];
-					
+
 					// Si hay un digimon seleccionado y existe un entrenamiento válido para él
 					if (selected && validEntrenamiento[selected]) {
 						const expectedEntrenamiento = validEntrenamiento[selected];
@@ -2529,11 +2557,21 @@ if (esperadoLower === "balanceado" || esperadoLower === "balanced") {
 						}
 					}
 				} else {
-					// Código original para casos normales
+					// Código para casos normales
 					const ingNum = Number(ingresado);
+
 					if (["Pillomon","Numemon"].includes(name)) {
 						punto = 0;
+					} else if (typeof esperado === "string" && esperado.includes("-")) {
+						// Si esperado es un rango (ej: "0-79" o "80-100")
+						const [min, max] = esperado.split("-").map(Number);
+						if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) {
+							punto = 1;
+						} else {
+							punto = 0;
+						}
 					} else if (!isNaN(ingNum) && ingNum >= esperado) {
+						// Lógica normal: mayor o igual
 						punto = 1;
 					} else {
 						punto = 0;
@@ -2691,16 +2729,21 @@ else if (field === "Xross") {
 			// Verificar si expectedXross es un array o un string
 			if (Array.isArray(expectedXross)) {
 				// Si es un array, verificar si ingresado coincide con alguno de los elementos
-				isValid = expectedXross.some(xross => 
+				isValid = expectedXross.some(xross =>
 					ingresado.toLowerCase() === xross.toLowerCase()
 				);
 			} else {
 				// Si es un string, comparar directamente
 				isValid = ingresado.toLowerCase() === expectedXross.toLowerCase();
 			}
-			
+
 			if (isValid) {
-				punto = 1; // Mantener el punto positivo para casos especiales
+				// Shoutmon SH y Shoutmon + Star Sword dan +3 puntos cuando el Xross es correcto
+				if (name === "Shoutmon SH" || name === "Shoutmon + Star Sword") {
+					punto = 3;
+				} else {
+					punto = 1; // Mantener el punto positivo para otros casos especiales
+				}
 			} else {
 				punto = -10;
 			}
@@ -2749,6 +2792,55 @@ else if (field === "Comida") {
 		punto = -10;
 	  }
 	}
+	else if (field === "Hora") {
+	  // Comparar hora ingresada con el rango esperado
+	  if (!ingresado || !esperado) {
+		punto = 0;
+	  } else {
+		// Extraer el rango de horas del requisito
+		// Formato esperado: "Día (8:00-20:00 UTC-3)" o "Noche (20:00-8:00 UTC-3)"
+		const regex = /(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})\s*UTC-3/;
+		const match = esperado.match(regex);
+
+		if (!match) {
+		  punto = 0;
+		} else {
+		  const horaInicioReq = parseInt(match[1]);
+		  const minInicioReq = parseInt(match[2]);
+		  const horaFinReq = parseInt(match[3]);
+		  const minFinReq = parseInt(match[4]);
+
+		  // Parsear hora ingresada (formato HH:MM)
+		  const [horaIngStr, minIngStr] = ingresado.split(':');
+		  const horaIng = parseInt(horaIngStr);
+		  const minIng = parseInt(minIngStr || 0);
+
+		  // Convertir todo a minutos desde medianoche para comparar
+		  const minutosIng = horaIng * 60 + minIng;
+		  const minutosInicio = horaInicioReq * 60 + minInicioReq;
+		  const minutosFin = horaFinReq * 60 + minFinReq;
+
+		  // Verificar si está en el rango
+		  let estaEnRango = false;
+
+		  if (minutosInicio <= minutosFin) {
+			// Rango normal (ej: 7:00-19:00)
+			estaEnRango = minutosIng >= minutosInicio && minutosIng <= minutosFin;
+		  } else {
+			// Rango que cruza medianoche (ej: 19:00-7:00)
+			estaEnRango = minutosIng >= minutosInicio || minutosIng <= minutosFin;
+		  }
+
+		  // Para Shoutmon y Shoutmon (Black), penalizar con -10 si no está en el rango
+		  if (name === "Shoutmon" || name === "Shoutmon (Black)") {
+			punto = estaEnRango ? 1 : -10;
+		  } else {
+			punto = estaEnRango ? 1 : 0;
+		  }
+		  console.log(`⏰ Hora - Ingresado: ${ingresado}, Rango: ${horaInicioReq}:${minInicioReq}-${horaFinReq}:${minFinReq}, En rango: ${estaEnRango}, Punto: ${punto}`);
+		}
+	  }
+	}
 
 
 	}
@@ -2758,7 +2850,7 @@ else if (field === "Comida") {
     });
 
     if (selected === "Botamon" && name === "Koromon" || selected === "Chibickmon" && name === "Pickmon" || selected === "Pickmon" && name === "Starmons" || selected === "Pickmon" && name === "Gotsumon" ) {
-      puntaje += 3;
+      puntaje += 1;
     }
 
     // Penalización por muerte inducida sin Carne X o Program X (excepto Bakemon LT)
@@ -2780,12 +2872,16 @@ else if (field === "Comida") {
 // APLICAR LÓGICA DE NUMEMON, NANIMON Y SCUMON ANTES DEL ORDENAMIENTO
 puntajes.forEach((digi, index) => {
     if (digi.name === "Numemon" || digi.name === "Nanimon" || digi.name === "Scumon") {
-        // Buscar todos los digis de nivel 4 o que sean Burpmon
+        // Buscar todos los digis de nivel 4, Burpmon, o sides de nivel 3
         const digisNivel4yBurpmon = puntajes.filter(d => {
             const digimonData = nextDigimons.find(([nombre, req]) => nombre === d.name);
             if (digimonData) {
                 const [nombre, requisitosDigimon] = digimonData;
-                return requisitosDigimon["Nivel"] === 4 || nombre === "Burpmon";
+                // Incluir nivel 4, Burpmon, o sides de nivel 3
+                const esNivel4 = requisitosDigimon["Nivel"] === 4;
+                const esBurpmon = nombre === "Burpmon";
+                const esSideNivel3 = SideEvolutionlist.hasOwnProperty(nombre) && SideEvolutionlist[nombre].includes(3);
+                return esNivel4 || esBurpmon || esSideNivel3;
             }
             return false;
         });
@@ -2845,8 +2941,8 @@ puntajes.forEach((digi, index) => {
                         puntajes[index].puntaje = 3;
                     }
                 } else {
-                    // Si no hay Nanimon, Numemon funciona normalmente
-                    puntajes[index].puntaje = 3;
+                    // Si no hay Nanimon, Numemon recibe 0
+                    puntajes[index].puntaje = 0;
                 }
 
             }
@@ -2930,7 +3026,7 @@ if (skullGreymonResult) {
 const bakemonLTResult = puntajes.find(d => d.name === "Bakemon LT" && d.puntaje === 4);
 if (bakemonLTResult) {
     const muerteInducida = inputValues["Muerte inducida sin Carne X o Program (30% de salir)"];
-    
+
     if (muerteInducida && muerteInducida.toLowerCase() === "si") {
         // Caso de muerte inducida - 30% de probabilidad
         const textTranslationsBakemon30 = {
@@ -2946,10 +3042,25 @@ if (bakemonLTResult) {
         };
         evolucionTexto.textContent = textTranslationsBakemonDirect[currentLanguage];
     }
-    
+
     return; // Terminar aquí para Bakemon LT
 }
 // FIN CASO ESPECIAL BAKEMON LT
+
+// VERIFICAR CASO ESPECIAL SHOUTMON SH Y SHOUTMON + STAR SWORD CON PUNTAJE 3 - AGREGADO
+const shoutmonSHResult = puntajes.find(d => d.name === "Shoutmon SH" && d.puntaje === 3);
+const shoutmonStarResult = puntajes.find(d => d.name === "Shoutmon + Star Sword" && d.puntaje === 3);
+
+if (shoutmonSHResult && shoutmonStarResult) {
+    // Ambos tienen puntaje 3, mostrar mensaje de 50% de probabilidad
+    const textTranslationsShoutmon50 = {
+        es: "Tu Digi tiene 50% de probabilidad de evolucionar en Shoutmon SH o Shoutmon + Star Sword.",
+        en: "Your Digi has a 50% chance of evolving to Shoutmon SH or Shoutmon + Star Sword."
+    };
+    evolucionTexto.textContent = textTranslationsShoutmon50[currentLanguage];
+    return; // Terminar aquí para Shoutmon
+}
+// FIN CASO ESPECIAL SHOUTMON
 
   // Traducciones para los textos a mostrar
 const textTranslations = {
@@ -3250,7 +3361,7 @@ if (mejoresDigimons.length >= 2) {
  // Función para actualizar el texto de evolución
   function actualizarTextoEvolucion() {
     let texto;
-    
+
     // MODIFICADO: Verificar primero SkullGreymon
     const skullGreymonResult = puntajes.find(d => d.name === "SkullGreymon" && d.puntaje >= 4);
     if (skullGreymonResult) {
@@ -3263,12 +3374,12 @@ if (mejoresDigimons.length >= 2) {
         evolucionTexto.textContent = textTranslationsSkull[currentLanguage];
         return;
     }
-    
+
     // VERIFICAR CASO ESPECIAL BAKEMON LT - AGREGADO
     const bakemonLTResult = puntajes.find(d => d.name === "Bakemon LT" && d.puntaje >= 4);
     if (bakemonLTResult) {
         const muerteInducida = inputValues["Muerte inducida sin Carne X o Program (30% de salir)"];
-        
+
         if (muerteInducida && muerteInducida.toLowerCase() === "si") {
             // Caso de muerte inducida - 30% de probabilidad
             const textTranslationsBakemon30 = {
@@ -3286,7 +3397,21 @@ if (mejoresDigimons.length >= 2) {
         }
         return;
     }
-    
+
+    // VERIFICAR CASO ESPECIAL SHOUTMON SH Y SHOUTMON + STAR SWORD - AGREGADO
+    const shoutmonSHResult = puntajes.find(d => d.name === "Shoutmon SH" && d.puntaje === 3);
+    const shoutmonStarResult = puntajes.find(d => d.name === "Shoutmon + Star Sword" && d.puntaje === 3);
+
+    if (shoutmonSHResult && shoutmonStarResult) {
+        // Ambos tienen puntaje 3, mostrar mensaje de 50% de probabilidad
+        const textTranslationsShoutmon50 = {
+            es: "Tu Digi tiene 50% de probabilidad de evolucionar en Shoutmon SH o Shoutmon + Star Sword.",
+            en: "Your Digi has a 50% chance of evolving to Shoutmon SH or Shoutmon + Star Sword."
+        };
+        evolucionTexto.textContent = textTranslationsShoutmon50[currentLanguage];
+        return;
+    }
+
     if (sideEvosValidas.length > 0) {
       const nombres = mejoresDigimons.join(", ");
       texto = textTranslations[currentLanguage].slideEvolution + nombres + ".";

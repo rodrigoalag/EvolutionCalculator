@@ -516,9 +516,12 @@ main {
       <a href="./StatRanking.html">Digimon Stat Ranking</a>
       <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
 	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
+	  <a href="./BalanceCalculator.html">Balance Calculator</a>
       <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
       <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
       <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
+      <a target="_blank" href="https://nd-deck-builder-5188c6.gitlab.io/">Deck Builder</a>
     </nav>
 	  <label for="languageSelector">Idioma / Language:</label>
 	  <select id="languageSelector">
@@ -643,6 +646,10 @@ const warningMessages = {
   skullgreymon: {
     es: "SkullGreymon es un digi que evoluciona con probabilidad, solo con 100% de entreno es 100% seguro de obtenerlo, menos entrenamiento implica que vas a tener probabilidad de morir, revisar con calculadora",
     en: "SkullGreymon is a digimon that evolves with probability, only with 100% training is 100% guaranteed to get it, less training means you will have a probability of death, check with calculator"
+  },
+  hora: {
+    es: "Hora local de tu país, para la hora del servidor pasar el tiempo a UTC-3",
+    en: "Local time of your country, for server time convert to UTC-3"
   }
 };
 
@@ -973,7 +980,31 @@ const specialDigimonConfig = {
     "No se considera en el puntaje": ["Peso", "Error Maximo"],
     "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Vinculo al momento de evolucionar"]
   }
-  } 
+},
+"Shoutmon": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Hora"]
+  }
+},
+"Shoutmon (Black)": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Hora"]
+  }
+},
+"Shoutmon SH": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Xross"]
+  }
+},
+"Shoutmon + Star Sword": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Xross"]
+  }
+}
 };
 // Configuración por defecto (la original)
 const gruposColumnasDefault = {
@@ -1004,6 +1035,16 @@ const specialxrossCases = {
 		"Icemon": "Ice Spirit H",
 		"Yukidarumon": "Ice Spirit H",
 		"Yuki Agumon": "Ice Spirit H"
+	},
+	"Shoutmon SH": {
+		"Shoutmon": "Starmons Driver",
+		"Shoutmon (Black)": "Starmons Driver",
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
+	},
+	"Shoutmon + Star Sword": {
+		"Shoutmon": "Starmons Driver",
+		"Shoutmon (Black)": "Starmons Driver",
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
 	}
 };
 const specialEntrenamientoCases = {
@@ -1100,8 +1141,9 @@ const camposVaciosPorEvolucion = {
 		"Death / Carne X": "Death / Carne X",
 		"Nuez Magica": "Nuez Magica",
 		"Balanceado":"Balanceado",
-		"Compuesto": "Compuesto", 
+		"Compuesto": "Compuesto",
 		"Dinosaurio": "Dinosaurio",
+		"Dragon": "Dragon",
 		"Vacuna": "Vacuna",
 		"Maquina": "Maquina",
 		"Hielo": "Hielo",
@@ -1116,6 +1158,7 @@ const camposVaciosPorEvolucion = {
 		"Vel":"Vel",
 		    campos: {
       "Peso": "Rango de peso",
+      "Hora": "Hora",
       "Error Maximo": "Rango de Errores de Cuido",
 	  "Errores Minimos": "Errores Mínimos",
       "EntrenamientoHecho": "Entrenamiento Hecho",
@@ -1132,7 +1175,7 @@ const camposVaciosPorEvolucion = {
 	  "Menos de 15 entrenamientos?": "Menos de 15 entrenamientos?",
       "Win Rate": "Win Rate",
       "Combates Minimos": "Combates Mínimos",
-	  "% Entrenamiento": "% Entrenamiento Minimo",
+	  "% Entrenamiento": "Rango de % Entrenamiento",
 	  "Bonus Batallas": "Bonus Batallas",
 	  "Comida" : "Comida",
 	  "Victorias": "Victorias",
@@ -1188,9 +1231,10 @@ const camposVaciosPorEvolucion = {
 		"Death o Carne X": "Death or X Meat",
 		"Death / Carne X": "Death / X Meat",
 		"Nuez Magica": "Magical Nut",
-		"Balanceado":"Balanced",	
-		"Compuesto": "Composite", 
+		"Balanceado":"Balanced",
+		"Compuesto": "Composite",
 		"Dinosaurio": "Dinosaur",
+		"Dragon": "Dragon",
 		"Vacuna": "Vaccine",
 		"Maquina": "Machine",
 		"Hielo": "Ice",
@@ -1205,6 +1249,7 @@ const camposVaciosPorEvolucion = {
 		"Vel":"SPD",
 		    campos: {
       "Peso": "Weight Range",
+      "Hora": "Time",
       "Error Maximo": "Care Mistakes Range",
 	  "Errores Minimos": "Minimum Errors",
       "EntrenamientoHecho": "Training Done",
@@ -1220,7 +1265,7 @@ const camposVaciosPorEvolucion = {
       "Vinculo Minimo alcanzado": "Bond Reached",
 	  "Menos de 15 entrenamientos?": "Less than 15 trainings?",
       "Combates Minimos": "Minimum Battles",
-	  "% Entrenamiento": "Minimum Training %",
+	  "% Entrenamiento": "Training % Range",
 	  "Bonus Batallas": "Battle Bonus",
 	  "Comida" : "Food",
 	  "Victorias": "Battle Victories",
@@ -1310,7 +1355,10 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
   if (campo === "Xross" && specialxrossCases[nombreDigimon]) {
     const valor = specialxrossCases[nombreDigimon][evolucionDigimon];
     if (valor !== undefined) {
-      return Array.isArray(valor) ? valor.join(", ") : valor;
+      if (Array.isArray(valor)) {
+        return "Install de uno de estos drivers: " + valor.join(", ");
+      }
+      return valor;
     }
     // Si no está definido para esta evolución, devolver vacío
     return "-";
@@ -1763,6 +1811,20 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
         warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
         warningIcon.textContent = "!";
         warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+        warningIcon.setAttribute("data-warning-key", "skullgreymon");
+        th.appendChild(warningIcon);
+      }
+
+      // ✅ AGREGAR ICONO DE INFORMACIÓN PARA HORA
+      if (campo === "Hora") {
+        th.textContent = traducirCampo(campo) + " ";
+        const warningIcon = document.createElement("span");
+        warningIcon.className = "warning-icon";
+        warningIcon.onclick = () => showWarningPopup("hora");
+        warningIcon.title = currentLanguage === 'es' ? 'Ver información' : 'Show info';
+        warningIcon.textContent = "?";
+        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver información' : 'Show info');
+        warningIcon.setAttribute("data-warning-key", "hora");
         th.appendChild(warningIcon);
       }
 
@@ -1794,6 +1856,16 @@ if (evolucionesMultiples.length > 0) {
       // Formatear Peso como rango (± 5)
       if (campo === "Peso") {
         valorOriginal = formatearPeso(valorOriginal);
+      }
+
+      // Formatear % Entrenamiento como rango
+      if (campo === "% Entrenamiento") {
+        valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal);
+      }
+
+      // Convertir Hora GMT-3 a hora local
+      if (campo === "Hora") {
+        valorOriginal = convertirHoraALocal(valorOriginal);
       }
 
       // Para campos con casos especiales
@@ -1884,6 +1956,16 @@ if (evolucionesMultiples.length > 0) {
       valorOriginal = formatearPeso(valorOriginal);
     }
 
+    // Formatear % Entrenamiento como rango
+    if (campo === "% Entrenamiento") {
+      valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal);
+    }
+
+    // Convertir Hora GMT-3 a hora local
+    if (campo === "Hora") {
+      valorOriginal = convertirHoraALocal(valorOriginal);
+    }
+
     // Agregar "%" para campos de entrenamiento
     if (campo === "% Entrenamiento" && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
       td.textContent = valorOriginal + "%";
@@ -1950,8 +2032,17 @@ function actualizarTextosUI() {
     if (warningIcon) {
       // Preservar el icono y solo actualizar el texto
       th.textContent = traducirCampo(original) + " ";
-      warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
-      warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+
+      // Verificar si es un icono de información (para Hora) o advertencia
+      const warningKey = warningIcon.getAttribute("data-warning-key");
+      if (warningKey === "hora") {
+        warningIcon.title = currentLanguage === 'es' ? 'Ver información' : 'Show info';
+        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver información' : 'Show info');
+      } else {
+        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
+        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+      }
+
       th.appendChild(warningIcon);
     } else {
       th.textContent = traducirCampo(original);
@@ -2093,6 +2184,120 @@ function formatearPeso(valor) {
 
   // Si no es un número, devolverlo sin cambios
   return valor;
+}
+
+// Función para formatear % Entrenamiento como rango
+function formatearPorcentajeEntrenamiento(valor) {
+  if (valor === undefined || valor === null || valor === "-") {
+    return valor;
+  }
+
+  // Si ya es un rango (string con guion), devolverlo tal cual
+  if (typeof valor === "string" && valor.includes("-")) {
+    return valor;
+  }
+
+  const valorNum = Number(valor);
+
+  // Si es un número válido, crear el rango desde ese valor hasta 100
+  if (!isNaN(valorNum)) {
+    return `${valorNum}-100`;
+  }
+
+  // Si no es un número, devolverlo sin cambios
+  return valor;
+}
+
+// Función para convertir hora UTC-3 a hora local del navegador
+function convertirHoraALocal(valor) {
+  if (valor === undefined || valor === null || valor === "-") {
+    return valor;
+  }
+
+  const valorStr = String(valor);
+
+  // Detectar si contiene información de hora UTC-3
+  const regexDia = /Día\s*\((\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})\s*UTC-3\)/i;
+  const regexNoche = /Noche\s*\((\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})\s*UTC-3\)/i;
+
+  let match = valorStr.match(regexDia);
+  let esDia = true;
+
+  if (!match) {
+    match = valorStr.match(regexNoche);
+    esDia = false;
+  }
+
+  if (!match) {
+    // No es un formato reconocido, devolver tal cual
+    return valor;
+  }
+
+  const horaInicio = parseInt(match[1]);
+  const minInicio = parseInt(match[2]);
+  const horaFin = parseInt(match[3]);
+  const minFin = parseInt(match[4]);
+
+  // Obtener el offset de la zona horaria local en minutos
+  const offsetLocal = -new Date().getTimezoneOffset(); // En minutos (positivo para UTC+, negativo para UTC-)
+  const offsetUTC3 = -180; // UTC-3 en minutos
+
+  // Diferencia entre la hora local y UTC-3
+  const diferencia = offsetLocal - offsetUTC3; // En minutos
+  const diferenciaHoras = Math.floor(diferencia / 60);
+  const diferenciaMinutos = diferencia % 60;
+
+  // Convertir hora de inicio
+  let nuevaHoraInicio = horaInicio + diferenciaHoras;
+  let nuevosMinInicio = minInicio + diferenciaMinutos;
+
+  if (nuevosMinInicio >= 60) {
+    nuevaHoraInicio++;
+    nuevosMinInicio -= 60;
+  } else if (nuevosMinInicio < 0) {
+    nuevaHoraInicio--;
+    nuevosMinInicio += 60;
+  }
+
+  // Normalizar hora (0-23)
+  if (nuevaHoraInicio >= 24) nuevaHoraInicio -= 24;
+  if (nuevaHoraInicio < 0) nuevaHoraInicio += 24;
+
+  // Convertir hora de fin
+  let nuevaHoraFin = horaFin + diferenciaHoras;
+  let nuevosMinFin = minFin + diferenciaMinutos;
+
+  if (nuevosMinFin >= 60) {
+    nuevaHoraFin++;
+    nuevosMinFin -= 60;
+  } else if (nuevosMinFin < 0) {
+    nuevaHoraFin--;
+    nuevosMinFin += 60;
+  }
+
+  // Normalizar hora (0-23)
+  if (nuevaHoraFin >= 24) nuevaHoraFin -= 24;
+  if (nuevaHoraFin < 0) nuevaHoraFin += 24;
+
+  // Formatear las horas en HH:MM
+  const horaInicioStr = `${String(nuevaHoraInicio).padStart(2, '0')}:${String(nuevosMinInicio).padStart(2, '0')}`;
+  const horaFinStr = `${String(nuevaHoraFin).padStart(2, '0')}:${String(nuevosMinFin).padStart(2, '0')}`;
+
+  // Obtener el nombre de la zona horaria local
+  const nombreZonaHoraria = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const offsetHoras = Math.floor(offsetLocal / 60);
+  const offsetMinutos = Math.abs(offsetLocal % 60);
+  const signo = offsetHoras >= 0 ? '+' : '';
+  const offsetStr = offsetMinutos > 0
+    ? `UTC${signo}${offsetHoras}:${String(offsetMinutos).padStart(2, '0')}`
+    : `UTC${signo}${offsetHoras}`;
+
+  // Traducir "Día" o "Noche" según el idioma actual
+  const textoDiaNoche = esDia
+    ? (currentLanguage === 'es' ? 'Día' : 'Day')
+    : (currentLanguage === 'es' ? 'Noche' : 'Night');
+
+  return `${textoDiaNoche} (${horaInicioStr}-${horaFinStr} ${offsetStr})`;
 }
 
 function traducirValor(campo, valor) {

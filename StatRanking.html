@@ -608,9 +608,6 @@ function generarVariantesScumon() {
   // Obtener todos los Child que evolucionan a Scumon
   const childsQueEvolucionan = Object.entries(digimonReqDict)
     .filter(([nombre, data]) => {
-      // Ignorar Digimon con Bonus "Desconocido"
-      if (data.Bonus === "Desconocido") return false;
-
       const stats = digimonstattier[nombre];
       return stats && stats.Evoluciona && stats.Evoluciona.includes("Scumon") && data.Nivel === 3;
     })
@@ -1071,7 +1068,7 @@ function generarRanking() {
 
   // Obtener Digimon del nivel seleccionado
   const digimonDelNivel = Object.entries(digimonReqDict)
-    .filter(([_, data]) => data.Nivel === nivelSeleccionado && data.Bonus !== "Desconocido")
+    .filter(([_, data]) => data.Nivel === nivelSeleccionado)
     .map(([nombre, _]) => nombre);
 
   // Crear array de ranking con datos

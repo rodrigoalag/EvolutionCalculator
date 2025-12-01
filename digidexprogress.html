@@ -303,7 +303,7 @@ function guardarEstado(estado) {
 // Función para obtener todos los Digimon de un Tama ORDENADOS POR NIVEL
 function obtenerDigimonDelTama(tamaSeleccionado) {
   const digimonDelTama = Object.entries(digimonReqDict)
-    .filter(([nombre, data]) => data.Tama === tamaSeleccionado && nombre.toLowerCase() !== "burpmon" && data.Bonus !== "Desconocido")
+    .filter(([nombre, data]) => data.Tama === tamaSeleccionado && nombre.toLowerCase() !== "burpmon")
     .map(([nombre, data]) => ({
       nombre: nombre,
       nivel: data.Nivel

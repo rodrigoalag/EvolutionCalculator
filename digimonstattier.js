@@ -50,6 +50,9 @@ const digimonstattier = {
   "Shoutmon SH": {
     "ATK": 45, "DEF": 25, "HP": 300, "Vel": 60, "Digipuntos": 16, "Evoluciona": ["King Shoutmon", "Burpmon", "Numemon", "Nanimon", "Bakemon LT", "Scumon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Starmons"]
   },
+  "King Shoutmon": {
+    "ATK": 95, "DEF": 60, "HP": 900, "Vel": 80, "Digipuntos": 32.5, "Evoluciona": ["Omega Shoutmon", "Burpmon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Shoutmon SH", "Shoutmon + Star Sword"]
+  },
   "Numemon": {
     "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40, "Digipuntos": 20, "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
   },
@@ -203,6 +206,9 @@ const digimonstattier = {
   "Insekimon High Tier": { // Cambiar
     "ATK": 160, "DEF": 200, "HP": 2000, "Vel": 140, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["Icemon"]
   }, 
+    "Omega Shoutmon": {
+    "ATK": 220, "DEF": 140, "HP": 1800, "Vel": 160, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["King Shoutmon"]
+  },
   "GreatKingScumon": { // Cambiar
     "ATK": 172, "DEF": 141, "HP": 1449, "Vel": 182, "Digipuntos": 64, "Evoluciona": ["Burpmon"], "Viene": ["Scumon","PlatinumScumon"]
   },

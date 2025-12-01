@@ -521,6 +521,9 @@ nivelSelect.addEventListener("change", () => {
 
   // Agregar Digimon que coincidan con Tama y Nivel
   Object.entries(digimonReqDict).forEach(([nombre, datos]) => {
+    // Ignorar Digimon con Bonus "Desconocido"
+    if (datos.Bonus === "Desconocido") return;
+
     if (datos.Tama === tamaElegido && parseInt(datos.Nivel) === nivelElegido) {
       const option = document.createElement("option");
       option.value = nombre;
@@ -869,7 +872,7 @@ function generarFormulario() {
   translateAutoFieldsContent();
 
   const nextLevel = data["Nivel"] + 1;
-  let nextDigimons = Object.entries(digimonReqDict).filter(([_, info]) => info["Nivel"] === nextLevel);
+  let nextDigimons = Object.entries(digimonReqDict).filter(([_, info]) => info["Nivel"] === nextLevel && info["Bonus"] !== "Desconocido");
   console.log("Lista ANTES de filtrar por Tama:", nextDigimons.map(([name]) => name));
 
   // FILTRADO UNIFICADO: Tama + Cross Tama Evolution + Bloqueos Evolución
@@ -1004,16 +1007,19 @@ function generarFormulario() {
 
     // Filtrar solo los side evolutions que existen en digimonReqDict
     const sideDigimons = Object.entries(digimonReqDict).filter(
-      ([name, _]) => {
+      ([name, info]) => {
+        // Ignorar Digimon con Bonus "Desconocido"
+        if (info["Bonus"] === "Desconocido") return false;
+
         const normalizedName = normalizeDigimonName(name);
-        
+
         return sideEvos.some(sideEvo => {
           const normalizedSideEvo = normalizeDigimonName(sideEvo);
           const matches = normalizedName === normalizedSideEvo;
-          
+
           // Debug detallado
           console.log(`Comparando: "${name}" (${normalizedName}) vs "${sideEvo}" (${normalizedSideEvo}) = ${matches}`);
-          
+
           return matches;
         });
       }
@@ -1725,7 +1731,7 @@ const data = digimonReqDict[selected];
 if (!data) return;
 
 const nextLevel = data["Nivel"] + 1;
-let nextDigimons = Object.entries(digimonReqDict).filter(([_, info]) => info["Nivel"] === nextLevel);
+let nextDigimons = Object.entries(digimonReqDict).filter(([_, info]) => info["Nivel"] === nextLevel && info["Bonus"] !== "Desconocido");
 console.log(`Lista antes de cualquier filtro en boton: ${nextDigimons}`);
 //Elimina las sides que NO están permitidas para el digimon seleccionado
 nextDigimons = nextDigimons.filter(([name, info]) => {
@@ -1774,16 +1780,19 @@ if (selected in SideEvolutionSelected) {
 
   // Filtrar solo los side evolutions que existen en digimonReqDict
   const sideDigimons = Object.entries(digimonReqDict).filter(
-    ([name, _]) => {
+    ([name, info]) => {
+      // Ignorar Digimon con Bonus "Desconocido"
+      if (info["Bonus"] === "Desconocido") return false;
+
       const normalizedName = normalizeDigimonName(name);
-      
+
       return sideEvos.some(sideEvo => {
         const normalizedSideEvo = normalizeDigimonName(sideEvo);
         const matches = normalizedName === normalizedSideEvo;
-        
+
         // Debug detallado
         console.log(`Comparando: "${name}" (${normalizedName}) vs "${sideEvo}" (${normalizedSideEvo}) = ${matches}`);
-        
+
         return matches;
       });
     }

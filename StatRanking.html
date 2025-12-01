@@ -608,6 +608,9 @@ function generarVariantesScumon() {
   // Obtener todos los Child que evolucionan a Scumon
   const childsQueEvolucionan = Object.entries(digimonReqDict)
     .filter(([nombre, data]) => {
+      // Ignorar Digimon con Bonus "Desconocido"
+      if (data.Bonus === "Desconocido") return false;
+
       const stats = digimonstattier[nombre];
       return stats && stats.Evoluciona && stats.Evoluciona.includes("Scumon") && data.Nivel === 3;
     })
@@ -803,8 +806,9 @@ const nivelAEtapa = {
 
 // Clasificaciones de Digipuntos
 const clasificacionDigipuntos = [
-  { min: 0, max: 15.01, nombre: "Standard Child", clase: "tier-low" },
-  { min: 15.02, max: 16.01, nombre: "High Child", clase: "tier-high" },
+  { min: 0, max: 14.99, nombre: "Low Child", clase: "tier-low" },
+  { min: 15, max: 15.99, nombre: "Standard Child", clase: "tier-mid" },
+  { min: 16, max: 19.99, nombre: "High Child", clase: "tier-high" },
   { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" },
   { min: 30, max: 30.99, nombre: "Low Adult", clase: "tier-low" },
   { min: 31, max: 34.99, nombre: "Mid Adult", clase: "tier-mid" },
@@ -886,7 +890,8 @@ function obtenerClasificacion(nivel, nombre) {
     return { min: 0, max: 10.00, nombre: "Standard Baby 2", clase: "tier-low" };
   }
 
-  if (digipuntosBase < 15 && nivel >= 3) {
+  // Mutant solo aplica para Adult (nivel 4) con stats bajos
+  if (digipuntosBase < 30 && nivel === 4) {
     return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
   }
   if (digipuntosBase < 60 && nivel === 5) {
@@ -1066,7 +1071,7 @@ function generarRanking() {
 
   // Obtener Digimon del nivel seleccionado
   const digimonDelNivel = Object.entries(digimonReqDict)
-    .filter(([_, data]) => data.Nivel === nivelSeleccionado)
+    .filter(([_, data]) => data.Nivel === nivelSeleccionado && data.Bonus !== "Desconocido")
     .map(([nombre, _]) => nombre);
 
   // Crear array de ranking con datos

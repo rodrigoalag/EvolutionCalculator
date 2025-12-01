@@ -291,7 +291,7 @@ const digimonReqDict = {
   
       "Bakemon MT": {
 	"ID": 100, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 10, 
-	"% Entrenamiento": 80,"Error Maximo": 1, "Combates Minimos": 15, "WinRate": 60, "Digimon Bonus": "Ghostmon",
+	"% Entrenamiento": 80,"Error Maximo": 1, "Combates Minimos": 15, "WinRate": 50, "Digimon Bonus": "Ghostmon",
   },
   
       "Soulmon MT": {
@@ -357,6 +357,13 @@ const digimonReqDict = {
   "Shoutmon + Star Sword": {
 	"ID": 161, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 17,
 	"Xross": "DriverInstall"
-  }
-
+  },
+  "King Shoutmon": {
+	"ID": 162, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 20,
+	"% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 15, "WinRate": 60, "Program": "Royal", "Bonus": "Desconocido"
+  },
+    "Omega Shoutmon": {
+	"ID": 163, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 35,
+	"% Entrenamiento": 100, "Error Maximo": 0, "Combates Minimos": 25, "WinRate": 70, "Vinculo Minimo alcanzado": 100,
+  },
 };

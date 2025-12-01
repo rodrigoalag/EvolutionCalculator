@@ -297,7 +297,7 @@ function obtenerNivelesPorTama(tama) {
 
 function obtenerDigimonPorTamaNivel(tama, nivel) {
   return Object.entries(digimonReqDict)
-    .filter(([_, d]) => d.Tama === tama && d.Nivel === Number(nivel))
+    .filter(([_, d]) => d.Tama === tama && d.Nivel === Number(nivel) && d.Bonus !== "Desconocido")
     .map(([k]) => k).sort();
 }
 

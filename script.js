@@ -162,7 +162,7 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Errores Minimos"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Errores Minimos"];
 
 
 const bloqueosEvolucion = {
@@ -208,7 +208,9 @@ const bloqueosEvolucion = {
   "BomberNanimon": ["Nanimon"],
   "Digitamamon": ["Nanimon","BomberNanimon"],
   "Devitamamon": ["Digitamamon"],
-  "PrinceMamemon":["Mamemon"]
+  "PrinceMamemon":["Mamemon"],
+  "King Shoutmon":["Shoutmon","Shoutmon (Black)","Shoutmon SH", "Shoutmon + Star Sword"],
+  "Omega Shoutmon": ["King Shoutmon"],
   
 };
 const bloqueosexcepciones = {
@@ -245,7 +247,8 @@ const EvoListSpecial = {
   "Icemon": ["Chackmon"],
   "Yukidarumon":["Chackmon"],
   "Blizzarmon":["Chackmon"],
-  "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon"],
+  "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword"],
+  "Nanimon": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword"],
   "GreatKingScumon": ["Scumon", "PlatinumScumon"]
 };
 const crosstamaevo = {
@@ -254,7 +257,8 @@ const crosstamaevo = {
   "Chackmon": ["Yuki Agumon", "Icemon", "Yukidarumon"], 
   "Daipenmon": ["Polarbearmon"],
   "Ghostmon": ["Koromon", "Pickmon"],
-  "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon"],
+  "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword"],
+  "Nanimon": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword"],
   "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"],
   "Mushmon": ["Koromon","Pickmon"]
 };
@@ -341,12 +345,12 @@ const specialxrossCases = {
 	"Shoutmon SH": {
 		"Shoutmon": "Starmons Driver",
 		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver"]
 	},
 	"Shoutmon + Star Sword": {
 		"Shoutmon": "Starmons Driver",
 		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver"]
 	}
 };
 /*const specialfoodcases = {
@@ -1101,7 +1105,14 @@ function generarFormulario() {
       }
     }
   });
-  
+
+  // EXCEPCIÓN: Si alguna evolución tiene "Bonus Vinculo Alcanzado", agregar "Vinculo Minimo alcanzado"
+  const tieneBonusVinculo = nextDigimons.some(([_, info]) => info["Bonus Vinculo Alcanzado"] !== undefined);
+  if (tieneBonusVinculo && !fieldSet.has("Vinculo Minimo alcanzado")) {
+    fieldSet.add("Vinculo Minimo alcanzado");
+    console.log("✅ Campo 'Vinculo Minimo alcanzado' agregado por excepción (existe Bonus Vinculo Alcanzado)");
+  }
+
   console.log(`📊 Todos los campos en fieldSet: ${Array.from(fieldSet)}`);
   console.log(`📏 Total de campos: ${fieldSet.size}`);
 
@@ -1318,9 +1329,30 @@ function generarFormulario() {
         return; // Salir temprano
     }
 
+    // EXCEPCIÓN ESPECIAL: Vinculo Minimo alcanzado siempre debe crear un input
+    if (field === "Vinculo Minimo alcanzado") {
+        console.log("⚠️ CREANDO INPUT ESPECIAL PARA VINCULO MINIMO ALCANZADO");
+        let input = document.createElement("input");
+        input.type = "text";
+        input.id = `field_${field}`;
+        input.min = -50;
+        input.max = 100;
+
+        // Agregar validación con limpieza automática
+        input.addEventListener('input', function() {
+          validarRangoInput(input, field, -50, 100);
+          recalcularCamposCalculados();
+        });
+
+        td.appendChild(input);
+        targetFields.appendChild(td);
+        console.log("✅ INPUT CREADO PARA VINCULO MINIMO ALCANZADO");
+        return; // Salir temprano
+    }
+
     // Lógica principal para campos string (mantener exacta pero sin Stat Superior)
-    // EXCEPCIÓN: % Entrenamiento y Hora siempre deben ser inputs, incluso si el valor esperado es string
-    if (typeof sampleValue === "string" && field !== "% Entrenamiento" && field !== "Hora") {
+    // EXCEPCIÓN: % Entrenamiento, Hora y Vinculo Minimo alcanzado siempre deben ser inputs, incluso si el valor esperado es string o undefined
+    if (typeof sampleValue === "string" && field !== "% Entrenamiento" && field !== "Hora" && field !== "Vinculo Minimo alcanzado") {
         let opciones = [];
         if (field === "EntrenamientoHecho") {
             opciones = ["Si", "No"];
@@ -1970,11 +2002,19 @@ if (nextDigimons.some(([_, info]) => "Program" in info)) {
 } else {
     console.log("No Program field found in any digimon");
 }
+
+// EXCEPCIÓN: Si alguna evolución tiene "Bonus Vinculo Alcanzado", agregar "Vinculo Minimo alcanzado"
+const tieneBonusVinculo = nextDigimons.some(([_, info]) => info["Bonus Vinculo Alcanzado"] !== undefined);
+if (tieneBonusVinculo && !fieldSet.has("Vinculo Minimo alcanzado")) {
+  fieldSet.add("Vinculo Minimo alcanzado");
+  console.log("✅ Campo 'Vinculo Minimo alcanzado' agregado por excepción en Calcular (existe Bonus Vinculo Alcanzado)");
+}
+
 const allKeys = new Set();
 nextDigimons.forEach(([_, info]) => {
   Object.keys(info).forEach(key => allKeys.add(key));
 });
-console.log("Todas las claves encontradas en nextDigimons:", Array.from(allKeys));  
+console.log("Todas las claves encontradas en nextDigimons:", Array.from(allKeys));
 console.log("Campos finales:", Array.from(fieldSet));
 
 
@@ -1983,7 +2023,9 @@ console.log("Campos finales:", Array.from(fieldSet));
 
 fieldSet.forEach(field => {
     const element = document.getElementById(`field_${field}`);
-    
+
+    console.log(`🔎 Buscando campo: ${field}, elemento encontrado:`, element);
+
     // Si el elemento no existe (campo calculado), buscar el span calculado
     if (!element) {
       const calcElement = document.getElementById(`calc_${field}`);
@@ -2077,11 +2119,22 @@ let tablaCompleta = `
             `<th data-translate='puntaje'>${translate('puntaje')}</th>`;
 
 fieldSet.forEach(field => {
+    // Excluir "Vinculo Minimo alcanzado" SOLO si ninguna evolución lo tiene como campo directo
+    // (es decir, solo existe por el Bonus Vinculo Alcanzado)
+    if (field === "Vinculo Minimo alcanzado") {
+        const tieneVinculoDirecto = nextDigimons.some(([_, info]) => info["Vinculo Minimo alcanzado"] !== undefined);
+        if (!tieneVinculoDirecto) {
+            console.log("⚠️ Vinculo Minimo alcanzado NO se muestra en tabla (solo existe por Bonus)");
+            return; // Saltar si solo existe por el bonus
+        }
+        console.log("✅ Vinculo Minimo alcanzado SÍ se muestra en tabla (es requisito directo)");
+    }
+
     const header = field === "Error Maximo" ? "Errores" :
       field === "EntrenamientoHecho" ? "¿Realizó Entrenamiento?" :
       field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
       field === "Combates Minimos" ? "Batallas":
-      field === "Vinculo Minimo alcanzado"?"Vinculo":
+      field === "Vinculo Minimo alcanzado" ? "Vinculo" :
       field;
 
     const translateKey = headerMappingJS[header] || header.toLowerCase();
@@ -2102,11 +2155,20 @@ let pillomonEvaluated = false;
 let skullGreymonEvaluated = false; // AGREGADO PARA SKULLGREYMON
 let bakemonLTEvaluated = false; // AGREGADO PARA BAKEMON LT
 
-const celdas = Array.from(fieldSet).map(field => {
+const celdas = Array.from(fieldSet)
+  .filter(field => {
+    // Excluir "Vinculo Minimo alcanzado" SOLO si no es requisito directo
+    if (field === "Vinculo Minimo alcanzado") {
+      const tieneVinculoDirecto = nextDigimons.some(([_, info]) => info["Vinculo Minimo alcanzado"] !== undefined);
+      return tieneVinculoDirecto; // Solo incluir si es requisito directo
+    }
+    return true; // Incluir todos los demás campos
+  })
+  .map(field => {
   const esperado = requisitos[field];
   const ingresado = inputValues[field];
   let punto = 0;
-  
+
 console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
 
         // LÓGICA ESPECIAL PARA SKULLGREYMON - AGREGADO
@@ -2339,20 +2401,60 @@ else if (bonusField === "Bonus Batallas") {
   } else if (bonusField === "Bonus Comida") {
     const digimonName = name;
     const comidaIngresada = inputValues["Comida"];
-    
+
     if (specialfoodcases[digimonName] && comidaIngresada && comidaIngresada !== "Ninguno") {
         const validFood = specialfoodcases[digimonName];
-        
+
         if (Array.isArray(validFood)) {
-            const isValid = validFood.some(food => 
+            const isValid = validFood.some(food =>
                 comidaIngresada.toLowerCase() === food.toLowerCase()
             );
-            
+
             if (isValid) {
                 totalBonus += 1;
             }
         }
     }
+} else if (bonusField === "Bonus Vinculo Alcanzado") {
+    console.log("🔍 === DEBUG BONUS VINCULO ALCANZADO ===");
+    console.log("inputValues disponibles:", Object.keys(inputValues));
+    console.log("Valor esperado del bonus:", esperadoBonus);
+
+    const vinculoValue = inputValues["Vinculo Minimo alcanzado"];
+    console.log("Valor de 'Vinculo Minimo alcanzado' en inputValues:", vinculoValue);
+
+    const cleanValue = vinculoValue?.toString().replace(/[<>=\s]/g, '') || '0';
+    const ingNum = Number(cleanValue);
+    console.log("Valor limpio:", cleanValue, "Número:", ingNum);
+
+    if (esperadoBonus.toString().includes("<=")) {
+        const valorEsperado = Number(esperadoBonus.toString().replace(/[<=\s]/g, ''));
+        const cumple = ingNum <= valorEsperado;
+        console.log(`Condición <=: ${ingNum} <= ${valorEsperado} = ${cumple}`);
+        totalBonus += cumple ? 1 : 0;
+    } else if (esperadoBonus.toString().includes(">=")) {
+        const valorEsperado = Number(esperadoBonus.toString().replace(/[>=\s]/g, ''));
+        const cumple = ingNum >= valorEsperado;
+        console.log(`Condición >=: ${ingNum} >= ${valorEsperado} = ${cumple}`);
+        totalBonus += cumple ? 1 : 0;
+    } else if (esperadoBonus.toString().includes("<")) {
+        const valorEsperado = Number(esperadoBonus.toString().replace(/[<\s]/g, ''));
+        const cumple = ingNum < valorEsperado;
+        console.log(`Condición <: ${ingNum} < ${valorEsperado} = ${cumple}`);
+        totalBonus += cumple ? 1 : 0;
+    } else if (esperadoBonus.toString().includes(">")) {
+        const valorEsperado = Number(esperadoBonus.toString().replace(/[>\s]/g, ''));
+        const cumple = ingNum > valorEsperado;
+        console.log(`Condición >: ${ingNum} > ${valorEsperado} = ${cumple}`);
+        totalBonus += cumple ? 1 : 0;
+    } else {
+        // Por defecto, usar >= para valores numéricos sin símbolo
+        const valorEsperado = Number(esperadoBonus);
+        const cumple = ingNum >= valorEsperado;
+        console.log(`Condición >= (por defecto): ${ingNum} >= ${valorEsperado} = ${cumple}`);
+        totalBonus += cumple ? 1 : 0;
+    }
+    console.log("Total bonus después de Bonus Vinculo Alcanzado:", totalBonus);
 }
 });
 punto = totalBonus;}

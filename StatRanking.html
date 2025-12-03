@@ -604,6 +604,7 @@ function formatearLineaEvolutiva(nombreDigimon, lineaEvolutiva) {
 // Función para generar variantes de Scumon y GreatKingScumon
 function generarVariantesScumon() {
   const variantes = [];
+  const variantesUnicas = new Map(); // Para evitar duplicados
 
   // Obtener todos los Child que evolucionan a Scumon
   const childsQueEvolucionan = Object.entries(digimonReqDict)
@@ -618,12 +619,43 @@ function generarVariantesScumon() {
     const childStats = digimonstattier[childNombre];
     const childData = digimonReqDict[childNombre];
 
-    // Obtener Baby II que viene antes del Child
+    // Obtener predecesores del Child
     if (!childStats.Viene || childStats.Viene.length === 0) return;
 
-    childStats.Viene.forEach(babyIINombre => {
-      const babyIIStats = digimonstattier[babyIINombre];
-      const babyIIData = digimonReqDict[babyIINombre];
+    // Procesar cada predecesor (puede ser Baby II o Child side evolution)
+    childStats.Viene.forEach(predecesorNombre => {
+      const predecesorStats = digimonstattier[predecesorNombre];
+      const predecesorData = digimonReqDict[predecesorNombre];
+
+      if (!predecesorStats || !predecesorData) return;
+
+      let babyIINombre, babyIIStats, babyIIData;
+
+      // Si el predecesor es un Baby II (nivel 2), usarlo directamente
+      if (predecesorData.Nivel === 2) {
+        babyIINombre = predecesorNombre;
+        babyIIStats = predecesorStats;
+        babyIIData = predecesorData;
+      }
+      // Si el predecesor es un Child (nivel 3) - es una side evolution
+      else if (predecesorData.Nivel === 3) {
+        // Buscar el Baby II del que viene este Child side
+        if (!predecesorStats.Viene || predecesorStats.Viene.length === 0) return;
+
+        // Tomar el primer Baby II encontrado
+        const babyIIFound = predecesorStats.Viene.find(nombre => {
+          const data = digimonReqDict[nombre];
+          return data && data.Nivel === 2;
+        });
+
+        if (!babyIIFound) return;
+
+        babyIINombre = babyIIFound;
+        babyIIStats = digimonstattier[babyIIFound];
+        babyIIData = digimonReqDict[babyIIFound];
+      } else {
+        return; // Ni Baby II ni Child, saltar
+      }
 
       if (!babyIIStats || !babyIIStats.Viene || babyIIStats.Viene.length === 0) return;
 
@@ -641,7 +673,11 @@ function generarVariantesScumon() {
           vel: Math.round(childStats.Vel * 1.34)
         };
 
-        // Calcular heredados para Scumon: 40% Baby I + 40% Baby II + 40% Child base
+        // Calcular heredados para Scumon
+        // SIEMPRE incluir 40% del Child ACTUAL (childStats)
+        // NO incluir el predecesor Child si es una side evolution
+        const esSideEvolution = predecesorData.Nivel === 3;
+
         const heredadoScumon = {
           atk: Math.round(babyIStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(childStats.ATK * 0.4),
           def: Math.round(babyIStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(childStats.DEF * 0.4),
@@ -677,69 +713,78 @@ function generarVariantesScumon() {
         const tamaId = babyIData ? babyIData.Tama : "?";
         const lineaEvolutiva = `${childNombre} (${tamaId})`;
 
-        variantes.push({
-          nombre: "Scumon",
-          lineaEvolutiva: lineaEvolutiva,
-          atk: scumonStatsFinal.atk,
-          def: scumonStatsFinal.def,
-          hp: scumonStatsFinal.hp,
-          vel: scumonStatsFinal.vel,
-          digipuntos: scumonDigipuntos,
-          nivel: 4
-        });
+        // Crear clave única para evitar duplicados: Child + Baby I + Baby II
+        const claveUnica = `${childNombre}-${babyINombre}-${babyIINombre}`;
 
-        // PlatinumScumon usa la misma fórmula que Scumon (Child base × 1.34)
-        variantes.push({
-          nombre: "PlatinumScumon",
-          lineaEvolutiva: lineaEvolutiva,
-          atk: scumonStatsFinal.atk,
-          def: scumonStatsFinal.def,
-          hp: scumonStatsFinal.hp,
-          vel: scumonStatsFinal.vel,
-          digipuntos: scumonDigipuntos,
-          nivel: 4
-        });
+        // Solo agregar si no existe esta combinación
+        if (!variantesUnicas.has(claveUnica)) {
+          variantesUnicas.set(claveUnica, true);
 
-        // Fórmula de GreatKingScumon: Scumon BASE × 2.25
-        const gksStatsBase = {
-          atk: Math.round(scumonStatsBase.atk * 2.25),
-          def: Math.round(scumonStatsBase.def * 2.25),
-          hp: Math.round(scumonStatsBase.hp * 2.25),
-          vel: Math.round(scumonStatsBase.vel * 2.25)
-        };
+          variantes.push({
+            nombre: "Scumon",
+            lineaEvolutiva: lineaEvolutiva,
+            atk: scumonStatsFinal.atk,
+            def: scumonStatsFinal.def,
+            hp: scumonStatsFinal.hp,
+            vel: scumonStatsFinal.vel,
+            digipuntos: scumonDigipuntos,
+            nivel: 4
+          });
 
-        if (tipoStatsActual === 'heredados') {
-          // GKS heredados: agregar 40% Baby I + 40% Baby II + 40% Child + 40% Scumon base
-          const heredadoGKS = {
-            atk: Math.round(babyIStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(scumonStatsBase.atk * 0.4),
-            def: Math.round(babyIStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(scumonStatsBase.def * 0.4),
-            hp: Math.round(babyIStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(scumonStatsBase.hp * 0.4),
-            vel: Math.round(babyIStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(scumonStatsBase.vel * 0.4)
+          // PlatinumScumon usa la misma fórmula que Scumon (Child base × 1.34)
+          variantes.push({
+            nombre: "PlatinumScumon",
+            lineaEvolutiva: lineaEvolutiva,
+            atk: scumonStatsFinal.atk,
+            def: scumonStatsFinal.def,
+            hp: scumonStatsFinal.hp,
+            vel: scumonStatsFinal.vel,
+            digipuntos: scumonDigipuntos,
+            nivel: 4
+          });
+
+          // Fórmula de GreatKingScumon: Scumon BASE × 2.25
+          const gksStatsBase = {
+            atk: Math.round(scumonStatsBase.atk * 2.25),
+            def: Math.round(scumonStatsBase.def * 2.25),
+            hp: Math.round(scumonStatsBase.hp * 2.25),
+            vel: Math.round(scumonStatsBase.vel * 2.25)
           };
 
-          gksStatsFinal = {
-            atk: gksStatsBase.atk + heredadoGKS.atk,
-            def: gksStatsBase.def + heredadoGKS.def,
-            hp: gksStatsBase.hp + heredadoGKS.hp,
-            vel: gksStatsBase.vel + heredadoGKS.vel
-          };
-        } else {
-          gksStatsFinal = gksStatsBase;
+          let gksStatsFinal;
+          if (tipoStatsActual === 'heredados') {
+            // GKS heredados: agregar 40% Baby I + 40% Baby II + 40% Child ACTUAL + 40% Scumon base
+            const heredadoGKS = {
+              atk: Math.round(babyIStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(scumonStatsBase.atk * 0.4),
+              def: Math.round(babyIStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(scumonStatsBase.def * 0.4),
+              hp: Math.round(babyIStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(scumonStatsBase.hp * 0.4),
+              vel: Math.round(babyIStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(scumonStatsBase.vel * 0.4)
+            };
+
+            gksStatsFinal = {
+              atk: gksStatsBase.atk + heredadoGKS.atk,
+              def: gksStatsBase.def + heredadoGKS.def,
+              hp: gksStatsBase.hp + heredadoGKS.hp,
+              vel: gksStatsBase.vel + heredadoGKS.vel
+            };
+          } else {
+            gksStatsFinal = gksStatsBase;
+          }
+
+          // Calcular Digipuntos para GKS
+          const gksDigipuntos = parseFloat((((gksStatsFinal.hp / 10) + gksStatsFinal.atk + gksStatsFinal.def + gksStatsFinal.vel) / 10).toFixed(1));
+
+          variantes.push({
+            nombre: "GreatKingScumon",
+            lineaEvolutiva: lineaEvolutiva,
+            atk: gksStatsFinal.atk,
+            def: gksStatsFinal.def,
+            hp: gksStatsFinal.hp,
+            vel: gksStatsFinal.vel,
+            digipuntos: gksDigipuntos,
+            nivel: 5
+          });
         }
-
-        // Calcular Digipuntos para GKS
-        const gksDigipuntos = parseFloat((((gksStatsFinal.hp / 10) + gksStatsFinal.atk + gksStatsFinal.def + gksStatsFinal.vel) / 10).toFixed(1));
-
-        variantes.push({
-          nombre: "GreatKingScumon",
-          lineaEvolutiva: lineaEvolutiva,
-          atk: gksStatsFinal.atk,
-          def: gksStatsFinal.def,
-          hp: gksStatsFinal.hp,
-          vel: gksStatsFinal.vel,
-          digipuntos: gksDigipuntos,
-          nivel: 5
-        });
       });
     });
   });

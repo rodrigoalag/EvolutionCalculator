@@ -360,7 +360,7 @@ const digimonReqDict = {
   },
   "King Shoutmon": {
 	"ID": 162, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 20,
-	"% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 15, "WinRate": 60, "Program": "Royal", "Bonus": "Desconocido"
+	"% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 15, "WinRate": 60, "Program": "Royal", "Bonus Vinculo Alcanzado": 80
   },
     "Omega Shoutmon": {
 	"ID": 163, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 35,

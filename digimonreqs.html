@@ -995,7 +995,7 @@ const specialDigimonConfig = {
 },
 "King Shoutmon": {
   gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus"],
+    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"],
     "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Program"]
   }
 },
@@ -1045,12 +1045,12 @@ const specialxrossCases = {
 	"Shoutmon SH": {
 		"Shoutmon": "Starmons Driver",
 		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver"]
 	},
 	"Shoutmon + Star Sword": {
 		"Shoutmon": "Starmons Driver",
 		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"]
+		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver" ]
 	}
 };
 const specialEntrenamientoCases = {
@@ -1972,8 +1972,8 @@ if (evolucionesMultiples.length > 0) {
       valorOriginal = convertirHoraALocal(valorOriginal);
     }
 
-    // Agregar "%" para campos de entrenamiento
-    if (campo === "% Entrenamiento" && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
+    // Agregar "%" para campos de entrenamiento y vínculo
+    if ((campo === "% Entrenamiento" || campo.includes("Vinculo")) && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
       td.textContent = valorOriginal + "%";
     } else {
       td.innerHTML = traducirValor(campo, valorOriginal);

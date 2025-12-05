@@ -130,6 +130,200 @@
       width: 100%;
     }
 
+    /* Estilos para filtros */
+    .filters-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-end;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.02);
+      border-radius: 8px;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .filter-item label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .filter-item input,
+    .filter-item select {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      min-width: 150px;
+    }
+
+    .filter-item input[type="number"] {
+      min-width: 100px;
+    }
+
+    .filter-item input[type="range"] {
+      min-width: 100%;
+      cursor: pointer;
+    }
+
+    .filter-item input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #2196F3;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .filter-item input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: #2196F3;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+    }
+
+    .filter-dropdown {
+      position: relative;
+      min-width: 200px;
+    }
+
+    .filter-dropdown-button {
+      padding: 0.5rem;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #2b2b2b;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .filter-dropdown-button:hover {
+      background-color: #3a3a3a;
+      border-color: #555;
+    }
+
+    .filter-dropdown-button.active {
+      border-color: #2196F3;
+      border-width: 2px;
+    }
+
+    .filter-dropdown-arrow {
+      margin-left: 0.5rem;
+      font-size: 0.7rem;
+      transition: transform 0.2s ease;
+    }
+
+    .filter-dropdown-button.active .filter-dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    .checkbox-container {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid #444;
+      border-radius: 4px;
+      padding: 0.5rem;
+      background-color: #2b2b2b;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .checkbox-container.show {
+      display: block;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .checkbox-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      cursor: pointer;
+      width: auto;
+      min-width: auto;
+    }
+
+    .checkbox-item label {
+      cursor: pointer;
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: normal;
+      flex: 1;
+      color: white;
+    }
+
+    .checkbox-item.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .filter-count {
+      font-size: 0.75rem;
+      color: #666;
+      margin-left: 0.5rem;
+    }
+
+    .clear-filters-btn {
+      padding: 0.5rem 1rem;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      align-self: flex-end;
+    }
+
+    .clear-filters-btn:hover {
+      background-color: #d32f2f;
+    }
+
+    @media (max-width: 768px) {
+      .filters-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-item input,
+      .filter-item select {
+        min-width: 100%;
+      }
+
+      .clear-filters-btn {
+        align-self: stretch;
+      }
+    }
+
     /* Estilos para botones de descarga */
     .download-buttons {
       display: flex;
@@ -246,6 +440,61 @@
     </section>
 
     <section class="container">
+      <!-- Filtros -->
+      <div id="filtersContainer" class="filters-container" style="display: none;">
+        <div class="filter-item">
+          <label id="labelFilterDigimon">Filtrar por Digimon:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterDigimonButton">
+              <span id="filterDigimonText">Todos</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterDigimonContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item" id="filterEvolucionAnteriorItem">
+          <label id="labelFilterEvolucionAnterior">Evolución Anterior:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterEvolucionAnteriorButton">
+              <span id="filterEvolucionAnteriorText">Todas</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterEvolucionAnteriorContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item">
+          <label id="labelFilterClasificacion">Filtrar por Clasificación:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterClasificacionButton">
+              <span id="filterClasificacionText">Todas</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterClasificacionContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item" style="min-width: 250px;">
+          <label id="labelFilterDigipuntos">
+            Digipuntos: <span id="digipuntosRangeValue">Todos</span>
+          </label>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="number" id="filterDigipuntosMin" min="0" max="100" step="0.1" value="0" style="width: 80px; padding: 0.3rem;">
+            <span style="color: #666;">-</span>
+            <input type="number" id="filterDigipuntosMax" min="0" max="100" step="0.1" value="100" style="width: 80px; padding: 0.3rem;">
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #666; margin-top: 0.3rem;">
+            <span>Min: <span id="digipuntosMinDisplay">0</span></span>
+            <span>Max: <span id="digipuntosMaxDisplay">100</span></span>
+          </div>
+        </div>
+        <button class="clear-filters-btn" id="clearFiltersBtn">Limpiar Filtros</button>
+      </div>
+
       <div id="rankingContainer">
         <div class="table-wrapper">
           <table id="rankingTable" class="ranking-table" style="display: none;">
@@ -275,6 +524,7 @@ let idiomaActual = 'es';
 let campoOrdenamiento = 'digipuntos';
 let ordenDescendente = true;
 let datosActuales = [];
+let datosSinFiltrar = []; // Guardar datos sin filtrar
 let procesandoClick = false;
 let tipoStatsActual = 'base'; // 'base' o 'heredados'
 
@@ -723,6 +973,7 @@ function generarVariantesScumon() {
           variantes.push({
             nombre: "Scumon",
             lineaEvolutiva: lineaEvolutiva,
+            evolucionAnterior: childNombre, // Scumon viene de Child
             atk: scumonStatsFinal.atk,
             def: scumonStatsFinal.def,
             hp: scumonStatsFinal.hp,
@@ -735,6 +986,7 @@ function generarVariantesScumon() {
           variantes.push({
             nombre: "PlatinumScumon",
             lineaEvolutiva: lineaEvolutiva,
+            evolucionAnterior: childNombre, // PlatinumScumon viene de Child
             atk: scumonStatsFinal.atk,
             def: scumonStatsFinal.def,
             hp: scumonStatsFinal.hp,
@@ -777,6 +1029,7 @@ function generarVariantesScumon() {
           variantes.push({
             nombre: "GreatKingScumon",
             lineaEvolutiva: lineaEvolutiva,
+            evolucionAnterior: "Scumon", // GreatKingScumon viene de Scumon
             atk: gksStatsFinal.atk,
             def: gksStatsFinal.def,
             hp: gksStatsFinal.hp,
@@ -813,6 +1066,15 @@ const traducciones = {
     digipuntos: "Digipuntos",
 	subtitle: "Creado por Rodrigoalag",
     explanation: "",
+    filtrarDigimon: "Filtrar por Digimon:",
+    filtrarEvolucionAnterior: "Evolución Anterior:",
+    filtrarClasificacion: "Filtrar por Clasificación:",
+    filtrarDigipuntos: "Digipuntos:",
+    todasClasificaciones: "Todas las clasificaciones",
+    todosDigimon: "Todos",
+    todasEvoluciones: "Todas",
+    todosDigipuntos: "Todos",
+    limpiarFiltros: "Limpiar Filtros",
  },
   en: {
     titulo: "Digimon Ranking by Digipoints",
@@ -833,6 +1095,15 @@ const traducciones = {
     digipuntos: "Digipoints",
 	subtitle: "Created by Rodrigoalag",
     explanation: "",
+    filtrarDigimon: "Filter by Digimon:",
+    filtrarEvolucionAnterior: "Previous Evolution:",
+    filtrarClasificacion: "Filter by Classification:",
+    filtrarDigipuntos: "Digipoints:",
+    todasClasificaciones: "All classifications",
+    todosDigimon: "All",
+    todasEvoluciones: "All",
+    todosDigipuntos: "All",
+    limpiarFiltros: "Clear Filters",
  }
 };
 
@@ -1098,16 +1369,603 @@ function generarTablaRankingSegura(data, tbody) {
   });
 }
 
+// Función para obtener la evolución anterior (un nivel atrás)
+function obtenerEvolucionAnterior(nombreDigimon, lineaEvolutiva) {
+  const nivelActual = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Baby I no tiene evolución anterior
+  if (nivelActual <= 1) return null;
+
+  // Si hay lineaEvolutiva (stats heredados), buscar en la línea
+  if (lineaEvolutiva && lineaEvolutiva.length > 0) {
+    // Buscar el último Digimon en la línea que sea del nivel anterior
+    for (let i = lineaEvolutiva.length - 1; i >= 0; i--) {
+      const predecesor = lineaEvolutiva[i];
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor === nivelActual - 1) {
+        return predecesor;
+      }
+    }
+  }
+
+  // Si no hay lineaEvolutiva o no se encontró en la línea, buscar en digimonstattier
+  const statsDigimon = digimonstattier[nombreDigimon];
+  if (!statsDigimon || !statsDigimon.Viene || statsDigimon.Viene.length === 0) {
+    return null;
+  }
+
+  // Buscar el primer predecesor que sea del nivel anterior
+  for (const predecesor of statsDigimon.Viene) {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+    if (nivelPredecesor === nivelActual - 1) {
+      return predecesor;
+    }
+  }
+
+  return null;
+}
+
+// Función para obtener TODAS las evoluciones anteriores de un Digimon (un nivel atrás)
+function obtenerTodasLasEvolucionesAnteriores(nombreDigimon) {
+  const nivelActual = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Baby I no tiene evolución anterior
+  if (nivelActual <= 1) return [];
+
+  const statsDigimon = digimonstattier[nombreDigimon];
+  if (!statsDigimon || !statsDigimon.Viene || statsDigimon.Viene.length === 0) {
+    return [];
+  }
+
+  // Obtener TODOS los predecesores que sean del nivel anterior
+  const evolucionesAnteriores = [];
+  for (const predecesor of statsDigimon.Viene) {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+    if (nivelPredecesor === nivelActual - 1) {
+      evolucionesAnteriores.push(predecesor);
+    }
+  }
+
+  return evolucionesAnteriores;
+}
+
+// ============================================
+// FUNCIONES DE FILTRADO
+// ============================================
+
+// Función para actualizar el texto del botón del dropdown
+function actualizarTextoDropdown(containerId, buttonTextId, todosText) {
+  const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`);
+  const seleccionados = Array.from(checkboxes)
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  const buttonText = document.getElementById(buttonTextId);
+  if (seleccionados.length === 0) {
+    buttonText.textContent = todosText;
+  } else if (seleccionados.length === 1) {
+    buttonText.textContent = seleccionados[0];
+  } else {
+    buttonText.textContent = `${seleccionados.length} seleccionados`;
+  }
+}
+
+// Función para toggle de dropdown
+function toggleDropdown(buttonId, containerId) {
+  const button = document.getElementById(buttonId);
+  const container = document.getElementById(containerId);
+
+  // Cerrar todos los demás dropdowns
+  document.querySelectorAll('.checkbox-container.show').forEach(c => {
+    if (c.id !== containerId) {
+      c.classList.remove('show');
+    }
+  });
+
+  document.querySelectorAll('.filter-dropdown-button.active').forEach(b => {
+    if (b.id !== buttonId) {
+      b.classList.remove('active');
+    }
+  });
+
+  // Toggle el actual
+  container.classList.toggle('show');
+  button.classList.toggle('active');
+}
+
+// Cerrar dropdowns al hacer click fuera
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.filter-dropdown')) {
+    document.querySelectorAll('.checkbox-container.show').forEach(c => {
+      c.classList.remove('show');
+    });
+    document.querySelectorAll('.filter-dropdown-button.active').forEach(b => {
+      b.classList.remove('active');
+    });
+  }
+});
+
+function aplicarFiltros() {
+  const rangeValueSpan = document.getElementById('digipuntosRangeValue');
+  const t = traducciones[idiomaActual];
+
+  let datosFiltrados = [...datosSinFiltrar];
+
+  // Obtener Digimon seleccionados (checkboxes marcados, excluyendo "Todos")
+  const digimonsSeleccionados = Array.from(
+    document.querySelectorAll('#filterDigimonContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por nombre de Digimon (si hay alguno seleccionado)
+  if (digimonsSeleccionados.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      digimonsSeleccionados.includes(item.nombre)
+    );
+  }
+
+  // Actualizar opciones de evolución anterior basado en Digimon seleccionados
+  actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados.length > 0 ? digimonsSeleccionados : null);
+
+  // Obtener evoluciones anteriores seleccionadas (checkboxes marcados, excluyendo "Todas")
+  const evolucionesSeleccionadas = Array.from(
+    document.querySelectorAll('#filterEvolucionAnteriorContainer input[type="checkbox"]:checked:not(:disabled)')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por evolución anterior (si hay alguna seleccionada)
+  if (evolucionesSeleccionadas.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item => {
+      // Si tiene el campo todasLasEvolucionesAnteriores (Stats Base), verificar contra ese array
+      if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
+        return item.todasLasEvolucionesAnteriores.some(evo => evolucionesSeleccionadas.includes(evo));
+      }
+      // Si no, verificar contra evolucionAnterior (Stats Heredados)
+      if (item.evolucionAnterior) {
+        return evolucionesSeleccionadas.includes(item.evolucionAnterior);
+      }
+      return false;
+    });
+  }
+
+  // Obtener clasificaciones seleccionadas (checkboxes marcados, excluyendo "Todas")
+  const clasificacionesSeleccionadas = Array.from(
+    document.querySelectorAll('#filterClasificacionContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por clasificación (si hay alguna seleccionada)
+  if (clasificacionesSeleccionadas.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      clasificacionesSeleccionadas.includes(item.clasificacion.nombre)
+    );
+  }
+
+  // Filtrar por Digipuntos (rango mín-máx)
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  const filterMin = parseFloat(inputMin.value);
+  const filterMax = parseFloat(inputMax.value);
+  const rangoMin = parseFloat(inputMin.min);
+  const rangoMax = parseFloat(inputMax.max);
+
+  // Filtrar si los valores no están en el rango completo
+  if (filterMin > rangoMin || filterMax < rangoMax) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      item.digipuntos >= filterMin && item.digipuntos <= filterMax
+    );
+    rangeValueSpan.textContent = `${filterMin.toFixed(1)} - ${filterMax.toFixed(1)}`;
+  } else {
+    rangeValueSpan.textContent = t.todosDigipuntos;
+  }
+
+  datosActuales = datosFiltrados;
+
+  // Actualizar texto de los botones dropdown
+  actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
+  actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+  actualizarTextoDropdown('filterClasificacionContainer', 'filterClasificacionText', t.todasClasificaciones);
+
+  // Ordenar y mostrar
+  const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+  const tbody = document.querySelector('#rankingTable tbody');
+  generarTablaRankingSegura(datosOrdenados, tbody);
+  actualizarHeadersActivos();
+}
+
+function limpiarFiltros() {
+  const t = traducciones[idiomaActual];
+
+  // Desmarcar todos los checkboxes excepto "Todos"
+  document.querySelectorAll('#filterDigimonContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
+  document.querySelectorAll('#filterEvolucionAnteriorContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+    cb.disabled = false;
+    cb.closest('.checkbox-item').classList.remove('disabled');
+  });
+
+  document.querySelectorAll('#filterClasificacionContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  if (inputMin && inputMax) {
+    inputMin.value = inputMin.min;
+    inputMax.value = inputMax.max;
+  }
+  document.getElementById('digipuntosRangeValue').textContent = t.todosDigipuntos;
+
+  // Actualizar texto de botones
+  document.getElementById('filterDigimonText').textContent = t.todosDigimon;
+  document.getElementById('filterEvolucionAnteriorText').textContent = t.todasEvoluciones;
+  document.getElementById('filterClasificacionText').textContent = t.todasClasificaciones;
+
+  datosActuales = [...datosSinFiltrar];
+
+  const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+  const tbody = document.querySelector('#rankingTable tbody');
+  generarTablaRankingSegura(datosOrdenados, tbody);
+  actualizarHeadersActivos();
+}
+
+function actualizarOpcionesDigimon() {
+  const container = document.getElementById('filterDigimonContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener nombres únicos de Digimon ordenados alfabéticamente
+  const digimonsUnicos = [...new Set(datosSinFiltrar.map(item => item.nombre))].sort();
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todos"
+  const todosDiv = document.createElement('div');
+  todosDiv.className = 'checkbox-item';
+  todosDiv.innerHTML = `
+    <input type="checkbox" id="digimon-todos" value="" checked>
+    <label for="digimon-todos">${t.todosDigimon}</label>
+  `;
+  container.appendChild(todosDiv);
+
+  // Agregar checkbox para cada Digimon
+  digimonsUnicos.forEach(nombre => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `digimon-${nombre.replace(/\s+/g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${nombre}">
+      <label for="${id}">${nombre}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todos"
+  document.getElementById('digimon-todos').addEventListener('change', function() {
+    if (this.checked) {
+      // Si se marca "Todos", desmarcar todos los demás
+      container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        // Si se marca uno individual, desmarcar "Todos"
+        document.getElementById('digimon-todos').checked = false;
+      } else {
+        // Si todos están desmarcados, marcar "Todos"
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('digimon-todos').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar texto del botón
+  actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
+}
+
+function actualizarOpcionesEvolucionAnterior() {
+  const container = document.getElementById('filterEvolucionAnteriorContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener evoluciones anteriores únicas (filtrar los que tienen evolucionAnterior)
+  const evolucionesAnteriores = [...new Set(
+    datosSinFiltrar
+      .filter(item => item.evolucionAnterior)
+      .map(item => item.evolucionAnterior)
+  )].sort();
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todas"
+  const todasDiv = document.createElement('div');
+  todasDiv.className = 'checkbox-item';
+  todasDiv.innerHTML = `
+    <input type="checkbox" id="evolucion-todas" value="" checked>
+    <label for="evolucion-todas">${t.todasEvoluciones}</label>
+  `;
+  container.appendChild(todasDiv);
+
+  // Agregar checkbox para cada evolución
+  evolucionesAnteriores.forEach(evolucion => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `evolucion-${evolucion.replace(/\s+/g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${evolucion}">
+      <label for="${id}">${evolucion}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todas"
+  document.getElementById('evolucion-todas').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
+        if (!cb.disabled) cb.checked = false;
+      });
+    }
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('evolucion-todas').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas):not(:disabled)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('evolucion-todas').checked = true;
+        }
+      }
+      aplicarFiltros();
+    });
+  });
+}
+
+function actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados) {
+  const container = document.getElementById('filterEvolucionAnteriorContainer');
+  const t = traducciones[idiomaActual];
+
+  // Guardar el estado actual de los checkboxes antes de regenerar
+  const estadoCheckboxes = {};
+  container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    estadoCheckboxes[cb.value] = cb.checked;
+  });
+
+  // Obtener evoluciones válidas basadas en los Digimon seleccionados
+  let evolucionesValidas;
+
+  if (!digimonsSeleccionados || digimonsSeleccionados.length === 0) {
+    // Si no hay Digimon seleccionados, mostrar todas las evoluciones únicas
+    const evolucionesSet = new Set();
+    datosSinFiltrar.forEach(item => {
+      // Añadir evoluciones del campo todasLasEvolucionesAnteriores (Stats Base)
+      if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
+        item.todasLasEvolucionesAnteriores.forEach(evo => evolucionesSet.add(evo));
+      }
+      // Añadir evolución del campo evolucionAnterior (Stats Heredados)
+      if (item.evolucionAnterior) {
+        evolucionesSet.add(item.evolucionAnterior);
+      }
+    });
+    evolucionesValidas = [...evolucionesSet].sort();
+  } else {
+    // Si hay Digimon seleccionados, mostrar solo sus evoluciones anteriores
+    const evolucionesSet = new Set();
+    datosSinFiltrar
+      .filter(item => digimonsSeleccionados.includes(item.nombre))
+      .forEach(item => {
+        // Añadir evoluciones del campo todasLasEvolucionesAnteriores (Stats Base)
+        if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
+          item.todasLasEvolucionesAnteriores.forEach(evo => evolucionesSet.add(evo));
+        }
+        // Añadir evolución del campo evolucionAnterior (Stats Heredados)
+        if (item.evolucionAnterior) {
+          evolucionesSet.add(item.evolucionAnterior);
+        }
+      });
+
+    evolucionesValidas = [...evolucionesSet].sort();
+
+    console.log('Digimon seleccionados:', digimonsSeleccionados);
+    console.log('Evoluciones válidas únicas:', evolucionesValidas);
+  }
+
+  // Limpiar y regenerar el contenedor
+  container.innerHTML = '';
+
+  console.log('Regenerando container con', evolucionesValidas.length, 'opciones');
+
+  // Agregar checkbox "Todas"
+  const todasDiv = document.createElement('div');
+  todasDiv.className = 'checkbox-item';
+  const todasChecked = estadoCheckboxes[''] !== undefined ? estadoCheckboxes[''] : true;
+  todasDiv.innerHTML = `
+    <input type="checkbox" id="evolucion-todas" value="" ${todasChecked ? 'checked' : ''}>
+    <label for="evolucion-todas">${t.todasEvoluciones}</label>
+  `;
+  container.appendChild(todasDiv);
+
+  // Agregar solo las evoluciones válidas
+  evolucionesValidas.forEach(evolucion => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const isChecked = estadoCheckboxes[evolucion] || false;
+    div.innerHTML = `
+      <input type="checkbox" id="evolucion-${evolucion.replace(/\s+/g, '-')}" value="${evolucion}" ${isChecked ? 'checked' : ''}>
+      <label for="evolucion-${evolucion.replace(/\s+/g, '-')}">${evolucion}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  console.log('Checkboxes de evolución creados:', evolucionesValidas.length);
+
+  // Event listener para "Todas"
+  const todasCheckbox = document.getElementById('evolucion-todas');
+  if (todasCheckbox) {
+    todasCheckbox.addEventListener('change', function() {
+      console.log('Checkbox "Todas" changed:', this.checked);
+      if (this.checked) {
+        // Si se marca "Todas", desmarcar todos los demás
+        container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
+          cb.checked = false;
+        });
+      }
+      actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+      aplicarFiltros();
+    });
+  }
+
+  // Event listeners para cada checkbox individual
+  const checkboxesIndividuales = container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)');
+  console.log('Agregando listeners a', checkboxesIndividuales.length, 'checkboxes individuales');
+
+  checkboxesIndividuales.forEach((cb, index) => {
+    cb.addEventListener('change', function() {
+      console.log('Checkbox individual changed:', this.value, 'checked:', this.checked);
+      if (this.checked) {
+        // Si se marca uno individual, desmarcar "Todas"
+        document.getElementById('evolucion-todas').checked = false;
+      } else {
+        // Si todos están desmarcados, marcar "Todas"
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('evolucion-todas').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar el texto del botón
+  actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+}
+
+function actualizarOpcionesClasificacion() {
+  const container = document.getElementById('filterClasificacionContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener clasificaciones únicas de los datos actuales sin filtrar
+  const clasificacionesUnicas = [...new Set(datosSinFiltrar.map(item => item.clasificacion.nombre))];
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todas"
+  const todasDiv = document.createElement('div');
+  todasDiv.className = 'checkbox-item';
+  todasDiv.innerHTML = `
+    <input type="checkbox" id="clasificacion-todas" value="" checked>
+    <label for="clasificacion-todas">${t.todasClasificaciones}</label>
+  `;
+  container.appendChild(todasDiv);
+
+  // Agregar checkbox para cada clasificación
+  clasificacionesUnicas.sort().forEach(clasificacion => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `clasificacion-${clasificacion.replace(/\s+/g, '-')}`;
+    const texto = traducciones[idiomaActual][clasificacion] || clasificacion;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${clasificacion}">
+      <label for="${id}">${texto}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todas"
+  document.getElementById('clasificacion-todas').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#clasificacion-todas)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#clasificacion-todas)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('clasificacion-todas').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#clasificacion-todas)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('clasificacion-todas').checked = true;
+        }
+      }
+      aplicarFiltros();
+    });
+  });
+}
+
+function actualizarRangoDigipuntos() {
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  const minDisplay = document.getElementById('digipuntosMinDisplay');
+  const maxDisplay = document.getElementById('digipuntosMaxDisplay');
+  const rangeValueSpan = document.getElementById('digipuntosRangeValue');
+  const t = traducciones[idiomaActual];
+
+  if (datosSinFiltrar.length === 0) return;
+
+  // Calcular min y max de digipuntos en los datos
+  const digipuntos = datosSinFiltrar.map(item => item.digipuntos);
+  const min = Math.floor(Math.min(...digipuntos) * 10) / 10; // Redondear hacia abajo
+  const max = Math.ceil(Math.max(...digipuntos) * 10) / 10;  // Redondear hacia arriba
+
+  // Configurar los inputs
+  inputMin.min = min;
+  inputMin.max = max;
+  inputMin.value = min;
+  inputMin.step = 0.1;
+
+  inputMax.min = min;
+  inputMax.max = max;
+  inputMax.value = max;
+  inputMax.step = 0.1;
+
+  // Actualizar labels
+  minDisplay.textContent = min.toFixed(1);
+  maxDisplay.textContent = max.toFixed(1);
+  rangeValueSpan.textContent = t.todosDigipuntos;
+}
+
+// ============================================
+// FIN FUNCIONES DE FILTRADO
+// ============================================
+
 // Función para generar el ranking (reutilizable)
 function generarRanking() {
   const nivelSeleccionado = parseInt(selectNivel.value);
   const downloadButtons = document.getElementById('downloadButtons');
   const explanationText = document.getElementById('explanationText');
+  const filtersContainer = document.getElementById('filtersContainer');
 
   if (!nivelSeleccionado) {
     rankingTable.style.display = "none";
     if (downloadButtons) downloadButtons.style.display = "none";
     if (explanationText) explanationText.style.display = "none";
+    if (filtersContainer) filtersContainer.style.display = "none";
     return;
   }
 
@@ -1165,9 +2023,13 @@ function generarRanking() {
           // Calcular digipuntos
           const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
 
+          // Obtener evolución anterior (un nivel atrás)
+          const evolucionAnterior = obtenerEvolucionAnterior(nombre, lineaEvolutiva);
+
           datosActuales.push({
             nombre,
             lineaEvolutiva: lineaEvo,
+            evolucionAnterior: evolucionAnterior,
             atk: stats.atk,
             def: stats.def,
             hp: stats.hp,
@@ -1188,9 +2050,14 @@ function generarRanking() {
         // Calcular digipuntos
         const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
 
+        // Obtener evolución anterior (un nivel atrás) - solo la primera para mostrar
+        const evolucionAnterior = obtenerEvolucionAnterior(nombre, null);
+
         datosActuales.push({
           nombre,
           lineaEvolutiva: null,
+          evolucionAnterior: evolucionAnterior,
+          todasLasEvolucionesAnteriores: obtenerTodasLasEvolucionesAnteriores(nombre), // Todas las opciones para el filtro
           atk: stats.atk,
           def: stats.def,
           hp: stats.hp,
@@ -1220,6 +2087,25 @@ function generarRanking() {
     });
   }
 
+  // Guardar datos sin filtrar y copiarlos a datosActuales
+  datosSinFiltrar = [...datosActuales];
+
+  // Actualizar opciones de filtros disponibles (esto también los resetea)
+  actualizarOpcionesDigimon();
+  actualizarOpcionesEvolucionAnterior();
+  actualizarOpcionesClasificacion();
+  actualizarRangoDigipuntos();
+
+  // Resetear inputs de digipuntos
+  const t = traducciones[idiomaActual];
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  if (inputMin && inputMax) {
+    inputMin.value = inputMin.min;
+    inputMax.value = inputMax.max;
+    document.getElementById('digipuntosRangeValue').textContent = t.todosDigipuntos;
+  }
+
   // Ordenar datos y generar tabla
   const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
   const tbody = document.querySelector('#rankingTable tbody');
@@ -1228,7 +2114,8 @@ function generarRanking() {
   actualizarHeadersActivos();
   rankingTable.style.display = "table";
 
-  // Mostrar texto explicativo y botones de descarga
+  // Mostrar filtros, texto explicativo y botones de descarga
+  if (filtersContainer) filtersContainer.style.display = "flex";
   if (explanationText) explanationText.style.display = "block";
   if (downloadButtons) downloadButtons.style.display = "flex";
 }
@@ -1240,6 +2127,17 @@ selectNivel.addEventListener("change", generarRanking);
 const selectTipoStats = document.getElementById("selectTipoStats");
 selectTipoStats.addEventListener("change", () => {
   tipoStatsActual = selectTipoStats.value;
+
+  // Mostrar/ocultar filtro de Evolución Anterior según el tipo de stats
+  const filterEvolucionAnteriorItem = document.getElementById('filterEvolucionAnteriorItem');
+  if (filterEvolucionAnteriorItem) {
+    if (tipoStatsActual === 'heredados') {
+      filterEvolucionAnteriorItem.style.display = 'flex';
+    } else {
+      filterEvolucionAnteriorItem.style.display = 'none';
+    }
+  }
+
   generarRanking();
 });
 
@@ -1270,6 +2168,41 @@ function actualizarTraducciones() {
     explanationText.textContent = t.explanation;
   }
 
+  // Actualizar labels de filtros
+  const labelFilterDigimon = document.getElementById('labelFilterDigimon');
+  const labelFilterEvolucionAnterior = document.getElementById('labelFilterEvolucionAnterior');
+  const labelFilterClasificacion = document.getElementById('labelFilterClasificacion');
+  const labelFilterDigipuntos = document.getElementById('labelFilterDigipuntos');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+  const digipuntosRangeValue = document.getElementById('digipuntosRangeValue');
+
+  if (labelFilterDigimon) labelFilterDigimon.textContent = t.filtrarDigimon;
+  if (labelFilterEvolucionAnterior) labelFilterEvolucionAnterior.textContent = t.filtrarEvolucionAnterior;
+  if (labelFilterClasificacion) labelFilterClasificacion.textContent = t.filtrarClasificacion;
+  if (clearFiltersBtn) clearFiltersBtn.textContent = t.limpiarFiltros;
+
+  // Actualizar label de Digipuntos preservando el span de valor
+  if (labelFilterDigipuntos && digipuntosRangeValue) {
+    const valorActual = digipuntosRangeValue.textContent;
+    labelFilterDigipuntos.innerHTML = `${t.filtrarDigipuntos} <span id="digipuntosRangeValue">${valorActual}</span>`;
+  }
+
+  // Actualizar opciones de filtros (para que se traduzcan)
+  if (datosSinFiltrar.length > 0) {
+    actualizarOpcionesDigimon();
+    actualizarOpcionesEvolucionAnterior();
+    actualizarOpcionesClasificacion();
+
+    // Actualizar el texto del valor de digipuntos si está en el rango completo
+    const inputMin = document.getElementById('filterDigipuntosMin');
+    const inputMax = document.getElementById('filterDigipuntosMax');
+    if (inputMin && inputMax &&
+        parseFloat(inputMin.value) === parseFloat(inputMin.min) &&
+        parseFloat(inputMax.value) === parseFloat(inputMax.max)) {
+      document.getElementById('digipuntosRangeValue').textContent = t.todosDigipuntos;
+    }
+  }
+
   // Actualizar headers de la tabla
   const headerDigimon = document.getElementById('headerDigimon');
   const headerLineaEvolutiva = document.getElementById('headerLineaEvolutiva');
@@ -1286,7 +2219,7 @@ function actualizarTraducciones() {
     headerDigipuntos.textContent = t.digipuntos;
     if (sortIcon) headerDigipuntos.appendChild(sortIcon);
   }
-  
+
   if (selectNivel.value && datosActuales.length > 0) {
     const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
     const tbody = document.querySelector('#rankingTable tbody');
@@ -1398,6 +2331,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const downloadCSVBtn = document.getElementById('downloadCSV');
   const downloadXLSXBtn = document.getElementById('downloadXLSX');
 
+  // Ocultar filtro de Evolución Anterior por defecto (Stats Base)
+  const filterEvolucionAnteriorItem = document.getElementById('filterEvolucionAnteriorItem');
+  if (filterEvolucionAnteriorItem) {
+    filterEvolucionAnteriorItem.style.display = 'none';
+  }
+
   selectIdioma.addEventListener("change", () => {
     idiomaActual = selectIdioma.value;
     actualizarTraducciones();
@@ -1417,6 +2356,50 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (downloadXLSXBtn) {
     downloadXLSXBtn.addEventListener('click', descargarXLSX);
+  }
+
+  // Event listeners para filtros
+  const filterDigipuntosMin = document.getElementById('filterDigipuntosMin');
+  const filterDigipuntosMax = document.getElementById('filterDigipuntosMax');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+  // Event listeners para los inputs de digipuntos
+  if (filterDigipuntosMin) {
+    filterDigipuntosMin.addEventListener('input', aplicarFiltros);
+  }
+  if (filterDigipuntosMax) {
+    filterDigipuntosMax.addEventListener('input', aplicarFiltros);
+  }
+
+  // Event listener para limpiar filtros
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', limpiarFiltros);
+  }
+
+  // Event listeners para botones dropdown
+  const filterDigimonButton = document.getElementById('filterDigimonButton');
+  const filterEvolucionAnteriorButton = document.getElementById('filterEvolucionAnteriorButton');
+  const filterClasificacionButton = document.getElementById('filterClasificacionButton');
+
+  if (filterDigimonButton) {
+    filterDigimonButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterDigimonButton', 'filterDigimonContainer');
+    });
+  }
+
+  if (filterEvolucionAnteriorButton) {
+    filterEvolucionAnteriorButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterEvolucionAnteriorButton', 'filterEvolucionAnteriorContainer');
+    });
+  }
+
+  if (filterClasificacionButton) {
+    filterClasificacionButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterClasificacionButton', 'filterClasificacionContainer');
+    });
   }
 
   inicializarSelector();

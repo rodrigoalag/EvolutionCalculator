@@ -35,7 +35,8 @@ const digimonReqDict = {
   },
   "Starmons": {
 	"ID": 84, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Mutante",
-    "Peso": 15, "Error Maximo": 6, "% Entrenamiento": "0-79"
+    "Peso": 15, "Error Maximo": 6, "% Entrenamiento": "0-79",
+    "Stat Superior": "HP", "Stat Superior 2": "Vel"
   },
   "Gotsumon": {
 	"ID": 85, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Tierra",
@@ -344,11 +345,13 @@ const digimonReqDict = {
   },
   "Shoutmon": {
 	"ID": 158, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 15,
-	"Hora": "Día (12:00-23:59 UTC-3)", "% Entrenamiento": 80
+	"Hora": "Día (12:00-23:59 UTC-3)", "% Entrenamiento": "80-100",
+	"Stat Superior": "ATK"
   },
   "Shoutmon (Black)": {
 	"ID": 159, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 15,
-	"Hora": "Noche (0:00-11:59 UTC-3)", "% Entrenamiento": 80
+	"Hora": "Noche (0:00-11:59 UTC-3)", "% Entrenamiento": "80-100",
+	"Stat Superior": "ATK"
   },
   "Shoutmon SH": {
 	"ID": 160, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 13,

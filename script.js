@@ -1454,6 +1454,35 @@ function generarFormulario() {
         }
 
         td.appendChild(input);
+
+        // Si es el campo Hora, agregar botón "Seleccionar Hoy"
+        if (field === "Hora") {
+            const btnHoy = document.createElement("button");
+            btnHoy.textContent = "📅 Hoy";
+            btnHoy.type = "button";
+            btnHoy.style.marginLeft = "8px";
+            btnHoy.style.padding = "4px 8px";
+            btnHoy.style.fontSize = "0.85rem";
+            btnHoy.style.cursor = "pointer";
+            btnHoy.style.backgroundColor = "#2196F3";
+            btnHoy.style.color = "white";
+            btnHoy.style.border = "none";
+            btnHoy.style.borderRadius = "4px";
+            btnHoy.title = "Seleccionar hora actual";
+            btnHoy.addEventListener('click', function() {
+                const ahora = new Date();
+                // Obtener hora local del sistema
+                const horas = String(ahora.getHours()).padStart(2, '0');
+                const minutos = String(ahora.getMinutes()).padStart(2, '0');
+                input.value = `${horas}:${minutos}`;
+
+                // Disparar evento input para que se recalculen los campos
+                const event = new Event('input', { bubbles: true });
+                input.dispatchEvent(event);
+            });
+            td.appendChild(btnHoy);
+        }
+
         targetFields.appendChild(td);
     }
   });
@@ -2154,6 +2183,8 @@ nextDigimons.forEach(([name, requisitos]) => {
 let pillomonEvaluated = false;
 let skullGreymonEvaluated = false; // AGREGADO PARA SKULLGREYMON
 let bakemonLTEvaluated = false; // AGREGADO PARA BAKEMON LT
+let shoutmonEvaluated = false; // AGREGADO PARA SHOUTMON
+let shoutmonBlackEvaluated = false; // AGREGADO PARA SHOUTMON BLACK
 
 const celdas = Array.from(fieldSet)
   .filter(field => {
@@ -2284,6 +2315,98 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             return `<td class="detail-column" style="display: none;">-</td>`;
         }
         // FIN LÓGICA ESPECIAL PARA BAKEMON LT
+
+        // LÓGICA ESPECIAL PARA SHOUTMON
+        if (name === "Shoutmon" && !shoutmonEvaluated) {
+            console.log("🔥 Evaluando Shoutmon con lógica especial");
+
+            // Obtener valores de los campos obligatorios
+            const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
+            const statSuperior = inputValues["Stat Superior"] || "";
+
+            // Verificar si cumple los requisitos obligatorios
+            const entrenamientoCorrecto = porcentajeEntrenamiento >= 80;
+
+            // Normalizar stat superior para comparación
+            let statSuperiorNorm = statSuperior.toLowerCase();
+            if (statSuperiorNorm.includes("spd")) {
+                statSuperiorNorm = statSuperiorNorm.replace("spd", "vel");
+            }
+            const partesStatSuperior = statSuperiorNorm.split("/").map(p => p.trim());
+            const tieneATK = partesStatSuperior.some(p => p === "atk");
+
+            console.log(`🔥 Shoutmon - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= 80)`);
+            console.log(`🔥 Shoutmon - Stat Superior contiene ATK: ${tieneATK} (${statSuperior})`);
+
+            // Si AMBOS requisitos se cumplen, dar +2 (1 por cada campo)
+            if (entrenamientoCorrecto && tieneATK) {
+                puntaje += 2;
+                console.log("🔥 Shoutmon - Ambos requisitos cumplidos: +2 puntos");
+            } else {
+                puntaje += -10;
+                console.log("🔥 Shoutmon - No cumple requisitos obligatorios: -10 puntos");
+            }
+
+            shoutmonEvaluated = true;
+
+            // Para Shoutmon, mostrar "Evaluado" en sus campos especiales
+            if (["% Entrenamiento", "Stat Superior"].includes(field)) {
+                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            }
+        }
+
+        // Si ya se evaluó Shoutmon y es uno de sus campos especiales, no evaluar de nuevo
+        if (name === "Shoutmon" && shoutmonEvaluated &&
+            ["% Entrenamiento", "Stat Superior"].includes(field)) {
+            return `<td class="detail-column" style="display: none;">-</td>`;
+        }
+        // FIN LÓGICA ESPECIAL PARA SHOUTMON
+
+        // LÓGICA ESPECIAL PARA SHOUTMON (BLACK)
+        if (name === "Shoutmon (Black)" && !shoutmonBlackEvaluated) {
+            console.log("🔥 Evaluando Shoutmon (Black) con lógica especial");
+
+            // Obtener valores de los campos obligatorios
+            const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
+            const statSuperior = inputValues["Stat Superior"] || "";
+
+            // Verificar si cumple los requisitos obligatorios
+            const entrenamientoCorrecto = porcentajeEntrenamiento >= 80;
+
+            // Normalizar stat superior para comparación
+            let statSuperiorNorm = statSuperior.toLowerCase();
+            if (statSuperiorNorm.includes("spd")) {
+                statSuperiorNorm = statSuperiorNorm.replace("spd", "vel");
+            }
+            const partesStatSuperior = statSuperiorNorm.split("/").map(p => p.trim());
+            const tieneATK = partesStatSuperior.some(p => p === "atk");
+
+            console.log(`🔥 Shoutmon (Black) - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= 80)`);
+            console.log(`🔥 Shoutmon (Black) - Stat Superior contiene ATK: ${tieneATK} (${statSuperior})`);
+
+            // Si AMBOS requisitos se cumplen, dar +2 (1 por cada campo)
+            if (entrenamientoCorrecto && tieneATK) {
+                puntaje += 2;
+                console.log("🔥 Shoutmon (Black) - Ambos requisitos cumplidos: +2 puntos");
+            } else {
+                puntaje += -10;
+                console.log("🔥 Shoutmon (Black) - No cumple requisitos obligatorios: -10 puntos");
+            }
+
+            shoutmonBlackEvaluated = true;
+
+            // Para Shoutmon (Black), mostrar "Evaluado" en sus campos especiales
+            if (["% Entrenamiento", "Stat Superior"].includes(field)) {
+                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            }
+        }
+
+        // Si ya se evaluó Shoutmon (Black) y es uno de sus campos especiales, no evaluar de nuevo
+        if (name === "Shoutmon (Black)" && shoutmonBlackEvaluated &&
+            ["% Entrenamiento", "Stat Superior"].includes(field)) {
+            return `<td class="detail-column" style="display: none;">-</td>`;
+        }
+        // FIN LÓGICA ESPECIAL PARA SHOUTMON (BLACK)
 
   if (field === "Bonus") {
     // Aquí se calculan los puntos por campos de bonus
@@ -2595,22 +2718,24 @@ const tieneBalanceado = partesIngresado.some(p =>
   console.log(`  ¿Tiene balanceado? ${tieneBalanceado}`);
   console.log(`  Stat principal: "${statPrincipal}"`);
   
-  if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)"].includes(name)) {
+  // Verificar si este Digimon tiene "Stat Superior 2"
+  if (requisitos["Stat Superior 2"]) {
     const esperado1 = (requisitos["Stat Superior"] || "").toLowerCase();
     const esperado2 = (requisitos["Stat Superior 2"] || "").toLowerCase();
-    
+
+    console.log(`  ${name} tiene Stat Superior 2`);
     console.log(`  Esperado1: "${esperado1}", Esperado2: "${esperado2}"`);
-    
+
     // Verificar si alguna parte del ingresado coincide con esperado1 o esperado2
     const coincideEsperado1 = partesIngresado.some(p => p === esperado1);
     const coincideEsperado2 = partesIngresado.some(p => p === esperado2);
-    
+
     if (coincideEsperado1 || coincideEsperado2) {
       punto = 1;
-      console.log(`  ✅ Coincide con esperado - Punto: ${punto}`);
+      console.log(`  ✅ Coincide con esperado1 o esperado2 - Punto: ${punto}`);
     } else {
       punto = 0;
-      console.log(`  ❌ No coincide con esperado - Punto: ${punto}`);
+      console.log(`  ❌ No coincide con ninguno - Punto: ${punto}`);
     }
   } else if (requisitos["Nivel"] === 3) {
     const esperadoLower = String(esperado).toLowerCase();

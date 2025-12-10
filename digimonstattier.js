@@ -18,7 +18,7 @@ const digimonstattier = {
     "ATK": 50, "DEF": 25, "HP": 250, "Vel": 50, "Digipuntos": 15,  "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon"]
   },
   "Pillomon": {
-    "ATK": 25, "DEF": 55, "HP": 500, "Vel": 20, "Digipuntos": 15, "Evoluciona": ["Numemon", "Scumon", "BakemonLT", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
+    "ATK": 25, "DEF": 40, "HP": 500, "Vel": 35, "Digipuntos": 15, "Evoluciona": ["Numemon", "Scumon", "BakemonLT", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
   },
   "Kokuwamon": {
     "ATK": 40, "DEF": 40, "HP": 450, "Vel": 25, "Digipuntos": 15, "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon"]

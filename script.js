@@ -166,8 +166,8 @@ const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo
 
 
 const bloqueosEvolucion = {
-  "V-Dramon": ["Agumon", "Yuki Agumon", "Agumon (2006)", "Kokuwamon"],
-  "Greymon": ["Agumon", "Kokuwamon", "Agumon"],
+  "V-Dramon": ["Agumon", "Yuki Agumon", "Agumon (2006)", "Kokuwamon", "Agumon Hakase"],
+  "Greymon": ["Agumon", "Kokuwamon", "Agumon", "Agumon Hakase"],
   "Tuskmon": ["Agumon (Black)"],
   "Yukidarumon": ["Yuki Agumon"],
   "GeoGreymon": ["Agumon (2006)"],

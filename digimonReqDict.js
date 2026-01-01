@@ -3,10 +3,17 @@ const digimonReqDict = {
   "Chibickmon": { "ID": 55, "Tama": "VS", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5 },
   "Koromon": { "ID": 1, "Tama": "V0", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 6 },
   "Pickmon": { "ID": 56, "Tama": "VS", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 10 },
+  "Yolkmon": { "ID": 47, "Tama": "VL", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 1 },
+  "Fluffymon": { "ID": 48, "Tama": "VL", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 4 },
   "Agumon": {
     "ID": 2, "Tama": "V0", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "Peso": 15, "Error Maximo": 6, "EntrenamientoHecho": "Si",
     "Stat Superior": "Vel", "Stat Superior 2": "ATK"
+  },
+  "Agumon Hakase": {
+    "ID": 97, "Tama": "V0", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
+    "Peso": 25, "Error Maximo": 6, "EntrenamientoHecho": "Si",
+    "Stat Superior": "Vel", "Stat Superior 2": "ATK","Nickname": "HK2006"
   },
   "Pillomon": {
     "ID": 75, "Tama": "M", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Mutante",
@@ -42,9 +49,17 @@ const digimonReqDict = {
 	"ID": 85, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Tierra",
     "Peso": 15, "Error Maximo": 6, "Program": "Ore"
   },
+    "Pteromon": {
+	"ID": 49, "Tama": "VL", "Nivel": 3, "Atributo": "Data", "Tipo": "Viento",
+    "Peso": 10, "Error Maximo": 6
+  },
   "Numemon": {
     "ID": 11, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "Peso": 10
+  },
+  "Galemon": {
+    "ID": 50, "Tama": "VL", "Nivel": 4, "Atributo": "Data", "Tipo": "Viento",
+    "Peso": 15, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15
   },
     "Greymon": {
 	"ID": 4, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
@@ -151,6 +166,10 @@ const digimonReqDict = {
 	"ID": 15, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dragon",
     "Peso": 50, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon",
 	"Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25
+  },
+      "GrandGalemon": {
+	"ID": 51, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Viento",
+    "Peso": 25, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25
   },
     "Monzaemon": {
 	"ID": 19, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Mutante",
@@ -369,4 +388,12 @@ const digimonReqDict = {
 	"ID": 163, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto", "Peso": 35,
 	"% Entrenamiento": 100, "Error Maximo": 0, "Combates Minimos": 25, "WinRate": 70, "Vinculo Minimo alcanzado": 100,
   },
+     "Wargreymon": {
+	"ID": 170, "Tama": "V0", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Dragon","Peso": 30,
+	"% Entrenamiento": 100,"Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 250, "Victorias": 125
+  }, 
+     "BlackWargreymon": {
+	"ID": 171, "Tama": "D", "Nivel": 6, "Atributo": "Virus", "Tipo": "Dragon","Peso": 30,
+	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias": 125
+  }, 
 };

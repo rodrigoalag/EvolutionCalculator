@@ -3,13 +3,13 @@ const digimonstattier = {
     "ATK": 6, "DEF": 6, "HP": 50, "Vel": 4, "Digipuntos": 2,  "Evoluciona": ["Koromon", "Burpmon"], "Viene": []
   },
   "Burpmon": {
-   "Viene": ["Botamon", "Chibickmon", "Koromon", "Pickmon", "Agumon", "Pillomon", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Starmons", "Gotsumon", "Numemon", "Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "RedVDramon", "GoldGuardromon", "GeoGreymon", "Clockmon", "Tuskmon", "Yukidarumon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Scumon", "PlatinumScumon", "ShootingStarmon", "Icemon", "Starmon", "Metal Greymon (Virus)", "Andromon", "Mametyramon", "Aero V-dramon", "Monzaemon", "Black King Numemon", "Etemon", "WaruMonzaemon", "GigaWaruMonzaemon", "Metal Tyranomon", "MetalMamemon", "Metal Greymon", "Mamemon", "MetalGreymon Alterous", "Aero V-dramon (Black)", "Triceramon", "BigMamemon", "RizeGreymon", "Polarbearmon", "Master Tyranomon", "Megadramon", "Gigadramon", "SuperStarmon", "DarkSuperStarmon", "Insekimon Low Tier", "Insekimon Mid Tier Dark", "Insekimon Mid Tier Super", "Insekimon High Tier", "GreatKingScumon", "MetalEtemon", "PlatinumNumemon", "Mugendramon", "Chackmon", "Blizzarmon", "Daipenmon"]
+   "Viene": ["Botamon", "Chibickmon", "Koromon", "Pickmon", "Agumon", "Agumon Hakase", "Pillomon", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Starmons", "Gotsumon", "Numemon", "Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "RedVDramon", "GoldGuardromon", "GeoGreymon", "Clockmon", "Tuskmon", "Yukidarumon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Scumon", "PlatinumScumon", "ShootingStarmon", "Icemon", "Starmon", "Metal Greymon (Virus)", "Andromon", "Mametyramon", "Aero V-dramon", "Monzaemon", "Black King Numemon", "Etemon", "WaruMonzaemon", "GigaWaruMonzaemon", "Metal Tyranomon", "MetalMamemon", "Metal Greymon", "Mamemon", "MetalGreymon Alterous", "Aero V-dramon (Black)", "Triceramon", "BigMamemon", "RizeGreymon", "Polarbearmon", "Master Tyranomon", "Megadramon", "Gigadramon", "SuperStarmon", "DarkSuperStarmon", "Insekimon Low Tier", "Insekimon Mid Tier Dark", "Insekimon Mid Tier Super", "Insekimon High Tier", "GreatKingScumon", "MetalEtemon", "PlatinumNumemon", "Mugendramon", "Chackmon", "Blizzarmon", "Daipenmon"]
   },
   "Chibickmon": {
     "ATK": 7, "DEF": 4, "HP": 40, "Vel": 6, "Digipuntos": 2, "Evoluciona": ["Pickmon", "Burpmon"], "Viene": []
   },
   "Koromon": {
-    "ATK": 9, "DEF": 6, "HP": 90, "Vel": 6, "Digipuntos": 3,  "Evoluciona": ["Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Mushmon", "Burpmon"], "Viene": ["Botamon"]
+    "ATK": 9, "DEF": 6, "HP": 90, "Vel": 6, "Digipuntos": 3,  "Evoluciona": ["Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Mushmon", "Burpmon"], "Viene": ["Botamon"]
   },
   "Pickmon": {
     "ATK": 10, "DEF": 5, "HP": 70, "Vel": 8, "Digipuntos": 3, "Evoluciona": ["Starmons", "Gotsumon", "Shoutmon", "Shoutmon (Black)", "Mushmon", "Burpmon"], "Viene": ["Chibickmon"]
@@ -54,31 +54,31 @@ const digimonstattier = {
     "ATK": 95, "DEF": 60, "HP": 900, "Vel": 80, "Digipuntos": 32.5, "Evoluciona": ["Omega Shoutmon", "Burpmon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Shoutmon SH", "Shoutmon + Star Sword"]
   },
   "Numemon": {
-    "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40, "Digipuntos": 20, "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
+    "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40, "Digipuntos": 20, "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
   },
   "Greymon": {
-    "ATK": 100, "DEF": 60, "HP": 1000, "Vel": 65, "Digipuntos": 32.5, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Kokuwamon"]
+    "ATK": 100, "DEF": 60, "HP": 1000, "Vel": 65, "Digipuntos": 32.5, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon"]
   },
   "Tyranomon": {
-    "ATK": 65, "DEF": 70, "HP": 1150, "Vel": 50, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Master Tyranomon", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Dark Tyranomon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
+    "ATK": 65, "DEF": 70, "HP": 1150, "Vel": 50, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Master Tyranomon", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Dark Tyranomon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
   },
   "Dark Tyranomon": {
     "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65,"Digipuntos": 30,  "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Tyranomon"]
   },
   "V-Dramon": {
-    "ATK": 100, "DEF": 55, "HP": 1050, "Vel": 90, "Digipuntos": 35, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "RedVDramon", "Burpmon"], "Viene": ["Agumon","Kokuwamon","Yuki Agumon", "Agumon (2006)"]
+    "ATK": 100, "DEF": 55, "HP": 1050, "Vel": 90, "Digipuntos": 35, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "RedVDramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon","Yuki Agumon", "Agumon (2006)"]
   },
   "Deltamon": {
-    "ATK": 115, "DEF": 40, "HP": 900, "Vel": 55, "Digipuntos": 30,  "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
+    "ATK": 115, "DEF": 40, "HP": 900, "Vel": 55, "Digipuntos": 30,  "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
   },
   "Thunderballmon": {
-    "ATK": 85, "DEF": 50, "HP": 900, "Vel": 75, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Mametyramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
+    "ATK": 85, "DEF": 50, "HP": 900, "Vel": 75, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Mametyramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
   },
   "Guardromon": {
-    "ATK": 50, "DEF": 110, "HP": 1100, "Vel": 30, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "GoldGuardromon", "Burpmon"], "Viene": ["Agumon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
+    "ATK": 50, "DEF": 110, "HP": 1100, "Vel": 30, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "GoldGuardromon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
   },
   "V-Dramon (Black)": {
-    "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75, "Digipuntos": 35,  "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
+    "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75, "Digipuntos": 35,  "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
   },
   "RedVDramon": {
     "ATK": 110, "DEF": 45, "HP": 950, "Vel": 100, "Digipuntos": 35, "Evoluciona": ["Aero V-dramon (Black)", "Burpmon"], "Viene": ["V-Dramon"]
@@ -90,7 +90,7 @@ const digimonstattier = {
     "ATK": 110, "DEF": 60, "HP": 1000, "Vel": 70, "Digipuntos": 34, "Evoluciona": ["Metal Greymon (Virus)", "RizeGreymon", "Andromon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon (2006)"]
   },
   "Clockmon": {
-    "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon","Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
+    "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65, "Digipuntos": 30, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon","Agumon (Black)","Yuki Agumon", "Agumon (2006)"]
   },
   "Tuskmon": {
     "ATK": 105, "DEF": 55, "HP": 1250, "Vel": 40, "Digipuntos": 32.5, "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)" ,"Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon (Black)"]
@@ -108,7 +108,7 @@ const digimonstattier = {
     "ATK": 50, "DEF": 50, "HP": 750, "Vel": 45, "Digipuntos": 22, "Evoluciona": ["Monzaemon", "Black King Numemon", "Burpmon"], "Viene": ["Numemon"]
   },
   "Scumon": { // Cambiar Poner todos?
-    "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "PlatinumScumon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
+    "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "PlatinumScumon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
   },
   "PlatinumScumon": { // Cambiar Poner todos?
     "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "Burpmon"], "Viene": ["Scumon"]
@@ -156,13 +156,13 @@ const digimonstattier = {
     "ATK": 190, "DEF": 120, "HP": 2000, "Vel": 140, "Digipuntos": 65, "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Mamemon"]
   },
   "Metal Greymon": {
-    "ATK": 225, "DEF": 120, "HP": 2000, "Vel": 130, "Digipuntos": 67.5, "Evoluciona": ["MetalGreymon Alterous", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]
+    "ATK": 225, "DEF": 120, "HP": 2000, "Vel": 130, "Digipuntos": 67.5, "Evoluciona": ["MetalGreymon Alterous","Wargreymon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]
   },
   "Mamemon": {
     "ATK": 185, "DEF": 75, "HP": 2000, "Vel": 140, "Digipuntos": 60, "Evoluciona": ["MetalMamemon", "BigMamemon", "PrinceMamemon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"]
   },
   "MetalGreymon Alterous": {
-    "ATK": 235, "DEF": 125, "HP": 2050, "Vel": 135, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["Metal Greymon"]
+    "ATK": 235, "DEF": 125, "HP": 2050, "Vel": 135, "Digipuntos": 70, "Evoluciona": ["Burpmon","Wargreymon"], "Viene": ["Metal Greymon"]
   },
   "Aero V-dramon (Black)": {
     "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["V-Dramon (Black)", "RedVDramon","Tuskmon","Dark Tyranomon"]
@@ -231,7 +231,7 @@ const digimonstattier = {
     "ATK": 160, "DEF": 160, "HP": 1200, "Vel": 110, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Polarbearmon", "Blizzarmon"]
   },
   "Bakemon LT": { // Cambiar
-    "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60, "Digipuntos": 20, "Evoluciona": ["Soulmon LT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
+    "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60, "Digipuntos": 20, "Evoluciona": ["Soulmon LT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
   },
     "Soulmon LT": { // Cambiar
     "ATK": 50, "DEF": 40, "HP": 600, "Vel": 70, "Digipuntos": 22, "Evoluciona": ["Fantomon", "Burpmon"], "Viene": ["Bakemon LT"]
@@ -246,7 +246,7 @@ const digimonstattier = {
     "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65, "Digipuntos": 16, "Evoluciona": ["Bakemon LT", "Bakemon MT", "Numemon", "Scumon", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
   },
     "SkullGreymon": { // Cambiar
-    "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70, "Digipuntos": 60, "Evoluciona": ["Burpmon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"]
+    "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70, "Digipuntos": 60, "Evoluciona": ["Burpmon","BlackWargreymon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"]
   },
 	"Fantomon": { // Cambiar
     "ATK": 250, "DEF": 100, "HP": 2200, "Vel": 180, "Digipuntos": 75, "Evoluciona": ["Metal Fantomon", "Burpmon"], "Viene": ["Bakemon LT", "Soulmon LT", "Bakemon MT", "Soulmon MT"]
@@ -261,7 +261,7 @@ const digimonstattier = {
     "ATK": 50, "DEF": 50, "HP": 1000, "Vel": 70, "Digipuntos": 27, "Evoluciona": ["Burpmon"], "Viene": ["Mushmon"]
   },  
 	"Nanimon": { // Cambiar
-    "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55, "Digipuntos": 20, "Evoluciona": ["Digitamamon","BomberNanimon","Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
+    "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55, "Digipuntos": 20, "Evoluciona": ["Digitamamon","BomberNanimon","Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon"]
   },  
 	"BomberNanimon": { // Cambiar
     "ATK": 70, "DEF": 10, "HP": 400, "Vel": 80, "Digipuntos": 20, "Evoluciona": ["Digitamamon","Burpmon"], "Viene": ["Nanimon"]
@@ -274,5 +274,30 @@ const digimonstattier = {
   }, 
 	"Devitamamon": { // Cambiar
     "ATK": 150 , "DEF": 120, "HP": 2200, "Vel": 60, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Digitamamon"]
-  }
+  },
+  	"Wargreymon": { // Cambiar
+    "ATK": 160 , "DEF": 100, "HP": 1800, "Vel": 110, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Metal Greymon","MetalGreymon Alterous"]
+  }, 
+    "BlackWargreymon": { // Cambiar
+    "ATK": 175 , "DEF": 100, "HP": 1900, "Vel": 85, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["SkullGreymon"]
+  },
+     "Yolkmon": { // Cambiar
+    "ATK": 3 , "DEF": 1, "HP": 40, "Vel": 13, "Digipuntos": 2.1, "Evoluciona": ["Burpmon","Fluffymon"], "Viene": []
+  },
+      "Fluffymon": { // Cambiar
+    "ATK": 3 , "DEF": 1, "HP": 50, "Vel": 21, "Digipuntos": 3, "Evoluciona": ["Burpmon","Pteromon"], "Viene": ["Yolkmon"]
+  },
+      "Pteromon": { // Cambiar
+    "ATK": 20 , "DEF": 20, "HP": 200, "Vel": 65, "Digipuntos": 12.5, "Evoluciona": ["Burpmon","Galemon","Numemon", "Scumon", "Bakemon LT", "Nanimon"], "Viene": ["Fluffymon"]
+  },
+      "Galemon": { // Cambiar
+    "ATK": 95 , "DEF": 40, "HP": 650, "Vel": 100, "Digipuntos": 30, "Evoluciona": ["Burpmon","GrandGalemon"], "Viene": ["Pteromon"]
+  },
+      "GrandGalemon": { // Cambiar
+    "ATK": 240 , "DEF": 110, "HP": 1000, "Vel": 200, "Digipuntos": 65, "Evoluciona": ["Burpmon"], "Viene": ["Galemon"]
+  }, 
+      "Agumon Hakase": { // Cambiar
+    "ATK": 45 , "DEF": 35, "HP": 350, "Vel": 35, "Digipuntos": 15, "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon"]
+
+  }, 
 };

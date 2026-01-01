@@ -1351,8 +1351,8 @@ function generarFormulario() {
     }
 
     // Lógica principal para campos string (mantener exacta pero sin Stat Superior)
-    // EXCEPCIÓN: % Entrenamiento, Hora y Vinculo Minimo alcanzado siempre deben ser inputs, incluso si el valor esperado es string o undefined
-    if (typeof sampleValue === "string" && field !== "% Entrenamiento" && field !== "Hora" && field !== "Vinculo Minimo alcanzado") {
+    // EXCEPCIÓN: % Entrenamiento, Hora, Vinculo Minimo alcanzado y Nickname siempre deben ser inputs, incluso si el valor esperado es string o undefined
+    if (typeof sampleValue === "string" && field !== "% Entrenamiento" && field !== "Hora" && field !== "Vinculo Minimo alcanzado" && field !== "Nickname") {
         let opciones = [];
         if (field === "EntrenamientoHecho") {
             opciones = ["Si", "No"];
@@ -1421,12 +1421,14 @@ function generarFormulario() {
         // Input numérico (lógica original exacta)
         let input = document.createElement("input");
         input.type = field === "Hora" ? "time" :
-                     (field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? "text" : "number";
+                     (field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar" || field === "Nickname") ? "text" : "number";
         input.id = `field_${field}`;
 
-        // Placeholder para Hora
+        // Placeholder para Hora y Nickname
         if (field === "Hora") {
             input.placeholder = "HH:MM";
+        } else if (field === "Nickname") {
+            input.placeholder = "Ingresa el nickname";
         }
 
         // Definir rangos de validación
@@ -1437,14 +1439,14 @@ function generarFormulario() {
                     (field === "% Entrenamiento" || field === "WinRate" || field === "Vinculo Minimo alcanzado" || field === "Vinculo al momento de evolucionar") ? 100 :
                     undefined;
 
-        // Solo aplicar min/max para campos numéricos, no para Hora
-        if (field !== "Hora") {
+        // Solo aplicar min/max para campos numéricos, no para Hora ni Nickname
+        if (field !== "Hora" && field !== "Nickname") {
             input.min = min;
             input.max = max;
         }
 
         // Agregar validación con limpieza automática para campos con límites definidos
-        if (max !== undefined && field !== "Hora") {
+        if (max !== undefined && field !== "Hora" && field !== "Nickname") {
           input.addEventListener('input', function() {
             validarRangoInput(input, field, min, max);
             recalcularCamposCalculados();
@@ -2831,22 +2833,17 @@ else if (field === "WinRate") {
     if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) {
         isSpecialCase = true;
     }
-    
+
     if (isSpecialCase) {
         punto = 0;
     } else {
         const ingNum = Number(ingresado);
-        const bonusBatallas = requisitos["Bonus Batallas"];
-        const combatesMinimosInput = Number(inputValues["Combates Minimos"]);
-        
-        if (!isNaN(bonusBatallas) && !isNaN(combatesMinimosInput) && bonusBatallas === combatesMinimosInput) {
+
+        // Evaluar WinRate: >= esperado da 0, < esperado da -10
+        if (!isNaN(ingNum) && ingNum >= esperado) {
             punto = 0;
         } else {
-            if (!isNaN(ingNum) && ingNum >= esperado) {
-                punto = 0;
-            } else {
-                punto = -10;
-            }
+            punto = -10;
         }
     }
 }
@@ -3066,6 +3063,14 @@ else if (field === "Comida") {
 		  }
 		  console.log(`⏰ Hora - Ingresado: ${ingresado}, Rango: ${horaInicioReq}:${minInicioReq}-${horaFinReq}:${minFinReq}, En rango: ${estaEnRango}, Punto: ${punto}`);
 		}
+	  }
+	}
+	else if (field === "Nickname") {
+	  // Evaluación para Nickname - debe coincidir exactamente
+	  if (ingresado.toLowerCase().trim() === String(esperado).toLowerCase().trim()) {
+		punto = 1;
+	  } else {
+		punto = -10;
 	  }
 	}
 
@@ -3288,6 +3293,34 @@ if (shoutmonSHResult && shoutmonStarResult) {
     return; // Terminar aquí para Shoutmon
 }
 // FIN CASO ESPECIAL SHOUTMON
+
+// VERIFICAR CASO ESPECIAL DEATH PROGRAM - NUEVO
+const programIngresado = inputValues["Program"];
+if (programIngresado && programIngresado.toLowerCase() === "death") {
+    // Lista de digimon que evolucionan con Death
+    const deathDigimons = ["Ghostmon", "Bakemon LT", "SkullGreymon"];
+
+    // Verificar si alguno de estos digimon tiene puntaje válido
+    const tieneEvolucionDeathValida = puntajes.some(d => {
+        const esDeathDigimon = deathDigimons.includes(d.name);
+        const tienePuntajeSuficiente = d.puntaje >= 0; // Ajustar según los requisitos mínimos
+
+        return esDeathDigimon && tienePuntajeSuficiente;
+    });
+
+    // Si NO hay evolución válida con Death, mostrar mensaje de muerte
+    if (!tieneEvolucionDeathValida) {
+        const textTranslationsDeath = {
+            es: "Tu Digimon se muere.",
+            en: "Your Digimon dies."
+        };
+
+        evolucionTexto.textContent = textTranslationsDeath[currentLanguage];
+        console.log("💀 Death Program sin evolución válida - El Digimon muere");
+        return; // Terminar aquí
+    }
+}
+// FIN CASO ESPECIAL DEATH PROGRAM
 
   // Traducciones para los textos a mostrar
 const textTranslations = {
@@ -3638,6 +3671,33 @@ if (mejoresDigimons.length >= 2) {
         evolucionTexto.textContent = textTranslationsShoutmon50[currentLanguage];
         return;
     }
+
+    // VERIFICAR CASO ESPECIAL DEATH PROGRAM - AGREGADO
+    const programIngresado = inputValues["Program"];
+    if (programIngresado && programIngresado.toLowerCase() === "death") {
+        // Lista de digimon que evolucionan con Death
+        const deathDigimons = ["Ghostmon", "Bakemon LT", "SkullGreymon"];
+
+        // Verificar si alguno de estos digimon tiene puntaje válido
+        const tieneEvolucionDeathValida = puntajes.some(d => {
+            const esDeathDigimon = deathDigimons.includes(d.name);
+            const tienePuntajeSuficiente = d.puntaje >= 0;
+
+            return esDeathDigimon && tienePuntajeSuficiente;
+        });
+
+        // Si NO hay evolución válida con Death, mostrar mensaje de muerte
+        if (!tieneEvolucionDeathValida) {
+            const textTranslationsDeath = {
+                es: "Tu Digimon se muere.",
+                en: "Your Digimon dies."
+            };
+
+            evolucionTexto.textContent = textTranslationsDeath[currentLanguage];
+            return;
+        }
+    }
+    // FIN CASO ESPECIAL DEATH PROGRAM
 
     if (sideEvosValidas.length > 0) {
       const nombres = mejoresDigimons.join(", ");

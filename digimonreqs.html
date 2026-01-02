@@ -137,6 +137,124 @@ select:disabled {
   width: 100%;
 }
 
+/* Ancho mínimo para tabla de evoluciones */
+#tablaEvoluciones {
+  min-width: 700px !important;
+  width: 100% !important;
+}
+
+#tablaEvoluciones th:nth-child(1),
+#tablaEvoluciones td:nth-child(1) {
+  width: 80px;
+  min-width: 80px;
+}
+
+#tablaEvoluciones th.col-evoluciona,
+#tablaEvoluciones td:nth-child(2) {
+  min-width: 350px;
+  width: 45%;
+  white-space: normal;
+}
+
+#tablaEvoluciones th.col-viene,
+#tablaEvoluciones td:nth-child(3) {
+  min-width: 350px;
+  width: 45%;
+  white-space: normal;
+}
+
+/* Estilos para listas de evoluciones en columnas */
+.evolution-list {
+  display: grid;
+  gap: 0 0.8rem;
+  text-align: left;
+  width: 100%;
+  align-items: start;
+}
+
+.evolution-column {
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Alineación para celdas con listas de evolución */
+td:has(.evolution-list),
+td:has(br) {
+  vertical-align: top;
+  padding: 0.5rem !important;
+}
+
+/* Wrapper para tabla con scroll horizontal */
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .evolution-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 0.5rem;
+  }
+
+  .evolution-column {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  td:has(.evolution-list),
+  td:has(br) {
+    padding: 0.3rem !important;
+    font-size: 0.75rem;
+  }
+}
+
+/* Estilos para secciones desplegables */
+.collapsible-section {
+  width: 100%;
+}
+
+.collapsible-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0;
+}
+
+.collapsible-header:hover .collapsible-toggle {
+  opacity: 0.7;
+}
+
+.collapsible-header h2 {
+  margin: 0;
+  display: inline;
+}
+
+.collapsible-toggle {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
+.collapsible-toggle.active {
+  transform: rotate(180deg);
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.collapsible-content.active {
+  max-height: 5000px;
+  transition: max-height 0.5s ease-in;
+}
+
 /* Responsividad para tablets */
 @media (max-width: 1024px) {
   .container {
@@ -165,6 +283,10 @@ select:disabled {
   table td {
     padding: 0.4rem;
     font-size: 0.85rem;
+  }
+
+  .collapsible-toggle {
+    font-size: 1.1rem;
   }
 }
 
@@ -213,7 +335,11 @@ select:disabled {
   .table-wrapper table {
     min-width: 350px; /* Balance entre compacto y legible */
   }
-  
+
+  .collapsible-toggle {
+    font-size: 1rem;
+  }
+
   nav {
     display: flex;
     flex-direction: column;
@@ -577,53 +703,97 @@ main {
     </div>
 
     <div class="digimon-tables">
-      <h2 id="subtitle">Datos Generales del Digimon</h2>
-      <table id="tablaGenerales">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Tama</th>
-            <th>Nivel</th>
-            <th>Atributo</th>
-            <th>Tipo</th>
-            <th>Peso</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <div class="collapsible-section">
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <h2 id="subtitle">Datos Generales del Digimon</h2>
+          <span class="collapsible-toggle active">▼</span>
+        </div>
+        <div class="collapsible-content active">
+          <table id="tablaGenerales">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tama</th>
+                <th>Nivel</th>
+                <th>Atributo</th>
+                <th>Tipo</th>
+                <th>Peso</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 	<div class="digimon-tables full-width">
-	  <h2 id="subtitle3">Stat Base y Evoluciones</h2>
-	  <table id="tablaStats">
-		<thead>
-		  <tr>
-			<th id="headerLineaEvolutivaStats">Línea Evolutiva</th>
-			<th>ATK</th>
-			<th>DEF</th>
-			<th>HP</th>
-			<th>Vel</th>
-			<th>Digipuntos</th>
-			<th>Evoluciona</th>
-			<th>Viene</th>
-		  </tr>
-		</thead>
-		<tbody></tbody>
-	  </table>
+	  <div class="collapsible-section">
+	    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+	      <h2 id="subtitle3">Stat Base</h2>
+	      <span class="collapsible-toggle active">▼</span>
+	    </div>
+	    <div class="collapsible-content active">
+	      <div class="table-scroll-wrapper">
+	        <table id="tablaStats">
+		      <thead>
+		        <tr>
+			      <th>ATK</th>
+			      <th>DEF</th>
+			      <th>HP</th>
+			      <th>Vel</th>
+			      <th>Digipuntos</th>
+		        </tr>
+		      </thead>
+		      <tbody></tbody>
+	        </table>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="digimon-tables full-width">
+	  <div class="collapsible-section">
+	    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+	      <h2 id="subtitle4">Evoluciones</h2>
+	      <span class="collapsible-toggle active">▼</span>
+	    </div>
+	    <div class="collapsible-content active">
+	      <div class="table-scroll-wrapper">
+	        <table id="tablaEvoluciones">
+		      <thead>
+		        <tr>
+			      <th>Línea Evolutiva</th>
+			      <th class="col-evoluciona">Evoluciona a</th>
+			      <th class="col-viene">Viene de</th>
+		        </tr>
+		      </thead>
+		      <tbody></tbody>
+	        </table>
+	      </div>
+	    </div>
+	  </div>
 	</div>
   <div class="digimon-tables full-width">
-    <h2 id="subtitle2">Datos de requisitos del Digimon</h2>
-	<table id="tablaRequisitos">
-	  <thead>
-		<tr id="headersGrupos">
-		  <!-- Los headers agrupados se generarán dinámicamente -->
-		</tr>
-		<tr id="headersRequisitos">
-		  <!-- Los headers individuales se generarán dinámicamente -->
-		</tr>
-	  </thead>
-	  <tbody></tbody>
-	</table>
+    <div class="collapsible-section">
+      <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <h2 id="subtitle2">Datos de requisitos del Digimon</h2>
+        <span class="collapsible-toggle active">▼</span>
+      </div>
+      <div class="collapsible-content active">
+        <div class="table-scroll-wrapper">
+	      <table id="tablaRequisitos">
+	        <thead>
+		      <tr id="headersGrupos">
+		        <!-- Los headers agrupados se generarán dinámicamente -->
+		      </tr>
+		      <tr id="headersRequisitos">
+		        <!-- Los headers individuales se generarán dinámicamente -->
+		      </tr>
+	        </thead>
+	        <tbody></tbody>
+	      </table>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
   </main>
@@ -637,6 +807,47 @@ main {
 </div>
 
 <script>
+// ============================================
+// FUNCIONES PARA SECCIONES DESPLEGABLES
+// ============================================
+
+function toggleCollapsible(button) {
+  const content = button.nextElementSibling;
+  const toggle = button.querySelector('.collapsible-toggle');
+
+  content.classList.toggle('active');
+  toggle.classList.toggle('active');
+}
+
+// ============================================
+// FUNCIONES PARA FORMATEAR LISTAS DE EVOLUCIONES
+// ============================================
+
+/**
+ * Divide una lista en columnas cuando tiene más de 'maxItems' elementos
+ * @param {Array} items - Array de nombres de digimon
+ * @param {number} maxItems - Número máximo de items antes de dividir en columnas (default: 5)
+ * @returns {string} HTML con la lista formateada en columnas
+ */
+function formatEvolutionList(items, maxItems = 5) {
+  if (!items || items.length === 0) return "-";
+
+  // Si la lista es corta, mostrar como lista simple
+  if (items.length <= maxItems) {
+    return items.map(item => `• ${item}`).join('<br>');
+  }
+
+  // Determinar número de columnas
+  // Siempre usar máximo 5 items por columna para mantener compacto
+  const maxItemsPerColumn = 5;
+  const numColumns = Math.ceil(items.length / maxItemsPerColumn);
+
+  // Usar CSS columns para dividir automáticamente
+  const listaCompleta = items.map(item => `• ${item}`).join('<br>');
+
+  return `<div style="column-count:${numColumns}; column-gap:1.5rem; line-height:1.6;">${listaCompleta}</div>`;
+}
+
 // ============================================
 // FUNCIONES DEL POPUP DE ADVERTENCIA
 // ============================================
@@ -1010,8 +1221,23 @@ const specialDigimonConfig = {
     "No se considera en el puntaje": ["Peso"],
     "Requisitos Obligatorios": ["Xross"]
   }
+},
+
+"Wargreymon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Error Maximo","% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
+  }
+},
+"BlackWargreymon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
 }
+}
+
 };
+
 // Configuración por defecto (la original)
 const gruposColumnasDefault = {
   "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar"],
@@ -1198,7 +1424,8 @@ const camposVaciosPorEvolucion = {
 	  "No se considera en el puntaje": "No se considera en el puntaje",
 	  "Evolucion por muerte inducida": "Evolucion por muerte inducida"
     },
-	  subtitle3: "Stat Base y Evoluciones",
+	  subtitle3: "Stat Base",
+	  subtitle4: "Evoluciones",
 	  ATK: "ATK",
 	  DEF: "DEF",
 	  HP: "HP",
@@ -1289,7 +1516,8 @@ const camposVaciosPorEvolucion = {
 	  "No se considera en el puntaje": "Not considered in scoring",
 	  "Evolucion por muerte inducida": "Evolution by induced death"
     },
-	  subtitle3: "Base Stats and Evolutions",
+	  subtitle3: "Base Stats",
+	  subtitle4: "Evolutions",
 	  ATK: "ATK",
 	  DEF: "DEF",
 	  HP: "HP",
@@ -1634,16 +1862,24 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	      });
 	    });
 
-	    // Crear celda con selector (columna de Línea Evolutiva)
-	    const tdLineaEvolutiva = document.createElement("td");
+	    // Crear selector antes de la tabla para Scumon
+	    const tablaSt = document.querySelector("#tablaStats");
+	    const mensajeSelector = document.createElement("div");
+	    mensajeSelector.style.marginBottom = "1rem";
+	    mensajeSelector.style.display = "flex";
+	    mensajeSelector.style.flexDirection = "column";
+	    mensajeSelector.style.gap = "0.5rem";
+
+	    const label = document.createElement("label");
+	    label.textContent = t("eligeLineaEvolutiva") + ":";
+	    label.style.fontSize = "1rem";
+
 	    const select = document.createElement("select");
 	    select.id = "childSelector";
-	    select.style.width = "100%";
-	    select.style.fontSize = "0.85em";
 
 	    const defaultOption = document.createElement("option");
 	    defaultOption.value = "";
-	    defaultOption.textContent = t("eligeLineaEvolutiva");
+	    defaultOption.textContent = "-- " + t("eligeLineaEvolutiva") + " --";
 	    select.appendChild(defaultOption);
 
 	    lineasEvolutivas.forEach((linea, index) => {
@@ -1656,8 +1892,9 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	      select.appendChild(option);
 	    });
 
-	    tdLineaEvolutiva.appendChild(select);
-	    filaStats.appendChild(tdLineaEvolutiva);
+	    mensajeSelector.appendChild(label);
+	    mensajeSelector.appendChild(select);
+	    tablaSt.parentElement.insertBefore(mensajeSelector, tablaSt);
 
 	    // Celdas para ATK, DEF, HP, Vel, Digipuntos (vacías inicialmente)
 	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(() => {
@@ -1714,11 +1951,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	    });
 
 	  } else {
-	    // Digimon normal: celda vacía para línea evolutiva + stats estáticos
-	    const tdLineaEvolutiva = document.createElement("td");
-	    tdLineaEvolutiva.textContent = "-";
-	    filaStats.appendChild(tdLineaEvolutiva);
-
+	    // Digimon normal: stats estáticos sin columna de línea evolutiva
 	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(campo => {
 	      const td = document.createElement("td");
 	      td.textContent = statsDigimon[campo] ?? "-";
@@ -1726,38 +1959,59 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	    });
 	  }
 
-	  // Campo Evoluciona (como lista)
-	  const tdEvoluciona = document.createElement("td");
-	  if (statsDigimon.Evoluciona && statsDigimon.Evoluciona.length > 0) {
-		const lista = statsDigimon.Evoluciona.map(evo => `• ${evo}`).join('<br>');
-		tdEvoluciona.innerHTML = lista;
-	  } else {
+	tablaStats.appendChild(filaStats);
+
+	// Actualizar tabla de Evoluciones
+	const tablaEvoluciones = document.querySelector("#tablaEvoluciones tbody");
+	tablaEvoluciones.innerHTML = "";
+	const filaEvoluciones = document.createElement("tr");
+
+	// Línea Evolutiva
+	const tdLineaEvo = document.createElement("td");
+	tdLineaEvo.textContent = "-";
+	filaEvoluciones.appendChild(tdLineaEvo);
+
+	// Campo Evoluciona (como lista con columnas automáticas)
+	const tdEvoluciona = document.createElement("td");
+	if (statsDigimon.Evoluciona && statsDigimon.Evoluciona.length > 0) {
+		tdEvoluciona.innerHTML = formatEvolutionList(statsDigimon.Evoluciona);
+	} else {
 		tdEvoluciona.textContent = "-";
-	  }
-	  filaStats.appendChild(tdEvoluciona);
+	}
+	filaEvoluciones.appendChild(tdEvoluciona);
 
-// Campo Viene (como lista)
-const tdViene = document.createElement("td");
-if (nombre === "Burpmon") {
-  tdViene.textContent = t("todosLosDigimon");
-} else if (statsDigimon.Viene && statsDigimon.Viene.length > 0) {
-  const lista = statsDigimon.Viene.map(viene => `• ${viene}`).join('<br>');
-  tdViene.innerHTML = lista;
-} else {
-  tdViene.textContent = "-";
-}
-filaStats.appendChild(tdViene);
+	// Campo Viene (como lista con columnas automáticas)
+	const tdViene = document.createElement("td");
+	if (nombre === "Burpmon") {
+		tdViene.textContent = t("todosLosDigimon");
+	} else if (statsDigimon.Viene && statsDigimon.Viene.length > 0) {
+		tdViene.innerHTML = formatEvolutionList(statsDigimon.Viene);
+	} else {
+		tdViene.textContent = "-";
+	}
+	filaEvoluciones.appendChild(tdViene);
 
-tablaStats.appendChild(filaStats);
+	tablaEvoluciones.appendChild(filaEvoluciones);
 } else {
-  // Si no hay datos de stats, mostrar fila vacía
-  const filaVacia = document.createElement("tr");
-  for (let i = 0; i < 8; i++) {
-    const td = document.createElement("td");
-    td.textContent = "-";
-    filaVacia.appendChild(td);
-  }
-  tablaStats.appendChild(filaVacia);
+	// Si no hay datos de stats, mostrar filas vacías
+	const filaVacia = document.createElement("tr");
+	for (let i = 0; i < 5; i++) {
+		const td = document.createElement("td");
+		td.textContent = "-";
+		filaVacia.appendChild(td);
+	}
+	tablaStats.appendChild(filaVacia);
+
+	// Tabla de evoluciones vacía
+	const tablaEvoluciones = document.querySelector("#tablaEvoluciones tbody");
+	tablaEvoluciones.innerHTML = "";
+	const filaEvolucionesVacia = document.createElement("tr");
+	for (let i = 0; i < 3; i++) {
+		const td = document.createElement("td");
+		td.textContent = "-";
+		filaEvolucionesVacia.appendChild(td);
+	}
+	tablaEvoluciones.appendChild(filaEvolucionesVacia);
 }
 
 // Actualizar tabla de requisitos con configuración especial
@@ -2098,13 +2352,19 @@ headersGrupos.forEach(th => {
       }
     });
   }
-	// Actualizar título de stats
+	// Actualizar títulos de tablas
 	document.getElementById("subtitle3").textContent = t("subtitle3");
+	document.getElementById("subtitle4").textContent = t("subtitle4");
 
 	// Actualizar headers de tabla stats
 	const headersStats = document.querySelectorAll("#tablaStats thead th");
-	const clavesStats = ["LineaEvolutiva", "ATK", "DEF", "HP", "Vel", "Digipuntos", "Evoluciona", "Viene"];
+	const clavesStats = ["ATK", "DEF", "HP", "Vel", "Digipuntos"];
 	headersStats.forEach((th, idx) => th.textContent = t(clavesStats[idx]));
+
+	// Actualizar headers de tabla evoluciones
+	const headersEvoluciones = document.querySelectorAll("#tablaEvoluciones thead th");
+	const clavesEvoluciones = ["LineaEvolutiva", "Evoluciona", "Viene"];
+	headersEvoluciones.forEach((th, idx) => th.textContent = t(clavesEvoluciones[idx]));
 
 	// Actualizar el selector de Scumon/GreatKingScumon si existe
 	const childSelector = document.getElementById("childSelector");

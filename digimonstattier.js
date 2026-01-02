@@ -285,7 +285,7 @@ const digimonstattier = {
     "ATK": 3 , "DEF": 1, "HP": 40, "Vel": 13, "Digipuntos": 2.1, "Evoluciona": ["Burpmon","Fluffymon"], "Viene": []
   },
       "Fluffymon": { // Cambiar
-    "ATK": 3 , "DEF": 1, "HP": 50, "Vel": 21, "Digipuntos": 3, "Evoluciona": ["Burpmon","Pteromon"], "Viene": ["Yolkmon"]
+    "ATK": 3 , "DEF": 1, "HP": 50, "Vel": 21, "Digipuntos": 3, "Evoluciona": ["Burpmon","Pteromon", "Gotsumon"], "Viene": ["Yolkmon"]
   },
       "Pteromon": { // Cambiar
     "ATK": 20 , "DEF": 20, "HP": 200, "Vel": 65, "Digipuntos": 12.5, "Evoluciona": ["Burpmon","Galemon","Numemon", "Scumon", "Bakemon LT", "Nanimon"], "Viene": ["Fluffymon"]

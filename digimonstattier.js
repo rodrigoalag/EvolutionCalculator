@@ -18,7 +18,7 @@ const digimonstattier = {
     "ATK": 50, "DEF": 25, "HP": 250, "Vel": 50, "Digipuntos": 15,  "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon"]
   },
   "Pillomon": {
-    "ATK": 25, "DEF": 40, "HP": 500, "Vel": 35, "Digipuntos": 15, "Evoluciona": ["Numemon", "Scumon", "BakemonLT", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon"]
+    "ATK": 25, "DEF": 40, "HP": 500, "Vel": 35, "Digipuntos": 15, "Evoluciona": ["Numemon", "Scumon", "BakemonLT", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon","Fluffymon"]
   },
   "Kokuwamon": {
     "ATK": 40, "DEF": 40, "HP": 450, "Vel": 25, "Digipuntos": 15, "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon"]
@@ -255,7 +255,7 @@ const digimonstattier = {
     "ATK": 240, "DEF": 140, "HP": 2200, "Vel": 150, "Digipuntos": 75, "Evoluciona": ["Burpmon"], "Viene": ["Fantomon"]
   },
 	"Mushmon": { // Cambiar
-    "ATK": 30, "DEF": 25, "HP": 550, "Vel": 40, "Digipuntos": 15, "Evoluciona": ["Chamblemon", "Nanimon", "Scumon", "Numemon", "Bakemon LT", "Burpmon"], "Viene": ["Koromon","Pickmon"]
+    "ATK": 30, "DEF": 25, "HP": 550, "Vel": 40, "Digipuntos": 15, "Evoluciona": ["Chamblemon", "Nanimon", "Scumon", "Numemon", "Bakemon LT", "Burpmon"], "Viene": ["Koromon","Pickmon","Fluffymon"]
   },  
 	"Chamblemon": { // Cambiar
     "ATK": 50, "DEF": 50, "HP": 1000, "Vel": 70, "Digipuntos": 27, "Evoluciona": ["Burpmon"], "Viene": ["Mushmon"]
@@ -285,7 +285,7 @@ const digimonstattier = {
     "ATK": 3 , "DEF": 1, "HP": 40, "Vel": 13, "Digipuntos": 2.1, "Evoluciona": ["Burpmon","Fluffymon"], "Viene": []
   },
       "Fluffymon": { // Cambiar
-    "ATK": 3 , "DEF": 1, "HP": 50, "Vel": 21, "Digipuntos": 3, "Evoluciona": ["Burpmon","Pteromon", "Gotsumon"], "Viene": ["Yolkmon"]
+    "ATK": 3 , "DEF": 1, "HP": 50, "Vel": 21, "Digipuntos": 3, "Evoluciona": ["Burpmon","Pteromon", "Pillomon","Mushmon","Ghostmon"], "Viene": ["Yolkmon"]
   },
       "Pteromon": { // Cambiar
     "ATK": 20 , "DEF": 20, "HP": 200, "Vel": 65, "Digipuntos": 12.5, "Evoluciona": ["Burpmon","Galemon","Numemon", "Scumon", "Bakemon LT", "Nanimon"], "Viene": ["Fluffymon"]

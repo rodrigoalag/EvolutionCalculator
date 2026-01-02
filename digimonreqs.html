@@ -1192,6 +1192,18 @@ const specialDigimonConfig = {
     "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Vinculo al momento de evolucionar"]
   }
 },
+"Wargreymon": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
+  }
+},
+"BlackWargreymon": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
+  }
+},
 "Shoutmon": {
   gruposColumnas: {
     "No se considera en el puntaje": ["Peso"],
@@ -1292,6 +1304,21 @@ const specialEntrenamientoCases = {
 		"Polarbearmon": 100
 	}
 };
+
+const specialVictoriasCases = {
+    "Wargreymon": {
+        "Metal Greymon": 100,
+        "MetalGreymon Alterous": 125
+    }
+};
+
+const specialBatallasCases = {
+    "Wargreymon": {
+        "Metal Greymon": 200,
+        "MetalGreymon Alterous": 250
+    }
+};
+
 const specialfoodcases = {
     "Icemon": ["Verdura Congelada", "Hongo Congelado"]
 };
@@ -1563,6 +1590,16 @@ function detectarEvolucionesMultiples(nombreDigimon) {
     }
   }
 
+  // Revisar casos especiales de victorias
+  if (specialVictoriasCases[nombreDigimon]) {
+    Object.keys(specialVictoriasCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
+  // Revisar casos especiales de batallas
+  if (specialBatallasCases[nombreDigimon]) {
+    Object.keys(specialBatallasCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
   return Array.from(evoluciones);
 }
 
@@ -1610,6 +1647,18 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
       // Si no está definido para esta evolución, devolver vacío
       return "-";
     }
+  }
+
+  // Casos especiales de victorias
+  if (campo === "Victorias" && specialVictoriasCases[nombreDigimon]) {
+    const valor = specialVictoriasCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) return valor;
+  }
+
+  // Casos especiales de batallas
+  if (campo === "Combates Minimos" && specialBatallasCases[nombreDigimon]) {
+    const valor = specialBatallasCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) return valor;
   }
 
   // Devolver el valor original del campo

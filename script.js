@@ -211,7 +211,8 @@ const bloqueosEvolucion = {
   "PrinceMamemon":["Mamemon"],
   "King Shoutmon":["Shoutmon","Shoutmon (Black)","Shoutmon SH", "Shoutmon + Star Sword"],
   "Omega Shoutmon": ["King Shoutmon"],
-  
+  "Wargreymon": ["Metal Greymon", "MetalGreymon Alterous"],
+
 };
 const bloqueosexcepciones = {
 	"Aero V-dramon (Black)":"RedVdramon",
@@ -375,6 +376,20 @@ const specialEntrenamientoCases = {
 		"Chackmon":80,
 		"Polarbearmon": 100
 	}
+};
+
+const specialVictoriasCases = {
+    "Wargreymon": {
+        "Metal Greymon": 100,
+        "MetalGreymon Alterous": 125
+    }
+};
+
+const specialBatallasCases = {
+    "Wargreymon": {
+        "Metal Greymon": 200,
+        "MetalGreymon Alterous": 250
+    }
 };
 
 // Diccionario corregido - eliminando duplicados y organizando mejor la data
@@ -2187,6 +2202,7 @@ let skullGreymonEvaluated = false; // AGREGADO PARA SKULLGREYMON
 let bakemonLTEvaluated = false; // AGREGADO PARA BAKEMON LT
 let shoutmonEvaluated = false; // AGREGADO PARA SHOUTMON
 let shoutmonBlackEvaluated = false; // AGREGADO PARA SHOUTMON BLACK
+let warGreymonEvaluated = false; // AGREGADO PARA WARGREYMON Y BLACKWARGREYMON
 
 const celdas = Array.from(fieldSet)
   .filter(field => {
@@ -2273,6 +2289,94 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             return `<td class="detail-column" style="display: none;">-</td>`;
         }
         // FIN LÓGICA ESPECIAL PARA SKULLGREYMON
+
+        // LÓGICA ESPECIAL PARA WARGREYMON Y BLACKWARGREYMON
+        if ((name === "Wargreymon" || name === "BlackWargreymon") && !warGreymonEvaluated) {
+            console.log(`🔥 Evaluando ${name} con lógica especial`);
+
+            // Obtener valores de los campos obligatorios
+            const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
+            const errores = Number(inputValues["Error Maximo"]);
+            const combates = Number(inputValues["Combates Minimos"]);
+            const victorias = Number(inputValues["Victorias"]);
+            let vinculoMomento = 0;
+            if (inputValues["Vinculo al momento de evolucionar"]) {
+                vinculoMomento = Number(inputValues["Vinculo al momento de evolucionar"]);
+            }
+
+            // Obtener requisitos esperados (considerando casos especiales)
+            let batallasEsperadas = requisitos["Combates Minimos"];
+            let victoriasEsperadas = requisitos["Victorias"];
+
+            // Aplicar casos especiales si existen
+            if (specialBatallasCases[name] && selected && specialBatallasCases[name][selected]) {
+                batallasEsperadas = specialBatallasCases[name][selected];
+            }
+            if (specialVictoriasCases[name] && selected && specialVictoriasCases[name][selected]) {
+                victoriasEsperadas = specialVictoriasCases[name][selected];
+            }
+
+            // Verificar campos obligatorios comunes (para ambos)
+            const entrenamientoCorrecto = porcentajeEntrenamiento >= requisitos["% Entrenamiento"];
+            const batallasCorrecto = combates >= batallasEsperadas;
+            const victoriasCorrecto = victorias >= victoriasEsperadas;
+
+            // Para WarGreymon: vinculo >= 100, para BlackWarGreymon: vinculo <= -50
+            let vinculoCorrecto = false;
+            if (name === "Wargreymon") {
+                vinculoCorrecto = vinculoMomento >= requisitos["Vinculo al momento de evolucionar"];
+            } else { // BlackWargreymon
+                vinculoCorrecto = vinculoMomento <= requisitos["Vinculo al momento de evolucionar"];
+            }
+
+            console.log(`🔥 ${name} - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= ${requisitos["% Entrenamiento"]})`);
+            console.log(`🔥 ${name} - Batallas: ${batallasCorrecto} (${combates} >= ${batallasEsperadas})`);
+            console.log(`🔥 ${name} - Victorias: ${victoriasCorrecto} (${victorias} >= ${victoriasEsperadas})`);
+            console.log(`🔥 ${name} - Vinculo: ${vinculoCorrecto} (${vinculoMomento} vs ${requisitos["Vinculo al momento de evolucionar"]})`);
+
+            if (name === "Wargreymon") {
+                // Para WarGreymon: Errores también son obligatorios
+                const erroresCorrecto = errores <= requisitos["Error Maximo"];
+                console.log(`🔥 ${name} - Errores: ${erroresCorrecto} (${errores} <= ${requisitos["Error Maximo"]})`);
+
+                if (entrenamientoCorrecto && erroresCorrecto && vinculoCorrecto && batallasCorrecto && victoriasCorrecto) {
+                    puntaje += 3;
+                    console.log(`🔥 ${name} - Todos los campos obligatorios cumplidos: +3 puntos`);
+                } else {
+                    puntaje += -10;
+                    console.log(`🔥 ${name} - Al menos un campo obligatorio no cumplido: -10 puntos`);
+                }
+            } else { // BlackWargreymon
+                // Para BlackWarGreymon: Solo entrenamiento, vínculo, batallas y victorias son obligatorios
+                if (entrenamientoCorrecto && vinculoCorrecto && batallasCorrecto && victoriasCorrecto) {
+                    puntaje += 3;
+                    console.log(`🔥 ${name} - Todos los campos obligatorios cumplidos: +3 puntos`);
+                } else {
+                    puntaje += -10;
+                    console.log(`🔥 ${name} - Al menos un campo obligatorio no cumplido: -10 puntos`);
+                }
+            }
+
+            warGreymonEvaluated = true;
+
+            // Para WarGreymon/BlackWarGreymon, mostrar "Evaluado" en sus campos especiales
+            if (name === "Wargreymon" && ["% Entrenamiento", "Error Maximo", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
+                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            } else if (name === "BlackWargreymon" && ["% Entrenamiento", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
+                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            }
+        }
+
+        // Si ya se evaluó WarGreymon/BlackWarGreymon y es uno de sus campos especiales, no evaluar de nuevo
+        if (name === "Wargreymon" && warGreymonEvaluated &&
+            ["% Entrenamiento", "Error Maximo", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
+            return `<td class="detail-column" style="display: none;">-</td>`;
+        }
+        if (name === "BlackWargreymon" && warGreymonEvaluated &&
+            ["% Entrenamiento", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
+            return `<td class="detail-column" style="display: none;">-</td>`;
+        }
+        // FIN LÓGICA ESPECIAL PARA WARGREYMON Y BLACKWARGREYMON
 
         // LÓGICA ESPECIAL PARA BAKEMON LT - AGREGADO
         if (name === "Bakemon LT" && !bakemonLTEvaluated) {
@@ -2855,26 +2959,42 @@ else if (field === "Combates Minimos") {
     if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) {
         isSpecialCase = true;
     }
-    
+
     if (isSpecialCase) {
         punto = 0;
     } else {
         const ingNum = Number(ingresado);
-        const bonusBatallas = requisitos["Bonus Batallas"];
-        
-        if (bonusBatallas === ingNum) {
-            // Si Bonus Batallas es igual al valor ingresado
-            if (!isNaN(ingNum) && ingNum === bonusBatallas) {
-                punto = 0;
-            } else {
-                punto = -10;
+
+        // Verificar si es un caso especial de batallas
+        if (specialBatallasCases[name]) {
+            const validBatallas = specialBatallasCases[name];
+
+            // Si hay un digimon seleccionado y existe un valor válido para él
+            if (selected && validBatallas[selected]) {
+                const expectedBatallas = validBatallas[selected];
+                if (!isNaN(ingNum) && ingNum >= expectedBatallas) {
+                    punto = 0;
+                } else {
+                    punto = -10;
+                }
             }
         } else {
-            // Lógica normal si Bonus Batallas no es igual al valor ingresado
-            if (!isNaN(ingNum) && ingNum >= esperado) {
-                punto = 0;
+            const bonusBatallas = requisitos["Bonus Batallas"];
+
+            if (bonusBatallas === ingNum) {
+                // Si Bonus Batallas es igual al valor ingresado
+                if (!isNaN(ingNum) && ingNum === bonusBatallas) {
+                    punto = 0;
+                } else {
+                    punto = -10;
+                }
             } else {
-                punto = -10;
+                // Lógica normal si Bonus Batallas no es igual al valor ingresado
+                if (!isNaN(ingNum) && ingNum >= esperado) {
+                    punto = 0;
+                } else {
+                    punto = -10;
+                }
             }
         }
     }
@@ -2917,10 +3037,28 @@ else if (field === "Program") {
 }
 
 	else if (field === "Victorias") {
-	  if (ingresado === esperado) {
-		punto = 0;
+	  const ingNum = Number(ingresado);
+
+	  // Verificar si es un caso especial de victorias
+	  if (specialVictoriasCases[name]) {
+		const validVictorias = specialVictoriasCases[name];
+
+		// Si hay un digimon seleccionado y existe un valor válido para él
+		if (selected && validVictorias[selected]) {
+		  const expectedVictorias = validVictorias[selected];
+		  if (!isNaN(ingNum) && ingNum >= expectedVictorias) {
+			punto = 0;
+		  } else {
+			punto = -10;
+		  }
+		}
 	  } else {
-		punto = -10;
+		// Lógica normal
+		if (!isNaN(ingNum) && ingNum >= esperado) {
+		  punto = 0;
+		} else {
+		  punto = -10;
+		}
 	  }
 	}
 	else if (field === "Alcanzo vinculo negativo?") {

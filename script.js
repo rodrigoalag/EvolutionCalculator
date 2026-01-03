@@ -1590,9 +1590,54 @@ digimonSelect.addEventListener("change", () => {
   generarFormulario();
 });
 
+// Función auxiliar para validar campos de vínculo
+function validarCampoVinculo(input) {
+    let val = input.value;
+
+    // Permitir campo vacío
+    if (val === '') {
+      return;
+    }
+
+    // Limpiar el valor: solo permitir números y un guión opcional al inicio
+    let cleanedVal = val;
+
+    // Paso 1: Eliminar cualquier carácter que no sea dígito o guión
+    cleanedVal = cleanedVal.replace(/[^\d-]/g, '');
+
+    // Paso 2: Asegurar que el guión solo esté al inicio (si existe)
+    if (cleanedVal.includes('-')) {
+      const hasLeadingDash = cleanedVal.startsWith('-');
+      cleanedVal = cleanedVal.replace(/-/g, ''); // Eliminar todos los guiones
+      if (hasLeadingDash) {
+        cleanedVal = '-' + cleanedVal; // Agregar un solo guión al inicio si había uno
+      }
+    }
+
+    // Paso 3: Actualizar el campo si se limpió algo
+    if (cleanedVal !== val) {
+      input.value = cleanedVal;
+    }
+
+    // Paso 4: Validar el rango numérico si hay un valor completo
+    if (cleanedVal !== '' && cleanedVal !== '-') {
+      const num = Number(cleanedVal);
+
+      if (!isNaN(num)) {
+        if (num > 100) {
+          alert('⚠️ El valor máximo permitido es 100');
+          input.value = '100';
+        } else if (num < -50) {
+          alert('⚠️ El valor mínimo permitido es -50');
+          input.value = '-50';
+        }
+      }
+    }
+}
+
 editableFields.addEventListener('input', (e) => {
   if (!e.target) return;
-  
+
   // Llamar recálculo para cualquier cambio
   recalcularCamposCalculados();
 
@@ -1621,88 +1666,9 @@ editableFields.addEventListener('input', (e) => {
     else if (num < 0 || isNaN(num)) e.target.value = 0;
   }
 
-  // [Resto de tu validación exacta...]
-if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar' || e.target.id === 'field_Vinculo al momento de evolucionar') {
-    console.log('🔍 === INICIO VALIDACIÓN ===');
-    console.log('⚡ Tipo de evento:', e.type);
-    
-    let val = e.target.value;
-    console.log('📝 Valor en input:', `"${val}"`);
-        
-    if (val === '' && !e.data) {
-      console.log('ℹ️ Campo vacío sin datos del evento');
-      return;
-    }
-    
-    let cleanedVal = val;
-    let alertMessage = '';
-    
-    if (val !== '') {
-      if (val.includes('--')) {
-        console.log('❌ DETECTADO: Dobles guiones');
-        cleanedVal = val.replace(/--+/g, '-');
-        alertMessage = '⚠️ No se permiten múltiples guiones';
-      }
-      
-      const dashIndex = cleanedVal.indexOf('-');
-      if (dashIndex > 0) {
-        console.log('❌ DETECTADO: Guión en posición incorrecta');
-        const originalFirstChar = val.charAt(0);
-        cleanedVal = cleanedVal.replace(/-/g, '');
-        if (originalFirstChar === '-') cleanedVal = '-' + cleanedVal;
-        alertMessage = '⚠️ El guion solo puede estar al inicio';
-      }
-      
-      const multipleStartDashes = cleanedVal.match(/^-{2,}/);
-      if (multipleStartDashes) {
-        console.log('❌ DETECTADO: Múltiples guiones al inicio');
-        cleanedVal = '-' + cleanedVal.replace(/^-+/, '');
-        alertMessage = '⚠️ Solo se permite un guion al inicio';
-      }
-      
-      const parts = cleanedVal.split('');
-      let result = '';
-      for (let i = 0; i < parts.length; i++) {
-        if (i === 0 && parts[i] === '-') {
-          result += parts[i];
-        } else if (/\d/.test(parts[i])) {
-          result += parts[i];
-        } else if (parts[i] !== '-') {
-          alertMessage = '⚠️ Solo se permiten números';
-        }
-      }
-      cleanedVal = result;
-      
-      if (cleanedVal !== val) {
-        e.target.value = cleanedVal;
-        if (alertMessage) {
-          alert(alertMessage);
-        }
-      }
-      
-      e.target.setAttribute('data-previous-value', cleanedVal);
-      
-      if (cleanedVal !== '' && cleanedVal !== '-') {
-        const num = Number(cleanedVal);
-        console.log('🔢 Validando rango:', num);
-        
-        if (!isNaN(num)) {
-          if (num > 100) {
-            console.log('❌ Valor superior a 100');
-            alert('⚠️ El valor máximo permitido es 100');
-            e.target.value = '100';
-            e.target.setAttribute('data-previous-value', '100');
-          } else if (num < -50) {
-            console.log('❌ Valor inferior a -50');
-            alert('⚠️ El valor mínimo permitido es -50');
-            e.target.value = '-50';  
-            e.target.setAttribute('data-previous-value', '-50');
-          }
-        }
-      }
-    }
-    
-    console.log('🏁 === FIN VALIDACIÓN ===');
+  // Validación de campos de vínculo
+  if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar' || e.target.id === 'field_Vinculo al momento de evolucionar') {
+    validarCampoVinculo(e.target);
   }
 
   if (e.target.id === 'field_WinRate') {
@@ -1794,6 +1760,94 @@ if (e.target.id === 'field_HP Base' ||
   }
 }
 });
+
+// Agregar los mismos event listeners a las filas 2 y 3
+editableFields2.addEventListener('input', (e) => {
+  if (!e.target) return;
+
+  // Llamar recálculo para cualquier cambio
+  recalcularCamposCalculados();
+
+  // Validación de campos de vínculo
+  if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar' || e.target.id === 'field_Vinculo al momento de evolucionar') {
+    validarCampoVinculo(e.target);
+  }
+
+  // Validaciones de otros campos (copiar de arriba si están en esta fila)
+  if (e.target.id === 'field_Error Maximo') {
+    let val = e.target.value.replace(/\D/g, '');
+    e.target.value = val;
+    let num = Number(val);
+    if (num > 6) e.target.value = 6;
+    else if (num < 0 || isNaN(num)) e.target.value = 0;
+  }
+
+  if (e.target.id === 'field_Peso') {
+    let val = e.target.value.replace(/\D/g, '');
+    e.target.value = val;
+    let num = Number(val);
+    if (num > 99) e.target.value = 99;
+    else if (num <= 0 || isNaN(num)) e.target.value = 1;
+  }
+
+  if (e.target.id === 'field_% Entrenamiento') {
+    let val = e.target.value.replace(/\D/g, '');
+    e.target.value = val;
+    let num = Number(val);
+    if (num > 100) e.target.value = 100;
+    else if (num < 0 || isNaN(num)) e.target.value = 0;
+  }
+
+  if (e.target.id === 'field_WinRate') {
+    let val = e.target.value.replace(/\D/g, '');
+    e.target.value = val;
+    let num = Number(val);
+    if (num > 100) e.target.value = 100;
+    else if (num < 0 || isNaN(num)) e.target.value = 0;
+  }
+
+  if (e.target.id === 'field_Combates Minimos') {
+    let val = e.target.value.replace(/\D/g, '');
+    e.target.value = val;
+    let num = Number(val);
+    if (num < 0 || isNaN(num)) e.target.value = 0;
+  }
+});
+
+editableFields3.addEventListener('input', (e) => {
+  if (!e.target) return;
+
+  // Llamar recálculo para cualquier cambio
+  recalcularCamposCalculados();
+
+  // Validación de campos de vínculo
+  if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar' || e.target.id === 'field_Vinculo al momento de evolucionar') {
+    validarCampoVinculo(e.target);
+  }
+});
+
+// Event listener para validar cuando el campo pierde el foco (blur) - para las 3 filas
+editableFields1.addEventListener('blur', (e) => {
+  if (!e.target) return;
+  if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar' || e.target.id === 'field_Vinculo al momento de evolucionar') {
+    validarCampoVinculo(e.target);
+  }
+}, true);
+
+editableFields2.addEventListener('blur', (e) => {
+  if (!e.target) return;
+  if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar' || e.target.id === 'field_Vinculo al momento de evolucionar') {
+    validarCampoVinculo(e.target);
+  }
+}, true);
+
+editableFields3.addEventListener('blur', (e) => {
+  if (!e.target) return;
+  if (e.target.id === 'field_Vinculo Minimo alcanzado' || e.target.id === 'field_Bonus Vinculo al momento de evolucionar' || e.target.id === 'field_Vinculo al momento de evolucionar') {
+    validarCampoVinculo(e.target);
+  }
+}, true);
+
 // #endregion
 
 // #region calcularBtn Event Listener

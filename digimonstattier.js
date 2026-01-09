@@ -213,7 +213,7 @@ const digimonstattier = {
     "ATK": 172, "DEF": 141, "HP": 1449, "Vel": 182, "Digipuntos": 64, "Evoluciona": ["Burpmon"], "Viene": ["Scumon","PlatinumScumon"]
   },
   "MetalEtemon": { // Cambiar
-    "ATK": 179, "DEF": 163, "HP": 1300, "Vel": 76, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Etemon"]
+    "ATK": 180, "DEF": 150, "HP": 1300, "Vel": 90, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Etemon"]
   },
   "PlatinumNumemon": { // Cambiar
     "ATK": 100, "DEF": 190, "HP": 2000, "Vel": 55, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Black King Numemon"]

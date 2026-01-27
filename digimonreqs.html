@@ -704,11 +704,6 @@ main {
 		DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.
 	</p>
 </section>
-<section id="explanationsection">
-	<p id="explanation">
-		Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar. Los stats base de Scumon/PlatScumon son un promedio.
-	</p>
-</section>
 <section class="container">
   <div class="top-section">
     <div class="digimon-image">
@@ -795,6 +790,9 @@ main {
         <span class="collapsible-toggle active">▼</span>
       </div>
       <div class="collapsible-content active">
+        <p id="evolutionNote" style="margin: 0.5rem 0 1rem 0; font-size: 0.95rem;">
+          Un digimon necesita más de 3 puntos para evolucionar (Excepto Baby II -> Child), por favor usar la calculadora para cálculos más precisos.
+        </p>
         <p id="colorExplanation" style="margin: 0.5rem 0 1.5rem 0; font-size: 0.95rem; line-height: 1.8;">
           <strong>Explicación de colores:</strong><br>
           <span style="color: #22c55e; font-weight: 600;">● Verde</span> = Da puntaje y debes estar en el rango o cumplirlo para obtenerlo<br>
@@ -1645,7 +1643,7 @@ function formatearPuntajeConColor(puntaje) {
 		subtitle: "Datos Generales del Digimon",
 		subtitle2: "Datos de requisitos del Digimon",
 		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
-		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar.",
+		evolutionNote: "Un digimon necesita más de 3 puntos para evolucionar (Excepto Baby II -> Child), por favor usar la calculadora para cálculos más precisos.",
 		colorExplanationTitle: "Explicación de colores:",
 		colorGreen: "Verde",
 		colorGreenDesc: "Da puntaje y debes estar en el rango o cumplirlo para obtenerlo",
@@ -1746,7 +1744,7 @@ function formatearPuntajeConColor(puntaje) {
 		subtitle: "General Digimon Data",
 		subtitle2: "Digimon Requirements Data",
 		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
-		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve.",
+		evolutionNote: "A Digimon needs more than 3 points to evolve (Except Baby II -> Child), please use the calculator for more precise calculations.",
 		colorExplanationTitle: "Color explanation:",
 		colorGreen: "Green",
 		colorGreenDesc: "Gives points and you must be in the range or meet it to obtain it",
@@ -2598,7 +2596,7 @@ function actualizarTextosUI() {
   document.getElementById("titleMain").textContent = t("titleMain");
   document.getElementById("subtitle2").textContent = t("subtitle2");
   document.getElementById("disclaimer").textContent = t("disclaimer");
-  document.getElementById("explanation").textContent = t("explanation");
+  document.getElementById("evolutionNote").textContent = t("evolutionNote");
 
   // Actualizar explicación de colores
   const colorExplanation = document.getElementById("colorExplanation");

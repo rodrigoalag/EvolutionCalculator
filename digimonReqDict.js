@@ -235,8 +235,8 @@ const digimonReqDict = {
   },
     "Master Tyranomon": {
 	"ID": 83, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
-    "Peso": 55, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Tyranomon",
-	"Program":"Combat", "WinRate": 70, "Combates Minimos": 25
+    "Peso": 55, "Error Maximo": 1, "% Entrenamiento": 80,
+	"Program":"Combat", "WinRate": 70, "Combates Minimos": 25, "Bonus Victorias": 20
   },
     "Megadramon": {
 	"ID": 18, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",

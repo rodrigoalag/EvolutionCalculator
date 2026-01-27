@@ -162,7 +162,7 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Errores Minimos"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Errores Minimos"];
 
 
 const bloqueosEvolucion = {
@@ -1126,6 +1126,13 @@ function generarFormulario() {
   if (tieneBonusVinculo && !fieldSet.has("Vinculo Minimo alcanzado")) {
     fieldSet.add("Vinculo Minimo alcanzado");
     console.log("✅ Campo 'Vinculo Minimo alcanzado' agregado por excepción (existe Bonus Vinculo Alcanzado)");
+  }
+
+  // EXCEPCIÓN: Si alguna evolución tiene "Bonus Victorias", agregar "Victorias"
+  const tieneBonusVictorias = nextDigimons.some(([_, info]) => info["Bonus Victorias"] !== undefined);
+  if (tieneBonusVictorias && !fieldSet.has("Victorias")) {
+    fieldSet.add("Victorias");
+    console.log("✅ Campo 'Victorias' agregado por excepción (existe Bonus Victorias)");
   }
 
   console.log(`📊 Todos los campos en fieldSet: ${Array.from(fieldSet)}`);
@@ -2738,6 +2745,15 @@ else if (bonusField === "Bonus Batallas") {
         totalBonus += cumple ? 1 : 0;
     }
     console.log("Total bonus después de Bonus Vinculo Alcanzado:", totalBonus);
+} else if (bonusField === "Bonus Victorias") {
+    const victoriasNum = Number(inputValues["Victorias"]);
+    const valorEsperado = Number(esperadoBonus);
+    if (!isNaN(victoriasNum) && victoriasNum >= valorEsperado) {
+      totalBonus += 1;
+      console.log(`✅ Bonus Victorias: ${victoriasNum} >= ${valorEsperado}`);
+    } else {
+      console.log(`❌ Bonus Victorias no cumplido: ${victoriasNum} < ${valorEsperado}`);
+    }
 }
 });
 punto = totalBonus;}

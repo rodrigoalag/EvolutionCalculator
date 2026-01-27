@@ -498,6 +498,22 @@ main {
   vertical-align: middle;
 }
 
+/* Estilos para puntajes en requisitos */
+.puntaje-positivo {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.puntaje-neutro {
+  color: #eab308;
+  font-weight: 600;
+}
+
+.puntaje-negativo {
+  color: #ef4444;
+  font-weight: 600;
+}
+
 /* Responsive para headers agrupados */
 @media (max-width: 768px) {
   #headersGrupos th {
@@ -779,6 +795,12 @@ main {
         <span class="collapsible-toggle active">▼</span>
       </div>
       <div class="collapsible-content active">
+        <p id="colorExplanation" style="margin: 0.5rem 0 1.5rem 0; font-size: 0.95rem; line-height: 1.8;">
+          <strong>Explicación de colores:</strong><br>
+          <span style="color: #22c55e; font-weight: 600;">● Verde</span> = Da puntaje y debes estar en el rango o cumplirlo para obtenerlo<br>
+          <span style="color: #eab308; font-weight: 600;">● Amarillo</span> = No afecta en el puntaje del Digimon / No da Puntaje<br>
+          <span style="color: #ef4444; font-weight: 600;">● Rojo</span> = Si lo incumples, te penaliza con puntaje negativo
+        </p>
         <div class="table-scroll-wrapper">
 	      <table id="tablaRequisitos">
 	        <thead>
@@ -1028,34 +1050,49 @@ const specialDigimonConfig = {
    "Agumon": {
     gruposColumnas: {
 	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"]
+    "Quota/Key Points": [ "Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["EntrenamientoHecho"]
 	} 
   },
    "Agumon (Black)": {
     gruposColumnas: {
 	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["Program"]
+	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["EntrenamientoHecho","Program"]
 	} 
   },
    "Yuki Agumon": {
     gruposColumnas: {
 	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["Program"]
+	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"]
 	} 
   },
     "Agumon (2006)": {
     gruposColumnas: {
 	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["Program", "2Ciclos"]
+	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["EntrenamientoHecho", "Program", "2Ciclos"]
+	} 
+  },
+    "Agumon Hakase": {
+    gruposColumnas: {
+	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
+	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
+	  "Requisitos Obligatorios": ["EntrenamientoHecho", "Nickname"]
 	} 
   },
 "V-Dramon": {
   gruposColumnas: {
     "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"],
     "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"]
+  } 
+}, 
+
+"ShootingStarmon": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso", "Error Maximo"],
+    "Requisitos Obligatorios": ["% Entrenamiento","WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Xross"]
   } 
 }, 
 
@@ -1082,8 +1119,8 @@ const specialDigimonConfig = {
 
 "Black King Numemon": {
   gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Program"]
+    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus", "Error Maximo"],
+    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"]
   } 
 }, 
 
@@ -1144,6 +1181,18 @@ const specialDigimonConfig = {
     "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
   }
   },  
+"Soulmon LT":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Comida"]
+  }
+  }, 
+  "Soulmon MT":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["Comida"]
+  }
+  },   
 "Mugendramon":  {
   gruposColumnas: {
     "No se considera en el puntaje": ["Peso", "Error Maximo"],
@@ -1210,6 +1259,12 @@ const specialDigimonConfig = {
     "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"]
   }
 },
+"Metal Fantomon": {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Program"]
+  }
+},
 "Shoutmon (Black)": {
   gruposColumnas: {
     "No se considera en el puntaje": ["Peso"],
@@ -1235,6 +1290,12 @@ const specialDigimonConfig = {
   }
 },
 
+"Master Tyranomon": {
+  gruposColumnas: {
+    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Victorias"],
+    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"]
+  }
+},
 "Wargreymon":  {
   gruposColumnas: {
     "No se considera en el puntaje": ["Peso"],
@@ -1252,7 +1313,7 @@ const specialDigimonConfig = {
 
 // Configuración por defecto (la original)
 const gruposColumnasDefault = {
-  "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar"],
+  "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar", "Bonus Victorias"],
   "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Vinculo al momento de evolucionar","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname"]
 };
 
@@ -1340,6 +1401,214 @@ const camposVaciosPorEvolucion = {
   const dict = digimonReqDict;
   const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo", "Peso"];
 
+// Configuración de puntajes por nivel y campo
+const puntajesPorNivel = {
+  3: { // Child
+    "Peso": { cumple: 0, noCumple: 0 },
+    "Error Maximo": { cumple: 0, noCumple: 0 },
+    "EntrenamientoHecho": { cumple: 1, noCumple: -10, condicional: true }, // Si="1/-10", No="1/0"
+    "Stat Superior": { cumple: 1, noCumple: 0 },
+    "Stat Superior 2": { cumple: 1, noCumple: 0 },
+    "Nickname": { cumple: 0, noCumple: -10 },
+    "Program": { cumple: 0, noCumple: -10 },
+    "2Ciclos": { cumple: 1, noCumple: -10 },
+    "% Entrenamiento": { cumple: 1, noCumple: 0 },
+    "Hora": { cumple: 1, noCumple: -10 },
+    "Xross": { cumple: 3, noCumple: -10 }
+  },
+  4: { // Adult
+    "WinRate": { cumple: 0, noCumple: -10 },
+    "Combates Minimos": { cumple: 0, noCumple: -10 },
+    "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
+    "Program": { cumple: 0, noCumple: -10 },
+    "Stat Superior": { cumple: 0, noCumple: -10 },
+    "Xross": { cumple: 3, noCumple: -10 },
+    "Comida": { cumple: 3, noCumple: -10 },
+    "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
+    "Muerte inducida sin Carne X o Program (30% de salir)": { cumple: 0, noCumple: -10, ocultar: true },
+    "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
+    "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
+    "Driver Equipado": { cumple: 0, noCumple: -10 },
+    "Victorias": { cumple: 1, noCumple: -10 }
+  },
+  5: { // Perfect
+    "WinRate": { cumple: 0, noCumple: -10 },
+    "Combates Minimos": { cumple: 0, noCumple: -10 },
+    "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
+    "Program": { cumple: 0, noCumple: -10 },
+    "Stat Superior": { cumple: 0, noCumple: -10 },
+    "Xross": { cumple: 3, noCumple: -10 },
+    "Comida": { cumple: 3, noCumple: -10 },
+    "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
+    "Muerte inducida sin Carne X o Program (30% de salir)": { cumple: 0, noCumple: -10, ocultar: true },
+    "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
+    "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
+    "Driver Equipado": { cumple: 0, noCumple: -10 },
+    "Victorias": { cumple: 1, noCumple: -10 }
+  },
+  6: { // Ultimate
+    "WinRate": { cumple: 0, noCumple: -10 },
+    "Combates Minimos": { cumple: 0, noCumple: -10 },
+    "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
+    "Program": { cumple: 0, noCumple: -10 },
+    "Stat Superior": { cumple: 0, noCumple: -10 },
+    "Xross": { cumple: 3, noCumple: -10 },
+    "Comida": { cumple: 3, noCumple: -10 },
+    "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
+    "Muerte inducida sin Carne X o Program (30% de salir)": { cumple: 0, noCumple: -10, ocultar: true },
+    "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
+    "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
+    "Driver Equipado": { cumple: 0, noCumple: -10 },
+    "Victorias": { cumple: 1, noCumple: -10 }
+  }
+};
+
+// Función para determinar el puntaje de un campo
+function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
+  const digimon = dict[nombreDigimon];
+  if (!digimon) return { cumple: 0, noCumple: 0 };
+
+  const nivel = digimon.Nivel;
+
+  // Baby I (nivel 1) y Baby II (nivel 2) no tienen puntajes
+  if (nivel === 1 || nivel === 2) return null;
+
+  // Excepciones especiales para ciertos Digimon
+  // Gotsumon, Ghostmon y Mushmon: Program da +3/-10
+  if ((nombreDigimon === "Gotsumon" || nombreDigimon === "Ghostmon" || nombreDigimon === "Mushmon") && campo === "Program") {
+    return { cumple: 3, noCumple: -10 };
+  }
+
+  // Excepciones en Adult (nivel 4)
+  if (nivel === 4) {
+    if (nombreDigimon === "DarkTyranomon" && campo === "Program") {
+      return { cumple: 3, noCumple: -10 };
+    }
+    if (nombreDigimon === "RedVDramon" && campo === "Vinculo Alcanzado") {
+      return { cumple: 3, noCumple: -10 };
+    }
+    if (nombreDigimon === "Geremon" && campo === "Program") {
+      return { cumple: 3, noCumple: -10 };
+    }
+    if (nombreDigimon === "Nanimon" && campo === "Vinculo al momento de evolucionar") {
+      return { cumple: 3, noCumple: -10 };
+    }
+  }
+
+  // Excepciones en Perfect (nivel 5)
+  if (nivel === 5) {
+    if (nombreDigimon === "Metalgreymon alterous") {
+      if (campo === "Program") {
+        return { cumple: 1, noCumple: -10 };
+      }
+      if (campo === "% Entrenamiento") {
+        return { cumple: 1, noCumple: -10 };
+      }
+    }
+    if (nombreDigimon === "Gigadramon") {
+      if (campo === "Program") {
+        return { cumple: 3, noCumple: -10 };
+      }
+      if (campo === "% Entrenamiento") {
+        return { cumple: 1, noCumple: -10 };
+      }
+    }
+    if (nombreDigimon === "Blizzarmon" && campo === "Peso") {
+      return { cumple: 1, noCumple: 0 };
+    }
+    if (nombreDigimon === "Metal Fantomon") {
+      if (campo === "Program") {
+        return { cumple: 3, noCumple: -10 };
+      }
+      if (campo === "% Entrenamiento") {
+        return { cumple: 1, noCumple: -10 };
+      }
+    }
+  }
+
+  // Regla general: Campos en grupo "No se considera en el puntaje" = 0/0
+  if (nombreGrupo === "No se considera en el puntaje") {
+    return { cumple: 0, noCumple: 0 };
+  }
+
+  // Usar diccionario de puntajes si existe para este nivel
+  if (puntajesPorNivel[nivel]) {
+    const configNivel = puntajesPorNivel[nivel];
+
+    // Buscar puntaje específico para este campo
+    if (configNivel[campo]) {
+      const config = configNivel[campo];
+
+      // Caso especial: EntrenamientoHecho condicional
+      if (campo === "EntrenamientoHecho" && config.condicional) {
+        const valor = digimon[campo];
+        if (valor === "No") {
+          return { cumple: 1, noCumple: 0, ocultar: config.ocultar };
+        }
+        // Si es "Si", usar el puntaje por defecto (1/-10)
+      }
+
+      return { cumple: config.cumple, noCumple: config.noCumple, ocultar: config.ocultar };
+    }
+
+    // Campos "Bonus" siempre +1/0
+    if (campo.includes("Bonus")) {
+      return { cumple: 1, noCumple: 0 };
+    }
+  }
+
+  // Casos especiales no cubiertos por diccionarios (para otros niveles)
+  const esUltimate = nivel === 6;
+  const esWargreymon = nombreDigimon === "Wargreymon";
+  const tieneXross = digimon.Xross !== undefined;
+  const esSide = camposVaciosPorEvolucion[nombreDigimon] !== undefined;
+  const casoEspecialCero = (esSide || tieneXross || (esUltimate && !esWargreymon));
+
+  // Caso especial Wargreymon: solo Errores
+  if (esWargreymon && campo === "Error Maximo") {
+    return { cumple: 1, noCumple: -10 };
+  }
+
+  // Peso y Errores en casos especiales (0/0)
+  if (casoEspecialCero && (campo === "Peso" || campo === "Error Maximo")) {
+    return { cumple: 0, noCumple: 0 };
+  }
+
+  // Requisitos Obligatorios: dan -10 si no se cumplen
+  if (nombreGrupo === "Requisitos Obligatorios") {
+    return { cumple: 1, noCumple: -10 };
+  }
+
+  // Campos que siempre dan +1/0: Peso, % Entrenamiento, Errores, y todos los "Bonus"
+  if (campo === "Peso" ||
+      campo === "% Entrenamiento" ||
+      campo === "Error Maximo" ||
+      campo.includes("Bonus")) {
+    return { cumple: 1, noCumple: 0 };
+  }
+
+  // Por defecto (otros campos en Quota/Key Points)
+  return { cumple: 1, noCumple: 0 };
+}
+
+// Función para formatear el puntaje con color
+function formatearPuntajeConColor(puntaje) {
+  // Si el puntaje es null (Baby I), no mostrar nada
+  if (puntaje === null) return "";
+
+  // Si tiene la propiedad ocultar=true, no mostrar el puntaje
+  if (puntaje.ocultar === true) return "";
+
+  const { cumple, noCumple } = puntaje;
+  let textoCumple = cumple > 0 ? `+${cumple}` : cumple;
+  let textoNoCumple = noCumple > 0 ? `+${noCumple}` : noCumple;
+
+  let claseCumple = cumple > 0 ? 'puntaje-positivo' : (cumple === 0 ? 'puntaje-neutro' : 'puntaje-negativo');
+  let claseNoCumple = noCumple > 0 ? 'puntaje-positivo' : (noCumple === 0 ? 'puntaje-neutro' : 'puntaje-negativo');
+
+  return ` (<span class="${claseCumple}">${textoCumple}</span>/<span class="${claseNoCumple}">${textoNoCumple}</span>)`;
+}
+
   const nivelAEtapa = {
     es: {
       1: "Baby I",
@@ -1374,9 +1643,16 @@ const camposVaciosPorEvolucion = {
 	  es: {
 	    titleMain: "Información del Digimon",
 		subtitle: "Datos Generales del Digimon",
-		subtitle2: "Datos de requisitos del Digimon", 
+		subtitle2: "Datos de requisitos del Digimon",
 		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
 		explanation: "Quota/Keypoints: Cada uno da un puntaje de 1. Ocupas un Puntaje de 3 de 4 para evolucionar al digimon. Los Requisitos Obligatorios son obligatorios para evolucionar.",
+		colorExplanationTitle: "Explicación de colores:",
+		colorGreen: "Verde",
+		colorGreenDesc: "Da puntaje y debes estar en el rango o cumplirlo para obtenerlo",
+		colorYellow: "Amarillo",
+		colorYellowDesc: "No afecta en el puntaje del Digimon / No da Puntaje",
+		colorRed: "Rojo",
+		colorRedDesc: "Si lo incumples, te penaliza con puntaje negativo",
 		Tama: "Tama",
 		Nivel: "Nivel",
 		Atributo: "Atributo",
@@ -1438,6 +1714,7 @@ const camposVaciosPorEvolucion = {
 	  "Bonus Batallas": "Bonus Batallas",
 	  "Comida" : "Comida",
 	  "Victorias": "Victorias",
+	  "Bonus Victorias": "Bonus Victorias Minimas",
 	  "Driver Equipado": "Driver Equipado",
 	  "Xross":"Xross/Install",
 	  "Bonus Vinculo al momento de evolucionar":"Bonus Vinculo al momento de evolucionar",
@@ -1470,6 +1747,13 @@ const camposVaciosPorEvolucion = {
 		subtitle2: "Digimon Requirements Data",
 		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
 		explanation: "Quota/Keypoints: Each one gives 1 point on the total point. You need 3 out of 4 points to evolve to a Digimon. Mandatory Requirements are mandatory to evolve.",
+		colorExplanationTitle: "Color explanation:",
+		colorGreen: "Green",
+		colorGreenDesc: "Gives points and you must be in the range or meet it to obtain it",
+		colorYellow: "Yellow",
+		colorYellowDesc: "Does not affect the Digimon's score / Gives no points",
+		colorRed: "Red",
+		colorRedDesc: "If you don't meet it, you get penalized with negative points",
 		Tama: "Tama",
 		Nivel: "Level",
 		Atributo: "Attribute",
@@ -1530,6 +1814,7 @@ const camposVaciosPorEvolucion = {
 	  "Bonus Batallas": "Battle Bonus",
 	  "Comida" : "Food",
 	  "Victorias": "Battle Victories",
+	  "Bonus Victorias": "Minimum Victory Bonus",
 	  "Driver Equipado": "Driver Equipped",
 	  "Xross":"Xross/Install",
 	  "Bonus Vinculo al momento de evolucionar":"Bond at evolution",
@@ -2140,7 +2425,7 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
       }
 
       tablaHeaders.appendChild(th);
-      camposOrdenados.push(campo);
+      camposOrdenados.push({ campo, grupo: nombreGrupo });
     });
   }
 });
@@ -2149,7 +2434,7 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
 if (evolucionesMultiples.length > 0) {
   // Primero, recopilar todos los valores para cada campo y cada evolución
   const valoresPorCampo = {};
-  camposOrdenados.forEach(campo => {
+  camposOrdenados.forEach(({ campo, grupo }) => {
     valoresPorCampo[campo] = evolucionesMultiples.map(evo => {
       window.currentEvolutionDigimon = evo;
       let valorOriginal = obtenerValorParaEvolucion(digimon, campo, nombre, evo);
@@ -2171,7 +2456,7 @@ if (evolucionesMultiples.length > 0) {
 
       // Formatear % Entrenamiento como rango
       if (campo === "% Entrenamiento") {
-        valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal);
+        valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal, nombre);
       }
 
       // Convertir Hora GMT-3 a hora local
@@ -2185,22 +2470,32 @@ if (evolucionesMultiples.length > 0) {
         (specialEntrenamientoCases[nombre] || specialxrossCases[nombre] ||
          specialProgramCases[nombre] || specialfoodcases[nombre]);
 
+      // Obtener puntaje para este campo
+      const puntaje = obtenerPuntaje(campo, nombre, grupo);
+      const puntajeHTML = formatearPuntajeConColor(puntaje);
+
+      let valorFinal;
       if (esCampoEspecial) {
         if (campo === "% Entrenamiento" && valorOriginal !== "-") {
-          return valorOriginal + "%";
+          valorFinal = valorOriginal + "%" + puntajeHTML;
         } else {
-          return valorOriginal;
+          valorFinal = valorOriginal + (valorOriginal !== "-" ? puntajeHTML : "");
         }
       } else {
-        return traducirValor(campo, valorOriginal);
+        valorFinal = traducirValor(campo, valorOriginal);
+        if (valorOriginal !== "-" && valorOriginal !== undefined && valorOriginal !== null) {
+          valorFinal += puntajeHTML;
+        }
       }
+
+      return valorFinal;
     });
   });
   window.currentEvolutionDigimon = null;
 
   // Determinar qué campos tienen valores idénticos en todas las filas
   const camposParaFusionar = {};
-  camposOrdenados.forEach(campo => {
+  camposOrdenados.forEach(({ campo }) => {
     const valores = valoresPorCampo[campo];
     const primerValor = valores[0];
     const todosSonIguales = valores.every(v => v === primerValor);
@@ -2219,7 +2514,7 @@ if (evolucionesMultiples.length > 0) {
     tdNombre.style.fontWeight = "bold";
     filaReq.appendChild(tdNombre);
 
-    camposOrdenados.forEach(campo => {
+    camposOrdenados.forEach(({ campo }) => {
       // Si el campo debe fusionarse, solo agregarlo en la primera fila
       if (camposParaFusionar[campo]) {
         if (indice === 0) {
@@ -2248,7 +2543,7 @@ if (evolucionesMultiples.length > 0) {
   // Una sola fila
   const filaReq = document.createElement("tr");
 
-  camposOrdenados.forEach(campo => {
+  camposOrdenados.forEach(({ campo, grupo }) => {
     const td = document.createElement("td");
     let valorOriginal = digimon[campo];
 
@@ -2269,7 +2564,7 @@ if (evolucionesMultiples.length > 0) {
 
     // Formatear % Entrenamiento como rango
     if (campo === "% Entrenamiento") {
-      valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal);
+      valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal, nombre);
     }
 
     // Convertir Hora GMT-3 a hora local
@@ -2277,11 +2572,18 @@ if (evolucionesMultiples.length > 0) {
       valorOriginal = convertirHoraALocal(valorOriginal);
     }
 
-    // Agregar "%" para campos de entrenamiento y vínculo
+    // Obtener puntaje para este campo
+    const puntaje = obtenerPuntaje(campo, nombre, grupo);
+    const puntajeHTML = formatearPuntajeConColor(puntaje);
+
+    // Agregar "%" para campos de entrenamiento y vínculo, más el puntaje
     if ((campo === "% Entrenamiento" || campo.includes("Vinculo")) && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
-      td.textContent = valorOriginal + "%";
+      td.innerHTML = valorOriginal + "%" + puntajeHTML;
     } else {
       td.innerHTML = traducirValor(campo, valorOriginal);
+      if (valorOriginal !== "-" && valorOriginal !== undefined && valorOriginal !== null) {
+        td.innerHTML += puntajeHTML;
+      }
     }
 
     filaReq.appendChild(td);
@@ -2297,7 +2599,18 @@ function actualizarTextosUI() {
   document.getElementById("subtitle2").textContent = t("subtitle2");
   document.getElementById("disclaimer").textContent = t("disclaimer");
   document.getElementById("explanation").textContent = t("explanation");
-  
+
+  // Actualizar explicación de colores
+  const colorExplanation = document.getElementById("colorExplanation");
+  if (colorExplanation) {
+    colorExplanation.innerHTML = `
+      <strong>${t("colorExplanationTitle")}</strong><br>
+      <span style="color: #22c55e; font-weight: 600;">● ${t("colorGreen")}</span> = ${t("colorGreenDesc")}<br>
+      <span style="color: #eab308; font-weight: 600;">● ${t("colorYellow")}</span> = ${t("colorYellowDesc")}<br>
+      <span style="color: #ef4444; font-weight: 600;">● ${t("colorRed")}</span> = ${t("colorRedDesc")}
+    `;
+  }
+
   // Actualizar el subtitle dinámicamente si hay un Digimon seleccionado
   const nombreDigimon = selectDigimon.value;
   if (nombreDigimon && dict[nombreDigimon]) {
@@ -2504,7 +2817,7 @@ function formatearPeso(valor) {
 }
 
 // Función para formatear % Entrenamiento como rango
-function formatearPorcentajeEntrenamiento(valor) {
+function formatearPorcentajeEntrenamiento(valor, nombreDigimon = null) {
   if (valor === undefined || valor === null || valor === "-") {
     return valor;
   }
@@ -2515,6 +2828,11 @@ function formatearPorcentajeEntrenamiento(valor) {
   }
 
   const valorNum = Number(valor);
+
+  // Excepción para Pillomon: 0% es el máximo permitido
+  if (nombreDigimon === "Pillomon" && valorNum === 0) {
+    return "0";
+  }
 
   // Si es un número válido, crear el rango desde ese valor hasta 100
   if (!isNaN(valorNum)) {

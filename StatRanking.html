@@ -478,6 +478,18 @@
             </div>
           </div>
         </div>
+        <div class="filter-item">
+          <label id="labelFilterAtributo">Filtrar por Atributo:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterAtributoButton">
+              <span id="filterAtributoText">Todos</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterAtributoContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
         <div class="filter-item" style="min-width: 250px;">
           <label id="labelFilterDigipuntos">
             Digipuntos: <span id="digipuntosRangeValue">Todos</span>
@@ -503,6 +515,7 @@
                 <th id="headerDigimon">Digimon</th>
                 <th id="headerLineaEvolutiva">Línea Evolutiva</th>
                 <th id="headerClasificacion">Clasificación</th>
+                <th id="headerAtributo">Atributo</th>
                 <th id="headerImagen">Imagen</th>
                 <th class="sortable-header" data-sort="hp">HP<span class="sort-icon">↓</span></th>
                 <th class="sortable-header" data-sort="atk">ATK<span class="sort-icon">↓</span></th>
@@ -1058,6 +1071,7 @@ const traducciones = {
     digimon: "Digimon",
     lineaEvolutiva: "Línea Evolutiva",
     clasificacion: "Clasificación",
+    atributo: "Atributo",
     imagen: "Imagen",
     atk: "ATK",
     def: "DEF",
@@ -1069,8 +1083,10 @@ const traducciones = {
     filtrarDigimon: "Filtrar por Digimon:",
     filtrarEvolucionAnterior: "Evolución Anterior:",
     filtrarClasificacion: "Filtrar por Clasificación:",
+    filtrarAtributo: "Filtrar por Atributo:",
     filtrarDigipuntos: "Digipuntos:",
     todasClasificaciones: "Todas las clasificaciones",
+    todosAtributos: "Todos",
     todosDigimon: "Todos",
     todasEvoluciones: "Todas",
     todosDigipuntos: "Todos",
@@ -1087,6 +1103,7 @@ const traducciones = {
     digimon: "Digimon",
     lineaEvolutiva: "Evolution Line",
     clasificacion: "Classification",
+    atributo: "Attribute",
     imagen: "Image",
     atk: "ATK",
     def: "DEF",
@@ -1098,8 +1115,10 @@ const traducciones = {
     filtrarDigimon: "Filter by Digimon:",
     filtrarEvolucionAnterior: "Previous Evolution:",
     filtrarClasificacion: "Filter by Classification:",
+    filtrarAtributo: "Filter by Attribute:",
     filtrarDigipuntos: "Digipoints:",
     todasClasificaciones: "All classifications",
+    todosAtributos: "All",
     todosDigimon: "All",
     todasEvoluciones: "All",
     todosDigipuntos: "All",
@@ -1295,6 +1314,11 @@ function generarTablaRankingSegura(data, tbody) {
     const tdClasificacion = document.createElement("td");
 	tdClasificacion.textContent = traducciones[idiomaActual][item.clasificacion.nombre] || item.clasificacion.nombre;
     fila.appendChild(tdClasificacion);
+
+    // Atributo
+    const tdAtributo = document.createElement("td");
+    tdAtributo.textContent = item.atributo || "-";
+    fila.appendChild(tdAtributo);
 
     // Imagen
     const tdImagen = document.createElement("td");
@@ -1544,6 +1568,20 @@ function aplicarFiltros() {
     );
   }
 
+  // Obtener atributos seleccionados (checkboxes marcados, excluyendo "Todos")
+  const atributosSeleccionados = Array.from(
+    document.querySelectorAll('#filterAtributoContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por atributo (si hay alguno seleccionado)
+  if (atributosSeleccionados.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      atributosSeleccionados.includes(item.atributo)
+    );
+  }
+
   // Filtrar por Digipuntos (rango mín-máx)
   const inputMin = document.getElementById('filterDigipuntosMin');
   const inputMax = document.getElementById('filterDigipuntosMax');
@@ -1568,6 +1606,7 @@ function aplicarFiltros() {
   actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
   actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
   actualizarTextoDropdown('filterClasificacionContainer', 'filterClasificacionText', t.todasClasificaciones);
+  actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
 
   // Ordenar y mostrar
   const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
@@ -1594,6 +1633,10 @@ function limpiarFiltros() {
     cb.checked = cb.value === '';
   });
 
+  document.querySelectorAll('#filterAtributoContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
   const inputMin = document.getElementById('filterDigipuntosMin');
   const inputMax = document.getElementById('filterDigipuntosMax');
   if (inputMin && inputMax) {
@@ -1606,6 +1649,7 @@ function limpiarFiltros() {
   document.getElementById('filterDigimonText').textContent = t.todosDigimon;
   document.getElementById('filterEvolucionAnteriorText').textContent = t.todasEvoluciones;
   document.getElementById('filterClasificacionText').textContent = t.todasClasificaciones;
+  document.getElementById('filterAtributoText').textContent = t.todosAtributos;
 
   datosActuales = [...datosSinFiltrar];
 
@@ -1918,6 +1962,68 @@ function actualizarOpcionesClasificacion() {
   });
 }
 
+function actualizarOpcionesAtributo() {
+  const container = document.getElementById('filterAtributoContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener atributos únicos de los datos actuales sin filtrar
+  const atributosUnicos = [...new Set(datosSinFiltrar.map(item => item.atributo).filter(a => a && a !== '-'))];
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todos"
+  const todosDiv = document.createElement('div');
+  todosDiv.className = 'checkbox-item';
+  todosDiv.innerHTML = `
+    <input type="checkbox" id="atributo-todos" value="" checked>
+    <label for="atributo-todos">${t.todosAtributos}</label>
+  `;
+  container.appendChild(todosDiv);
+
+  // Agregar checkbox para cada atributo
+  atributosUnicos.sort().forEach(atributo => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `atributo-${atributo.replace(/\s+/g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${atributo}">
+      <label for="${id}">${atributo}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todos"
+  document.getElementById('atributo-todos').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#atributo-todos)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#atributo-todos)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('atributo-todos').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#atributo-todos)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('atributo-todos').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar texto del botón
+  actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+}
+
 function actualizarRangoDigipuntos() {
   const inputMin = document.getElementById('filterDigipuntosMin');
   const inputMax = document.getElementById('filterDigipuntosMax');
@@ -2030,6 +2136,7 @@ function generarRanking() {
             nombre,
             lineaEvolutiva: lineaEvo,
             evolucionAnterior: evolucionAnterior,
+            atributo: digimonReqDict[nombre]?.Atributo || "-",
             atk: stats.atk,
             def: stats.def,
             hp: stats.hp,
@@ -2058,6 +2165,7 @@ function generarRanking() {
           lineaEvolutiva: null,
           evolucionAnterior: evolucionAnterior,
           todasLasEvolucionesAnteriores: obtenerTodasLasEvolucionesAnteriores(nombre), // Todas las opciones para el filtro
+          atributo: digimonReqDict[nombre]?.Atributo || "-",
           atk: stats.atk,
           def: stats.def,
           hp: stats.hp,
@@ -2077,6 +2185,7 @@ function generarRanking() {
       datosActuales.push({
         nombre: variante.nombre,
         lineaEvolutiva: variante.lineaEvolutiva,
+        atributo: digimonReqDict[variante.nombre]?.Atributo || "-",
         atk: variante.atk,
         def: variante.def,
         hp: variante.hp,
@@ -2094,6 +2203,7 @@ function generarRanking() {
   actualizarOpcionesDigimon();
   actualizarOpcionesEvolucionAnterior();
   actualizarOpcionesClasificacion();
+  actualizarOpcionesAtributo();
   actualizarRangoDigipuntos();
 
   // Resetear inputs de digipuntos
@@ -2172,6 +2282,7 @@ function actualizarTraducciones() {
   const labelFilterDigimon = document.getElementById('labelFilterDigimon');
   const labelFilterEvolucionAnterior = document.getElementById('labelFilterEvolucionAnterior');
   const labelFilterClasificacion = document.getElementById('labelFilterClasificacion');
+  const labelFilterAtributo = document.getElementById('labelFilterAtributo');
   const labelFilterDigipuntos = document.getElementById('labelFilterDigipuntos');
   const clearFiltersBtn = document.getElementById('clearFiltersBtn');
   const digipuntosRangeValue = document.getElementById('digipuntosRangeValue');
@@ -2179,6 +2290,7 @@ function actualizarTraducciones() {
   if (labelFilterDigimon) labelFilterDigimon.textContent = t.filtrarDigimon;
   if (labelFilterEvolucionAnterior) labelFilterEvolucionAnterior.textContent = t.filtrarEvolucionAnterior;
   if (labelFilterClasificacion) labelFilterClasificacion.textContent = t.filtrarClasificacion;
+  if (labelFilterAtributo) labelFilterAtributo.textContent = t.filtrarAtributo;
   if (clearFiltersBtn) clearFiltersBtn.textContent = t.limpiarFiltros;
 
   // Actualizar label de Digipuntos preservando el span de valor
@@ -2192,6 +2304,7 @@ function actualizarTraducciones() {
     actualizarOpcionesDigimon();
     actualizarOpcionesEvolucionAnterior();
     actualizarOpcionesClasificacion();
+    actualizarOpcionesAtributo();
 
     // Actualizar el texto del valor de digipuntos si está en el rango completo
     const inputMin = document.getElementById('filterDigipuntosMin');
@@ -2207,12 +2320,14 @@ function actualizarTraducciones() {
   const headerDigimon = document.getElementById('headerDigimon');
   const headerLineaEvolutiva = document.getElementById('headerLineaEvolutiva');
   const headerClasificacion = document.getElementById('headerClasificacion');
+  const headerAtributo = document.getElementById('headerAtributo');
   const headerImagen = document.getElementById('headerImagen');
   const headerDigipuntos = document.getElementById('headerDigipuntos');
 
   if (headerDigimon) headerDigimon.textContent = t.digimon;
   if (headerLineaEvolutiva) headerLineaEvolutiva.textContent = t.lineaEvolutiva;
   if (headerClasificacion) headerClasificacion.textContent = t.clasificacion;
+  if (headerAtributo) headerAtributo.textContent = t.atributo;
   if (headerImagen) headerImagen.textContent = t.imagen;
   if (headerDigipuntos) {
     const sortIcon = headerDigipuntos.querySelector('.sort-icon');
@@ -2249,8 +2364,8 @@ function descargarCSV() {
     const rowData = [];
 
     cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 3, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Imagen)
-      if (index === 3) return;
+      // Saltar la columna de imagen (índice 4, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Imagen)
+      if (index === 4) return;
 
       let text = col.textContent.trim();
       // Escapar comillas y envolver en comillas si contiene comas
@@ -2294,8 +2409,8 @@ function descargarXLSX() {
     const cols = row.querySelectorAll('td, th');
 
     cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 3, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Imagen)
-      if (index === 3) return;
+      // Saltar la columna de imagen (índice 4, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Imagen)
+      if (index === 4) return;
       rowData.push(col.textContent.trim());
     });
 
@@ -2311,6 +2426,7 @@ function descargarXLSX() {
     { wch: 20 }, // Digimon
     { wch: 30 }, // Línea Evolutiva
     { wch: 15 }, // Clasificación
+    { wch: 12 }, // Atributo
     { wch: 8 },  // HP
     { wch: 8 },  // ATK
     { wch: 8 },  // DEF
@@ -2380,6 +2496,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterDigimonButton = document.getElementById('filterDigimonButton');
   const filterEvolucionAnteriorButton = document.getElementById('filterEvolucionAnteriorButton');
   const filterClasificacionButton = document.getElementById('filterClasificacionButton');
+  const filterAtributoButton = document.getElementById('filterAtributoButton');
 
   if (filterDigimonButton) {
     filterDigimonButton.addEventListener('click', (e) => {
@@ -2399,6 +2516,13 @@ document.addEventListener("DOMContentLoaded", () => {
     filterClasificacionButton.addEventListener('click', (e) => {
       e.stopPropagation();
       toggleDropdown('filterClasificacionButton', 'filterClasificacionContainer');
+    });
+  }
+
+  if (filterAtributoButton) {
+    filterAtributoButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterAtributoButton', 'filterAtributoContainer');
     });
   }
 

@@ -1098,8 +1098,15 @@ const specialDigimonConfig = {
   gruposColumnas: {
     "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Batallas"],
     "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"]
-  } 
-}, 
+  }
+},
+
+"Clockmon": {
+  gruposColumnas: {
+    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Batallas"],
+    "Requisitos Obligatorios": ["WinRate", "Combates Minimos"]
+  }
+},
 
 "Aero V-dramon": {
   gruposColumnas: {
@@ -1360,8 +1367,13 @@ const specialEntrenamientoCases = {
         "Icemon": 80,
         "Yukidarumon": 80,
 		"Chackmon":80,
+		"Chackmon (Sin Install)": 80,
 		"Polarbearmon": 100
-	}
+	},
+    "Clockmon": {
+        "Sin Bonus": 50,
+        "Con Bonus": 50
+    }
 };
 
 const specialVictoriasCases = {
@@ -1391,8 +1403,13 @@ const camposVaciosPorEvolucion = {
         // Yuki Agumon es nivel 3 → 4 (normal), por lo tanto requiere WinRate y Combates
     },
     "Blizzarmon": {
-        "Polarbearmon": ["WinRate", "Combates Minimos"]   // Nivel 5 → 5 (slide)
+        "Polarbearmon": ["WinRate", "Combates Minimos"],   // Nivel 5 → 5 (slide)
+        "Chackmon (Sin Install)": ["Xross"]                // Variante sin Install
         // Icemon, Chackmon, Yukidarumon son nivel 4 → 5 (normal), requieren WinRate y Combates
+    },
+    "Clockmon": {
+        "Sin Bonus": ["Bonus Batallas"],                   // Variante sin bonus
+        "Con Bonus": ["WinRate", "Combates Minimos"]       // Variante con bonus, sin WinRate ni Combates
     }
 };
 
@@ -1491,6 +1508,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     if (nombreDigimon === "Nanimon" && campo === "Vinculo al momento de evolucionar") {
       return { cumple: 3, noCumple: -10 };
     }
+    // Clockmon: Peso y Error Maximo dan +1/0
+    if (nombreDigimon === "Clockmon" && (campo === "Peso" || campo === "Error Maximo")) {
+      return { cumple: 1, noCumple: 0 };
+    }
   }
 
   // Excepciones en Perfect (nivel 5)
@@ -1512,6 +1533,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
       }
     }
     if (nombreDigimon === "Blizzarmon" && campo === "Peso") {
+      return { cumple: 1, noCumple: 0 };
+    }
+    // Blizzarmon variante "Sin Install": Error Maximo da +1/0
+    if (nombreDigimon === "Blizzarmon" && campo === "Error Maximo" && window.currentEvolutionDigimon === "Chackmon (Sin Install)") {
       return { cumple: 1, noCumple: 0 };
     }
     if (nombreDigimon === "Metal Fantomon") {
@@ -1709,7 +1734,7 @@ function formatearPuntajeConColor(puntaje) {
       "Win Rate": "Win Rate",
       "Combates Minimos": "Combates Mínimos",
 	  "% Entrenamiento": "Rango de % Entrenamiento",
-	  "Bonus Batallas": "Bonus Batallas",
+	  "Bonus Batallas": "Bonus Combates Máximos",
 	  "Comida" : "Comida",
 	  "Victorias": "Victorias",
 	  "Bonus Victorias": "Bonus Victorias Minimas",
@@ -1809,7 +1834,7 @@ function formatearPuntajeConColor(puntaje) {
 	  "Menos de 15 entrenamientos?": "Less than 15 trainings?",
       "Combates Minimos": "Minimum Battles",
 	  "% Entrenamiento": "Training % Range",
-	  "Bonus Batallas": "Battle Bonus",
+	  "Bonus Batallas": "Max Battle Bonus",
 	  "Comida" : "Food",
 	  "Victorias": "Battle Victories",
 	  "Bonus Victorias": "Minimum Victory Bonus",

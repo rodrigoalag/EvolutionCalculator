@@ -67,6 +67,8 @@
       <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
 	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
 	  <a href="./BalanceCalculator.html">Balance Calculator</a>
+      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
+      <a href="./dropsdelared.html">Drops de la Red</a>
       <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
       <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
       <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
@@ -134,6 +136,26 @@ const translations = {
 };
 
 let currentLang = localStorage.getItem("lang") || "es";
+
+// Diccionario de nombres de Tama
+const tamaNombres = {
+  "V0": { es: "Cachivaches y Dragones", en: "Devices and Dragons" },
+  "M": { es: "Mutantes", en: "Mutant" },
+  "VS": { es: "Meteoros Xruzados", en: "Xrossing Meteors" },
+  "SP": { es: "Spirits", en: "Spirits" },
+  "D": { es: "Death", en: "Death" },
+  "P": { es: "Plant", en: "Plant" },
+  "VL": { es: "Cielos Liberados", en: "Liberated Skies" },
+  "PR": { es: "Prototipo Alpha", en: "Alpha Prototype" }
+};
+
+const getTamaNombre = (codigo) => {
+  const nombre = tamaNombres[codigo];
+  if (nombre) {
+    return `${codigo} - ${nombre[currentLang] || nombre.es}`;
+  }
+  return codigo;
+};
 
 const selectTama = document.getElementById("selectTama");
 const selectNivel = document.getElementById("selectNivel");
@@ -311,7 +333,7 @@ function poblarTama() {
   obtenerTamas().forEach(t => {
     const opt = document.createElement("option");
     opt.value = t;
-    opt.textContent = t; // Tama no se traduce
+    opt.textContent = getTamaNombre(t);
     selectTama.appendChild(opt);
   });
 }

@@ -105,6 +105,11 @@ table th {
   font-weight: bold;
 }
 
+/* Asegurar que las filas de datos en requisitosOrigen tengan el mismo color */
+#tablaRequisitos tbody tr.data-row-origen {
+  background-color: var(--bg) !important;
+}
+
 select:disabled {
   opacity: 0.5;
 }
@@ -659,6 +664,8 @@ main {
       <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
 	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
 	  <a href="./BalanceCalculator.html">Balance Calculator</a>
+      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
+      <a href="./dropsdelared.html">Drops de la Red</a>
       <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
       <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
       <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
@@ -877,6 +884,14 @@ const warningMessages = {
   skullgreymon: {
     es: "SkullGreymon es un digi que evoluciona con probabilidad, solo con 100% de entreno es 100% seguro de obtenerlo, menos entrenamiento implica que vas a tener probabilidad de morir, revisar con calculadora",
     en: "SkullGreymon is a digimon that evolves with probability, only with 100% training is 100% guaranteed to get it, less training means you will have a probability of death, check with calculator"
+  },
+  dexdorugamon: {
+    es: "⚠️ PLACEHOLDER: Los requisitos de DexDorugamon no están confirmados. Evoluciona con probabilidad igual al % de entrenamiento. Requiere Death Program.",
+    en: "⚠️ PLACEHOLDER: DexDorugamon requirements are not confirmed. Evolves with probability equal to training %. Requires Death Program."
+  },
+  dexdoruguremon: {
+    es: "DexDoruguremon: Desde Dorugamon, evoluciona con probabilidad igual al % de entrenamiento (igual que SkullGreymon). Desde DexDorugamon o Doruguremon, los requisitos no están claros.",
+    en: "DexDoruguremon: From Dorugamon, evolves with probability equal to training % (like SkullGreymon). From DexDorugamon or Doruguremon, requirements are unclear."
   },
   hora: {
     es: "Hora local de tu país, para la hora del servidor pasar el tiempo a UTC-3",
@@ -1236,9 +1251,9 @@ const specialDigimonConfig = {
 },
 "Tyranomon": {
   gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Stat Superior", "Error Maximo"],
+    "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Stat Superior", "Error Maximo"],
     "Requisitos Obligatorios": ["WinRate", "Combates Minimos"]
-  } 
+  }
 },  
 "Devitamamon":  {
   gruposColumnas: {
@@ -1312,8 +1327,66 @@ const specialDigimonConfig = {
     "No se considera en el puntaje": ["Peso", "Error Maximo"],
     "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
 }
+},
+"DexDorugamon":  {
+  requisitosOrigen: {
+    "Dorumon": {
+      gruposColumnas: {
+        "No se considera en el puntaje": ["Peso"],
+        "Requisitos Obligatorios": ["% Entrenamiento", "Program"]
+      },
+      valores: {
+        "Peso": "20-30",
+        "% Entrenamiento": "50-100%",
+        "Program": "Death"
+      },
+      placeholder: true
+    },
+    "Dorugamon": {
+      gruposColumnas: {
+        "Requisitos Obligatorios": ["Program"],
+        "Debes incumplir al menos uno": ["% Entrenamiento", "Errores", "Combates", "Vinculo"]
+      },
+      valores: {
+        "Program": "Death",
+        "% Entrenamiento": "< 50%",
+        "Errores": "< 6",
+        "Combates": "< 30",
+        "Vinculo": "> -50"
+      }
+    }
+  }
+},
+"DexDoruguremon":  {
+  gruposColumnas: {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program o Comida"]
+  },
+  procesarCampos: function(digimon) {
+    const procesado = {...digimon};
+    if (digimon.Program && digimon.Comida) {
+      procesado["Program o Comida"] = "Death o Carne X";
+    }
+    return procesado;
+  }
+},
+"Raptordramon":  {
+  gruposColumnas: {
+    "Quota/Key Points": ["Peso", "% Entrenamiento"],
+    "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos","WinRate" ,"Vinculo Minimo alcanzado","Tienes registrado a DexDorugamon y Dorugamon?"]
 }
-
+},
+"Grademon":  {
+  gruposColumnas: {
+    "Quota/Key Points": ["Peso", "% Entrenamiento"],
+    "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos","WinRate" ,"Vinculo Minimo alcanzado", "Tienes registrado a DexDoruguremon y Doruguremon?"]
+}
+},
+"Grademon VICE":  {
+  gruposColumnas: {
+    "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Vinculo Minimo alcanzado","Tienes registrado a DexDoruguremon y Doruguremon?"]
+}
+},
 };
 
 // Configuración por defecto (la original)
@@ -1362,7 +1435,7 @@ const specialEntrenamientoCases = {
         "Icemon": 100,
         "Yukidarumon": 100,
 		"Yuki Agumon": 80
-},
+    },
     "Blizzarmon": {
         "Icemon": 80,
         "Yukidarumon": 80,
@@ -1373,20 +1446,25 @@ const specialEntrenamientoCases = {
     "Clockmon": {
         "Sin Bonus": 50,
         "Con Bonus": 50
+    },
+    "DexDoruguremon": {
+        "Dorugamon": 50,
+        "DexDorugamon": "-",
+        "Doruguremon": "-"
     }
 };
 
 const specialVictoriasCases = {
     "Wargreymon": {
         "Metal Greymon": 100,
-        "MetalGreymon Alterous": 125
+        "MetalGreymon Alterous": 175
     }
 };
 
 const specialBatallasCases = {
     "Wargreymon": {
         "Metal Greymon": 200,
-        "MetalGreymon Alterous": 250
+        "MetalGreymon Alterous": 300
     }
 };
 
@@ -1410,6 +1488,10 @@ const camposVaciosPorEvolucion = {
     "Clockmon": {
         "Sin Bonus": ["Bonus Batallas"],                   // Variante sin bonus
         "Con Bonus": ["WinRate", "Combates Minimos"]       // Variante con bonus, sin WinRate ni Combates
+    },
+    "DexDoruguremon": {
+        "DexDorugamon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program o Comida"],  // Requisitos no claros
+        "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar"]  // Solo necesita Death o Carne X
     }
 };
 
@@ -1444,7 +1526,8 @@ const puntajesPorNivel = {
     "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
     "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
     "Driver Equipado": { cumple: 0, noCumple: -10 },
-    "Victorias": { cumple: 1, noCumple: -10 }
+    "Victorias": { cumple: 1, noCumple: -10 },
+    "Tienes registrado a DexDorugamon y Dorugamon?": { cumple: 0, noCumple: -10 }
   },
   5: { // Perfect
     "WinRate": { cumple: 0, noCumple: -10 },
@@ -1459,7 +1542,8 @@ const puntajesPorNivel = {
     "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
     "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
     "Driver Equipado": { cumple: 0, noCumple: -10 },
-    "Victorias": { cumple: 1, noCumple: -10 }
+    "Victorias": { cumple: 1, noCumple: -10 },
+    "Tienes registrado a DexDoruguremon y Doruguremon?": { cumple: 0, noCumple: -10 }
   },
   6: { // Ultimate
     "WinRate": { cumple: 0, noCumple: -10 },
@@ -1496,6 +1580,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
 
   // Excepciones en Adult (nivel 4)
   if (nivel === 4) {
+    // DexDorugamon: PLACEHOLDER - evolución al azar, no usar puntajes tradicionales
+    if (nombreDigimon === "DexDorugamon" && (campo === "% Entrenamiento" || campo === "Program")) {
+      return { cumple: 0, noCumple: 0, ocultar: true };
+    }
     if (nombreDigimon === "DarkTyranomon" && campo === "Program") {
       return { cumple: 3, noCumple: -10 };
     }
@@ -1510,6 +1598,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     }
     // Clockmon: Peso y Error Maximo dan +1/0
     if (nombreDigimon === "Clockmon" && (campo === "Peso" || campo === "Error Maximo")) {
+      return { cumple: 1, noCumple: 0 };
+    }
+    // Tyranomon: Bonus Stat Superior da +1/0
+    if (nombreDigimon === "Tyranomon" && campo === "Bonus Stat Superior") {
       return { cumple: 1, noCumple: 0 };
     }
   }
@@ -1546,6 +1638,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
       if (campo === "% Entrenamiento") {
         return { cumple: 1, noCumple: -10 };
       }
+    }
+    // DexDoruguremon: evolución al azar (como SkullGreymon), no usar puntajes tradicionales
+    if (nombreDigimon === "DexDoruguremon" && (campo === "% Entrenamiento" || campo === "Program o Comida" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar")) {
+      return { cumple: 0, noCumple: 0, ocultar: true };
     }
   }
 
@@ -1662,6 +1758,27 @@ function formatearPuntajeConColor(puntaje) {
   const imagePlaceholder = document.getElementById("imagePlaceholder");
 
   const uniqueValues = (array) => [...new Set(array)];
+
+  // Diccionario de nombres de Tama
+  const tamaNombres = {
+    "V0": { es: "Cachivaches y Dragones", en: "Devices and Dragons" },
+    "M": { es: "Mutantes", en: "Mutant" },
+    "VS": { es: "Meteoros Xruzados", en: "Xrossing Meteors" },
+    "SP": { es: "Spirits", en: "Spirits" },
+    "D": { es: "Death", en: "Death" },
+    "P": { es: "Plant", en: "Plant" },
+    "VL": { es: "Cielos Liberados", en: "Liberated Skies" },
+    "PR": { es: "Prototipo Alpha", en: "Alpha Prototype" }
+  };
+
+  const getTamaNombre = (codigo) => {
+    const nombre = tamaNombres[codigo];
+    if (nombre) {
+      return `${codigo} - ${nombre[currentLanguage] || nombre.es}`;
+    }
+    return codigo;
+  };
+
 	 const traducciones = {
 	  es: {
 	    titleMain: "Información del Digimon",
@@ -1719,9 +1836,13 @@ function formatearPuntajeConColor(puntaje) {
       "Hora": "Hora",
       "Error Maximo": "Rango de Errores de Cuido",
 	  "Errores Minimos": "Errores Mínimos",
-      "EntrenamientoHecho": "Entrenamiento Hecho",
+	  "Errores": "Errores",
+	  "Combates": "Combates",
+	  "Vinculo": "Vínculo",
+      "EntrenamientoHecho": "Entrenamiento Hecho en Baby 2",
       "Stat Superior": "Stat Superior",
       "Stat Superior 2": "Stat Superior 2",
+      "Bonus Stat Superior": "Bonus Stat Superior",
       "2Ciclos": "Haber Conseguido 2 perfects en las ultimas dos generaciones / Haber tenido Agumon 06 antes",
       "Program": "Program",
 	  "Program o Comida": "Program o Comida",
@@ -1744,12 +1865,15 @@ function formatearPuntajeConColor(puntaje) {
 	  "Vinculo al momento de evolucionar": "Vínculo al momento de evolucionar",
 	  "Alcanzo vinculo negativo?": "Alcanzo vinculo negativo?",
 	  "Nickname": "Nickname",
+	  "Tienes registrado a DexDorugamon y Dorugamon?": "¿Tienes registrado a DexDorugamon y Dorugamon?",
+	  "Tienes registrado a DexDoruguremon y Doruguremon?": "¿Tienes registrado a DexDoruguremon y Doruguremon?",
     },
 	    grupos: {
       "Quota/Key Points": "Quota/Key Points",
       "Requisitos Obligatorios": "Requisitos Obligatorios",
 	  "No se considera en el puntaje": "No se considera en el puntaje",
-	  "Evolucion por muerte inducida": "Evolucion por muerte inducida"
+	  "Evolucion por muerte inducida": "Evolucion por muerte inducida",
+	  "Debes incumplir al menos uno": "Debes incumplir al menos uno"
     },
 	  subtitle3: "Stat Base",
 	  subtitle4: "Evoluciones",
@@ -1820,9 +1944,13 @@ function formatearPuntajeConColor(puntaje) {
       "Hora": "Time",
       "Error Maximo": "Care Mistakes Range",
 	  "Errores Minimos": "Minimum Errors",
-      "EntrenamientoHecho": "Training Done",
+	  "Errores": "Errors",
+	  "Combates": "Battles",
+	  "Vinculo": "Bond",
+      "EntrenamientoHecho": "Training Done in Baby 2",
       "Stat Superior": "Highest Stat",
       "Stat Superior 2": "Highest Stat 2",
+      "Bonus Stat Superior": "Bonus Highest Stat",
       "2Ciclos": "Have obtain 2 perfects on last two generations / Have obtain Agumon 06",
       "Program": "Program",
 	  "Program o Comida": "Program or Food",
@@ -1844,12 +1972,15 @@ function formatearPuntajeConColor(puntaje) {
 	  "Vinculo al momento de evolucionar": "Bond at evolution",
 	  "Alcanzo vinculo negativo?": "Reached negative bond?",
 	  "Nickname": "Nickname",
+	  "Tienes registrado a DexDorugamon y Dorugamon?": "Do you have DexDorugamon and Dorugamon registered?",
+	  "Tienes registrado a DexDoruguremon y Doruguremon?": "Do you have DexDoruguremon and Doruguremon registered?",
     },
 	    grupos: {
-      "Quota/Key Points": "Quota/Key Points", 
+      "Quota/Key Points": "Quota/Key Points",
       "Requisitos Obligatorios": "Mandatory Requirements",
 	  "No se considera en el puntaje": "Not considered in scoring",
-	  "Evolucion por muerte inducida": "Evolution by induced death"
+	  "Evolucion por muerte inducida": "Evolution by induced death",
+	  "Debes incumplir al menos uno": "Must fail at least one"
     },
 	  subtitle3: "Base Stats",
 	  subtitle4: "Evolutions",
@@ -2071,7 +2202,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   allTamas.forEach(tama => {
     const opt = document.createElement("option");
     opt.value = tama;
-    opt.textContent = tama;
+    opt.textContent = getTamaNombre(tama);
     selectTama.appendChild(opt);
   });
 
@@ -2380,6 +2511,10 @@ headersGrupos.innerHTML = "";
 tablaHeaders.innerHTML = "";
 tablaRequisitos.innerHTML = "";
 
+// Restaurar visibilidad de headers del thead (pueden haber sido ocultados por requisitosOrigen)
+headersGrupos.style.display = "";
+tablaHeaders.style.display = "";
+
 // Excluir campos generales de la tabla de requisitos, EXCEPTO "Peso" que aparece en ambas
 const camposDisponibles = Object.keys(digimon).filter(campo => {
   if (campo === "Peso") return true; // Peso puede aparecer en ambas tablas
@@ -2391,6 +2526,114 @@ const gruposColumnas = obtenerGruposColumnas(nombre);
 
 // Detectar si hay casos especiales que requieren múltiples filas
 const evolucionesMultiples = detectarEvolucionesMultiples(nombre);
+
+// Detectar si tiene requisitosOrigen (diferentes requisitos según digimon de origen)
+const tieneRequisitosOrigen = specialDigimonConfig[nombre]?.requisitosOrigen;
+
+// Si tiene requisitosOrigen, generar tabla especial con headers separados por origen
+if (tieneRequisitosOrigen) {
+  const requisitosOrigen = specialDigimonConfig[nombre].requisitosOrigen;
+  const origenes = Object.keys(requisitosOrigen);
+
+  // Ocultar los headers normales del thead ya que usaremos headers en el tbody
+  headersGrupos.style.display = "none";
+  tablaHeaders.style.display = "none";
+
+  // Para cada origen, crear sus propios headers y fila de datos
+  origenes.forEach((origen, index) => {
+    const config = requisitosOrigen[origen];
+
+    // Si es "NoClaro", mostrar solo una fila con el mensaje
+    if (config.esNoClaro) {
+      // Fila con origen + mensaje de requisitos no claros
+      const trNoClaro = document.createElement("tr");
+      const tdOrigen = document.createElement("td");
+      tdOrigen.textContent = origen;
+      tdOrigen.style.fontWeight = "bold";
+      trNoClaro.appendChild(tdOrigen);
+
+      const tdNoClaro = document.createElement("td");
+      tdNoClaro.setAttribute("colspan", "9");
+      tdNoClaro.textContent = config.mensaje || "Requisitos no claros, por confirmar";
+      tdNoClaro.style.fontStyle = "italic";
+      trNoClaro.appendChild(tdNoClaro);
+      tablaRequisitos.appendChild(trNoClaro);
+    } else {
+      // Obtener grupos y campos para este origen
+      const gruposOrigen = config.gruposColumnas || {};
+
+      // Calcular total de campos
+      let totalCampos = 1; // +1 para columna Digimon
+      Object.values(gruposOrigen).forEach(campos => totalCampos += campos.length);
+
+      // Fila de headers de grupos (con columna Digimon rowspan 2 para cada origen)
+      const trGrupos = document.createElement("tr");
+
+      // Columna Digimon con rowspan 2 (para cada origen)
+      const thDigimon = document.createElement("th");
+      thDigimon.setAttribute("rowspan", "2");
+      thDigimon.textContent = "Digimon";
+      thDigimon.style.verticalAlign = "middle";
+      trGrupos.appendChild(thDigimon);
+
+      Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
+        const thGrupo = document.createElement("th");
+        thGrupo.setAttribute("colspan", campos.length);
+        thGrupo.textContent = traducciones[currentLanguage]?.grupos?.[nombreGrupo] || nombreGrupo;
+        trGrupos.appendChild(thGrupo);
+      });
+      tablaRequisitos.appendChild(trGrupos);
+
+      // Fila de headers de campos individuales
+      const trCampos = document.createElement("tr");
+      Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
+        campos.forEach(campo => {
+          const th = document.createElement("th");
+          th.setAttribute("data-orig", campo);
+          th.textContent = traducirCampo(campo);
+
+          // Agregar icono de advertencia para % Entrenamiento si es placeholder
+          if (campo === "% Entrenamiento" && config.placeholder) {
+            th.textContent = traducirCampo(campo) + " ";
+            const warningIcon = document.createElement("span");
+            warningIcon.className = "warning-icon";
+            warningIcon.onclick = () => showWarningPopup("dexdorugamon");
+            warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
+            warningIcon.textContent = "!";
+            warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+            warningIcon.setAttribute("data-warning-key", "dexdorugamon");
+            th.appendChild(warningIcon);
+          }
+
+          trCampos.appendChild(th);
+        });
+      });
+      tablaRequisitos.appendChild(trCampos);
+
+      // Fila de datos con nombre del origen
+      const trDatos = document.createElement("tr");
+      trDatos.className = "data-row-origen";
+
+      // Celda con nombre del origen
+      const tdOrigen = document.createElement("td");
+      tdOrigen.textContent = origen;
+      trDatos.appendChild(tdOrigen);
+
+      Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
+        campos.forEach(campo => {
+          const td = document.createElement("td");
+          const valor = config.valores?.[campo];
+          td.textContent = valor !== undefined ? valor : "-";
+          trDatos.appendChild(td);
+        });
+      });
+      tablaRequisitos.appendChild(trDatos);
+    }
+
+  });
+
+  return; // Terminar aquí para requisitosOrigen
+}
 
 // Crear headers agrupados y individuales
 let camposOrdenados = [];
@@ -2431,6 +2674,32 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
         warningIcon.textContent = "!";
         warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
         warningIcon.setAttribute("data-warning-key", "skullgreymon");
+        th.appendChild(warningIcon);
+      }
+
+      // ✅ AGREGAR ICONO DE ADVERTENCIA PARA DEXDORUGAMON EN % ENTRENAMIENTO (PLACEHOLDER)
+      if (nombre === "DexDorugamon" && campo === "% Entrenamiento") {
+        th.textContent = traducirCampo(campo) + " ";
+        const warningIcon = document.createElement("span");
+        warningIcon.className = "warning-icon";
+        warningIcon.onclick = () => showWarningPopup("dexdorugamon");
+        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
+        warningIcon.textContent = "!";
+        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+        warningIcon.setAttribute("data-warning-key", "dexdorugamon");
+        th.appendChild(warningIcon);
+      }
+
+      // ✅ AGREGAR ICONO DE ADVERTENCIA PARA DEXDORUGUREMON EN % ENTRENAMIENTO
+      if (nombre === "DexDoruguremon" && campo === "% Entrenamiento") {
+        th.textContent = traducirCampo(campo) + " ";
+        const warningIcon = document.createElement("span");
+        warningIcon.className = "warning-icon";
+        warningIcon.onclick = () => showWarningPopup("dexdoruguremon");
+        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
+        warningIcon.textContent = "!";
+        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
+        warningIcon.setAttribute("data-warning-key", "dexdoruguremon");
         th.appendChild(warningIcon);
       }
 
@@ -2536,6 +2805,18 @@ if (evolucionesMultiples.length > 0) {
     tdNombre.textContent = evolucionDigimon;
     tdNombre.style.fontWeight = "bold";
     filaReq.appendChild(tdNombre);
+
+    // Caso especial: DexDoruguremon desde DexDorugamon - mostrar placeholder
+    if (nombre === "DexDoruguremon" && evolucionDigimon === "DexDorugamon") {
+      const tdPlaceholder = document.createElement("td");
+      tdPlaceholder.setAttribute("colspan", camposOrdenados.length);
+      tdPlaceholder.textContent = currentLanguage === 'es' ? "Requisitos no claros, por confirmar" : "Requirements unclear, to be confirmed";
+      tdPlaceholder.style.fontStyle = "italic";
+      tdPlaceholder.style.textAlign = "center";
+      filaReq.appendChild(tdPlaceholder);
+      tablaRequisitos.appendChild(filaReq);
+      return; // Saltar al siguiente
+    }
 
     camposOrdenados.forEach(({ campo }) => {
       // Si el campo debe fusionarse, solo agregarlo en la primera fila
@@ -2655,6 +2936,13 @@ function actualizarTextosUI() {
   selectTama.options[0].textContent = t("selectTamaDefault");
   selectNivel.options[0].textContent = t("selectNivelDefault");
   selectDigimon.options[0].textContent = t("selectDigimonDefault");
+
+  // Actualizar nombres de Tama según idioma
+  Array.from(selectTama.options).forEach(option => {
+    if (option.value !== "") {
+      option.textContent = getTamaNombre(option.value);
+    }
+  });
 
   // Actualizar las opciones de nivel si hay alguna seleccionada
   Array.from(selectNivel.options).forEach(option => {

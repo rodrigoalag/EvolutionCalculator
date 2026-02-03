@@ -67,7 +67,7 @@ const digimonReqDict = {
   },
     "Tyranomon": {
 	"ID": 5, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
-    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 40,"Stat Superior": "Balanceado", "WinRate": 50, "Combates Minimos": 15
+    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 40,"Bonus Stat Superior": "Balanceado", "WinRate": 50, "Combates Minimos": 15
   },
     "Dark Tyranomon": {
 	"ID": 6, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -390,10 +390,60 @@ const digimonReqDict = {
   },
      "Wargreymon": {
 	"ID": 170, "Tama": "V0", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Dragon","Peso": 30,
-	"% Entrenamiento": 100,"Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 250, "Victorias": 125
+	"% Entrenamiento": 100,"Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias": 175
   }, 
      "BlackWargreymon": {
 	"ID": 171, "Tama": "D", "Nivel": 6, "Atributo": "Virus", "Tipo": "Dragon","Peso": 30,
 	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias": 100
-  }, 
+  },
+     "Dodomon": {
+	"ID": "146", "Tama": "PR", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5
+  },
+     "Dorimon": {
+	"ID": "147", "Tama": "PR", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 10
+  },
+     "Dorumon": {
+	"ID": "148", "Tama": "PR", "Nivel": 3, "Atributo": "Data", "Tipo": "Bestia", "Peso": 18
+  },
+     "Dorugamon": {
+	"ID": "149", "Tama": "PR", "Nivel": 4, "Atributo": "Data", "Tipo": "Bestia / Dragon", "Peso": 20,
+	"% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15
+  },
+     "DexDorugamon": {
+	"ID": "151", "Tama": "PR", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 25,
+	"% Entrenamiento": 50, "Program": "Death",
+	"Placeholder": true,
+	"RequisitosCondicionados": {
+		"Dorumon": "Placeholder",
+		"Dorugamon": "SideEvolution"
+	}
+  },
+     "Raptordramon": {
+	"ID": "153", "Tama": "PR", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina", "Peso": "25",
+	"% Entrenamiento": 100, "Error Maximo": 0, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100,
+	"Tienes registrado a DexDorugamon y Dorugamon?": "Si"
+  },
+     "Doruguremon": {
+	"ID": "150", "Tama": "PR", "Nivel": 5, "Atributo": "Data", "Tipo": "Bestia / Dragon", "Peso": 36,
+	"% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 70, "Combates Minimos": 25
+  },
+     "DexDoruguremon": {
+	"ID": "152", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 36,
+	"% Entrenamiento": 50, "Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program": "Death", "Comida": "Carne X",
+	"RequisitosCondicionados": {
+		"Dorugamon": "SkullGreymon",
+		"DexDorugamon": "NoClaro",
+		"Doruguremon": "SoloDeathProgram"
+	}
+  },
+     "Grademon": {
+	"ID": "154", "Tama": "PR", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Guerrero", "Peso": "36",
+	"% Entrenamiento": 100, "Error Maximo": 0, "WinRate": 70, "Combates Minimos": 25,
+	"Tienes registrado a DexDoruguremon y Doruguremon?": "Si"
+  },
+     "Grademon VICE": {
+	"ID": "174", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "Guerrero", "Peso": "36",
+  "Error Maximo": 6, "Vinculo Minimo alcanzado": -50, "% Entrenamiento": 100,
+  "Tienes registrado a DexDoruguremon y Doruguremon?": "Si"
+  },
 };

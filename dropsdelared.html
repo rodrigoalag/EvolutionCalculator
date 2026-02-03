@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drops de la Red</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+/* Estilos base */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Contenedor de pool */
+.pool-container {
+  background-image: url('font/Font1.jpg');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 0;
+}
+
+/* Título del pool */
+.pool-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Grid de items */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+/* Item individual */
+.item-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-entry img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.item-quantity {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Texto informativo */
+.info-text {
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.info-text p {
+  margin: 0.5rem 0;
+}
+
+/* Selector de nivel */
+.selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Botón de descarga */
+.download-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* Grid de pools */
+#dropsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  #dropsContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .items-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pool-container {
+    min-width: auto;
+    width: 95%;
+  }
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="pageTitle">Drops de la Red</h1>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
+      <a href="./digidexprogress.html">Digidex Progress Checklist</a>
+      <a href="./BalanceCalculator.html">Balance Calculator</a>
+      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
+      <a href="./dropsdelared.html">Drops de la Red</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
+      <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
+      <a target="_blank" href="https://nd-deck-builder-5188c6.gitlab.io/">Deck Builder</a>
+    </nav>
+    <label for="languageSelector">Idioma / Language:</label>
+    <select id="languageSelector">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="info-text">
+        <p id="infoText1">Esta pagina contiene los dropeos de la red del juego. Estan divididas por etapas. Las pool se definen por la cantidad de errores que tenga tu Digimon.</p>
+        <p id="infoText2"><strong>0-1 Error = Pool 1</strong> | <strong>2-3 Errores = Pool 2</strong> | <strong>4-5 Errores = Pool 3</strong> | <strong>6 Errores = Pool 4</strong></p>
+      </div>
+      <div class="selector-container">
+        <label id="nivelLabel" for="nivelSelect">Selecciona el Nivel:</label>
+        <select id="nivelSelect">
+          <option value="2">Baby 2</option>
+          <option value="3" selected>Child</option>
+          <option value="4">Adult</option>
+          <option value="5">Perfect/Ultimate</option>
+        </select>
+      </div>
+      <div id="dropsContainer">
+        <!-- Los pools se generan dinámicamente aquí -->
+      </div>
+      <button id="downloadBtn" class="download-btn">Descargar Imagen</button>
+    </div>
+  </main>
+
+  <script src="dropsData.js"></script>
+  <script>
+    // Sistema de traducciones
+    let currentLanguage = 'es';
+
+    const traducciones = {
+      es: {
+        pageTitle: "Drops de la Red",
+        infoText1: "Esta pagina contiene los dropeos de la red del juego. Estan divididas por etapas. Las pool se definen por la cantidad de errores que tenga tu Digimon.",
+        infoText2: "<strong>0-1 Error = Pool 1</strong> | <strong>2-3 Errores = Pool 2</strong> | <strong>4-5 Errores = Pool 3</strong> | <strong>6 Errores = Pool 4</strong>",
+        nivelLabel: "Selecciona el Nivel:",
+        downloadBtn: "Descargar Imagen",
+        generating: "Generando...",
+        downloadError: "Error al generar imagen. Intenta de nuevo.",
+        localError: "La descarga de imagen no funciona en modo local (file://). Esta función estará disponible en la versión web (GitHub Pages)."
+      },
+      en: {
+        pageTitle: "Network Drops",
+        infoText1: "This page contains the network drops from the game. They are divided by stages. The pool is defined by the number of errors your Digimon has.",
+        infoText2: "<strong>0-1 Error = Pool 1</strong> | <strong>2-3 Errors = Pool 2</strong> | <strong>4-5 Errors = Pool 3</strong> | <strong>6 Errors = Pool 4</strong>",
+        nivelLabel: "Select Level:",
+        downloadBtn: "Download Image",
+        generating: "Generating...",
+        downloadError: "Error generating image. Try again.",
+        localError: "Image download does not work in local mode (file://). This feature will be available in the web version (GitHub Pages)."
+      }
+    };
+
+    function t(key) {
+      return traducciones[currentLanguage][key] || key;
+    }
+
+    function actualizarTextosUI() {
+      document.getElementById('pageTitle').textContent = t('pageTitle');
+      document.getElementById('infoText1').textContent = t('infoText1');
+      document.getElementById('infoText2').innerHTML = t('infoText2');
+      document.getElementById('nivelLabel').textContent = t('nivelLabel');
+      document.getElementById('downloadBtn').textContent = t('downloadBtn');
+      document.title = t('pageTitle');
+    }
+
+    // Mapeo de nombres de items a sus archivos de imagen
+    const itemImageMap = {
+      "Carne": "Carne.png",
+      "Hongo": "Hongo.png",
+      "SetadelCaos": "SetadelCaos.png",
+      "HongoFeliz": "HongoFeliz.png",
+      "CarneGrande": "CarneGrande.png",
+      "Sirloin": "Sirloin.png",
+      "CarneAnomala": "CarneAnomala.png",
+      "HongoMagnifico": "HongoMagnifico.png",
+      "BrocoliCongelado": "BrocoliCongelado.png",
+      "Brocoli": "Brocoli.png",
+      "Zanahoria": "Zanahoria.png",
+      "Manzana": "Manzana.png",
+      "ManzanaAzul": "ManzanaAzul.png",
+      "ManzanaVerde": "ManzanaVerde.png",
+      "LuckyApple": "LuckyApple.png",
+      "Bellota": "Bellota.png",
+      "BellotadeOro": "BellotadeOro.png",
+      "BellotadeCristal": "BellotadeCristal.png",
+      "Caca": "Caca.png",
+      "CacaDorada": "CacaDorada.png",
+      "CacaDePlatino": "Caca de Platino.png",
+      "Bandita": "Bandita.png",
+      "Pildora": "Pildora.png",
+      "BebidaDeportiva": "BebidaDeportiva.png",
+      "TomateMilagroso": "TomateMilagroso.png",
+      "MelonEncadenado": "MelonEncadenado.png",
+      "LimonJuzgador": "LimonJuzgador.png",
+      "LimondelJuicio": "LimondelJuicio.png",
+      "FertilizanteA": "FertilizanteA.png",
+      "FertilizanteB": "FertilizanteB.png",
+      "MegaZanahoria": "Mega Zanahoria.png",
+      "MegaBrocoli": "Mega Brocoli.png",
+      "HongoExtrano": "Hongo Extraño.png",
+      "MongoCongelado": "Mongo Congelado.png",
+      "papa": "papa.png",
+      "Driver": "Driver.png",
+      "CombatProgram": "CombatProgram.png",
+      "DeathProgram": "DeathProgram.png",
+      "FroztProgram": "FroztProgram.png",
+      "MechaProgram": "MechaProgram.png",
+      "MushProgram": "MushProgram.png",
+      "OreProgram": "Ore Program.png",
+      "TrashProgram": "TrashProgram.png",
+      "VaccineProgram": "VaccineProgram.png",
+      "VirusProgram": "VirusProgram.png",
+      "RestosMetal": "restosdemetal.png"
+    };
+
+    // Nombres de niveles evolutivos (no se traducen)
+    const nivelNombres = {
+      2: "Baby 2",
+      3: "Child",
+      4: "Adult",
+      5: "Perfect/Ultimate"
+    };
+
+    // Función para normalizar caracteres especiales (ñ → n, acentos, espacios, etc.)
+    function normalizarCaracteres(texto) {
+      return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Elimina acentos
+        .replace(/ñ/g, 'n')
+        .replace(/Ñ/g, 'N')
+        .replace(/\s+/g, ''); // Elimina espacios
+    }
+
+    // Función para generar múltiples variaciones del nombre de archivo
+    function generarVariacionesNombre(nombre) {
+      const nombreNormalizado = normalizarCaracteres(nombre);
+      const nombreLimpio = nombreNormalizado.toLowerCase().replace(/[^a-z0-9]/gi, "");
+      const nombreMayusculas = nombreNormalizado.toUpperCase().replace(/[^A-Z0-9]/gi, "");
+      const nombreOriginal = nombreNormalizado.replace(/[^a-zA-Z0-9]/gi, "");
+
+      return [...new Set([
+        nombreLimpio,
+        nombreMayusculas,
+        nombreOriginal,
+        nombreOriginal.toLowerCase(),
+        nombreOriginal.toUpperCase(),
+        nombre.replace(/\s+/g, ''), // nombre sin espacios
+        nombre // nombre original tal cual
+      ])];
+    }
+
+    // Función para cargar imagen con variaciones de nombre
+    function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'itemimg') {
+      const variaciones = generarVariacionesNombre(nombre);
+      let indiceActual = 0;
+
+      const intentarSiguiente = () => {
+        if (indiceActual >= variaciones.length) {
+          // Si fallan todas las variaciones, intentar con placeholder
+          console.log(`❌ No se encontró imagen para ${nombre}`);
+          elementoImg.src = `${carpeta}/placeholder.png`;
+          return;
+        }
+
+        const variacionActual = variaciones[indiceActual];
+        const ruta = `${carpeta}/${variacionActual}.png`;
+
+        const imgTest = new Image();
+        imgTest.onload = function() {
+          console.log(`✅ Imagen encontrada: ${ruta}`);
+          elementoImg.src = ruta;
+        };
+        imgTest.onerror = function() {
+          indiceActual++;
+          intentarSiguiente();
+        };
+        imgTest.src = ruta;
+      };
+
+      intentarSiguiente();
+    }
+
+    // Función para obtener nombre del nivel
+    function getNivelNombre(nivel) {
+      return nivelNombres[nivel] || `Nivel ${nivel}`;
+    }
+
+    // Función para renderizar un pool
+    function renderPool(poolData) {
+      const poolContainer = document.createElement('div');
+      poolContainer.className = 'pool-container';
+
+      // Título (no se traduce)
+      const title = document.createElement('div');
+      title.className = 'pool-title';
+      title.textContent = `Pool ${poolData.pool} ${getNivelNombre(poolData.nivel)}`;
+      poolContainer.appendChild(title);
+
+      // Grid de items
+      const itemsGrid = document.createElement('div');
+      itemsGrid.className = 'items-grid';
+
+      // Ordenar items alfabéticamente
+      const sortedItems = Object.entries(poolData.items).sort((a, b) => a[0].localeCompare(b[0]));
+
+      for (const [itemName, quantity] of sortedItems) {
+        const itemEntry = document.createElement('div');
+        itemEntry.className = 'item-entry';
+
+        const img = document.createElement('img');
+        img.alt = itemName;
+        img.title = itemName;
+
+        // Para items, primero verificar el mapeo, si no existe usar normalización
+        if (itemImageMap[itemName]) {
+          img.src = `itemimg/${itemImageMap[itemName]}`;
+        } else {
+          cargarImagenConVariaciones(itemName, img, 'itemimg');
+        }
+
+        const quantitySpan = document.createElement('span');
+        quantitySpan.className = 'item-quantity';
+        quantitySpan.textContent = `x${quantity}`;
+
+        itemEntry.appendChild(img);
+        itemEntry.appendChild(quantitySpan);
+        itemsGrid.appendChild(itemEntry);
+      }
+
+      poolContainer.appendChild(itemsGrid);
+      return poolContainer;
+    }
+
+    // Cargar y renderizar datos filtrados por nivel
+    function loadDrops(nivelSeleccionado) {
+      const container = document.getElementById('dropsContainer');
+      container.innerHTML = ''; // Limpiar contenedor
+
+      // Filtrar por nivel seleccionado
+      const filteredData = dropsData.filter(pool => pool.nivel === nivelSeleccionado);
+
+      // Ordenar por pool
+      filteredData.sort((a, b) => a.pool - b.pool);
+
+      for (const poolData of filteredData) {
+        container.appendChild(renderPool(poolData));
+      }
+    }
+
+    // Función para descargar imagen
+    function downloadImage() {
+      // Detectar si estamos en file://
+      if (window.location.protocol === 'file:') {
+        alert(t('localError'));
+        return;
+      }
+
+      const container = document.getElementById('dropsContainer');
+      const nivel = document.getElementById('nivelSelect');
+      const nivelNombre = nivelNombres[parseInt(nivel.value)] || 'drops';
+      const btn = document.getElementById('downloadBtn');
+
+      btn.textContent = t('generating');
+      btn.disabled = true;
+
+      html2canvas(container, {
+        backgroundColor: '#212121',
+        scale: 2,
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `drops_${nivelNombre}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        btn.textContent = t('downloadBtn');
+        btn.disabled = false;
+      }).catch(err => {
+        console.error('Error:', err);
+        alert(t('downloadError'));
+        btn.textContent = t('downloadBtn');
+        btn.disabled = false;
+      });
+    }
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+      const selector = document.getElementById('nivelSelect');
+      const languageSelector = document.getElementById('languageSelector');
+
+      // Cargar con nivel inicial
+      loadDrops(parseInt(selector.value));
+
+      // Escuchar cambios en el selector de nivel
+      selector.addEventListener('change', (e) => {
+        loadDrops(parseInt(e.target.value));
+      });
+
+      // Escuchar cambios en el selector de idioma
+      languageSelector.addEventListener('change', () => {
+        currentLanguage = languageSelector.value;
+        actualizarTextosUI();
+      });
+
+      // Botón de descarga
+      document.getElementById('downloadBtn').addEventListener('click', downloadImage);
+
+      // Inicializar textos
+      actualizarTextosUI();
+    });
+  </script>
+</body>
+</html>

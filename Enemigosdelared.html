@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enemigos de la Red</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+/* Estilos base */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Contenedor de enemigo */
+.enemy-container {
+  background-image: url('font/Font1.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Info del Digimon */
+.digimon-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.digimon-info img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+.digimon-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.digimon-nickname {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #ffcc00;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.digimon-errores {
+  font-size: 0.8rem;
+  color: #ff6666;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-top: 0.25rem;
+}
+
+.digimon-boss {
+  font-size: 0.75rem;
+  color: #ff9900;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(255, 153, 0, 0.2);
+  border-radius: 4px;
+}
+
+.digimon-fds {
+  font-size: 0.75rem;
+  color: #66ccff;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(102, 204, 255, 0.2);
+  border-radius: 4px;
+}
+
+.random-drop-msg {
+  width: 100%;
+  font-size: 0.75rem;
+  color: #ffcc00;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  margin-bottom: 0.25rem;
+}
+
+/* Drops del enemigo */
+.enemy-drops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.drop-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.drop-entry img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+/* Driver compuesto */
+.driver-container {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.driver-container .driver-bg {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.driver-container .driver-icon {
+  position: absolute;
+  top: 35%;
+  left: 38%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+/* Ajuste para driver Verde - el fondo es 60% más grande */
+.driver-container.driver-container-Verde .driver-bg {
+  width: 115px;
+  height: 115px;
+}
+
+.driver-container.driver-container-Verde {
+  width: 115px;
+  height: 115px;
+}
+
+.driver-container.driver-container-Verde .driver-icon {
+  top: 38%;
+  left: 40%;
+  width: 50px;
+  height: 50px;
+}
+
+.drop-name {
+  font-size: 1rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.drops-title {
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 0.25rem;
+}
+
+/* Texto informativo */
+.info-text {
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.info-text p {
+  margin: 0.5rem 0;
+}
+
+/* Selector de nivel */
+.selector-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Botón de descarga */
+.download-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* Grid de enemigos */
+#enemigosContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  #enemigosContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .enemy-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .enemy-container {
+    min-width: auto;
+    width: 95%;
+  }
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="pageTitle">Enemigos de la Red</h1>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
+      <a href="./digidexprogress.html">Digidex Progress Checklist</a>
+      <a href="./BalanceCalculator.html">Balance Calculator</a>
+      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
+      <a href="./dropsdelared.html">Drops de la Red</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
+      <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
+      <a target="_blank" href="https://nd-deck-builder-5188c6.gitlab.io/">Deck Builder</a>
+    </nav>
+    <label for="languageSelector">Idioma / Language:</label>
+    <select id="languageSelector">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="info-text">
+        <p id="infoText1">Esta pagina contiene los enemigos de la red del juego. Estan divididos por nivel y porcentaje de entrenamiento.</p>
+      </div>
+      <div class="selector-container">
+        <div class="selector-group">
+          <label id="nivelLabel" for="nivelSelect">Selecciona el Nivel:</label>
+          <select id="nivelSelect">
+            <option value="3" selected>Child</option>
+            <option value="4">Adult</option>
+            <option value="5">Perfect/Ultimate</option>
+          </select>
+        </div>
+        <div class="selector-group">
+          <label id="entrenamientoLabel" for="entrenamientoSelect">% de Entrenamiento:</label>
+          <select id="entrenamientoSelect">
+            <option value="0-39.99">0 - 39.99%</option>
+            <option value="40-59.99">40 - 59.99%</option>
+            <option value="60-100">60 - 100%</option>
+          </select>
+        </div>
+      </div>
+      <div id="enemigosContainer">
+        <!-- Los enemigos se generan dinámicamente aquí -->
+      </div>
+      <button id="downloadBtn" class="download-btn">Descargar Imagen</button>
+    </div>
+  </main>
+
+  <script src="enemigosData.js"></script>
+  <script src="driverNombres.js"></script>
+  <script>
+    // Sistema de traducciones
+    let currentLanguage = 'es';
+
+    const traducciones = {
+      es: {
+        pageTitle: "Enemigos de la Red",
+        infoText1: "Esta pagina contiene los enemigos de la red del juego. Estan divididos por nivel y porcentaje de entrenamiento.",
+        nivelLabel: "Selecciona el Nivel:",
+        entrenamientoLabel: "% de Entrenamiento:",
+        downloadBtn: "Descargar Imagen",
+        generating: "Generando...",
+        downloadError: "Error al generar imagen. Intenta de nuevo.",
+        localError: "La descarga de imagen no funciona en modo local (file://). Esta función estará disponible en la versión web (GitHub Pages)."
+      },
+      en: {
+        pageTitle: "Network Enemies",
+        infoText1: "This page contains the network enemies from the game. They are divided by level and training percentage.",
+        nivelLabel: "Select Level:",
+        entrenamientoLabel: "Training %:",
+        downloadBtn: "Download Image",
+        generating: "Generating...",
+        downloadError: "Error generating image. Try again.",
+        localError: "Image download does not work in local mode (file://). This feature will be available in the web version (GitHub Pages)."
+      }
+    };
+
+    // Traducciones de items (ES -> EN)
+    const itemTranslations = {
+      "Bandita": "Bandage",
+      "Bebida deportiva": "Sports Drink",
+      "Bellota": "Acorn",
+      "Bellota de Cristal": "Crystal Acorn",
+      "Bellota de Oro": "Golden Acorn",
+      "Caca": "Poop",
+      "Caca de Platino": "Platinum Poop",
+      "Caca Dorada": "Golden Poop",
+      "Caja Basica": "Basic Box",
+      "Caja con Liston": "Ribbon Box",
+      "Caja con Rayas": "Stripped Box",
+      "Caja Lunar": "Lunar Box",
+      "Carne": "Meat",
+      "Carne Anomala": "Anomaly Meat",
+      "Carne Grande": "Big Meat",
+      "Carne X": "Meat X",
+      "Champiñon Congelado": "Frozen Mushroom",
+      "Champiñon": "Mushroom",
+      "Champiñon Feliz": "Happy Mushroom",
+      "DigiSardina": "DigiSardine",
+      "DigiTrucha": "DigiTrout",
+      "DigiTrucha Negra": "Black Trout",
+      "Fertilizante A": "Fertilizer A",
+      "Fertilizante B": "Fertilizer B",
+      "Hongo Extraño": "Strange Mushroom",
+      "Hongo Magnifico": "Magnificent Mushroom",
+      "Limon del Juicio": "Lemon of Judgement",
+      "Limon Juzgador": "Judgemental Lemon",
+      "Manzana Afortunada": "Lucky Apple",
+      "Manzana": "Apple",
+      "Manzana Azul": "Blue Apple",
+      "Manzana Verde": "Green Apple",
+      "Manzanas": "Apples",
+      "Mega Zanahoria": "Mega Carrot",
+      "Mega Zanahorias": "Mega Carrots",
+      "Mega Verdura": "Mega Vegetable",
+      "Melon Encadenado": "Chain Melon",
+      "Nuez Magica": "Magic Nut",
+      "Papa": "Potato",
+      "Pildora": "Pill",
+      "Restos de Metal": "Metal Scrap",
+      "Seta del Caos": "Chaos Mushroom",
+      "Solomillo": "Sirloin",
+      "Tomate Milagroso": "Miraculous Tomato",
+      "Verdura": "Vegetable",
+      "Verdura Congelada": "Frozen Vegetable",
+      "Zanahoria": "Carrot",
+      "Booster C (C)": "Booster C (C)",
+      "Booster C (A)": "Booster C (A)",
+      "Booster C (P)": "Booster C (P)"
+    };
+
+    // Crear mapa normalizado para búsquedas sin importar mayúsculas/minúsculas
+    const itemTranslationsNormalized = {};
+    for (const [key, value] of Object.entries(itemTranslations)) {
+      itemTranslationsNormalized[key.toLowerCase()] = value;
+    }
+
+    // Función para traducir nombre de item (normalizado)
+    function translateItem(itemName) {
+      if (currentLanguage === 'en') {
+        const normalizedKey = itemName.toLowerCase();
+        if (itemTranslationsNormalized[normalizedKey]) {
+          return itemTranslationsNormalized[normalizedKey];
+        }
+      }
+      return itemName;
+    }
+
+    // Opciones de entrenamiento por nivel
+    const entrenamientoOpciones = {
+      3: [ // Child
+        { value: "0-39.99", label: "0 - 39.99%" },
+        { value: "40-59.99", label: "40 - 59.99%" },
+        { value: "60-100", label: "60 - 100%" }
+      ],
+      4: [ // Adult
+        { value: "0-49.99", label: "0 - 49.99%" },
+        { value: "50-69.99", label: "50 - 69.99%" },
+        { value: "70-100", label: "70 - 100%" }
+      ],
+      5: [ // Perfect/Ultimate
+        { value: "0-49.99", label: "0 - 49.99%" },
+        { value: "50-69.99", label: "50 - 69.99%" },
+        { value: "70-100", label: "70 - 100%" }
+      ]
+    };
+
+    function t(key) {
+      return traducciones[currentLanguage][key] || key;
+    }
+
+    function actualizarTextosUI() {
+      document.getElementById('pageTitle').textContent = t('pageTitle');
+      document.getElementById('infoText1').textContent = t('infoText1');
+      document.getElementById('nivelLabel').textContent = t('nivelLabel');
+      document.getElementById('entrenamientoLabel').textContent = t('entrenamientoLabel');
+      document.getElementById('downloadBtn').textContent = t('downloadBtn');
+      document.title = t('pageTitle');
+    }
+
+    // Mapeo de nombres de items a sus archivos de imagen
+    const itemImageMap = {
+      "Carne": "Carne.png",
+      "Hongo": "Hongo.png",
+      "SetadelCaos": "SetadelCaos.png",
+      "HongoFeliz": "HongoFeliz.png",
+      "CarneGrande": "CarneGrande.png",
+      "Sirloin": "Sirloin.png",
+      "CarneAnomala": "CarneAnomala.png",
+      "HongoMagnifico": "HongoMagnifico.png",
+      "BrocoliCongelado": "BrocoliCongelado.png",
+      "Brocoli": "Brocoli.png",
+      "Zanahoria": "Zanahoria.png",
+      "Manzana": "Manzana.png",
+      "ManzanaAzul": "ManzanaAzul.png",
+      "ManzanaVerde": "ManzanaVerde.png",
+      "LuckyApple": "LuckyApple.png",
+      "Bellota": "Bellota.png",
+      "BellotadeOro": "BellotadeOro.png",
+      "BellotadeCristal": "BellotadeCristal.png",
+      "Caca": "Caca.png",
+      "CacaDorada": "CacaDorada.png",
+      "CacaDePlatino": "Caca de Platino.png",
+      "Bandita": "Bandita.png",
+      "Pildora": "Pildora.png",
+      "BebidaDeportiva": "BebidaDeportiva.png",
+      "TomateMilagroso": "TomateMilagroso.png",
+      "MelonEncadenado": "MelonEncadenado.png",
+      "LimonJuzgador": "LimonJuzgador.png",
+      "LimondelJuicio": "LimondelJuicio.png",
+      "FertilizanteA": "FertilizanteA.png",
+      "FertilizanteB": "FertilizanteB.png",
+      "MegaZanahoria": "Mega Zanahoria.png",
+      "MegaBrocoli": "Mega Brocoli.png",
+      "HongoExtrano": "Hongo Extraño.png",
+      "MongoCongelado": "Mongo Congelado.png",
+      "papa": "papa.png",
+      "Driver": "Driver.png",
+      "CombatProgram": "CombatProgram.png",
+      "DeathProgram": "DeathProgram.png",
+      "FroztProgram": "FroztProgram.png",
+      "MechaProgram": "MechaProgram.png",
+      "MushProgram": "MushProgram.png",
+      "OreProgram": "Ore Program.png",
+      "TrashProgram": "TrashProgram.png",
+      "VaccineProgram": "VaccineProgram.png",
+      "VirusProgram": "VirusProgram.png",
+      "RestosMetal": "restosdemetal.png"
+    };
+
+    // Nombres de niveles evolutivos
+    const nivelNombres = {
+      3: "Child",
+      4: "Adult",
+      5: "Perfect/Ultimate"
+    };
+
+    // Función para normalizar caracteres especiales (ñ → n, acentos, espacios, etc.)
+    function normalizarCaracteres(texto) {
+      return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Elimina acentos
+        .replace(/ñ/g, 'n')
+        .replace(/Ñ/g, 'N')
+        .replace(/\s+/g, ''); // Elimina espacios
+    }
+
+    // Función para generar múltiples variaciones del nombre de archivo
+    function generarVariacionesNombre(nombre) {
+      const nombreNormalizado = normalizarCaracteres(nombre);
+      const nombreLimpio = nombreNormalizado.toLowerCase().replace(/[^a-z0-9]/gi, "");
+      const nombreMayusculas = nombreNormalizado.toUpperCase().replace(/[^A-Z0-9]/gi, "");
+      const nombreOriginal = nombreNormalizado.replace(/[^a-zA-Z0-9]/gi, "");
+
+      return [...new Set([
+        nombreLimpio,
+        nombreMayusculas,
+        nombreOriginal,
+        nombreOriginal.toLowerCase(),
+        nombreOriginal.toUpperCase(),
+        nombre.replace(/\s+/g, ''), // nombre sin espacios
+        nombre // nombre original tal cual
+      ])];
+    }
+
+    // Función para cargar imagen con variaciones de nombre
+    function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'img') {
+      const variaciones = generarVariacionesNombre(nombre);
+      let indiceActual = 0;
+
+      const intentarSiguiente = () => {
+        if (indiceActual >= variaciones.length) {
+          // Si fallan todas las variaciones, intentar con placeholder
+          console.log(`❌ No se encontró imagen para ${nombre}`);
+          elementoImg.src = `${carpeta}/placeholder.png`;
+          return;
+        }
+
+        const variacionActual = variaciones[indiceActual];
+        const ruta = `${carpeta}/${variacionActual}.png`;
+
+        const imgTest = new Image();
+        imgTest.onload = function() {
+          console.log(`✅ Imagen encontrada: ${ruta}`);
+          elementoImg.src = ruta;
+        };
+        imgTest.onerror = function() {
+          indiceActual++;
+          intentarSiguiente();
+        };
+        imgTest.src = ruta;
+      };
+
+      intentarSiguiente();
+    }
+
+    // Actualizar opciones de entrenamiento según el nivel
+    function actualizarEntrenamientoOpciones(nivel) {
+      const entrenamientoSelect = document.getElementById('entrenamientoSelect');
+      const opciones = entrenamientoOpciones[nivel] || entrenamientoOpciones[3];
+
+      entrenamientoSelect.innerHTML = '';
+      opciones.forEach(opcion => {
+        const option = document.createElement('option');
+        option.value = opcion.value;
+        option.textContent = opcion.label;
+        entrenamientoSelect.appendChild(option);
+      });
+    }
+
+    // Función para renderizar un enemigo
+    function renderEnemigo(enemigo) {
+      const enemyContainer = document.createElement('div');
+      enemyContainer.className = 'enemy-container';
+
+      // Info del Digimon
+      const digimonInfo = document.createElement('div');
+      digimonInfo.className = 'digimon-info';
+
+      const img = document.createElement('img');
+      img.alt = enemigo.digimon;
+      img.title = enemigo.digimon;
+      // Cargar imagen con normalización de nombre
+      cargarImagenConVariaciones(enemigo.digimon, img, 'img');
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'digimon-name';
+      nameSpan.textContent = enemigo.digimon;
+
+      const nicknameSpan = document.createElement('span');
+      nicknameSpan.className = 'digimon-nickname';
+      nicknameSpan.textContent = `"${enemigo.nickName}"`;
+
+      digimonInfo.appendChild(img);
+      digimonInfo.appendChild(nameSpan);
+      digimonInfo.appendChild(nicknameSpan);
+
+      // Errores
+      if (enemigo.errores) {
+        const erroresSpan = document.createElement('span');
+        erroresSpan.className = 'digimon-errores';
+        erroresSpan.textContent = currentLanguage === 'es'
+          ? `Aparece en errores: ${enemigo.errores}`
+          : `Appears in errors: ${enemigo.errores}`;
+        digimonInfo.appendChild(erroresSpan);
+      }
+
+      // Boss - leyenda especial
+      if (enemigo.boss) {
+        const bossSpan = document.createElement('span');
+        bossSpan.className = 'digimon-boss';
+        bossSpan.textContent = currentLanguage === 'es'
+          ? '⚠️ Solo aparece con 80% de entreno o más'
+          : '⚠️ Only appears with 80%+ training';
+        digimonInfo.appendChild(bossSpan);
+      }
+
+      // Fin de semana - leyenda especial
+      if (enemigo.finDeSemana) {
+        const finDeSemanaSpan = document.createElement('span');
+        finDeSemanaSpan.className = 'digimon-fds';
+        finDeSemanaSpan.textContent = currentLanguage === 'es'
+          ? '📅 Solo aparece los fines de semana (Sábado, Domingo)'
+          : '📅 Only appears on weekends (Saturday, Sunday)';
+        digimonInfo.appendChild(finDeSemanaSpan);
+      }
+
+      // Drops
+      const enemyDrops = document.createElement('div');
+      enemyDrops.className = 'enemy-drops';
+
+      // Título "Drops"
+      const dropsTitle = document.createElement('div');
+      dropsTitle.className = 'drops-title';
+      dropsTitle.textContent = 'Drops';
+      enemyDrops.appendChild(dropsTitle);
+
+      const drops = Array.isArray(enemigo.itemDrop) ? enemigo.itemDrop : [enemigo.itemDrop];
+
+      // Contar cuántos drivers hay
+      const driversCount = drops.filter(d => d.tipo === "driver").length;
+
+      // Si hay múltiples drivers, mostrar mensaje de drop aleatorio
+      if (driversCount > 1) {
+        const randomDropMsg = document.createElement('div');
+        randomDropMsg.className = 'random-drop-msg';
+        randomDropMsg.textContent = currentLanguage === 'es'
+          ? '🎲 Solo 1 de estos drivers puede salir (al azar)'
+          : '🎲 Only 1 of these drivers can drop (random)';
+        enemyDrops.appendChild(randomDropMsg);
+      }
+
+      for (const dropData of drops) {
+        const dropEntry = document.createElement('div');
+        dropEntry.className = 'drop-entry';
+
+        // Verificar si es un driver
+        if (dropData.tipo === "driver") {
+          const driverCode = dropData.driver;
+          const cantidad = dropData.cantidad || 1;
+          // Determinar carpeta del driver según el prefijo
+          // Series de 2 chars: ST, BO, EX, W0, V0, VL, PR, VS, SP
+          // Series de 1 char: D, P, C, M, U
+          const prefijos2chars = ['ST', 'BO', 'EX', 'W0', 'V0', 'VL', 'PR', 'VS', 'SP'];
+          const primeros2 = driverCode.substring(0, 2);
+          const carpetaDriver = prefijos2chars.includes(primeros2) ? primeros2 : driverCode.substring(0, 1);
+
+          // Obtener info del driver desde driverNombres
+          const driverInfo = driverNombres[driverCode];
+          const driverColor = driverInfo ? driverInfo.color : "Azul"; // fallback
+          const driverNombre = driverInfo ? driverInfo.nombre : driverCode;
+
+          // Contenedor para driver compuesto
+          const driverContainer = document.createElement('div');
+          driverContainer.className = `driver-container driver-container-${driverColor}`;
+
+          // Imagen de fondo (color del driver)
+          const driverBg = document.createElement('img');
+          driverBg.className = 'driver-bg';
+          driverBg.src = `itemimg/driver${driverColor}.png`;
+          driverBg.alt = `Driver ${driverColor}`;
+
+          // Imagen del driver específico
+          const driverIcon = document.createElement('img');
+          driverIcon.className = 'driver-icon';
+          driverIcon.src = `driverlist/${carpetaDriver}/${driverCode}.png`;
+          driverIcon.alt = driverCode;
+
+          driverContainer.appendChild(driverBg);
+          driverContainer.appendChild(driverIcon);
+
+          const dropName = document.createElement('span');
+          dropName.className = 'drop-name';
+          dropName.textContent = `${driverNombre} x${cantidad}`;
+
+          dropEntry.appendChild(driverContainer);
+          dropEntry.appendChild(dropName);
+        } else {
+          // Item normal
+          const itemName = dropData.item || dropData;
+          const cantidad = dropData.cantidad || 1;
+          const displayName = translateItem(itemName);
+
+          const itemImg = document.createElement('img');
+          itemImg.alt = displayName;
+          itemImg.title = displayName;
+          // Para items, primero verificar el mapeo, si no existe usar normalización
+          if (itemImageMap[itemName]) {
+            itemImg.src = `itemimg/${itemImageMap[itemName]}`;
+          } else {
+            cargarImagenConVariaciones(itemName, itemImg, 'itemimg');
+          }
+
+          const dropName = document.createElement('span');
+          dropName.className = 'drop-name';
+          dropName.textContent = `${displayName} x${cantidad}`;
+
+          dropEntry.appendChild(itemImg);
+          dropEntry.appendChild(dropName);
+        }
+
+        enemyDrops.appendChild(dropEntry);
+      }
+
+      enemyContainer.appendChild(digimonInfo);
+      enemyContainer.appendChild(enemyDrops);
+      return enemyContainer;
+    }
+
+    // Función para verificar si un enemigo aparece en el nivel/entrenamiento seleccionado
+    function enemigoAparece(enemigo, nivelSeleccionado, entrenamientoSeleccionado) {
+      // Verificar nivel
+      const nivelOk = enemigo.niveles === "todos" ||
+        (Array.isArray(enemigo.niveles) && enemigo.niveles.includes(nivelSeleccionado));
+
+      // Verificar entrenamiento
+      const entrenamientoOk = enemigo.entrenamientos === "todos" ||
+        (Array.isArray(enemigo.entrenamientos) && enemigo.entrenamientos.includes(entrenamientoSeleccionado));
+
+      return nivelOk && entrenamientoOk;
+    }
+
+    // Cargar y renderizar datos filtrados
+    function loadEnemigos(nivelSeleccionado, entrenamientoSeleccionado) {
+      const container = document.getElementById('enemigosContainer');
+      container.innerHTML = '';
+
+      // Filtrar por nivel y entrenamiento
+      const filteredData = enemigosData.filter(enemigo =>
+        enemigoAparece(enemigo, nivelSeleccionado, entrenamientoSeleccionado)
+      );
+
+      for (const enemigo of filteredData) {
+        container.appendChild(renderEnemigo(enemigo));
+      }
+
+      // Si no hay datos, mostrar mensaje
+      if (filteredData.length === 0) {
+        const noData = document.createElement('p');
+        noData.textContent = currentLanguage === 'es'
+          ? 'No hay enemigos para esta selección.'
+          : 'No enemies for this selection.';
+        noData.style.color = '#999';
+        noData.style.textAlign = 'center';
+        noData.style.gridColumn = '1 / -1';
+        container.appendChild(noData);
+      }
+    }
+
+    // Función para descargar imagen
+    function downloadImage() {
+      if (window.location.protocol === 'file:') {
+        alert(t('localError'));
+        return;
+      }
+
+      const container = document.getElementById('enemigosContainer');
+      const nivel = document.getElementById('nivelSelect');
+      const entrenamiento = document.getElementById('entrenamientoSelect');
+      const nivelNombre = nivelNombres[parseInt(nivel.value)] || 'enemigos';
+      const btn = document.getElementById('downloadBtn');
+
+      btn.textContent = t('generating');
+      btn.disabled = true;
+
+      html2canvas(container, {
+        backgroundColor: '#212121',
+        scale: 2,
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `enemigos_${nivelNombre}_${entrenamiento.value}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        btn.textContent = t('downloadBtn');
+        btn.disabled = false;
+      }).catch(err => {
+        console.error('Error:', err);
+        alert(t('downloadError'));
+        btn.textContent = t('downloadBtn');
+        btn.disabled = false;
+      });
+    }
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+      const nivelSelector = document.getElementById('nivelSelect');
+      const entrenamientoSelector = document.getElementById('entrenamientoSelect');
+      const languageSelector = document.getElementById('languageSelector');
+
+      // Actualizar opciones de entrenamiento inicial
+      actualizarEntrenamientoOpciones(parseInt(nivelSelector.value));
+
+      // Cargar con valores iniciales
+      loadEnemigos(parseInt(nivelSelector.value), entrenamientoSelector.value);
+
+      // Escuchar cambios en el selector de nivel
+      nivelSelector.addEventListener('change', (e) => {
+        const nivel = parseInt(e.target.value);
+        actualizarEntrenamientoOpciones(nivel);
+        loadEnemigos(nivel, entrenamientoSelector.value);
+      });
+
+      // Escuchar cambios en el selector de entrenamiento
+      entrenamientoSelector.addEventListener('change', (e) => {
+        loadEnemigos(parseInt(nivelSelector.value), e.target.value);
+      });
+
+      // Escuchar cambios en el selector de idioma
+      languageSelector.addEventListener('change', () => {
+        currentLanguage = languageSelector.value;
+        actualizarTextosUI();
+        loadEnemigos(parseInt(nivelSelector.value), entrenamientoSelector.value);
+      });
+
+      // Botón de descarga
+      document.getElementById('downloadBtn').addEventListener('click', downloadImage);
+
+      // Inicializar textos
+      actualizarTextosUI();
+    });
+  </script>
+</body>
+</html>

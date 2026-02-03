@@ -2557,6 +2557,20 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
         if ((name === "Wargreymon" || name === "BlackWargreymon") && !warGreymonEvaluated) {
             console.log(`🔥 Evaluando ${name} con lógica especial`);
 
+            // Caso especial: Wargreymon desde Metal Greymon - requisitos no claros
+            const selectedNormalizado = selected.toLowerCase().trim();
+            if (name === "Wargreymon" && selectedNormalizado === "metal greymon") {
+                // Requisitos no claros - dar 0 puntos (neutro)
+                puntaje += 0;
+                console.log("🔥 Wargreymon desde Metal Greymon - Requisitos no claros: 0 puntos (neutro)");
+                warGreymonEvaluated = true;
+
+                if (["% Entrenamiento", "Error Maximo", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
+                    return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+                }
+                return;
+            }
+
             // Obtener valores de los campos obligatorios
             const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
             const errores = Number(inputValues["Error Maximo"]);
@@ -3738,6 +3752,18 @@ if (dexDoruguremonResult || dexDoruguremonNoClaro) {
     return; // Terminar aquí para DexDoruguremon
 }
 // FIN CASO ESPECIAL DEXDORUGUREMON
+
+// VERIFICAR CASO ESPECIAL WARGREYMON DESDE METAL GREYMON (NoClaro)
+const wargreymonNoClaro = puntajes.find(d => d.name === "Wargreymon" && d.puntaje === 0 && selected.toLowerCase() === "metal greymon");
+if (wargreymonNoClaro) {
+    const textTranslationsWargreymonNoClaro = {
+        es: `⚠️ Wargreymon: Requisitos no claros desde Metal Greymon, por confirmar.`,
+        en: `⚠️ Wargreymon: Requirements unclear from Metal Greymon, to be confirmed.`
+    };
+    evolucionTexto.textContent = textTranslationsWargreymonNoClaro[currentLanguage];
+    return;
+}
+// FIN CASO ESPECIAL WARGREYMON METAL GREYMON
 
 // VERIFICAR CASO ESPECIAL BAKEMON LT CON PUNTAJE 4 - AGREGADO
 const bakemonLTResult = puntajes.find(d => d.name === "Bakemon LT" && d.puntaje === 4);

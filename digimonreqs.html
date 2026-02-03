@@ -1492,6 +1492,9 @@ const camposVaciosPorEvolucion = {
     "DexDoruguremon": {
         "DexDorugamon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program o Comida"],  // Requisitos no claros
         "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar"]  // Solo necesita Death o Carne X
+    },
+    "Wargreymon": {
+        "Metal Greymon": ["Peso", "% Entrenamiento", "Error Maximo", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]  // Requisitos no claros
     }
 };
 
@@ -2808,6 +2811,18 @@ if (evolucionesMultiples.length > 0) {
 
     // Caso especial: DexDoruguremon desde DexDorugamon - mostrar placeholder
     if (nombre === "DexDoruguremon" && evolucionDigimon === "DexDorugamon") {
+      const tdPlaceholder = document.createElement("td");
+      tdPlaceholder.setAttribute("colspan", camposOrdenados.length);
+      tdPlaceholder.textContent = currentLanguage === 'es' ? "Requisitos no claros, por confirmar" : "Requirements unclear, to be confirmed";
+      tdPlaceholder.style.fontStyle = "italic";
+      tdPlaceholder.style.textAlign = "center";
+      filaReq.appendChild(tdPlaceholder);
+      tablaRequisitos.appendChild(filaReq);
+      return; // Saltar al siguiente
+    }
+
+    // Caso especial: Wargreymon desde Metal Greymon - mostrar placeholder
+    if (nombre === "Wargreymon" && evolucionDigimon === "Metal Greymon") {
       const tdPlaceholder = document.createElement("td");
       tdPlaceholder.setAttribute("colspan", camposOrdenados.length);
       tdPlaceholder.textContent = currentLanguage === 'es' ? "Requisitos no claros, por confirmar" : "Requirements unclear, to be confirmed";

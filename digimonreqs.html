@@ -1631,7 +1631,7 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     if (nombreDigimon === "DarkTyranomon" && campo === "Program") {
       return { cumple: 3, noCumple: -10 };
     }
-    if (nombreDigimon === "RedVDramon" && campo === "Vinculo Alcanzado") {
+    if (nombreDigimon === "RedVDramon" && campo === "Vinculo Minimo alcanzado") {
       return { cumple: 3, noCumple: -10 };
     }
     if (nombreDigimon === "Geremon" && campo === "Program") {
@@ -1657,6 +1657,11 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
         return { cumple: 1, noCumple: -10 };
       }
       if (campo === "% Entrenamiento") {
+        return { cumple: 1, noCumple: -10 };
+      }
+    }
+    if (nombreDigimon === "Grademon VICE") {
+      if (campo === "Vinculo Minimo alcanzado") {
         return { cumple: 1, noCumple: -10 };
       }
     }

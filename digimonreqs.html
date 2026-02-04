@@ -1468,6 +1468,13 @@ const specialBatallasCases = {
     }
 };
 
+const specialVinculoCases = {
+    "Wargreymon": {
+        "Metal Greymon": "-",
+        "MetalGreymon Alterous": 100
+    }
+};
+
 const specialfoodcases = {
     "Icemon": ["Verdura Congelada", "Hongo Congelado"]
 };
@@ -2042,6 +2049,11 @@ function detectarEvolucionesMultiples(nombreDigimon) {
     Object.keys(specialBatallasCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
   }
 
+  // Revisar casos especiales de vinculo
+  if (specialVinculoCases[nombreDigimon]) {
+    Object.keys(specialVinculoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
   return Array.from(evoluciones);
 }
 
@@ -2100,6 +2112,12 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
   // Casos especiales de batallas
   if (campo === "Combates Minimos" && specialBatallasCases[nombreDigimon]) {
     const valor = specialBatallasCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) return valor;
+  }
+
+  // Casos especiales de vinculo
+  if (campo === "Vinculo al momento de evolucionar" && specialVinculoCases[nombreDigimon]) {
+    const valor = specialVinculoCases[nombreDigimon][evolucionDigimon];
     if (valor !== undefined) return valor;
   }
 

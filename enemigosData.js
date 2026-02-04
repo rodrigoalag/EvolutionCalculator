@@ -162,7 +162,7 @@ const enemigosData = [
     nickName: "Bacomon Lunar",
     niveles: "todos",
     entrenamientos: "todos",
-    errores: "6",
+    errores: "1-6",
     itemDrop: [
       { item: "Caja Lunar", cantidad: 1 }
     ]

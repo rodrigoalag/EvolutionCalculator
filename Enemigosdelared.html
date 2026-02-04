@@ -431,55 +431,101 @@
       document.title = t('pageTitle');
     }
 
-    // Mapeo de nombres de items a sus archivos de imagen
-    const itemImageMap = {
-      "Carne": "Carne.png",
-      "Hongo": "Hongo.png",
-      "SetadelCaos": "SetadelCaos.png",
-      "HongoFeliz": "HongoFeliz.png",
-      "CarneGrande": "CarneGrande.png",
-      "Sirloin": "Sirloin.png",
-      "CarneAnomala": "CarneAnomala.png",
-      "HongoMagnifico": "HongoMagnifico.png",
-      "BrocoliCongelado": "BrocoliCongelado.png",
-      "Brocoli": "Brocoli.png",
-      "Zanahoria": "Zanahoria.png",
-      "Manzana": "Manzana.png",
-      "ManzanaAzul": "ManzanaAzul.png",
-      "ManzanaVerde": "ManzanaVerde.png",
-      "LuckyApple": "LuckyApple.png",
-      "Bellota": "Bellota.png",
-      "BellotadeOro": "BellotadeOro.png",
-      "BellotadeCristal": "BellotadeCristal.png",
-      "Caca": "Caca.png",
-      "CacaDorada": "CacaDorada.png",
-      "CacaDePlatino": "Caca de Platino.png",
-      "Bandita": "Bandita.png",
-      "Pildora": "Pildora.png",
-      "BebidaDeportiva": "BebidaDeportiva.png",
-      "TomateMilagroso": "TomateMilagroso.png",
-      "MelonEncadenado": "MelonEncadenado.png",
-      "LimonJuzgador": "LimonJuzgador.png",
-      "LimondelJuicio": "LimondelJuicio.png",
-      "FertilizanteA": "FertilizanteA.png",
-      "FertilizanteB": "FertilizanteB.png",
-      "MegaZanahoria": "Mega Zanahoria.png",
-      "MegaBrocoli": "Mega Brocoli.png",
-      "HongoExtrano": "Hongo Extraño.png",
-      "MongoCongelado": "Mongo Congelado.png",
+    // Mapeo base de nombres de items a sus archivos de imagen
+    // Claves normalizadas (minúsculas, sin acentos, sin espacios) -> nombre real del archivo
+    const itemImageMapBase = {
+      // Carnes
+      "carne": "Carne.png",
+      "carnegrande": "CarneGrande.png",
+      "solomillo": "Solomillo.png",
+      "sirloin": "Solomillo.png",
+      "carneanomala": "CarneAnomala.png",
+      "carnex": "carnex.png",
+      // Hongos/Champiñones
+      "champinon": "Champiñon.png",
+      "champinonfeliz": "ChampiñonFeliz.png",
+      "champinoncongelado": "Champiñon congelado.png",
+      "hongomagnifco": "HongoMagnifico.png",
+      "hongomagnfico": "HongoMagnifico.png",
+      "hongoextrano": "Hongo Extraño.png",
+      "setadelcaos": "SetadelCaos.png",
+      // Verduras
+      "verdura": "Verdura.png",
+      "verduracongelada": "Verduracongelada.png",
+      "megaverdura": "MegaVerdura.png",
+      "zanahoria": "Zanahoria.png",
+      "megazanahoria": "Mega Zanahoria.png",
       "papa": "papa.png",
-      "Driver": "Driver.png",
-      "CombatProgram": "CombatProgram.png",
-      "DeathProgram": "DeathProgram.png",
-      "FroztProgram": "FroztProgram.png",
-      "MechaProgram": "MechaProgram.png",
-      "MushProgram": "MushProgram.png",
-      "OreProgram": "Ore Program.png",
-      "TrashProgram": "TrashProgram.png",
-      "VaccineProgram": "VaccineProgram.png",
-      "VirusProgram": "VirusProgram.png",
-      "RestosMetal": "restosdemetal.png"
+      // Frutas
+      "manzana": "Manzana.png",
+      "manzanaazul": "ManzanaAzul.png",
+      "manzanaverde": "ManzanaVerde.png",
+      "manzanaafortunada": "ManzanaAfortunada.png",
+      "luckyapple": "ManzanaAfortunada.png",
+      // Bellotas
+      "bellota": "Bellota.png",
+      "bellotadeoro": "BellotadeOro.png",
+      "bellotadecristal": "BellotadeCristal.png",
+      // Cacas
+      "caca": "Caca.png",
+      "cacadorada": "CacaDorada.png",
+      "cacadeplatino": "CacadePlatino.png",
+      // Pescados
+      "digisardina": "digisardina.png",
+      "digitrucha": "digitrucha.png",
+      "digitruchanegra": "digitruchanegra.png",
+      // Medicinas y otros
+      "bandita": "Bandita.png",
+      "pildora": "Pildora.png",
+      "bebidadeportiva": "BebidaDeportiva.png",
+      "nuezmagica": "nuezmagica.png",
+      // Frutas especiales
+      "tomatemilagroso": "TomateMilagroso.png",
+      "melonencadenado": "MelonEncadenado.png",
+      "limonjuzgador": "LimonJuzgador.png",
+      "limondeljuicio": "LimondelJuicio.png",
+      // Fertilizantes
+      "fertilizantea": "FertilizanteA.png",
+      "fertilizanteb": "FertilizanteB.png",
+      // Restos
+      "restosdemetal": "restosdemetal.png",
+      // Programas
+      "driver": "Driver.png",
+      "combatprogram": "CombatProgram.png",
+      "deathprogram": "DeathProgram.png",
+      "froztprogram": "FroztProgram.png",
+      "mechaprogram": "MechaProgram.png",
+      "mushprogram": "MushProgram.png",
+      "oreprogram": "Ore Program.png",
+      "trashprogram": "TrashProgram.png",
+      "vaccineprogram": "VaccineProgram.png",
+      "virusprogram": "VirusProgram.png",
+      // Cajas
+      "cajabasica": "cajabasica.png",
+      "cajaconliston": "cajaconliston.png",
+      "cajaconrayas": "cajaconrayas.png",
+      "cajalunar": "cajalunar.png",
+      // Boosters
+      "boostercc": "boosterc(c).png",
+      "boosterca": "boosterc(a).png",
+      "boostercp": "boosterc(p).png"
     };
+
+    // Función para normalizar nombre de item para búsqueda
+    function normalizarItemParaBusqueda(nombre) {
+      return nombre
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Elimina acentos
+        .replace(/ñ/g, 'n')
+        .replace(/[^a-z0-9]/g, ''); // Elimina espacios, paréntesis, etc.
+    }
+
+    // Función para obtener imagen de item
+    function obtenerImagenItem(itemName) {
+      const normalizado = normalizarItemParaBusqueda(itemName);
+      return itemImageMapBase[normalizado] || null;
+    }
 
     // Nombres de niveles evolutivos
     const nivelNombres = {
@@ -501,18 +547,33 @@
     // Función para generar múltiples variaciones del nombre de archivo
     function generarVariacionesNombre(nombre) {
       const nombreNormalizado = normalizarCaracteres(nombre);
-      const nombreLimpio = nombreNormalizado.toLowerCase().replace(/[^a-z0-9]/gi, "");
-      const nombreMayusculas = nombreNormalizado.toUpperCase().replace(/[^A-Z0-9]/gi, "");
-      const nombreOriginal = nombreNormalizado.replace(/[^a-zA-Z0-9]/gi, "");
+      const nombreSinEspacios = nombreNormalizado.replace(/\s+/g, '');
+      const nombreLimpio = nombreSinEspacios.toLowerCase();
+      const nombreMayusculas = nombreSinEspacios.toUpperCase();
+
+      // Variaciones adicionales
+      const conGuionBajo = nombreNormalizado.replace(/\s+/g, '_');
+      const conGuion = nombreNormalizado.replace(/\s+/g, '-');
+
+      // Para nombres como "AgumonBlack" -> "Agumon Black" y viceversa
+      const conEspacioEnMayusculas = nombreSinEspacios.replace(/([a-z])([A-Z])/g, '$1 $2');
+      const sinEspacioEnMayusculas = nombre.replace(/\s+/g, '');
+
+      // Nombre original con espacios (para archivos como "Metal Greymon.png")
+      const nombreOriginalConEspacios = normalizarCaracteres(nombre);
 
       return [...new Set([
-        nombreLimpio,
-        nombreMayusculas,
-        nombreOriginal,
-        nombreOriginal.toLowerCase(),
-        nombreOriginal.toUpperCase(),
-        nombre.replace(/\s+/g, ''), // nombre sin espacios
-        nombre // nombre original tal cual
+        nombreSinEspacios,           // MetalGreymon
+        nombreLimpio,                // metalgreymon
+        nombreMayusculas,            // METALGREYMON
+        nombreOriginalConEspacios,   // Metal Greymon
+        conGuionBajo,                // Metal_Greymon
+        conGuion,                    // Metal-Greymon
+        conEspacioEnMayusculas,      // Agumon Black (de AgumonBlack)
+        sinEspacioEnMayusculas,      // AgumonBlack (de Agumon Black)
+        nombre,                      // nombre original tal cual
+        nombre.toLowerCase(),        // nombre original en minúsculas
+        nombre.toUpperCase()         // nombre original en mayúsculas
       ])];
     }
 
@@ -697,10 +758,12 @@
           const itemImg = document.createElement('img');
           itemImg.alt = displayName;
           itemImg.title = displayName;
-          // Para items, primero verificar el mapeo, si no existe usar normalización
-          if (itemImageMap[itemName]) {
-            itemImg.src = `itemimg/${itemImageMap[itemName]}`;
+          // Buscar imagen usando normalización automática
+          const imagenEncontrada = obtenerImagenItem(itemName);
+          if (imagenEncontrada) {
+            itemImg.src = `itemimg/${imagenEncontrada}`;
           } else {
+            // Fallback: intentar variaciones del nombre
             cargarImagenConVariaciones(itemName, itemImg, 'itemimg');
           }
 

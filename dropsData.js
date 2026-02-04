@@ -138,7 +138,7 @@ const dropsData = [
       "MegaZanahoria": "2",
       "Driver": "3",
       "RestosMetal": "1",
-      "CarneAnomala": "1",
+      "CarneX": "1",
       "TomateMilagroso": "2-3",
       "LimonJuzgador": "1-2"
     }

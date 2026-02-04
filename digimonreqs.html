@@ -649,7 +649,36 @@ main {
   }
 }
 /* ====================== FIN ESTILOS WARNING ICON ====================== */
+
+/* ====================== ESTILOS BOTÓN DESCARGA ====================== */
+.download-section {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.download-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: #4a5568;
+  color: white;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover {
+  background-color: #2d3748;
+}
+
+.download-btn:disabled {
+  background-color: #718096;
+  cursor: not-allowed;
+}
+/* ====================== FIN ESTILOS BOTÓN DESCARGA ====================== */
   </style>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <script src="digimonReqDict.js"></script>
 <script src="digimonstattier.js"></script>
@@ -821,6 +850,11 @@ main {
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Botón de descarga de imagen -->
+  <div class="download-section">
+    <button id="downloadBtn" class="download-btn" style="display: none;">Descargar Imagen</button>
   </div>
 </section>
   </main>
@@ -1796,6 +1830,10 @@ function formatearPuntajeConColor(puntaje) {
 		subtitle2: "Datos de requisitos del Digimon",
 		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
 		evolutionNote: "Un digimon necesita más de 3 puntos para evolucionar (Excepto Baby II -> Child), por favor usar la calculadora para cálculos más precisos.",
+		downloadBtn: "Descargar Imagen",
+		downloadGenerating: "Generando...",
+		downloadError: "Error al generar imagen. Intenta de nuevo.",
+		downloadLocalError: "La descarga de imagen no funciona en modo local (file://). Esta función estará disponible en la versión web (GitHub Pages).",
 		colorExplanationTitle: "Explicación de colores:",
 		colorGreen: "Verde",
 		colorGreenDesc: "Da puntaje y debes estar en el rango o cumplirlo para obtenerlo",
@@ -1904,6 +1942,10 @@ function formatearPuntajeConColor(puntaje) {
 		subtitle2: "Digimon Requirements Data",
 		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
 		evolutionNote: "A Digimon needs more than 3 points to evolve (Except Baby II -> Child), please use the calculator for more precise calculations.",
+		downloadBtn: "Download Image",
+		downloadGenerating: "Generating...",
+		downloadError: "Error generating image. Try again.",
+		downloadLocalError: "Image download does not work in local mode (file://). This feature will be available in the web version (GitHub Pages).",
 		colorExplanationTitle: "Color explanation:",
 		colorGreen: "Green",
 		colorGreenDesc: "Gives points and you must be in the range or meet it to obtain it",
@@ -3399,7 +3441,70 @@ if (campo === "Bonus Comida") {
   return valor;
 }
 
+// ============================================
+// FUNCIONES PARA DESCARGA DE IMAGEN
+// ============================================
 
+function t(key) {
+  return traducciones[currentLanguage]?.[key] || key;
+}
+
+function downloadDigimonImage() {
+  if (window.location.protocol === 'file:') {
+    alert(t('downloadLocalError'));
+    return;
+  }
+
+  const container = document.querySelector('.container');
+  const digimonSelect = document.getElementById('selectDigimon');
+  const digimonName = digimonSelect.value || 'digimon';
+  const btn = document.getElementById('downloadBtn');
+
+  btn.textContent = t('downloadGenerating');
+  btn.disabled = true;
+
+  html2canvas(container, {
+    backgroundColor: '#212121',
+    scale: 2,
+    useCORS: true
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `${digimonName}_info.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    btn.textContent = t('downloadBtn');
+    btn.disabled = false;
+  }).catch(err => {
+    console.error('Error:', err);
+    alert(t('downloadError'));
+    btn.textContent = t('downloadBtn');
+    btn.disabled = false;
+  });
+}
+
+// Mostrar botón de descarga cuando se selecciona un Digimon
+document.getElementById('selectDigimon').addEventListener('change', function() {
+  const downloadBtn = document.getElementById('downloadBtn');
+  if (this.value) {
+    downloadBtn.style.display = 'inline-block';
+    downloadBtn.textContent = t('downloadBtn');
+  } else {
+    downloadBtn.style.display = 'none';
+  }
+});
+
+// Agregar evento click al botón de descarga
+document.getElementById('downloadBtn').addEventListener('click', downloadDigimonImage);
+
+// Actualizar texto del botón cuando cambia el idioma
+const originalLanguageHandler = languageSelector.onchange;
+languageSelector.addEventListener('change', function() {
+  const downloadBtn = document.getElementById('downloadBtn');
+  if (downloadBtn.style.display !== 'none') {
+    downloadBtn.textContent = t('downloadBtn');
+  }
+});
 
 </script>
 </body>

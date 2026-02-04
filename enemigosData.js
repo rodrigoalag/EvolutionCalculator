@@ -17,7 +17,7 @@ const enemigosData = [
     ]
   },
   {
-    digimon: "Yukiagumon",
+    digimon: "YukiAgumon",
     nickName: "Rudolph",
     niveles: [3],
     entrenamientos: ["0-39.99"],
@@ -425,7 +425,7 @@ const enemigosData = [
     ]
   },
   {
-    digimon: "Geogreymon",
+    digimon: "GeoGreymon",
     nickName: "Bimbodzilla",
     niveles: [4],
     entrenamientos: ["50-69.99"],
@@ -476,7 +476,7 @@ const enemigosData = [
     ]
   },
   {
-    digimon: "Red Vdramon",
+    digimon: "RedVDramon",
     nickName: "Lee",
     niveles: [4],
     entrenamientos: ["70-100"],

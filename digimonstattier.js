@@ -255,7 +255,7 @@ const digimonstattier = {
     "ATK": 240, "DEF": 140, "HP": 2200, "Vel": 150, "Digipuntos": 75, "Evoluciona": ["Burpmon"], "Viene": ["Fantomon"]
   },
 	"Mushmon": { // Cambiar
-    "ATK": 30, "DEF": 25, "HP": 550, "Vel": 40, "Digipuntos": 15, "Evoluciona": ["Chamblemon", "Nanimon", "Scumon", "Numemon", "Bakemon LT", "Burpmon"], "Viene": ["Koromon","Pickmon","Fluffymon"]
+    "ATK": 30, "DEF": 25, "HP": 550, "Vel": 40, "Digipuntos": 15, "Evoluciona": ["Chamblemon", "Nanimon", "Scumon", "Numemon", "Bakemon LT", "Burpmon"], "Viene": ["Koromon","Pickmon","Fluffymon", "Dorimon"]
   },  
 	"Chamblemon": { // Cambiar
     "ATK": 50, "DEF": 50, "HP": 1000, "Vel": 70, "Digipuntos": 27, "Evoluciona": ["Burpmon"], "Viene": ["Mushmon"]
@@ -304,7 +304,7 @@ const digimonstattier = {
     "ATK": 7, "DEF": 4, "HP": 60, "Vel": 4, "Digipuntos": 2.1, "Evoluciona": ["Dorimon","Burpmon"]
   },
   "Dorimon": {
-    "ATK": 10, "DEF": 5, "HP": 100, "Vel": 5, "Digipuntos": 3.0, "Evoluciona": ["Dorumon","Ghostmon","Burpmon"], "Viene": ["Dodomon"]
+    "ATK": 10, "DEF": 5, "HP": 100, "Vel": 5, "Digipuntos": 3.0, "Evoluciona": ["Dorumon","Ghostmon","Mushmon","Burpmon"], "Viene": ["Dodomon"]
   },
   "Dorumon": {
     "ATK": 55, "DEF": 35, "HP": 400, "Vel": 25, "Digipuntos": 15.5, "Evoluciona": ["Dorugamon","DexDorugamon","Raptordramon","Numemon", "Scumon", "Bakemon LT", "Nanimon","Burpmon"], "Viene": ["Dorimon"]

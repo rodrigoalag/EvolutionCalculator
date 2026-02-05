@@ -443,6 +443,6 @@ const digimonReqDict = {
   },
      "Grademon VICE": {
 	"ID": "174", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "Guerrero", "Peso": "36",
-  "Error Maximo": 6, "Vinculo Minimo alcanzado": -50
+  "Error Maximo": "6-6", "Vinculo Minimo alcanzado": -50
   },
 };

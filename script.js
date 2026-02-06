@@ -168,7 +168,7 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Errores Minimos", "Bonus Stat Superior", "Placeholder"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Errores Minimos", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados"];
 
 
 const bloqueosEvolucion = {
@@ -219,7 +219,10 @@ const bloqueosEvolucion = {
   "Omega Shoutmon": ["King Shoutmon"],
   "Wargreymon": ["Metal Greymon", "MetalGreymon Alterous"],
   "Doruguremon": ["Dorugamon"],
-
+  "Grademon": ["Raptordramon"],
+  "Grademon VICE": ["Grademon"],
+  "DexDorugamon": ["Dorumon", "Dorugamon"],
+  "DexDoruguremon": ["Dorugamon", "DexDorugamon", "Doruguremon"]
 };
 const bloqueosexcepciones = {
 	"Aero V-dramon (Black)":"RedVdramon",
@@ -273,12 +276,8 @@ const crosstamaevo = {
   "Nanimon": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon"],
   "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"],
   "Mushmon": ["Koromon","Pickmon"],
-  "Grademon": ["Raptordramon"],
-  "Grademon VICE": ["Raptordramon"],
-  "DexDorugamon": ["Dorumon", "Dorugamon"],
-  "DexDoruguremon": ["Dorugamon", "DexDorugamon", "Doruguremon"]
 };
-	
+
 const SideEvolutionlist = {
   "Dark Tyranomon": [4],
   "GoldGuardromon": [4],
@@ -1113,6 +1112,47 @@ function generarFormulario() {
   }
 
   console.log("Lista final después de filtrar sides por Tama y añadir Burpmon:", nextDigimons.map(([name]) => name));
+
+  // NUEVA LÓGICA: Aplicar RequisitosCondicionados según el origen seleccionado
+  nextDigimons = nextDigimons.map(([name, info]) => {
+    if (info.RequisitosCondicionados && info.RequisitosCondicionados[selected]) {
+      const condicion = info.RequisitosCondicionados[selected];
+      console.log(`🔄 Aplicando RequisitosCondicionados para ${name} desde ${selected}: ${condicion}`);
+
+      if (condicion === "SoloDeathProgram") {
+        // Solo mostrar el campo Program con valor Death
+        const requisitosReducidos = {
+          "ID": info.ID,
+          "Tama": info.Tama,
+          "Nivel": info.Nivel,
+          "Atributo": info.Atributo,
+          "Tipo": info.Tipo,
+          "Peso": info.Peso,
+          "Program": info.Program
+        };
+        console.log(`✅ ${name}: Solo mostrando Program (Death)`);
+        return [name, requisitosReducidos];
+      } else if (condicion === "NoClaro") {
+        // Requisitos no claros - solo mostrar campos básicos
+        const requisitosBasicos = {
+          "ID": info.ID,
+          "Tama": info.Tama,
+          "Nivel": info.Nivel,
+          "Atributo": info.Atributo,
+          "Tipo": info.Tipo,
+          "Peso": info.Peso
+        };
+        console.log(`⚠️ ${name}: Requisitos no claros`);
+        return [name, requisitosBasicos];
+      } else if (digimonReqDict[condicion]) {
+        // Usar los requisitos de otro Digimon (ej: SkullGreymon)
+        const requisitosAlternos = { ...digimonReqDict[condicion], Nivel: info.Nivel };
+        console.log(`🔄 ${name}: Usando requisitos de ${condicion}`);
+        return [name, requisitosAlternos];
+      }
+    }
+    return [name, info];
+  });
 
   // NUEVA LÓGICA: Combinar campos dinámicos + estáticos CON DEBUG
   const fieldSet = new Set();
@@ -2112,7 +2152,7 @@ let hayBonus = false;
 		
 nextDigimons.forEach(([_, info]) => {
   for (const key in info) {
-    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Errores Minimos", "Placeholder"].includes(key)) {
+    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Errores Minimos", "Placeholder", "RequisitosCondicionados"].includes(key)) {
       if (key.includes("Bonus")) {
         hayBonus = true;
       } else {
@@ -2519,18 +2559,16 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                     console.log("🔮 DexDoruguremon - Ni Program ni Comida cumplidos: -10 puntos");
                 }
             } else if (selectedNormalizado === "doruguremon") {
-                // Viene de Doruguremon - Necesita Death Program o Carne X
+                // Viene de Doruguremon - Solo necesita Death Program
                 const programCorrecto = inputValues["Program"] &&
                     inputValues["Program"].toLowerCase() === "death";
-                const comidaCorrecta = inputValues["Comida"] &&
-                    inputValues["Comida"].toLowerCase() === "carne x";
 
-                if (programCorrecto || comidaCorrecta) {
+                if (programCorrecto) {
                     puntaje += 5; // Puntaje especial para evolución directa
-                    console.log("🔮 DexDoruguremon desde Doruguremon - Death o Carne X cumplido: +5 puntos (evolución directa)");
+                    console.log("🔮 DexDoruguremon desde Doruguremon - Death Program cumplido: +5 puntos (evolución directa)");
                 } else {
                     puntaje += -10;
-                    console.log("🔮 DexDoruguremon desde Doruguremon - Ni Death ni Carne X cumplido: -10 puntos");
+                    console.log("🔮 DexDoruguremon desde Doruguremon - Death Program no cumplido: -10 puntos");
                 }
             } else {
                 // Viene de DexDorugamon - Requisitos no claros
@@ -3040,8 +3078,8 @@ else if (field === "Error Maximo") {
 	} 
 	if (isSpecialCase) { 
 		punto = 0; 
-	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon", "Digitamamon"].includes(name)) {
-		// Nuevo caso especial: penalización por error
+	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon", "Digitamamon", "Grademon VICE"].includes(name)) {
+		// Nuevo caso especial: penalización por error (requiere exactamente el valor esperado)
 		const ingNum = Number(ingresado);
 		const espNum = Number(esperado);
 		if (!isNaN(ingNum) && !isNaN(espNum) && ingNum === espNum) {
@@ -3212,6 +3250,13 @@ const tieneBalanceado = partesIngresado.some(p =>
 			  punto = 0;
 			} else {
 			  punto = -10;
+			}
+		  } else if (name === "Grademon VICE") {
+			// Grademon VICE: requiere alcanzar vínculo negativo de -50 o menos
+			if (!isNaN(ingNum) && ingNum <= esperado) {
+			  punto = 1; // Cumple: alcanzó -50 o menos
+			} else {
+			  punto = -10; // No cumple: no alcanzó el vínculo negativo requerido
 			}
 		  } else {
 			// Lógica normal para otros Digimon: menor que esperado = -10
@@ -4053,15 +4098,16 @@ if (nextLevel === 4 || nextLevel === 5) {
 }
 
 // --- NIVEL 5 (desde nivel 5) ---
+let sideEvosValidas5 = []; // Definido fuera para usarlo en la condición de nivel 6
 if (data["Nivel"] === 5) {
   console.log(`🧪 Evaluando evoluciones para Nivel ${data["Nivel"]}`);
-  
+
   const burpmon = puntajes.find(d => d.name === "Burpmon" && d.puntaje >= 3);
   if (burpmon) {
     mejoresDigimons = ["Burpmon"];
     console.log("👑 Excepción: Burpmon tiene puntaje >= 3, se selecciona directamente.");
   } else {
-    const sideEvosValidas5 = puntajes.filter(d => {
+    sideEvosValidas5 = puntajes.filter(d => {
       const nivelesPermitidos = SideEvolutionlist[d.name];
       const esSideValido = nivelesPermitidos?.includes(data["Nivel"]) && d.puntaje >= 0;
       console.log(`valido ${esSideValido}`)
@@ -4070,7 +4116,7 @@ if (data["Nivel"] === 5) {
       }
       return esSideValido;
     });
-    
+
     if (sideEvosValidas5.length > 0) {
       const maxPuntaje5 = Math.max(...sideEvosValidas5.map(d => d.puntaje));
       const candidatos = sideEvosValidas5.filter(d => d.puntaje === maxPuntaje5).map(d => d.name);
@@ -4085,10 +4131,11 @@ if (data["Nivel"] === 5) {
 }
 
 // --- EVALUACIÓN NIVEL 6 ---
-if (nextLevel === 6) {
+// Solo evaluar nivel 6 si no hay side evolutions válidas de nivel 5
+if (nextLevel === 6 && sideEvosValidas5.length === 0) {
   console.log(`🧪 Evaluando evoluciones para Nivel ${nextLevel}`);
   console.log("📋 Nivel actual:", data["Nivel"]);
-  
+
   const burpmon = puntajes.find(d => d.name === "Burpmon" && d.puntaje >= 3);
   if (burpmon) {
     mejoresDigimons = ["Burpmon"];
@@ -4098,9 +4145,9 @@ if (nextLevel === 6) {
       const req = digimonReqDict[d.name];
       return req?.Nivel === nextLevel && d.puntaje >= 2;
     });
-    
+
     console.log("🔍 Digimon válidos Nivel 6 (puntaje >= 2):", digimonNivel6.map(d => `${d.name} (${d.puntaje})`));
-    
+
     if (digimonNivel6.length > 0) {
       const maxPuntajeNivel6 = Math.max(...digimonNivel6.map(d => d.puntaje));
       const candidatos = digimonNivel6.filter(d => d.puntaje === maxPuntajeNivel6).map(d => d.name);
@@ -4112,12 +4159,15 @@ if (nextLevel === 6) {
     }
   }
   console.log("🧾 Resultado final Nivel 6:", mejoresDigimons);
+} else if (nextLevel === 6 && sideEvosValidas5.length > 0) {
+  console.log("⏭️ Se encontró side evolution válida de nivel 5, saltando evaluación de nivel 6.");
 }
 
 // --- Construcción del texto según idioma y resultado ---
 let texto;
 
-if (sideEvosValidas.length > 0) {
+// Verificar si hay side evolutions válidas (incluyendo las de nivel 5)
+if (sideEvosValidas.length > 0 || sideEvosValidas5.length > 0) {
   const nombres = mejoresDigimons.join(", ");
   texto = textTranslations[currentLanguage]?.slideEvolution + nombres + ".";
 } else {
@@ -4264,7 +4314,8 @@ if (mejoresDigimons.length >= 2) {
     }
     // FIN CASO ESPECIAL DEATH PROGRAM
 
-    if (sideEvosValidas.length > 0) {
+    // Verificar si hay side evolutions válidas (incluyendo las de nivel 5)
+    if (sideEvosValidas.length > 0 || sideEvosValidas5.length > 0) {
       const nombres = mejoresDigimons.join(", ");
       texto = textTranslations[currentLanguage].slideEvolution + nombres + ".";
     } else {

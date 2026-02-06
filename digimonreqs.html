@@ -2372,7 +2372,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       if (campo === "Nivel") {
         valorOriginal = nivelAEtapa[currentLanguage][valorOriginal] || valorOriginal;
       }
-      td.innerHTML = traducirValor(campo, valorOriginal);
+      td.innerHTML = traducirValor(campo, valorOriginal, nombre);
       filaGen.appendChild(td);
     });
     tablaGenerales.appendChild(filaGen);
@@ -2658,11 +2658,11 @@ if (tieneRequisitosOrigen) {
         campos.forEach(campo => {
           const th = document.createElement("th");
           th.setAttribute("data-orig", campo);
-          th.textContent = traducirCampo(campo);
+          th.textContent = traducirCampo(campo, nombre);
 
           // Agregar icono de advertencia para % Entrenamiento si es placeholder
           if (campo === "% Entrenamiento" && config.placeholder) {
-            th.textContent = traducirCampo(campo) + " ";
+            th.textContent = traducirCampo(campo, nombre) + " ";
             const warningIcon = document.createElement("span");
             warningIcon.className = "warning-icon";
             warningIcon.onclick = () => showWarningPopup("dexdorugamon");
@@ -2730,11 +2730,11 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
     camposEncontrados.forEach(campo => {
       const th = document.createElement("th");
       th.setAttribute("data-orig", campo);
-      th.textContent = traducirCampo(campo);
+      th.textContent = traducirCampo(campo, nombre);
 
       // ✅ AGREGAR ICONO DE ADVERTENCIA PARA SKULLGREYMON EN % ENTRENAMIENTO
       if (nombre === "SkullGreymon" && campo === "% Entrenamiento") {
-        th.textContent = traducirCampo(campo) + " ";
+        th.textContent = traducirCampo(campo, nombre) + " ";
         const warningIcon = document.createElement("span");
         warningIcon.className = "warning-icon";
         warningIcon.onclick = () => showWarningPopup("skullgreymon");
@@ -2747,7 +2747,7 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
 
       // ✅ AGREGAR ICONO DE ADVERTENCIA PARA DEXDORUGAMON EN % ENTRENAMIENTO (PLACEHOLDER)
       if (nombre === "DexDorugamon" && campo === "% Entrenamiento") {
-        th.textContent = traducirCampo(campo) + " ";
+        th.textContent = traducirCampo(campo, nombre) + " ";
         const warningIcon = document.createElement("span");
         warningIcon.className = "warning-icon";
         warningIcon.onclick = () => showWarningPopup("dexdorugamon");
@@ -2760,7 +2760,7 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
 
       // ✅ AGREGAR ICONO DE ADVERTENCIA PARA DEXDORUGUREMON EN % ENTRENAMIENTO
       if (nombre === "DexDoruguremon" && campo === "% Entrenamiento") {
-        th.textContent = traducirCampo(campo) + " ";
+        th.textContent = traducirCampo(campo, nombre) + " ";
         const warningIcon = document.createElement("span");
         warningIcon.className = "warning-icon";
         warningIcon.onclick = () => showWarningPopup("dexdoruguremon");
@@ -2773,7 +2773,7 @@ Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
 
       // ✅ AGREGAR ICONO DE INFORMACIÓN PARA HORA
       if (campo === "Hora") {
-        th.textContent = traducirCampo(campo) + " ";
+        th.textContent = traducirCampo(campo, nombre) + " ";
         const warningIcon = document.createElement("span");
         warningIcon.className = "warning-icon";
         warningIcon.onclick = () => showWarningPopup("hora");
@@ -2801,7 +2801,7 @@ if (evolucionesMultiples.length > 0) {
 
       // Formatear Error Maximo como rango
       if (campo === "Error Maximo") {
-        valorOriginal = formatearErrorMaximo(valorOriginal);
+        valorOriginal = formatearErrorMaximo(valorOriginal, nombre);
       }
 
       // Formatear WinRate agregando %
@@ -2842,7 +2842,7 @@ if (evolucionesMultiples.length > 0) {
           valorFinal = valorOriginal + (valorOriginal !== "-" ? puntajeHTML : "");
         }
       } else {
-        valorFinal = traducirValor(campo, valorOriginal);
+        valorFinal = traducirValor(campo, valorOriginal, nombre);
         if (valorOriginal !== "-" && valorOriginal !== undefined && valorOriginal !== null) {
           valorFinal += puntajeHTML;
         }
@@ -2933,7 +2933,7 @@ if (evolucionesMultiples.length > 0) {
 
     // Formatear Error Maximo como rango
     if (campo === "Error Maximo") {
-      valorOriginal = formatearErrorMaximo(valorOriginal);
+      valorOriginal = formatearErrorMaximo(valorOriginal, nombre);
     }
 
     // Formatear WinRate agregando %
@@ -2964,7 +2964,7 @@ if (evolucionesMultiples.length > 0) {
     if ((campo === "% Entrenamiento" || campo.includes("Vinculo")) && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
       td.innerHTML = valorOriginal + "%" + puntajeHTML;
     } else {
-      td.innerHTML = traducirValor(campo, valorOriginal);
+      td.innerHTML = traducirValor(campo, valorOriginal, nombre);
       if (valorOriginal !== "-" && valorOriginal !== undefined && valorOriginal !== null) {
         td.innerHTML += puntajeHTML;
       }
@@ -3082,9 +3082,10 @@ headersGrupos.forEach(th => {
   const filaGen = tablaGenerales.querySelector("tr");
   if (filaGen && selectDigimon.value && dict[selectDigimon.value]) {
     const digimon = dict[selectDigimon.value];
+    const nombreDigi = selectDigimon.value;
     [...filaGen.children].forEach((td, idx) => {
       const campo = generales[idx];
-      td.textContent = traducirValor(campo, digimon[campo]);
+      td.textContent = traducirValor(campo, digimon[campo], nombreDigi);
     });
   }
 
@@ -3099,7 +3100,7 @@ headersGrupos.forEach(th => {
       if (!generales.includes(campo)) {
         const td = filaReq.children[i];
 		if (td) {
-          td.innerHTML = traducirValor(campo, digimon[campo]);
+          td.innerHTML = traducirValor(campo, digimon[campo], nombreDigimon);
         }
         i++;
       }
@@ -3140,17 +3141,27 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarTextosUI();
 });
 
-function traducirCampo(campo) {
+function traducirCampo(campo, nombreDigimon = null) {
+  // Excepción: Grademon VICE usa "Errores Requeridos" en vez de "Rango de Errores de Cuido"
+  if (nombreDigimon === "Grademon VICE" && campo === "Error Maximo") {
+    return currentLanguage === 'es' ? "Errores Requeridos" : "Required Errors";
+  }
   return traducciones[currentLanguage]?.campos?.[campo] || campo;
 }
 
 // Función para formatear el valor de Error Maximo como rango
-function formatearErrorMaximo(valor) {
+// Excepciones: Grademon VICE requiere exactamente 6 errores (no rango)
+function formatearErrorMaximo(valor, nombreDigimon = null) {
   if (valor === undefined || valor === null || valor === "-") {
     return valor;
   }
 
   const valorStr = String(valor);
+
+  // Excepción: Grademon VICE requiere exactamente el valor, no un rango
+  if (nombreDigimon === "Grademon VICE") {
+    return valorStr;
+  }
 
   // Si ya es un rango (contiene "-"), devolverlo tal cual
   if (valorStr.includes("-")) {
@@ -3326,14 +3337,14 @@ function convertirHoraALocal(valor) {
   return `${textoDiaNoche} (${horaInicioStr}-${horaFinStr} ${offsetStr})`;
 }
 
-function traducirValor(campo, valor) {
+function traducirValor(campo, valor, nombreDigimon = null) {
   if (campo === "Nivel" && nivelAEtapa[currentLanguage][valor]) {
     return nivelAEtapa[currentLanguage][valor];
   }
 
   // Formatear Error Maximo como rango
   if (campo === "Error Maximo") {
-    valor = formatearErrorMaximo(valor);
+    valor = formatearErrorMaximo(valor, nombreDigimon);
   }
 
   // Formatear WinRate agregando %

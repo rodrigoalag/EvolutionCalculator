@@ -411,12 +411,7 @@ const digimonReqDict = {
   },
      "DexDorugamon": {
 	"ID": "151", "Tama": "PR", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 25,
-	"% Entrenamiento": 50, "Program": "Death",
-	"Placeholder": true,
-	"RequisitosCondicionados": {
-		"Dorumon": "Placeholder",
-		"Dorugamon": "SideEvolution"
-	}
+	"% Entrenamiento": 50, "Vinculo al momento de evolucionar": -50, "Program": "Death"
   },
      "Raptordramon": {
 	"ID": "153", "Tama": "PR", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina", "Peso": 25,
@@ -429,12 +424,7 @@ const digimonReqDict = {
   },
      "DexDoruguremon": {
 	"ID": "152", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 36,
-	"% Entrenamiento": 50, "Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program": "Death", "Comida": "Carne X",
-	"RequisitosCondicionados": {
-		"Dorugamon": "SkullGreymon",
-		"DexDorugamon": "NoClaro",
-		"Doruguremon": "SoloDeathProgram"
-	}
+	"% Entrenamiento": 50, "Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program": "Death", "Comida": "Carne X", "Error Maximo": 6
   },
      "Grademon": {
 	"ID": "154", "Tama": "PR", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Guerrero", "Peso": 36,

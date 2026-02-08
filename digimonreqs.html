@@ -1386,7 +1386,7 @@ const specialDigimonConfig = {
         "% Entrenamiento": "< 50%",
         "Errores": "< 6",
         "Combates": "< 30",
-        "Vinculo": "> -50"
+        "Vinculo": "< -50"
       }
     }
   }
@@ -1483,7 +1483,7 @@ const specialEntrenamientoCases = {
     },
     "DexDoruguremon": {
         "Dorugamon": 50,
-        "DexDorugamon": "-",
+        "DexDorugamon": 100,
         "Doruguremon": "-"
     }
 };
@@ -1509,6 +1509,14 @@ const specialVinculoCases = {
     }
 };
 
+const specialErroresCases = {
+    "DexDoruguremon": {
+        "Dorugamon": 6,
+        "DexDorugamon": 6,
+        "Doruguremon": "-"
+    }
+};
+
 const specialfoodcases = {
     "Icemon": ["Verdura Congelada", "Hongo Congelado"]
 };
@@ -1531,8 +1539,8 @@ const camposVaciosPorEvolucion = {
         "Con Bonus": ["WinRate", "Combates Minimos"]       // Variante con bonus, sin WinRate ni Combates
     },
     "DexDoruguremon": {
-        "DexDorugamon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program o Comida"],  // Requisitos no claros
-        "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar"]  // Solo necesita Death o Carne X
+        "DexDorugamon": ["Vinculo al momento de evolucionar", "Program o Comida", "Program", "Comida"],  // Solo necesita: Combates Minimos 30, % Entrenamiento 100, Peso 36, Errores 0-6
+        "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo"]  // Solo necesita Death Program
     },
     "Wargreymon": {
         "Metal Greymon": ["Peso", "% Entrenamiento", "Error Maximo", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]  // Requisitos no claros
@@ -1688,9 +1696,24 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
         return { cumple: 1, noCumple: -10 };
       }
     }
-    // DexDoruguremon: evolución al azar (como SkullGreymon), no usar puntajes tradicionales
-    if (nombreDigimon === "DexDoruguremon" && (campo === "% Entrenamiento" || campo === "Program o Comida" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar")) {
-      return { cumple: 0, noCumple: 0, ocultar: true };
+    // DexDoruguremon: puntajes según origen
+    if (nombreDigimon === "DexDoruguremon") {
+      const evolucionActual = window.currentEvolutionDigimon;
+
+      // Desde DexDorugamon: Peso, Entrenamiento, Errores dan +1/0; Combates es obligatorio 0/-10
+      if (evolucionActual === "DexDorugamon") {
+        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Error Maximo" || campo === "Errores Minimos") {
+          return { cumple: 1, noCumple: 0 };
+        }
+        if (campo === "Combates Minimos") {
+          return { cumple: 0, noCumple: -10 };
+        }
+      }
+
+      // Desde Dorugamon o Doruguremon: evolución al azar, no usar puntajes tradicionales
+      if (campo === "% Entrenamiento" || campo === "Program o Comida" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar") {
+        return { cumple: 0, noCumple: 0, ocultar: true };
+      }
     }
   }
 
@@ -2101,6 +2124,11 @@ function detectarEvolucionesMultiples(nombreDigimon) {
     Object.keys(specialVinculoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
   }
 
+  // Revisar casos especiales de errores
+  if (specialErroresCases[nombreDigimon]) {
+    Object.keys(specialErroresCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
   return Array.from(evoluciones);
 }
 
@@ -2166,6 +2194,18 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
   if (campo === "Vinculo al momento de evolucionar" && specialVinculoCases[nombreDigimon]) {
     const valor = specialVinculoCases[nombreDigimon][evolucionDigimon];
     if (valor !== undefined) return valor;
+  }
+
+  // Casos especiales de errores (tanto "Errores Minimos" como "Error Maximo")
+  if ((campo === "Errores Minimos" || campo === "Error Maximo") && specialErroresCases[nombreDigimon]) {
+    const valorEspecial = specialErroresCases[nombreDigimon][evolucionDigimon];
+    if (valorEspecial !== undefined) {
+      // Para DexDorugamon mostrar como rango "0-6", para otros como valor directo
+      if (evolucionDigimon === "DexDorugamon" && valorEspecial !== "-") {
+        return "0-" + valorEspecial;
+      }
+      return valorEspecial;
+    }
   }
 
   // Devolver el valor original del campo
@@ -2874,18 +2914,6 @@ if (evolucionesMultiples.length > 0) {
     tdNombre.style.fontWeight = "bold";
     filaReq.appendChild(tdNombre);
 
-    // Caso especial: DexDoruguremon desde DexDorugamon - mostrar placeholder
-    if (nombre === "DexDoruguremon" && evolucionDigimon === "DexDorugamon") {
-      const tdPlaceholder = document.createElement("td");
-      tdPlaceholder.setAttribute("colspan", camposOrdenados.length);
-      tdPlaceholder.textContent = currentLanguage === 'es' ? "Requisitos no claros, por confirmar" : "Requirements unclear, to be confirmed";
-      tdPlaceholder.style.fontStyle = "italic";
-      tdPlaceholder.style.textAlign = "center";
-      filaReq.appendChild(tdPlaceholder);
-      tablaRequisitos.appendChild(filaReq);
-      return; // Saltar al siguiente
-    }
-
     // Caso especial: Wargreymon desde Metal Greymon - mostrar placeholder
     if (nombre === "Wargreymon" && evolucionDigimon === "Metal Greymon") {
       const tdPlaceholder = document.createElement("td");
@@ -3405,6 +3433,7 @@ function traducirValor(campo, valor, nombreDigimon = null) {
         "</ul>";
     }
   }
+
 // Reemplaza la sección de "Comida" en la función traducirValor con esto:
 
 // Manejo especial para "Bonus Comida" (flexible para ambos formatos)

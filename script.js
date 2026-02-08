@@ -253,8 +253,17 @@ const SideEvolutionSelected = {
   "Starmons":["Shoutmon SH","Shoutmon + Star Sword"],
   "Grademon":["Grademon VICE"],
   "Dorumon":["DexDorugamon"],
-  "Dorugamon":["DexDorugamon"],
+  "Dorugamon":["DexDorugamon", "DexDoruguremon"],
+  "DexDorugamon":["DexDoruguremon"],
   "Doruguremon":["DexDoruguremon"]
+};
+
+// Campos a ocultar de evoluciones específicas según el origen seleccionado
+const ocultarCamposPorOrigen = {
+  "DexDoruguremon": {
+    "DexDorugamon": ["Errores Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"],
+    "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo"]
+  }
 };
 
 const EvoListSpecial = {
@@ -1113,46 +1122,6 @@ function generarFormulario() {
 
   console.log("Lista final después de filtrar sides por Tama y añadir Burpmon:", nextDigimons.map(([name]) => name));
 
-  // NUEVA LÓGICA: Aplicar RequisitosCondicionados según el origen seleccionado
-  nextDigimons = nextDigimons.map(([name, info]) => {
-    if (info.RequisitosCondicionados && info.RequisitosCondicionados[selected]) {
-      const condicion = info.RequisitosCondicionados[selected];
-      console.log(`🔄 Aplicando RequisitosCondicionados para ${name} desde ${selected}: ${condicion}`);
-
-      if (condicion === "SoloDeathProgram") {
-        // Solo mostrar el campo Program con valor Death
-        const requisitosReducidos = {
-          "ID": info.ID,
-          "Tama": info.Tama,
-          "Nivel": info.Nivel,
-          "Atributo": info.Atributo,
-          "Tipo": info.Tipo,
-          "Peso": info.Peso,
-          "Program": info.Program
-        };
-        console.log(`✅ ${name}: Solo mostrando Program (Death)`);
-        return [name, requisitosReducidos];
-      } else if (condicion === "NoClaro") {
-        // Requisitos no claros - solo mostrar campos básicos
-        const requisitosBasicos = {
-          "ID": info.ID,
-          "Tama": info.Tama,
-          "Nivel": info.Nivel,
-          "Atributo": info.Atributo,
-          "Tipo": info.Tipo,
-          "Peso": info.Peso
-        };
-        console.log(`⚠️ ${name}: Requisitos no claros`);
-        return [name, requisitosBasicos];
-      } else if (digimonReqDict[condicion]) {
-        // Usar los requisitos de otro Digimon (ej: SkullGreymon)
-        const requisitosAlternos = { ...digimonReqDict[condicion], Nivel: info.Nivel };
-        console.log(`🔄 ${name}: Usando requisitos de ${condicion}`);
-        return [name, requisitosAlternos];
-      }
-    }
-    return [name, info];
-  });
 
   // NUEVA LÓGICA: Combinar campos dinámicos + estáticos CON DEBUG
   const fieldSet = new Set();
@@ -1170,9 +1139,12 @@ function generarFormulario() {
   
   // DESPUÉS: Agregar campos dinámicos (lógica original)
   console.log("📋 Agregando campos dinámicos...");
-  nextDigimons.forEach(([_, info]) => {
+  nextDigimons.forEach(([name, info]) => {
+    // Obtener campos a ocultar para esta evolución según el origen
+    const camposAOcultar = ocultarCamposPorOrigen[name]?.[selected] || [];
+
     for (const key in info) {
-      if (!excludelist.includes(key) && key !== "Stat Superior" && key !== "Bonus Stat Superior") { // Excluir Stat Superior del dinámico
+      if (!excludelist.includes(key) && key !== "Stat Superior" && key !== "Bonus Stat Superior" && !camposAOcultar.includes(key)) {
         fieldSet.add(key);
         console.log(`✅ Campo dinámico agregado: ${key}`);
       }
@@ -2558,6 +2530,7 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                     puntaje += -10;
                     console.log("🔮 DexDoruguremon - Ni Program ni Comida cumplidos: -10 puntos");
                 }
+                dexDoruguremonEvaluated = true;
             } else if (selectedNormalizado === "doruguremon") {
                 // Viene de Doruguremon - Solo necesita Death Program
                 const programCorrecto = inputValues["Program"] &&
@@ -2570,24 +2543,100 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                     puntaje += -10;
                     console.log("🔮 DexDoruguremon desde Doruguremon - Death Program no cumplido: -10 puntos");
                 }
-            } else {
-                // Viene de DexDorugamon - Requisitos no claros
-                // Dar 0 puntos - no sube ni baja en el ranking
-                puntaje += 0;
-                console.log("🔮 DexDoruguremon - Requisitos no claros (viene de DexDorugamon): 0 puntos (neutro)");
-            }
+                dexDoruguremonEvaluated = true;
+            } else if (selectedNormalizado === "dexdorugamon") {
+                // Viene de DexDorugamon - Requisitos específicos
+                // Obligatorio: Combates Minimos >= 30 (no da puntaje, pero si no cumple -10)
+                // Da puntaje: % Entrenamiento >= 100, Peso >= 36, Error Maximo <= 6
+                const combatesMinimos = Number(inputValues["Combates Minimos"]) || 0;
+                const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]) || 0;
+                const pesoActual = Number(inputValues["Peso"]) || 0;
+                const errores = Number(inputValues["Error Maximo"]) || 0;
 
-            dexDoruguremonEvaluated = true;
+                // Requisito obligatorio: Combates Minimos >= 30
+                const combatesCumplido = combatesMinimos >= 30;
 
-            if (["% Entrenamiento", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+                console.log(`🔮 DexDoruguremon desde DexDorugamon:`);
+                console.log(`   - Combates (obligatorio): ${combatesCumplido} (${combatesMinimos} >= 30)`);
+
+                if (!combatesCumplido) {
+                    puntaje += -10;
+                    console.log("🔮 DexDoruguremon - Combates NO cumplido: -10 puntos");
+                }
+
+                // % Entrenamiento >= 100: +1 si cumple
+                if (porcentajeEntrenamiento >= 100) {
+                    puntaje += 1;
+                    console.log(`🔮 DexDoruguremon - Entrenamiento cumplido (${porcentajeEntrenamiento} >= 100): +1 punto`);
+                } else {
+                    console.log(`🔮 DexDoruguremon - Entrenamiento NO cumplido (${porcentajeEntrenamiento} < 100): 0 puntos`);
+                }
+
+                // Peso >= 36: +1 si cumple
+                if (pesoActual >= 36) {
+                    puntaje += 1;
+                    console.log(`🔮 DexDoruguremon - Peso cumplido (${pesoActual} >= 36): +1 punto`);
+                } else {
+                    console.log(`🔮 DexDoruguremon - Peso NO cumplido (${pesoActual} < 36): 0 puntos`);
+                }
+
+                // Error Maximo <= 6: +1 si cumple
+                if (errores <= 6) {
+                    puntaje += 1;
+                    console.log(`🔮 DexDoruguremon - Errores cumplido (${errores} <= 6): +1 punto`);
+                } else {
+                    console.log(`🔮 DexDoruguremon - Errores NO cumplido (${errores} > 6): 0 puntos`);
+                }
+
+                console.log(`🔮 DexDoruguremon desde DexDorugamon - Puntaje total: ${puntaje}`);
+
+                dexDoruguremonEvaluated = true;
+
+                // Retornar puntaje individual para cada campo
+                if (field === "Combates Minimos") {
+                    return `<td class="detail-column">${combatesCumplido ? 0 : -10}</td>`;
+                }
+                if (field === "% Entrenamiento") {
+                    return `<td class="detail-column">${porcentajeEntrenamiento >= 100 ? 1 : 0}</td>`;
+                }
+                if (field === "Peso") {
+                    return `<td class="detail-column">${pesoActual >= 36 ? 1 : 0}</td>`;
+                }
+                if (field === "Error Maximo") {
+                    return `<td class="detail-column">${errores <= 6 ? 1 : 0}</td>`;
+                }
+                // Campos no usados para DexDorugamon
+                if (["Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
+                    return `<td class="detail-column">-</td>`;
+                }
             }
         }
 
-        // Si ya se evaluó DexDoruguremon y es uno de sus campos especiales, no evaluar de nuevo
-        if (name === "DexDoruguremon" && dexDoruguremonEvaluated &&
-            ["% Entrenamiento", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-            return `<td class="detail-column" style="display: none;">-</td>`;
+        // Si ya se evaluó DexDoruguremon y es uno de sus campos especiales, retornar puntaje individual
+        if (name === "DexDoruguremon" && dexDoruguremonEvaluated) {
+            const selectedNorm = selected.toLowerCase().trim();
+            if (selectedNorm === "dexdorugamon") {
+                const combatesMinimos = Number(inputValues["Combates Minimos"]) || 0;
+                const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]) || 0;
+                const pesoActual = Number(inputValues["Peso"]) || 0;
+                const errores = Number(inputValues["Error Maximo"]) || 0;
+
+                if (field === "Combates Minimos") {
+                    return `<td class="detail-column">${combatesMinimos >= 30 ? 0 : -10}</td>`;
+                }
+                if (field === "% Entrenamiento") {
+                    return `<td class="detail-column">${porcentajeEntrenamiento >= 100 ? 1 : 0}</td>`;
+                }
+                if (field === "Peso") {
+                    return `<td class="detail-column">${pesoActual >= 36 ? 1 : 0}</td>`;
+                }
+                if (field === "Error Maximo") {
+                    return `<td class="detail-column">${errores <= 6 ? 1 : 0}</td>`;
+                }
+                if (["Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
+                    return `<td class="detail-column">-</td>`;
+                }
+            }
         }
         // FIN LÓGICA ESPECIAL PARA DEXDORUGUREMON
 
@@ -3730,6 +3779,7 @@ puntajes.forEach((digi) => {
 
 	const maxPuntaje = Math.max(...puntajes.map(d => d.puntaje));
 	let mejoresDigimons;
+	let specialCaseHandled = false;
 
 // VERIFICAR CASO ESPECIAL SKULLGREYMON CON PUNTAJE 4 - AGREGADO
 const skullGreymonResult = puntajes.find(d => d.name === "SkullGreymon" && d.puntaje === 4);
@@ -3741,7 +3791,7 @@ if (skullGreymonResult) {
     };
 
     evolucionTexto.textContent = textTranslationsSkull[currentLanguage];
-    return; // Terminar aquí para SkullGreymon
+    specialCaseHandled = true;
 }
 
 // VERIFICAR CASO ESPECIAL DEXDORUGAMON CON PUNTAJE 4 (Placeholder) o 6 (Side Evolution)
@@ -3763,38 +3813,42 @@ if (dexDorugamonResult) {
         };
         evolucionTexto.textContent = textTranslationsSide[currentLanguage];
     }
-    return; // Terminar aquí para DexDorugamon
+    specialCaseHandled = true;
 }
 // FIN CASO ESPECIAL DEXDORUGAMON
 
-// VERIFICAR CASO ESPECIAL DEXDORUGUREMON CON PUNTAJE 4, 5 o 0 (NoClaro)
-const dexDoruguremonResult = puntajes.find(d => d.name === "DexDoruguremon" && (d.puntaje === 4 || d.puntaje === 5));
-const dexDoruguremonNoClaro = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 0 && selected.toLowerCase() === "dexdorugamon");
-if (dexDoruguremonResult || dexDoruguremonNoClaro) {
-    if (dexDoruguremonResult?.puntaje === 4) {
-        // Viene de Dorugamon - mostrar % de probabilidad
-        const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
-        const textTranslationsDexGure = {
-            es: `Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDoruguremon.`,
-            en: `Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDoruguremon.`
-        };
-        evolucionTexto.textContent = textTranslationsDexGure[currentLanguage];
-    } else if (dexDoruguremonResult?.puntaje === 5) {
-        // Viene de Doruguremon - evolución directa con Death Program
-        const textTranslationsDirect = {
-            es: `Tu digimon evoluciona a DexDoruguremon.`,
-            en: `Your digimon evolves to DexDoruguremon.`
-        };
-        evolucionTexto.textContent = textTranslationsDirect[currentLanguage];
-    } else if (dexDoruguremonNoClaro) {
-        // Viene de DexDorugamon - requisitos no claros
-        const textTranslationsNoClaros = {
-            es: `⚠️ DexDoruguremon: Requisitos no claros, por confirmar.`,
-            en: `⚠️ DexDoruguremon: Requirements unclear, to be confirmed.`
-        };
-        evolucionTexto.textContent = textTranslationsNoClaros[currentLanguage];
-    }
-    return; // Terminar aquí para DexDoruguremon
+// VERIFICAR CASO ESPECIAL DEXDORUGUREMON
+const selectedNormDex = selected.toLowerCase();
+// Dorugamon: puntaje 4, DexDorugamon: puntaje >= 3, Doruguremon: puntaje 5
+const dexDoruguremonFromDorugamon = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 4 && selectedNormDex === "dorugamon");
+const dexDoruguremonFromDexDorugamon = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje >= 3 && selectedNormDex === "dexdorugamon");
+const dexDoruguremonFromDoruguremon = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 5 && selectedNormDex === "doruguremon");
+
+if (dexDoruguremonFromDorugamon) {
+    // Viene de Dorugamon - mostrar % de probabilidad
+    const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
+    const textTranslationsDexGure = {
+        es: `Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDoruguremon.`,
+        en: `Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDoruguremon.`
+    };
+    evolucionTexto.textContent = textTranslationsDexGure[currentLanguage];
+    specialCaseHandled = true;
+} else if (dexDoruguremonFromDexDorugamon) {
+    // Viene de DexDorugamon - evolución directa
+    const textTranslationsDexFromDex = {
+        es: `Tu digimon evoluciona a DexDoruguremon.`,
+        en: `Your digimon evolves to DexDoruguremon.`
+    };
+    evolucionTexto.textContent = textTranslationsDexFromDex[currentLanguage];
+    specialCaseHandled = true;
+} else if (dexDoruguremonFromDoruguremon) {
+    // Viene de Doruguremon - evolución directa con Death Program
+    const textTranslationsDirect = {
+        es: `Tu digimon evoluciona a DexDoruguremon.`,
+        en: `Your digimon evolves to DexDoruguremon.`
+    };
+    evolucionTexto.textContent = textTranslationsDirect[currentLanguage];
+    specialCaseHandled = true;
 }
 // FIN CASO ESPECIAL DEXDORUGUREMON
 
@@ -3806,7 +3860,7 @@ if (wargreymonNoClaro) {
         en: `⚠️ Wargreymon: Requirements unclear from Metal Greymon, to be confirmed.`
     };
     evolucionTexto.textContent = textTranslationsWargreymonNoClaro[currentLanguage];
-    return;
+    specialCaseHandled = true;
 }
 // FIN CASO ESPECIAL WARGREYMON METAL GREYMON
 
@@ -3825,13 +3879,13 @@ if (bakemonLTResult) {
     } else {
         // Caso de comida o program correctos - evolución directa
         const textTranslationsBakemonDirect = {
-            es: "Tu digi evoluciona a Bakemon LT.",
-            en: "Your digi evolves to Bakemon LT."
+            es: "Tu digimon evoluciona a Bakemon LT.",
+            en: "Your digimon evolves to Bakemon LT."
         };
         evolucionTexto.textContent = textTranslationsBakemonDirect[currentLanguage];
     }
 
-    return; // Terminar aquí para Bakemon LT
+    specialCaseHandled = true;
 }
 // FIN CASO ESPECIAL BAKEMON LT
 
@@ -3842,11 +3896,11 @@ const shoutmonStarResult = puntajes.find(d => d.name === "Shoutmon + Star Sword"
 if (shoutmonSHResult && shoutmonStarResult) {
     // Ambos tienen puntaje 3, mostrar mensaje de 50% de probabilidad
     const textTranslationsShoutmon50 = {
-        es: "Tu Digi tiene 50% de probabilidad de evolucionar en Shoutmon SH o Shoutmon + Star Sword.",
-        en: "Your Digi has a 50% chance of evolving to Shoutmon SH or Shoutmon + Star Sword."
+        es: "Tu digimon tiene 50% de probabilidad de evolucionar en Shoutmon SH o Shoutmon + Star Sword.",
+        en: "Your digimon has a 50% chance of evolving to Shoutmon SH or Shoutmon + Star Sword."
     };
     evolucionTexto.textContent = textTranslationsShoutmon50[currentLanguage];
-    return; // Terminar aquí para Shoutmon
+    specialCaseHandled = true;
 }
 // FIN CASO ESPECIAL SHOUTMON
 
@@ -3873,7 +3927,7 @@ if (programIngresado && programIngresado.toLowerCase() === "death") {
 
         evolucionTexto.textContent = textTranslationsDeath[currentLanguage];
         console.log("💀 Death Program sin evolución válida - El Digimon muere");
-        return; // Terminar aquí
+        specialCaseHandled = true;
     }
 }
 // FIN CASO ESPECIAL DEATH PROGRAM
@@ -4220,32 +4274,36 @@ if (mejoresDigimons.length >= 2) {
     // FIN CASO ESPECIAL DEXDORUGAMON
 
     // VERIFICAR CASO ESPECIAL DEXDORUGUREMON
-    const dexDoruguremonResultFunc = puntajes.find(d => d.name === "DexDoruguremon" && (d.puntaje === 4 || d.puntaje === 5));
-    const dexDoruguremonNoClaroFunc = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 0 && selected.toLowerCase() === "dexdorugamon");
-    if (dexDoruguremonResultFunc || dexDoruguremonNoClaroFunc) {
-        if (dexDoruguremonResultFunc?.puntaje === 4) {
-            // Viene de Dorugamon - mostrar % de probabilidad
-            const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
-            const textTranslationsDexGure = {
-                es: `Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDoruguremon.`,
-                en: `Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDoruguremon.`
-            };
-            evolucionTexto.textContent = textTranslationsDexGure[currentLanguage];
-        } else if (dexDoruguremonResultFunc?.puntaje === 5) {
-            // Viene de Doruguremon - evolución directa con Death Program
-            const textTranslationsDirect = {
-                es: `Tu digimon evoluciona a DexDoruguremon.`,
-                en: `Your digimon evolves to DexDoruguremon.`
-            };
-            evolucionTexto.textContent = textTranslationsDirect[currentLanguage];
-        } else if (dexDoruguremonNoClaroFunc) {
-            // Viene de DexDorugamon - requisitos no claros
-            const textTranslationsNoClaros = {
-                es: `⚠️ DexDoruguremon: Requisitos no claros, por confirmar.`,
-                en: `⚠️ DexDoruguremon: Requirements unclear, to be confirmed.`
-            };
-            evolucionTexto.textContent = textTranslationsNoClaros[currentLanguage];
-        }
+    const selectedNormFuncDex = selected.toLowerCase();
+    // Dorugamon: puntaje 4, DexDorugamon: puntaje >= 3, Doruguremon: puntaje 5
+    const dexDoruguremonFromDorugamonFunc = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 4 && selectedNormFuncDex === "dorugamon");
+    const dexDoruguremonFromDexDorugamonFunc = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje >= 3 && selectedNormFuncDex === "dexdorugamon");
+    const dexDoruguremonFromDoruguremonFunc = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 5 && selectedNormFuncDex === "doruguremon");
+
+    if (dexDoruguremonFromDorugamonFunc) {
+        // Viene de Dorugamon - mostrar % de probabilidad
+        const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
+        const textTranslationsDexGure = {
+            es: `Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDoruguremon.`,
+            en: `Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDoruguremon.`
+        };
+        evolucionTexto.textContent = textTranslationsDexGure[currentLanguage];
+        return;
+    } else if (dexDoruguremonFromDexDorugamonFunc) {
+        // Viene de DexDorugamon - evolución directa
+        const textTranslationsDexFromDex = {
+            es: `Tu digimon evoluciona a DexDoruguremon.`,
+            en: `Your digimon evolves to DexDoruguremon.`
+        };
+        evolucionTexto.textContent = textTranslationsDexFromDex[currentLanguage];
+        return;
+    } else if (dexDoruguremonFromDoruguremonFunc) {
+        // Viene de Doruguremon - evolución directa con Death Program
+        const textTranslationsDirect = {
+            es: `Tu digimon evoluciona a DexDoruguremon.`,
+            en: `Your digimon evolves to DexDoruguremon.`
+        };
+        evolucionTexto.textContent = textTranslationsDirect[currentLanguage];
         return;
     }
     // FIN CASO ESPECIAL DEXDORUGUREMON
@@ -4265,8 +4323,8 @@ if (mejoresDigimons.length >= 2) {
         } else {
             // Caso de comida o program correctos - evolución directa
             const textTranslationsBakemonDirect = {
-                es: "Tu digi evoluciona a Bakemon LT.",
-                en: "Your digi evolves to Bakemon LT."
+                es: "Tu digimon evoluciona a Bakemon LT.",
+                en: "Your digimon evolves to Bakemon LT."
             };
             evolucionTexto.textContent = textTranslationsBakemonDirect[currentLanguage];
         }
@@ -4280,8 +4338,8 @@ if (mejoresDigimons.length >= 2) {
     if (shoutmonSHResult && shoutmonStarResult) {
         // Ambos tienen puntaje 3, mostrar mensaje de 50% de probabilidad
         const textTranslationsShoutmon50 = {
-            es: "Tu Digi tiene 50% de probabilidad de evolucionar en Shoutmon SH o Shoutmon + Star Sword.",
-            en: "Your Digi has a 50% chance of evolving to Shoutmon SH or Shoutmon + Star Sword."
+            es: "Tu digimon tiene 50% de probabilidad de evolucionar en Shoutmon SH o Shoutmon + Star Sword.",
+            en: "Your digimon has a 50% chance of evolving to Shoutmon SH or Shoutmon + Star Sword."
         };
         evolucionTexto.textContent = textTranslationsShoutmon50[currentLanguage];
         return;

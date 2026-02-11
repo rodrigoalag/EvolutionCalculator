@@ -1392,9 +1392,42 @@ const specialDigimonConfig = {
   }
 },
 "DexDoruguremon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program"]
+  requisitosOrigen: {
+    "Dorugamon": {
+      gruposColumnas: {
+        "No se considera en el puntaje": ["Peso"],
+        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program"]
+      },
+      valores: {
+        "Peso": "36",
+        "% Entrenamiento": "50-100%",
+        "Errores Minimos": "6",
+        "Combates Minimos": "30",
+        "Vinculo al momento de evolucionar": "-50%",
+        "Program": "Death"
+      },
+      placeholder: true
+    },
+    "DexDorugamon": {
+      gruposColumnas: {
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos"],
+        "Requisitos Obligatorios": ["Combates Minimos"]
+      },
+      valores: {
+        "Peso": "36",
+        "% Entrenamiento": "100%",
+        "Errores Minimos": "0-6",
+        "Combates Minimos": "30"
+      }
+    },
+    "Doruguremon": {
+      gruposColumnas: {
+        "Requisitos Obligatorios": ["Program"]
+      },
+      valores: {
+        "Program": "Death"
+      }
+    }
   }
 },
 "Raptordramon":  {
@@ -1532,7 +1565,7 @@ const camposVaciosPorEvolucion = {
         "Con Bonus": ["WinRate", "Combates Minimos"]       // Variante con bonus, sin WinRate ni Combates
     },
     "DexDoruguremon": {
-        "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida"],  // Solo necesita: Combates Minimos 30, % Entrenamiento 100, Peso 36, Errores 0-6, Program
+        "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida", "Program"],  // Solo necesita: Combates Minimos 30, % Entrenamiento 100, Peso 36, Errores 0-6
         "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]  // Solo necesita Death Program
     },
     "Wargreymon": {
@@ -1695,7 +1728,7 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
 
       // Desde DexDorugamon: Peso, Entrenamiento, Errores dan +1/0; Combates es obligatorio 0/-10
       if (evolucionActual === "DexDorugamon") {
-        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Error Maximo" || campo === "Errores Minimos") {
+        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Errores Minimos") {
           return { cumple: 1, noCumple: 0 };
         }
         if (campo === "Combates Minimos") {
@@ -1703,9 +1736,20 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
         }
       }
 
-      // Desde Dorugamon o Doruguremon: evolución al azar, no usar puntajes tradicionales
-      if (campo === "% Entrenamiento" || campo === "Program" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar") {
+      // Desde Doruguremon: solo Program, todo lo demás no aplica
+      if (evolucionActual === "Doruguremon") {
+        if (campo === "Program") {
+          return { cumple: 0, noCumple: -10 };
+        }
         return { cumple: 0, noCumple: 0, ocultar: true };
+      }
+
+      // Desde Dorugamon: misma lógica que SkullGreymon (evolución probabilística)
+      if (evolucionActual === "Dorugamon") {
+        // Todos los requisitos obligatorios deben cumplirse para tener chance
+        if (campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar" || campo === "Program") {
+          return { cumple: 0, noCumple: -10 };
+        }
       }
     }
   }
@@ -2720,11 +2764,29 @@ if (tieneRequisitosOrigen) {
       tdOrigen.textContent = origen;
       trDatos.appendChild(tdOrigen);
 
+      // Contar total de campos en todos los grupos para determinar si mostrar puntajes
+      const totalCamposSinDigimon = Object.values(gruposOrigen).reduce((sum, c) => sum + c.length, 0);
+      const mostrarPuntaje = !config.placeholder && totalCamposSinDigimon > 1;
+
       Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
         campos.forEach(campo => {
           const td = document.createElement("td");
           const valor = config.valores?.[campo];
-          td.textContent = valor !== undefined ? valor : "-";
+
+          let puntajeHTML = "";
+          if (mostrarPuntaje) {
+            if (nombreGrupo === "Quota/Key Points") {
+              puntajeHTML = formatearPuntajeConColor({ cumple: 1, noCumple: 0 });
+            } else if (nombreGrupo === "Requisitos Obligatorios") {
+              puntajeHTML = formatearPuntajeConColor({ cumple: 0, noCumple: -10 });
+            }
+          }
+
+          if (valor !== undefined && valor !== "-") {
+            td.innerHTML = valor + puntajeHTML;
+          } else {
+            td.textContent = "-";
+          }
           trDatos.appendChild(td);
         });
       });

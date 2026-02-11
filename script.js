@@ -261,8 +261,8 @@ const SideEvolutionSelected = {
 // Campos a ocultar de evoluciones específicas según el origen seleccionado
 const ocultarCamposPorOrigen = {
   "DexDoruguremon": {
-    "DexDorugamon": ["Errores Minimos", "Vinculo al momento de evolucionar", "Comida"],
-    "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]
+    "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida", "Program"],  // Solo necesita: Peso, % Entrenamiento, Errores Minimos, Combates Minimos
+    "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]  // Solo necesita: Program
   }
 };
 

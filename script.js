@@ -261,8 +261,8 @@ const SideEvolutionSelected = {
 // Campos a ocultar de evoluciones específicas según el origen seleccionado
 const ocultarCamposPorOrigen = {
   "DexDoruguremon": {
-    "DexDorugamon": ["Errores Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"],
-    "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo"]
+    "DexDorugamon": ["Errores Minimos", "Vinculo al momento de evolucionar", "Comida"],
+    "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]
   }
 };
 
@@ -2515,20 +2515,17 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                     console.log("🔮 DexDoruguremon - No todos los campos obligatorios cumplidos: -10 puntos");
                 }
 
-                // Evaluar Program y Comida (al menos uno debe cumplirse)
+                // Evaluar Program (requisito obligatorio)
                 const programCorrecto = inputValues["Program"] &&
                     inputValues["Program"].toLowerCase() === requisitos["Program"].toLowerCase();
-                const comidaCorrecta = inputValues["Comida"] &&
-                    inputValues["Comida"].toLowerCase() === requisitos["Comida"].toLowerCase();
 
                 console.log(`🔮 DexDoruguremon - Program correcto: ${programCorrecto}`);
-                console.log(`🔮 DexDoruguremon - Comida correcta: ${comidaCorrecta}`);
 
-                if (programCorrecto || comidaCorrecta) {
-                    console.log("🔮 DexDoruguremon - Al menos Program o Comida cumplidos: +0 puntos");
+                if (programCorrecto) {
+                    console.log("🔮 DexDoruguremon - Program cumplido: +0 puntos");
                 } else {
                     puntaje += -10;
-                    console.log("🔮 DexDoruguremon - Ni Program ni Comida cumplidos: -10 puntos");
+                    console.log("🔮 DexDoruguremon - Program no cumplido: -10 puntos");
                 }
                 dexDoruguremonEvaluated = true;
             } else if (selectedNormalizado === "doruguremon") {
@@ -2634,6 +2631,18 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                     return `<td class="detail-column">${errores <= 6 ? 1 : 0}</td>`;
                 }
                 if (["Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
+                    return `<td class="detail-column">-</td>`;
+                }
+            }
+            // Desde Doruguremon - Solo Program aplica, todos los demás campos muestran "-"
+            if (selectedNorm === "doruguremon") {
+                if (field === "Program") {
+                    const programCorrecto = inputValues["Program"] &&
+                        inputValues["Program"].toLowerCase() === "death";
+                    return `<td class="detail-column">${programCorrecto ? 5 : -10}</td>`;
+                }
+                // Todos los demás campos no aplican desde Doruguremon
+                if (["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"].includes(field)) {
                     return `<td class="detail-column">-</td>`;
                 }
             }

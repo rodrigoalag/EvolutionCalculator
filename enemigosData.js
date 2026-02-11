@@ -511,7 +511,7 @@ const enemigosData = [
     digimon: "Starmon",
     nickName: "Seiya",
     niveles: [4],
-    entrenamientos: ["60-100"],
+    entrenamientos: ["70-100"],
     errores: "0-6",
     boss: true,
     itemDrop: [
@@ -522,7 +522,7 @@ const enemigosData = [
     digimon: "Gigantic Numemon",
     nickName: "Gigantic Numemon",
     niveles: [4],
-    entrenamientos: ["60-100"],
+    entrenamientos: ["70-100"],
     errores: "0-6",
     boss: true,
     itemDrop: [

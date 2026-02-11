@@ -1394,14 +1394,7 @@ const specialDigimonConfig = {
 "DexDoruguremon":  {
   gruposColumnas: {
     "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program o Comida"]
-  },
-  procesarCampos: function(digimon) {
-    const procesado = {...digimon};
-    if (digimon.Program && digimon.Comida) {
-      procesado["Program o Comida"] = "Death o Carne X";
-    }
-    return procesado;
+    "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program"]
   }
 },
 "Raptordramon":  {
@@ -1539,8 +1532,8 @@ const camposVaciosPorEvolucion = {
         "Con Bonus": ["WinRate", "Combates Minimos"]       // Variante con bonus, sin WinRate ni Combates
     },
     "DexDoruguremon": {
-        "DexDorugamon": ["Vinculo al momento de evolucionar", "Program o Comida", "Program", "Comida"],  // Solo necesita: Combates Minimos 30, % Entrenamiento 100, Peso 36, Errores 0-6
-        "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo"]  // Solo necesita Death Program
+        "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida"],  // Solo necesita: Combates Minimos 30, % Entrenamiento 100, Peso 36, Errores 0-6, Program
+        "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]  // Solo necesita Death Program
     },
     "Wargreymon": {
         "Metal Greymon": ["Peso", "% Entrenamiento", "Error Maximo", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]  // Requisitos no claros
@@ -1711,7 +1704,7 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
       }
 
       // Desde Dorugamon o Doruguremon: evolución al azar, no usar puntajes tradicionales
-      if (campo === "% Entrenamiento" || campo === "Program o Comida" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar") {
+      if (campo === "% Entrenamiento" || campo === "Program" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar") {
         return { cumple: 0, noCumple: 0, ocultar: true };
       }
     }

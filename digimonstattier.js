@@ -328,6 +328,6 @@ const digimonstattier = {
     "ATK": 210, "DEF": 130, "HP": 2300, "Vel": 130, "Digipuntos": 70.0, "Evoluciona": ["Grademon VICE","Burpmon"], "Viene": ["Raptordramon"]
   },
   "Grademon VICE": {
-    "ATK": 210, "DEF": 130, "HP": 2300, "Vel": 130, "Digipuntos": 70.0, "Evoluciona": ["Burpmon"], "Viene": ["Grademon"]
+    "ATK": 245, "DEF": 125, "HP": 2000, "Vel": 130, "Digipuntos": 70.0, "Evoluciona": ["Burpmon"], "Viene": ["Grademon"]
   }, 
 };

@@ -428,8 +428,7 @@ const digimonReqDict = {
   },
      "Grademon": {
 	"ID": "154", "Tama": "PR", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Guerrero", "Peso": 36,
-	"% Entrenamiento": 100, "Error Maximo": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100,
-	"Tienes registrado a DexDoruguremon y Doruguremon?": "Si"
+	"% Entrenamiento": 100, "Error Maximo": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100
   },
      "Grademon VICE": {
 	"ID": "174", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "Guerrero", "Peso": 36,

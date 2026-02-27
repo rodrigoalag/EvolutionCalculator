@@ -435,7 +435,7 @@ const digimonReqDict = {
   "Error Maximo": 6, "Vinculo Minimo alcanzado": -50
   },
   "Penmon": {
-	"ID": 179, "Tama": "SP", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Hielo",
+	"ID": 179, "Tama": "SP", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Hielo", "Peso": 15,
     "Xross":"Ice Spirit A o Ice Spirit H + Ice Spirit B"
   },
 };

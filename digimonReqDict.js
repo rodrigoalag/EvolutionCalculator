@@ -190,7 +190,7 @@ const digimonReqDict = {
   },
     "GigaWaruMonzaemon": {
 	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Compuesto",
-	"Xross":"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"
+	"Xross":"3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon"
   }, 
     "Metal Tyranomon": {
 	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
@@ -433,5 +433,9 @@ const digimonReqDict = {
      "Grademon VICE": {
 	"ID": "174", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "Guerrero", "Peso": 36,
   "Error Maximo": 6, "Vinculo Minimo alcanzado": -50
+  },
+  "Penmon": {
+	"ID": 179, "Tama": "SP", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Hielo",
+    "Xross":"Ice Spirit A o Ice Spirit H + Ice Spirit B"
   },
 };

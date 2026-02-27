@@ -28,6 +28,49 @@
   flex: 1;
   text-align: center;
   min-width: 300px;
+  position: relative;
+}
+
+/* Contenedor de la galería de imágenes */
+.image-gallery-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Botones de navegación de imágenes */
+.image-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  z-index: 10;
+}
+
+.image-nav-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.image-nav-btn.prev {
+  left: -16px;
+}
+
+.image-nav-btn.next {
+  right: -16px;
+}
+
+.image-nav-btn.visible {
+  display: flex;
 }
 
 /* Estilos mejorados para las imágenes de Digimon */
@@ -746,7 +789,11 @@ main {
       <div id="imagePlaceholder">
         <p>Selecciona un Digimon para ver su imagen</p>
       </div>
-      <img id="digimonImage" alt="Imagen del Digimon" style="display: none;" />
+      <div class="image-gallery-container">
+        <button class="image-nav-btn prev" id="imgPrevBtn" onclick="navegarImagen(-1)">◀</button>
+        <img id="digimonImage" alt="Imagen del Digimon" style="display: none;" />
+        <button class="image-nav-btn next" id="imgNextBtn" onclick="navegarImagen(1)">▶</button>
+      </div>
     </div>
 
     <div class="digimon-tables">
@@ -1410,8 +1457,7 @@ const specialDigimonConfig = {
     },
     "DexDorugamon": {
       gruposColumnas: {
-        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos"],
-        "Requisitos Obligatorios": ["Combates Minimos"]
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos", "Combates Minimos"]
       },
       valores: {
         "Peso": "36",
@@ -1726,13 +1772,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     if (nombreDigimon === "DexDoruguremon") {
       const evolucionActual = window.currentEvolutionDigimon;
 
-      // Desde DexDorugamon: Peso, Entrenamiento, Errores dan +1/0; Combates es obligatorio 0/-10
+      // Desde DexDorugamon: Peso, Entrenamiento, Errores, Combates dan +1/0
       if (evolucionActual === "DexDorugamon") {
-        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Errores Minimos") {
+        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Combates Minimos") {
           return { cumple: 1, noCumple: 0 };
-        }
-        if (campo === "Combates Minimos") {
-          return { cumple: 0, noCumple: -10 };
         }
       }
 
@@ -1865,6 +1908,75 @@ function formatearPuntajeConColor(puntaje) {
   const tablaRequisitos = document.querySelector("#tablaRequisitos tbody");
   const digimonImage = document.getElementById("digimonImage");
   const imagePlaceholder = document.getElementById("imagePlaceholder");
+  const imgPrevBtn = document.getElementById("imgPrevBtn");
+  const imgNextBtn = document.getElementById("imgNextBtn");
+
+  // Variables para la galería de imágenes
+  let imagenesDisponibles = [];
+  let indiceImagenActual = 0;
+  let nombreDigimonActual = '';
+
+  // Función para detectar imágenes adicionales (nombre2.png, nombre3.png, etc.)
+  function detectarImagenesAdicionales(nombreBase, rutaBase, callback) {
+    const imagenes = [rutaBase]; // La imagen principal ya encontrada
+    let numeroActual = 2;
+    const maxImagenes = 10; // Límite de búsqueda
+
+    const buscarSiguiente = () => {
+      if (numeroActual > maxImagenes) {
+        callback(imagenes);
+        return;
+      }
+
+      // Extraer el nombre sin extensión y carpeta
+      const nombreSinExt = rutaBase.replace('.png', '').replace('img/', '');
+      const rutaAdicional = `img/${nombreSinExt}${numeroActual}.png`;
+
+      const imgTest = new Image();
+      imgTest.onload = function() {
+        imagenes.push(rutaAdicional);
+        numeroActual++;
+        buscarSiguiente();
+      };
+      imgTest.onerror = function() {
+        // No hay más imágenes, terminar
+        callback(imagenes);
+      };
+      imgTest.src = rutaAdicional;
+    };
+
+    buscarSiguiente();
+  }
+
+  // Función para navegar entre imágenes
+  function navegarImagen(direccion) {
+    if (imagenesDisponibles.length <= 1) return;
+
+    indiceImagenActual += direccion;
+
+    // Navegación cíclica
+    if (indiceImagenActual < 0) {
+      indiceImagenActual = imagenesDisponibles.length - 1;
+    } else if (indiceImagenActual >= imagenesDisponibles.length) {
+      indiceImagenActual = 0;
+    }
+
+    digimonImage.src = imagenesDisponibles[indiceImagenActual];
+  }
+
+  // Función para actualizar visibilidad de botones de navegación
+  function actualizarBotonesNavegacion() {
+    if (imagenesDisponibles.length > 1) {
+      imgPrevBtn.classList.add('visible');
+      imgNextBtn.classList.add('visible');
+    } else {
+      imgPrevBtn.classList.remove('visible');
+      imgNextBtn.classList.remove('visible');
+    }
+  }
+
+  // Hacer navegarImagen global para onclick
+  window.navegarImagen = navegarImagen;
 
   const uniqueValues = (array) => [...new Set(array)];
 
@@ -1942,7 +2054,7 @@ function formatearPuntajeConColor(puntaje) {
 		"Chatarra": "Chatarra",
 		"Starmon o ShootingStarmon Driver": "Starmon o ShootingStarmon Driver",
 		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon y DarkSuperStarmon Driver",
-		"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon": "3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon",
+		"3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon": "3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon",
 		"Vel":"Vel",
 		    campos: {
       "Peso": "Rango de peso",
@@ -2054,7 +2166,7 @@ function formatearPuntajeConColor(puntaje) {
 		"Chatarra": "Metal Scrap",
 		"Starmon o ShootingStarmon Driver": "Starmon or ShootingStarmon Driver",
 		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon and DarkSuperStarmon Driver",
-		"3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon": "3 Monzaemon Driver in WaruMonzaemon or 3 WaruMonzaemon Driver in Monzaemon",
+		"3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon": "3 Monzaemon Driver in WaruMonzaemon or 1 WaruMonzaemon + 2 Monzaemon Driver in Monzaemon",
 		"Vel":"SPD",
 		    campos: {
       "Peso": "Weight Range",
@@ -2329,6 +2441,16 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       elementoImg.src = ruta;
       elementoImg.style.display = 'block';
       imagePlaceholder.style.display = 'none';
+
+      // Detectar imágenes adicionales para la galería
+      nombreDigimonActual = nombre;
+      indiceImagenActual = 0;
+      detectarImagenesAdicionales(nombre, ruta, (imagenes) => {
+        imagenesDisponibles = imagenes;
+        console.log(`📸 Imágenes disponibles para ${nombre}:`, imagenes);
+        actualizarBotonesNavegacion();
+      });
+
       if (callback) callback(true, ruta);
     };
     imgTest.onerror = function() {
@@ -2338,7 +2460,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     };
     imgTest.src = ruta;
   };
-  
+
   intentarSiguiente();
 }
 
@@ -2360,6 +2482,8 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     // Mostrar placeholder cuando se cambie Tama
     digimonImage.style.display = 'none';
     imagePlaceholder.style.display = 'flex';
+    imagenesDisponibles = [];
+    actualizarBotonesNavegacion();
 
     const tamSelected = selectTama.value;
     if (!tamSelected) return;
@@ -2386,6 +2510,8 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     // Mostrar placeholder cuando se cambie Nivel
     digimonImage.style.display = 'none';
     imagePlaceholder.style.display = 'flex';
+    imagenesDisponibles = [];
+    actualizarBotonesNavegacion();
 
     const tamSelected = selectTama.value;
     const nivelSelected = parseInt(selectNivel.value);
@@ -2411,6 +2537,8 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       // Si no hay selección, mostrar placeholder y limpiar tablas
       digimonImage.style.display = 'none';
       imagePlaceholder.style.display = 'flex';
+      imagenesDisponibles = [];
+      actualizarBotonesNavegacion();
       tablaGenerales.innerHTML = "";
       tablaHeaders.innerHTML = "";
       tablaRequisitos.innerHTML = "";

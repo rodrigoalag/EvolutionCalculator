@@ -137,6 +137,17 @@ const enemigosData = [
       { item: "Caja Basica", cantidad: 1 }
     ]
   },
+      {
+    digimon: "AeroVDramonBlack",
+    nickName: "1nst1g4t0r",
+    niveles: "todos",
+    entrenamientos: "todos",
+    errores: "1-6",
+    itemDrop: [
+      { tipo: "driverGenerico", cantidad: 2 },
+      { tipo: "bits", cantidad: 500 }
+    ]
+  },
   {
     digimon: "Bacomon Liston",
     nickName: "Bacomon Liston",
@@ -229,6 +240,36 @@ const enemigosData = [
     ]
   },
   {
+    digimon: "Betamon",
+    nickName: "SpookyFishy",
+    niveles: [3],
+    entrenamientos: ["60-100"],
+    errores: "0-6",
+    itemDrop: [
+      { item: "DigiTruchaNegra", cantidad: 1 }
+    ]
+  },
+  {
+    digimon: "Mushmon",
+    nickName: "Shemage",
+    niveles: [3],
+    entrenamientos: ["60-100"],
+    errores: "6",
+    diaSemana: "lunes",
+    itemDrop: [ { item: "HongoExtraño", cantidad: 1 } ]
+  },
+  {
+    digimon: "Dorumon",
+    nickName: "DORUmon",
+    niveles: [3],
+    entrenamientos: ["60-100"],
+    errores: "6",
+    diaSemana: "lunes",
+    entreno100: true,
+    itemDrop: [{ item: "Clave Prototipo", cantidad: 1 }]
+  },
+
+  {
     digimon: "CardmonChild",
     nickName: "Cardmon Child",
     niveles: [3],
@@ -238,6 +279,7 @@ const enemigosData = [
       { item: "Booster C (C)", cantidad: 1 }
     ]
   },
+
   // Bosses Child - Solo aparecen con 80%+ de entrenamiento
   {
     digimon: "Botamon",
@@ -576,6 +618,7 @@ const enemigosData = [
       { tipo: "driver", driver: "BO002", cantidad: 1 }
     ]
   },
+
   {
     digimon: "CardmonUltimate",
     nickName: "Cardmon Ultimate",

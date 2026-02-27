@@ -280,11 +280,12 @@ const crosstamaevo = {
   "Blizzarmon": ["Yukidarumon", "Icemon", "Polarbearmon"],
   "Chackmon": ["Yuki Agumon", "Icemon", "Yukidarumon"],
   "Daipenmon": ["Polarbearmon"],
-  "Ghostmon": ["Koromon", "Pickmon", "Dorimon"],
+  "Ghostmon": ["Koromon","Pickmon","Fluffymon","Dorimon"],
   "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon"],
   "Nanimon": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon"],
   "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"],
-  "Mushmon": ["Koromon","Pickmon"],
+  "Mushmon": ["Koromon","Pickmon","Fluffymon","Dorimon"],
+  "Penmon": ["Koromon","Pickmon","Fluffymon","Dorimon"],
 };
 
 const SideEvolutionlist = {
@@ -339,7 +340,7 @@ const PesoSet = new Set([
 
 
 const xrossSpecialNames = new Set([
-    "ShootingStarmon", "PlatinumNumemon"
+    "ShootingStarmon", "PlatinumNumemon", "Penmon"
 ]);
 const nivelAEtapa = {
   1: "Baby I",
@@ -428,8 +429,8 @@ const specialBatallasCases = {
 const xrossinstallop = {
     "Mamemon": ["3 Mamemon Driver"],
     "Starmons": ["4 Pickmon Driver", "Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"],
-    "Monzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"],
-    "WaruMonzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 3 WaruMonzaemon Driver en Monzaemon"],
+    "Monzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon"],
+    "WaruMonzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon"],
     "Black King Numemon": ["5 PlatinumScumon Driver"],
     "Megadramon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
 	"Gigadramon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
@@ -445,7 +446,11 @@ const xrossinstallop = {
     "Polarbearmon": ["Ice Spirit A", "Ice Spirit B + Ice Spirit H"], // Combinando ambos valores
     "Nanimon": ["1 Mamemon Driver"],
     "Shoutmon": ["Starmons Driver"],
-    "Shoutmon (Black)": ["Starmons Driver"]
+    "Shoutmon (Black)": ["Starmons Driver"],
+    "Koromon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
+    "Pickmon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
+    "Fluffymon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
+    "Dorimon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
 };
 //Lo mismo pero para driver equipado
 const driverEquipadoOp = {
@@ -2559,15 +2564,17 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                 const pesoActual = Number(inputValues["Peso"]) || 0;
                 const errores = Number(inputValues["Error Maximo"]) || 0;
 
-                // Requisito obligatorio: Combates Minimos >= 30
+                // Combates Minimos >= 30: +1 si cumple, 0 si no
                 const combatesCumplido = combatesMinimos >= 30;
 
                 console.log(`🔮 DexDoruguremon desde DexDorugamon:`);
-                console.log(`   - Combates (obligatorio): ${combatesCumplido} (${combatesMinimos} >= 30)`);
+                console.log(`   - Combates: ${combatesCumplido} (${combatesMinimos} >= 30)`);
 
-                if (!combatesCumplido) {
-                    puntaje += -10;
-                    console.log("🔮 DexDoruguremon - Combates NO cumplido: -10 puntos");
+                if (combatesCumplido) {
+                    puntaje += 1;
+                    console.log("🔮 DexDoruguremon - Combates cumplido: +1 punto");
+                } else {
+                    console.log("🔮 DexDoruguremon - Combates NO cumplido: 0 puntos");
                 }
 
                 // % Entrenamiento >= 100: +1 si cumple
@@ -2600,7 +2607,7 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
 
                 // Retornar puntaje individual para cada campo
                 if (field === "Combates Minimos") {
-                    return `<td class="detail-column">${combatesCumplido ? 0 : -10}</td>`;
+                    return `<td class="detail-column">${combatesCumplido ? 1 : 0}</td>`;
                 }
                 if (field === "% Entrenamiento") {
                     return `<td class="detail-column">${porcentajeEntrenamiento >= 100 ? 1 : 0}</td>`;
@@ -2628,7 +2635,7 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                 const errores = Number(inputValues["Error Maximo"]) || 0;
 
                 if (field === "Combates Minimos") {
-                    return `<td class="detail-column">${combatesMinimos >= 30 ? 0 : -10}</td>`;
+                    return `<td class="detail-column">${combatesMinimos >= 30 ? 1 : 0}</td>`;
                 }
                 if (field === "% Entrenamiento") {
                     return `<td class="detail-column">${porcentajeEntrenamiento >= 100 ? 1 : 0}</td>`;
@@ -3547,8 +3554,16 @@ else if (field === "Xross") {
 			punto = 0;
 		}
 	} else if (xrossSpecialNames.has(String(name))) {
-		// Para nombres en la lista especial: 1 si coincide, -10 si no
-		if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
+    //Case para childs de Spirits como Penmon
+    if (name==="Penmon"){
+      if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
+			punto = 3;
+		} else {
+			punto = -10;
+		}
+    }
+		// Para nombres en la lista especial: 1 si coincide, -10 si no. Case para casos de otras Xross
+		else if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
 			punto = 1;
 		} else {
 			punto = -10;

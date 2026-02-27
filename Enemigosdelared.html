@@ -178,6 +178,95 @@
   padding-bottom: 0.25rem;
 }
 
+/* Botón Build&Stats */
+.build-stats-btn {
+  background: linear-gradient(135deg, #4a90d9, #357abd);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.build-stats-btn:hover {
+  background: linear-gradient(135deg, #5a9fe9, #4589cd);
+  transform: scale(1.05);
+}
+
+.build-stats-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.5;
+}
+
+/* Modal Build&Stats */
+.build-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.build-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.build-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.build-modal-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  display: block;
+  border-radius: 8px;
+}
+
+.build-modal-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 36px;
+  height: 36px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  transition: background 0.2s ease;
+}
+
+.build-modal-close:hover {
+  background: #ff6666;
+}
+
 /* Texto informativo */
 .info-text {
   text-align: center;
@@ -269,7 +358,15 @@
     </select>
   </header>
 
-  <main>
+  <!-- Modal para Build&Stats -->
+<div id="buildModal" class="build-modal-overlay">
+  <div class="build-modal-content">
+    <button class="build-modal-close" onclick="cerrarBuildModal()">&times;</button>
+    <img id="buildModalImg" src="" alt="Build & Stats">
+  </div>
+</div>
+
+<main>
     <div class="container">
       <div class="info-text">
         <p id="infoText1">Esta pagina contiene los enemigos de la red del juego. Estan divididos por nivel y porcentaje de entrenamiento.</p>
@@ -305,6 +402,147 @@
     // Sistema de traducciones
     let currentLanguage = 'es';
 
+    // Funciones para el modal Build&Stats
+    function formatearErroresParaArchivo(errores) {
+      // Convierte "0-6" a "06", "3-6" a "36", "6" a "6"
+      if (!errores) return '';
+      return errores.replace(/-/g, '').replace(/\./g, '');
+    }
+
+    function formatearEntrenamientoParaArchivo(entrenamiento) {
+      // Convierte "0-39.99" a "03999", "40-59.99" a "405999", etc.
+      if (!entrenamiento) return '';
+      return entrenamiento.replace(/-/g, '').replace(/\./g, '');
+    }
+
+    // Mapeo de número de nivel a nombre para archivos
+    const nivelNombreArchivo = {
+      3: 'Child',
+      4: 'Adult',
+      5: 'Perfect'
+    };
+
+    function buscarImagenNPC(digimon, nivel, errores, entrenamiento) {
+      // Normalizar nombre del digimon para el archivo
+      const nombreNormalizado = normalizarCaracteres(digimon).replace(/\s+/g, '');
+      const nivelNombre = nivelNombreArchivo[nivel] || '';
+      const erroresFormateados = formatearErroresParaArchivo(errores);
+      const entrenamientoFormateado = formatearEntrenamientoParaArchivo(entrenamiento);
+
+      // Generar posibles nombres de archivo, del más específico al menos específico
+      const variaciones = [];
+
+      // Con nivel específico (más específico primero)
+      if (nivelNombre) {
+        // 1. Nombre + Nivel + errores + entrenamiento
+        if (erroresFormateados && entrenamientoFormateado) {
+          variaciones.push(`${nombreNormalizado}${nivelNombre}${erroresFormateados}${entrenamientoFormateado}`);
+        }
+        // 2. Nombre + Nivel + errores
+        if (erroresFormateados) {
+          variaciones.push(`${nombreNormalizado}${nivelNombre}${erroresFormateados}`);
+        }
+        // 3. Nombre + Nivel
+        variaciones.push(`${nombreNormalizado}${nivelNombre}`);
+      }
+
+      // Sin nivel (genérico, aplica para todos los niveles)
+      // 4. Nombre + errores + entrenamiento
+      if (erroresFormateados && entrenamientoFormateado) {
+        variaciones.push(`${nombreNormalizado}${erroresFormateados}${entrenamientoFormateado}`);
+      }
+      // 5. Nombre + errores
+      if (erroresFormateados) {
+        variaciones.push(`${nombreNormalizado}${erroresFormateados}`);
+      }
+      // 6. Solo nombre (aplica para todos)
+      variaciones.push(nombreNormalizado);
+
+      return variaciones;
+    }
+
+    function abrirBuildModal(digimon, nivel, errores, entrenamiento) {
+      const modal = document.getElementById('buildModal');
+      const img = document.getElementById('buildModalImg');
+      const variaciones = buscarImagenNPC(digimon, nivel, errores, entrenamiento);
+
+      let indice = 0;
+
+      const intentarCargar = () => {
+        if (indice >= variaciones.length) {
+          console.log(`No se encontró imagen de NPC para ${digimon}`);
+          alert(`${t('buildStatsNotFound')} ${digimon}`);
+          return;
+        }
+
+        const nombreArchivo = variaciones[indice];
+        const ruta = `NPCS/${nombreArchivo}.png`;
+
+        const imgTest = new Image();
+        imgTest.onload = function() {
+          console.log(`Imagen NPC encontrada: ${ruta}`);
+          img.src = ruta;
+          img.alt = `Build & Stats - ${digimon}`;
+          modal.classList.add('active');
+        };
+        imgTest.onerror = function() {
+          indice++;
+          intentarCargar();
+        };
+        imgTest.src = ruta;
+      };
+
+      intentarCargar();
+    }
+
+    function cerrarBuildModal() {
+      const modal = document.getElementById('buildModal');
+      modal.classList.remove('active');
+    }
+
+    // Verificar si existe imagen de NPC (callback con true/false)
+    function verificarImagenNPC(digimon, nivel, errores, entrenamiento, callback) {
+      const variaciones = buscarImagenNPC(digimon, nivel, errores, entrenamiento);
+      let indice = 0;
+
+      const verificarSiguiente = () => {
+        if (indice >= variaciones.length) {
+          callback(false);
+          return;
+        }
+
+        const nombreArchivo = variaciones[indice];
+        const ruta = `NPCS/${nombreArchivo}.png`;
+
+        const imgTest = new Image();
+        imgTest.onload = function() {
+          callback(true);
+        };
+        imgTest.onerror = function() {
+          indice++;
+          verificarSiguiente();
+        };
+        imgTest.src = ruta;
+      };
+
+      verificarSiguiente();
+    }
+
+    // Cerrar modal al hacer clic fuera de la imagen
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('buildModal');
+      if (e.target === modal) {
+        cerrarBuildModal();
+      }
+    });
+
+    // Cerrar modal con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        cerrarBuildModal();
+      }
+    });
+
     const traducciones = {
       es: {
         pageTitle: "Enemigos de la Red",
@@ -314,7 +552,21 @@
         downloadBtn: "Descargar Imagen",
         generating: "Generando...",
         downloadError: "Error al generar imagen. Intenta de nuevo.",
-        localError: "La descarga de imagen no funciona en modo local (file://). Esta función estará disponible en la versión web (GitHub Pages)."
+        localError: "La descarga de imagen no funciona en modo local (file://). Esta función estará disponible en la versión web (GitHub Pages).",
+        buildStatsBtn: "Build & Stats",
+        buildStatsNotFound: "No se encontró imagen de Build&Stats para",
+        diasSemana: {
+          lunes: "Lunes",
+          martes: "Martes",
+          miercoles: "Miércoles",
+          jueves: "Jueves",
+          viernes: "Viernes",
+          sabado: "Sábado",
+          domingo: "Domingo",
+          finDeSemana: "Sábado, Domingo"
+        },
+        soloAparece: "📅 Solo aparece los",
+        entreno100: "⚠️ Solo aparece en 100% de entreno"
       },
       en: {
         pageTitle: "Network Enemies",
@@ -324,7 +576,21 @@
         downloadBtn: "Download Image",
         generating: "Generating...",
         downloadError: "Error generating image. Try again.",
-        localError: "Image download does not work in local mode (file://). This feature will be available in the web version (GitHub Pages)."
+        localError: "Image download does not work in local mode (file://). This feature will be available in the web version (GitHub Pages).",
+        buildStatsBtn: "Build & Stats",
+        buildStatsNotFound: "Build&Stats image not found for",
+        diasSemana: {
+          lunes: "Monday",
+          martes: "Tuesday",
+          miercoles: "Wednesday",
+          jueves: "Thursday",
+          viernes: "Friday",
+          sabado: "Saturday",
+          domingo: "Sunday",
+          finDeSemana: "Saturday, Sunday"
+        },
+        soloAparece: "📅 Only appears on",
+        entreno100: "⚠️ Only appears at 100% training"
       }
     };
 
@@ -379,7 +645,8 @@
       "Zanahoria": "Carrot",
       "Booster C (C)": "Booster C (C)",
       "Booster C (A)": "Booster C (A)",
-      "Booster C (P)": "Booster C (P)"
+      "Booster C (P)": "Booster C (P)",
+      "Clave Prototipo": "Prototype Key"
     };
 
     // Crear mapa normalizado para búsquedas sin importar mayúsculas/minúsculas
@@ -623,7 +890,7 @@
     }
 
     // Función para renderizar un enemigo
-    function renderEnemigo(enemigo) {
+    function renderEnemigo(enemigo, nivelSeleccionado) {
       const enemyContainer = document.createElement('div');
       enemyContainer.className = 'enemy-container';
 
@@ -669,19 +936,58 @@
         digimonInfo.appendChild(bossSpan);
       }
 
-      // Fin de semana - leyenda especial
-      if (enemigo.finDeSemana) {
-        const finDeSemanaSpan = document.createElement('span');
-        finDeSemanaSpan.className = 'digimon-fds';
-        finDeSemanaSpan.textContent = currentLanguage === 'es'
-          ? '📅 Solo aparece los fines de semana (Sábado, Domingo)'
-          : '📅 Only appears on weekends (Saturday, Sunday)';
-        digimonInfo.appendChild(finDeSemanaSpan);
+      // Entreno 100% - leyenda especial
+      if (enemigo.entreno100) {
+        const entreno100Span = document.createElement('span');
+        entreno100Span.className = 'digimon-boss';
+        entreno100Span.textContent = t('entreno100');
+        digimonInfo.appendChild(entreno100Span);
+      }
+
+      // Día de semana específico - leyenda especial
+      if (enemigo.diaSemana || enemigo.finDeSemana) {
+        const diaSemanaSpan = document.createElement('span');
+        diaSemanaSpan.className = 'digimon-fds';
+
+        // Obtener los días a mostrar
+        let dias = enemigo.diaSemana;
+        if (enemigo.finDeSemana) {
+          dias = "finDeSemana";
+        }
+
+        // Convertir a array si es string
+        const diasArray = Array.isArray(dias) ? dias : [dias];
+
+        // Traducir los días
+        const diasTraducidos = diasArray.map(dia =>
+          traducciones[currentLanguage].diasSemana[dia] || dia
+        ).join(', ');
+
+        diaSemanaSpan.textContent = `${t('soloAparece')} ${diasTraducidos}`;
+        digimonInfo.appendChild(diaSemanaSpan);
       }
 
       // Drops
       const enemyDrops = document.createElement('div');
       enemyDrops.className = 'enemy-drops';
+
+      // Botón Build&Stats (antes de Drops) - solo si existe imagen
+      const entrenamientoActual = document.getElementById('entrenamientoSelect').value;
+      const buildStatsBtn = document.createElement('button');
+      buildStatsBtn.className = 'build-stats-btn';
+      buildStatsBtn.textContent = t('buildStatsBtn');
+      buildStatsBtn.style.display = 'none'; // Oculto por defecto
+      buildStatsBtn.onclick = () => {
+        abrirBuildModal(enemigo.digimon, nivelSeleccionado, enemigo.errores, entrenamientoActual);
+      };
+      enemyDrops.appendChild(buildStatsBtn);
+
+      // Verificar si existe imagen para mostrar el botón
+      verificarImagenNPC(enemigo.digimon, nivelSeleccionado, enemigo.errores, entrenamientoActual, (existe) => {
+        if (existe) {
+          buildStatsBtn.style.display = 'block';
+        }
+      });
 
       // Título "Drops"
       const dropsTitle = document.createElement('div');
@@ -749,6 +1055,39 @@
 
           dropEntry.appendChild(driverContainer);
           dropEntry.appendChild(dropName);
+        } else if (dropData.tipo === "driverGenerico") {
+          // Driver genérico (sin fondo de color, solo la imagen driver.png)
+          const cantidad = dropData.cantidad || 1;
+
+          const driverImg = document.createElement('img');
+          driverImg.src = 'itemimg/Driver.png';
+          driverImg.alt = 'Driver';
+          driverImg.title = 'Driver';
+          driverImg.style.width = '48px';
+          driverImg.style.height = '48px';
+          driverImg.style.objectFit = 'contain';
+
+          const dropName = document.createElement('span');
+          dropName.className = 'drop-name';
+          dropName.textContent = `Driver x${cantidad}`;
+
+          dropEntry.appendChild(driverImg);
+          dropEntry.appendChild(dropName);
+        } else if (dropData.tipo === "bits") {
+          // Bits (solo texto, sin imagen)
+          const cantidad = dropData.cantidad || 0;
+
+          const bitsIcon = document.createElement('span');
+          bitsIcon.textContent = '💰';
+          bitsIcon.style.fontSize = '2rem';
+          bitsIcon.style.marginRight = '0.25rem';
+
+          const dropName = document.createElement('span');
+          dropName.className = 'drop-name';
+          dropName.textContent = `${cantidad} Bits`;
+
+          dropEntry.appendChild(bitsIcon);
+          dropEntry.appendChild(dropName);
         } else {
           // Item normal
           const itemName = dropData.item || dropData;
@@ -807,7 +1146,7 @@
       );
 
       for (const enemigo of filteredData) {
-        container.appendChild(renderEnemigo(enemigo));
+        container.appendChild(renderEnemigo(enemigo, nivelSeleccionado));
       }
 
       // Si no hay datos, mostrar mensaje

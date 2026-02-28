@@ -438,4 +438,14 @@ const digimonReqDict = {
 	"ID": 179, "Tama": "SP", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Hielo", "Peso": 15,
     "Xross":"Ice Spirit A o Ice Spirit H + Ice Spirit B"
   },
+  "Kekomon": {
+	"ID": 175, "Tama": "BG", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5
+  },
+  "Kekkomon": {
+	"ID": 176, "Tama": "BG", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 10
+  },
+    "Gekkomon": {
+	"ID": 177, "Tama": "BG", "Nivel": 3, "Atributo": "Data", "Tipo": "Dinosaurio",
+    "Peso": 18, "Error Maximo": 6
+  },
 };

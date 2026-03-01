@@ -394,7 +394,7 @@ const digimonReqDict = {
   }, 
      "BlackWargreymon": {
 	"ID": 171, "Tama": "D", "Nivel": 6, "Atributo": "Virus", "Tipo": "Dragon","Peso": 30,
-	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 300, "Victorias": 175
+	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias": 140
   },
      "Dodomon": {
 	"ID": "146", "Tama": "PR", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5

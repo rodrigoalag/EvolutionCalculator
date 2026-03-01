@@ -1562,21 +1562,21 @@ const specialEntrenamientoCases = {
 
 const specialVictoriasCases = {
     "Wargreymon": {
-        "Metal Greymon": 100,
+        "Metal Greymon": 140,
         "MetalGreymon Alterous": 175
     }
 };
 
 const specialBatallasCases = {
     "Wargreymon": {
-        "Metal Greymon": 200,
+        "Metal Greymon": 250,
         "MetalGreymon Alterous": 300
     }
 };
 
 const specialVinculoCases = {
     "Wargreymon": {
-        "Metal Greymon": "-",
+        "Metal Greymon": 100,
         "MetalGreymon Alterous": 100
     }
 };
@@ -1613,9 +1613,6 @@ const camposVaciosPorEvolucion = {
     "DexDoruguremon": {
         "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida", "Program"],  // Solo necesita: Combates Minimos 30, % Entrenamiento 100, Peso 36, Errores 0-6
         "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]  // Solo necesita Death Program
-    },
-    "Wargreymon": {
-        "Metal Greymon": ["Peso", "% Entrenamiento", "Error Maximo", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]  // Requisitos no claros
     }
 };
 
@@ -3098,7 +3095,7 @@ if (evolucionesMultiples.length > 0) {
     tdNombre.style.fontWeight = "bold";
     filaReq.appendChild(tdNombre);
 
-    // Caso especial: Wargreymon desde Metal Greymon - mostrar placeholder
+    /*// Caso especial: Wargreymon desde Metal Greymon - mostrar placeholder
     if (nombre === "Wargreymon" && evolucionDigimon === "Metal Greymon") {
       const tdPlaceholder = document.createElement("td");
       tdPlaceholder.setAttribute("colspan", camposOrdenados.length);
@@ -3108,7 +3105,7 @@ if (evolucionesMultiples.length > 0) {
       filaReq.appendChild(tdPlaceholder);
       tablaRequisitos.appendChild(filaReq);
       return; // Saltar al siguiente
-    }
+    }*/
 
     camposOrdenados.forEach(({ campo }) => {
       // Si el campo debe fusionarse, solo agregarlo en la primera fila

@@ -407,21 +407,21 @@ const specialEntrenamientoCases = {
 
 const specialVictoriasCases = {
     "Wargreymon": {
-        "Metal Greymon": 100,
+        "Metal Greymon": 140,
         "MetalGreymon Alterous": 175
     },
     "BlackWargreymon": {
-        "SkullGreymon": 175
+        "SkullGreymon": 140
     }
 };
 
 const specialBatallasCases = {
     "Wargreymon": {
-        "Metal Greymon": 200,
+        "Metal Greymon": 250,
         "MetalGreymon Alterous": 300
     },
     "BlackWargreymon": {
-        "SkullGreymon": 300
+        "SkullGreymon": 250
     }
 };
 
@@ -2670,7 +2670,7 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             console.log(`🔥 Evaluando ${name} con lógica especial`);
 
             // Caso especial: Wargreymon desde Metal Greymon - requisitos no claros
-            const selectedNormalizado = selected.toLowerCase().trim();
+           /* const selectedNormalizado = selected.toLowerCase().trim();
             if (name === "Wargreymon" && selectedNormalizado === "metal greymon") {
                 // Requisitos no claros - dar 0 puntos (neutro)
                 puntaje += 0;
@@ -2681,7 +2681,7 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                     return `<td class="detail-column" style="display: none;">Evaluado</td>`;
                 }
                 return;
-            }
+            }*/
 
             // Obtener valores de los campos obligatorios
             const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);

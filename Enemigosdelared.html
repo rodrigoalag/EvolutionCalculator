@@ -813,6 +813,7 @@
 
     // Función para generar múltiples variaciones del nombre de archivo
     function generarVariacionesNombre(nombre) {
+      const nombrenormal = nombre
       const nombreNormalizado = normalizarCaracteres(nombre);
       const nombreSinEspacios = nombreNormalizado.replace(/\s+/g, '');
       const nombreLimpio = nombreSinEspacios.toLowerCase();
@@ -830,6 +831,7 @@
       const nombreOriginalConEspacios = normalizarCaracteres(nombre);
 
       return [...new Set([
+        nombrenormal,                // Nombr tal cual
         nombreSinEspacios,           // MetalGreymon
         nombreLimpio,                // metalgreymon
         nombreMayusculas,            // METALGREYMON
@@ -856,7 +858,7 @@
           elementoImg.src = `${carpeta}/placeholder.png`;
           return;
         }
-
+        console.log(`Nombre actual: ${variaciones}`);
         const variacionActual = variaciones[indiceActual];
         const ruta = `${carpeta}/${variacionActual}.png`;
 

@@ -138,7 +138,7 @@ const enemigosData = [
     ]
   },
       {
-    digimon: "AeroVDramonBlack",
+    digimon: "AeroVdramonBlack",
     nickName: "1nst1g4t0r",
     niveles: "todos",
     entrenamientos: "todos",
@@ -768,7 +768,7 @@ const enemigosData = [
 
   // Perfect 70 - 100%
   {
-    digimon: "AeroVDramon",
+    digimon: "AeroVdramon",
     nickName: "Zero",
     niveles: [5],
     entrenamientos: ["70-100"],

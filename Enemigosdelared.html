@@ -858,10 +858,10 @@
           elementoImg.src = `${carpeta}/placeholder.png`;
           return;
         }
-        console.log(`Nombre actual: ${variacionActual}`);
         const variacionActual = variaciones[indiceActual];
         const ruta = `${carpeta}/${variacionActual}.png`;
-        console.log(`Nombre actual: ${carpeta}/${variacionActual}.png`);
+        console.log(`Nombre actual: ${variacionActual}`);
+        console.log(`Nombre actual: ${ruta}`);
 
         const imgTest = new Image();
         imgTest.onload = function() {

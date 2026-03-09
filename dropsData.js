@@ -81,6 +81,16 @@ const dropsData = [
       "Driver": "1"
     }
   },
+    {
+    nivel: 4,
+    pool: 2,
+    items: {
+      "Bellota": "2",      
+      "Verdura": "2",
+      "Zanahoria": "2",
+      "Driver": "1-2"
+    }
+  },
   {
     nivel: 4,
     pool: 3,

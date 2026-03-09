@@ -145,7 +145,7 @@ const enemigosData = [
     errores: "1-6",
     itemDrop: [
       { tipo: "driverGenerico", cantidad: 2 },
-      { tipo: "bits", cantidad: 500 }
+      { tipo: "bits", cantidad: 300 }
     ]
   },
   {
@@ -768,7 +768,7 @@ const enemigosData = [
 
   // Perfect 70 - 100%
   {
-    digimon: "AeroVdramon",
+    digimon: "AeroVDramon",
     nickName: "Zero",
     niveles: [5],
     entrenamientos: ["70-100"],

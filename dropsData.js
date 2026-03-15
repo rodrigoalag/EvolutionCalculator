@@ -102,7 +102,18 @@ const dropsData = [
       "TomateMilagroso": "2"
     }
   },
-
+  {
+    nivel: 4,
+    pool: 4,
+    items: {
+      "Verdura": "2-3",
+      "Manzana": "3",
+      "Bellota": "3",
+      "Zanahoria": "2",
+      "TomateMilagroso": "2"
+    }
+  },
+  
   // Perfect/Ultimate (nivel 5)
   {
     nivel: 5,

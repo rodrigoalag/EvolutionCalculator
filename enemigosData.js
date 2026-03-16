@@ -188,6 +188,16 @@ const enemigosData = [
       { tipo: "driver", driver: "W0010", cantidad: 1 }
     ]
   },
+   {
+    digimon: "Kuramon",
+    nickName: "Kuramon",
+    niveles: [3],
+    entrenamientos: ["0-39.99"],
+    errores: "1-6",
+    itemDrop: [
+      { tipo: "driver", driver: "W0009", cantidad: 1 }
+    ]
+  }, 
   // Child 60-100%
   {
     digimon: "Gabumon",

@@ -347,7 +347,7 @@ const enemigosData = [
   },
   {
     digimon: "Chamblemon",
-    nickName: "Champiñonmaniaco",
+    nickName: "Hongonmaniaco",
     niveles: [4],
     entrenamientos: ["0-49.99"],
     errores: "0-6",

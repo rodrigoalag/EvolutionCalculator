@@ -172,7 +172,7 @@ const digimonReqDict = {
     "Peso": 25, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25
   },
     "Monzaemon": {
-	"ID": 19, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Mutante",
+	"ID": 19, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Marioneta",
     "Peso": 40, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Numemon", "WinRate": 70, "Combates Minimos": 25
   },
     "Black King Numemon": {
@@ -181,15 +181,15 @@ const digimonReqDict = {
 	"WinRate": 60, "Combates Minimos": 25, "Program" : "Royal"
   },
     "Etemon": {
-	"ID": 44, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
+	"ID": 44, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Marioneta",
     "Peso": 20, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Scumon", "WinRate": 70, "Combates Minimos": 25
   },
     "WaruMonzaemon": {
-	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
+	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Marioneta", "Peso": 30,
 	"Vinculo Minimo alcanzado": -50
   },
     "GigaWaruMonzaemon": {
-	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Compuesto",
+	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Compuesto", "Peso": 40,
 	"Xross":"3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon"
   }, 
     "Metal Tyranomon": {
@@ -447,5 +447,9 @@ const digimonReqDict = {
     "Gekkomon": {
 	"ID": 177, "Tama": "BG", "Nivel": 3, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Peso": 18, "Error Maximo": 6
+  },
+      "BanchoMamemon": {
+	"ID": 999, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": "",
+	"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80
   },
 };

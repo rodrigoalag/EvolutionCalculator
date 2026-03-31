@@ -111,7 +111,7 @@ const digimonstattier = {
     "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "PlatinumScumon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Dorumon", "Gekkomon"]
   },
   "PlatinumScumon": { // Cambiar Poner todos?
-    "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["GreatKingScumon","Etemon", "Burpmon"], "Viene": ["Scumon"]
+    "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29, "Evoluciona": ["Etemon", "Burpmon"], "Viene": ["Scumon"]
   },
   "ShootingStarmon": { // Cambiar
     "ATK": 120, "DEF": 40, "HP": 900, "Vel": 75, "Digipuntos": 32.5, "Evoluciona": ["SuperStarmon", "DarkSuperStarmon", "Burpmon"], "Viene": ["Starmons"]
@@ -210,7 +210,7 @@ const digimonstattier = {
     "ATK": 220, "DEF": 140, "HP": 1800, "Vel": 160, "Digipuntos": 70, "Evoluciona": ["Burpmon"], "Viene": ["King Shoutmon"]
   },
   "GreatKingScumon": { // Cambiar
-    "ATK": 172, "DEF": 141, "HP": 1449, "Vel": 182, "Digipuntos": 64, "Evoluciona": ["Burpmon"], "Viene": ["Scumon","PlatinumScumon"]
+    "ATK": 172, "DEF": 141, "HP": 1449, "Vel": 182, "Digipuntos": 64, "Evoluciona": ["Burpmon"], "Viene": ["Scumon"]
   },
   "MetalEtemon": { // Cambiar
     "ATK": 180, "DEF": 150, "HP": 1300, "Vel": 90, "Digipuntos": 55, "Evoluciona": ["Burpmon"], "Viene": ["Etemon"]
@@ -341,5 +341,8 @@ const digimonstattier = {
   },
   "Gekkomon": {
     "ATK": 35, "DEF": 35, "HP": 450, "Vel": 35, "Digipuntos": 15.0, "Evoluciona": ["Numemon", "Scumon", "Bakemon LT", "Nanimon","Burpmon"], "Viene": ["Kekkomon"]
+  }, 
+  "BanchoMamemon": {
+    "ATK": "", "DEF": "", "HP": "", "Vel": "", "Digipuntos": "", "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"]
   }, 
 };

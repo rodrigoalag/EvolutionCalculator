@@ -187,7 +187,7 @@ const bloqueosEvolucion = {
   "KaratsukiNumemon": ["Numemon"],
   "GoldNumemon": ["Numemon"],
   "Monzaemon": ["Numemon", "GoldNumemon","KaratsukiNumemon","Geremon"],
-  "GreatKingScumon": ["Scumon","PlatinumScumon"],
+  "GreatKingScumon": ["Scumon"],
   "Black King Numemon": ["Numemon", "GoldNumemon","KaratsukiNumemon","Geremon"],
   "Etemon": ["Scumon","PlatinumScumon"],
   "MetalEtemon" : ["Etemon"],
@@ -273,7 +273,7 @@ const EvoListSpecial = {
   "Blizzarmon":["Chackmon"],
   "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon"],
   "Nanimon": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon"],
-  "GreatKingScumon": ["Scumon", "PlatinumScumon"]
+  "GreatKingScumon": ["Scumon"]
 };
 const crosstamaevo = {
   "Icemon": ["Yuki Agumon"],

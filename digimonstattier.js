@@ -246,7 +246,7 @@ const digimonstattier = {
     "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65, "Digipuntos": 16, "Evoluciona": ["Bakemon LT", "Bakemon MT", "Numemon", "Scumon", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon","Kekkomon", "Fluffymon", "Dorimon"]
   },
     "SkullGreymon": { // Cambiar
-    "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70, "Digipuntos": 60, "Evoluciona": ["Burpmon","BlackWargreymon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"]
+    "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70, "Digipuntos": 60, "Evoluciona": ["Burpmon","BlackWargreymon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon", "Armalizamon"]
   },
 	"Fantomon": { // Cambiar
     "ATK": 250, "DEF": 100, "HP": 2200, "Vel": 180, "Digipuntos": 75, "Evoluciona": ["Metal Fantomon", "Burpmon"], "Viene": ["Bakemon LT", "Soulmon LT", "Bakemon MT", "Soulmon MT"]
@@ -344,5 +344,8 @@ const digimonstattier = {
   }, 
   "BanchoMamemon": {
     "ATK": "", "DEF": "", "HP": "", "Vel": "", "Digipuntos": "", "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"]
+  },
+  "Armalizamon": {
+    "ATK": 70, "DEF": 100, "HP": 850, "Vel": 70, "Digipuntos": 32.5, "Evoluciona": ["SkullGreymon","Burpmon"], "Viene": ["Gekkomon"]
   }, 
 };

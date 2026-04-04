@@ -452,4 +452,8 @@ const digimonReqDict = {
 	"ID": 999, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": "",
 	"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80
   },
+    "Armalizamon": {
+	"ID": 178, "Tama": "BG", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
+    "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15
+  },
 };

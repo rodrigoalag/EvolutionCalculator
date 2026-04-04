@@ -501,7 +501,7 @@ const enemigosData = [
     digimon: "Cardmon Adult",
     nickName: "Cardmon Adult",
     niveles: [4],
-    entrenamientos: ["70-100"],
+    entrenamientos: ["50-69.99", "70-100"],
     errores: "0-6",
     itemDrop: [
       { item: "Booster C (A)", cantidad: 1 }

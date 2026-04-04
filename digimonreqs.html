@@ -1523,7 +1523,8 @@ const specialxrossCases = {
 	"Chackmon": {
 		"Icemon": "Ice Spirit H",
 		"Yukidarumon": "Ice Spirit H",
-		"Yuki Agumon": "Ice Spirit H"
+		"Yuki Agumon": "Ice Spirit H",
+		"Penmon": "Ice Spirit H"
 	},
 	"Shoutmon SH": {
 		"Shoutmon": "Starmons Driver",
@@ -1540,7 +1541,8 @@ const specialEntrenamientoCases = {
     "Chackmon": {
         "Icemon": 100,
         "Yukidarumon": 100,
-		"Yuki Agumon": 80
+		    "Yuki Agumon": 80,
+        "Penmon":80
     },
     "Blizzarmon": {
         "Icemon": 80,
@@ -1724,6 +1726,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     // Tyranomon: Bonus Stat Superior da +1/0
     if (nombreDigimon === "Tyranomon" && campo === "Bonus Stat Superior") {
       return { cumple: 1, noCumple: 0 };
+    }
+    // Chackmon: Xross da +3/0 cuando el origen es Penmon
+    if (nombreDigimon === "Chackmon" && campo === "Xross" && window.currentEvolutionDigimon === "Penmon") {
+      return { cumple: 3, noCumple: 0 };
     }
   }
 

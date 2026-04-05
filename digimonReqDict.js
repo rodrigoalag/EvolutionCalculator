@@ -407,7 +407,7 @@ const digimonReqDict = {
   },
      "Dorugamon": {
 	"ID": "149", "Tama": "PR", "Nivel": 4, "Atributo": "Data", "Tipo": "Bestia / Dragon", "Peso": 20,
-	"% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15
+	"% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Digimon Bonus": "Dorumon"
   },
      "DexDorugamon": {
 	"ID": "151", "Tama": "PR", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 25,
@@ -454,6 +454,6 @@ const digimonReqDict = {
   },
     "Armalizamon": {
 	"ID": 178, "Tama": "BG", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
-    "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15
+    "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Digimon Bonus": "Gekkomon"
   },
 };

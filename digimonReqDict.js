@@ -82,7 +82,7 @@ const digimonReqDict = {
     "Peso": 30, "Error Maximo": "3-6", "% Entrenamiento": 60, "Bonus Errores": 5, "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "ATK"
   },
     "Thunderballmon": {
-	"ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",
+	"ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
     "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 60, "Digimon Bonus": "Kokuwamon", "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "Vel"
   },
     "Guardromon": {
@@ -222,7 +222,7 @@ const digimonReqDict = {
     "Peso": 50, "Error Maximo": 2, "% Entrenamiento": 50, "Digimon Bonus": "Tyranomon", "WinRate": 60, "Combates Minimos": 25
   },
     "BigMamemon": {
-	"ID": 38, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 38, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto",
 	"Xross":"3 Mamemon Driver"
   },
     "RizeGreymon": {
@@ -449,8 +449,8 @@ const digimonReqDict = {
     "Peso": 18, "Error Maximo": 6
   },
       "BanchoMamemon": {
-	"ID": 999, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": "",
-	"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80
+	"ID": 182, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": "",
+	"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Combat"
   },
     "Armalizamon": {
 	"ID": 178, "Tama": "BG", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",

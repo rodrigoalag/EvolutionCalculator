@@ -492,6 +492,18 @@
             </div>
           </div>
         </div>
+        <div class="filter-item">
+          <label id="labelFilterTipo">Filtrar por Tipo:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterTipoButton">
+              <span id="filterTipoText">Todos</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterTipoContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
         <div class="filter-item" style="min-width: 250px;">
           <label id="labelFilterDigipuntos">
             Digipuntos: <span id="digipuntosRangeValue">Todos</span>
@@ -517,7 +529,8 @@
                 <th id="headerDigimon">Digimon</th>
                 <th id="headerLineaEvolutiva">Línea Evolutiva</th>
                 <th id="headerClasificacion">Clasificación</th>
-                <th id="headerAtributo">Atributo</th>
+                <th id="headerAtributo" class="sortable-header" data-sort="atributo">Atributo<span class="sort-icon">↓</span></th>
+                <th id="headerTipo" class="sortable-header" data-sort="tipo">Tipo<span class="sort-icon">↓</span></th>
                 <th id="headerImagen">Imagen</th>
                 <th class="sortable-header" data-sort="hp">HP<span class="sort-icon">↓</span></th>
                 <th class="sortable-header" data-sort="atk">ATK<span class="sort-icon">↓</span></th>
@@ -1074,6 +1087,7 @@ const traducciones = {
     lineaEvolutiva: "Línea Evolutiva",
     clasificacion: "Clasificación",
     atributo: "Atributo",
+    tipo: "Tipo",
     imagen: "Imagen",
     atk: "ATK",
     def: "DEF",
@@ -1086,9 +1100,11 @@ const traducciones = {
     filtrarEvolucionAnterior: "Evolución Anterior:",
     filtrarClasificacion: "Filtrar por Clasificación:",
     filtrarAtributo: "Filtrar por Atributo:",
+    filtrarTipo: "Filtrar por Tipo:",
     filtrarDigipuntos: "Digipuntos:",
     todasClasificaciones: "Todas las clasificaciones",
     todosAtributos: "Todos",
+    todosTipos: "Todos",
     todosDigimon: "Todos",
     todasEvoluciones: "Todas",
     todosDigipuntos: "Todos",
@@ -1106,6 +1122,7 @@ const traducciones = {
     lineaEvolutiva: "Evolution Line",
     clasificacion: "Classification",
     atributo: "Attribute",
+    tipo: "Type",
     imagen: "Image",
     atk: "ATK",
     def: "DEF",
@@ -1118,9 +1135,11 @@ const traducciones = {
     filtrarEvolucionAnterior: "Previous Evolution:",
     filtrarClasificacion: "Filter by Classification:",
     filtrarAtributo: "Filter by Attribute:",
+    filtrarTipo: "Filter by Type:",
     filtrarDigipuntos: "Digipoints:",
     todasClasificaciones: "All classifications",
     todosAtributos: "All",
+    todosTipos: "All",
     todosDigimon: "All",
     todasEvoluciones: "All",
     todosDigipuntos: "All",
@@ -1267,9 +1286,20 @@ function generarVariacionesNombre(nombre) {
 
 // Función para ordenar datos
 function ordenarDatos(datos, campo, descendente = true) {
+  // Campos que son strings (ordenamiento alfabético)
+  const camposTexto = ['atributo', 'tipo'];
+
   return [...datos].sort((a, b) => {
-    const valorA = a[campo] || 0;
-    const valorB = b[campo] || 0;
+    const valorA = a[campo] || (camposTexto.includes(campo) ? '' : 0);
+    const valorB = b[campo] || (camposTexto.includes(campo) ? '' : 0);
+
+    // Si es un campo de texto, usar comparación de strings
+    if (camposTexto.includes(campo)) {
+      const comparacion = valorA.localeCompare(valorB, 'es', { sensitivity: 'base' });
+      return descendente ? -comparacion : comparacion;
+    }
+
+    // Si es un campo numérico, usar comparación numérica
     return descendente ? (valorB - valorA) : (valorA - valorB);
   });
 }
@@ -1321,6 +1351,11 @@ function generarTablaRankingSegura(data, tbody) {
     const tdAtributo = document.createElement("td");
     tdAtributo.textContent = item.atributo || "-";
     fila.appendChild(tdAtributo);
+
+    // Tipo
+    const tdTipo = document.createElement("td");
+    tdTipo.textContent = item.tipo || "-";
+    fila.appendChild(tdTipo);
 
     // Imagen
     const tdImagen = document.createElement("td");
@@ -1584,6 +1619,20 @@ function aplicarFiltros() {
     );
   }
 
+  // Obtener tipos seleccionados (checkboxes marcados, excluyendo "Todos")
+  const tiposSeleccionados = Array.from(
+    document.querySelectorAll('#filterTipoContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por tipo (si hay alguno seleccionado)
+  if (tiposSeleccionados.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      tiposSeleccionados.includes(item.tipo)
+    );
+  }
+
   // Filtrar por Digipuntos (rango mín-máx)
   const inputMin = document.getElementById('filterDigipuntosMin');
   const inputMax = document.getElementById('filterDigipuntosMax');
@@ -1609,6 +1658,7 @@ function aplicarFiltros() {
   actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
   actualizarTextoDropdown('filterClasificacionContainer', 'filterClasificacionText', t.todasClasificaciones);
   actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+  actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
 
   // Ordenar y mostrar
   const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
@@ -1639,6 +1689,10 @@ function limpiarFiltros() {
     cb.checked = cb.value === '';
   });
 
+  document.querySelectorAll('#filterTipoContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
   const inputMin = document.getElementById('filterDigipuntosMin');
   const inputMax = document.getElementById('filterDigipuntosMax');
   if (inputMin && inputMax) {
@@ -1652,6 +1706,7 @@ function limpiarFiltros() {
   document.getElementById('filterEvolucionAnteriorText').textContent = t.todasEvoluciones;
   document.getElementById('filterClasificacionText').textContent = t.todasClasificaciones;
   document.getElementById('filterAtributoText').textContent = t.todosAtributos;
+  document.getElementById('filterTipoText').textContent = t.todosTipos;
 
   datosActuales = [...datosSinFiltrar];
 
@@ -2026,6 +2081,68 @@ function actualizarOpcionesAtributo() {
   actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
 }
 
+function actualizarOpcionesTipo() {
+  const container = document.getElementById('filterTipoContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener tipos únicos de los datos actuales sin filtrar
+  const tiposUnicos = [...new Set(datosSinFiltrar.map(item => item.tipo).filter(a => a && a !== '-'))];
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todos"
+  const todosDiv = document.createElement('div');
+  todosDiv.className = 'checkbox-item';
+  todosDiv.innerHTML = `
+    <input type="checkbox" id="tipo-todos" value="" checked>
+    <label for="tipo-todos">${t.todosTipos}</label>
+  `;
+  container.appendChild(todosDiv);
+
+  // Agregar checkbox para cada tipo
+  tiposUnicos.sort().forEach(tipo => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `tipo-${tipo.replace(/\s+/g, '-').replace(/\//g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${tipo}">
+      <label for="${id}">${tipo}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todos"
+  document.getElementById('tipo-todos').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#tipo-todos)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#tipo-todos)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('tipo-todos').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#tipo-todos)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('tipo-todos').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar texto del botón
+  actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
+}
+
 function actualizarRangoDigipuntos() {
   const inputMin = document.getElementById('filterDigipuntosMin');
   const inputMax = document.getElementById('filterDigipuntosMax');
@@ -2139,6 +2256,7 @@ function generarRanking() {
             lineaEvolutiva: lineaEvo,
             evolucionAnterior: evolucionAnterior,
             atributo: digimonReqDict[nombre]?.Atributo || "-",
+            tipo: digimonReqDict[nombre]?.Tipo || "-",
             atk: stats.atk,
             def: stats.def,
             hp: stats.hp,
@@ -2168,6 +2286,7 @@ function generarRanking() {
           evolucionAnterior: evolucionAnterior,
           todasLasEvolucionesAnteriores: obtenerTodasLasEvolucionesAnteriores(nombre), // Todas las opciones para el filtro
           atributo: digimonReqDict[nombre]?.Atributo || "-",
+          tipo: digimonReqDict[nombre]?.Tipo || "-",
           atk: stats.atk,
           def: stats.def,
           hp: stats.hp,
@@ -2188,6 +2307,7 @@ function generarRanking() {
         nombre: variante.nombre,
         lineaEvolutiva: variante.lineaEvolutiva,
         atributo: digimonReqDict[variante.nombre]?.Atributo || "-",
+        tipo: digimonReqDict[variante.nombre]?.Tipo || "-",
         atk: variante.atk,
         def: variante.def,
         hp: variante.hp,
@@ -2206,6 +2326,7 @@ function generarRanking() {
   actualizarOpcionesEvolucionAnterior();
   actualizarOpcionesClasificacion();
   actualizarOpcionesAtributo();
+  actualizarOpcionesTipo();
   actualizarRangoDigipuntos();
 
   // Resetear inputs de digipuntos
@@ -2285,6 +2406,7 @@ function actualizarTraducciones() {
   const labelFilterEvolucionAnterior = document.getElementById('labelFilterEvolucionAnterior');
   const labelFilterClasificacion = document.getElementById('labelFilterClasificacion');
   const labelFilterAtributo = document.getElementById('labelFilterAtributo');
+  const labelFilterTipo = document.getElementById('labelFilterTipo');
   const labelFilterDigipuntos = document.getElementById('labelFilterDigipuntos');
   const clearFiltersBtn = document.getElementById('clearFiltersBtn');
   const digipuntosRangeValue = document.getElementById('digipuntosRangeValue');
@@ -2293,6 +2415,7 @@ function actualizarTraducciones() {
   if (labelFilterEvolucionAnterior) labelFilterEvolucionAnterior.textContent = t.filtrarEvolucionAnterior;
   if (labelFilterClasificacion) labelFilterClasificacion.textContent = t.filtrarClasificacion;
   if (labelFilterAtributo) labelFilterAtributo.textContent = t.filtrarAtributo;
+  if (labelFilterTipo) labelFilterTipo.textContent = t.filtrarTipo;
   if (clearFiltersBtn) clearFiltersBtn.textContent = t.limpiarFiltros;
 
   // Actualizar label de Digipuntos preservando el span de valor
@@ -2307,6 +2430,7 @@ function actualizarTraducciones() {
     actualizarOpcionesEvolucionAnterior();
     actualizarOpcionesClasificacion();
     actualizarOpcionesAtributo();
+    actualizarOpcionesTipo();
 
     // Actualizar el texto del valor de digipuntos si está en el rango completo
     const inputMin = document.getElementById('filterDigipuntosMin');
@@ -2323,13 +2447,23 @@ function actualizarTraducciones() {
   const headerLineaEvolutiva = document.getElementById('headerLineaEvolutiva');
   const headerClasificacion = document.getElementById('headerClasificacion');
   const headerAtributo = document.getElementById('headerAtributo');
+  const headerTipo = document.getElementById('headerTipo');
   const headerImagen = document.getElementById('headerImagen');
   const headerDigipuntos = document.getElementById('headerDigipuntos');
 
   if (headerDigimon) headerDigimon.textContent = t.digimon;
   if (headerLineaEvolutiva) headerLineaEvolutiva.textContent = t.lineaEvolutiva;
   if (headerClasificacion) headerClasificacion.textContent = t.clasificacion;
-  if (headerAtributo) headerAtributo.textContent = t.atributo;
+  if (headerAtributo) {
+    const sortIcon = headerAtributo.querySelector('.sort-icon');
+    headerAtributo.textContent = t.atributo;
+    if (sortIcon) headerAtributo.appendChild(sortIcon);
+  }
+  if (headerTipo) {
+    const sortIcon = headerTipo.querySelector('.sort-icon');
+    headerTipo.textContent = t.tipo;
+    if (sortIcon) headerTipo.appendChild(sortIcon);
+  }
   if (headerImagen) headerImagen.textContent = t.imagen;
   if (headerDigipuntos) {
     const sortIcon = headerDigipuntos.querySelector('.sort-icon');
@@ -2366,8 +2500,8 @@ function descargarCSV() {
     const rowData = [];
 
     cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 4, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Imagen)
-      if (index === 4) return;
+      // Saltar la columna de imagen (índice 5, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Tipo, Imagen)
+      if (index === 5) return;
 
       let text = col.textContent.trim();
       // Escapar comillas y envolver en comillas si contiene comas
@@ -2411,8 +2545,8 @@ function descargarXLSX() {
     const cols = row.querySelectorAll('td, th');
 
     cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 4, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Imagen)
-      if (index === 4) return;
+      // Saltar la columna de imagen (índice 5, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Tipo, Imagen)
+      if (index === 5) return;
       rowData.push(col.textContent.trim());
     });
 
@@ -2429,6 +2563,7 @@ function descargarXLSX() {
     { wch: 30 }, // Línea Evolutiva
     { wch: 15 }, // Clasificación
     { wch: 12 }, // Atributo
+    { wch: 15 }, // Tipo
     { wch: 8 },  // HP
     { wch: 8 },  // ATK
     { wch: 8 },  // DEF
@@ -2499,6 +2634,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterEvolucionAnteriorButton = document.getElementById('filterEvolucionAnteriorButton');
   const filterClasificacionButton = document.getElementById('filterClasificacionButton');
   const filterAtributoButton = document.getElementById('filterAtributoButton');
+  const filterTipoButton = document.getElementById('filterTipoButton');
 
   if (filterDigimonButton) {
     filterDigimonButton.addEventListener('click', (e) => {
@@ -2525,6 +2661,13 @@ document.addEventListener("DOMContentLoaded", () => {
     filterAtributoButton.addEventListener('click', (e) => {
       e.stopPropagation();
       toggleDropdown('filterAtributoButton', 'filterAtributoContainer');
+    });
+  }
+
+  if (filterTipoButton) {
+    filterTipoButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterTipoButton', 'filterTipoContainer');
     });
   }
 

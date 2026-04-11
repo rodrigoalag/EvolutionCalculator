@@ -343,7 +343,7 @@ const digimonstattier = {
     "ATK": 35, "DEF": 35, "HP": 450, "Vel": 35, "Digipuntos": 15.0, "Evoluciona": ["Numemon", "Scumon", "Bakemon LT", "Nanimon","Burpmon"], "Viene": ["Kekkomon"]
   }, 
   "BanchoMamemon": {
-    "ATK": 180, "DEF": 90, "HP": 1300, "Vel": 130, "Digipuntos": "55", "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"]
+    "ATK": 180, "DEF": 90, "HP": 1500, "Vel": 130, "Digipuntos": "55", "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"]
   },
   "Armalizamon": {
     "ATK": 70, "DEF": 100, "HP": 850, "Vel": 70, "Digipuntos": 32.5, "Evoluciona": ["SkullGreymon","Burpmon"], "Viene": ["Gekkomon"]

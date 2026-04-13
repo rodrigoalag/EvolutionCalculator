@@ -41,7 +41,7 @@ const digimonReqDict = {
     "Stat Superior": "Vel", "Stat Superior 2": "ATK", "Program": "Combat", "2Ciclos": "Si"
   },
   "Starmons": {
-	"ID": 84, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 84, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto",
     "Peso": 15, "Error Maximo": 6, "% Entrenamiento": "0-79",
     "Stat Superior": "HP", "Stat Superior 2": "Vel"
   },
@@ -138,7 +138,7 @@ const digimonReqDict = {
 	"ID": 43, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 10, "Comida": "Chatarra"
 	},	
     "ShootingStarmon": {
-	"ID": 57, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 57, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto",
     "Peso": 30, "Error Maximo": 6, "% Entrenamiento": 80, "WinRate": 65, "Combates Minimos": 20, "Xross": "4 Pickmon Driver"
 	},
     "Icemon": {
@@ -146,7 +146,7 @@ const digimonReqDict = {
     "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 50, "Combates Minimos": 15, "Program": "Frost", "Bonus Comida": "Verdura Congelada"
 	},
     "Starmon": {
-	"ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
+	"ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto",
     "Peso": 15, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 50, "Combates Minimos": 15
 	},
     "Metal Greymon (Virus)": {

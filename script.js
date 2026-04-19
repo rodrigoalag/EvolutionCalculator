@@ -3767,18 +3767,17 @@ if (skullGreymonResult) {
 const dexDorugamonResult = puntajes.find(d => d.name === "DexDorugamon" && (d.puntaje === 4 || d.puntaje === 6));
 if (dexDorugamonResult) {
     if (dexDorugamonResult.puntaje === 4) {
-        // Desde Dorumon - Placeholder con probabilidad
-        const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
+        // Desde Dorumon - Requisitos desconocidos
         const textTranslationsDex = {
-            es: `⚠️ PLACEHOLDER: Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDorugamon. (Requisitos no confirmados)`,
-            en: `⚠️ PLACEHOLDER: Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDorugamon. (Requirements not confirmed)`
+            es: `⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+            en: `⚠️ WARNING: DexDorugamon requirements have changed and are currently unknown. The information shown may not be accurate.`
         };
         evolucionTexto.textContent = textTranslationsDex[currentLanguage];
     } else if (dexDorugamonResult.puntaje === 6) {
         // Desde Dorugamon - Side Evolution
         const textTranslationsSide = {
-            es: `Tu digimon hace side a DexDorugamon.`,
-            en: `Your digimon side-evolves to DexDorugamon.`
+            es: `⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+            en: `⚠️ WARNING: DexDorugamon requirements have changed and are currently unknown. The information shown may not be accurate.`
         };
         evolucionTexto.textContent = textTranslationsSide[currentLanguage];
     }
@@ -3794,27 +3793,26 @@ const dexDoruguremonFromDexDorugamon = puntajes.find(d => d.name === "DexDorugur
 const dexDoruguremonFromDoruguremon = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 5 && selectedNormDex === "doruguremon");
 
 if (dexDoruguremonFromDorugamon) {
-    // Viene de Dorugamon - mostrar % de probabilidad
-    const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
+    // Viene de Dorugamon - Requisitos desconocidos
     const textTranslationsDexGure = {
-        es: `Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDoruguremon.`,
-        en: `Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDoruguremon.`
+        es: `⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+        en: `⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate.`
     };
     evolucionTexto.textContent = textTranslationsDexGure[currentLanguage];
     specialCaseHandled = true;
 } else if (dexDoruguremonFromDexDorugamon) {
-    // Viene de DexDorugamon - evolución directa
+    // Viene de DexDorugamon - Requisitos desconocidos
     const textTranslationsDexFromDex = {
-        es: `Tu digimon evoluciona a DexDoruguremon.`,
-        en: `Your digimon evolves to DexDoruguremon.`
+        es: `⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+        en: `⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate.`
     };
     evolucionTexto.textContent = textTranslationsDexFromDex[currentLanguage];
     specialCaseHandled = true;
 } else if (dexDoruguremonFromDoruguremon) {
-    // Viene de Doruguremon - evolución directa con Death Program
+    // Viene de Doruguremon - Requisitos desconocidos
     const textTranslationsDirect = {
-        es: `Tu digimon evoluciona a DexDoruguremon.`,
-        en: `Your digimon evolves to DexDoruguremon.`
+        es: `⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+        en: `⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate.`
     };
     evolucionTexto.textContent = textTranslationsDirect[currentLanguage];
     specialCaseHandled = true;
@@ -4298,18 +4296,17 @@ if (!specialCaseHandled) {
     const dexDorugamonResultFunc = puntajes.find(d => d.name === "DexDorugamon" && (d.puntaje === 4 || d.puntaje === 6));
     if (dexDorugamonResultFunc) {
         if (dexDorugamonResultFunc.puntaje === 4) {
-            // Desde Dorumon - Placeholder con probabilidad
-            const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
+            // Desde Dorumon - Requisitos desconocidos
             const textTranslationsDex = {
-                es: `⚠️ PLACEHOLDER: Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDorugamon. (Requisitos no confirmados)`,
-                en: `⚠️ PLACEHOLDER: Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDorugamon. (Requirements not confirmed)`
+                es: `⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+                en: `⚠️ WARNING: DexDorugamon requirements have changed and are currently unknown. The information shown may not be accurate.`
             };
             evolucionTexto.textContent = textTranslationsDex[currentLanguage];
         } else if (dexDorugamonResultFunc.puntaje === 6) {
-            // Desde Dorugamon - Side Evolution
+            // Desde Dorugamon - Requisitos desconocidos
             const textTranslationsSide = {
-                es: `Tu digimon hace side a DexDorugamon.`,
-                en: `Your digimon side-evolves to DexDorugamon.`
+                es: `⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+                en: `⚠️ WARNING: DexDorugamon requirements have changed and are currently unknown. The information shown may not be accurate.`
             };
             evolucionTexto.textContent = textTranslationsSide[currentLanguage];
         }
@@ -4325,27 +4322,26 @@ if (!specialCaseHandled) {
     const dexDoruguremonFromDoruguremonFunc = puntajes.find(d => d.name === "DexDoruguremon" && d.puntaje === 5 && selectedNormFuncDex === "doruguremon");
 
     if (dexDoruguremonFromDorugamonFunc) {
-        // Viene de Dorugamon - mostrar % de probabilidad
-        const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
+        // Viene de Dorugamon - Requisitos desconocidos
         const textTranslationsDexGure = {
-            es: `Tu digimon tiene un chance de ${porcentajeEntrenamiento}% de evolucionar a DexDoruguremon.`,
-            en: `Your digimon has a ${porcentajeEntrenamiento}% chance of evolving to DexDoruguremon.`
+            es: `⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+            en: `⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate.`
         };
         evolucionTexto.textContent = textTranslationsDexGure[currentLanguage];
         return;
     } else if (dexDoruguremonFromDexDorugamonFunc) {
-        // Viene de DexDorugamon - evolución directa
+        // Viene de DexDorugamon - Requisitos desconocidos
         const textTranslationsDexFromDex = {
-            es: `Tu digimon evoluciona a DexDoruguremon.`,
-            en: `Your digimon evolves to DexDoruguremon.`
+            es: `⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+            en: `⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate.`
         };
         evolucionTexto.textContent = textTranslationsDexFromDex[currentLanguage];
         return;
     } else if (dexDoruguremonFromDoruguremonFunc) {
-        // Viene de Doruguremon - evolución directa con Death Program
+        // Viene de Doruguremon - Requisitos desconocidos
         const textTranslationsDirect = {
-            es: `Tu digimon evoluciona a DexDoruguremon.`,
-            en: `Your digimon evolves to DexDoruguremon.`
+            es: `⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.`,
+            en: `⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate.`
         };
         evolucionTexto.textContent = textTranslationsDirect[currentLanguage];
         return;

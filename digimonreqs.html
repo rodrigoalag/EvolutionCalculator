@@ -967,12 +967,12 @@ const warningMessages = {
     en: "SkullGreymon is a digimon that evolves with probability, only with 100% training is 100% guaranteed to get it, less training means you will have a probability of death, check with calculator"
   },
   dexdorugamon: {
-    es: "⚠️ PLACEHOLDER: Los requisitos de DexDorugamon no están confirmados. Evoluciona con probabilidad igual al % de entrenamiento. Requiere Death Program.",
-    en: "⚠️ PLACEHOLDER: DexDorugamon requirements are not confirmed. Evolves with probability equal to training %. Requires Death Program."
+    es: "⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.",
+    en: "⚠️ WARNING: DexDorugamon requirements have changed and are currently unknown. The information shown may not be accurate."
   },
   dexdoruguremon: {
-    es: "DexDoruguremon: Desde Dorugamon, evoluciona con probabilidad igual al % de entrenamiento (igual que SkullGreymon). Desde DexDorugamon o Doruguremon, los requisitos no están claros.",
-    en: "DexDoruguremon: From Dorugamon, evolves with probability equal to training % (like SkullGreymon). From DexDorugamon or Doruguremon, requirements are unclear."
+    es: "⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.",
+    en: "⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate."
   },
   hora: {
     es: "Hora local de tu país, para la hora del servidor pasar el tiempo a UTC-3",
@@ -1413,28 +1413,21 @@ const specialDigimonConfig = {
   requisitosOrigen: {
     "Dorumon": {
       gruposColumnas: {
-        "No se considera en el puntaje": ["Peso"],
-        "Requisitos Obligatorios": ["% Entrenamiento", "Program"]
+        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
       },
       valores: {
-        "Peso": "20-30",
-        "% Entrenamiento": "50-100%",
-        "Program": "Death"
+        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
       },
       placeholder: true
     },
     "Dorugamon": {
       gruposColumnas: {
-        "Requisitos Obligatorios": ["Program"],
-        "Debes cumplir al menos uno": ["% Entrenamiento", "Errores", "Combates", "Vinculo"]
+        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
       },
       valores: {
-        "Program": "Death",
-        "% Entrenamiento": "< 50%",
-        "Errores": "< 6",
-        "Combates": "< 30",
-        "Vinculo": "< -50"
-      }
+        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
+      },
+      placeholder: true
     }
   }
 },
@@ -1442,37 +1435,30 @@ const specialDigimonConfig = {
   requisitosOrigen: {
     "Dorugamon": {
       gruposColumnas: {
-        "No se considera en el puntaje": ["Peso"],
-        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program"]
+        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
       },
       valores: {
-        "Peso": "36",
-        "% Entrenamiento": "50-100%",
-        "Errores Minimos": "6",
-        "Combates Minimos": "30",
-        "Vinculo al momento de evolucionar": "-50%",
-        "Program": "Death"
+        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
       },
       placeholder: true
     },
     "DexDorugamon": {
       gruposColumnas: {
-        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos", "Combates Minimos"]
+        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
       },
       valores: {
-        "Peso": "36",
-        "% Entrenamiento": "100%",
-        "Errores Minimos": "0-6",
-        "Combates Minimos": "30"
-      }
+        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
+      },
+      placeholder: true
     },
     "Doruguremon": {
       gruposColumnas: {
-        "Requisitos Obligatorios": ["Program"]
+        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
       },
       valores: {
-        "Program": "Death"
-      }
+        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
+      },
+      placeholder: true
     }
   }
 },

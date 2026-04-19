@@ -323,8 +323,8 @@ const digimonReqDict = {
   }, 
   
       "SkullGreymon": {
-	"ID": 104, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 20,
-	"% Entrenamiento": 50,"Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program":"Death", "Comida": "Carne X"
+	"ID": 104, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 20
+	//"% Entrenamiento": 50,"Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program":"Death", "Comida": "Carne X"
   }, 
       "Fantomon": {
 	"ID": 102, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",
@@ -411,12 +411,12 @@ const digimonReqDict = {
   },
      "DexDorugamon": {
 	"ID": "151", "Tama": "PR", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 25,
-	"% Entrenamiento": 50, "Vinculo al momento de evolucionar": -50, "Program": "Death"
+	// ⚠️ REQUISITOS DESCONOCIDOS: Los requisitos han cambiado y actualmente no se conocen
   },
      "Raptordramon": {
 	"ID": "153", "Tama": "PR", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina", "Peso": 25,
 	"% Entrenamiento": 100, "Error Maximo": 0, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100,
-	"Tienes registrado a DexDorugamon y Dorugamon?": "Si"
+	"Tienes registrado a DexDorugamon y Dorugamon?": "Si", "Bonus Digimon":"Dorumon"
   },
      "Doruguremon": {
 	"ID": "150", "Tama": "PR", "Nivel": 5, "Atributo": "Data", "Tipo": "Bestia / Dragon", "Peso": 36,
@@ -424,7 +424,7 @@ const digimonReqDict = {
   },
      "DexDoruguremon": {
 	"ID": "152", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 36,
-	"% Entrenamiento": 50, "Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program": "Death", "Error Maximo": 6
+	// ⚠️ REQUISITOS DESCONOCIDOS: Los requisitos han cambiado y actualmente no se conocen
   },
      "Grademon": {
 	"ID": "154", "Tama": "PR", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Guerrero", "Peso": 36,
@@ -455,5 +455,20 @@ const digimonReqDict = {
     "Armalizamon": {
 	"ID": 178, "Tama": "BG", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Digimon Bonus": "Gekkomon"
+  },
+  "Pomumon": {
+	"ID": 176, "Tama": "P", "Nivel": 3, "Atributo": "Data", "Tipo": "Planta", "Peso": ""
+  },
+  "Kiwimon": {
+	"ID": 176, "Tama": "P", "Nivel": 4, "Atributo": "Data", "Tipo": "Planta / Viento", "Peso": ""
+  },
+  "Parasaumon": {
+	"ID": 176, "Tama": "P", "Nivel": 4, "Atributo": "Virus", "Tipo": "Planta / Dinosaurio", "Peso": ""
+  },
+  "Delumon": {
+	"ID": 176, "Tama": "P", "Nivel": 5, "Atributo": "Data", "Tipo": "Planta / Viento", "Peso": ""
+  },
+  "Entmon": {
+	"ID": 176, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": ""
   },
 };

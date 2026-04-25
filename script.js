@@ -295,8 +295,8 @@ const SideEvolutionSelected = {
 // Campos a ocultar de evoluciones específicas según el origen seleccionado
 const ocultarCamposPorOrigen = {
   "DexDoruguremon": {
-    "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida", "Program"],  // Solo necesita: Peso, % Entrenamiento, Errores Minimos, Combates Minimos
-    "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]  // Solo necesita: Program
+    "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida", "Program"],  // Solo necesita: Peso, % Entrenamiento, Errores Minimos, Victorias Minimas
+    "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]  // Solo necesita: Program
   }
 };
 
@@ -2271,12 +2271,12 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             // Verificar si los 4 campos obligatorios se cumplen
             const entrenamientoCorrecto = porcentajeEntrenamiento >= requisitos["% Entrenamiento"];
             const erroresCorrecto = erroresMinimos >= requisitos["Errores Minimos"];
-            const combatesCorrecto = combatesMinimos >= requisitos["Combates Minimos"];
+            const combatesCorrecto = combatesMinimos >= requisitos["Victorias Minimas"];
             const vinculoCorrecto = vinculoMomento <= requisitos["Vinculo al momento de evolucionar"];
-            
+
             console.log(`🔥 SkullGreymon - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= ${requisitos["% Entrenamiento"]})`);
             console.log(`🔥 SkullGreymon - Errores: ${erroresCorrecto} (${erroresMinimos} >= ${requisitos["Errores Minimos"]})`);
-            console.log(`🔥 SkullGreymon - Combates: ${combatesCorrecto} (${combatesMinimos} >= ${requisitos["Combates Minimos"]})`);
+            console.log(`🔥 SkullGreymon - Victorias Minimas: ${combatesCorrecto} (${combatesMinimos} >= ${requisitos["Victorias Minimas"]})`);
             console.log(`🔥 SkullGreymon - Vinculo: ${vinculoCorrecto} (${vinculoMomento} <= ${requisitos["Vinculo al momento de evolucionar"]})`);
             
             // Si TODOS los campos obligatorios se cumplen, dar +4
@@ -2289,9 +2289,9 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             }
             
             // Evaluar Program y Comida (al menos uno debe cumplirse)
-            const programCorrecto = inputValues["Program"] && 
+            const programCorrecto = inputValues["Program"] && requisitos["Program"] &&
                 inputValues["Program"].toLowerCase() === requisitos["Program"].toLowerCase();
-            const comidaCorrecta = inputValues["Comida"] && 
+            const comidaCorrecta = inputValues["Comida"] && requisitos["Comida"] &&
                 inputValues["Comida"].toLowerCase() === requisitos["Comida"].toLowerCase();
             
             console.log(`🔥 SkullGreymon - Program correcto: ${programCorrecto} ("${inputValues["Program"]}" vs "${requisitos["Program"]}")`);
@@ -2320,9 +2320,12 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
         }
         // FIN LÓGICA ESPECIAL PARA SKULLGREYMON
 
+        // ⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen
+        // La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
+        // Se mantiene como referencia hasta que se conozcan los nuevos requisitos
         // LÓGICA ESPECIAL PARA DEXDORUGAMON - Condicionada por origen
         if (name === "DexDorugamon" && !dexDorugamonEvaluated) {
-            console.log("🔮 Evaluando DexDorugamon con lógica especial");
+            console.log("🔮 Evaluando DexDorugamon con lógica especial (⚠️ REQUISITOS ANTIGUOS)");
 
             const selectedNormalizado = selected.toLowerCase().trim();
             const vieneDeDorumon = selectedNormalizado === "dorumon";
@@ -2405,9 +2408,12 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
         }
         // FIN LÓGICA ESPECIAL PARA DEXDORUGAMON
 
+        // ⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen
+        // La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
+        // Se mantiene como referencia hasta que se conozcan los nuevos requisitos
         // LÓGICA ESPECIAL PARA DEXDORUGUREMON (similar a SkullGreymon pero condicionado)
         if (name === "DexDoruguremon" && !dexDoruguremonEvaluated) {
-            console.log("🔮 Evaluando DexDoruguremon con lógica especial");
+            console.log("🔮 Evaluando DexDoruguremon con lógica especial (⚠️ REQUISITOS ANTIGUOS)");
 
             // Verificar si viene de Dorugamon (requisitos conocidos) o de otros (requisitos no claros)
             const selectedNormalizado = selected.toLowerCase().trim();
@@ -2426,12 +2432,12 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
 
                 const entrenamientoCorrecto = porcentajeEntrenamiento >= requisitos["% Entrenamiento"];
                 const erroresCorrecto = erroresMinimos >= requisitos["Errores Minimos"];
-                const combatesCorrecto = combatesMinimos >= requisitos["Combates Minimos"];
+                const combatesCorrecto = combatesMinimos >= requisitos["Victorias Minimas"];
                 const vinculoCorrecto = vinculoMomento <= requisitos["Vinculo al momento de evolucionar"];
 
                 console.log(`🔮 DexDoruguremon - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= ${requisitos["% Entrenamiento"]})`);
                 console.log(`🔮 DexDoruguremon - Errores: ${erroresCorrecto} (${erroresMinimos} >= ${requisitos["Errores Minimos"]})`);
-                console.log(`🔮 DexDoruguremon - Combates: ${combatesCorrecto} (${combatesMinimos} >= ${requisitos["Combates Minimos"]})`);
+                console.log(`🔮 DexDoruguremon - Victorias Minimas: ${combatesCorrecto} (${combatesMinimos} >= ${requisitos["Victorias Minimas"]})`);
                 console.log(`🔮 DexDoruguremon - Vinculo: ${vinculoCorrecto} (${vinculoMomento} <= ${requisitos["Vinculo al momento de evolucionar"]})`);
 
                 if (entrenamientoCorrecto && erroresCorrecto && combatesCorrecto && vinculoCorrecto) {
@@ -3763,6 +3769,8 @@ if (skullGreymonResult) {
     specialCaseHandled = true;
 }
 
+// ⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen
+// La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
 // VERIFICAR CASO ESPECIAL DEXDORUGAMON CON PUNTAJE 4 (Placeholder) o 6 (Side Evolution)
 const dexDorugamonResult = puntajes.find(d => d.name === "DexDorugamon" && (d.puntaje === 4 || d.puntaje === 6));
 if (dexDorugamonResult) {
@@ -3785,6 +3793,8 @@ if (dexDorugamonResult) {
 }
 // FIN CASO ESPECIAL DEXDORUGAMON
 
+// ⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen
+// La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
 // VERIFICAR CASO ESPECIAL DEXDORUGUREMON
 const selectedNormDex = selected.toLowerCase();
 // Dorugamon: puntaje 4, DexDorugamon: puntaje >= 3, Doruguremon: puntaje 5
@@ -4292,6 +4302,8 @@ if (!specialCaseHandled) {
         return;
     }
 
+    // ⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen
+    // La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
     // VERIFICAR CASO ESPECIAL DEXDORUGAMON CON PUNTAJE 4 (Placeholder) o 6 (Side Evolution)
     const dexDorugamonResultFunc = puntajes.find(d => d.name === "DexDorugamon" && (d.puntaje === 4 || d.puntaje === 6));
     if (dexDorugamonResultFunc) {
@@ -4314,6 +4326,8 @@ if (!specialCaseHandled) {
     }
     // FIN CASO ESPECIAL DEXDORUGAMON
 
+    // ⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen
+    // La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
     // VERIFICAR CASO ESPECIAL DEXDORUGUREMON
     const selectedNormFuncDex = selected.toLowerCase();
     // Dorugamon: puntaje 4, DexDorugamon: puntaje >= 3, Doruguremon: puntaje 5

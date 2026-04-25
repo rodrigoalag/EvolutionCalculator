@@ -323,8 +323,8 @@ const digimonReqDict = {
   }, 
   
       "SkullGreymon": {
-	"ID": 104, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 20
-	//"% Entrenamiento": 50,"Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50, "Program":"Death", "Comida": "Carne X"
+	"ID": 104, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 20,
+	"% Entrenamiento": 50,"Errores Minimos": 6, "Victorias Minimas": 30, "Vinculo al momento de evolucionar": -50, "Program":"Death", "Comida": "Carne X"
   }, 
       "Fantomon": {
 	"ID": 102, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",
@@ -390,11 +390,11 @@ const digimonReqDict = {
   },
      "Wargreymon": {
 	"ID": 170, "Tama": "V0", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Dragon","Peso": 30,
-	"% Entrenamiento": 100,"Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias": 175
+	"% Entrenamiento": 100,"Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias Minimas": 175
   }, 
      "BlackWargreymon": {
 	"ID": 171, "Tama": "D", "Nivel": 6, "Atributo": "Virus", "Tipo": "Dragon","Peso": 30,
-	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias": 140
+	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias Minimas": 140
   },
      "Dodomon": {
 	"ID": "146", "Tama": "PR", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5
@@ -412,6 +412,7 @@ const digimonReqDict = {
      "DexDorugamon": {
 	"ID": "151", "Tama": "PR", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 25,
 	// ⚠️ REQUISITOS DESCONOCIDOS: Los requisitos han cambiado y actualmente no se conocen
+	//"% Entrenamiento": 50, "Vinculo al momento de evolucionar": -50, "Program": "Death"
   },
      "Raptordramon": {
 	"ID": "153", "Tama": "PR", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina", "Peso": 25,
@@ -425,6 +426,7 @@ const digimonReqDict = {
      "DexDoruguremon": {
 	"ID": "152", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 36,
 	// ⚠️ REQUISITOS DESCONOCIDOS: Los requisitos han cambiado y actualmente no se conocen
+	//"% Entrenamiento": 50, "Errores Minimos": 6, "Victorias Minimas": 30, "Vinculo al momento de evolucionar": -50, "Program": "Death", "Error Maximo": 6
   },
      "Grademon": {
 	"ID": "154", "Tama": "PR", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Guerrero", "Peso": 36,

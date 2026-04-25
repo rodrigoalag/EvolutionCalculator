@@ -1053,7 +1053,7 @@ const specialDigimonConfig = {
   "SkullGreymon": {
     gruposColumnas: {
       "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Program o Comida"]
+      "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program o Comida"]
     },
     procesarCampos: function(digimon) {
       const procesado = {...digimon};
@@ -1410,6 +1410,36 @@ const specialDigimonConfig = {
 }
 },
 "DexDorugamon":  {
+  // ⚠️ REQUISITOS DESCONOCIDOS - Los requisitos han cambiado y actualmente no se conocen
+  /* REQUISITOS ANTIGUOS (COMENTADOS PARA REFERENCIA):
+  requisitosOrigen: {
+    "Dorumon": {
+      gruposColumnas: {
+        "No se considera en el puntaje": ["Peso"],
+        "Requisitos Obligatorios": ["% Entrenamiento", "Program"]
+      },
+      valores: {
+        "Peso": "20-30",
+        "% Entrenamiento": "50-100%",
+        "Program": "Death"
+      },
+      placeholder: true
+    },
+    "Dorugamon": {
+      gruposColumnas: {
+        "Requisitos Obligatorios": ["Program"],
+        "Debes cumplir al menos uno": ["% Entrenamiento", "Errores", "Combates", "Vinculo"]
+      },
+      valores: {
+        "Program": "Death",
+        "% Entrenamiento": "< 50%",
+        "Errores": "< 6",
+        "Combates": "< 30",
+        "Vinculo": "< -50"
+      }
+    }
+  }
+  */
   requisitosOrigen: {
     "Dorumon": {
       gruposColumnas: {
@@ -1432,6 +1462,45 @@ const specialDigimonConfig = {
   }
 },
 "DexDoruguremon":  {
+  // ⚠️ REQUISITOS DESCONOCIDOS - Los requisitos han cambiado y actualmente no se conocen
+  /* REQUISITOS ANTIGUOS (COMENTADOS PARA REFERENCIA):
+  requisitosOrigen: {
+    "Dorugamon": {
+      gruposColumnas: {
+        "No se considera en el puntaje": ["Peso"],
+        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"]
+      },
+      valores: {
+        "Peso": "36",
+        "% Entrenamiento": "50-100%",
+        "Errores Minimos": "6",
+        "Victorias Minimas": "30",
+        "Vinculo al momento de evolucionar": "-50%",
+        "Program": "Death"
+      },
+      placeholder: true
+    },
+    "DexDorugamon": {
+      gruposColumnas: {
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos", "Victorias Minimas"]
+      },
+      valores: {
+        "Peso": "36",
+        "% Entrenamiento": "100%",
+        "Errores Minimos": "0-6",
+        "Victorias Minimas": "30"
+      }
+    },
+    "Doruguremon": {
+      gruposColumnas: {
+        "Requisitos Obligatorios": ["Program"]
+      },
+      valores: {
+        "Program": "Death"
+      }
+    }
+  }
+  */
   requisitosOrigen: {
     "Dorugamon": {
       gruposColumnas: {
@@ -1761,9 +1830,9 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     if (nombreDigimon === "DexDoruguremon") {
       const evolucionActual = window.currentEvolutionDigimon;
 
-      // Desde DexDorugamon: Peso, Entrenamiento, Errores, Combates dan +1/0
+      // Desde DexDorugamon: Peso, Entrenamiento, Errores, Victorias Minimas dan +1/0
       if (evolucionActual === "DexDorugamon") {
-        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Combates Minimos") {
+        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Victorias Minimas") {
           return { cumple: 1, noCumple: 0 };
         }
       }
@@ -1779,7 +1848,7 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
       // Desde Dorugamon: misma lógica que SkullGreymon (evolución probabilística)
       if (evolucionActual === "Dorugamon") {
         // Todos los requisitos obligatorios deben cumplirse para tener chance
-        if (campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Combates Minimos" || campo === "Vinculo al momento de evolucionar" || campo === "Program") {
+        if (campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Victorias Minimas" || campo === "Vinculo al momento de evolucionar" || campo === "Program") {
           return { cumple: 0, noCumple: -10 };
         }
       }

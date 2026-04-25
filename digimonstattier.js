@@ -288,7 +288,7 @@ const digimonstattier = {
     "ATK": 3 , "DEF": 1, "HP": 50, "Vel": 21, "Digipuntos": 3, "Evoluciona": ["Pteromon", "Mushmon","Penmon","Pillomon", "Ghostmon", "Burpmon"], "Viene": ["Yolkmon"]
   },
       "Pteromon": { // Cambiar
-    "ATK": 20 , "DEF": 20, "HP": 200, "Vel": 65, "Digipuntos": 12.5, "Evoluciona": ["Burpmon","Galemon","Numemon", "Scumon", "Bakemon LT", "Nanimon"], "Viene": ["Fluffymon"]
+    "ATK": 20 , "DEF": 20, "HP": 200, "Vel": 65, "Digipuntos": 12.5, "Evoluciona": ["Burpmon","Galemon","Numemon", "Scumon", "Bakemon LT", "Nanimon", "Kiwimon"], "Viene": ["Fluffymon"]
   },
       "Galemon": { // Cambiar
     "ATK": 95 , "DEF": 40, "HP": 650, "Vel": 100, "Digipuntos": 30, "Evoluciona": ["Burpmon","GrandGalemon"], "Viene": ["Pteromon"]
@@ -325,7 +325,7 @@ const digimonstattier = {
     "ATK": 250, "DEF": 100, "HP": 1500, "Vel": 100, "Digipuntos": 60.0, "Evoluciona": ["Burpmon"], "Viene": ["Dorugamon","DexDorugamon","Doruguremon"]
   },
   "Grademon": {
-    "ATK": 210, "DEF": 130, "HP": 2300, "Vel": 130, "Digipuntos": 70.0, "Evoluciona": ["Grademon VICE","Burpmon"], "Viene": ["Raptordramon"]
+    "ATK": 210, "DEF": 130, "HP": 2100, "Vel": 150, "Digipuntos": 70.0, "Evoluciona": ["Grademon VICE","Burpmon"], "Viene": ["Raptordramon"]
   },
   "Grademon VICE": {
     "ATK": 245, "DEF": 125, "HP": 2000, "Vel": 130, "Digipuntos": 70.0, "Evoluciona": ["Burpmon"], "Viene": ["Grademon"]
@@ -349,7 +349,7 @@ const digimonstattier = {
     "ATK": 70, "DEF": 100, "HP": 850, "Vel": 70, "Digipuntos": 32.5, "Evoluciona": ["SkullGreymon","Burpmon"], "Viene": ["Gekkomon"]
   },
   "Kiwimon": {
-    "ATK": 50, "DEF": 40, "HP": 1100, "Vel": 100, "Digipuntos": 30.0, "Evoluciona": ["GrandGalemon","Burpmon","Delumon","Entmon"], "Viene": ["Pomumon"]
+    "ATK": 50, "DEF": 40, "HP": 1100, "Vel": 100, "Digipuntos": 30.0, "Evoluciona": ["GrandGalemon","Burpmon","Delumon","Entmon"], "Viene": ["Pomumon","Pteromon"]
   },
   "Pomumon": {
     "ATK": 35, "DEF": 30, "HP": 550, "Vel": 35, "Digipuntos": 15.0, "Evoluciona": ["Kiwimon", "Parasaumon", "Scumon", "Bakemon LT", "Nanimon","Burpmon"], "Viene": ["Fluffymon"]

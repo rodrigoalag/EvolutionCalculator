@@ -1,4 +1,7 @@
 // #region Constantes
+// Variable global para el idioma actual (por defecto español)
+let currentLanguage = 'es';
+
   // Mapeo de textos en español a claves de traducción
   const headerMappingJS = {
     'Peso': 'peso',
@@ -120,7 +123,6 @@ const getTamaNombre = (codigo) => {
 // 4. Función para actualizar los textos de los selects
 function updateSelectTexts() {
   // Actualizar labels
-  if (tamaLabel) tamaLabel.textContent = getSelectText('selectTama');
   if (nivelLabel) nivelLabel.textContent = getSelectText('selectLevel');
   if (digimonLabel) digimonLabel.textContent = getSelectText('selectDigimon');
 
@@ -565,7 +567,13 @@ function onTamaChanged(tamaElegido) {
   defaultDigiOption.textContent = getSelectText('selectDigimonDefault');
   digimonSelect.appendChild(defaultDigiOption);
 
-  if (!tamaElegido) return;
+  if (!tamaElegido) {
+    nivelSelect.disabled = true;
+    return;
+  }
+
+  // Habilitar selector de Nivel
+  nivelSelect.disabled = false;
 
   // Filtrar niveles disponibles para ese Tama
   const nivelesFiltrados = [...new Set(
@@ -597,7 +605,13 @@ nivelSelect.addEventListener("change", () => {
   defaultDigiOption.textContent = getSelectText('selectDigimonDefault'); // Usar función de traducción
   digimonSelect.appendChild(defaultDigiOption);
 
-  if (!nivelElegido || !tamaElegido) return;
+  if (!nivelElegido || !tamaElegido) {
+    digimonSelect.disabled = true;
+    return;
+  }
+
+  // Habilitar selector de Digimon
+  digimonSelect.disabled = false;
 
   // Agregar Digimon que coincidan con Tama y Nivel
   Object.entries(digimonReqDict).forEach(([nombre, datos]) => {
@@ -617,10 +631,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Insertar los selectores de Nivel y Digimon después del contenedor de iconos
   const tamaSection = document.querySelector('.tama-selector-section');
+  const digimonSelectElement = document.getElementById('digimonSelect');
+
   if (tamaSection && nivelLabel && nivelSelect) {
     tamaSection.parentNode.insertBefore(nivelLabel, tamaSection.nextSibling);
     tamaSection.parentNode.insertBefore(nivelSelect, nivelLabel.nextSibling);
     tamaSection.parentNode.insertBefore(digimonLabel, nivelSelect.nextSibling);
+    if (digimonSelectElement) {
+      digimonSelectElement.style.display = 'block';
+      tamaSection.parentNode.insertBefore(digimonSelectElement, digimonLabel.nextSibling);
+    }
+  }
+
+  // Deshabilitar selectores por defecto
+  nivelSelect.disabled = true;
+  if (digimonSelectElement) {
+    digimonSelectElement.disabled = true;
   }
 
   // Establecer idioma inicial basado en el selector

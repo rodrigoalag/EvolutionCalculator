@@ -152,23 +152,6 @@ h1, h2, h3 { color: #4ecdc4; }
 #nav-overlay.active { display: block; }
 
 /* Selector de idioma */
-#lang-selector {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 200;
-}
-#lang-selector select {
-  background: rgba(30, 30, 50, 0.9);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-#lang-selector select:hover { border-color: #4ecdc4; }
-
     /* Estilos originales de StatRanking */
     .container {
       display: flex;
@@ -619,14 +602,6 @@ h1, h2, h3 { color: #4ecdc4; }
     </ul>
   </div>
 </nav>
-
-<!-- Selector de idioma -->
-<div id="lang-selector">
-  <select id="languageSelector" onchange="changeLanguage()">
-    <option value="es">Español</option>
-    <option value="en">English</option>
-  </select>
-</div>
 
   <main>
     <section>

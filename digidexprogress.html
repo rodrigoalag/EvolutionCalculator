@@ -226,6 +226,50 @@ main {
   color: #4ecdc4;
 }
 
+/* Selector de idioma */
+#selectorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 2rem auto;
+}
+
+.selectorItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectorItem label {
+  color: #4ecdc4;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+#selectIdioma {
+  background: rgba(30, 30, 50, 0.9);
+  color: white;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+#selectIdioma:hover {
+  border-color: #4ecdc4;
+  background: rgba(30, 30, 50, 0.95);
+}
+
+#selectIdioma:focus {
+  outline: none;
+  border-color: #4ecdc4;
+  box-shadow: 0 0 8px rgba(78, 205, 196, 0.3);
+}
+
     .container {
       display: flex;
       flex-direction: column;
@@ -417,11 +461,9 @@ main {
   <main>
     <section>
       <div id="selectorContainer">
-        <div class="selectorItem">
-          <label for="selectTama">Seleccionar Tama:</label>
-          <select id="selectTama">
-            <option value="">-- Elige un Tama --</option>
-          </select>
+        <div class="tama-selector-section">
+          <h3 id="tamaTitle">Selecciona tu Tama</h3>
+          <div id="tama-icons"></div>
         </div>
         <div class="selectorItem">
           <label for="selectIdioma">Idioma:</label>

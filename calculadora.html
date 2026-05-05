@@ -1505,39 +1505,33 @@ function translateresultadosContent() {
 
 // Función para reorganizar campos con dropdowns a la derecha
 function reorganizeFields() {
-  const originalScript = document.createElement('script');
-  originalScript.src = 'script.js';
+  // script.js ya se carga en el HTML al final
+  const retryInterval = setInterval(() => {
+    if (typeof window.populateEditableFields === 'function') {
+      const originalPopulateEditableFields = window.populateEditableFields;
 
-  originalScript.onload = function() {
-    const retryInterval = setInterval(() => {
-      if (typeof window.populateEditableFields === 'function') {
-        const originalPopulateEditableFields = window.populateEditableFields;
+      window.populateEditableFields = function(digimon) {
+        originalPopulateEditableFields(digimon);
 
-        window.populateEditableFields = function(digimon) {
-          originalPopulateEditableFields(digimon);
+        setTimeout(() => {
+          reorganizeTableColumns();
+          updateEditableFieldsHeaders();
 
+          const selects = document.querySelectorAll('#editableFields select');
+          selects.forEach(select => translateSelectOptions(select));
+
+          updateInterfaceLanguage();
+
+          // ✅ Agregar help icon después de reorganizar y actualizar estilos
           setTimeout(() => {
-            reorganizeTableColumns();
-            updateEditableFieldsHeaders();
+            addHelpIconToHPBase();
+          }, 200);
+        }, 150);
+      };
 
-            const selects = document.querySelectorAll('#editableFields select');
-            selects.forEach(select => translateSelectOptions(select));
-
-            updateInterfaceLanguage();
-            
-            // ✅ Agregar help icon después de reorganizar y actualizar estilos
-            setTimeout(() => {
-              addHelpIconToHPBase();
-            }, 200);
-          }, 150);
-        };
-
-        clearInterval(retryInterval);
-      }
-    }, 50);
-  };
-
-  document.head.appendChild(originalScript);
+      clearInterval(retryInterval);
+    }
+  }, 50);
 }
 
 function reorganizeTableColumns() {
@@ -1657,6 +1651,7 @@ document.addEventListener('keydown', (e) => {
 
   <script src="digimonReqDict.js"></script>
   <script src="digimonstattier.js"></script>
+  <script src="script.js"></script>
 
 </body>
 </html>

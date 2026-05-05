@@ -697,6 +697,68 @@ nav a {
   color: #4ecdc4;
 }
 
+/* Buscador de Digimon */
+#search-container {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto 0.5rem auto;
+}
+
+#digi-search {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.9);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s;
+}
+#digi-search::placeholder { color: #666; }
+#digi-search:focus {
+  border-color: #4ecdc4;
+  box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+}
+#search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  background: rgba(30, 30, 50, 0.98);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  border-radius: 0 0 12px 12px;
+  display: none;
+  z-index: 1000;
+}
+#search-suggestions.active { display: block; }
+.suggestion-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.2s;
+}
+.suggestion-item:hover { background: rgba(78, 205, 196, 0.2); }
+.suggestion-item img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+.suggestion-item .name { color: #fff; font-size: 0.95rem; }
+.suggestion-item .tama-level { color: #4ecdc4; font-size: 0.75rem; }
+.selector-divider {
+  text-align: center;
+  color: #555;
+  margin: 0.3rem 0;
+  font-size: 0.75rem;
+}
+
 /* Dark theme para inputs y selects */
 input[type="number"],
 input[type="text"],
@@ -731,12 +793,21 @@ label {
   display: block;
   margin-top: 10px;
   margin-bottom: 5px;
+  text-align: center;
 }
 
 label:has(+ select:disabled),
 label:has(+ #nivelSelect:disabled) {
   color: #888;
   opacity: 0.6;
+}
+
+/* Centrar selectores de nivel y digimon */
+#nivelSelect,
+#digimonSelect {
+  display: block;
+  margin: 0 auto 5px auto;
+  min-width: 180px;
 }
 
 /* Dark theme para tablas */
@@ -852,6 +923,12 @@ button:active {
 	  DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.
 	</p>
 </section>
+
+  <div id="search-container">
+    <input type="text" id="digi-search" placeholder="🔍 Buscar Digimon..." autocomplete="off">
+    <div id="search-suggestions"></div>
+  </div>
+  <div class="selector-divider">o selecciona manualmente</div>
 
   <div class="tama-selector-section">
     <h3 id="tamaTitle" data-translate="selectTama">Selecciona tu Tama</h3>

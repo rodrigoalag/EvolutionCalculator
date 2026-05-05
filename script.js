@@ -513,6 +513,106 @@ function selectTamaIcon(tama) {
   onTamaChanged(tama);
 }
 
+// Buscador de Digimon
+function initSearch() {
+  const searchInput = document.getElementById('digi-search');
+  const suggestionsContainer = document.getElementById('search-suggestions');
+  if (!searchInput || !suggestionsContainer) return;
+
+  const allDigimon = Object.entries(digimonReqDict).map(([name, data]) => ({
+    name,
+    tama: data.Tama,
+    nivel: data.Nivel
+  }));
+
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    if (query.length < 1) {
+      suggestionsContainer.classList.remove('active');
+      return;
+    }
+
+    const matches = allDigimon
+      .filter(d => d.name.toLowerCase().includes(query))
+      .slice(0, 8);
+
+    if (matches.length === 0) {
+      suggestionsContainer.classList.remove('active');
+      return;
+    }
+
+    suggestionsContainer.innerHTML = matches.map(d => `
+      <div class="suggestion-item" data-name="${d.name}" data-tama="${d.tama}" data-nivel="${d.nivel}">
+        <img src="icon/placeholder.png" data-digimon="${d.name}" alt="">
+        <div>
+          <div class="name">${d.name}</div>
+          <div class="tama-level">${d.tama} • ${nivelAEtapa[d.nivel] || ''}</div>
+        </div>
+      </div>
+    `).join('');
+
+    suggestionsContainer.querySelectorAll('img[data-digimon]').forEach(img => {
+      cargarImagenIcono(img.dataset.digimon, img);
+    });
+
+    suggestionsContainer.classList.add('active');
+  });
+
+  suggestionsContainer.addEventListener('click', (e) => {
+    const item = e.target.closest('.suggestion-item');
+    if (item) {
+      selectDigimonFromSearch(item.dataset.name, item.dataset.tama, parseInt(item.dataset.nivel));
+      searchInput.value = '';
+      suggestionsContainer.classList.remove('active');
+    }
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const firstItem = suggestionsContainer.querySelector('.suggestion-item');
+      if (firstItem) {
+        selectDigimonFromSearch(firstItem.dataset.name, firstItem.dataset.tama, parseInt(firstItem.dataset.nivel));
+        searchInput.value = '';
+        suggestionsContainer.classList.remove('active');
+      }
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#search-container')) {
+      suggestionsContainer.classList.remove('active');
+    }
+  });
+}
+
+function cargarImagenIcono(nombre, elementoImg) {
+  const variaciones = [nombre, nombre.replace(/ /g, ''), nombre.replace(/ /g, '_')];
+  let i = 0;
+  function intentar() {
+    if (i >= variaciones.length) return;
+    const srcTry = `icon/${variaciones[i]}.png`;
+    const testImg = new Image();
+    testImg.onload = () => { elementoImg.src = srcTry; };
+    testImg.onerror = () => { i++; intentar(); };
+    testImg.src = srcTry;
+  }
+  intentar();
+}
+
+function selectDigimonFromSearch(name, tama, nivel) {
+  selectTamaIcon(tama);
+
+  setTimeout(() => {
+    nivelSelect.value = nivel;
+    nivelSelect.dispatchEvent(new Event('change'));
+
+    setTimeout(() => {
+      digimonSelect.value = name;
+      digimonSelect.dispatchEvent(new Event('change'));
+    }, 100);
+  }, 50);
+}
+
 // Crear el label y select del nivel (MODIFICADO)
 const nivelLabel = document.createElement("label");
 nivelLabel.textContent = getSelectText('selectLevel'); // Usar función de traducción
@@ -625,6 +725,7 @@ nivelSelect.addEventListener("change", () => {
 document.addEventListener('DOMContentLoaded', () => {
   // Crear selectores de Tama con iconos, Nivel y Digimon
   createTamaIcons();
+  initSearch();
 
   // Insertar los selectores de Nivel y Digimon después del contenedor de iconos
   const tamaSection = document.querySelector('.tama-selector-section');

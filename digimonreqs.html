@@ -20,7 +20,7 @@ body {
 
 h1, h2, h3 { color: #4ecdc4; }
 
-/* MenÃº hamburguesa */
+/* MenÁº hamburguesa */
 #nav-toggle {
   position: fixed;
   top: 15px;
@@ -195,7 +195,7 @@ h1, h2, h3 { color: #4ecdc4; }
   color: #ccc;
 }
 
-/* Cards de selecciÃ³n */
+/* Cards de selección */
 .selection-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -248,7 +248,7 @@ h1, h2, h3 { color: #4ecdc4; }
   line-height: 1.5;
 }
 
-/* SecciÃ³n de crÃ©ditos */
+/* Sección de crÁ©ditos */
 .credits-section {
   background: rgba(30, 30, 50, 0.4);
   border-radius: 16px;
@@ -345,7 +345,7 @@ h1, h2, h3 { color: #4ecdc4; }
 </head>
 <body>
 
-<!-- MenÃº de navegaciÃ³n hamburguesa -->
+<!-- MenÁº de navegación hamburguesa -->
 <button id="nav-toggle" onclick="toggleNav()">
   <span></span>
   <span></span>
@@ -371,13 +371,13 @@ h1, h2, h3 { color: #4ecdc4; }
   <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
   <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
   <div class="nav-divider"></div>
-  <h3><img src="./pageicons/audit.png" alt="CrÃ©ditos"> CrÃ©ditos</h3>
+  <h3><img src="./pageicons/audit.png" alt="CrÁ©ditos"> CrÁ©ditos</h3>
   <div class="nav-credits">
-    Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÃ­a podido hacer varias cosas en las pÃ¡ginas:
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÁ­a podido hacer varias cosas en las páginas:
     <ul>
       <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
-      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del Ã¡rbol evolutivo, tomÃ© prestado sus ideas para hacer las mejoras</li>
-      <li><strong>Panoli</strong> - Por darme todas las imÃ¡genes recortadas del juego</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomÁ© prestado sus ideas para hacer las mejoras</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
       <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
     </ul>
   </div>
@@ -386,7 +386,7 @@ h1, h2, h3 { color: #4ecdc4; }
 <!-- Selector de idioma -->
 <div id="lang-selector">
   <select id="languageSelector" onchange="changeLanguage()">
-    <option value="es">EspaÃ±ol</option>
+    <option value="es">EspaÁ±ol</option>
     <option value="en">English</option>
   </select>
 </div>
@@ -396,30 +396,30 @@ h1, h2, h3 { color: #4ecdc4; }
   <p class="welcome-subtitle" id="welcomeSubtitle">Net Driver - Herramientas de la comunidad</p>
 
   <p class="welcome-text" id="welcomeText">
-    Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la informaciÃ³n mediante el Ã¡rbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.
+    Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la información mediante el árbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.
   </p>
 
   <div class="selection-cards">
     <a href="./arbolCanvas.html" class="selection-card">
-      <span class="icon"><img src="./pageicons/arbolevolutivo.png" alt="Ãrbol"></span>
-      <h2 id="treeTitle">Ãrbol Evolutivo</h2>
-      <p id="treeDesc">Visualiza las evoluciones de forma interactiva con un Ã¡rbol grÃ¡fico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.</p>
+      <span class="icon"><img src="./pageicons/arbolevolutivo.png" alt="Árbol"></span>
+      <h2 id="treeTitle">Árbol Evolutivo</h2>
+      <p id="treeDesc">Visualiza las evoluciones de forma interactiva con un árbol gráfico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.</p>
     </a>
 
     <a href="./digidex.html?v=2" class="selection-card">
       <span class="icon"><img src="./pageicons/Digidex.png" alt="DigiDex"></span>
       <h2 id="reqsTitle">Entradas DigiDex</h2>
-      <p id="reqsDesc">Consulta la informaciÃ³n detallada de cada Digimon: requisitos de evoluciÃ³n, stats base, y toda la informaciÃ³n necesaria para evolucionar.</p>
+      <p id="reqsDesc">Consulta la información detallada de cada Digimon: requisitos de evolución, stats base, y toda la información necesaria para evolucionar.</p>
     </a>
   </div>
 
   <div class="credits-section">
-    <h3><span id="creditsTitle">CrÃ©ditos</span></h3>
-    <p id="creditsIntro">Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÃ­a podido hacer varias cosas en las pÃ¡ginas:</p>
+    <h3><span id="creditsTitle">CrÁ©ditos</span></h3>
+    <p id="creditsIntro">Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÁ­a podido hacer varias cosas en las páginas:</p>
     <ul>
       <li><strong>JorgeTitor</strong> - <span id="credit1">Por ser el de la idea original de llevar un registro de todos los requisitos</span></li>
-      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - <span id="credit2">Tuvo la idea original del Ã¡rbol evolutivo, tomÃ© prestado sus ideas para hacer las mejoras</span></li>
-      <li><strong>Panoli</strong> - <span id="credit3">Por darme todas las imÃ¡genes recortadas del juego</span></li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - <span id="credit2">Tuvo la idea original del árbol evolutivo, tomÁ© prestado sus ideas para hacer las mejoras</span></li>
+      <li><strong>Panoli</strong> - <span id="credit3">Por darme todas las imágenes recortadas del juego</span></li>
       <li id="credit4">Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
     </ul>
   </div>
@@ -431,16 +431,16 @@ const translations = {
   es: {
     welcomeTitle: "Bienvenido a DigiDex Web",
     welcomeSubtitle: "Net Driver - Herramientas de la comunidad",
-    welcomeText: "Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la informaciÃ³n mediante el Ã¡rbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.",
-    treeTitle: "Ãrbol Evolutivo",
-    treeDesc: "Visualiza las evoluciones de forma interactiva con un Ã¡rbol grÃ¡fico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.",
+    welcomeText: "Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la información mediante el árbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.",
+    treeTitle: "Árbol Evolutivo",
+    treeDesc: "Visualiza las evoluciones de forma interactiva con un árbol gráfico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.",
     reqsTitle: "Entradas DigiDex",
-    reqsDesc: "Consulta la informaciÃ³n detallada de cada Digimon: requisitos de evoluciÃ³n, stats base, y toda la informaciÃ³n necesaria para evolucionar.",
-    creditsTitle: "CrÃ©ditos",
-    creditsIntro: "Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÃ­a podido hacer varias cosas en las pÃ¡ginas:",
+    reqsDesc: "Consulta la información detallada de cada Digimon: requisitos de evolución, stats base, y toda la información necesaria para evolucionar.",
+    creditsTitle: "CrÁ©ditos",
+    creditsIntro: "Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÁ­a podido hacer varias cosas en las páginas:",
     credit1: "Por ser el de la idea original de llevar un registro de todos los requisitos",
-    credit2: "Tuvo la idea original del Ã¡rbol evolutivo, tomÃ© prestado sus ideas para hacer las mejoras",
-    credit3: "Por darme todas las imÃ¡genes recortadas del juego",
+    credit2: "Tuvo la idea original del árbol evolutivo, tomÁ© prestado sus ideas para hacer las mejoras",
+    credit3: "Por darme todas las imágenes recortadas del juego",
     credit4: "Y a todos los que han ayudado a mejorar la base de datos con sus tageos"
   },
   en: {

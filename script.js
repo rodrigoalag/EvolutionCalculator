@@ -1458,6 +1458,16 @@ function generarFormulario() {
         return opciones;
     }
 
+    // Resuelve "N CODE Driver" → "N NombreDriver Driver" usando driverNombres.js
+    function resolverNombreDriver(driverStr) {
+        if (!driverStr || driverStr === "Ninguno") return driverStr;
+        const match = driverStr.match(/^(\d+)\s+([A-Z0-9]+)\s+Driver$/);
+        if (match && typeof driverNombres !== "undefined" && driverNombres[match[2]]) {
+            return `${match[1]} ${driverNombres[match[2]].nombre} Driver`;
+        }
+        return driverStr;
+    }
+
     function getDriverEquipadoOptions(selected) {
         let opciones = [];
         if (driverEquipadoOp[selected]) {
@@ -1597,7 +1607,8 @@ function generarFormulario() {
         opciones.forEach(op => {
             let option = document.createElement("option");
             option.value = op;
-            option.textContent = op;
+            // Para Driver Equipado, mostrar nombre resuelto pero conservar código como value
+            option.textContent = (field === "Driver Equipado") ? resolverNombreDriver(op) : op;
             select.appendChild(option);
         });
         

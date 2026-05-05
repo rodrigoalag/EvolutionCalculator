@@ -16,8 +16,6 @@ body {
   margin: 0;
   padding: 1rem;
   padding-top: 70px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in;
 }
 
 h1, h2, h3 { color: #4ecdc4; }
@@ -2785,9 +2783,6 @@ function descargarXLSX() {
 
 // Inicializar página - ejecutar inmediatamente sin esperar DOMContentLoaded
 function inicializarPaginaInmediatamente() {
-  // Ocultar página durante inicialización
-  document.body.style.opacity = '0';
-
   const selectIdioma = document.getElementById("selectIdioma");
   const downloadCSVBtn = document.getElementById('downloadCSV');
   const downloadXLSXBtn = document.getElementById('downloadXLSX');
@@ -2888,9 +2883,7 @@ function inicializarPaginaInmediatamente() {
   generarRanking();
   selectNivel.value = '';
 
-  // Mostrar página cuando todo está listo
-  document.body.style.opacity = '1';
-  console.log('Página inicializada sin parpadeos');
+  console.log('Tabla generada al cargar');
 }
 
 // Ejecutar inmediatamente si el documento ya está cargado, o esperar DOMContentLoaded

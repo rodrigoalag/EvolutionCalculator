@@ -344,6 +344,25 @@ h1, h2, h3 { color: #4ecdc4; }
 }
 
 /* ===== CALCULATOR-SPECIFIC STYLES ===== */
+header {
+  background: rgba(20, 20, 40, 0.6);
+  padding: 2rem 1rem !important;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+header h1 {
+  color: #4ecdc4;
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+}
+
+header p {
+  color: #888;
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+}
+
 #languageSelector {
   float: none;
   display: inline-flex;
@@ -351,6 +370,16 @@ h1, h2, h3 { color: #4ecdc4; }
   align-items: center;
   margin: 0 auto;
   width: auto;
+  background: rgba(30, 30, 50, 0.9);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#languageSelector:hover {
+  border-color: #4ecdc4;
 }
 
 nav a {

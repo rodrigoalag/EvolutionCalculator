@@ -344,6 +344,37 @@ h1, h2, h3 { color: #4ecdc4; }
 }
 
 /* ===== ENEMIGOS SPECIFIC STYLES ===== */
+header {
+  background: rgba(20, 20, 40, 0.6);
+  padding: 2rem 1rem !important;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+header h1 {
+  color: #4ecdc4;
+  margin: 0 0 1rem 0;
+  font-size: 2.5rem;
+}
+
+header p, header select {
+  color: #e0e0e0;
+  margin: 0.5rem 0;
+}
+
+header select {
+  background: rgba(30, 30, 50, 0.9);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+header select:hover {
+  border-color: #4ecdc4;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -613,6 +644,10 @@ h1, h2, h3 { color: #4ecdc4; }
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
+  background: rgba(30, 30, 50, 0.4);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(78, 205, 196, 0.2);
 }
 
 .selector-group {
@@ -620,6 +655,25 @@ h1, h2, h3 { color: #4ecdc4; }
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+}
+
+.selector-group label {
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+.selector-group select {
+  background: rgba(30, 30, 50, 0.9);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.selector-group select:hover {
+  border-color: #4ecdc4;
 }
 
 .download-btn {

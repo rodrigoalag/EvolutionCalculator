@@ -16,6 +16,8 @@ body {
   margin: 0;
   padding: 1rem;
   padding-top: 70px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
 }
 
 h1, h2, h3 { color: #4ecdc4; }
@@ -2781,8 +2783,11 @@ function descargarXLSX() {
   XLSX.writeFile(wb, `ranking_digimon_nivel_${nivel}.xlsx`);
 }
 
-// Inicializar
-document.addEventListener("DOMContentLoaded", () => {
+// Inicializar página - ejecutar inmediatamente sin esperar DOMContentLoaded
+function inicializarPaginaInmediatamente() {
+  // Ocultar página durante inicialización
+  document.body.style.opacity = '0';
+
   const selectIdioma = document.getElementById("selectIdioma");
   const downloadCSVBtn = document.getElementById('downloadCSV');
   const downloadXLSXBtn = document.getElementById('downloadXLSX');
@@ -2877,8 +2882,23 @@ document.addEventListener("DOMContentLoaded", () => {
   inicializarSelector();
   actualizarTraducciones();
   configurarDelegacionEventos();
-  console.log('Delegación de eventos configurada');
-});
+
+  // Generar tabla default (Perfect / Nivel 5) sin cambiar el selector visualmente
+  selectNivel.value = 5;
+  generarRanking();
+  selectNivel.value = '';
+
+  // Mostrar página cuando todo está listo
+  document.body.style.opacity = '1';
+  console.log('Página inicializada sin parpadeos');
+}
+
+// Ejecutar inmediatamente si el documento ya está cargado, o esperar DOMContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarPaginaInmediatamente);
+} else {
+  inicializarPaginaInmediatamente();
+}
   </script>
 
 <script>

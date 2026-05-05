@@ -347,9 +347,17 @@ const digimonReqDict = {
     "Peso": 15, "Xross": "1 V0019 Driver"
   },   
      "PrinceMamemon": {
-	"ID": 107, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante","Peso": 60,
-	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal",
-	"Victorias": 130, "Driver Equipado": "1 EX009 Driver"
+	"ID": 107, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": 60,
+	"RequisitosCondicionados": {
+		"condicion": "Driver Equipado",
+		"valorCondicion": "1 EX009 Driver",
+		"Con WR": {
+			"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal"
+		},
+		"Con Driver": {
+			"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 250, "Victorias": 130, "Driver Equipado": "1 EX009 Driver"
+		}
+	}
   },
       "Chamblemon": {
 	"ID": 107, "Tama": "P", "Nivel": 4, "Atributo": "Virus", "Tipo": "Planta", "Peso": 16,

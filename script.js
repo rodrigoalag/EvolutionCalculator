@@ -1254,6 +1254,21 @@ function generarFormulario() {
         console.log(`✅ Campo dinámico agregado: ${key}`);
       }
     }
+
+    // Si tiene RequisitosCondicionados, agregar campos de TODOS los paths al fieldSet
+    if (info.RequisitosCondicionados) {
+      ["Con WR", "Con Driver"].forEach(path => {
+        const pathReqs = info.RequisitosCondicionados[path];
+        if (pathReqs) {
+          for (const key in pathReqs) {
+            if (!excludelist.includes(key) && key !== "Stat Superior" && !camposAOcultar.includes(key)) {
+              fieldSet.add(key);
+              console.log(`✅ Campo de RequisitosCondicionados[${path}] agregado: ${key}`);
+            }
+          }
+        }
+      });
+    }
   });
 
   // EXCEPCIÓN: Si alguna evolución tiene "Bonus Vinculo Alcanzado", agregar "Vinculo Minimo alcanzado"
@@ -2344,6 +2359,7 @@ let bakemonLTEvaluated = false; // AGREGADO PARA BAKEMON LT
 let shoutmonEvaluated = false; // AGREGADO PARA SHOUTMON
 let shoutmonBlackEvaluated = false; // AGREGADO PARA SHOUTMON BLACK
 let warGreymonEvaluated = false; // AGREGADO PARA WARGREYMON Y BLACKWARGREYMON
+let princeMamemonEvaluated = false; // AGREGADO PARA PRINCEMAMEMON
 
 const celdas = Array.from(fieldSet)
   .filter(field => {
@@ -2436,6 +2452,50 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             return `<td class="detail-column" style="display: none;">-</td>`;
         }
         // FIN LÓGICA ESPECIAL PARA SKULLGREYMON
+
+        // LÓGICA ESPECIAL PARA PRINCEMAMEMON - RequisitosCondicionados
+        if (name === "PrinceMamemon" && !princeMamemonEvaluated) {
+            const condReqs = requisitos.RequisitosCondicionados;
+            if (condReqs) {
+                const driverIngresado = (inputValues["Driver Equipado"] || "").trim();
+                const usarDriver = driverIngresado &&
+                    driverIngresado !== "Ninguno" &&
+                    driverIngresado.toLowerCase() === condReqs.valorCondicion.toLowerCase();
+
+                const reqPath = usarDriver ? condReqs["Con Driver"] : condReqs["Con WR"];
+
+                const entrenamientoOk = Number(inputValues["% Entrenamiento"]) >= reqPath["% Entrenamiento"];
+                const erroresOk = Number(inputValues["Error Maximo"]) <= reqPath["Error Maximo"];
+                const combatesOk = Number(inputValues["Combates Minimos"]) >= reqPath["Combates Minimos"];
+
+                let allOk;
+                if (usarDriver) {
+                    const victoriasOk = Number(inputValues["Victorias"]) >= reqPath["Victorias"];
+                    const driverOk = driverIngresado.toLowerCase() === reqPath["Driver Equipado"].toLowerCase();
+                    allOk = entrenamientoOk && erroresOk && combatesOk && victoriasOk && driverOk;
+                    console.log(`👑 PrinceMamemon [Con Driver] - Entrenamiento:${entrenamientoOk} Errores:${erroresOk} Combates:${combatesOk} Victorias:${victoriasOk} Driver:${driverOk}`);
+                } else {
+                    const winRateOk = Number(inputValues["WinRate"]) >= reqPath["WinRate"];
+                    const programOk = (inputValues["Program"] || "").toLowerCase() === (reqPath["Program"] || "").toLowerCase();
+                    allOk = entrenamientoOk && erroresOk && combatesOk && winRateOk && programOk;
+                    console.log(`👑 PrinceMamemon [Con WR] - Entrenamiento:${entrenamientoOk} Errores:${erroresOk} Combates:${combatesOk} WinRate:${winRateOk} Program:${programOk}`);
+                }
+
+                puntaje += allOk ? 4 : -10;
+                console.log(`👑 PrinceMamemon - Resultado: ${allOk ? "+4" : "-10"} (path: ${usarDriver ? "Con Driver" : "Con WR"})`);
+            }
+            princeMamemonEvaluated = true;
+
+            if (["% Entrenamiento", "Error Maximo", "WinRate", "Combates Minimos", "Victorias", "Program", "Driver Equipado"].includes(field)) {
+                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            }
+        }
+
+        if (name === "PrinceMamemon" && princeMamemonEvaluated &&
+            ["% Entrenamiento", "Error Maximo", "WinRate", "Combates Minimos", "Victorias", "Program", "Driver Equipado"].includes(field)) {
+            return `<td class="detail-column" style="display: none;">-</td>`;
+        }
+        // FIN LÓGICA ESPECIAL PARA PRINCEMAMEMON
 
         // ⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen
         // La siguiente lógica está basada en requisitos antiguos y puede no ser precisa

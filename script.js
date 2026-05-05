@@ -514,8 +514,6 @@ function selectTamaIcon(tama) {
   onTamaChanged(tama);
 }
 
-createTamaIcons();
-
 // Crear el label y select del nivel (MODIFICADO)
 const nivelLabel = document.createElement("label");
 nivelLabel.textContent = getSelectText('selectLevel'); // Usar función de traducción
@@ -622,6 +620,17 @@ nivelSelect.addEventListener("change", () => {
 
 // 8. Inicializar traducciones al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
+  // Crear selectores de Tama con iconos, Nivel y Digimon
+  createTamaIcons();
+
+  // Insertar los selectores de Nivel y Digimon después del contenedor de iconos
+  const tamaSection = document.querySelector('.tama-selector-section');
+  if (tamaSection && nivelLabel && nivelSelect) {
+    tamaSection.parentNode.insertBefore(nivelLabel, tamaSection.nextSibling);
+    tamaSection.parentNode.insertBefore(nivelSelect, nivelLabel.nextSibling);
+    tamaSection.parentNode.insertBefore(digimonLabel, nivelSelect.nextSibling);
+  }
+
   // Establecer idioma inicial basado en el selector
   if (languageSelector) {
     currentLanguage = languageSelector.value || 'es';

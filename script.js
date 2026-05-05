@@ -1426,7 +1426,22 @@ function generarFormulario() {
     }
 
     // LÓGICA ORIGINAL PARA CAMPOS DINÁMICOS (mantener exacta)
-    const sampleValue = nextDigimons.find(([_, info]) => info[field] !== undefined)?.[1][field];
+    // También buscar en RequisitosCondicionados si el campo no está al nivel raíz
+    let sampleValue = nextDigimons.find(([_, info]) => info[field] !== undefined)?.[1][field];
+    if (sampleValue === undefined) {
+      for (const [_, info] of nextDigimons) {
+        if (info.RequisitosCondicionados) {
+          for (const path of ["Con WR", "Con Driver"]) {
+            const pathReqs = info.RequisitosCondicionados[path];
+            if (pathReqs && pathReqs[field] !== undefined) {
+              sampleValue = pathReqs[field];
+              break;
+            }
+          }
+        }
+        if (sampleValue !== undefined) break;
+      }
+    }
     let td = document.createElement("td");
     let select = document.createElement("select");
     select.id = `field_${field}`;

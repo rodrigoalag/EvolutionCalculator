@@ -136,21 +136,17 @@ function updateSelectTexts() {
 
 // 4.5. Función para actualizar los nombres de Tama según idioma
 function updateTamaOptions() {
-  Array.from(tamaSelect.options).forEach(option => {
-    if (option.value !== "") {
-      option.textContent = getTamaNombre(option.value);
-    }
-  });
+  // Los Tamas se muestran como iconos, no hay dropdown de opciones que actualizar
+  const tamaTitle = document.getElementById('tamaTitle');
+  if (tamaTitle) {
+    tamaTitle.textContent = getSelectText('selectTama');
+  }
 }
 
 // 5. Función para actualizar opciones por defecto
 function updateDefaultOptions() {
-  // Actualizar opción por defecto del Tama
-  const tamaDefaultOption = tamaSelect.querySelector('option[value=""]');
-  if (tamaDefaultOption) {
-    tamaDefaultOption.textContent = getSelectText('selectTamaDefault');
-  }
-  
+  // Los Tamas se muestran como iconos, no hay dropdown de opciones
+
   // Actualizar opción por defecto del Nivel
   const nivelDefaultOption = nivelSelect.querySelector('option[value=""]');
   if (nivelDefaultOption) {
@@ -483,28 +479,42 @@ const evonatural = {
 // #endregion
 
 // #region Selector
-///// SELECTOR CON HTML?
-// Crear el label y el select del Tama (MODIFICADO)
-const tamaLabel = document.createElement("label");
-tamaLabel.textContent = getSelectText('selectTama'); // Usar función de traducción
-tamaLabel.setAttribute("for", "tamaSelect");
+///// SELECTOR CON ICONOS
+// Crear el selector de Tama con iconos
+function createTamaIcons() {
+  const container = document.getElementById('tama-icons');
+  if (!container) return;
+  container.innerHTML = '';
 
-const tamaSelect = document.createElement("select");
-tamaSelect.id = "tamaSelect";
+  const tamasUnicos = [...new Set(Object.values(digimonReqDict).map(d => d.Tama))].sort();
+  tamasUnicos.forEach(tama => {
+    const btn = document.createElement('button');
+    btn.className = 'tama-icon-btn';
+    btn.dataset.tama = tama;
+    btn.type = 'button';
+    btn.innerHTML = `
+      <img src="Tama/${tama}.png" alt="${tama}" onerror="this.src='icon/placeholder.png'">
+      <span>${tama}</span>
+    `;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectTamaIcon(tama);
+    });
+    container.appendChild(btn);
+  });
+}
 
-const defaultTamaOption = document.createElement("option");
-defaultTamaOption.value = "";
-defaultTamaOption.textContent = getSelectText('selectTamaDefault'); // Usar función de traducción
-tamaSelect.appendChild(defaultTamaOption);
+let currentTama = ''; // Variable global para rastrear el Tama seleccionado
 
-// Obtener valores únicos de Tama con formato "ID - Nombre"
-const tamanosUnicos = [...new Set(Object.values(digimonReqDict).map(d => d["Tama"]))];
-tamanosUnicos.forEach(tama => {
-  const option = document.createElement("option");
-  option.value = tama;
-  option.textContent = getTamaNombre(tama); // Usar formato "ID - Nombre"
-  tamaSelect.appendChild(option);
-});
+function selectTamaIcon(tama) {
+  currentTama = tama;
+  document.querySelectorAll('.tama-icon-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tama === tama);
+  });
+  onTamaChanged(tama);
+}
+
+createTamaIcons();
 
 // Crear el label y select del nivel (MODIFICADO)
 const nivelLabel = document.createElement("label");
@@ -528,22 +538,29 @@ Object.entries(nivelAEtapa).forEach(([nivel, etapa]) => {
   nivelSelect.appendChild(option);
 });
 
-// Crear el label para el selector de Digimon (MODIFICADO)
+// Crear el label para el selector de Digimon
 const digimonLabel = document.createElement("label");
 digimonLabel.textContent = getSelectText('selectDigimon'); // Usar función de traducción
 digimonLabel.setAttribute("for", "digimonSelect");
 
-// Insertar los selectores en orden (sin cambios)
-digimonSelect.parentNode.insertBefore(tamaLabel, digimonSelect);
-digimonSelect.parentNode.insertBefore(tamaSelect, digimonSelect);
-digimonSelect.parentNode.insertBefore(nivelLabel, digimonSelect);
-digimonSelect.parentNode.insertBefore(nivelSelect, digimonSelect);
-digimonSelect.parentNode.insertBefore(digimonLabel, digimonSelect);
+// Crear label y select de Nivel
+const nivelLabel = document.createElement("label");
+nivelLabel.textContent = getSelectText('selectLevel');
+nivelLabel.setAttribute("for", "nivelSelect");
 
-// Manejar cambio en Tama (MODIFICADO)
-tamaSelect.addEventListener("change", () => {
-  const tamaElegido = tamaSelect.value;
+const nivelSelect = document.createElement("select");
+nivelSelect.id = "nivelSelect";
 
+// Insertar los selectores de Nivel y Digimon después del contenedor de iconos
+const tamaSection = document.querySelector('.tama-selector-section');
+if (tamaSection) {
+  tamaSection.parentNode.insertBefore(nivelLabel, tamaSection.nextSibling);
+  tamaSection.parentNode.insertBefore(nivelSelect, nivelLabel.nextSibling);
+  tamaSection.parentNode.insertBefore(digimonLabel, nivelSelect.nextSibling);
+}
+
+// Función para manejar cambio en Tama
+function onTamaChanged(tamaElegido) {
   // Limpiar nivel y digimon
   nivelSelect.innerHTML = "";
   digimonSelect.innerHTML = "";
@@ -574,13 +591,13 @@ tamaSelect.addEventListener("change", () => {
     option.textContent = nivelAEtapa[nivel];
     nivelSelect.appendChild(option);
   });
-});
+}
 
 let tamaElegido 
 // Manejar cambio en Nivel (MODIFICADO)
 nivelSelect.addEventListener("change", () => {
   const nivelElegido = parseInt(nivelSelect.value);
-  tamaElegido = tamaSelect.value;
+  const tamaElegido = currentTama;
 
   // Limpiar digimon
   digimonSelect.innerHTML = "";

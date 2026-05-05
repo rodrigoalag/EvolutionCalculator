@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Árbol Evolutivo de Digimon</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="digimonReqDict.js"></script>
+  <script src="digimonstattier.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #27272a; color: white; margin: 0; overflow: auto; -webkit-overflow-scrolling: touch; /* Suaviza scroll en iOS */ }
+    header { padding: 1rem; text-align: center; }
+    header h1 { font-size: 2rem; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1rem; }
+    nav a { color: #4ecdc4; text-decoration: none; border: 1px solid #4ecdc4; padding: 0.5rem 1rem; border-radius: 10px; }
+    #selectorContainer { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1rem; align-items: center; }
+    #selectorContainer select {
+      padding: 0.5rem;
+      border-radius: 5px;
+      background: #1f1f22;
+      color: white;
+      border: 1px solid #4ecdc4;
+    }
+    #selectorContainer label {
+      padding: 0.5rem;
+      user-select: none;
+      color: white;
+      background: transparent;
+      border: none;
+      margin-right: 0.3rem;
+      display: inline-block;
+      min-width: 60px;
+    }
+    #treeContainer { width: 100vw; height: 90vh; overflow: hidden; position: relative; }
+    #mensajeInicial { text-align: center; font-size: 1.2rem; color: #aaa; margin-top: 2rem; }
+    .link { fill: none; stroke: #888; stroke-width: 2px; }
+    .digimon-img { width: 40px; height: 40px; border-radius: 50%; display: block; }
+    .fo-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+      color: white;
+      pointer-events: none;
+    }
+    #languageSelector {
+      margin-left: 1rem;
+      background: #1f1f22;
+      border: 1px solid #4ecdc4;
+      color: white;
+      border-radius: 5px;
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1 id="mainTitle" data-translate="title">Árbol Evolutivo de Digimon</h1>
+  <p id="mainSubtitle" data-translate="subtitle">Creado por Rodrigoalag, basado en el trabajo de Ruben</p>
+    <nav>
+      <a href="./index.html">Main Hub</a>
+      <a href="./calculadora.html">Digimon Evo Calc</a>
+      <a href="./digimonreqs.html">Digimon Reqs</a>
+      <a href="./StatRanking.html">Digimon Stat Ranking</a>
+      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
+	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
+	  <a href="./BalanceCalculator.html">Balance Calculator</a>
+      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
+      <a href="./dropsdelared.html">Drops de la Red</a>
+      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
+      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
+      <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
+      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
+      <a target="_blank" href="https://nd-deck-builder-5188c6.gitlab.io/">Deck Builder</a>
+    </nav>
+</header>
+
+<section id="selectorContainer">
+  <div>
+    <label for="selectTama">Tama:</label>
+    <select id="selectTama"><option value="">-- Elige un Tama --</option></select>
+  </div>
+  <div>
+    <label for="selectNivel" id="labelNivel">Nivel:</label>
+    <select id="selectNivel" disabled><option value="">-- Elige un Nivel --</option></select>
+  </div>
+  <div>
+    <label for="selectDigimon" id="labelDigimon">Digimon:</label>
+    <select id="selectDigimon" disabled><option value="">-- Elige un Digimon --</option></select>
+  </div>
+  <div>
+    <label for="languageSelector">Idioma:</label>
+    <select id="languageSelector" aria-label="Selector de idioma">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+</section>
+
+<div id="treeContainer">
+  <div id="mensajeInicial">Selecciona un Digimon para mostrar el árbol evolutivo.</div>
+  <svg id="treeSvg" width="3000" height="1000"></svg>
+</div>
+
+<script>
+const nivelAEtapa = {
+  1: "Baby I",
+  2: "Baby II",
+  3: "Child",
+  4: "Adult",
+  5: "Perfect",
+  6: "Ultimate"
+};
+
+const translations = {
+  es: {
+    title: "Árbol Evolutivo de Digimon",
+    subtitle: "Creado por Rodrigoalag, basado en el trabajo de Ruben",
+    labelNivel: "Nivel:",
+    placeholderTama: "-- Elige un Tama --",
+    placeholderNivel: "-- Elige un Nivel --",
+    placeholderDigimon: "-- Elige un Digimon --",
+    mensajeInicial: "Selecciona un Digimon para mostrar el árbol evolutivo."
+  },
+  en: {
+    title: "Digimon Evolution Tree",
+    subtitle: "Created by Rodrigoalag, based on Ruben's work",
+    labelNivel: "Level:",
+    placeholderTama: "-- Choose a Tama --",
+    placeholderNivel: "-- Choose a Level --",
+    placeholderDigimon: "-- Choose a Digimon --",
+    mensajeInicial: "Select a Digimon to display the evolution tree."
+  }
+};
+
+let currentLang = localStorage.getItem("lang") || "es";
+
+// Diccionario de nombres de Tama
+const tamaNombres = {
+  "V0": { es: "Cachivaches y Dragones", en: "Devices and Dragons" },
+  "M": { es: "Mutantes", en: "Mutant" },
+  "VS": { es: "Meteoros Xruzados", en: "Xrossing Meteors" },
+  "SP": { es: "Spirits", en: "Spirits" },
+  "D": { es: "Death", en: "Death" },
+  "P": { es: "Plant", en: "Plant" },
+  "VL": { es: "Cielos Liberados", en: "Liberated Skies" },
+  "PR": { es: "Prototipo Alpha", en: "Alpha Prototype" }
+};
+
+const getTamaNombre = (codigo) => {
+  const nombre = tamaNombres[codigo];
+  if (nombre) {
+    return `${codigo} - ${nombre[currentLang] || nombre.es}`;
+  }
+  return codigo;
+};
+
+const selectTama = document.getElementById("selectTama");
+const selectNivel = document.getElementById("selectNivel");
+const selectDigimon = document.getElementById("selectDigimon");
+const languageSelector = document.getElementById("languageSelector");
+const mainTitle = document.getElementById("mainTitle");
+const mainSubtitle = document.getElementById("mainSubtitle");
+const labelNivel = document.getElementById("labelNivel");
+const labelDigimon = document.getElementById("labelDigimon");
+const mensajeInicial = document.getElementById("mensajeInicial");
+const svg = d3.select("#treeSvg");
+let g = null;
+
+const zoom = d3.zoom().scaleExtent([0.4, 2]).on("zoom", e => g.attr("transform", e.transform));
+
+function traducirUI() {
+  const t = translations[currentLang];
+
+  mainTitle.textContent = t.title;
+  mainSubtitle.textContent = t.subtitle;
+  labelNivel.textContent = t.labelNivel;
+  labelDigimon.textContent = "Digimon:"; // No se traduce
+  selectTama.options[0].textContent = t.placeholderTama;
+  selectNivel.options[0].textContent = t.placeholderNivel;
+  selectDigimon.options[0].textContent = t.placeholderDigimon;
+  mensajeInicial.textContent = t.mensajeInicial;
+}
+
+// Función para cargar imagen (reutilizar del HTML original)
+function generarVariacionesNombre(nombre) {
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+  
+  return [...new Set([
+    nombreLimpio,
+    nombreEspacios,
+    nombreGuiones,
+    nombreOriginal.toLowerCase(),
+    nombreOriginal,
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase()
+  ])];
+}
+
+
+function crearImagenDigimon(nombre) {
+  const img = document.createElement("img");
+  img.className = "digimon-img";
+  img.alt = nombre;
+
+  const variaciones = generarVariacionesNombre(nombre);
+
+  let i = 0;
+  function intentar() {
+    if (i >= variaciones.length) {
+      // Si fallan todas las variaciones, intentar con placeholder.png
+      console.log(`❌ No se encontró imagen específica para ${nombre}. Intentando placeholder.png...`);
+      
+      const testPlaceholder = new Image();
+      testPlaceholder.onload = () => {
+        console.log(`✅ Usando placeholder.png para ${nombre}`);
+        img.src = "icon/placeholder.png";
+      };
+      testPlaceholder.onerror = () => {
+        console.log(`❌ No se encontró placeholder.png. Usando placeholder SVG.`);
+        // No se encontró imagen ni placeholder, poner placeholder SVG
+        img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM0ZWNkYzQiLz4KPHN2ZyB4PSI4IiB5PSI4IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IndoaXRlIj4KICA8cGF0aCBkPSJNMTIgMTJoOHY4aC04eiIvPgo8L3N2Zz4KPC9zdmc+";
+      };
+      testPlaceholder.src = "icon/placeholder.png";
+      return;
+    }
+    
+    const srcTry = `icon/${variaciones[i]}.png`;
+    const testImg = new Image();
+    testImg.onload = () => { 
+      console.log(`✅ Imagen encontrada: ${srcTry}`);
+      img.src = srcTry; 
+    };
+    testImg.onerror = () => {
+      console.log(`❌ No encontrada: ${srcTry}`);
+      i++;
+      intentar();
+    };
+    testImg.src = srcTry;
+  }
+  intentar();
+
+  return img;
+}
+
+function isMobile() {
+  return window.innerWidth <= 600;
+}
+
+function centrarYZoom(zoomFactor = 1) {
+  if (!d3Root) return;
+
+  const treeLayout = d3.tree().nodeSize([80, 225]);
+  treeLayout(d3Root);
+
+  const nodes = d3Root.descendants();
+
+  const xVals = nodes.map(d => d.x);
+  const yVals = nodes.map(d => d.y);
+
+  const minX = Math.min(...xVals);
+  const maxX = Math.max(...xVals);
+  const minY = Math.min(...yVals);
+  const maxY = Math.max(...yVals);
+
+  const width = maxY - minY;
+  const height = maxX - minX;
+
+  const svgWidth = svg.node().clientWidth;
+  const svgHeight = svg.node().clientHeight;
+
+  const scaleX = svgWidth / (width * 1.1);
+  const scaleY = svgHeight / (height * 1.1);
+
+  let scale = Math.min(scaleX, scaleY);
+
+  const isMobile = window.innerWidth <= 600;
+
+  if (isMobile) {
+    zoomFactor = 0.85;
+    scale *= zoomFactor;
+
+    scale = Math.min(Math.max(scale, 0.4), 2);
+
+    // En móvil no aplicar translate, solo zoom en 0,0
+    svg.transition().duration(700)
+      .call(zoom.transform, d3.zoomIdentity.scale(scale));
+
+  } else {
+    scale *= zoomFactor;
+
+    scale = Math.min(Math.max(scale, 0.4), 2);
+
+    const translateX = (svgWidth - scale * (minY + maxY)) / 2;
+    const translateY = (svgHeight - scale * (minX + maxX)) / 2;
+
+    svg.transition().duration(700)
+      .call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
+  }
+}
+
+
+
+function obtenerTamas() {
+  const set = new Set();
+  Object.values(digimonReqDict).forEach(d => d.Tama && set.add(d.Tama));
+  return Array.from(set).sort();
+}
+
+function obtenerNivelesPorTama(tama) {
+  const set = new Set();
+  Object.values(digimonReqDict).forEach(d => d.Tama === tama && d.Nivel != null && set.add(d.Nivel));
+  return Array.from(set).sort((a, b) => a - b);
+}
+
+function obtenerDigimonPorTamaNivel(tama, nivel) {
+  return Object.entries(digimonReqDict)
+    .filter(([_, d]) => d.Tama === tama && d.Nivel === Number(nivel))
+    .map(([k]) => k).sort();
+}
+
+function poblarTama() {
+  selectTama.innerHTML = '';
+  const opt0 = document.createElement("option");
+  opt0.value = "";
+  opt0.textContent = translations[currentLang].placeholderTama;
+  selectTama.appendChild(opt0);
+
+  obtenerTamas().forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = getTamaNombre(t);
+    selectTama.appendChild(opt);
+  });
+}
+
+function poblarNivel() {
+  selectNivel.innerHTML = '';
+  const opt0 = document.createElement("option");
+  opt0.value = "";
+  opt0.textContent = translations[currentLang].placeholderNivel;
+  selectNivel.appendChild(opt0);
+
+  selectDigimon.innerHTML = '';
+  const optDig0 = document.createElement("option");
+  optDig0.value = "";
+  optDig0.textContent = translations[currentLang].placeholderDigimon;
+  selectDigimon.appendChild(optDig0);
+  selectDigimon.disabled = true;
+
+  const tama = selectTama.value;
+  if (!tama) {
+    selectNivel.disabled = true;
+    return;
+  }
+  obtenerNivelesPorTama(tama).forEach(n => {
+    const opt = document.createElement("option");
+    opt.value = n;
+    opt.textContent = nivelAEtapa[n] || (currentLang === "es" ? `Nivel ${n}` : `Level ${n}`);
+    selectNivel.appendChild(opt);
+  });
+  selectNivel.disabled = false;
+}
+
+function poblarDigimon() {
+  selectDigimon.innerHTML = '';
+  const opt0 = document.createElement("option");
+  opt0.value = "";
+  opt0.textContent = translations[currentLang].placeholderDigimon;
+  selectDigimon.appendChild(opt0);
+
+  const tama = selectTama.value, nivel = selectNivel.value;
+  if (!tama || !nivel) {
+    selectDigimon.disabled = true;
+    return;
+  }
+  obtenerDigimonPorTamaNivel(tama, nivel).forEach(d => {
+    const opt = document.createElement("option");
+    opt.value = d;
+    opt.textContent = d;
+    selectDigimon.appendChild(opt);
+  });
+  selectDigimon.disabled = false;
+}
+
+function construirJerarquia(nombre, visitados = new Set()) {
+  if (!digimonReqDict[nombre]) return null;
+
+  if (visitados.has(nombre)) {
+    // Ciclo detectado, romper recursión
+    return null;
+  }
+  visitados.add(nombre);
+
+  const stat = digimonstattier[nombre];
+  const hijo = { name: nombre, children: [] };
+  if (stat?.Evoluciona) {
+    const evols = Array.isArray(stat.Evoluciona) ? stat.Evoluciona : stat.Evoluciona.split(',').map(e => e.trim());
+    evols.forEach(e => {
+      if (digimonReqDict[e]) {
+        // Pasar copia para no contaminar otras ramas
+        const sub = construirJerarquia(e, new Set(visitados));
+        if (sub) hijo.children.push(sub);
+      }
+    });
+  }
+  return hijo;
+}
+
+
+function collapse(d) {
+  if (d.children) {
+    d._children = d.children;
+    d._children.forEach(collapse);
+    d.children = null;
+  }
+}
+
+function update(source, inicial = false) {
+  g.selectAll("*").remove();
+  const treeLayout = d3.tree().nodeSize([100, 225]);
+  treeLayout(d3Root);
+
+  if (inicial) {
+    // Obtener nodos visibles
+    const nodes = d3Root.descendants();
+
+    const minX = d3.min(nodes, d => d.x);
+    const maxX = d3.max(nodes, d => d.x);
+    const minY = d3.min(nodes, d => d.y);
+    const maxY = d3.max(nodes, d => d.y);
+
+    const svgWidth = +svg.attr("width");
+    const svgHeight = +svg.attr("height");
+
+    const treeCenterX = (minX + maxX) / 2;
+    const treeCenterY = (minY + maxY) / 2;
+
+    const margin = 100;
+    const treeWidth = maxY - minY + margin * 2;
+    const treeHeight = maxX - minX + margin * 2;
+
+    const scaleX = svgWidth / treeWidth;
+    const scaleY = svgHeight / treeHeight;
+    let scale = Math.min(scaleX, scaleY);
+    scale = Math.min(2, Math.max(0.4, scale));
+
+    const translateX = svgWidth / 2 - treeCenterY * scale;
+    const translateY = svgHeight / 2 - treeCenterX * scale;
+
+    svg.transition().duration(700)
+      .call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
+	centrarYZoom();
+  }
+
+  g.selectAll(".link")
+    .data(d3Root.links())
+    .enter()
+    .append("path")
+    .attr("class", "link")
+    .attr("d", d3.linkHorizontal().x(d => d.y).y(d => d.x));
+
+  const node = g.selectAll(".node")
+    .data(d3Root.descendants())
+    .enter()
+    .append("g")
+    .attr("transform", d => `translate(${d.y},${d.x})`)
+    .attr("class", "node")
+    .style("cursor", "pointer")
+    .on("click", (event, d) => {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else if (d._children) {
+        d.children = d._children;
+        d._children = null;
+      }
+      update(d3Root);
+    });
+
+  node.append("circle")
+    .attr("r", 10)
+    .attr("fill", "#4ecdc4");
+
+  node.append("foreignObject")
+    .attr("x", -60).attr("y", -75).attr("width", 120).attr("height", 80)
+    .append("xhtml:div")
+    .attr("class", "fo-node")
+    .each(function(d) {
+      const div = this;
+      div.innerHTML = '';
+      const img = crearImagenDigimon(d.data.name);
+      img.style.margin = "0 auto";
+      const span = document.createElement("span");
+      span.textContent = d.data.name;
+      div.appendChild(img);
+      div.appendChild(span);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  languageSelector.value = currentLang;
+  traducirUI();
+
+  poblarTama();
+  g = svg.append("g");
+  svg.call(zoom);
+
+  selectTama.addEventListener("change", () => {
+    poblarNivel();
+    g.selectAll("*").remove();
+    mensajeInicial.style.display = "block";
+  });
+
+  selectNivel.addEventListener("change", () => {
+    poblarDigimon();
+    g.selectAll("*").remove();
+    mensajeInicial.style.display = "block";
+  });
+
+  selectDigimon.addEventListener("change", () => {
+    const digimon = selectDigimon.value;
+    if (!digimon) {
+      g.selectAll("*").remove();
+      mensajeInicial.style.display = "block";
+      return;
+    }
+    const jerarquia = construirJerarquia(digimon);
+    if (!jerarquia) return;
+    d3Root = d3.hierarchy(jerarquia);
+    d3Root.children?.forEach(collapse);
+    mensajeInicial.style.display = "none";
+    update(d3Root, true);
+  });
+
+  languageSelector.addEventListener("change", () => {
+    currentLang = languageSelector.value;
+    localStorage.setItem("lang", currentLang);
+    traducirUI();
+
+    // Repoblar selects con textos traducidos
+    poblarTama();
+    selectNivel.innerHTML = `<option value="">${translations[currentLang].placeholderNivel}</option>`;
+    selectNivel.disabled = true;
+    selectDigimon.innerHTML = `<option value="">${translations[currentLang].placeholderDigimon}</option>`;
+    selectDigimon.disabled = true;
+
+    g.selectAll("*").remove();
+    mensajeInicial.style.display = "block";
+  });
+});
+</script>
+</body>
+</html>

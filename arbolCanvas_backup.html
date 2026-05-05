@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Árbol Evolutivo - Digimon</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+  <script src="digimonReqDict.js?v=15"></script>
+  <script src="digimonstattier.js?v=15"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+      color: white;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Selector de Tamas */
+    #tama-selector {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      display: flex;
+      gap: 8px;
+      z-index: 100;
+      background: rgba(30, 30, 50, 0.9);
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .tama-icon {
+      width: 50px;
+      height: 65px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      background: rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 5px;
+    }
+    .tama-icon:hover { border-color: #4ecdc4; transform: scale(1.1); }
+    .tama-icon.active { border-color: #4ecdc4; box-shadow: 0 0 15px rgba(78, 205, 196, 0.5); }
+    .tama-icon img { width: 40px; height: 40px; object-fit: contain; }
+    .tama-icon span { display: block; font-size: 10px; text-align: center; margin-top: 2px; color: #aaa; }
+    .tama-icon.active span { color: #4ecdc4; }
+
+    /* Controles */
+    #controls {
+      position: fixed;
+      top: 15px;
+      right: 600px;
+      display: flex;
+      gap: 8px;
+      z-index: 100;
+    }
+    #controls button {
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: rgba(30, 30, 50, 0.9);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+    #controls button:hover { background: #4ecdc4; color: #1a1a2e; }
+
+    /* Canvas */
+    #cy {
+      width: calc(100vw - 580px);
+      height: 100vh;
+    }
+
+    /* Panel lateral */
+    #side-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 580px;
+      height: 100vh;
+      background: rgba(20, 20, 40, 0.98);
+      border-left: 1px solid rgba(78, 205, 196, 0.3);
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      gap: 20px;
+    }
+    .panel-column {
+      flex: 1;
+      min-width: 0;
+    }
+    .panel-column h3 {
+      color: #4ecdc4;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(78, 205, 196, 0.3);
+    }
+    #side-panel .placeholder {
+      text-align: center;
+      color: #666;
+      margin-top: 50%;
+      transform: translateY(-50%);
+    }
+    #side-panel .placeholder p {
+      font-size: 0.9rem;
+    }
+
+    /* Info del Digimon */
+    .digi-info {
+      display: none;
+    }
+    .digi-info.active {
+      display: block;
+    }
+    .digi-info .header {
+      text-align: center;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 15px;
+    }
+    .digi-info .header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #4ecdc4;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.1);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .digi-info .header img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+    }
+
+    /* Modal de zoom */
+    .img-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+    }
+    .img-modal.active {
+      display: flex;
+    }
+    .img-modal img {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 12px;
+      box-shadow: 0 0 50px rgba(78, 205, 196, 0.3);
+    }
+    .digi-info .header h2 {
+      color: #4ecdc4;
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+    .digi-info .header .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .digi-info .stats {
+      margin: 15px 0;
+    }
+    .digi-info .stats p {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin: 5px 0;
+    }
+    .digi-info .stats span {
+      color: #fff;
+    }
+
+    /* Base Stats */
+    .base-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin: 12px 0;
+      padding: 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
+    .stat-label {
+      color: #888;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .stat-value {
+      color: #4ecdc4;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    /* Secciones de evolución */
+    .evo-section {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .evo-section h4 {
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .evo-section h4.from { color: #ffa94d; }
+    .evo-section h4.to { color: #69db7c; }
+
+    .evo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .evo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .evo-item:hover {
+      background: rgba(78, 205, 196, 0.2);
+    }
+    .evo-item img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+    }
+    .evo-item .name {
+      flex: 1;
+      font-size: 0.85rem;
+    }
+    .evo-item .level {
+      font-size: 0.7rem;
+      color: #888;
+    }
+
+    /* Requisitos */
+    #req-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .req-section {
+      margin-bottom: 0;
+    }
+    .req-section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .req-section-title.no-score {
+      background: rgba(234, 179, 8, 0.2);
+      color: #eab308;
+    }
+    .req-section-title.quota {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+    }
+    .req-section-title.required {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+    .req-section-title.warning {
+      background: rgba(249, 115, 22, 0.2);
+      color: #f97316;
+    }
+    .req-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .req-item {
+      background: rgba(255,255,255,0.05);
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+    .req-item.full-width {
+      grid-column: span 2;
+    }
+    .req-item .label {
+      color: #888;
+      font-size: 0.65rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .req-item .value {
+      color: #fff;
+      font-weight: 500;
+    }
+    .req-item .value.positive {
+      color: #22c55e;
+    }
+    .req-item .value.negative {
+      color: #ef4444;
+    }
+    .req-item .value.neutral {
+      color: #eab308;
+    }
+    .req-item .value.info {
+      color: #4ecdc4;
+    }
+    /* Estilos para puntajes en requisitos */
+    .puntaje-positivo {
+      color: #22c55e;
+      font-weight: 600;
+    }
+    .puntaje-neutro {
+      color: #eab308;
+      font-weight: 600;
+    }
+    .puntaje-negativo {
+      color: #ef4444;
+      font-weight: 600;
+    }
+    /* Estilos para tabla de variantes (Clockmon, etc.) */
+    .variantes-table {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 4px;
+    }
+    .variante-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 6px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 3px;
+      font-size: 0.7rem;
+    }
+    .variante-label {
+      color: #aaa;
+    }
+    .variante-value {
+      color: #fff;
+      font-weight: 500;
+    }
+    /* Tabla completa de variantes (Clockmon style) */
+    .variantes-full-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.7rem;
+      margin-top: 6px;
+      table-layout: fixed;
+    }
+    .variantes-full-table th,
+    .variantes-full-table td {
+      padding: 5px 4px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      word-wrap: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .variantes-full-table thead {
+      background: rgba(255,255,255,0.08);
+    }
+    .campo-header {
+      text-align: left !important;
+      color: #888;
+      width: 22%;
+    }
+    .variante-header {
+      color: #4ecdc4;
+      font-weight: 600;
+      font-size: 0.65rem;
+    }
+    .campo-cell {
+      text-align: left !important;
+      color: #aaa;
+      background: rgba(255,255,255,0.03);
+      white-space: nowrap;
+    }
+    .valor-cell {
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.65rem;
+    }
+
+    /* Tablas por pre-evolución */
+    .preevo-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .preevo-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .preevo-card-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .preevo-card-header img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+    .preevo-card-header span {
+      color: #4ecdc4;
+      font-weight: 600;
+      font-size: 0.7rem;
+    }
+    .preevo-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .preevo-field {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+    }
+    .preevo-field-label {
+      color: #888;
+    }
+    .preevo-field-value {
+      color: #fff;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    /* Instrucciones */
+    #instructions {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      background: rgba(30, 30, 50, 0.8);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: #666;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<div id="tama-selector"></div>
+
+<div id="controls">
+  <button id="btnReset">Reset</button>
+  <button id="btnFit">Ajustar</button>
+</div>
+
+<div id="cy"></div>
+
+<div id="side-panel">
+  <div class="placeholder" id="panel-placeholder" style="flex:1; text-align:center; align-self:center;">
+    <p>👆</p>
+    <p>Click en un Digimon<br>para ver su información</p>
+  </div>
+
+  <!-- Columna 1: Evoluciones -->
+  <div class="panel-column digi-info" id="digi-info">
+    <div class="header">
+      <img id="info-img" src="img/placeholder.png" onerror="this.src='img/placeholder.png'" alt="" onclick="openImgModal()">
+      <h2 id="info-name"></h2>
+      <span class="badge" id="info-badge"></span>
+    </div>
+
+    <div class="stats">
+      <p>Atributo: <span id="info-attr"></span></p>
+      <p>Tipo: <span id="info-type"></span></p>
+      <p>Tama: <span id="info-tama"></span></p>
+    </div>
+
+    <div class="base-stats" id="base-stats">
+      <div class="stat-row"><span class="stat-label">HP</span><span class="stat-value" id="stat-hp">-</span></div>
+      <div class="stat-row"><span class="stat-label">ATK</span><span class="stat-value" id="stat-atk">-</span></div>
+      <div class="stat-row"><span class="stat-label">DEF</span><span class="stat-value" id="stat-def">-</span></div>
+      <div class="stat-row"><span class="stat-label">Vel</span><span class="stat-value" id="stat-vel">-</span></div>
+    </div>
+
+    <div class="evo-section" id="section-from">
+      <h4 class="from">⬅ Viene de</h4>
+      <div class="evo-list" id="list-from"></div>
+    </div>
+
+    <div class="evo-section" id="section-to">
+      <h4 class="to">➡ Evoluciona a</h4>
+      <div class="evo-list" id="list-to"></div>
+    </div>
+  </div>
+
+  <!-- Columna 2: Requisitos -->
+  <div class="panel-column digi-info" id="digi-reqs" style="display:none;">
+    <h3>📋 Requisitos de Evolución</h3>
+    <div class="req-grid" id="req-grid"></div>
+  </div>
+</div>
+
+<!-- Modal de zoom para imagen -->
+<div id="img-modal" class="img-modal" onclick="closeImgModal()">
+  <img id="modal-img" src="" alt="">
+</div>
+
+<div id="instructions">
+  Click en Digimon para ver info • Scroll para zoom • Arrastra para mover
+</div>
+
+<script>
+const nivelColors = {
+  1: '#ff6b6b', 2: '#ffa94d', 3: '#ffd43b',
+  4: '#69db7c', 5: '#4ecdc4', 6: '#9775fa'
+};
+
+const nivelAEtapa = {
+  1: "Baby I", 2: "Baby II", 3: "Child",
+  4: "Adult", 5: "Perfect", 6: "Ultimate"
+};
+
+// Configuración especial de requisitos por Digimon (copiado EXACTAMENTE de digimonreqs.html)
+const specialDigimonConfig = {
+  // === Digimons con procesarCampos especial ===
+  "SkullGreymon": {
+    "No se considera en el puntaje": ["Peso"],
+    "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program o Comida"]
+  },
+  "Bakemon LT": {
+    "No se considera en el puntaje": ["Peso"],
+    "Evolucion por muerte inducida": ["Muerte inducida sin Carne X o Program (30% de salir)", "Program / Comida (Asegura evolucion)"]
+  },
+
+  // === Numemon family ===
+  "Numemon": { "No se considera en el puntaje": ["Peso"] },
+  "Scumon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
+  "Geremon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
+  "GoldNumemon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
+  "KaratsukiNumemon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
+  "PlatinumScumon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
+
+  // === Otros especiales ===
+  "Pillomon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "EntrenamientoHecho"] },
+  "Burpmon": { "Requisitos Obligatorios": ["Peso"] },
+  "GreatKingScumon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Menos de 15 entrenamientos?"] },
+
+  // === Rookies/Childs ===
+  "Kokuwamon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior"] },
+  "Agumon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho"] },
+  "Agumon (Black)": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"] },
+  "Yuki Agumon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"] },
+  "Agumon (2006)": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program", "2Ciclos"] },
+  "Agumon Hakase": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Nickname"] },
+
+  // === V-Dramon family ===
+  "V-Dramon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
+  "V-Dramon (Black)": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Batallas"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"] },
+  "Aero V-dramon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
+  "Aero V-dramon (Black)": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"] },
+
+  // === Clockmon ===
+  "Clockmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Batallas"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+
+  // === Otros Champions/Adults ===
+  "Tyranomon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Stat Superior", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+  "Monzaemon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
+  "Black King Numemon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"] },
+  "Etemon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
+  "Fantomon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
+  "Digitamamon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
+  "Insekimon High Tier": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Driver Equipado"] },
+
+  // === Nanimon family ===
+  "Nanimon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Vinculo al momento de evolucionar"] },
+  "BomberNanimon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
+  "Mushmon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
+
+  // === Mega/Ultimate tier ===
+  "Wargreymon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Error Maximo", "% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"] },
+  "BlackWargreymon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"] },
+  "Mugendramon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"] },
+  "PlatinumNumemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"] },
+  "MetalEtemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"] },
+  "PrinceMamemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"] },
+  "Daipenmon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"] },
+  "Devitamamon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Vinculo al momento de evolucionar"] },
+
+  // === Shoutmon family ===
+  "Shoutmon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"] },
+  "Shoutmon (Black)": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"] },
+  "Shoutmon SH": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
+  "Shoutmon + Star Sword": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
+  "King Shoutmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Program"] },
+  "ShootingStarmon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Xross"] },
+
+  // === Otros ===
+  "Metal Fantomon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Program"] },
+  "Master Tyranomon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Victorias"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"] },
+  "Soulmon LT": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
+  "Soulmon MT": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
+
+  // === Spirit Evolution ===
+  "Chackmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
+  "Blizzarmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
+
+  // === DexDoru family (requisitos desconocidos) ===
+  "DexDorugamon": { "⚠️ Requisitos desconocidos": ["Los requisitos han cambiado"] },
+  "DexDoruguremon": { "⚠️ Requisitos desconocidos": ["Los requisitos han cambiado"] },
+
+  // === Doru family ===
+  "Raptordramon": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDorugamon y Dorugamon?"] },
+  "Grademon": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDoruguremon y Doruguremon?"] },
+  "Grademon VICE": { "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Vinculo Minimo alcanzado", "Tienes registrado a DexDoruguremon y Doruguremon?"] },
+  "Doruguremon": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
+
+  // === Otros ===
+  "BanchoMamemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Program"] }
+};
+
+// Casos especiales donde % Entrenamiento varía según evolución o condición
+const specialEntrenamientoCases = {
+  "Chackmon": {
+    "Icemon": 100,
+    "Yukidarumon": 100,
+    "Yuki Agumon": 80,
+    "Penmon": 80
+  },
+  "Blizzarmon": {
+    "Icemon": 80,
+    "Yukidarumon": 80,
+    "Chackmon": 80,
+    "Chackmon (Sin Install)": 80,
+    "Polarbearmon": 100
+  },
+  "DexDoruguremon": {
+    "Dorugamon": 50,
+    "DexDorugamon": 100,
+    "Doruguremon": "-"
+  }
+};
+
+// Digimons con variantes completas (múltiples columnas de requisitos)
+const digimonVariantes = {
+  "Clockmon": {
+    columnas: ["Sin Bonus", "Con Bonus"],
+    categorias: {
+      "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Batallas"],
+      "Requisitos Obligatorios": ["WinRate", "Combates Minimos"]
+    },
+    valores: {
+      "Sin Bonus": {
+        "Peso": "13-23",
+        "% Entrenamiento": "50-100%",
+        "Error Maximo": "1-6",
+        "Bonus Batallas": "-",
+        "WinRate": "50%",
+        "Combates Minimos": "15"
+      },
+      "Con Bonus": {
+        "Peso": "13-23",
+        "% Entrenamiento": "50-100%",
+        "Error Maximo": "1-6",
+        "Bonus Batallas": "0",
+        "WinRate": "-",
+        "Combates Minimos": "-"
+      }
+    }
+  },
+};
+
+// Digimons con variantes por pre-evolución (tablas separadas)
+
+// Digimons con variantes por pre-evolución (tablas separadas)
+const digimonVariantesPorPreEvo = {
+  "Chackmon": {
+    categorias: {
+      "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+      "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+    },
+    preEvos: {
+      "Icemon": {
+        "Peso": "10", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "Spirit H"
+      },
+      "Yukidarumon": {
+        "Peso": "10", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "Spirit H"
+      },
+      "Yuki Agumon": {
+        "Peso": "10", "% Entrenamiento": "80%", "Error Maximo": "0-6",
+        "WinRate": "60%", "Combates Minimos": "15", "Xross": "Spirit H"
+      },
+      "Penmon": {
+        "Peso": "10", "% Entrenamiento": "80%", "Error Maximo": "0-6",
+        "WinRate": "60%", "Combates Minimos": "15", "Xross": "Spirit H"
+      }
+    }
+  },
+  "Blizzarmon": {
+    categorias: {
+      "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+      "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+    },
+    preEvos: {
+      "Icemon": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "Spirit B"
+      },
+      "Yukidarumon": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "Spirit B"
+      },
+      "Chackmon": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "Spirit B"
+      },
+      "Chackmon (Sin Install)": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "-"
+      },
+      "Polarbearmon": {
+        "Peso": "30", "% Entrenamiento": "100%", "Error Maximo": "0-2",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "Spirit B"
+      }
+    }
+  },
+  "Wargreymon": {
+    categorias: {
+      "No se considera en el puntaje": ["Peso"],
+      "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
+    },
+    preEvos: {
+      "Metal Greymon": {
+        "Peso": "30", "% Entrenamiento": "100%", "Error Maximo": "0",
+        "Combates Minimos": "250", "Victorias": "140", "Vinculo al momento de evolucionar": "100"
+      },
+      "MetalGreymon Alterous": {
+        "Peso": "30", "% Entrenamiento": "100%", "Error Maximo": "0",
+        "Combates Minimos": "300", "Victorias": "175", "Vinculo al momento de evolucionar": "100"
+      }
+    }
+  },
+  "Mugendramon": {
+    categorias: {
+      "No se considera en el puntaje": ["Peso", "Error Maximo"],
+      "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Xross"]
+    },
+    preEvos: {
+      "Megadramon": {
+        "Peso": "40", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "80%", "Combates Minimos": "50",
+        "Xross": "MG(V) + MTyra + MMame + Andro + Giga"
+      },
+      "Gigadramon": {
+        "Peso": "40", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "80%", "Combates Minimos": "50",
+        "Xross": "MG(V) + MTyra + MMame + Andro + Mega"
+      },
+      "Metal Greymon (Virus)": {
+        "Peso": "40", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "80%", "Combates Minimos": "50",
+        "Xross": "Mega + MTyra + MMame + Andro + Giga"
+      },
+      "Metal Tyranomon": {
+        "Peso": "40", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "80%", "Combates Minimos": "50",
+        "Xross": "MG(V) + Mega + MMame + Andro + Giga"
+      },
+      "MetalMamemon": {
+        "Peso": "40", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "80%", "Combates Minimos": "50",
+        "Xross": "MG(V) + MTyra + Mega + Andro + Giga"
+      },
+      "Andromon": {
+        "Peso": "40", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "80%", "Combates Minimos": "50",
+        "Xross": "MG(V) + MTyra + MMame + Mega + Giga"
+      }
+    }
+  }
+};
+
+// Configuración por defecto para Digimons sin configuración especial
+const gruposColumnasDefault = {
+  "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus Digimon", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar", "Bonus Victorias", "Bonus Stat Superior"],
+  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Vinculo al momento de evolucionar", "Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname", "Tienes registrado a DexDorugamon y Dorugamon?", "Tienes registrado a DexDoruguremon y Doruguremon?"]
+};
+
+const tamaIcons = {
+  "V0": "botamon", "VS": "chibickmon", "PR": "Dodomon",
+  "VL": "fluffymon", "M": "numemon", "D": "Ghostmon",
+  "SP": "chackmon", "P": "mushmon", "BG": "Kekomon"
+};
+
+// Genera variaciones del nombre para buscar imágenes
+function generarVariacionesNombre(nombre) {
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+
+  return [...new Set([
+    nombreLimpio,
+    nombreEspacios,
+    nombreGuiones,
+    nombreOriginal.toLowerCase(),
+    nombreOriginal,
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase()
+  ])];
+}
+
+// Para Cytoscape: usa la primera variación (más común)
+function getImagePath(nombre) {
+  const variaciones = generarVariacionesNombre(nombre);
+  return `./icon/${variaciones[0]}.png`;
+}
+
+// Para elementos IMG del panel: prueba múltiples variaciones
+function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'icon') {
+  const variaciones = generarVariacionesNombre(nombre);
+  let i = 0;
+
+  function intentar() {
+    if (i >= variaciones.length) {
+      elementoImg.src = `${carpeta}/placeholder.png`;
+      return;
+    }
+    const srcTry = `${carpeta}/${variaciones[i]}.png`;
+    const testImg = new Image();
+    testImg.onload = () => { elementoImg.src = srcTry; };
+    testImg.onerror = () => { i++; intentar(); };
+    testImg.src = srcTry;
+  }
+  intentar();
+}
+
+// Modal de zoom para imagen
+function openImgModal() {
+  const mainImg = document.getElementById('info-img');
+  const modal = document.getElementById('img-modal');
+  const modalImg = document.getElementById('modal-img');
+  modalImg.src = mainImg.src;
+  modal.classList.add('active');
+}
+
+function closeImgModal() {
+  document.getElementById('img-modal').classList.remove('active');
+}
+
+// Cerrar modal con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeImgModal();
+});
+
+let cy;
+let currentTama = 'PR';
+let selectedNode = null;
+let originalPositions = new Map(); // Guardar posiciones originales para restaurar
+
+function getTamas() {
+  const tamas = new Set();
+  Object.values(digimonReqDict).forEach(d => { if (d.Tama) tamas.add(d.Tama); });
+  return Array.from(tamas).sort();
+}
+
+function createTamaSelectors() {
+  const container = document.getElementById('tama-selector');
+  container.innerHTML = '';
+  getTamas().forEach(tama => {
+    const div = document.createElement('div');
+    div.className = 'tama-icon' + (tama === currentTama ? ' active' : '');
+    div.dataset.tama = tama;
+    div.title = tama;
+    const img = document.createElement('img');
+    img.src = `Tama/${tama}.png`;
+    img.onerror = function() { this.src = 'icon/placeholder.png'; };
+    div.appendChild(img);
+    const label = document.createElement('span');
+    label.textContent = tama;
+    div.appendChild(label);
+    div.addEventListener('click', () => selectTama(tama));
+    container.appendChild(div);
+  });
+}
+
+function selectTama(tama) {
+  currentTama = tama;
+  selectedNode = null;
+  document.querySelectorAll('.tama-icon').forEach(el => {
+    el.classList.toggle('active', el.dataset.tama === tama);
+  });
+  hideInfo();
+  initCytoscape(tama);
+}
+
+function getEvolutions(nombre) {
+  const stats = digimonstattier[nombre];
+  if (!stats || !stats.Evoluciona) return [];
+  const evols = Array.isArray(stats.Evoluciona) ? stats.Evoluciona : stats.Evoluciona.split(',').map(e => e.trim());
+  return evols.filter(e => e !== "Burpmon" && digimonReqDict[e]);
+}
+
+function getPreEvolutions(nombre) {
+  const stats = digimonstattier[nombre];
+  if (!stats || !stats.Viene) return [];
+  return stats.Viene.filter(e => digimonReqDict[e]);
+}
+
+function buildGraphData(tamaFilter) {
+  const nodes = [], edges = [], addedNodes = new Set();
+  const niveles = {}; // Agrupar por nivel
+
+  // Primera pasada: recolectar nodos por nivel
+  Object.entries(digimonReqDict).forEach(([nombre, data]) => {
+    if (tamaFilter && data.Tama !== tamaFilter) return;
+    if (nombre === "Burpmon") return;
+    const nivel = data.Nivel || 0;
+    if (!niveles[nivel]) niveles[nivel] = [];
+    niveles[nivel].push({ nombre, data });
+    addedNodes.add(nombre);
+  });
+
+  // Segunda pasada: crear nodos con posiciones calculadas
+  const containerWidth = document.getElementById('cy')?.offsetWidth || 1200;
+  Object.keys(niveles).sort((a, b) => a - b).forEach(nivel => {
+    const digimons = niveles[nivel];
+    const totalAtLevel = digimons.length;
+    const spacing = (containerWidth - 100) / (totalAtLevel + 1);
+
+    digimons.forEach((item, index) => {
+      const { nombre, data } = item;
+      nodes.push({
+        data: {
+          id: nombre, label: nombre, nivel: parseInt(nivel), etapa: nivelAEtapa[nivel] || `Nivel ${nivel}`,
+          atributo: data.Atributo || 'Free', tipo: data.Tipo || 'Ninguno',
+          tama: data.Tama || '', color: nivelColors[nivel] || '#888', image: getImagePath(nombre)
+        },
+        position: {
+          x: spacing * (index + 1),
+          y: parseInt(nivel) * 180
+        }
+      });
+    });
+  });
+
+  // Crear edges
+  Object.entries(digimonstattier).forEach(([nombre, data]) => {
+    if (!addedNodes.has(nombre) || !data.Evoluciona) return;
+    const evoluciones = Array.isArray(data.Evoluciona) ? data.Evoluciona : data.Evoluciona.split(',').map(e => e.trim());
+    evoluciones.forEach(evol => {
+      if (evol !== "Burpmon" && addedNodes.has(evol)) {
+        edges.push({ data: { id: `${nombre}->${evol}`, source: nombre, target: evol } });
+      }
+    });
+  });
+
+  return { nodes, edges };
+}
+
+function initCytoscape(tamaFilter) {
+  const data = buildGraphData(tamaFilter);
+  if (cy) cy.destroy();
+
+  cy = cytoscape({
+    container: document.getElementById('cy'),
+    elements: [...data.nodes, ...data.edges],
+    style: [
+      {
+        selector: 'node',
+        style: {
+          'background-color': 'data(color)',
+          'background-image': 'data(image)',
+          'background-fit': 'cover',
+          'background-clip': 'node',
+          'background-width': '100%',
+          'background-height': '100%',
+          'border-width': 3,
+          'border-color': 'data(color)',
+          'label': 'data(label)',
+          'text-valign': 'bottom',
+          'text-halign': 'center',
+          'font-size': '11px',
+          'color': '#fff',
+          'text-outline-color': '#1a1a2e',
+          'text-outline-width': 2,
+          'width': 75,
+          'height': 75,
+          'text-margin-y': 8,
+          'opacity': 1,
+          'transition-property': 'opacity, width, height, border-width, border-color',
+          'transition-duration': '0.3s'
+        }
+      },
+      {
+        selector: 'node.selected',
+        style: { 'width': 106, 'height': 106, 'border-width': 5, 'border-color': '#fff', 'z-index': 999 }
+      },
+      {
+        selector: 'node.related',
+        style: { 'opacity': 1, 'border-width': 4 }
+      },
+      {
+        selector: 'node.faded',
+        style: { 'opacity': 0, 'pointer-events': 'none' }
+      },
+      {
+        selector: 'node.temp-node',
+        style: { 'border-style': 'dashed', 'border-width': 3, 'opacity': 0.85 }
+      },
+      {
+        selector: 'edge',
+        style: {
+          'width': 2, 'line-color': 'rgba(255,255,255,0.25)', 'line-style': 'dashed',
+          'line-dash-pattern': [6, 3], 'target-arrow-color': 'rgba(255,255,255,0.4)',
+          'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'arrow-scale': 1,
+          'opacity': 1, 'transition-property': 'opacity, line-color, width',
+          'transition-duration': '0.3s'
+        }
+      },
+      {
+        selector: 'edge.from',
+        style: { 'line-color': '#ffa94d', 'target-arrow-color': '#ffa94d', 'width': 3, 'line-style': 'solid' }
+      },
+      {
+        selector: 'edge.to',
+        style: { 'line-color': '#69db7c', 'target-arrow-color': '#69db7c', 'width': 3, 'line-style': 'solid' }
+      },
+      {
+        selector: 'edge.faded',
+        style: { 'opacity': 0 }
+      }
+    ],
+    layout: {
+      name: 'preset',
+      padding: 50,
+      animate: true,
+      animationDuration: 500,
+      fit: true
+    },
+    minZoom: 0.3, maxZoom: 3, wheelSensitivity: 0.3
+  });
+
+  cy.on('tap', 'node', evt => selectDigimon(evt.target));
+  cy.on('tap', evt => { if (evt.target === cy) resetSelection(); });
+}
+
+function selectDigimon(node) {
+  const nodeId = node.id();
+
+  // Si es un nodo temporal, cambiar al Tama de ese Digimon
+  if (node.hasClass('temp-node')) {
+    const digiData = digimonReqDict[nodeId];
+    if (digiData && digiData.Tama && digiData.Tama !== currentTama) {
+      selectTama(digiData.Tama);
+      // Después de cambiar de Tama, seleccionar el nodo
+      setTimeout(() => {
+        const newNode = cy.getElementById(nodeId);
+        if (newNode.length) {
+          selectDigimon(newNode);
+        }
+      }, 100);
+      return;
+    }
+  }
+
+  selectedNode = node;
+  const evolutions = getEvolutions(nodeId);
+  const preEvolutions = getPreEvolutions(nodeId);
+
+  // Remover nodos temporales anteriores
+  cy.nodes('.temp-node').remove();
+
+  // Reset classes
+  cy.nodes().removeClass('selected related faded');
+  cy.edges().removeClass('from to faded');
+
+  // Agregar nodos temporales para evos/prevos de otros Tamas
+  const nodePos = node.position();
+  const tempElements = [];
+
+  // Agrupar nodos temporales por nivel para calcular posiciones X
+  const tempByLevel = {};
+
+  // Pre-evoluciones que no están en el grafo
+  preEvolutions.forEach((name) => {
+    if (!cy.getElementById(name).length) {
+      const data = digimonReqDict[name] || {};
+      const nivel = data.Nivel || 1;
+      if (!tempByLevel[nivel]) tempByLevel[nivel] = [];
+      tempByLevel[nivel].push({ name, data, isPreEvo: true });
+    }
+  });
+
+  // Evoluciones que no están en el grafo
+  evolutions.forEach((name) => {
+    if (!cy.getElementById(name).length) {
+      const data = digimonReqDict[name] || {};
+      const nivel = data.Nivel || 4;
+      if (!tempByLevel[nivel]) tempByLevel[nivel] = [];
+      tempByLevel[nivel].push({ name, data, isPreEvo: false });
+    }
+  });
+
+  // Separar pre-evoluciones y evoluciones temporales por nivel
+  const preEvosByLevel = {};
+  const evosByLevel = {};
+
+  Object.keys(tempByLevel).forEach(nivel => {
+    tempByLevel[nivel].forEach(item => {
+      if (item.isPreEvo) {
+        if (!preEvosByLevel[nivel]) preEvosByLevel[nivel] = [];
+        preEvosByLevel[nivel].push(item);
+      } else {
+        if (!evosByLevel[nivel]) evosByLevel[nivel] = [];
+        evosByLevel[nivel].push(item);
+      }
+    });
+  });
+
+  // Mark selected
+  node.addClass('selected');
+
+  // Mark related nodes (existentes en el grafo)
+  const evolutionNodes = cy.nodes().filter(n => evolutions.includes(n.id()) && !n.hasClass('temp-node'));
+  const preEvoNodes = cy.nodes().filter(n => preEvolutions.includes(n.id()) && !n.hasClass('temp-node'));
+  evolutionNodes.addClass('related');
+  preEvoNodes.addClass('related');
+
+  // Guardar posiciones de TODOS los nodos antes de mover
+  originalPositions.clear();
+  cy.nodes().forEach(n => {
+    originalPositions.set(n.id(), { ...n.position() });
+  });
+
+  // Usar la posición del nodo seleccionado como centro
+  const centerX = node.position().x;
+  const centerY = node.position().y;
+
+  const spacingX = 120; // Espacio horizontal entre nodos
+  const spacingY = 150; // Espacio vertical entre filas
+
+  // Agrupar todos los pre-evos (existentes + temp) - todos en una fila arriba
+  const allPreEvos = [...preEvoNodes.toArray()];
+  const tempPreEvosList = [];
+  Object.keys(preEvosByLevel).forEach(nivel => {
+    preEvosByLevel[nivel].forEach(item => tempPreEvosList.push(item));
+  });
+  const totalPreEvos = allPreEvos.length + tempPreEvosList.length;
+
+  // PRE-EVOLUCIONES: ARRIBA del nodo seleccionado, centradas horizontalmente (una sola fila)
+  const preEvoY = centerY - spacingY;
+  const preEvoTotalWidth = (totalPreEvos - 1) * spacingX;
+  const preEvoStartX = centerX - (preEvoTotalWidth / 2);
+
+  allPreEvos.forEach((n, i) => {
+    n.animate({
+      position: { x: preEvoStartX + (i * spacingX), y: preEvoY },
+      duration: 300,
+      easing: 'ease-out'
+    });
+  });
+
+  // Agregar nodos temporales PRE-EVOS (arriba, continuando la fila)
+  tempPreEvosList.forEach((item, i) => {
+    const { name, data } = item;
+    const nivelNum = data.Nivel || 3;
+    tempElements.push({
+      group: 'nodes',
+      data: {
+        id: name, label: name, nivel: nivelNum,
+        etapa: nivelAEtapa[nivelNum] || `Nivel ${nivelNum}`,
+        atributo: data.Atributo || 'Free',
+        tipo: data.Tipo || 'Ninguno',
+        tama: data.Tama || '',
+        color: nivelColors[nivelNum] || '#888',
+        image: getImagePath(name)
+      },
+      position: { x: preEvoStartX + ((allPreEvos.length + i) * spacingX), y: preEvoY },
+      classes: 'temp-node related'
+    });
+    tempElements.push({
+      group: 'edges',
+      data: { id: `temp-${name}->${nodeId}`, source: name, target: nodeId },
+      classes: 'from'
+    });
+  });
+
+  // EVOLUCIONES: Agrupar por NIVEL y mostrar en filas separadas
+  const evosByNivel = {};
+
+  // Agrupar evos existentes por nivel
+  evolutionNodes.forEach(n => {
+    const nivel = n.data('nivel');
+    if (!evosByNivel[nivel]) evosByNivel[nivel] = { existing: [], temp: [] };
+    evosByNivel[nivel].existing.push(n);
+  });
+
+  // Agrupar evos temporales por nivel
+  Object.keys(evosByLevel).forEach(nivel => {
+    const nivelNum = parseInt(nivel);
+    if (!evosByNivel[nivelNum]) evosByNivel[nivelNum] = { existing: [], temp: [] };
+    evosByLevel[nivel].forEach(item => evosByNivel[nivelNum].temp.push(item));
+  });
+
+  // Ordenar niveles y posicionar cada fila
+  const sortedNiveles = Object.keys(evosByNivel).map(n => parseInt(n)).sort((a, b) => a - b);
+
+  sortedNiveles.forEach((nivel, rowIndex) => {
+    const evosAtNivel = evosByNivel[nivel];
+    const totalAtNivel = evosAtNivel.existing.length + evosAtNivel.temp.length;
+    const rowY = centerY + spacingY + (rowIndex * spacingY);
+    const rowTotalWidth = (totalAtNivel - 1) * spacingX;
+    const rowStartX = centerX - (rowTotalWidth / 2);
+
+    // Posicionar evos existentes en esta fila
+    evosAtNivel.existing.forEach((n, i) => {
+      n.animate({
+        position: { x: rowStartX + (i * spacingX), y: rowY },
+        duration: 300,
+        easing: 'ease-out'
+      });
+    });
+
+    // Agregar evos temporales en esta fila
+    evosAtNivel.temp.forEach((item, i) => {
+      const { name, data } = item;
+      tempElements.push({
+        group: 'nodes',
+        data: {
+          id: name, label: name, nivel: nivel,
+          etapa: nivelAEtapa[nivel] || `Nivel ${nivel}`,
+          atributo: data.Atributo || 'Free',
+          tipo: data.Tipo || 'Ninguno',
+          tama: data.Tama || '',
+          color: nivelColors[nivel] || '#888',
+          image: getImagePath(name)
+        },
+        position: { x: rowStartX + ((evosAtNivel.existing.length + i) * spacingX), y: rowY },
+        classes: 'temp-node related'
+      });
+      tempElements.push({
+        group: 'edges',
+        data: { id: `temp-${nodeId}->${name}`, source: nodeId, target: name },
+        classes: 'to'
+      });
+    });
+  });
+
+  if (tempElements.length > 0) {
+    cy.add(tempElements);
+  }
+
+  // Fade others
+  cy.nodes().not(node).not(evolutionNodes).not(preEvoNodes).not('.temp-node').addClass('faded');
+
+  // Mark edges
+  cy.edges().forEach(edge => {
+    const src = edge.source().id();
+    const tgt = edge.target().id();
+    if (src === nodeId && evolutions.includes(tgt)) {
+      edge.addClass('to');
+    } else if (tgt === nodeId && preEvolutions.includes(src)) {
+      edge.addClass('from');
+    } else {
+      edge.addClass('faded');
+    }
+  });
+
+  // Update side panel
+  showInfo(node.data(), evolutions, preEvolutions);
+
+  // Ajustar vista para mostrar todos los elementos relacionados
+  setTimeout(() => {
+    const allRelated = cy.nodes().not('.faded');
+    cy.animate({ fit: { eles: allRelated, padding: 50 } }, { duration: 400 });
+  }, 350);
+}
+
+function resetSelection() {
+  selectedNode = null;
+  cy.nodes('.temp-node').remove();
+
+  // Restaurar posiciones originales con animación
+  originalPositions.forEach((pos, nodeId) => {
+    const n = cy.getElementById(nodeId);
+    if (n.length) {
+      n.animate({
+        position: pos,
+        duration: 300,
+        easing: 'ease-out'
+      });
+    }
+  });
+  originalPositions.clear();
+
+  cy.nodes().removeClass('selected related faded');
+  cy.edges().removeClass('from to faded');
+  hideInfo();
+}
+
+function showInfo(data, evolutions, preEvolutions) {
+  document.getElementById('panel-placeholder').style.display = 'none';
+  document.getElementById('digi-info').classList.add('active');
+  document.getElementById('digi-reqs').style.display = 'block';
+
+  cargarImagenConVariaciones(data.label, document.getElementById('info-img'), 'img');
+  document.getElementById('info-name').textContent = data.label;
+  document.getElementById('info-attr').textContent = data.atributo;
+  document.getElementById('info-type').textContent = data.tipo;
+  document.getElementById('info-tama').textContent = data.tama;
+
+  // Base stats from digimonstattier
+  const statData = digimonstattier[data.label];
+  document.getElementById('stat-hp').textContent = statData?.HP ?? '-';
+  document.getElementById('stat-atk').textContent = statData?.ATK ?? '-';
+  document.getElementById('stat-def').textContent = statData?.DEF ?? '-';
+  document.getElementById('stat-vel').textContent = statData?.Vel ?? '-';
+
+  const badge = document.getElementById('info-badge');
+  badge.textContent = data.etapa;
+  badge.style.background = data.color;
+  badge.style.color = data.nivel > 3 ? '#1a1a2e' : '#fff';
+
+  // Pre-evolutions
+  const sectionFrom = document.getElementById('section-from');
+  const listFrom = document.getElementById('list-from');
+  if (preEvolutions.length > 0) {
+    sectionFrom.style.display = 'block';
+    listFrom.innerHTML = preEvolutions.map(name => {
+      const d = digimonReqDict[name] || {};
+      return `<div class="evo-item" onclick="clickEvoItem('${name}')">
+        <img data-digimon="${name}" src="icon/placeholder.png" alt="">
+        <span class="name">${name}</span>
+        <span class="level">${nivelAEtapa[d.Nivel] || ''}</span>
+      </div>`;
+    }).join('');
+    listFrom.querySelectorAll('img[data-digimon]').forEach(img => {
+      cargarImagenConVariaciones(img.dataset.digimon, img);
+    });
+  } else {
+    sectionFrom.style.display = 'none';
+  }
+
+  // Evolutions
+  const sectionTo = document.getElementById('section-to');
+  const listTo = document.getElementById('list-to');
+  if (evolutions.length > 0) {
+    sectionTo.style.display = 'block';
+    listTo.innerHTML = evolutions.map(name => {
+      const d = digimonReqDict[name] || {};
+      return `<div class="evo-item" onclick="clickEvoItem('${name}')">
+        <img data-digimon="${name}" src="icon/placeholder.png" alt="">
+        <span class="name">${name}</span>
+        <span class="level">${nivelAEtapa[d.Nivel] || ''}</span>
+      </div>`;
+    }).join('');
+    listTo.querySelectorAll('img[data-digimon]').forEach(img => {
+      cargarImagenConVariaciones(img.dataset.digimon, img);
+    });
+  } else {
+    sectionTo.style.display = 'none';
+  }
+
+  // Requisitos de digimonReqDict
+  const reqData = digimonReqDict[data.label] || {};
+  const reqGrid = document.getElementById('req-grid');
+  const specialConfig = specialDigimonConfig[data.label];
+
+  // Campos que usan porcentaje
+  const percentFields = ['% Entrenamiento', 'WinRate', 'Bonus WinRate'];
+
+  // Función para formatear valor
+  function formatValue(key, value) {
+    if (value === undefined || value === null || value === '') return null;
+
+    // Formatear porcentajes
+    if (percentFields.includes(key) && typeof value === 'number') {
+      return value + '%';
+    }
+    return value;
+  }
+
+  // Configuración de puntajes por nivel y campo (copiado de digimonreqs.html)
+  const puntajesPorNivel = {
+    3: { // Child
+      "Peso": { cumple: 0, noCumple: 0 },
+      "Error Maximo": { cumple: 0, noCumple: 0 },
+      "EntrenamientoHecho": { cumple: 1, noCumple: -10, condicional: true },
+      "Stat Superior": { cumple: 1, noCumple: 0 },
+      "Stat Superior 2": { cumple: 1, noCumple: 0 },
+      "Nickname": { cumple: 0, noCumple: -10 },
+      "Program": { cumple: 0, noCumple: -10 },
+      "2Ciclos": { cumple: 1, noCumple: -10 },
+      "% Entrenamiento": { cumple: 1, noCumple: 0 },
+      "Hora": { cumple: 1, noCumple: -10 },
+      "Xross": { cumple: 3, noCumple: -10 }
+    },
+    4: { // Adult
+      "WinRate": { cumple: 0, noCumple: -10 },
+      "Combates Minimos": { cumple: 0, noCumple: -10 },
+      "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
+      "Program": { cumple: 0, noCumple: -10 },
+      "Stat Superior": { cumple: 0, noCumple: -10 },
+      "Xross": { cumple: 3, noCumple: -10 },
+      "Comida": { cumple: 3, noCumple: -10 },
+      "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
+      "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
+      "Driver Equipado": { cumple: 0, noCumple: -10 },
+      "Victorias": { cumple: 1, noCumple: -10 },
+      "Tienes registrado a DexDorugamon y Dorugamon?": { cumple: 0, noCumple: -10 }
+    },
+    5: { // Perfect
+      "WinRate": { cumple: 0, noCumple: -10 },
+      "Combates Minimos": { cumple: 0, noCumple: -10 },
+      "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
+      "Program": { cumple: 0, noCumple: -10 },
+      "Stat Superior": { cumple: 0, noCumple: -10 },
+      "Xross": { cumple: 3, noCumple: -10 },
+      "Comida": { cumple: 3, noCumple: -10 },
+      "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
+      "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
+      "Driver Equipado": { cumple: 0, noCumple: -10 },
+      "Victorias": { cumple: 1, noCumple: -10 },
+      "Tienes registrado a DexDoruguremon y Doruguremon?": { cumple: 0, noCumple: -10 }
+    },
+    6: { // Ultimate
+      "WinRate": { cumple: 0, noCumple: -10 },
+      "Combates Minimos": { cumple: 0, noCumple: -10 },
+      "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
+      "Program": { cumple: 0, noCumple: -10 },
+      "Stat Superior": { cumple: 0, noCumple: -10 },
+      "Xross": { cumple: 3, noCumple: -10 },
+      "Comida": { cumple: 3, noCumple: -10 },
+      "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
+      "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
+      "Driver Equipado": { cumple: 0, noCumple: -10 },
+      "Victorias": { cumple: 1, noCumple: -10 }
+    }
+  };
+
+  // Función para obtener puntaje según nivel, categoría y campo (copiado de digimonreqs.html)
+  function getPuntaje(category, field, nivel) {
+    // Baby I (nivel 1) y Baby II (nivel 2) no tienen puntajes
+    if (nivel === 1 || nivel === 2) return null;
+
+    // Regla general: Campos en grupo "No se considera en el puntaje" = 0/0
+    if (category === 'No se considera en el puntaje') {
+      return { cumple: 0, noCumple: 0 };
+    }
+
+    // IMPORTANTE: Si está en Requisitos Obligatorios, siempre -10 cuando se incumple
+    if (category === 'Requisitos Obligatorios') {
+      // Obtener el valor de cumple del diccionario si existe, sino usar 1
+      let cumpleVal = 1;
+      if (puntajesPorNivel[nivel] && puntajesPorNivel[nivel][field]) {
+        cumpleVal = puntajesPorNivel[nivel][field].cumple;
+      }
+      return { cumple: cumpleVal, noCumple: -10 };
+    }
+
+    // Quota/Key Points: la categoría define que noCumple = 0
+    if (category === 'Quota/Key Points') {
+      // Obtener cumple del diccionario si existe, sino usar 1
+      let cumpleVal = 1;
+      if (puntajesPorNivel[nivel] && puntajesPorNivel[nivel][field]) {
+        cumpleVal = puntajesPorNivel[nivel][field].cumple;
+      }
+      // En Quota/Key Points, noCumple siempre es 0
+      return { cumple: cumpleVal, noCumple: 0 };
+    }
+
+    // Por defecto
+    return { cumple: 1, noCumple: 0 };
+  }
+
+  // Función para formatear puntaje con color
+  function formatearPuntajeConColor(puntaje) {
+    // Si el puntaje es null (Baby I/II), no mostrar nada
+    if (puntaje === null) return '';
+    if (!puntaje) return '';
+
+    const { cumple, noCumple } = puntaje;
+
+    // Si ambos son 0, no mostrar puntaje
+    if (cumple === 0 && noCumple === 0) return '';
+
+    let textoCumple = cumple > 0 ? `+${cumple}` : cumple;
+    let textoNoCumple = noCumple > 0 ? `+${noCumple}` : noCumple;
+
+    let claseCumple = cumple > 0 ? 'puntaje-positivo' : (cumple === 0 ? 'puntaje-neutro' : 'puntaje-negativo');
+    let claseNoCumple = noCumple > 0 ? 'puntaje-positivo' : (noCumple === 0 ? 'puntaje-neutro' : 'puntaje-negativo');
+
+    return ` (<span class="${claseCumple}">${textoCumple}</span>/<span class="${claseNoCumple}">${textoNoCumple}</span>)`;
+  }
+
+  // Nivel del Digimon actual
+  const nivel = data.nivel;
+
+  // Mapeo de categorías a clases CSS
+  const categoryClasses = {
+    'No se considera en el puntaje': 'no-score',
+    'Quota/Key Points': 'quota',
+    'Requisitos Obligatorios': 'required',
+    '⚠️ Requisitos desconocidos': 'warning',
+    'Evolución especial': 'warning',
+    'Evolucion por muerte inducida': 'warning'
+  };
+
+  // Etiquetas legibles para campos
+  const fieldLabels = {
+    'ID': 'ID',
+    'Peso': 'Peso',
+    'Error Maximo': 'Error Máximo',
+    '% Entrenamiento': '% Entrenamiento',
+    'EntrenamientoHecho': 'Entrenamiento Hecho',
+    'Stat Superior': 'Stat Superior',
+    'Stat Superior 2': 'Stat Superior 2',
+    'Bonus Stat Superior': 'Bonus Stat',
+    'WinRate': 'WinRate',
+    'Bonus WinRate': 'Bonus WinRate',
+    'Bonus Batallas': 'Bonus Batallas',
+    'Bonus Errores': 'Bonus Errores',
+    'Bonus Comida': 'Bonus Comida',
+    'Bonus Vinculo': 'Bonus Vínculo',
+    'Bonus Victorias': 'Bonus Victorias',
+    'Bonus Vinculo Alcanzado': 'Bonus Vínculo',
+    'Combates Minimos': 'Combates Mín.',
+    'Vinculo Minimo alcanzado': 'Vínculo Mín.',
+    'Victorias': 'Victorias',
+    'Driver Equipado': 'Driver Equipado',
+    'Digimon Bonus': 'Digimon Bonus',
+    'Program': 'Program',
+    '2Ciclos': '2 Ciclos',
+    'Nickname': 'Nickname',
+    'Comida': 'Comida',
+    'Xross': 'Xross',
+    'Hora': 'Hora',
+    'Tienes registrado a DexDorugamon y Dorugamon?': '¿Registrado DexDoru/Doru?',
+    'Tienes registrado a DexDoruguremon y Doruguremon?': '¿Registrado DexDorugure/Dorugure?',
+    'Vinculo al momento de evolucionar': 'Vínculo al Evolucionar',
+    'Bonus Vinculo al momento de evolucionar': 'Bonus Vínculo',
+    'Menos de 15 entrenamientos?': '< 15 Entrenamientos?',
+    'Alcanzo vinculo negativo?': '¿Vínculo Negativo?',
+    'Errores Minimos': 'Errores Mín.',
+    'Victorias Minimas': 'Victorias Mín.',
+    'Bonus Digimon': 'Bonus Digimon',
+    'Muerte inducida sin Carne X o Program (30% de salir)': 'Muerte inducida (30%)',
+    'Program / Comida (Asegura evolucion)': 'Program / Comida',
+    'Program o Comida': 'Program o Comida'
+  };
+
+  let reqHTML = '';
+
+  // Verificar si tiene variantes completas (como Clockmon)
+  const variantesConfig = digimonVariantes[data.label];
+  if (variantesConfig) {
+    // Renderizar tabla con columnas para cada variante
+    const { columnas, categorias, valores } = variantesConfig;
+
+    Object.entries(categorias).forEach(([category, campos]) => {
+      const categoryClass = categoryClasses[category] || '';
+      reqHTML += `<div class="req-section">
+        <div class="req-section-title ${categoryClass}">${category}</div>
+        <table class="variantes-full-table">
+          <thead>
+            <tr>
+              <th class="campo-header">Campo</th>
+              ${columnas.map(col => `<th class="variante-header">${col.replace(/2$/, '')}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>`;
+
+      campos.forEach(campo => {
+        const label = fieldLabels[campo] || campo;
+        const puntaje = getPuntaje(category, campo, nivel);
+        const puntajeHTML = formatearPuntajeConColor(puntaje);
+
+        reqHTML += `<tr>
+          <td class="campo-cell">${label}${puntajeHTML}</td>`;
+
+        columnas.forEach(col => {
+          const valor = valores[col][campo] || '-';
+          reqHTML += `<td class="valor-cell">${valor}</td>`;
+        });
+
+        reqHTML += `</tr>`;
+      });
+
+      reqHTML += `</tbody></table></div>`;
+    });
+
+    reqGrid.innerHTML = reqHTML;
+    return;
+  }
+
+  // Verificar si tiene variantes por pre-evolución (como Mugendramon)
+  const variantesPorPreEvoConfig = digimonVariantesPorPreEvo[data.label];
+  if (variantesPorPreEvoConfig) {
+    const { categorias, preEvos } = variantesPorPreEvoConfig;
+
+    // Mostrar cada categoría
+    Object.entries(categorias).forEach(([category, campos]) => {
+      const categoryClass = categoryClasses[category] || '';
+      reqHTML += `<div class="req-section">
+        <div class="req-section-title ${categoryClass}">${category}</div>
+        <div class="preevo-cards">`;
+
+      // Crear una card por cada pre-evolución
+      Object.entries(preEvos).forEach(([preEvoName, valores]) => {
+        reqHTML += `<div class="preevo-card">
+          <div class="preevo-card-header">
+            <img data-digimon="${preEvoName}" src="icon/placeholder.png" alt="">
+            <span>${preEvoName}</span>
+          </div>
+          <div class="preevo-card-content">`;
+
+        campos.forEach(campo => {
+          const label = fieldLabels[campo] || campo;
+          const valor = valores[campo] || '-';
+          reqHTML += `<div class="preevo-field">
+            <span class="preevo-field-label">${label}</span>
+            <span class="preevo-field-value">${valor}</span>
+          </div>`;
+        });
+
+        reqHTML += `</div></div>`;
+      });
+
+      reqHTML += `</div></div>`;
+    });
+
+    reqGrid.innerHTML = reqHTML;
+    // Cargar imágenes de pre-evoluciones
+    reqGrid.querySelectorAll('img[data-digimon]').forEach(img => {
+      cargarImagenConVariaciones(img.dataset.digimon, img);
+    });
+    return;
+  }
+
+  if (specialConfig) {
+    // Usar configuración especial agrupada
+    Object.entries(specialConfig).forEach(([category, fields]) => {
+      const categoryClass = categoryClasses[category] || '';
+      reqHTML += `<div class="req-section">
+        <div class="req-section-title ${categoryClass}">${category}</div>
+        <div class="req-grid">`;
+
+      fields.forEach(field => {
+        let value = reqData[field];
+        const label = fieldLabels[field] || field;
+        const isFullWidth = field === 'Digimon Bonus' || field.includes('requisitos');
+        const fullWidthClass = isFullWidth ? ' full-width' : '';
+
+        // Campos especiales de muerte inducida (Bakemon LT)
+        if (field === 'Muerte inducida sin Carne X o Program (30% de salir)') {
+          reqHTML += `<div class="req-item full-width">
+            <span class="label">${label}</span>
+            <span class="value">Si</span>
+          </div>`;
+          return;
+        }
+
+        if (field === 'Program / Comida (Asegura evolucion)') {
+          const combinedValue = (reqData.Program && reqData.Comida) ? `${reqData.Program} / ${reqData.Comida}` : '-';
+          const puntajeHTML = formatearPuntajeConColor({ cumple: 3, noCumple: -10 });
+          reqHTML += `<div class="req-item">
+            <span class="label">${label}</span>
+            <span class="value">${combinedValue}${puntajeHTML}</span>
+          </div>`;
+          return;
+        }
+
+        // Campo especial de SkullGreymon: combina Program y Comida
+        if (field === 'Program o Comida') {
+          const combinedValue = (reqData.Program && reqData.Comida) ? `${reqData.Program} o ${reqData.Comida}` : '-';
+          const puntajeHTML = formatearPuntajeConColor(getPuntaje(category, field, nivel));
+          reqHTML += `<div class="req-item">
+            <span class="label">${label}</span>
+            <span class="value">${combinedValue}${puntajeHTML}</span>
+          </div>`;
+          return;
+        }
+
+        // Campo especial "% Entrenamiento" con variantes (Clockmon, Chackmon, Blizzarmon, etc.)
+        if (field === '% Entrenamiento' && specialEntrenamientoCases[data.label]) {
+          const casos = specialEntrenamientoCases[data.label];
+          const puntajeHTML = formatearPuntajeConColor(getPuntaje(category, field, nivel));
+          let variantesHTML = '<div class="variantes-table">';
+          Object.entries(casos).forEach(([variante, valor]) => {
+            const valorStr = valor === '-' ? '-' : valor + '%';
+            variantesHTML += `<div class="variante-row"><span class="variante-label">${variante}:</span><span class="variante-value">${valorStr}</span></div>`;
+          });
+          variantesHTML += '</div>';
+          reqHTML += `<div class="req-item full-width">
+            <span class="label">${label}${puntajeHTML}</span>
+            <span class="value">${variantesHTML}</span>
+          </div>`;
+          return;
+        }
+
+        // Para campos con "Los requisitos han cambiado"
+        if (field.includes('requisitos')) {
+          reqHTML += `<div class="req-item full-width">
+            <span class="value neutral">${field}</span>
+          </div>`;
+          return;
+        }
+
+        const formattedValue = formatValue(field, value);
+        const puntaje = getPuntaje(category, field, nivel);
+        const puntajeHTML = formatearPuntajeConColor(puntaje);
+
+        if (formattedValue !== null) {
+          reqHTML += `<div class="req-item${fullWidthClass}">
+            <span class="label">${label}</span>
+            <span class="value">${formattedValue}${puntajeHTML}</span>
+          </div>`;
+        } else if (category === 'Requisitos Obligatorios') {
+          reqHTML += `<div class="req-item${fullWidthClass}">
+            <span class="label">${label}</span>
+            <span class="value">Requerido${puntajeHTML}</span>
+          </div>`;
+        } else {
+          reqHTML += `<div class="req-item${fullWidthClass}">
+            <span class="label">${label}</span>
+            <span class="value">-</span>
+          </div>`;
+        }
+      });
+
+      reqHTML += `</div></div>`;
+    });
+  } else {
+    // Sin configuración especial: usar gruposColumnasDefault
+    Object.entries(gruposColumnasDefault).forEach(([category, fields]) => {
+      const categoryClass = categoryClasses[category] || '';
+      let categoryHasFields = false;
+      let categoryHTML = '';
+
+      fields.forEach(field => {
+        const value = reqData[field];
+        const formattedValue = formatValue(field, value);
+        if (formattedValue !== null) {
+          categoryHasFields = true;
+          const label = fieldLabels[field] || field;
+          const isFullWidth = field === 'Digimon Bonus';
+          const fullWidthClass = isFullWidth ? ' full-width' : '';
+          const puntaje = getPuntaje(category, field, nivel);
+          const puntajeHTML = formatearPuntajeConColor(puntaje);
+
+          categoryHTML += `<div class="req-item${fullWidthClass}">
+            <span class="label">${label}</span>
+            <span class="value">${formattedValue}${puntajeHTML}</span>
+          </div>`;
+        }
+      });
+
+      if (categoryHasFields) {
+        reqHTML += `<div class="req-section">
+          <div class="req-section-title ${categoryClass}">${category}</div>
+          <div class="req-grid">${categoryHTML}</div>
+        </div>`;
+      }
+    });
+
+    if (reqHTML === '') {
+      reqHTML = '<div class="req-item full-width"><span class="label">Sin requisitos específicos</span></div>';
+    }
+  }
+
+  reqGrid.innerHTML = reqHTML;
+}
+
+function clickEvoItem(name) {
+  const node = cy.getElementById(name);
+  if (node && node.length > 0) {
+    selectDigimon(node);
+  }
+}
+
+function hideInfo() {
+  document.getElementById('panel-placeholder').style.display = 'flex';
+  document.getElementById('digi-info').classList.remove('active');
+  document.getElementById('digi-reqs').style.display = 'none';
+}
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  resetSelection();
+  cy.animate({ fit: { eles: cy.elements(), padding: 50 } }, { duration: 500 });
+});
+
+document.getElementById('btnFit').addEventListener('click', () => {
+  cy.animate({ fit: { eles: cy.elements(), padding: 50 } }, { duration: 500 });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  createTamaSelectors();
+  initCytoscape(currentTama);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+{
+  "nodes": [
+    {
+      "id": "dorumon",
+      "type": "text",
+      "x": 400,
+      "y": 300,
+      "width": 200,
+      "height": 160,
+      "text": "![[DigimonIcons/dorumon.png|100]]\n# Dorumon\n**Child** • Data • Bestia",
+      "color": "3"
+    },
+    {
+      "id": "dodomon",
+      "type": "text",
+      "x": 50,
+      "y": 200,
+      "width": 160,
+      "height": 130,
+      "text": "![[DigimonIcons/Dodomon.png|80]]\n## Dodomon\n**Baby I** • Free",
+      "color": "1"
+    },
+    {
+      "id": "dorimon",
+      "type": "text",
+      "x": 50,
+      "y": 400,
+      "width": 160,
+      "height": 130,
+      "text": "![[DigimonIcons/Dorimon.png|80]]\n## Dorimon\n**Baby II** • Free",
+      "color": "2"
+    },
+    {
+      "id": "dorugamon",
+      "type": "text",
+      "x": 750,
+      "y": 80,
+      "width": 160,
+      "height": 130,
+      "text": "![[DigimonIcons/dorugamon.png|80]]\n## Dorugamon\n**Adult** • Data",
+      "color": "4"
+    },
+    {
+      "id": "dexdorugamon",
+      "type": "text",
+      "x": 750,
+      "y": 280,
+      "width": 170,
+      "height": 130,
+      "text": "![[DigimonIcons/dexdorugamon.png|80]]\n## DexDorugamon\n**Adult** • Virus",
+      "color": "4"
+    },
+    {
+      "id": "raptordramon",
+      "type": "text",
+      "x": 750,
+      "y": 480,
+      "width": 160,
+      "height": 130,
+      "text": "![[DigimonIcons/raptordramon.png|80]]\n## Raptordramon\n**Adult** • Vacuna",
+      "color": "4"
+    },
+    {
+      "id": "doruguremon",
+      "type": "text",
+      "x": 1050,
+      "y": 0,
+      "width": 160,
+      "height": 130,
+      "text": "![[DigimonIcons/doruguremon.png|80]]\n## Doruguremon\n**Perfect** • Data",
+      "color": "5"
+    },
+    {
+      "id": "dexdoruguremon",
+      "type": "text",
+      "x": 1050,
+      "y": 180,
+      "width": 180,
+      "height": 130,
+      "text": "![[DigimonIcons/dexdoruguremon.png|80]]\n## DexDoruguremon\n**Perfect** • Virus",
+      "color": "5"
+    },
+    {
+      "id": "grademon",
+      "type": "text",
+      "x": 1050,
+      "y": 380,
+      "width": 160,
+      "height": 130,
+      "text": "![[DigimonIcons/grademon.png|80]]\n## Grademon\n**Perfect** • Vacuna",
+      "color": "5"
+    },
+    {
+      "id": "grademon_vice",
+      "type": "text",
+      "x": 1050,
+      "y": 560,
+      "width": 180,
+      "height": 130,
+      "text": "![[DigimonIcons/grademon.png|80]]\n## Grademon VICE\n**Perfect** • Virus",
+      "color": "5"
+    }
+  ],
+  "edges": [
+    {"id": "e1", "fromNode": "dodomon", "toNode": "dorimon", "fromSide": "bottom", "toSide": "top"},
+    {"id": "e2", "fromNode": "dorimon", "toNode": "dorumon", "fromSide": "right", "toSide": "left"},
+    {"id": "e3", "fromNode": "dorumon", "toNode": "dorugamon", "fromSide": "right", "toSide": "left"},
+    {"id": "e4", "fromNode": "dorumon", "toNode": "dexdorugamon", "fromSide": "right", "toSide": "left"},
+    {"id": "e5", "fromNode": "dorumon", "toNode": "raptordramon", "fromSide": "right", "toSide": "left"},
+    {"id": "e6", "fromNode": "dorugamon", "toNode": "doruguremon", "fromSide": "right", "toSide": "left"},
+    {"id": "e7", "fromNode": "dorugamon", "toNode": "dexdoruguremon", "fromSide": "right", "toSide": "left"},
+    {"id": "e8", "fromNode": "dexdorugamon", "toNode": "dexdoruguremon", "fromSide": "right", "toSide": "left"},
+    {"id": "e9", "fromNode": "raptordramon", "toNode": "grademon", "fromSide": "right", "toSide": "left"},
+    {"id": "e10", "fromNode": "grademon", "toNode": "grademon_vice", "fromSide": "bottom", "toSide": "top"}
+  ]
+}

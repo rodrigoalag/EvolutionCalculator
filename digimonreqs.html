@@ -1,3800 +1,540 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Información del Digimon</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>DigiDex Web - Net Driver</title>
   <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
-  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"/>
   <style>
-/* Estilos base */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.top-section {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 2rem;
-  width: 100%;
-}
-.digimon-image {
-  flex: 1;
-  text-align: center;
-  min-width: 300px;
-  position: relative;
-}
-
-/* Contenedor de la galería de imágenes */
-.image-gallery-container {
-  position: relative;
-  display: inline-block;
-}
-
-/* Botones de navegación de imágenes */
-.image-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease;
-  z-index: 10;
-}
-
-.image-nav-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.image-nav-btn.prev {
-  left: -16px;
-}
-
-.image-nav-btn.next {
-  right: -16px;
-}
-
-.image-nav-btn.visible {
-  display: flex;
-}
-
-/* Estilos mejorados para las imágenes de Digimon */
-.digimon-image img {
-  width: 280px !important;
-  height: 280px !important;
-  object-fit: contain;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  background-color: transparent;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-  max-width: 100%;
-  height: auto;
-}
-
-/* Efecto hover para las imágenes */
-.digimon-image img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-/* Placeholder mejorado */
-#imagePlaceholder {
-  width: 280px;
-  height: 280px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-  border: 2px dashed #ccc;
-  border-radius: 12px;
-  color: #666;
-  font-weight: 500;
-  text-align: center;
-  max-width: 100%;
-}
-
-.digimon-tables {
-  flex: 2;
-  min-width: 0;
-  overflow-x: auto;
-}
-
-.digimon-tables.full-width {
-  width: 100%;
-  flex: none;
-}
-
-/* ESTILOS DE TABLA MEJORADOS */
-table {
-  margin-bottom: 2rem;
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto; /* Cambiado de fixed a auto */
-}
-
-table th,
-table td {
-  padding: 0.4rem;
-  text-align: center;
-  border: 1px solid #ddd;
-  word-wrap: break-word;
-  hyphens: auto;
-  overflow-wrap: break-word;
-  white-space: normal;
-  line-height: 1.3;
-  font-size: 0.9rem;
-  vertical-align: middle;
-}
-
-table th {
-  font-weight: bold;
-}
-
-/* Asegurar que las filas de datos en requisitosOrigen tengan el mismo color */
-#tablaRequisitos tbody tr.data-row-origen {
-  background-color: var(--bg) !important;
-}
-
-select:disabled {
-  opacity: 0.5;
-}
-
-#selectorContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 2rem auto;
-}
-
-.selectorItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Wrapper para scroll horizontal de tablas */
-.table-wrapper {
-  overflow-x: auto;
-  width: 100%;
-  margin-bottom: 1rem;
-  -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-}
-
-.table-wrapper table {
-  margin-bottom: 0;
-  min-width: 400px; /* Aumentado para mejor legibilidad */
-  width: 100%;
-}
-
-/* Ancho mínimo para tabla de evoluciones */
-#tablaEvoluciones {
-  min-width: 700px !important;
-  width: 100% !important;
-}
-
-#tablaEvoluciones th:nth-child(1),
-#tablaEvoluciones td:nth-child(1) {
-  width: 80px;
-  min-width: 80px;
-}
-
-#tablaEvoluciones th.col-evoluciona,
-#tablaEvoluciones td:nth-child(2) {
-  min-width: 350px;
-  width: 45%;
-  white-space: normal;
-}
-
-#tablaEvoluciones th.col-viene,
-#tablaEvoluciones td:nth-child(3) {
-  min-width: 350px;
-  width: 45%;
-  white-space: normal;
-}
-
-/* Estilos para listas de evoluciones en columnas */
-.evolution-list {
-  display: grid;
-  gap: 0 0.8rem;
-  text-align: left;
-  width: 100%;
-  align-items: start;
-}
-
-.evolution-column {
-  line-height: 1.5;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-}
-
-/* Alineación para celdas con listas de evolución */
-td:has(.evolution-list),
-td:has(br) {
-  vertical-align: top;
-  padding: 0.5rem !important;
-}
-
-/* Wrapper para tabla con scroll horizontal */
-.table-scroll-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-@media (max-width: 768px) {
-  .evolution-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 0.5rem;
-  }
-
-  .evolution-column {
-    font-size: 0.75rem;
-    line-height: 1.4;
-  }
-
-  td:has(.evolution-list),
-  td:has(br) {
-    padding: 0.3rem !important;
-    font-size: 0.75rem;
-  }
-}
-
-/* Estilos para secciones desplegables */
-.collapsible-section {
-  width: 100%;
-}
-
-.collapsible-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  margin-bottom: 0;
-}
-
-.collapsible-header:hover .collapsible-toggle {
-  opacity: 0.7;
-}
-
-.collapsible-header h2 {
-  margin: 0;
-  display: inline;
-}
-
-.collapsible-toggle {
-  font-size: 1.2rem;
-  transition: transform 0.3s ease, opacity 0.2s ease;
-  margin-left: 0.5rem;
-  display: inline-block;
-}
-
-.collapsible-toggle.active {
-  transform: rotate(180deg);
-}
-
-.collapsible-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-
-.collapsible-content.active {
-  max-height: 5000px;
-  transition: max-height 0.5s ease-in;
-}
-
-/* Responsividad para tablets */
-@media (max-width: 1024px) {
-  .container {
-    gap: 1.5rem;
-  }
-  
-  .digimon-image {
-    min-width: 250px;
-  }
-  
-  .digimon-image img {
-    width: 240px !important;
-    height: 240px !important;
-  }
-  
-  #imagePlaceholder {
-    width: 240px;
-    height: 240px;
-  }
-  
-  table {
-    font-size: 0.9rem;
-  }
-  
-  table th,
-  table td {
-    padding: 0.4rem;
-    font-size: 0.85rem;
-  }
-
-  .collapsible-toggle {
-    font-size: 1.1rem;
-  }
-}
-
-/* Responsividad para pantallas pequeñas */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-  
-  .digimon-image {
-    min-width: unset;
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .digimon-image img {
-    width: 220px !important;
-    height: 220px !important;
-  }
-  
-  #imagePlaceholder {
-    width: 220px;
-    height: 220px;
-  }
-  
-  .digimon-tables {
-    width: 100%;
-    overflow-x: visible; /* Permitir que el wrapper maneje el scroll */
-  }
-  
-  table {
-    font-size: 0.8rem;
-  }
-  
-  table th,
-  table td {
-    padding: 0.25rem;
-    font-size: 0.75rem;
-    line-height: 1.2;
-  }
-  
-  /* Hacer que las tablas sean más compactas */
-  .table-wrapper table {
-    min-width: 350px; /* Balance entre compacto y legible */
-  }
-
-  .collapsible-toggle {
-    font-size: 1rem;
-  }
-
-  nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  nav a {
-    text-align: center;
-    font-size: 0.9rem;
-  }
-}
-
-/* Responsividad para pantallas muy pequeñas */
-@media (max-width: 480px) {
-  #selectorContainer {
-    padding: 0 0.5rem;
-  }
-  
-  .digimon-image img {
-    width: 180px !important;
-    height: 180px !important;
-  }
-  
-  #imagePlaceholder {
-    width: 180px;
-    height: 180px;
-    font-size: 0.85rem;
-    padding: 0.5rem;
-  }
-  
-  table {
-    font-size: 0.75rem;
-  }
-  
-  table th,
-  table td {
-    padding: 0.2rem;
-    font-size: 0.7rem;
-    line-height: 1.1;
-  }
-  
-  /* Tabla compacta pero legible para móviles pequeños */
-  .table-wrapper table {
-    min-width: 320px;
-  }
-  
-  h1 {
-    font-size: 1.5rem;
-  }
-  
-  h2 {
-    font-size: 1.2rem;
-  }
-  
-  #disclaimer {
-    font-size: 0.8rem;
-    padding: 0.8rem;
-  }
-}
-
-/* NUEVOS ESTILOS PARA TEXTO LARGO EN CELDAS */
-@media (max-width: 600px) {
-  /* Para textos largos como "Errores de Cuidado" y "Entrenamiento Mínimo" */
-  table th,
-  table td {
-    font-size: 0.7rem;
-    line-height: 1.2;
-    padding: 0.2rem;
-    max-width: 80px; /* Más espacio para legibilidad */
-  }
-  
-  /* Permitir que el texto se ajuste en múltiples líneas */
-  table th {
-    white-space: normal;
-    word-break: break-word;
-  }
-  
-  table td {
-    white-space: normal;
-    word-break: break-word;
-  }
-  
-  .table-wrapper table {
-    min-width: 300px; /* Balance entre compacto y scroll */
-  }
-}
-
-/* Mejoras generales para mejor UX móvil */
-* {
-  box-sizing: border-box;
-}
-
+* { box-sizing: border-box; }
 body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
   margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+  padding: 1rem;
+  padding-top: 70px;
 }
 
-main {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+h1, h2, h3 { color: #4ecdc4; }
 
-/* Asegurar que las tablas no se desborden */
-.digimon-tables {
-  overflow: hidden;
-}
-
-/* Indicador visual de scroll horizontal */
-.table-wrapper::after {
-  content: "← Desliza para ver más →";
-  display: block;
-  text-align: center;
-  font-size: 0.7rem;
-  color: #999;
-  padding: 0.5rem;
-}
-
-@media (min-width: 769px) {
-  .table-wrapper::after {
-    display: none;
-  }
-}
-/* Estilos para headers agrupados */
-#headersGrupos th {
-  background-color: transparent;
-  font-weight: bold;
-  text-align: center;
-  border: 2px solid #333;
-  padding: 0.4rem;
-  text-align: center;
-  border: 1px solid #ddd;
-  word-wrap: break-word;
-  hyphens: auto;
-  overflow-wrap: break-word;
-  white-space: normal;
-  line-height: 1.3;
-  font-size: 0.9rem;
-  vertical-align: middle;
-}
-
-#headersRequisitos th {
-  background-color: transparent;
-  font-weight: 600;
-  border: 1px solid #ddd;
-  padding: 0.4rem;
-  text-align: center;
-  border: 1px solid #ddd;
-  word-wrap: break-word;
-  hyphens: auto;
-  overflow-wrap: break-word;
-  white-space: normal;
-  line-height: 1.3;
-  font-size: 0.9rem;
-  vertical-align: middle;
-}
-
-/* Estilos para puntajes en requisitos */
-.puntaje-positivo {
-  color: #22c55e;
-  font-weight: 600;
-}
-
-.puntaje-neutro {
-  color: #eab308;
-  font-weight: 600;
-}
-
-.puntaje-negativo {
-  color: #ef4444;
-  font-weight: 600;
-}
-
-/* Responsive para headers agrupados */
-@media (max-width: 768px) {
-  #headersGrupos th {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.2rem;
-  }
-
-  #headersRequisitos th {
-    font-size: 0.7rem;
-    padding: 0.25rem;
-  }
-}
-
-/* ====================== ESTILOS PARA WARNING ICON ====================== */
-/* Estilos para el icono de advertencia */
-.warning-icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background-color: #4a9eff;
-  color: white;
-  border-radius: 50%;
-  text-align: center;
-  font-size: 12px;
-  line-height: 16px;
+/* MenÃº hamburguesa */
+#nav-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.95);
+  border: 1px solid rgba(78, 205, 196, 0.3);
   cursor: pointer;
-  margin-left: 5px;
-  user-select: none;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: #4ecdc4;
+  border-radius: 2px;
+}
+
+#nav-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: rgba(20, 20, 40, 0.98);
+  border-right: 1px solid rgba(78, 205, 196, 0.3);
+  z-index: 150;
+  padding: 20px;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78, 205, 196, 0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#nav-menu h3 img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
   vertical-align: middle;
-  font-weight: bold;
+  object-fit: contain;
 }
-
-.warning-icon:hover {
-  background-color: #3182ce;
+.nav-link {
+  display: block;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
 }
-
-/* Overlay del popup */
-.warning-overlay {
+.nav-link img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link:hover { background: rgba(78, 205, 196, 0.2); color: #fff; }
+.nav-link.active { background: rgba(78, 205, 196, 0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' â†—'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.5;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.nav-credits ul {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+.nav-credits li {
+  margin-bottom: 8px;
+}
+.nav-credits a {
+  color: #4ecdc4;
+  text-decoration: none;
+}
+.nav-credits a:hover {
+  text-decoration: underline;
+}
+#nav-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 10000;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
   display: none;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
 }
+#nav-overlay.active { display: block; }
 
-.warning-overlay.show {
-  display: flex;
-}
-
-/* Contenedor del popup */
-.warning-container {
-  position: relative;
-  max-width: 500px;
-  background: white;
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  animation: popupIn 0.3s ease-out;
-  color: #333;
-}
-
-/* Animación de entrada */
-@keyframes popupIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Botón de cerrar */
-.warning-close {
-  position: absolute;
-  top: 10px;
+/* Selector de idioma */
+#lang-selector {
+  position: fixed;
+  top: 15px;
   right: 15px;
-  background: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+}
+#lang-selector select {
+  background: rgba(30, 30, 50, 0.9);
   color: white;
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
   cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
-  z-index: 10001;
+}
+#lang-selector select:hover { border-color: #4ecdc4; }
+
+/* Contenedor principal */
+.main-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.welcome-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  color: #ccc;
+}
+
+/* Cards de selecciÃ³n */
+.selection-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.selection-card {
+  background: rgba(30, 30, 50, 0.6);
+  border: 2px solid rgba(78, 205, 196, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selection-card:hover {
+  border-color: #4ecdc4;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(78, 205, 196, 0.2);
+}
+
+.selection-card .icon {
+  font-size: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.warning-close:hover {
-  background: rgba(0, 0, 0, 0.8);
+.selection-card .icon img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
 }
 
-/* Texto del warning */
-.warning-text {
-  font-size: 16px;
+.selection-card h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.selection-card p {
+  color: #888;
+  font-size: 0.95rem;
+  margin: 0;
   line-height: 1.5;
-  text-align: center;
 }
 
-/* Responsive para warning popup */
-@media (max-width: 768px) {
-  .warning-container {
-    max-width: 90vw;
-    padding: 25px;
+/* SecciÃ³n de crÃ©ditos */
+.credits-section {
+  background: rgba(30, 30, 50, 0.4);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.credits-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.credits-section p {
+  color: #999;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.credits-section ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.credits-section li {
+  margin-bottom: 0.8rem;
+  color: #ccc;
+}
+
+.credits-section a {
+  color: #4ecdc4;
+  text-decoration: none;
+}
+
+.credits-section a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    padding-top: 60px;
   }
 
-  .warning-text {
-    font-size: 14px;
+  #nav-toggle {
+    top: 10px;
+    left: 10px;
+    width: 38px;
+    height: 38px;
   }
-
-  .warning-icon {
+  #nav-toggle span {
     width: 18px;
-    height: 18px;
-    line-height: 18px;
-    font-size: 13px;
+  }
+
+  #lang-selector {
+    top: 10px;
+    right: 10px;
+  }
+  #lang-selector select {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+  }
+
+  .welcome-text {
+    font-size: 0.95rem;
+  }
+
+  .selection-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .selection-card {
+    padding: 1.5rem;
+  }
+
+  .selection-card .icon {
+    font-size: 3rem;
+  }
+
+  .selection-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .credits-section {
+    padding: 1.5rem;
   }
 }
-/* ====================== FIN ESTILOS WARNING ICON ====================== */
-
-/* ====================== ESTILOS BOTÓN DESCARGA ====================== */
-.download-section {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-}
-
-.download-btn {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 8px;
-  background-color: #4a5568;
-  color: white;
-  border: none;
-  transition: background-color 0.2s;
-}
-
-.download-btn:hover {
-  background-color: #2d3748;
-}
-
-.download-btn:disabled {
-  background-color: #718096;
-  cursor: not-allowed;
-}
-/* ====================== FIN ESTILOS BOTÓN DESCARGA ====================== */
   </style>
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
-<script src="digimonReqDict.js"></script>
-<script src="digimonstattier.js"></script>
 <body>
-  <header>
-    <h1 id="titleMain">Información del Digimon</h1>
-    <nav>
-      <a href="./index.html">Main Hub</a>
-      <a href="./calculadora.html">Digimon Evo Calc</a>
-      <a href="./digimonreqs.html">Digimon Reqs</a>
-      <a href="./StatRanking.html">Digimon Stat Ranking</a>
-      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
-	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
-	  <a href="./BalanceCalculator.html">Balance Calculator</a>
-      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
-      <a href="./dropsdelared.html">Drops de la Red</a>
-      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
-      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
-      <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
-      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
-      <a target="_blank" href="https://nd-deck-builder-5188c6.gitlab.io/">Deck Builder</a>
-    </nav>
-	  <label for="languageSelector">Idioma / Language:</label>
-	  <select id="languageSelector">
-		<option value="es">Español</option>
-		<option value="en">English</option>
-	  </select>
 
-  </header>
-
-  <main>
-  
-<section>
-  <div id="selectorContainer">
-    <div class="selectorItem">
-      <label for="selectTama">Seleccionar Tama:</label>
-      <select id="selectTama">
-        <option value="">-- Elige un Tama --</option>
-      </select>
-    </div>
-
-    <div class="selectorItem">
-      <label for="selectNivel">Seleccionar Nivel:</label>
-      <select id="selectNivel" disabled>
-        <option value="">-- Elige un Nivel --</option>
-      </select>
-    </div>
-
-    <div class="selectorItem">
-      <label for="selectDigimon">Seleccionar Digimon:</label>
-      <select id="selectDigimon" disabled>
-        <option value="">-- Elige un Digimon --</option>
-      </select>
-    </div>
+<!-- MenÃº de navegaciÃ³n hamburguesa -->
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">âœ•</button>
+  <h3>ðŸ”§ Herramientas</h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Evo Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link active"><img src="./pageicons/Digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/Ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/Digidex.png" alt="Digidex"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/Agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <div class="nav-divider"></div>
+  <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="CrÃ©ditos"> CrÃ©ditos</h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÃ­a podido hacer varias cosas en las pÃ¡ginas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del Ã¡rbol evolutivo, tomÃ© prestado sus ideas para hacer las mejoras</li>
+      <li><strong>Panoli</strong> - Por darme todas las imÃ¡genes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
   </div>
-</section>
-<section id="disclaimerSection">
-	<p id="disclaimer">
-		DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.
-	</p>
-</section>
-<section class="container">
-  <div class="top-section">
-    <div class="digimon-image">
-      <div id="imagePlaceholder">
-        <p>Selecciona un Digimon para ver su imagen</p>
-      </div>
-      <div class="image-gallery-container">
-        <button class="image-nav-btn prev" id="imgPrevBtn" onclick="navegarImagen(-1)">◀</button>
-        <img id="digimonImage" alt="Imagen del Digimon" style="display: none;" />
-        <button class="image-nav-btn next" id="imgNextBtn" onclick="navegarImagen(1)">▶</button>
-      </div>
-    </div>
+</nav>
 
-    <div class="digimon-tables">
-      <div class="collapsible-section">
-        <div class="collapsible-header" onclick="toggleCollapsible(this)">
-          <h2 id="subtitle">Datos Generales del Digimon</h2>
-          <span class="collapsible-toggle active">▼</span>
-        </div>
-        <div class="collapsible-content active">
-          <table id="tablaGenerales">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Tama</th>
-                <th>Nivel</th>
-                <th>Atributo</th>
-                <th>Tipo</th>
-                <th>Peso</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-	<div class="digimon-tables full-width">
-	  <div class="collapsible-section">
-	    <div class="collapsible-header" onclick="toggleCollapsible(this)">
-	      <h2 id="subtitle3">Stat Base</h2>
-	      <span class="collapsible-toggle active">▼</span>
-	    </div>
-	    <div class="collapsible-content active">
-	      <div class="table-scroll-wrapper">
-	        <table id="tablaStats">
-		      <thead>
-		        <tr>
-			      <th>ATK</th>
-			      <th>DEF</th>
-			      <th>HP</th>
-			      <th>Vel</th>
-			      <th>Digipuntos</th>
-		        </tr>
-		      </thead>
-		      <tbody></tbody>
-	        </table>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<div class="digimon-tables full-width">
-	  <div class="collapsible-section">
-	    <div class="collapsible-header" onclick="toggleCollapsible(this)">
-	      <h2 id="subtitle4">Evoluciones</h2>
-	      <span class="collapsible-toggle active">▼</span>
-	    </div>
-	    <div class="collapsible-content active">
-	      <div class="table-scroll-wrapper">
-	        <table id="tablaEvoluciones">
-		      <thead>
-		        <tr>
-			      <th>Línea Evolutiva</th>
-			      <th class="col-evoluciona">Evoluciona a</th>
-			      <th class="col-viene">Viene de</th>
-		        </tr>
-		      </thead>
-		      <tbody></tbody>
-	        </table>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-  <div class="digimon-tables full-width">
-    <div class="collapsible-section">
-      <div class="collapsible-header" onclick="toggleCollapsible(this)">
-        <h2 id="subtitle2">Datos de requisitos del Digimon</h2>
-        <span class="collapsible-toggle active">▼</span>
-      </div>
-      <div class="collapsible-content active">
-        <p id="evolutionNote" style="margin: 0.5rem 0 1rem 0; font-size: 0.95rem;">
-          Un digimon necesita más de 3 puntos para evolucionar (Excepto Baby II -> Child), por favor usar la calculadora para cálculos más precisos.
-        </p>
-        <p id="colorExplanation" style="margin: 0.5rem 0 1.5rem 0; font-size: 0.95rem; line-height: 1.8;">
-          <strong>Explicación de colores:</strong><br>
-          <span style="color: #22c55e; font-weight: 600;">● Verde</span> = Da puntaje y debes estar en el rango o cumplirlo para obtenerlo<br>
-          <span style="color: #eab308; font-weight: 600;">● Amarillo</span> = No afecta en el puntaje del Digimon / No da Puntaje<br>
-          <span style="color: #ef4444; font-weight: 600;">● Rojo</span> = Si lo incumples, te penaliza con puntaje negativo
-        </p>
-        <div class="table-scroll-wrapper">
-	      <table id="tablaRequisitos">
-	        <thead>
-		      <tr id="headersGrupos">
-		        <!-- Los headers agrupados se generarán dinámicamente -->
-		      </tr>
-		      <tr id="headersRequisitos">
-		        <!-- Los headers individuales se generarán dinámicamente -->
-		      </tr>
-	        </thead>
-	        <tbody></tbody>
-	      </table>
-        </div>
-      </div>
-    </div>
+<!-- Selector de idioma -->
+<div id="lang-selector">
+  <select id="languageSelector" onchange="changeLanguage()">
+    <option value="es">EspaÃ±ol</option>
+    <option value="en">English</option>
+  </select>
+</div>
+
+<div class="main-container">
+  <h1 class="welcome-title" id="welcomeTitle">Bienvenido a DigiDex Web</h1>
+  <p class="welcome-subtitle" id="welcomeSubtitle">Net Driver - Herramientas de la comunidad</p>
+
+  <p class="welcome-text" id="welcomeText">
+    Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la informaciÃ³n mediante el Ã¡rbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.
+  </p>
+
+  <div class="selection-cards">
+    <a href="./arbolCanvas.html" class="selection-card">
+      <span class="icon"><img src="./pageicons/arbolevolutivo.png" alt="Ãrbol"></span>
+      <h2 id="treeTitle">Ãrbol Evolutivo</h2>
+      <p id="treeDesc">Visualiza las evoluciones de forma interactiva con un Ã¡rbol grÃ¡fico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.</p>
+    </a>
+
+    <a href="./digidex.html?v=2" class="selection-card">
+      <span class="icon"><img src="./pageicons/Digidex.png" alt="DigiDex"></span>
+      <h2 id="reqsTitle">Entradas DigiDex</h2>
+      <p id="reqsDesc">Consulta la informaciÃ³n detallada de cada Digimon: requisitos de evoluciÃ³n, stats base, y toda la informaciÃ³n necesaria para evolucionar.</p>
+    </a>
   </div>
 
-  <!-- Botón de descarga de imagen -->
-  <div class="download-section">
-    <button id="downloadBtn" class="download-btn" style="display: none;">Descargar Imagen</button>
-  </div>
-</section>
-  </main>
-
-<!-- Popup de advertencia para SkullGreymon -->
-<div id="warningPopupOverlay" class="warning-overlay" onclick="closeWarningPopup(event)">
-  <div class="warning-container">
-    <button class="warning-close" onclick="closeWarningPopup()" aria-label="Cerrar">×</button>
-    <p id="warningText" class="warning-text"></p>
+  <div class="credits-section">
+    <h3><span id="creditsTitle">CrÃ©ditos</span></h3>
+    <p id="creditsIntro">Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÃ­a podido hacer varias cosas en las pÃ¡ginas:</p>
+    <ul>
+      <li><strong>JorgeTitor</strong> - <span id="credit1">Por ser el de la idea original de llevar un registro de todos los requisitos</span></li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - <span id="credit2">Tuvo la idea original del Ã¡rbol evolutivo, tomÃ© prestado sus ideas para hacer las mejoras</span></li>
+      <li><strong>Panoli</strong> - <span id="credit3">Por darme todas las imÃ¡genes recortadas del juego</span></li>
+      <li id="credit4">Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
   </div>
 </div>
 
 <script>
-// ============================================
-// FUNCIONES PARA SECCIONES DESPLEGABLES
-// ============================================
-
-function toggleCollapsible(button) {
-  const content = button.nextElementSibling;
-  const toggle = button.querySelector('.collapsible-toggle');
-
-  content.classList.toggle('active');
-  toggle.classList.toggle('active');
-}
-
-// ============================================
-// FUNCIONES PARA FORMATEAR LISTAS DE EVOLUCIONES
-// ============================================
-
-/**
- * Divide una lista en columnas cuando tiene más de 'maxItems' elementos
- * @param {Array} items - Array de nombres de digimon
- * @param {number} maxItems - Número máximo de items antes de dividir en columnas (default: 5)
- * @returns {string} HTML con la lista formateada en columnas
- */
-function formatEvolutionList(items, maxItems = 5) {
-  if (!items || items.length === 0) return "-";
-
-  // Si la lista es corta, mostrar como lista simple
-  if (items.length <= maxItems) {
-    return items.map(item => `• ${item}`).join('<br>');
-  }
-
-  // Determinar número de columnas
-  // Siempre usar máximo 5 items por columna para mantener compacto
-  const maxItemsPerColumn = 5;
-  const numColumns = Math.ceil(items.length / maxItemsPerColumn);
-
-  // Usar CSS columns para dividir automáticamente
-  const listaCompleta = items.map(item => `• ${item}`).join('<br>');
-
-  return `<div style="column-count:${numColumns}; column-gap:1.5rem; line-height:1.6;">${listaCompleta}</div>`;
-}
-
-// ============================================
-// FUNCIONES DEL POPUP DE ADVERTENCIA
-// ============================================
-
-// Mensajes de advertencia con traducciones
-const warningMessages = {
-  skullgreymon: {
-    es: "SkullGreymon es un digi que evoluciona con probabilidad, solo con 100% de entreno es 100% seguro de obtenerlo, menos entrenamiento implica que vas a tener probabilidad de morir, revisar con calculadora",
-    en: "SkullGreymon is a digimon that evolves with probability, only with 100% training is 100% guaranteed to get it, less training means you will have a probability of death, check with calculator"
+// Traducciones
+const translations = {
+  es: {
+    welcomeTitle: "Bienvenido a DigiDex Web",
+    welcomeSubtitle: "Net Driver - Herramientas de la comunidad",
+    welcomeText: "Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la informaciÃ³n mediante el Ã¡rbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.",
+    treeTitle: "Ãrbol Evolutivo",
+    treeDesc: "Visualiza las evoluciones de forma interactiva con un Ã¡rbol grÃ¡fico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.",
+    reqsTitle: "Entradas DigiDex",
+    reqsDesc: "Consulta la informaciÃ³n detallada de cada Digimon: requisitos de evoluciÃ³n, stats base, y toda la informaciÃ³n necesaria para evolucionar.",
+    creditsTitle: "CrÃ©ditos",
+    creditsIntro: "Agradecimientos totales a las siguientes personas, que sin su ayuda no habrÃ­a podido hacer varias cosas en las pÃ¡ginas:",
+    credit1: "Por ser el de la idea original de llevar un registro de todos los requisitos",
+    credit2: "Tuvo la idea original del Ã¡rbol evolutivo, tomÃ© prestado sus ideas para hacer las mejoras",
+    credit3: "Por darme todas las imÃ¡genes recortadas del juego",
+    credit4: "Y a todos los que han ayudado a mejorar la base de datos con sus tageos"
   },
-  dexdorugamon: {
-    es: "⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.",
-    en: "⚠️ WARNING: DexDorugamon requirements have changed and are currently unknown. The information shown may not be accurate."
-  },
-  dexdoruguremon: {
-    es: "⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.",
-    en: "⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate."
-  },
-  hora: {
-    es: "Hora local de tu país, para la hora del servidor pasar el tiempo a UTC-3",
-    en: "Local time of your country, for server time convert to UTC-3"
+  en: {
+    welcomeTitle: "Welcome to DigiDex Web",
+    welcomeSubtitle: "Net Driver - Community Tools",
+    welcomeText: "Welcome to the Net Driver DigiDex web selector. Please choose whether you want to view the information through the interactive evolution tree or through the detailed DigiDex entries.",
+    treeTitle: "Evolution Tree",
+    treeDesc: "Visualize evolutions interactively with a graphical tree. Navigate through different evolutionary branches and discover the connections between Digimons.",
+    reqsTitle: "DigiDex Entries",
+    reqsDesc: "Check detailed information for each Digimon: evolution requirements, base stats, and all the information needed to evolve.",
+    creditsTitle: "Credits",
+    creditsIntro: "Special thanks to the following people, without whose help I couldn't have done many things on these pages:",
+    credit1: "For being the one with the original idea of keeping a record of all requirements",
+    credit2: "Had the original idea for the evolution tree, I borrowed his ideas to make improvements",
+    credit3: "For giving me all the cropped images from the game",
+    credit4: "And to everyone who has helped improve the database with their tags"
   }
 };
 
-// Función para mostrar el popup de advertencia
-function showWarningPopup(warningKey) {
-  const overlay = document.getElementById('warningPopupOverlay');
-  const text = document.getElementById('warningText');
+let currentLanguage = localStorage.getItem('digilang') || 'es';
 
-  // Configurar el texto según el idioma actual
-  if (warningMessages[warningKey]) {
-    text.textContent = warningMessages[warningKey][currentLanguage] || warningMessages[warningKey]['es'];
-
-    // Mostrar el popup
-    overlay.classList.add('show');
-
-    // Prevenir scroll del body
-    document.body.style.overflow = 'hidden';
-
-    // Focus en el popup para accesibilidad
-    overlay.focus();
-  }
+function changeLanguage() {
+  currentLanguage = document.getElementById('languageSelector').value;
+  localStorage.setItem('digilang', currentLanguage);
+  updateTexts();
 }
 
-// Función para cerrar el popup de advertencia
-function closeWarningPopup(event) {
-  const overlay = document.getElementById('warningPopupOverlay');
-
-  // Solo cerrar si se hace click en el overlay o en el botón de cerrar
-  if (!event || event.target === overlay || event.target.classList.contains('warning-close')) {
-    overlay.classList.remove('show');
-    document.body.style.overflow = '';
-  }
+function updateTexts() {
+  const t = translations[currentLanguage];
+  document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
+  document.getElementById('welcomeSubtitle').textContent = t.welcomeSubtitle;
+  document.getElementById('welcomeText').textContent = t.welcomeText;
+  document.getElementById('treeTitle').textContent = t.treeTitle;
+  document.getElementById('treeDesc').textContent = t.treeDesc;
+  document.getElementById('reqsTitle').textContent = t.reqsTitle;
+  document.getElementById('reqsDesc').textContent = t.reqsDesc;
+  document.getElementById('creditsTitle').textContent = t.creditsTitle;
+  document.getElementById('creditsIntro').textContent = t.creditsIntro;
+  document.getElementById('credit1').textContent = t.credit1;
+  document.getElementById('credit2').textContent = t.credit2;
+  document.getElementById('credit3').textContent = t.credit3;
+  document.getElementById('credit4').textContent = t.credit4;
 }
 
-// Cerrar popup con tecla Escape
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') {
-    closeWarningPopup();
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+
+// Cerrar con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeNav();
   }
 });
 
-// Prevenir cierre accidental al hacer click en el contenedor
-document.addEventListener('DOMContentLoaded', function() {
-  const container = document.querySelector('.warning-container');
-  if (container) {
-    container.addEventListener('click', function(event) {
-      event.stopPropagation();
-    });
-  }
+// Inicializar
+document.getElementById('languageSelector').value = currentLanguage;
+updateTexts();
 
-  // Touch events para mejor experiencia móvil
-  let touchStartY = 0;
-  const overlay = document.getElementById('warningPopupOverlay');
-  if (overlay) {
-    overlay.addEventListener('touchstart', function(e) {
-      touchStartY = e.touches[0].clientY;
-    });
-
-    overlay.addEventListener('touchend', function(e) {
-      const touchEndY = e.changedTouches[0].clientY;
-      const deltaY = touchEndY - touchStartY;
-
-      // Si desliza hacia abajo más de 50px, cerrar popup
-      if (deltaY > 50) {
-        closeWarningPopup();
-      }
-    });
+// Actualizar menú hamburguesa
+function updateNavMenuLanguage() {
+  const lang = typeof currentLanguage !== 'undefined' ? currentLanguage : (localStorage.getItem('digilang') || 'es');
+  const navHerramientas = document.getElementById("nav-herramientas");
+  if (navHerramientas) {
+    navHerramientas.innerHTML = '<img src="./pageicons/menu.png" alt="Herramientas"><span>' + (lang === 'es' ? 'Herramientas' : 'Tools') + '</span>';
   }
-});
-
-// ============================================
-// CONFIGURACIÓN DE EXCEPCIONES ESPECIALES
-const specialDigimonConfig = {
-  "SkullGreymon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program o Comida"]
-    },
-    procesarCampos: function(digimon) {
-      const procesado = {...digimon};
-      if (digimon.Program && digimon.Comida) {
-        procesado["Program o Comida"] = "Death o Carne X";
-        delete procesado.Program;
-        delete procesado.Comida;
-      }
-      return procesado;
-    }
-  },
-  "Bakemon LT": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Evolucion por muerte inducida": ["Muerte inducida sin Carne X o Program (30% de salir)", "Program / Comida (Asegura evolucion)"]
-    },
-    procesarCampos: function(digimon) {
-      const procesado = {...digimon};
-      // Combinar Program y Comida
-      if (digimon.Program && digimon.Comida) {
-        procesado["Program / Comida (Asegura evolucion)"] = "Death / Carne X";
-        delete procesado.Program;
-        delete procesado.Comida;
-      }
-      // Agregar campo de muerte inducida
-      procesado["Muerte inducida sin Carne X o Program (30% de salir)"] = "Si";
-      return procesado;
-    }
-  },
-  "PlatinumScumon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["Comida"]
-    }
-  },
-  "GoldNumemon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["Comida"]
-    }
-  },
-  "Geremon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["Program"]
-    }
-  },
-  "Scumon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["Comida"]
-    }
-  },
-   "KaratsukiNumemon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["Comida"]
-    }
-  },
-   "Numemon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"]
-	} 
-  },
-   "Pillomon": {
-    gruposColumnas: {
-      "No se considera en el puntaje": ["Peso"],
-      "Requisitos Obligatorios": ["% Entrenamiento", "EntrenamientoHecho"]
-	} 
-  },
-   "Burpmon": {
-    gruposColumnas: {
-      "Requisitos Obligatorios": ["Peso"]
-	} 
-  },
-   "GreatKingScumon": {
-    gruposColumnas: {
-	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-      "Requisitos Obligatorios": ["% Entrenamiento", "Menos de 15 entrenamientos?"]
-	} 
-  },
-   "Kokuwamon": {
-    gruposColumnas: {
-	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior"]
-	} 
-  },
-   "Agumon": {
-    gruposColumnas: {
-	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Quota/Key Points": [ "Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["EntrenamientoHecho"]
-	} 
-  },
-   "Agumon (Black)": {
-    gruposColumnas: {
-	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["EntrenamientoHecho","Program"]
-	} 
-  },
-   "Yuki Agumon": {
-    gruposColumnas: {
-	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"]
-	} 
-  },
-    "Agumon (2006)": {
-    gruposColumnas: {
-	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["EntrenamientoHecho", "Program", "2Ciclos"]
-	} 
-  },
-    "Agumon Hakase": {
-    gruposColumnas: {
-	  "No se considera en el puntaje": ["Peso", "Error Maximo"],
-	  "Quota/Key Points": ["Stat Superior", "Stat Superior 2"],
-	  "Requisitos Obligatorios": ["EntrenamientoHecho", "Nickname"]
-	} 
-  },
-"V-Dramon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"]
-  } 
-}, 
-
-"ShootingStarmon": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento","WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Xross"]
-  } 
-}, 
-
-"V-Dramon (Black)": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Batallas"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"]
+  const navLinks = document.getElementById("nav-links");
+  if (navLinks) {
+    navLinks.innerHTML = '<img src="./pageicons/Link.png" alt="Links"><span>' + (lang === 'es' ? 'Links Externos' : 'External Links') + '</span>';
   }
-},
-
-"Clockmon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Batallas"],
-    "Requisitos Obligatorios": ["WinRate", "Combates Minimos"]
+  const navCreditos = document.getElementById("nav-creditos");
+  if (navCreditos) {
+    navCreditos.innerHTML = '<img src="./pageicons/audit.png" alt="Créditos"><span>' + (lang === 'es' ? 'Créditos' : 'Credits') + '</span>';
   }
-},
-
-"Aero V-dramon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"]
-  } 
-}, 
-
-"Monzaemon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"]
-  } 
-}, 
-
-"Black King Numemon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus", "Error Maximo"],
-    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"]
-  } 
-}, 
-
-"Etemon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"]
-  } 
-}, 
-
-"Aero V-dramon (Black)": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"]
-  } 
-}, 
-
-"Insekimon High Tier": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Driver Equipado"]
-  } 
-}, 
-
-"Fantomon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"]
-  } 
-},
-"Nanimon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Vinculo al momento de evolucionar"]
-  }
-  },
-"BomberNanimon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Xross"]
-  }
-  },
-"Mushmon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Program"]
-  }
-  },
-"PrinceMamemon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"]
-  }
-  },  
-"Daipenmon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
-  }
-  },  
-"Soulmon LT":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Comida"]
-  }
-  }, 
-  "Soulmon MT":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Comida"]
-  }
-  },   
-"Mugendramon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
-  }
-  },  
-"MetalEtemon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"]
-  }
-  },  
-"PlatinumNumemon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
-  }
-  }, 
-"Digitamamon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"],
-    "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"]
-  }
-},
-"Chackmon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
-    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
-  }
-},
-"Blizzarmon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
-    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
-  }
-},
-"Tyranomon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Stat Superior", "Error Maximo"],
-    "Requisitos Obligatorios": ["WinRate", "Combates Minimos"]
-  }
-},  
-"Devitamamon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Vinculo al momento de evolucionar"]
-  }
-},
-"Wargreymon": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
-  }
-},
-"BlackWargreymon": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
-  }
-},
-"Shoutmon": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"]
-  }
-},
-"Metal Fantomon": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Program"]
-  }
-},
-"Shoutmon (Black)": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"]
-  }
-},
-"King Shoutmon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"],
-    "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Program"]
-  }
-},
-"Shoutmon SH": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Xross"]
-  }
-},
-"Shoutmon + Star Sword": {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Xross"]
-  }
-},
-
-"Master Tyranomon": {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Victorias"],
-    "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"]
-  }
-},
-"Wargreymon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso"],
-    "Requisitos Obligatorios": ["Error Maximo","% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
-  }
-},
-"BlackWargreymon":  {
-  gruposColumnas: {
-    "No se considera en el puntaje": ["Peso", "Error Maximo"],
-    "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"]
 }
-},
-"DexDorugamon":  {
-  // ⚠️ REQUISITOS DESCONOCIDOS - Los requisitos han cambiado y actualmente no se conocen
-  /* REQUISITOS ANTIGUOS (COMENTADOS PARA REFERENCIA):
-  requisitosOrigen: {
-    "Dorumon": {
-      gruposColumnas: {
-        "No se considera en el puntaje": ["Peso"],
-        "Requisitos Obligatorios": ["% Entrenamiento", "Program"]
-      },
-      valores: {
-        "Peso": "20-30",
-        "% Entrenamiento": "50-100%",
-        "Program": "Death"
-      },
-      placeholder: true
-    },
-    "Dorugamon": {
-      gruposColumnas: {
-        "Requisitos Obligatorios": ["Program"],
-        "Debes cumplir al menos uno": ["% Entrenamiento", "Errores", "Combates", "Vinculo"]
-      },
-      valores: {
-        "Program": "Death",
-        "% Entrenamiento": "< 50%",
-        "Errores": "< 6",
-        "Combates": "< 30",
-        "Vinculo": "< -50"
-      }
-    }
-  }
-  */
-  requisitosOrigen: {
-    "Dorumon": {
-      gruposColumnas: {
-        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
-      },
-      valores: {
-        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
-      },
-      placeholder: true
-    },
-    "Dorugamon": {
-      gruposColumnas: {
-        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
-      },
-      valores: {
-        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
-      },
-      placeholder: true
-    }
-  }
-},
-"DexDoruguremon":  {
-  // ⚠️ REQUISITOS DESCONOCIDOS - Los requisitos han cambiado y actualmente no se conocen
-  /* REQUISITOS ANTIGUOS (COMENTADOS PARA REFERENCIA):
-  requisitosOrigen: {
-    "Dorugamon": {
-      gruposColumnas: {
-        "No se considera en el puntaje": ["Peso"],
-        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"]
-      },
-      valores: {
-        "Peso": "36",
-        "% Entrenamiento": "50-100%",
-        "Errores Minimos": "6",
-        "Victorias Minimas": "30",
-        "Vinculo al momento de evolucionar": "-50%",
-        "Program": "Death"
-      },
-      placeholder: true
-    },
-    "DexDorugamon": {
-      gruposColumnas: {
-        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos", "Victorias Minimas"]
-      },
-      valores: {
-        "Peso": "36",
-        "% Entrenamiento": "100%",
-        "Errores Minimos": "0-6",
-        "Victorias Minimas": "30"
-      }
-    },
-    "Doruguremon": {
-      gruposColumnas: {
-        "Requisitos Obligatorios": ["Program"]
-      },
-      valores: {
-        "Program": "Death"
-      }
-    }
-  }
-  */
-  requisitosOrigen: {
-    "Dorugamon": {
-      gruposColumnas: {
-        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
-      },
-      valores: {
-        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
-      },
-      placeholder: true
-    },
-    "DexDorugamon": {
-      gruposColumnas: {
-        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
-      },
-      valores: {
-        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
-      },
-      placeholder: true
-    },
-    "Doruguremon": {
-      gruposColumnas: {
-        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
-      },
-      valores: {
-        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
-      },
-      placeholder: true
-    }
-  }
-},
-"Raptordramon":  {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento"],
-    "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos","WinRate" ,"Vinculo Minimo alcanzado","Tienes registrado a DexDorugamon y Dorugamon?"]
-}
-},
-"Grademon":  {
-  gruposColumnas: {
-    "Quota/Key Points": ["Peso", "% Entrenamiento"],
-    "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos","WinRate" ,"Vinculo Minimo alcanzado", "Tienes registrado a DexDoruguremon y Doruguremon?"]
-}
-},
-"Grademon VICE":  {
-  gruposColumnas: {
-    "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Vinculo Minimo alcanzado","Tienes registrado a DexDoruguremon y Doruguremon?"]
-}
-},
-};
-
-// Configuración por defecto (la original)
-const gruposColumnasDefault = {
-  "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar", "Bonus Victorias"],
-  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Vinculo al momento de evolucionar","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname"]
-};
-
-const specialProgramCases = { 
-  "Icemon": { 
-    "Yuki Agumon": "Ore", 
-    "Gotsumon": "Frost" 
-  }
-};
-const specialxrossCases = {
-    "Mugendramon": {
-        "Megadramon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver",
-		"Gigadramon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver",
-        "Metal Greymon (Virus)": "Megadramon Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver",
-		"Metal Tyranomon": "Metal Greymon (Virus) Driver + Megadramon Driver + MetalMamemon Driver + Andromon Driver",
-		"MetalMamemon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + Megadramon Driver + Andromon Driver",
-		"Andromon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Megadramon Driver"
-},
-	"Daipenmon": {
-		"Blizzarmon":["Ice Spirit H"],
-		"Polarbearmon": ["Ice Spirit B + Ice Spirit H","Ice Spirit A"]
-	},
-	"Chackmon": {
-		"Icemon": "Ice Spirit H",
-		"Yukidarumon": "Ice Spirit H",
-		"Yuki Agumon": "Ice Spirit H",
-		"Penmon": "Ice Spirit H"
-	},
-	"Shoutmon SH": {
-		"Shoutmon": "Starmons Driver",
-		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver"]
-	},
-	"Shoutmon + Star Sword": {
-		"Shoutmon": "Starmons Driver",
-		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver" ]
-	}
-};
-const specialEntrenamientoCases = {
-    "Chackmon": {
-        "Icemon": 100,
-        "Yukidarumon": 100,
-		    "Yuki Agumon": 80,
-        "Penmon":80
-    },
-    "Blizzarmon": {
-        "Icemon": 80,
-        "Yukidarumon": 80,
-		"Chackmon":80,
-		"Chackmon (Sin Install)": 80,
-		"Polarbearmon": 100
-	},
-    "Clockmon": {
-        "Sin Bonus": 50,
-        "Con Bonus": 50
-    },
-    "DexDoruguremon": {
-        "Dorugamon": 50,
-        "DexDorugamon": 100,
-        "Doruguremon": "-"
-    }
-};
-
-const specialVictoriasCases = {
-    "Wargreymon": {
-        "Metal Greymon": 140,
-        "MetalGreymon Alterous": 175
-    }
-};
-
-const specialBatallasCases = {
-    "Wargreymon": {
-        "Metal Greymon": 250,
-        "MetalGreymon Alterous": 300
-    }
-};
-
-const specialVinculoCases = {
-    "Wargreymon": {
-        "Metal Greymon": 100,
-        "MetalGreymon Alterous": 100
-    }
-};
-
-const specialErroresCases = {
-    "DexDoruguremon": {
-        "Dorugamon": 6,
-        "DexDorugamon": 6,
-        "Doruguremon": "-"
-    }
-};
-
-const specialfoodcases = {
-    "Icemon": ["Verdura Congelada", "Hongo Congelado"]
-};
-
-// Configuración de campos que deben estar vacíos para ciertas evoluciones
-// Solo para slide evolutions (mismo nivel) - las evoluciones normales mantienen todos los requisitos
-const camposVaciosPorEvolucion = {
-    "Chackmon": {
-        "Icemon": ["WinRate", "Combates Minimos"],        // Nivel 4 → 4 (slide)
-        "Yukidarumon": ["WinRate", "Combates Minimos"]    // Nivel 4 → 4 (slide)
-        // Yuki Agumon es nivel 3 → 4 (normal), por lo tanto requiere WinRate y Combates
-    },
-    "Blizzarmon": {
-        "Polarbearmon": ["WinRate", "Combates Minimos"],   // Nivel 5 → 5 (slide)
-        "Chackmon (Sin Install)": ["Xross"]                // Variante sin Install
-        // Icemon, Chackmon, Yukidarumon son nivel 4 → 5 (normal), requieren WinRate y Combates
-    },
-    "Clockmon": {
-        "Sin Bonus": ["Bonus Batallas"],                   // Variante sin bonus
-        "Con Bonus": ["WinRate", "Combates Minimos"]       // Variante con bonus, sin WinRate ni Combates
-    },
-    "DexDoruguremon": {
-        "DexDorugamon": ["Vinculo al momento de evolucionar", "Comida", "Program"],  // Solo necesita: Combates Minimos 30, % Entrenamiento 100, Peso 36, Errores 0-6
-        "Doruguremon": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"]  // Solo necesita Death Program
-    }
-};
-
-  const dict = digimonReqDict;
-  const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo", "Peso"];
-
-// Configuración de puntajes por nivel y campo
-const puntajesPorNivel = {
-  3: { // Child
-    "Peso": { cumple: 0, noCumple: 0 },
-    "Error Maximo": { cumple: 0, noCumple: 0 },
-    "EntrenamientoHecho": { cumple: 1, noCumple: -10, condicional: true }, // Si="1/-10", No="1/0"
-    "Stat Superior": { cumple: 1, noCumple: 0 },
-    "Stat Superior 2": { cumple: 1, noCumple: 0 },
-    "Nickname": { cumple: 0, noCumple: -10 },
-    "Program": { cumple: 0, noCumple: -10 },
-    "2Ciclos": { cumple: 1, noCumple: -10 },
-    "% Entrenamiento": { cumple: 1, noCumple: 0 },
-    "Hora": { cumple: 1, noCumple: -10 },
-    "Xross": { cumple: 3, noCumple: -10 }
-  },
-  4: { // Adult
-    "WinRate": { cumple: 0, noCumple: -10 },
-    "Combates Minimos": { cumple: 0, noCumple: -10 },
-    "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
-    "Program": { cumple: 0, noCumple: -10 },
-    "Stat Superior": { cumple: 0, noCumple: -10 },
-    "Xross": { cumple: 3, noCumple: -10 },
-    "Comida": { cumple: 3, noCumple: -10 },
-    "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
-    "Muerte inducida sin Carne X o Program (30% de salir)": { cumple: 0, noCumple: -10, ocultar: true },
-    "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
-    "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
-    "Driver Equipado": { cumple: 0, noCumple: -10 },
-    "Victorias": { cumple: 1, noCumple: -10 },
-    "Tienes registrado a DexDorugamon y Dorugamon?": { cumple: 0, noCumple: -10 }
-  },
-  5: { // Perfect
-    "WinRate": { cumple: 0, noCumple: -10 },
-    "Combates Minimos": { cumple: 0, noCumple: -10 },
-    "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
-    "Program": { cumple: 0, noCumple: -10 },
-    "Stat Superior": { cumple: 0, noCumple: -10 },
-    "Xross": { cumple: 3, noCumple: -10 },
-    "Comida": { cumple: 3, noCumple: -10 },
-    "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
-    "Muerte inducida sin Carne X o Program (30% de salir)": { cumple: 0, noCumple: -10, ocultar: true },
-    "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
-    "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
-    "Driver Equipado": { cumple: 0, noCumple: -10 },
-    "Victorias": { cumple: 1, noCumple: -10 },
-    "Tienes registrado a DexDoruguremon y Doruguremon?": { cumple: 0, noCumple: -10 }
-  },
-  6: { // Ultimate
-    "WinRate": { cumple: 0, noCumple: -10 },
-    "Combates Minimos": { cumple: 0, noCumple: -10 },
-    "Vinculo Minimo alcanzado": { cumple: 0, noCumple: -10 },
-    "Program": { cumple: 0, noCumple: -10 },
-    "Stat Superior": { cumple: 0, noCumple: -10 },
-    "Xross": { cumple: 3, noCumple: -10 },
-    "Comida": { cumple: 3, noCumple: -10 },
-    "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
-    "Muerte inducida sin Carne X o Program (30% de salir)": { cumple: 0, noCumple: -10, ocultar: true },
-    "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
-    "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
-    "Driver Equipado": { cumple: 0, noCumple: -10 },
-    "Victorias": { cumple: 1, noCumple: -10 }
-  }
-};
-
-// Función para determinar el puntaje de un campo
-function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
-  const digimon = dict[nombreDigimon];
-  if (!digimon) return { cumple: 0, noCumple: 0 };
-
-  const nivel = digimon.Nivel;
-
-  // Baby I (nivel 1) y Baby II (nivel 2) no tienen puntajes
-  if (nivel === 1 || nivel === 2) return null;
-
-  // Excepciones especiales para ciertos Digimon
-  // Gotsumon, Ghostmon y Mushmon: Program da +3/-10
-  if ((nombreDigimon === "Gotsumon" || nombreDigimon === "Ghostmon" || nombreDigimon === "Mushmon") && campo === "Program") {
-    return { cumple: 3, noCumple: -10 };
-  }
-
-  // Excepciones en Adult (nivel 4)
-  if (nivel === 4) {
-    // DexDorugamon: PLACEHOLDER - evolución al azar, no usar puntajes tradicionales
-    if (nombreDigimon === "DexDorugamon" && (campo === "% Entrenamiento" || campo === "Program")) {
-      return { cumple: 0, noCumple: 0, ocultar: true };
-    }
-    if (nombreDigimon === "DarkTyranomon" && campo === "Program") {
-      return { cumple: 3, noCumple: -10 };
-    }
-    if (nombreDigimon === "RedVDramon" && campo === "Vinculo Minimo alcanzado") {
-      return { cumple: 3, noCumple: -10 };
-    }
-    if (nombreDigimon === "Geremon" && campo === "Program") {
-      return { cumple: 3, noCumple: -10 };
-    }
-    if (nombreDigimon === "Nanimon" && campo === "Vinculo al momento de evolucionar") {
-      return { cumple: 3, noCumple: -10 };
-    }
-    // Clockmon: Peso y Error Maximo dan +1/0
-    if (nombreDigimon === "Clockmon" && (campo === "Peso" || campo === "Error Maximo")) {
-      return { cumple: 1, noCumple: 0 };
-    }
-    // Tyranomon: Bonus Stat Superior da +1/0
-    if (nombreDigimon === "Tyranomon" && campo === "Bonus Stat Superior") {
-      return { cumple: 1, noCumple: 0 };
-    }
-    // Chackmon: Xross da +3/0 cuando el origen es Penmon
-    if (nombreDigimon === "Chackmon" && campo === "Xross" && window.currentEvolutionDigimon === "Penmon") {
-      return { cumple: 3, noCumple: 0 };
-    }
-  }
-
-  // Excepciones en Perfect (nivel 5)
-  if (nivel === 5) {
-    if (nombreDigimon === "Metalgreymon alterous") {
-      if (campo === "Program") {
-        return { cumple: 1, noCumple: -10 };
-      }
-      if (campo === "% Entrenamiento") {
-        return { cumple: 1, noCumple: -10 };
-      }
-    }
-    if (nombreDigimon === "Grademon VICE") {
-      if (campo === "Vinculo Minimo alcanzado") {
-        return { cumple: 1, noCumple: -10 };
-      }
-    }
-    if (nombreDigimon === "Gigadramon") {
-      if (campo === "Program") {
-        return { cumple: 3, noCumple: -10 };
-      }
-      if (campo === "% Entrenamiento") {
-        return { cumple: 1, noCumple: -10 };
-      }
-    }
-    if (nombreDigimon === "Blizzarmon" && campo === "Peso") {
-      return { cumple: 1, noCumple: 0 };
-    }
-    // Blizzarmon variante "Sin Install": Error Maximo da +1/0
-    if (nombreDigimon === "Blizzarmon" && campo === "Error Maximo" && window.currentEvolutionDigimon === "Chackmon (Sin Install)") {
-      return { cumple: 1, noCumple: 0 };
-    }
-    if (nombreDigimon === "Metal Fantomon") {
-      if (campo === "Program") {
-        return { cumple: 3, noCumple: -10 };
-      }
-      if (campo === "% Entrenamiento") {
-        return { cumple: 1, noCumple: -10 };
-      }
-    }
-    // DexDoruguremon: puntajes según origen
-    if (nombreDigimon === "DexDoruguremon") {
-      const evolucionActual = window.currentEvolutionDigimon;
-
-      // Desde DexDorugamon: Peso, Entrenamiento, Errores, Victorias Minimas dan +1/0
-      if (evolucionActual === "DexDorugamon") {
-        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Victorias Minimas") {
-          return { cumple: 1, noCumple: 0 };
-        }
-      }
-
-      // Desde Doruguremon: solo Program, todo lo demás no aplica
-      if (evolucionActual === "Doruguremon") {
-        if (campo === "Program") {
-          return { cumple: 0, noCumple: -10 };
-        }
-        return { cumple: 0, noCumple: 0, ocultar: true };
-      }
-
-      // Desde Dorugamon: misma lógica que SkullGreymon (evolución probabilística)
-      if (evolucionActual === "Dorugamon") {
-        // Todos los requisitos obligatorios deben cumplirse para tener chance
-        if (campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Victorias Minimas" || campo === "Vinculo al momento de evolucionar" || campo === "Program") {
-          return { cumple: 0, noCumple: -10 };
-        }
-      }
-    }
-  }
-
-  // Regla general: Campos en grupo "No se considera en el puntaje" = 0/0
-  if (nombreGrupo === "No se considera en el puntaje") {
-    return { cumple: 0, noCumple: 0 };
-  }
-
-  // Usar diccionario de puntajes si existe para este nivel
-  if (puntajesPorNivel[nivel]) {
-    const configNivel = puntajesPorNivel[nivel];
-
-    // Buscar puntaje específico para este campo
-    if (configNivel[campo]) {
-      const config = configNivel[campo];
-
-      // Caso especial: EntrenamientoHecho condicional
-      if (campo === "EntrenamientoHecho" && config.condicional) {
-        const valor = digimon[campo];
-        if (valor === "No") {
-          return { cumple: 1, noCumple: 0, ocultar: config.ocultar };
-        }
-        // Si es "Si", usar el puntaje por defecto (1/-10)
-      }
-
-      return { cumple: config.cumple, noCumple: config.noCumple, ocultar: config.ocultar };
-    }
-
-    // Campos "Bonus" siempre +1/0
-    if (campo.includes("Bonus")) {
-      return { cumple: 1, noCumple: 0 };
-    }
-  }
-
-  // Casos especiales no cubiertos por diccionarios (para otros niveles)
-  const esUltimate = nivel === 6;
-  const esWargreymon = nombreDigimon === "Wargreymon";
-  const tieneXross = digimon.Xross !== undefined;
-  const esSide = camposVaciosPorEvolucion[nombreDigimon] !== undefined;
-  const casoEspecialCero = (esSide || tieneXross || (esUltimate && !esWargreymon));
-
-  // Caso especial Wargreymon: solo Errores
-  if (esWargreymon && campo === "Error Maximo") {
-    return { cumple: 1, noCumple: -10 };
-  }
-
-  // Peso y Errores en casos especiales (0/0)
-  if (casoEspecialCero && (campo === "Peso" || campo === "Error Maximo")) {
-    return { cumple: 0, noCumple: 0 };
-  }
-
-  // Requisitos Obligatorios: dan -10 si no se cumplen
-  if (nombreGrupo === "Requisitos Obligatorios") {
-    return { cumple: 1, noCumple: -10 };
-  }
-
-  // Campos que siempre dan +1/0: Peso, % Entrenamiento, Errores, y todos los "Bonus"
-  if (campo === "Peso" ||
-      campo === "% Entrenamiento" ||
-      campo === "Error Maximo" ||
-      campo.includes("Bonus")) {
-    return { cumple: 1, noCumple: 0 };
-  }
-
-  // Por defecto (otros campos en Quota/Key Points)
-  return { cumple: 1, noCumple: 0 };
-}
-
-// Función para formatear el puntaje con color
-function formatearPuntajeConColor(puntaje) {
-  // Si el puntaje es null (Baby I), no mostrar nada
-  if (puntaje === null) return "";
-
-  // Si tiene la propiedad ocultar=true, no mostrar el puntaje
-  if (puntaje.ocultar === true) return "";
-
-  const { cumple, noCumple } = puntaje;
-  let textoCumple = cumple > 0 ? `+${cumple}` : cumple;
-  let textoNoCumple = noCumple > 0 ? `+${noCumple}` : noCumple;
-
-  let claseCumple = cumple > 0 ? 'puntaje-positivo' : (cumple === 0 ? 'puntaje-neutro' : 'puntaje-negativo');
-  let claseNoCumple = noCumple > 0 ? 'puntaje-positivo' : (noCumple === 0 ? 'puntaje-neutro' : 'puntaje-negativo');
-
-  return ` (<span class="${claseCumple}">${textoCumple}</span>/<span class="${claseNoCumple}">${textoNoCumple}</span>)`;
-}
-
-  const nivelAEtapa = {
-    es: {
-      1: "Baby I",
-      2: "Baby II",
-      3: "Child",
-      4: "Adult",
-      5: "Perfect",
-      6: "Ultimate"
-    },
-    en: {
-      1: "Baby I",
-      2: "Baby II",
-      3: "Child",
-      4: "Adult",
-      5: "Perfect",
-      6: "Ultimate"
-    }
-  };
-
-  const selectTama = document.getElementById("selectTama");
-  const selectNivel = document.getElementById("selectNivel");
-  const selectDigimon = document.getElementById("selectDigimon");
-
-  const tablaGenerales = document.querySelector("#tablaGenerales tbody");
-  const tablaHeaders = document.getElementById("headersRequisitos");
-  const tablaRequisitos = document.querySelector("#tablaRequisitos tbody");
-  const digimonImage = document.getElementById("digimonImage");
-  const imagePlaceholder = document.getElementById("imagePlaceholder");
-  const imgPrevBtn = document.getElementById("imgPrevBtn");
-  const imgNextBtn = document.getElementById("imgNextBtn");
-
-  // Variables para la galería de imágenes
-  let imagenesDisponibles = [];
-  let indiceImagenActual = 0;
-  let nombreDigimonActual = '';
-
-  // Función para detectar imágenes adicionales (nombre2.png, nombre3.png, etc.)
-  function detectarImagenesAdicionales(nombreBase, rutaBase, callback) {
-    const imagenes = [rutaBase]; // La imagen principal ya encontrada
-    let numeroActual = 2;
-    const maxImagenes = 10; // Límite de búsqueda
-
-    const buscarSiguiente = () => {
-      if (numeroActual > maxImagenes) {
-        callback(imagenes);
-        return;
-      }
-
-      // Extraer el nombre sin extensión y carpeta
-      const nombreSinExt = rutaBase.replace('.png', '').replace('img/', '');
-      const rutaAdicional = `img/${nombreSinExt}${numeroActual}.png`;
-
-      const imgTest = new Image();
-      imgTest.onload = function() {
-        imagenes.push(rutaAdicional);
-        numeroActual++;
-        buscarSiguiente();
-      };
-      imgTest.onerror = function() {
-        // No hay más imágenes, terminar
-        callback(imagenes);
-      };
-      imgTest.src = rutaAdicional;
-    };
-
-    buscarSiguiente();
-  }
-
-  // Función para navegar entre imágenes
-  function navegarImagen(direccion) {
-    if (imagenesDisponibles.length <= 1) return;
-
-    indiceImagenActual += direccion;
-
-    // Navegación cíclica
-    if (indiceImagenActual < 0) {
-      indiceImagenActual = imagenesDisponibles.length - 1;
-    } else if (indiceImagenActual >= imagenesDisponibles.length) {
-      indiceImagenActual = 0;
-    }
-
-    digimonImage.src = imagenesDisponibles[indiceImagenActual];
-  }
-
-  // Función para actualizar visibilidad de botones de navegación
-  function actualizarBotonesNavegacion() {
-    if (imagenesDisponibles.length > 1) {
-      imgPrevBtn.classList.add('visible');
-      imgNextBtn.classList.add('visible');
-    } else {
-      imgPrevBtn.classList.remove('visible');
-      imgNextBtn.classList.remove('visible');
-    }
-  }
-
-  // Hacer navegarImagen global para onclick
-  window.navegarImagen = navegarImagen;
-
-  const uniqueValues = (array) => [...new Set(array)];
-
-  // Diccionario de nombres de Tama
-  const tamaNombres = {
-    "V0": { es: "Cachivaches y Dragones", en: "Devices and Dragons" },
-    "M": { es: "Mutantes", en: "Mutant" },
-    "VS": { es: "Meteoros Xruzados", en: "Xrossing Meteors" },
-    "SP": { es: "Spirits", en: "Spirits" },
-    "D": { es: "Death", en: "Death" },
-    "P": { es: "Plant", en: "Plant" },
-    "VL": { es: "Cielos Liberados", en: "Liberated Skies" },
-    "PR": { es: "Prototipo Alpha", en: "Alpha Prototype" },
-    "BG": {es: "Beat Gekko", en:"Beat Gekko"}
-  };
-
-  const getTamaNombre = (codigo) => {
-    const nombre = tamaNombres[codigo];
-    if (nombre) {
-      return `${codigo} - ${nombre[currentLanguage] || nombre.es}`;
-    }
-    return codigo;
-  };
-
-	 const traducciones = {
-	  es: {
-	    titleMain: "Información del Digimon",
-		subtitle: "Datos Generales del Digimon",
-		subtitle2: "Datos de requisitos del Digimon",
-		disclaimer: "DISCLAIMER: Condiciones recopiladas basados en la experiencia del discord y screenshots. PUEDEN haber errores, en caso de encontrar alguno, contactarme en el discord de Net Driver haciendo ping a @rodrigoalag para revisar el caso.",
-		evolutionNote: "Un digimon necesita más de 3 puntos para evolucionar (Excepto Baby II -> Child), por favor usar la calculadora para cálculos más precisos.",
-		downloadBtn: "Descargar Imagen",
-		downloadGenerating: "Generando...",
-		downloadError: "Error al generar imagen. Intenta de nuevo.",
-		downloadLocalError: "La descarga de imagen no funciona en modo local (file://). Esta función estará disponible en la versión web (GitHub Pages).",
-		colorExplanationTitle: "Explicación de colores:",
-		colorGreen: "Verde",
-		colorGreenDesc: "Si cumples el requisito, te da un puntaje que está en color verde",
-		colorYellow: "Amarillo",
-		colorYellowDesc: "No afecta en el puntaje del Digimon / No da Puntaje",
-		colorRed: "Rojo",
-		colorRedDesc: "Si incumples el requisito, obtendras una penalización que está de color rojo",
-		Tama: "Tama",
-		Nivel: "Nivel",
-		Atributo: "Atributo",
-		Tipo: "Tipo",
-		Peso: "Peso",
-		ID: "ID",
-		"selectTama": "Seleccionar Tama:",
-		"selectNivel": "Seleccionar Nivel:",
-		"selectDigimon": "Seleccionar Digimon:",
-		"selectTamaDefault": "-- Elige un Tama --",
-		"selectNivelDefault": "-- Elige un Nivel --",
-		"selectDigimonDefault": "-- Elige un Digimon --",
-	    "Bellota Dorada": "Bellota Dorada",
-		"Verdura Congelada": "Verdura Congelada como última comida antes de la evolución",
-		"Hongo Congelado": "Hongo Congelado como última comida antes de al evolución",
-		"Ninguno":"Ninguno",
-		"Si":"Si",
-		"No":"No",
-		"No Muerto": "No Muerto",
-		"Death o Carne X": "Death o Carne X",
-		"Death / Carne X": "Death / Carne X",
-		"Nuez Magica": "Nuez Magica",
-		"Balanceado":"Balanceado",
-		"Compuesto": "Compuesto",
-		"Dinosaurio": "Dinosaurio",
-		"Dragon": "Dragon",
-		"Vacuna": "Vacuna",
-		"Maquina": "Maquina",
-		"Hielo": "Hielo",
-		"Mutante": "Mutante",
-    "Marioneta": "Marioneta",
-		"Tierra": "Tierra",
-		"5 Caca": "5 Caca",
-		"5 Sardinas": "5 Sardinas",
-		"Chatarra": "Chatarra",
-		"Starmon o ShootingStarmon Driver": "Starmon o ShootingStarmon Driver",
-		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon y DarkSuperStarmon Driver",
-		"3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon": "3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon",
-		"Vel":"Vel",
-		    campos: {
-      "Peso": "Rango de peso",
-      "Hora": "Hora",
-      "Error Maximo": "Rango de Errores de Cuido",
-	  "Errores Minimos": "Errores Mínimos",
-	  "Errores": "Errores",
-	  "Combates": "Combates",
-	  "Vinculo": "Vínculo",
-      "EntrenamientoHecho": "Entrenamiento Hecho en Baby 2",
-      "Stat Superior": "Stat Superior",
-      "Stat Superior 2": "Stat Superior 2",
-      "Bonus Stat Superior": "Bonus Stat Superior",
-      "2Ciclos": "Haber Conseguido 2 perfects en las ultimas dos generaciones / Haber tenido Agumon 06 antes",
-      "Program": "Program",
-	  "Program o Comida": "Program o Comida",
-	  "Program / Comida (Asegura evolucion)": "Program / Comida (Asegura evolucion)",
-	  "Muerte inducida sin Carne X o Program (30% de salir)": "Muerte inducida sin Carne X o Program (30% de salir)",
-      "% de Entrenamiento": "% Entrenamiento",
-      "Digimon Bonus": "Bonus Digimon",
-      "Vinculo Minimo alcanzado": "Vínculo Alcanzado",
-	  "Menos de 15 entrenamientos?": "Menos de 15 entrenamientos?",
-      "Win Rate": "Win Rate",
-      "Combates Minimos": "Combates Mínimos",
-	  "% Entrenamiento": "Rango de % Entrenamiento",
-	  "Bonus Batallas": "Bonus Combates Mínimos",
-	  "Comida" : "Comida",
-	  "Victorias": "Victorias",
-	  "Bonus Victorias": "Bonus Victorias Minimas",
-	  "Driver Equipado": "Driver Equipado",
-	  "Xross":"Xross/Install",
-	  "Bonus Vinculo al momento de evolucionar":"Bonus Vinculo al momento de evolucionar",
-	  "Vinculo al momento de evolucionar": "Vínculo al momento de evolucionar",
-	  "Alcanzo vinculo negativo?": "Alcanzo vinculo negativo?",
-	  "Nickname": "Nickname",
-	  "Tienes registrado a DexDorugamon y Dorugamon?": "¿Tienes registrado a DexDorugamon y Dorugamon?",
-	  "Tienes registrado a DexDoruguremon y Doruguremon?": "¿Tienes registrado a DexDoruguremon y Doruguremon?",
-    },
-	    grupos: {
-      "Quota/Key Points": "Quota/Key Points",
-      "Requisitos Obligatorios": "Requisitos Obligatorios",
-	  "No se considera en el puntaje": "No se considera en el puntaje",
-	  "Evolucion por muerte inducida": "Evolucion por muerte inducida",
-	  "Debes cumplir al menos uno": "Debes cumplir al menos uno"
-    },
-	  subtitle3: "Stat Base",
-	  subtitle4: "Evoluciones",
-	  ATK: "ATK",
-	  DEF: "DEF",
-	  HP: "HP",
-	  Vel: "Vel",
-	  Digipuntos: "Digipuntos",
-	  Evoluciona: "Evoluciona a",
-	  Viene: "Viene de",
-	  LineaEvolutiva: "Línea Evolutiva",
-	  eligeLineaEvolutiva: "-- Elige línea evolutiva --",
-	  todosLosDigimon: "Todos los Digimon"
-	  },
-	  en: {
-	  	titleMain: "Digimon Information",
-		subtitle: "General Digimon Data",
-		subtitle2: "Digimon Requirements Data",
-		disclaimer:"DISCLAIMER: Conditions based on the user experience of the discord and screenshots. There can be errors or mistakes, in case of finding one, please contact me at Net Driver discord by pinging @rodrigoalag to check the case.",
-		evolutionNote: "A Digimon needs more than 3 points to evolve (Except Baby II -> Child), please use the calculator for more precise calculations.",
-		downloadBtn: "Download Image",
-		downloadGenerating: "Generating...",
-		downloadError: "Error generating image. Try again.",
-		downloadLocalError: "Image download does not work in local mode (file://). This feature will be available in the web version (GitHub Pages).",
-		colorExplanationTitle: "Color explanation:",
-		colorGreen: "Green",
-		colorGreenDesc: "If you meet the requirement, you will get a score that is on color green",
-		colorYellow: "Yellow",
-		colorYellowDesc: "Does not affect the Digimon's score / Gives no points",
-		colorRed: "Red",
-		colorRedDesc: "If you don't meet the requirement, you will get a penalty that is on color red",
-		Tama: "Tama",
-		Nivel: "Level",
-		Atributo: "Attribute",
-		Tipo: "Type",
-		Peso: "Weight",
-		ID: "ID",
-		"selectTama": "Select Tama:",
-		"selectNivel": "Select Level:",
-		"selectDigimon": "Select Digimon:",
-		"selectTamaDefault": "-- Choose a Tama --",
-		"selectNivelDefault": "-- Choose a Level --",
-		"selectDigimonDefault": "-- Choose a Digimon --",
-	    "Bellota Dorada": "Golden Acorn",
-		"Verdura Congelada": "Frozen Vegetable as last food eaten before evolving.",
-		"Hongo Congelado": "Frozen Mushroom as last food eaten before evolving.",
-		"Ninguno":"None",
-		"Si":"Yes",
-		"No":"No",
-		"No Muerto": "Undead",
-		"Death o Carne X": "Death or X Meat",
-		"Death / Carne X": "Death / X Meat",
-		"Nuez Magica": "Magical Nut",
-		"Balanceado":"Balanced",
-		"Compuesto": "Composite",
-		"Dinosaurio": "Dinosaur",
-		"Dragon": "Dragon",
-		"Vacuna": "Vaccine",
-		"Maquina": "Machine",
-		"Hielo": "Ice",
-		"Mutante": "Mutant",
-    "Marioneta":"Puppet",
-		"Tierra": "Earth",		
-		"5 Caca": "5 Poop",
-		"5 Sardinas": "5 DigiSardine",
-		"Chatarra": "Metal Scrap",
-		"Starmon o ShootingStarmon Driver": "Starmon or ShootingStarmon Driver",
-		"SuperStarmon y DarkSuperStarmon Driver": "SuperStarmon and DarkSuperStarmon Driver",
-		"3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon": "3 Monzaemon Driver in WaruMonzaemon or 1 WaruMonzaemon + 2 Monzaemon Driver in Monzaemon",
-		"Vel":"SPD",
-		    campos: {
-      "Peso": "Weight Range",
-      "Hora": "Time",
-      "Error Maximo": "Care Mistakes Range",
-	  "Errores Minimos": "Minimum Errors",
-	  "Errores": "Errors",
-	  "Combates": "Battles",
-	  "Vinculo": "Bond",
-      "EntrenamientoHecho": "Training Done in Baby 2",
-      "Stat Superior": "Highest Stat",
-      "Stat Superior 2": "Highest Stat 2",
-      "Bonus Stat Superior": "Bonus Highest Stat",
-      "2Ciclos": "Have obtain 2 perfects on last two generations / Have obtain Agumon 06",
-      "Program": "Program",
-	  "Program o Comida": "Program or Food",
-	  "Program / Comida (Asegura evolucion)": "Program / Food (Ensures evolution)",
-	  "Muerte inducida sin Carne X o Program (30% de salir)": "Induced death without X Meat or Program (30% chance)",
-      "% de Entrenamiento": "% Training",
-      "Digimon Bonus": "Digimon Bonus",
-      "Vinculo Minimo alcanzado": "Bond Reached",
-	  "Menos de 15 entrenamientos?": "Less than 15 trainings?",
-      "Combates Minimos": "Minimum Battles",
-	  "% Entrenamiento": "Training % Range",
-	  "Bonus Batallas": "Min Battle Bonus",
-	  "Comida" : "Food",
-	  "Victorias": "Battle Victories",
-	  "Bonus Victorias": "Minimum Victory Bonus",
-	  "Driver Equipado": "Driver Equipped",
-	  "Xross":"Xross/Install",
-	  "Bonus Vinculo al momento de evolucionar":"Bond at evolution",
-	  "Vinculo al momento de evolucionar": "Bond at evolution",
-	  "Alcanzo vinculo negativo?": "Reached negative bond?",
-	  "Nickname": "Nickname",
-	  "Tienes registrado a DexDorugamon y Dorugamon?": "Do you have DexDorugamon and Dorugamon registered?",
-	  "Tienes registrado a DexDoruguremon y Doruguremon?": "Do you have DexDoruguremon and Doruguremon registered?",
-    },
-	    grupos: {
-      "Quota/Key Points": "Quota/Key Points",
-      "Requisitos Obligatorios": "Mandatory Requirements",
-	  "No se considera en el puntaje": "Not considered in scoring",
-	  "Evolucion por muerte inducida": "Evolution by induced death",
-	  "Debes cumplir al menos uno": "Must have at least one"
-    },
-	  subtitle3: "Base Stats",
-	  subtitle4: "Evolutions",
-	  ATK: "ATK",
-	  DEF: "DEF",
-	  HP: "HP",
-	  Vel: "SPD",
-	  Digipuntos: "Digipoints",
-	  Evoluciona: "Evolves To",
-	  Viene: "Comes From",
-	  LineaEvolutiva: "Evolution Line",
-	  eligeLineaEvolutiva: "-- Choose evolution line --",
-	  todosLosDigimon: "All Digimon"
-	  }
-	};
-
-let currentLanguage = "es";
-
-function t(key) {
-  return traducciones[currentLanguage][key] || key;
-}
-
-// Función para detectar si un Digimon tiene múltiples evoluciones
-function detectarEvolucionesMultiples(nombreDigimon) {
-  const evoluciones = new Set();
-
-  // Revisar casos especiales de entrenamiento
-  if (specialEntrenamientoCases[nombreDigimon]) {
-    Object.keys(specialEntrenamientoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-  }
-
-  // Revisar casos especiales de program
-  if (specialProgramCases[nombreDigimon]) {
-    Object.keys(specialProgramCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-  }
-
-  // Revisar casos especiales de xross
-  if (specialxrossCases[nombreDigimon]) {
-    Object.keys(specialxrossCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-  }
-
-  // Revisar casos especiales de comida
-  if (specialfoodcases[nombreDigimon]) {
-    if (typeof specialfoodcases[nombreDigimon] === 'object' && !Array.isArray(specialfoodcases[nombreDigimon])) {
-      Object.keys(specialfoodcases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-    }
-  }
-
-  // Revisar casos especiales de victorias
-  if (specialVictoriasCases[nombreDigimon]) {
-    Object.keys(specialVictoriasCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-  }
-
-  // Revisar casos especiales de batallas
-  if (specialBatallasCases[nombreDigimon]) {
-    Object.keys(specialBatallasCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-  }
-
-  // Revisar casos especiales de vinculo
-  if (specialVinculoCases[nombreDigimon]) {
-    Object.keys(specialVinculoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-  }
-
-  // Revisar casos especiales de errores
-  if (specialErroresCases[nombreDigimon]) {
-    Object.keys(specialErroresCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
-  }
-
-  return Array.from(evoluciones);
-}
-
-// Función para obtener el valor específico de un campo para una evolución
-function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigimon) {
-  // Verificar si este campo debe estar vacío para esta evolución específica
-  if (camposVaciosPorEvolucion[nombreDigimon]?.[evolucionDigimon]?.includes(campo)) {
-    return "-";
-  }
-
-  // Casos especiales de entrenamiento
-  if (campo === "% Entrenamiento" && specialEntrenamientoCases[nombreDigimon]) {
-    const valor = specialEntrenamientoCases[nombreDigimon][evolucionDigimon];
-    if (valor !== undefined) return valor;
-  }
-
-  // Casos especiales de program
-  if (campo === "Program" && specialProgramCases[nombreDigimon]) {
-    const valor = specialProgramCases[nombreDigimon][evolucionDigimon];
-    if (valor !== undefined) return valor;
-    // Si no está definido para esta evolución, devolver vacío
-    return "-";
-  }
-
-  // Casos especiales de xross
-  if (campo === "Xross" && specialxrossCases[nombreDigimon]) {
-    const valor = specialxrossCases[nombreDigimon][evolucionDigimon];
-    if (valor !== undefined) {
-      if (Array.isArray(valor)) {
-        return "Install de uno de estos drivers: " + valor.join(", ");
-      }
-      return valor;
-    }
-    // Si no está definido para esta evolución, devolver vacío
-    return "-";
-  }
-
-  // Casos especiales de comida
-  if (campo === "Bonus Comida" && specialfoodcases[nombreDigimon]) {
-    if (typeof specialfoodcases[nombreDigimon] === 'object' && !Array.isArray(specialfoodcases[nombreDigimon])) {
-      const valor = specialfoodcases[nombreDigimon][evolucionDigimon];
-      if (valor !== undefined) {
-        return Array.isArray(valor) ? valor.join(", ") : valor;
-      }
-      // Si no está definido para esta evolución, devolver vacío
-      return "-";
-    }
-  }
-
-  // Casos especiales de victorias
-  if (campo === "Victorias" && specialVictoriasCases[nombreDigimon]) {
-    const valor = specialVictoriasCases[nombreDigimon][evolucionDigimon];
-    if (valor !== undefined) return valor;
-  }
-
-  // Casos especiales de batallas
-  if (campo === "Combates Minimos" && specialBatallasCases[nombreDigimon]) {
-    const valor = specialBatallasCases[nombreDigimon][evolucionDigimon];
-    if (valor !== undefined) return valor;
-  }
-
-  // Casos especiales de vinculo
-  if (campo === "Vinculo al momento de evolucionar" && specialVinculoCases[nombreDigimon]) {
-    const valor = specialVinculoCases[nombreDigimon][evolucionDigimon];
-    if (valor !== undefined) return valor;
-  }
-
-  // Casos especiales de errores (tanto "Errores Minimos" como "Error Maximo")
-  if ((campo === "Errores Minimos" || campo === "Error Maximo") && specialErroresCases[nombreDigimon]) {
-    const valorEspecial = specialErroresCases[nombreDigimon][evolucionDigimon];
-    if (valorEspecial !== undefined) {
-      // Para DexDorugamon mostrar como rango "0-6", para otros como valor directo
-      if (evolucionDigimon === "DexDorugamon" && valorEspecial !== "-") {
-        return "0-" + valorEspecial;
-      }
-      return valorEspecial;
-    }
-  }
-
-  // Devolver el valor original del campo
-  return digimon[campo];
-}
-
-// Función para obtener la configuración de columnas para un digimon específico
-function obtenerGruposColumnas(nombreDigimon) {
-  if (specialDigimonConfig[nombreDigimon] && specialDigimonConfig[nombreDigimon].gruposColumnas) {
-    return specialDigimonConfig[nombreDigimon].gruposColumnas;
-  }
-  return gruposColumnasDefault;
-}
-
-// Función para procesar los datos del digimon si tiene configuración especial
-function procesarDatosDigimon(nombreDigimon, datosOriginales) {
-  if (specialDigimonConfig[nombreDigimon] && specialDigimonConfig[nombreDigimon].procesarCampos) {
-    return specialDigimonConfig[nombreDigimon].procesarCampos(datosOriginales);
-  }
-  return datosOriginales;
-}
-
-// Función para generar múltiples variaciones del nombre de archivo
-function generarVariacionesNombre(nombre) {
-  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
-  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
-  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
-  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
-  
-  // Variaciones para probar
-  const variaciones = [
-    nombreLimpio,                    // darktyranomon (original)
-    nombreEspacios,                  // darktyranomon (sin espacios)
-    nombreGuiones,                   // dark-tyranomon (con guiones)
-    nombreOriginal.toLowerCase(),    // darktyranomon (preservando estructura)
-    nombreOriginal,                  // DarkTyranomon (con mayúsculas)
-    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase(), // sin símbolos especiales
-  ];
-  
-  // Eliminar duplicados
-  return [...new Set(variaciones)];
-}
-
-// Función para intentar cargar imagen con múltiples variaciones
-function cargarImagenConVariaciones(nombre, elementoImg, callback) {
-  const variaciones = generarVariacionesNombre(nombre);
-  
-  console.log(`Intentando cargar imagen para: ${nombre}`);
-  console.log(`Variaciones a probar:`, variaciones);
-  
-  let indiceActual = 0;
-  
-  const intentarSiguiente = () => {
-    if (indiceActual >= variaciones.length) {
-      // Si fallan todas las variaciones, intentar con placeholder.png
-      console.log(`❌ No se encontró imagen específica para ${nombre}. Intentando placeholder.png...`);
-      
-      const imgPlaceholder = new Image();
-      imgPlaceholder.onload = function() {
-        console.log(`✅ Usando placeholder.png para ${nombre}`);
-        elementoImg.src = 'img/placeholder.png';
-        elementoImg.style.display = 'block';
-        imagePlaceholder.style.display = 'none';
-        if (callback) callback(true, 'img/placeholder.png');
-      };
-      imgPlaceholder.onerror = function() {
-        console.log(`❌ No se encontró placeholder.png. Usando placeholder de texto.`);
-        elementoImg.style.display = 'none';
-        imagePlaceholder.style.display = 'flex';
-        if (callback) callback(false);
-      };
-      imgPlaceholder.src = 'img/placeholder.png';
-      return;
-    }
-    
-    const variacionActual = variaciones[indiceActual];
-    const ruta = `img/${variacionActual}.png`;
-    
-    console.log(`Probando: ${ruta}`);
-    
-    const imgTest = new Image();
-    imgTest.onload = function() {
-      console.log(`✅ Imagen encontrada: ${ruta}`);
-      elementoImg.src = ruta;
-      elementoImg.style.display = 'block';
-      imagePlaceholder.style.display = 'none';
-
-      // Detectar imágenes adicionales para la galería
-      nombreDigimonActual = nombre;
-      indiceImagenActual = 0;
-      detectarImagenesAdicionales(nombre, ruta, (imagenes) => {
-        imagenesDisponibles = imagenes;
-        console.log(`📸 Imágenes disponibles para ${nombre}:`, imagenes);
-        actualizarBotonesNavegacion();
-      });
-
-      if (callback) callback(true, ruta);
-    };
-    imgTest.onerror = function() {
-      console.log(`❌ No encontrada: ${ruta}`);
-      indiceActual++;
-      intentarSiguiente();
-    };
-    imgTest.src = ruta;
-  };
-
-  intentarSiguiente();
-}
-
-  // Llenar Tama inicial
-  const allTamas = uniqueValues(Object.values(dict).map(d => d.Tama));
-  allTamas.forEach(tama => {
-    const opt = document.createElement("option");
-    opt.value = tama;
-    opt.textContent = getTamaNombre(tama);
-    selectTama.appendChild(opt);
-  });
-
-  selectTama.addEventListener("change", () => {
-    selectNivel.innerHTML = `<option value="">${t("selectNivelDefault")}</option>`;
-    selectDigimon.innerHTML = `<option value="">${t("selectDigimonDefault")}</option>`;
-    selectNivel.disabled = true;
-    selectDigimon.disabled = true;
-    
-    // Mostrar placeholder cuando se cambie Tama
-    digimonImage.style.display = 'none';
-    imagePlaceholder.style.display = 'flex';
-    imagenesDisponibles = [];
-    actualizarBotonesNavegacion();
-
-    const tamSelected = selectTama.value;
-    if (!tamSelected) return;
-
-    const niveles = uniqueValues(Object.values(dict)
-      .filter(d => d.Tama === tamSelected)
-      .map(d => d.Nivel))
-      .sort((a, b) => a - b);
-
-    niveles.forEach(nivel => {
-      const opt = document.createElement("option");
-      opt.value = nivel;
-      opt.textContent = nivelAEtapa[currentLanguage][nivel] || `Nivel ${nivel}`;
-      selectNivel.appendChild(opt);
-    });
-
-    selectNivel.disabled = false;
-  });
-
-  selectNivel.addEventListener("change", () => {
-    selectDigimon.innerHTML = `<option value="">${t("selectDigimonDefault")}</option>`;
-    selectDigimon.disabled = true;
-    
-    // Mostrar placeholder cuando se cambie Nivel
-    digimonImage.style.display = 'none';
-    imagePlaceholder.style.display = 'flex';
-    imagenesDisponibles = [];
-    actualizarBotonesNavegacion();
-
-    const tamSelected = selectTama.value;
-    const nivelSelected = parseInt(selectNivel.value);
-    if (!tamSelected || isNaN(nivelSelected)) return;
-
-    const digimons = Object.entries(dict)
-      .filter(([_, d]) => d.Tama === tamSelected && d.Nivel === nivelSelected);
-
-    digimons.forEach(([nombre]) => {
-      const opt = document.createElement("option");
-      opt.value = nombre;
-      opt.textContent = nombre;
-      selectDigimon.appendChild(opt);
-    });
-
-    selectDigimon.disabled = false;
-  });
-
-  // Event listener mejorado para selectDigimon
-  selectDigimon.addEventListener("change", () => {
-    const nombre = selectDigimon.value;
-    if (!nombre || !dict[nombre]) {
-      // Si no hay selección, mostrar placeholder y limpiar tablas
-      digimonImage.style.display = 'none';
-      imagePlaceholder.style.display = 'flex';
-      imagenesDisponibles = [];
-      actualizarBotonesNavegacion();
-      tablaGenerales.innerHTML = "";
-      tablaHeaders.innerHTML = "";
-      tablaRequisitos.innerHTML = "";
-	  // Restaurar título por defecto cuando no hay selección
-      document.getElementById("subtitle").textContent = t("subtitle");
-      return;
-    }
-	
-	// Actualizar el título con el nombre del Digimon
-	if (currentLanguage === 'es') {
-	  document.getElementById("subtitle").textContent = `Datos Generales de ${nombre}`;
-	} else {
-	  document.getElementById("subtitle").textContent = `${nombre} General Data`;
-	}
-
-	// Procesar datos del digimon si tiene configuración especial
-    const datosOriginales = dict[nombre];
-    const digimon = procesarDatosDigimon(nombre, datosOriginales);
-
-    // Cargar imagen solo después de seleccionar Digimon
-    console.log(`Digimon seleccionado: ${nombre}`);
-    cargarImagenConVariaciones(nombre, digimonImage, (exito, rutaUsada) => {
-      if (exito) {
-        console.log(`Imagen cargada exitosamente desde: ${rutaUsada}`);
-      } else {
-        console.log(`No se pudo cargar imagen para: ${nombre}`);
-      }
-    });
-
-    // Actualizar tabla de datos generales
-    tablaGenerales.innerHTML = "";
-    const filaGen = document.createElement("tr");
-    generales.forEach(campo => {
-      const td = document.createElement("td");
-      let valorOriginal = digimon[campo] ?? "-";
-      if (campo === "Nivel") {
-        valorOriginal = nivelAEtapa[currentLanguage][valorOriginal] || valorOriginal;
-      }
-      td.innerHTML = traducirValor(campo, valorOriginal, nombre);
-      filaGen.appendChild(td);
-    });
-    tablaGenerales.appendChild(filaGen);
-	// Actualizar tabla de stats
-	const tablaStats = document.querySelector("#tablaStats tbody");
-	tablaStats.innerHTML = "";
-
-	if (digimonstattier[nombre]) {
-	  const statsDigimon = digimonstattier[nombre];
-	  const filaStats = document.createElement("tr");
-
-	  // Si es Scumon, PlatinumScumon o GreatKingScumon, agregar selector de Child
-	  if (nombre === "Scumon" || nombre === "PlatinumScumon" || nombre === "GreatKingScumon") {
-	    // Obtener todos los Children que evolucionan a Scumon
-	    const childsQueEvolucionan = Object.entries(digimonReqDict)
-	      .filter(([nombreDigi, data]) => {
-	        const stats = digimonstattier[nombreDigi];
-	        return stats && stats.Evoluciona && stats.Evoluciona.includes("Scumon") && data.Nivel === 3;
-	      })
-	      .map(([nombreDigi]) => nombreDigi);
-
-	    // Obtener todas las líneas evolutivas posibles
-	    const lineasEvolutivas = [];
-	    childsQueEvolucionan.forEach(childNombre => {
-	      const childStats = digimonstattier[childNombre];
-	      if (!childStats.Viene || childStats.Viene.length === 0) return;
-
-	      childStats.Viene.forEach(babyIINombre => {
-	        const babyIIStats = digimonstattier[babyIINombre];
-	        if (!babyIIStats || !babyIIStats.Viene || babyIIStats.Viene.length === 0) return;
-
-	        babyIIStats.Viene.forEach(babyINombre => {
-	          const babyIData = digimonReqDict[babyINombre];
-	          const tamaId = babyIData ? babyIData.Tama : "?";
-	          lineasEvolutivas.push({
-	            child: childNombre,
-	            babyII: babyIINombre,
-	            babyI: babyINombre,
-	            tama: tamaId,
-	            label: `${childNombre} (${tamaId})`
-	          });
-	        });
-	      });
-	    });
-
-	    // Crear selector antes de la tabla para Scumon
-	    const tablaSt = document.querySelector("#tablaStats");
-	    const mensajeSelector = document.createElement("div");
-	    mensajeSelector.style.marginBottom = "1rem";
-	    mensajeSelector.style.display = "flex";
-	    mensajeSelector.style.flexDirection = "column";
-	    mensajeSelector.style.gap = "0.5rem";
-
-	    const label = document.createElement("label");
-	    label.textContent = t("eligeLineaEvolutiva") + ":";
-	    label.style.fontSize = "1rem";
-
-	    const select = document.createElement("select");
-	    select.id = "childSelector";
-
-	    const defaultOption = document.createElement("option");
-	    defaultOption.value = "";
-	    defaultOption.textContent = "-- " + t("eligeLineaEvolutiva") + " --";
-	    select.appendChild(defaultOption);
-
-	    lineasEvolutivas.forEach((linea, index) => {
-	      const option = document.createElement("option");
-	      option.value = index;
-	      option.textContent = linea.label;
-	      option.dataset.child = linea.child;
-	      option.dataset.babyii = linea.babyII;
-	      option.dataset.babyi = linea.babyI;
-	      select.appendChild(option);
-	    });
-
-	    mensajeSelector.appendChild(label);
-	    mensajeSelector.appendChild(select);
-	    tablaSt.parentElement.insertBefore(mensajeSelector, tablaSt);
-
-	    // Celdas para ATK, DEF, HP, Vel, Digipuntos (vacías inicialmente)
-	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(() => {
-	      const td = document.createElement("td");
-	      td.textContent = "-";
-	      td.className = "stat-cell";
-	      filaStats.appendChild(td);
-	    });
-
-	    // Event listener para calcular stats cuando se seleccione una línea
-	    select.addEventListener("change", (e) => {
-	      const selectedIndex = e.target.value;
-	      if (!selectedIndex) {
-	        // Limpiar stats si no hay selección
-	        document.querySelectorAll(".stat-cell").forEach(cell => cell.textContent = "-");
-	        return;
-	      }
-
-	      const linea = lineasEvolutivas[selectedIndex];
-	      const childStats = digimonstattier[linea.child];
-
-	      // CORRECCIÓN: Scumon BASE = Child BASE × 1.34 (SIN heredados)
-	      const scumonStatsBase = {
-	        atk: Math.round(childStats.ATK * 1.34),
-	        def: Math.round(childStats.DEF * 1.34),
-	        hp: Math.round(childStats.HP * 1.34),
-	        vel: Math.round(childStats.Vel * 1.34)
-	      };
-
-	      let statsFinales;
-	      if (nombre === "Scumon" || nombre === "PlatinumScumon") {
-	        // Scumon y PlatinumScumon: solo BASE (sin heredados)
-	        statsFinales = scumonStatsBase;
-	      } else {
-	        // GreatKingScumon: BASE = Scumon base × 2.25 (sin heredados)
-	        statsFinales = {
-	          atk: Math.round(scumonStatsBase.atk * 2.25),
-	          def: Math.round(scumonStatsBase.def * 2.25),
-	          hp: Math.round(scumonStatsBase.hp * 2.25),
-	          vel: Math.round(scumonStatsBase.vel * 2.25)
-	        };
-	      }
-
-	      // Calcular Digipuntos
-	      statsFinales.digipuntos = parseFloat((((statsFinales.hp / 10) + statsFinales.atk + statsFinales.def + statsFinales.vel) / 10).toFixed(1));
-
-	      // Actualizar celdas
-	      const cells = document.querySelectorAll(".stat-cell");
-	      cells[0].textContent = statsFinales.atk;
-	      cells[1].textContent = statsFinales.def;
-	      cells[2].textContent = statsFinales.hp;
-	      cells[3].textContent = statsFinales.vel;
-	      cells[4].textContent = statsFinales.digipuntos;
-	    });
-
-	  } else {
-	    // Digimon normal: stats estáticos sin columna de línea evolutiva
-	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(campo => {
-	      const td = document.createElement("td");
-	      td.textContent = statsDigimon[campo] ?? "-";
-	      filaStats.appendChild(td);
-	    });
-	  }
-
-	tablaStats.appendChild(filaStats);
-
-	// Actualizar tabla de Evoluciones
-	const tablaEvoluciones = document.querySelector("#tablaEvoluciones tbody");
-	tablaEvoluciones.innerHTML = "";
-	const filaEvoluciones = document.createElement("tr");
-
-	// Línea Evolutiva
-	const tdLineaEvo = document.createElement("td");
-	tdLineaEvo.textContent = "-";
-	filaEvoluciones.appendChild(tdLineaEvo);
-
-	// Campo Evoluciona (como lista con columnas automáticas)
-	const tdEvoluciona = document.createElement("td");
-	if (statsDigimon.Evoluciona && statsDigimon.Evoluciona.length > 0) {
-		tdEvoluciona.innerHTML = formatEvolutionList(statsDigimon.Evoluciona);
-	} else {
-		tdEvoluciona.textContent = "-";
-	}
-	filaEvoluciones.appendChild(tdEvoluciona);
-
-	// Campo Viene (como lista con columnas automáticas)
-	const tdViene = document.createElement("td");
-	if (nombre === "Burpmon") {
-		tdViene.textContent = t("todosLosDigimon");
-	} else if (statsDigimon.Viene && statsDigimon.Viene.length > 0) {
-		tdViene.innerHTML = formatEvolutionList(statsDigimon.Viene);
-	} else {
-		tdViene.textContent = "-";
-	}
-	filaEvoluciones.appendChild(tdViene);
-
-	tablaEvoluciones.appendChild(filaEvoluciones);
+// Ejecutar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateNavMenuLanguage);
 } else {
-	// Si no hay datos de stats, mostrar filas vacías
-	const filaVacia = document.createElement("tr");
-	for (let i = 0; i < 5; i++) {
-		const td = document.createElement("td");
-		td.textContent = "-";
-		filaVacia.appendChild(td);
-	}
-	tablaStats.appendChild(filaVacia);
-
-	// Tabla de evoluciones vacía
-	const tablaEvoluciones = document.querySelector("#tablaEvoluciones tbody");
-	tablaEvoluciones.innerHTML = "";
-	const filaEvolucionesVacia = document.createElement("tr");
-	for (let i = 0; i < 3; i++) {
-		const td = document.createElement("td");
-		td.textContent = "-";
-		filaEvolucionesVacia.appendChild(td);
-	}
-	tablaEvoluciones.appendChild(filaEvolucionesVacia);
+  updateNavMenuLanguage();
 }
-
-// Actualizar tabla de requisitos con configuración especial
-const headersGrupos = document.getElementById("headersGrupos");
-const tablaHeaders = document.getElementById("headersRequisitos");
-const tablaRequisitos = document.querySelector("#tablaRequisitos tbody");
-
-headersGrupos.innerHTML = "";
-tablaHeaders.innerHTML = "";
-tablaRequisitos.innerHTML = "";
-
-// Restaurar visibilidad de headers del thead (pueden haber sido ocultados por requisitosOrigen)
-headersGrupos.style.display = "";
-tablaHeaders.style.display = "";
-
-// Excluir campos generales de la tabla de requisitos, EXCEPTO "Peso" que aparece en ambas
-const camposDisponibles = Object.keys(digimon).filter(campo => {
-  if (campo === "Peso") return true; // Peso puede aparecer en ambas tablas
-  return !generales.includes(campo);
-});
-
-// Obtener la configuración de columnas para este digimon específico
-const gruposColumnas = obtenerGruposColumnas(nombre);
-
-// Detectar si hay casos especiales que requieren múltiples filas
-const evolucionesMultiples = detectarEvolucionesMultiples(nombre);
-
-// Detectar si tiene requisitosOrigen (diferentes requisitos según digimon de origen)
-const tieneRequisitosOrigen = specialDigimonConfig[nombre]?.requisitosOrigen;
-
-// Si tiene requisitosOrigen, generar tabla especial con headers separados por origen
-if (tieneRequisitosOrigen) {
-  const requisitosOrigen = specialDigimonConfig[nombre].requisitosOrigen;
-  const origenes = Object.keys(requisitosOrigen);
-
-  // Ocultar los headers normales del thead ya que usaremos headers en el tbody
-  headersGrupos.style.display = "none";
-  tablaHeaders.style.display = "none";
-
-  // Para cada origen, crear sus propios headers y fila de datos
-  origenes.forEach((origen, index) => {
-    const config = requisitosOrigen[origen];
-
-    // Si es "NoClaro", mostrar solo una fila con el mensaje
-    if (config.esNoClaro) {
-      // Fila con origen + mensaje de requisitos no claros
-      const trNoClaro = document.createElement("tr");
-      const tdOrigen = document.createElement("td");
-      tdOrigen.textContent = origen;
-      tdOrigen.style.fontWeight = "bold";
-      trNoClaro.appendChild(tdOrigen);
-
-      const tdNoClaro = document.createElement("td");
-      tdNoClaro.setAttribute("colspan", "9");
-      tdNoClaro.textContent = config.mensaje || "Requisitos no claros, por confirmar";
-      tdNoClaro.style.fontStyle = "italic";
-      trNoClaro.appendChild(tdNoClaro);
-      tablaRequisitos.appendChild(trNoClaro);
-    } else {
-      // Obtener grupos y campos para este origen
-      const gruposOrigen = config.gruposColumnas || {};
-
-      // Calcular total de campos
-      let totalCampos = 1; // +1 para columna Digimon
-      Object.values(gruposOrigen).forEach(campos => totalCampos += campos.length);
-
-      // Fila de headers de grupos (con columna Digimon rowspan 2 para cada origen)
-      const trGrupos = document.createElement("tr");
-
-      // Columna Digimon con rowspan 2 (para cada origen)
-      const thDigimon = document.createElement("th");
-      thDigimon.setAttribute("rowspan", "2");
-      thDigimon.textContent = "Digimon";
-      thDigimon.style.verticalAlign = "middle";
-      trGrupos.appendChild(thDigimon);
-
-      Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
-        const thGrupo = document.createElement("th");
-        thGrupo.setAttribute("colspan", campos.length);
-        thGrupo.textContent = traducciones[currentLanguage]?.grupos?.[nombreGrupo] || nombreGrupo;
-        trGrupos.appendChild(thGrupo);
-      });
-      tablaRequisitos.appendChild(trGrupos);
-
-      // Fila de headers de campos individuales
-      const trCampos = document.createElement("tr");
-      Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
-        campos.forEach(campo => {
-          const th = document.createElement("th");
-          th.setAttribute("data-orig", campo);
-          th.textContent = traducirCampo(campo, nombre);
-
-          // Agregar icono de advertencia para % Entrenamiento si es placeholder
-          if (campo === "% Entrenamiento" && config.placeholder) {
-            th.textContent = traducirCampo(campo, nombre) + " ";
-            const warningIcon = document.createElement("span");
-            warningIcon.className = "warning-icon";
-            warningIcon.onclick = () => showWarningPopup("dexdorugamon");
-            warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
-            warningIcon.textContent = "!";
-            warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
-            warningIcon.setAttribute("data-warning-key", "dexdorugamon");
-            th.appendChild(warningIcon);
-          }
-
-          trCampos.appendChild(th);
-        });
-      });
-      tablaRequisitos.appendChild(trCampos);
-
-      // Fila de datos con nombre del origen
-      const trDatos = document.createElement("tr");
-      trDatos.className = "data-row-origen";
-
-      // Celda con nombre del origen
-      const tdOrigen = document.createElement("td");
-      tdOrigen.textContent = origen;
-      trDatos.appendChild(tdOrigen);
-
-      // Contar total de campos en todos los grupos para determinar si mostrar puntajes
-      const totalCamposSinDigimon = Object.values(gruposOrigen).reduce((sum, c) => sum + c.length, 0);
-      const mostrarPuntaje = !config.placeholder && totalCamposSinDigimon > 1;
-
-      Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
-        campos.forEach(campo => {
-          const td = document.createElement("td");
-          const valor = config.valores?.[campo];
-
-          let puntajeHTML = "";
-          if (mostrarPuntaje) {
-            if (nombreGrupo === "Quota/Key Points") {
-              puntajeHTML = formatearPuntajeConColor({ cumple: 1, noCumple: 0 });
-            } else if (nombreGrupo === "Requisitos Obligatorios") {
-              puntajeHTML = formatearPuntajeConColor({ cumple: 0, noCumple: -10 });
-            }
-          }
-
-          if (valor !== undefined && valor !== "-") {
-            td.innerHTML = valor + puntajeHTML;
-          } else {
-            td.textContent = "-";
-          }
-          trDatos.appendChild(td);
-        });
-      });
-      tablaRequisitos.appendChild(trDatos);
-    }
-
-  });
-
-  return; // Terminar aquí para requisitosOrigen
-}
-
-// Crear headers agrupados y individuales
-let camposOrdenados = [];
-
-// Si hay múltiples evoluciones, agregar columna de nombre
-if (evolucionesMultiples.length > 0) {
-  // Header agrupado para nombre de Digimon
-  const thGrupoNombre = document.createElement("th");
-  thGrupoNombre.setAttribute("rowspan", "2");
-  thGrupoNombre.textContent = "Digimon";
-  thGrupoNombre.style.verticalAlign = "middle";
-  headersGrupos.appendChild(thGrupoNombre);
-}
-
-Object.entries(gruposColumnas).forEach(([nombreGrupo, camposGrupo]) => {
-  const camposEncontrados = camposGrupo.filter(campo => camposDisponibles.includes(campo));
-
-  if (camposEncontrados.length > 0) {
-    // Header agrupado
-    const thGrupo = document.createElement("th");
-    thGrupo.setAttribute("colspan", camposEncontrados.length);
-    thGrupo.textContent = traducciones[currentLanguage]?.grupos?.[nombreGrupo] || nombreGrupo;
-    headersGrupos.appendChild(thGrupo);
-
-    // Headers individuales
-    camposEncontrados.forEach(campo => {
-      const th = document.createElement("th");
-      th.setAttribute("data-orig", campo);
-      th.textContent = traducirCampo(campo, nombre);
-
-      // ✅ AGREGAR ICONO DE ADVERTENCIA PARA SKULLGREYMON EN % ENTRENAMIENTO
-      if (nombre === "SkullGreymon" && campo === "% Entrenamiento") {
-        th.textContent = traducirCampo(campo, nombre) + " ";
-        const warningIcon = document.createElement("span");
-        warningIcon.className = "warning-icon";
-        warningIcon.onclick = () => showWarningPopup("skullgreymon");
-        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
-        warningIcon.textContent = "!";
-        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
-        warningIcon.setAttribute("data-warning-key", "skullgreymon");
-        th.appendChild(warningIcon);
-      }
-
-      // ✅ AGREGAR ICONO DE ADVERTENCIA PARA DEXDORUGAMON EN % ENTRENAMIENTO (PLACEHOLDER)
-      if (nombre === "DexDorugamon" && campo === "% Entrenamiento") {
-        th.textContent = traducirCampo(campo, nombre) + " ";
-        const warningIcon = document.createElement("span");
-        warningIcon.className = "warning-icon";
-        warningIcon.onclick = () => showWarningPopup("dexdorugamon");
-        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
-        warningIcon.textContent = "!";
-        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
-        warningIcon.setAttribute("data-warning-key", "dexdorugamon");
-        th.appendChild(warningIcon);
-      }
-
-      // ✅ AGREGAR ICONO DE ADVERTENCIA PARA DEXDORUGUREMON EN % ENTRENAMIENTO
-      if (nombre === "DexDoruguremon" && campo === "% Entrenamiento") {
-        th.textContent = traducirCampo(campo, nombre) + " ";
-        const warningIcon = document.createElement("span");
-        warningIcon.className = "warning-icon";
-        warningIcon.onclick = () => showWarningPopup("dexdoruguremon");
-        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
-        warningIcon.textContent = "!";
-        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
-        warningIcon.setAttribute("data-warning-key", "dexdoruguremon");
-        th.appendChild(warningIcon);
-      }
-
-      // ✅ AGREGAR ICONO DE INFORMACIÓN PARA HORA
-      if (campo === "Hora") {
-        th.textContent = traducirCampo(campo, nombre) + " ";
-        const warningIcon = document.createElement("span");
-        warningIcon.className = "warning-icon";
-        warningIcon.onclick = () => showWarningPopup("hora");
-        warningIcon.title = currentLanguage === 'es' ? 'Ver información' : 'Show info';
-        warningIcon.textContent = "?";
-        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver información' : 'Show info');
-        warningIcon.setAttribute("data-warning-key", "hora");
-        th.appendChild(warningIcon);
-      }
-
-      tablaHeaders.appendChild(th);
-      camposOrdenados.push({ campo, grupo: nombreGrupo });
-    });
-  }
-});
-
-// Crear filas según si hay múltiples evoluciones o no
-if (evolucionesMultiples.length > 0) {
-  // Primero, recopilar todos los valores para cada campo y cada evolución
-  const valoresPorCampo = {};
-  camposOrdenados.forEach(({ campo, grupo }) => {
-    valoresPorCampo[campo] = evolucionesMultiples.map(evo => {
-      window.currentEvolutionDigimon = evo;
-      let valorOriginal = obtenerValorParaEvolucion(digimon, campo, nombre, evo);
-
-      // Formatear Error Maximo como rango
-      if (campo === "Error Maximo") {
-        valorOriginal = formatearErrorMaximo(valorOriginal, nombre);
-      }
-
-      // Formatear WinRate agregando %
-      if (campo === "WinRate") {
-        valorOriginal = formatearWinRate(valorOriginal);
-      }
-
-      // Formatear Peso como rango (± 5)
-      if (campo === "Peso") {
-        valorOriginal = formatearPeso(valorOriginal);
-      }
-
-      // Formatear % Entrenamiento como rango
-      if (campo === "% Entrenamiento") {
-        valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal, nombre);
-      }
-
-      // Convertir Hora GMT-3 a hora local
-      if (campo === "Hora") {
-        valorOriginal = convertirHoraALocal(valorOriginal);
-      }
-
-      // Para campos con casos especiales
-      const camposEspeciales = ["% Entrenamiento", "Xross", "Program", "Bonus Comida"];
-      const esCampoEspecial = camposEspeciales.includes(campo) &&
-        (specialEntrenamientoCases[nombre] || specialxrossCases[nombre] ||
-         specialProgramCases[nombre] || specialfoodcases[nombre]);
-
-      // Obtener puntaje para este campo
-      const puntaje = obtenerPuntaje(campo, nombre, grupo);
-      const puntajeHTML = formatearPuntajeConColor(puntaje);
-
-      let valorFinal;
-      if (esCampoEspecial) {
-        if (campo === "% Entrenamiento" && valorOriginal !== "-") {
-          valorFinal = valorOriginal + "%" + puntajeHTML;
-        } else {
-          valorFinal = valorOriginal + (valorOriginal !== "-" ? puntajeHTML : "");
-        }
-      } else {
-        valorFinal = traducirValor(campo, valorOriginal, nombre);
-        if (valorOriginal !== "-" && valorOriginal !== undefined && valorOriginal !== null) {
-          valorFinal += puntajeHTML;
-        }
-      }
-
-      return valorFinal;
-    });
-  });
-  window.currentEvolutionDigimon = null;
-
-  // Determinar qué campos tienen valores idénticos en todas las filas
-  const camposParaFusionar = {};
-  camposOrdenados.forEach(({ campo }) => {
-    const valores = valoresPorCampo[campo];
-    const primerValor = valores[0];
-    const todosSonIguales = valores.every(v => v === primerValor);
-    if (todosSonIguales) {
-      camposParaFusionar[campo] = true;
-    }
-  });
-
-  // Crear las filas
-  evolucionesMultiples.forEach((evolucionDigimon, indice) => {
-    const filaReq = document.createElement("tr");
-
-    // Agregar celda con nombre del Digimon
-    const tdNombre = document.createElement("td");
-    tdNombre.textContent = evolucionDigimon;
-    tdNombre.style.fontWeight = "bold";
-    filaReq.appendChild(tdNombre);
-
-    /*// Caso especial: Wargreymon desde Metal Greymon - mostrar placeholder
-    if (nombre === "Wargreymon" && evolucionDigimon === "Metal Greymon") {
-      const tdPlaceholder = document.createElement("td");
-      tdPlaceholder.setAttribute("colspan", camposOrdenados.length);
-      tdPlaceholder.textContent = currentLanguage === 'es' ? "Requisitos no claros, por confirmar" : "Requirements unclear, to be confirmed";
-      tdPlaceholder.style.fontStyle = "italic";
-      tdPlaceholder.style.textAlign = "center";
-      filaReq.appendChild(tdPlaceholder);
-      tablaRequisitos.appendChild(filaReq);
-      return; // Saltar al siguiente
-    }*/
-
-    camposOrdenados.forEach(({ campo }) => {
-      // Si el campo debe fusionarse, solo agregarlo en la primera fila
-      if (camposParaFusionar[campo]) {
-        if (indice === 0) {
-          const td = document.createElement("td");
-          td.setAttribute("rowspan", evolucionesMultiples.length);
-          td.style.verticalAlign = "middle";
-
-          const valor = valoresPorCampo[campo][0];
-          td.innerHTML = valor;
-
-          filaReq.appendChild(td);
-        }
-        // Si no es la primera fila, no agregar celda (ya está fusionada)
-      } else {
-        // Valor diferente, agregar celda normal
-        const td = document.createElement("td");
-        const valor = valoresPorCampo[campo][indice];
-        td.innerHTML = valor;
-        filaReq.appendChild(td);
-      }
-    });
-
-    tablaRequisitos.appendChild(filaReq);
-  });
-} else {
-  // Una sola fila
-  const filaReq = document.createElement("tr");
-
-  camposOrdenados.forEach(({ campo, grupo }) => {
-    const td = document.createElement("td");
-    let valorOriginal = digimon[campo];
-
-    // Formatear Error Maximo como rango
-    if (campo === "Error Maximo") {
-      valorOriginal = formatearErrorMaximo(valorOriginal, nombre);
-    }
-
-    // Formatear WinRate agregando %
-    if (campo === "WinRate") {
-      valorOriginal = formatearWinRate(valorOriginal);
-    }
-
-    // Formatear Peso como rango (± 5)
-    if (campo === "Peso") {
-      valorOriginal = formatearPeso(valorOriginal);
-    }
-
-    // Formatear % Entrenamiento como rango
-    if (campo === "% Entrenamiento") {
-      valorOriginal = formatearPorcentajeEntrenamiento(valorOriginal, nombre);
-    }
-
-    // Convertir Hora GMT-3 a hora local
-    if (campo === "Hora") {
-      valorOriginal = convertirHoraALocal(valorOriginal);
-    }
-
-    // Obtener puntaje para este campo
-    const puntaje = obtenerPuntaje(campo, nombre, grupo);
-    const puntajeHTML = formatearPuntajeConColor(puntaje);
-
-    // Agregar "%" para campos de entrenamiento y vínculo, más el puntaje
-    if ((campo === "% Entrenamiento" || campo.includes("Vinculo")) && valorOriginal !== undefined && valorOriginal !== null && valorOriginal !== "-") {
-      td.innerHTML = valorOriginal + "%" + puntajeHTML;
-    } else {
-      td.innerHTML = traducirValor(campo, valorOriginal, nombre);
-      if (valorOriginal !== "-" && valorOriginal !== undefined && valorOriginal !== null) {
-        td.innerHTML += puntajeHTML;
-      }
-    }
-
-    filaReq.appendChild(td);
-  });
-
-  tablaRequisitos.appendChild(filaReq);
-}
-  });
-
-function actualizarTextosUI() {
-  // Actualizar títulos principales
-  document.getElementById("titleMain").textContent = t("titleMain");
-  document.getElementById("subtitle2").textContent = t("subtitle2");
-  document.getElementById("disclaimer").textContent = t("disclaimer");
-  document.getElementById("evolutionNote").textContent = t("evolutionNote");
-
-  // Actualizar explicación de colores
-  const colorExplanation = document.getElementById("colorExplanation");
-  if (colorExplanation) {
-    colorExplanation.innerHTML = `
-      <strong>${t("colorExplanationTitle")}</strong><br>
-      <span style="color: #22c55e; font-weight: 600;">● ${t("colorGreen")}</span> = ${t("colorGreenDesc")}<br>
-      <span style="color: #eab308; font-weight: 600;">● ${t("colorYellow")}</span> = ${t("colorYellowDesc")}<br>
-      <span style="color: #ef4444; font-weight: 600;">● ${t("colorRed")}</span> = ${t("colorRedDesc")}
-    `;
-  }
-
-  // Actualizar el subtitle dinámicamente si hay un Digimon seleccionado
-  const nombreDigimon = selectDigimon.value;
-  if (nombreDigimon && dict[nombreDigimon]) {
-    if (currentLanguage === 'es') {
-      document.getElementById("subtitle").textContent = `Datos Generales de ${nombreDigimon}`;
-    } else {
-      document.getElementById("subtitle").textContent = `${nombreDigimon} General Data`;
-    }
-  } else {
-    document.getElementById("subtitle").textContent = t("subtitle");
-  }
-
-  // Actualizar labels de selectores
-  document.querySelector('label[for="selectTama"]').textContent = t("selectTama");
-  document.querySelector('label[for="selectNivel"]').textContent = t("selectNivel");
-  document.querySelector('label[for="selectDigimon"]').textContent = t("selectDigimon");
-
-  // Actualizar opciones por defecto de selectores
-  selectTama.options[0].textContent = t("selectTamaDefault");
-  selectNivel.options[0].textContent = t("selectNivelDefault");
-  selectDigimon.options[0].textContent = t("selectDigimonDefault");
-
-  // Actualizar nombres de Tama según idioma
-  Array.from(selectTama.options).forEach(option => {
-    if (option.value !== "") {
-      option.textContent = getTamaNombre(option.value);
-    }
-  });
-
-  // Actualizar las opciones de nivel si hay alguna seleccionada
-  Array.from(selectNivel.options).forEach(option => {
-    if (option.value !== "") {
-      const nivelNumero = parseInt(option.value);
-      option.textContent = nivelAEtapa[currentLanguage][nivelNumero] || `Nivel ${nivelNumero}`;
-    }
-  });
-
-  // Actualiza encabezados de tabla generales
-  const headersGen = document.querySelectorAll("#tablaGenerales thead th");
-  const claves = ["ID", "Tama", "Nivel", "Atributo", "Tipo", "Peso"];
-  headersGen.forEach((th, idx) => th.textContent = t(claves[idx]));
-
-  // Vuelve a traducir cabeceras de requisitos si existen
-  const headersReq = document.querySelectorAll("#headersRequisitos th");
-  headersReq.forEach(th => {
-    const original = th.getAttribute("data-orig") || th.textContent;
-
-    // ✅ ACTUALIZAR ICONO DE ADVERTENCIA AL CAMBIAR IDIOMA
-    const warningIcon = th.querySelector(".warning-icon");
-    if (warningIcon) {
-      // Preservar el icono y solo actualizar el texto
-      th.textContent = traducirCampo(original) + " ";
-
-      // Verificar si es un icono de información (para Hora) o advertencia
-      const warningKey = warningIcon.getAttribute("data-warning-key");
-      if (warningKey === "hora") {
-        warningIcon.title = currentLanguage === 'es' ? 'Ver información' : 'Show info';
-        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver información' : 'Show info');
-      } else {
-        warningIcon.title = currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning';
-        warningIcon.setAttribute("aria-label", currentLanguage === 'es' ? 'Ver advertencia' : 'Show warning');
-      }
-
-      th.appendChild(warningIcon);
-    } else {
-      th.textContent = traducirCampo(original);
-    }
-
-    th.setAttribute("data-orig", original);
-  });
-// Dentro de actualizarTextosUI(), después de re-traducir headers de requisitos:
-const headersGrupos = document.querySelectorAll("#headersGrupos th");
-headersGrupos.forEach(th => {
-  const colspan = th.getAttribute("colspan");
-  const textoOriginal = th.textContent;
-  
-  // Buscar en grupos de traducciones
-  Object.entries(traducciones[currentLanguage]?.grupos || {}).forEach(([key, value]) => {
-    if (th.textContent.includes(key.split('/')[0]) || th.textContent === key) {
-      th.textContent = value;
-    }
-  });
-});
-  // Re-traducir los valores de tablaGenerales
-  const filaGen = tablaGenerales.querySelector("tr");
-  if (filaGen && selectDigimon.value && dict[selectDigimon.value]) {
-    const digimon = dict[selectDigimon.value];
-    const nombreDigi = selectDigimon.value;
-    [...filaGen.children].forEach((td, idx) => {
-      const campo = generales[idx];
-      td.textContent = traducirValor(campo, digimon[campo], nombreDigi);
-    });
-  }
-
-  // Re-traducir los valores de tablaRequisitos
-  const filaReq = tablaRequisitos.querySelector("tr");
-  if (filaReq && selectDigimon.value && dict[selectDigimon.value]) {
-	const nombreDigimon = selectDigimon.value;
-    const datosOriginales = dict[nombreDigimon];
-    const digimon = procesarDatosDigimon(nombreDigimon, datosOriginales);
-    let i = 0;
-    Object.keys(digimon).forEach(campo => {
-      if (!generales.includes(campo)) {
-        const td = filaReq.children[i];
-		if (td) {
-          td.innerHTML = traducirValor(campo, digimon[campo], nombreDigimon);
-        }
-        i++;
-      }
-    });
-  }
-	// Actualizar títulos de tablas
-	document.getElementById("subtitle3").textContent = t("subtitle3");
-	document.getElementById("subtitle4").textContent = t("subtitle4");
-
-	// Actualizar headers de tabla stats
-	const headersStats = document.querySelectorAll("#tablaStats thead th");
-	const clavesStats = ["ATK", "DEF", "HP", "Vel", "Digipuntos"];
-	headersStats.forEach((th, idx) => th.textContent = t(clavesStats[idx]));
-
-	// Actualizar headers de tabla evoluciones
-	const headersEvoluciones = document.querySelectorAll("#tablaEvoluciones thead th");
-	const clavesEvoluciones = ["LineaEvolutiva", "Evoluciona", "Viene"];
-	headersEvoluciones.forEach((th, idx) => th.textContent = t(clavesEvoluciones[idx]));
-
-	// Actualizar el selector de Scumon/GreatKingScumon si existe
-	const childSelector = document.getElementById("childSelector");
-	if (childSelector && childSelector.options.length > 0) {
-		childSelector.options[0].textContent = t("eligeLineaEvolutiva");
-	}
-}
-
-languageSelector.addEventListener("change", () => {
-  currentLanguage = languageSelector.value;
-  actualizarTextosUI();
-  
-  // Agregar estas líneas para forzar actualización de la tabla
-  if (selectDigimon.value) {
-    selectDigimon.dispatchEvent(new Event('change'));
-  }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  actualizarTextosUI();
-});
-
-function traducirCampo(campo, nombreDigimon = null) {
-  // Excepción: Grademon VICE usa "Errores Requeridos" en vez de "Rango de Errores de Cuido"
-  if (nombreDigimon === "Grademon VICE" && campo === "Error Maximo") {
-    return currentLanguage === 'es' ? "Errores Requeridos" : "Required Errors";
-  }
-  return traducciones[currentLanguage]?.campos?.[campo] || campo;
-}
-
-// Función para formatear el valor de Error Maximo como rango
-// Excepciones: Grademon VICE requiere exactamente 6 errores (no rango)
-function formatearErrorMaximo(valor, nombreDigimon = null) {
-  if (valor === undefined || valor === null || valor === "-") {
-    return valor;
-  }
-
-  const valorStr = String(valor);
-
-  // Excepción: Grademon VICE requiere exactamente el valor, no un rango
-  if (nombreDigimon === "Grademon VICE") {
-    return valorStr;
-  }
-
-  // Si ya es un rango (contiene "-"), devolverlo tal cual
-  if (valorStr.includes("-")) {
-    return valorStr;
-  }
-
-  // Si es un número simple, convertirlo a rango 0-x
-  if (!isNaN(valorStr) && valorStr.trim() !== "") {
-    return "0-" + valorStr;
-  }
-
-  // Si no es ninguno de los anteriores, devolverlo sin cambios
-  return valor;
-}
-
-// Función para formatear el valor de WinRate agregando %
-function formatearWinRate(valor) {
-  if (valor === undefined || valor === null || valor === "-" || valor === "") {
-    return valor;
-  }
-
-  const valorStr = String(valor).trim();
-
-  // Si ya tiene %, devolverlo tal cual
-  if (valorStr.includes("%")) {
-    return valorStr;
-  }
-
-  // Si es un número, agregar %
-  if (!isNaN(valorStr) && valorStr !== "") {
-    return valorStr + "%";
-  }
-
-  // Si no es ninguno de los anteriores, devolverlo sin cambios
-  return valor;
-}
-
-// Función para formatear el valor de Peso como rango (± 5)
-function formatearPeso(valor) {
-  if (valor === undefined || valor === null || valor === "-") {
-    return valor;
-  }
-
-  const valorNum = Number(valor);
-
-  // Si es un número válido, crear el rango ± 5
-  if (!isNaN(valorNum)) {
-    const min = Math.max(0, valorNum - 5); // No puede ser negativo
-    const max = valorNum + 5;
-    return `${min}-${max}`;
-  }
-
-  // Si no es un número, devolverlo sin cambios
-  return valor;
-}
-
-// Función para formatear % Entrenamiento como rango
-function formatearPorcentajeEntrenamiento(valor, nombreDigimon = null) {
-  if (valor === undefined || valor === null || valor === "-") {
-    return valor;
-  }
-
-  // Si ya es un rango (string con guion), devolverlo tal cual
-  if (typeof valor === "string" && valor.includes("-")) {
-    return valor;
-  }
-
-  const valorNum = Number(valor);
-
-  // Excepción para Pillomon: 0% es el máximo permitido
-  if (nombreDigimon === "Pillomon" && valorNum === 0) {
-    return "0";
-  }
-
-  // Si es un número válido, crear el rango desde ese valor hasta 100
-  if (!isNaN(valorNum)) {
-    return `${valorNum}-100`;
-  }
-
-  // Si no es un número, devolverlo sin cambios
-  return valor;
-}
-
-// Función para convertir hora UTC-3 a hora local del navegador
-function convertirHoraALocal(valor) {
-  if (valor === undefined || valor === null || valor === "-") {
-    return valor;
-  }
-
-  const valorStr = String(valor);
-
-  // Detectar si contiene información de hora UTC-3
-  const regexDia = /Día\s*\((\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})\s*UTC-3\)/i;
-  const regexNoche = /Noche\s*\((\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})\s*UTC-3\)/i;
-
-  let match = valorStr.match(regexDia);
-  let esDia = true;
-
-  if (!match) {
-    match = valorStr.match(regexNoche);
-    esDia = false;
-  }
-
-  if (!match) {
-    // No es un formato reconocido, devolver tal cual
-    return valor;
-  }
-
-  const horaInicio = parseInt(match[1]);
-  const minInicio = parseInt(match[2]);
-  const horaFin = parseInt(match[3]);
-  const minFin = parseInt(match[4]);
-
-  // Obtener el offset de la zona horaria local en minutos
-  const offsetLocal = -new Date().getTimezoneOffset(); // En minutos (positivo para UTC+, negativo para UTC-)
-  const offsetUTC3 = -180; // UTC-3 en minutos
-
-  // Diferencia entre la hora local y UTC-3
-  const diferencia = offsetLocal - offsetUTC3; // En minutos
-  const diferenciaHoras = Math.floor(diferencia / 60);
-  const diferenciaMinutos = diferencia % 60;
-
-  // Convertir hora de inicio
-  let nuevaHoraInicio = horaInicio + diferenciaHoras;
-  let nuevosMinInicio = minInicio + diferenciaMinutos;
-
-  if (nuevosMinInicio >= 60) {
-    nuevaHoraInicio++;
-    nuevosMinInicio -= 60;
-  } else if (nuevosMinInicio < 0) {
-    nuevaHoraInicio--;
-    nuevosMinInicio += 60;
-  }
-
-  // Normalizar hora (0-23)
-  if (nuevaHoraInicio >= 24) nuevaHoraInicio -= 24;
-  if (nuevaHoraInicio < 0) nuevaHoraInicio += 24;
-
-  // Convertir hora de fin
-  let nuevaHoraFin = horaFin + diferenciaHoras;
-  let nuevosMinFin = minFin + diferenciaMinutos;
-
-  if (nuevosMinFin >= 60) {
-    nuevaHoraFin++;
-    nuevosMinFin -= 60;
-  } else if (nuevosMinFin < 0) {
-    nuevaHoraFin--;
-    nuevosMinFin += 60;
-  }
-
-  // Normalizar hora (0-23)
-  if (nuevaHoraFin >= 24) nuevaHoraFin -= 24;
-  if (nuevaHoraFin < 0) nuevaHoraFin += 24;
-
-  // Formatear las horas en HH:MM
-  const horaInicioStr = `${String(nuevaHoraInicio).padStart(2, '0')}:${String(nuevosMinInicio).padStart(2, '0')}`;
-  const horaFinStr = `${String(nuevaHoraFin).padStart(2, '0')}:${String(nuevosMinFin).padStart(2, '0')}`;
-
-  // Obtener el nombre de la zona horaria local
-  const nombreZonaHoraria = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const offsetHoras = Math.floor(offsetLocal / 60);
-  const offsetMinutos = Math.abs(offsetLocal % 60);
-  const signo = offsetHoras >= 0 ? '+' : '';
-  const offsetStr = offsetMinutos > 0
-    ? `UTC${signo}${offsetHoras}:${String(offsetMinutos).padStart(2, '0')}`
-    : `UTC${signo}${offsetHoras}`;
-
-  // Traducir "Día" o "Noche" según el idioma actual
-  const textoDiaNoche = esDia
-    ? (currentLanguage === 'es' ? 'Día' : 'Day')
-    : (currentLanguage === 'es' ? 'Noche' : 'Night');
-
-  return `${textoDiaNoche} (${horaInicioStr}-${horaFinStr} ${offsetStr})`;
-}
-
-function traducirValor(campo, valor, nombreDigimon = null) {
-  if (campo === "Nivel" && nivelAEtapa[currentLanguage][valor]) {
-    return nivelAEtapa[currentLanguage][valor];
-  }
-
-  // Formatear Error Maximo como rango
-  if (campo === "Error Maximo") {
-    valor = formatearErrorMaximo(valor, nombreDigimon);
-  }
-
-  // Formatear WinRate agregando %
-  if (campo === "WinRate") {
-    valor = formatearWinRate(valor);
-  }
-
-  // Manejo especial para "Program"
-  if (campo === "Program") {
-    const digimonSeleccionado = selectDigimon.value;
-    if (digimonSeleccionado && specialProgramCases[digimonSeleccionado]) {
-      const programsForDigimon = specialProgramCases[digimonSeleccionado];
-      return "<ul>" +
-        Object.entries(programsForDigimon)
-          .map(function([digimon, program]) {
-            if (Array.isArray(program)) {
-              return program.map(function(p) {
-                return "<li>" + digimon + ": " + p + "</li>";
-              }).join('');
-            } else {
-              return "<li>" + digimon + ": " + program + "</li>";
-            }
-          })
-          .join('') +
-        "</ul>";
-    }
-  }
-
-  // Manejo especial para "Xross"
-  if (campo === "Xross") {
-    const digimonSeleccionado = selectDigimon.value;
-    if (digimonSeleccionado && specialxrossCases[digimonSeleccionado]) {
-      const xrossForDigimon = specialxrossCases[digimonSeleccionado];
-      return "<ul>" +
-        Object.entries(xrossForDigimon)
-          .map(function([digimon, drivers]) {
-            const lista = Array.isArray(drivers) ? drivers : [drivers];
-            return lista.map(function(driver) {
-              return "<li>" + digimon + ": " + driver + "</li>";
-            }).join('');
-          })
-          .join('') +
-        "</ul>";
-    }
-  }
-
-  // Manejo especial para "% Entrenamiento"
-  if (campo === "% Entrenamiento") {
-    const digimonSeleccionado = selectDigimon.value;
-    if (digimonSeleccionado && specialEntrenamientoCases[digimonSeleccionado]) {
-      const entrenamientoForDigimon = specialEntrenamientoCases[digimonSeleccionado];
-      return "<ul>" +
-        Object.entries(entrenamientoForDigimon)
-          .map(function([digimon, valor]) {
-            return "<li>" + digimon + ": " + valor + "</li>";
-          })
-          .join('') +
-        "</ul>";
-    }
-  }
-
-// Reemplaza la sección de "Comida" en la función traducirValor con esto:
-
-// Manejo especial para "Bonus Comida" (flexible para ambos formatos)
-if (campo === "Bonus Comida") {
-  const digimonSeleccionado = selectDigimon.value;
-  if (digimonSeleccionado && specialfoodcases[digimonSeleccionado]) {
-    const foodForDigimon = specialfoodcases[digimonSeleccionado];
-    
-    // Formato nuevo simplificado: "Icemon": ["Verdura Congelada", "Hongo Congelado"]
-    if (Array.isArray(foodForDigimon)) {
-      const comidasTraducidas = foodForDigimon.map(function(comida) {
-        return traducciones[currentLanguage][comida] || comida;
-      });
-      return comidasTraducidas.join(', ');
-    }
-    
-    // Formato anterior complejo: "Icemon": { "Gotsumon": ["Verdura Congelada"], "Yuki Agumon": [...] }
-    if (typeof foodForDigimon === 'object' && !Array.isArray(foodForDigimon)) {
-      return "<ul>" +
-        Object.entries(foodForDigimon)
-          .map(function([digimon, comida]) {
-            if (Array.isArray(comida)) {
-              const comidasTraducidas = comida.map(function(c) {
-                return traducciones[currentLanguage][c] || c;
-              });
-              return "<li>" + digimon + ": " + comidasTraducidas.join(', ') + "</li>";
-            } else {
-              const comidaTraducida = traducciones[currentLanguage][comida] || comida;
-              return "<li>" + digimon + ": " + comidaTraducida + "</li>";
-            }
-          })
-          .join('') +
-        "</ul>";
-    }
-  }
-}
-  // Traducciones generales
-  const idioma = traducciones[currentLanguage] || {};
-  const traduccionesCampo = idioma.campos || {};
-  const valorLimpio = String(valor).trim();
-
-  if (traduccionesCampo[valorLimpio]) {
-    return traduccionesCampo[valorLimpio];
-  }
-
-  if (idioma[valorLimpio]) {
-    return idioma[valorLimpio];
-  }
-
-  return valor;
-}
-
-// ============================================
-// FUNCIONES PARA DESCARGA DE IMAGEN
-// ============================================
-
-function t(key) {
-  return traducciones[currentLanguage]?.[key] || key;
-}
-
-function downloadDigimonImage() {
-  if (window.location.protocol === 'file:') {
-    alert(t('downloadLocalError'));
-    return;
-  }
-
-  const container = document.querySelector('.container');
-  const digimonSelect = document.getElementById('selectDigimon');
-  const digimonName = digimonSelect.value || 'digimon';
-  const btn = document.getElementById('downloadBtn');
-
-  btn.textContent = t('downloadGenerating');
-  btn.disabled = true;
-
-  html2canvas(container, {
-    backgroundColor: '#212121',
-    scale: 2,
-    useCORS: true
-  }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = `${digimonName}_info.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-
-    btn.textContent = t('downloadBtn');
-    btn.disabled = false;
-  }).catch(err => {
-    console.error('Error:', err);
-    alert(t('downloadError'));
-    btn.textContent = t('downloadBtn');
-    btn.disabled = false;
-  });
-}
-
-// Mostrar botón de descarga cuando se selecciona un Digimon
-document.getElementById('selectDigimon').addEventListener('change', function() {
-  const downloadBtn = document.getElementById('downloadBtn');
-  if (this.value) {
-    downloadBtn.style.display = 'inline-block';
-    downloadBtn.textContent = t('downloadBtn');
-  } else {
-    downloadBtn.style.display = 'none';
-  }
-});
-
-// Agregar evento click al botón de descarga
-document.getElementById('downloadBtn').addEventListener('click', downloadDigimonImage);
-
-// Actualizar texto del botón cuando cambia el idioma
-const originalLanguageHandler = languageSelector.onchange;
-languageSelector.addEventListener('change', function() {
-  const downloadBtn = document.getElementById('downloadBtn');
-  if (downloadBtn.style.display !== 'none') {
-    downloadBtn.textContent = t('downloadBtn');
-  }
-});
-
+// Ejecutar cuando cambia el idioma
+document.getElementById('languageSelector')?.addEventListener('change', updateNavMenuLanguage);
 </script>
+
 </body>
 </html>
+
+

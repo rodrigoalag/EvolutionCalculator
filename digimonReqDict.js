@@ -139,14 +139,14 @@ const digimonReqDict = {
 	},	
     "ShootingStarmon": {
 	"ID": 57, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto",
-    "Peso": 30, "Error Maximo": 6, "% Entrenamiento": 80, "WinRate": 65, "Combates Minimos": 20, "Xross": "4 Pickmon Driver"
+    "Peso": 30, "Error Maximo": 6, "% Entrenamiento": 80, "WinRate": 65, "Combates Minimos": 20, "Xross": "4 VS000 Driver"
 	},
     "Icemon": {
 	"ID": 86, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Hielo",
     "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 50, "Combates Minimos": 15, "Program": "Frost", "Bonus Comida": "Verdura Congelada"
 	},
     "Starmon": {
-	"ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto",
+	"ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
     "Peso": 15, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 50, "Combates Minimos": 15
 	},
     "Metal Greymon (Virus)": {
@@ -160,7 +160,7 @@ const digimonReqDict = {
     "Mametyramon": {
 	"ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Peso": 10, "Error Maximo": 2, "% Entrenamiento": 60, "Bonus Errores": "1+",
-	"WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "Tyranomon Driver"
+	"WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 V0003 Driver"
   },
     "Aero V-dramon": {
 	"ID": 15, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dragon",
@@ -190,7 +190,7 @@ const digimonReqDict = {
   },
     "GigaWaruMonzaemon": {
 	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Compuesto", "Peso": 40,
-	"Xross":"3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon"
+	"Xross":"3 M002 Driver en WaruMonzaemon o 2 M002 Driver y 1 M003 Driver en Monzaemon"
   }, 
     "Metal Tyranomon": {
 	"ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
@@ -223,7 +223,7 @@ const digimonReqDict = {
   },
     "BigMamemon": {
 	"ID": 38, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto",
-	"Xross":"3 Mamemon Driver"
+	"Xross":"3 V0019 Driver"
   },
     "RizeGreymon": {
 	"ID": 73, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
@@ -260,27 +260,27 @@ const digimonReqDict = {
   },   
     "Insekimon Low Tier": {
 	"ID": 87, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
-    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Driver Equipado": "Starmon o ShootingStarmon Driver"
+    "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Driver Equipado": "1 VS003 Driver o 1 VS002 Driver"
   }, 
     "Insekimon Mid Tier Dark": {
 	"ID": 88, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
-    "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "DarkSuperStarmon Driver"
+    "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 VS005 Driver"
   }, 
     "Insekimon Mid Tier Super": {
 	"ID": 88, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
-    "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "SuperStarmon Driver"
+    "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 VS004 Driver"
   }, 
     "Insekimon High Tier": {
 	"ID": 90, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
-    "Peso": 30, "Error Maximo": 0, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "SuperStarmon y DarkSuperStarmon Driver"
+    "Peso": 30, "Error Maximo": 0, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 VS004 Driver + 1 VS005 Driver"
   },
     "MetalEtemon": {
-	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante","Peso": 40,
+	"ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Marioneta","Peso": 40,
 	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Mecha"
   },
     "PlatinumNumemon": {
 	"ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 55,
-	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 PlatinumScumon Driver"
+	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 M007 Driver"
   },
     "Mugendramon": {
 	"ID": 27, "Tama": "V0", "Nivel": 6, "Atributo": "Virus", "Tipo": "Maquina", "Peso": 40,
@@ -288,11 +288,11 @@ const digimonReqDict = {
   },
      "Chackmon": {
 	"ID": 93, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Hielo","Peso":10,
-	"% Entrenamiento": 80,"Error Maximo": 6, "Combates Minimos": 15, "WinRate": 60, "Xross": "Ice Spirit H"
+	"% Entrenamiento": 80,"Error Maximo": 6, "Combates Minimos": 15, "WinRate": 60, "Xross": "1 SP000 Driver"
   },
     "Blizzarmon": {
 	"ID": 94, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Hielo","Peso":30,
-	"% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 25, "WinRate": 70, "Xross": "Ice Spirit B"
+	"% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 25, "WinRate": 70, "Xross": "1 SP001 Driver"
   },
     "Daipenmon": {
 	"ID": 95, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
@@ -344,12 +344,13 @@ const digimonReqDict = {
   },   
        "BomberNanimon": {
 	"ID": 111 , "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
-    "Peso": 15, "Xross": "1 Mamemon Driver"
+    "Peso": 15, "Xross": "1 V0019 Driver"
   },   
      "PrinceMamemon": {
 	"ID": 107, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante","Peso": 60,
-	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal"
-  }, 
+	"% Entrenamiento": 100,"Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal",
+	"Victorias": 130, "Driver Equipado": "1 EX009 Driver"
+  },
       "Chamblemon": {
 	"ID": 107, "Tama": "P", "Nivel": 4, "Atributo": "Virus", "Tipo": "Planta", "Peso": 16,
 	"% Entrenamiento": 100,"Error Maximo": 1, "Combates Minimos": 15, "WinRate": 50
@@ -390,11 +391,11 @@ const digimonReqDict = {
   },
      "Wargreymon": {
 	"ID": 170, "Tama": "V0", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Dragon","Peso": 30,
-	"% Entrenamiento": 100,"Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias Minimas": 175
+	"% Entrenamiento": 100,"Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias": 175
   }, 
      "BlackWargreymon": {
 	"ID": 171, "Tama": "D", "Nivel": 6, "Atributo": "Virus", "Tipo": "Dragon","Peso": 30,
-	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias Minimas": 140
+	"% Entrenamiento": 100,"Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias": 140
   },
      "Dodomon": {
 	"ID": "146", "Tama": "PR", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5
@@ -438,7 +439,7 @@ const digimonReqDict = {
   },
   "Penmon": {
 	"ID": 179, "Tama": "SP", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Hielo", "Peso": 15,
-    "Xross":"Ice Spirit A o Ice Spirit H + Ice Spirit B"
+    "Xross":"1 SP004 Driver"
   },
   "Kekomon": {
 	"ID": 175, "Tama": "BG", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno", "Peso": 5
@@ -448,10 +449,10 @@ const digimonReqDict = {
   },
     "Gekkomon": {
 	"ID": 177, "Tama": "BG", "Nivel": 3, "Atributo": "Data", "Tipo": "Dinosaurio",
-    "Peso": 18, "Error Maximo": 6
+    "Peso": 18, "Error Maximo": 6, "Stat Superior": "ATK"
   },
       "BanchoMamemon": {
-	"ID": 182, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": "",
+	"ID": 182, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante", "Peso": 15,
 	"% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Combat"
   },
     "Armalizamon": {
@@ -473,4 +474,107 @@ const digimonReqDict = {
   "Entmon": {
 	"ID": 176, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": ""
   },
+    "Tyumon": {
+	"ID": 184, "Tama": "M", "Nivel": 3, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 10, "Program":"Trash"
+  },
+    "Mercuremon": {
+	"ID": 189, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Mutante", "Peso": 15,
+  "% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 15, "WinRate": 50, "Xross": "1 SP013 Driver"
+  },
+    "ScumonTyumon": {
+	"ID": 185, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Xross": "Driverinstall"
+  },
+    "PlatinumScumonTyumon": {
+	"ID": 187, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Comida": "Chatarra"
+  },
+    "ScumonTyumonHigh": {
+	"ID": 186, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20,
+  "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 50, "Combates Minimos": 15
+  },
+    "PlatinumScumonTyumonHigh": {
+	"ID": 188, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Comida": "Chatarra"
+  },
+    "Sephirothmon": {
+	"ID": 190, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Mutante", "Peso": 30,
+  "% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 25, "WinRate": 60, "Xross": "1 SP014 Driver"
+  },
+    "Chiropmon": {
+	"ID": 156, "Tama": "BG", "Nivel": 3, "Atributo": "Virus", "Tipo": "Bestia",
+    "Peso": 15, "Error Maximo": 6, "Stat Superior": "Vel"
+  },
+    "Pristimon": {
+	"ID": 999, "Tama": "BG", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Marioneta",
+    "Peso": "", "Error Maximo": 6, "Stat Superior": "ATK"
+  },
+};
+
+const specialxrossCases = {
+  "Mugendramon": {
+    "Megadramon":            "1 V0009 Driver + 1 V0013 Driver + 1 V0014 Driver + 1 V0010 Driver",
+    "Gigadramon":            "1 V0009 Driver + 1 V0013 Driver + 1 V0014 Driver + 1 V0010 Driver",
+    "Metal Greymon (Virus)": "1 V0015 Driver + 1 V0013 Driver + 1 V0014 Driver + 1 V0010 Driver",
+    "Metal Tyranomon":       "1 V0009 Driver + 1 V0015 Driver + 1 V0014 Driver + 1 V0010 Driver",
+    "MetalMamemon":          "1 V0009 Driver + 1 V0013 Driver + 1 V0015 Driver + 1 V0010 Driver",
+    "Andromon":              "1 V0009 Driver + 1 V0013 Driver + 1 V0014 Driver + 1 V0015 Driver"
+  },
+  "Daipenmon": {
+    "Blizzarmon":   ["1 SP000 Driver"],
+    "Polarbearmon": ["1 SP001 Driver + 1 SP000 Driver", "1 SP004 Driver"]
+  },
+  "Chackmon": {
+    "Icemon":      "1 SP000 Driver",
+    "Yukidarumon": "1 SP000 Driver",
+    "Yuki Agumon": "1 SP000 Driver",
+    "Penmon":      "1 SP000 Driver"
+  },
+  "Shoutmon SH": {
+    "Shoutmon":         "1 VS001 Driver",
+    "Shoutmon (Black)": "1 VS001 Driver",
+    "Starmons":         ["1 VS009 Driver", "1 VS010 Driver"]
+  },
+  "Shoutmon + Star Sword": {
+    "Shoutmon":         "1 VS001 Driver",
+    "Shoutmon (Black)": "1 VS001 Driver",
+    "Starmons":         ["1 VS009 Driver", "1 VS010 Driver"]
+  },
+  "ScumonTyumon": {
+    "Scumon": "1 M017 Driver",
+    "Tyumon": "1 M005 Driver"
+    },
+};
+
+// Human-readable version of specialxrossCases — values match xrossinstallop dropdown strings for scoring
+const specialxrossScoring = {
+  "Mugendramon": {
+    "Megadramon":            ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
+    "Gigadramon":            ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
+    "Metal Greymon (Virus)": ["Megadramon Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
+    "Metal Tyranomon":       ["Metal Greymon (Virus) Driver + Megadramon Driver + MetalMamemon Driver + Andromon Driver"],
+    "MetalMamemon":          ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + Megadramon Driver + Andromon Driver"],
+    "Andromon":              ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Megadramon Driver"]
+  },
+  "Daipenmon": {
+    "Blizzarmon":   ["Ice Spirit H"],
+    "Polarbearmon": ["Ice Spirit B + Ice Spirit H", "Ice Spirit A"]
+  },
+  "Chackmon": {
+    "Icemon":      ["Ice Spirit H"],
+    "Yukidarumon": ["Ice Spirit H"],
+    "Yuki Agumon": ["Ice Spirit H"],
+    "Penmon":      ["Ice Spirit H"]
+  },
+  "Shoutmon SH": {
+    "Shoutmon":         ["Starmons Driver"],
+    "Shoutmon (Black)": ["Starmons Driver"],
+    "Starmons":         ["Shoutmon Driver", "Shoutmon (Black) Driver"]
+  },
+  "Shoutmon + Star Sword": {
+    "Shoutmon":         ["Starmons Driver"],
+    "Shoutmon (Black)": ["Starmons Driver"],
+    "Starmons":         ["Shoutmon Driver", "Shoutmon (Black) Driver"]
+  },
+  "ScumonTyumon": {
+    "Scumon": ["Scumon Driver"],
+    "Tyumon": ["Tyumon Driver"]
+    },
 };

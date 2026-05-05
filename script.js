@@ -688,7 +688,6 @@ function onTamaChanged(tamaElegido) {
   });
 }
 
-let tamaElegido 
 // Manejar cambio en Nivel (MODIFICADO)
 nivelSelect.addEventListener("change", () => {
   const nivelElegido = parseInt(nivelSelect.value);
@@ -1098,67 +1097,67 @@ function generarFormulario() {
   console.log("Lista ANTES de filtrar por Tama (desde digimonstattier):", nextDigimons.map(([name]) => name));
 
   // FILTRADO UNIFICADO: Tama + Cross Tama Evolution + Bloqueos Evolución
-  if (tamaElegido !== "Todos") {
-    console.log(`Filtrando por Tama: ${tamaElegido}`);
+  if (currentTama !== "Todos") {
+    console.log(`Filtrando por Tama: ${currentTama}`);
     const selectedNormalizado = selected.toLowerCase().trim();
-    
+
     nextDigimons = nextDigimons.filter(([name, _]) => {
       // Excepción especial para Numemon y Scumon - nunca eliminar
       if (name === "Numemon" || name === "Scumon" || name === "Nanimon") {
         console.log(`${name} mantenido por excepción especial`);
         return true;
       }
-      
+
       // Buscar el digimon en digimonReqDict
       const digimonData = digimonReqDict[name];
-      
+
       if (digimonData && digimonData["Tama"]) {
         const tamaDigimon = digimonData["Tama"];
-        
+
         // Si el Tama coincide, mantenerlo
-        if (tamaDigimon === tamaElegido) {
+        if (tamaDigimon === currentTama) {
           console.log(`${name} mantenido - Tama coincide: ${tamaDigimon}`);
           return true;
         }
-        
+
         // Si el Tama NO coincide, verificar Cross Tama Evolution
-        console.log(`${name} tiene Tama diferente: ${tamaDigimon} vs ${tamaElegido}`);
-        
+        console.log(`${name} tiene Tama diferente: ${tamaDigimon} vs ${currentTama}`);
+
         // Verificar si este digimon puede ser obtenido por Cross Tama Evolution
         const crossEvoData = crosstamaevo[name];
         if (crossEvoData && Array.isArray(crossEvoData)) {
           // Verificar si el digimon selected está en la lista de fuentes para este cross evo
-          const puedeHacerCrossEvo = crossEvoData.some(source => 
+          const puedeHacerCrossEvo = crossEvoData.some(source =>
             source.toLowerCase().trim() === selectedNormalizado
           );
-          
+
           if (puedeHacerCrossEvo) {
             console.log(`${name} mantenido por Cross Tama Evolution - ${selected} puede evolucionar a ${name}`);
             return true;
           }
         }
-        
+
         // Verificar si el selected está en bloqueosEvolucion y este digimon es el valor principal
         if (bloqueosEvolucion[name] && Array.isArray(bloqueosEvolucion[name])) {
-          const estaEnBloqueos = bloqueosEvolucion[name].some(blockedSource => 
+          const estaEnBloqueos = bloqueosEvolucion[name].some(blockedSource =>
             blockedSource.toLowerCase().trim() === selectedNormalizado
           );
-          
+
           if (estaEnBloqueos) {
             console.log(`${name} mantenido por Bloqueos Evolución - ${selected} está en la lista de bloqueos para ${name}`);
             return true;
           }
         }
-        
+
         // Si no cumple ninguna condición, eliminarlo
         console.log(`${name} eliminado - No hay Cross Tama Evolution ni Bloqueos Evolución disponible desde ${selected}`);
         return false;
       }
-      
+
       console.log(`${name} eliminado - No encontrado en digimonReqDict o sin Tama`);
       return false;
     });
-    
+
     console.log("Lista después de filtrar por Tama + Cross Tama Evolution + Bloqueos Evolución:", nextDigimons.map(([name]) => name));
   }
 
@@ -2085,66 +2084,66 @@ if (tieneExcepcionAbsoluta) {
 }
 
 // FILTRADO UNIFICADO: Tama + Cross Tama Evolution + Bloqueos Evolución
-if (!tieneExcepcionAbsoluta && tamaElegido !== "Todos") {
-  console.log(`Filtrando por Tama: ${tamaElegido}`);
+if (!tieneExcepcionAbsoluta && currentTama !== "Todos") {
+  console.log(`Filtrando por Tama: ${currentTama}`);
   const selectedNormalizado = selected.toLowerCase().trim();
-  
+
   nextDigimons = nextDigimons.filter(([name, _]) => {
     // Excepción especial para Numemon y Scumon - nunca eliminar
     if (name === "Numemon" || name === "Scumon" || name === "Nanimon") {
       console.log(`${name} mantenido por excepción especial`);
       return true;
     }
-    
+
     // Buscar el digimon en digimonReqDict
     const digimonData = digimonReqDict[name];
-    
+
     if (digimonData && digimonData["Tama"]) {
       const tamaDigimon = digimonData["Tama"];
-      
+
       // Si el Tama coincide, mantenerlo
-      if (tamaDigimon === tamaElegido) {
+      if (tamaDigimon === currentTama) {
         console.log(`${name} mantenido - Tama coincide: ${tamaDigimon}`);
         return true;
       }
-      
+
       // Si el Tama NO coincide, verificar condiciones especiales
-      console.log(`${name} tiene Tama diferente: ${tamaDigimon} vs ${tamaElegido}`);
-      
+      console.log(`${name} tiene Tama diferente: ${tamaDigimon} vs ${currentTama}`);
+
       // 1. Verificar Cross Tama Evolution
       const crossEvoData = crosstamaevo[name];
       if (crossEvoData && Array.isArray(crossEvoData)) {
-        const puedeHacerCrossEvo = crossEvoData.some(source => 
+        const puedeHacerCrossEvo = crossEvoData.some(source =>
           source.toLowerCase().trim() === selectedNormalizado
         );
-        
+
         if (puedeHacerCrossEvo) {
           console.log(`${name} mantenido por Cross Tama Evolution - ${selected} puede evolucionar a ${name}`);
           return true;
         }
       }
-      
+
       // 2. Verificar Bloqueos Evolución (selected está en la lista de permitidos)
       if (bloqueosEvolucion[name] && Array.isArray(bloqueosEvolucion[name])) {
-        const estaEnBloqueos = bloqueosEvolucion[name].some(blockedSource => 
+        const estaEnBloqueos = bloqueosEvolucion[name].some(blockedSource =>
           blockedSource.toLowerCase().trim() === selectedNormalizado
         );
-        
+
         if (estaEnBloqueos) {
           console.log(`${name} mantenido por Bloqueos Evolución - ${selected} está en la lista de permitidos para ${name}`);
           return true;
         }
       }
-      
+
       // Si no cumple ninguna condición especial, eliminarlo
       console.log(`${name} eliminado - Tama diferente y sin condiciones especiales desde ${selected}`);
       return false;
     }
-    
+
     console.log(`${name} eliminado - No encontrado en digimonReqDict o sin Tama`);
     return false;
   });
-  
+
   console.log("Lista después de filtrar por Tama + Cross Tama Evolution + Bloqueos Evolución:", nextDigimons.map(([name]) => name));
 }
 

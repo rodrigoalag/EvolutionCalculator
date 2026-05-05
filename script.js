@@ -392,31 +392,7 @@ const specialProgramCases = {
         "Penmon": "Ore"
 }};
 
-const specialxrossCases = {
-    "Mugendramon": {
-        "Megadramon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver",
-		"Gigadramon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver",
-        "Metal Greymon (Virus)": "Megadramon Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver",
-		"Metal Tyranomon": "Metal Greymon (Virus) Driver + Megadramon Driver + MetalMamemon Driver + Andromon Driver",
-		"MetalMamemon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + Megadramon Driver + Andromon Driver",
-		"Andromon": "Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Megadramon Driver"
-
-},
-	"Daipenmon": {
-		"Blizzarmon":["Ice Spirit H"],
-		"Polarbearmon": ["Ice Spirit B + Ice Spirit H","Ice Spirit A"]
-	},
-	"Shoutmon SH": {
-		"Shoutmon": "Starmons Driver",
-		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver"]
-	},
-	"Shoutmon + Star Sword": {
-		"Shoutmon": "Starmons Driver",
-		"Shoutmon (Black)": "Starmons Driver",
-		"Starmons": ["Shoutmon Driver", "Shoutmon (Black) Driver"]
-	}
-};
+// specialxrossCases is defined in digimonReqDict.js
 /*const specialfoodcases = {
     "Icemon": {
 		"Gotsumon": ["Verdura Congelada", "Hongo Congelado"],

@@ -541,14 +541,6 @@ const digimonLabel = document.createElement("label");
 digimonLabel.textContent = getSelectText('selectDigimon'); // Usar función de traducción
 digimonLabel.setAttribute("for", "digimonSelect");
 
-// Crear label y select de Nivel
-const nivelLabel = document.createElement("label");
-nivelLabel.textContent = getSelectText('selectLevel');
-nivelLabel.setAttribute("for", "nivelSelect");
-
-const nivelSelect = document.createElement("select");
-nivelSelect.id = "nivelSelect";
-
 // Insertar los selectores de Nivel y Digimon después del contenedor de iconos
 const tamaSection = document.querySelector('.tama-selector-section');
 if (tamaSection) {

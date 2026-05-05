@@ -1,0 +1,2929 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Ranking de Digimon por Digipuntos</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <style>
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 70px;
+}
+
+h1, h2, h3 { color: #4ecdc4; }
+
+/* Menú hamburguesa */
+#nav-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.95);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: #4ecdc4;
+  border-radius: 2px;
+}
+
+#nav-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: rgba(20, 20, 40, 0.98);
+  border-right: 1px solid rgba(78, 205, 196, 0.3);
+  z-index: 150;
+  padding: 20px;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78, 205, 196, 0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#nav-menu h3 img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link {
+  display: block;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.nav-link img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link:hover { background: rgba(78, 205, 196, 0.2); color: #fff; }
+.nav-link.active { background: rgba(78, 205, 196, 0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.5;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.nav-credits ul {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+.nav-credits li {
+  margin-bottom: 8px;
+}
+.nav-credits a {
+  color: #4ecdc4;
+  text-decoration: none;
+}
+.nav-credits a:hover {
+  text-decoration: underline;
+}
+#nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
+  display: none;
+}
+#nav-overlay.active { display: block; }
+
+/* Selector de idioma */
+    /* Estilos originales de StatRanking */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    #selectorContainer {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem 2rem;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: rgba(30, 30, 50, 0.4);
+      border: 1px solid rgba(78, 205, 196, 0.2);
+      border-radius: 8px;
+    }
+
+    .selectorItem {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .selectorItem label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #ccc;
+    }
+
+    .selectorItem select {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 6px;
+      background: rgba(40, 40, 60, 0.8);
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .selectorItem select:hover {
+      border-color: #4ecdc4;
+      background: rgba(40, 40, 60, 1);
+    }
+
+    .selectorItem select:focus {
+      outline: none;
+      border-color: #4ecdc4;
+      box-shadow: 0 0 8px rgba(78, 205, 196, 0.3);
+    }
+
+    /* Estilos para la tabla de ranking */
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      overflow-x: auto;
+    }
+
+    .ranking-table th,
+    .ranking-table td {
+      padding: 0.5rem;
+      text-align: center;
+      border: 1px solid #ddd;
+      vertical-align: middle;
+    }
+
+    .ranking-table th {
+      background-color: transparent;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+
+    /* Estilos para las imágenes en la tabla */
+    .digimon-img {
+      width: 60px !important;
+      height: 60px !important;
+      object-fit: contain;
+      border-radius: 8px;
+      background-color: transparent;
+    }
+
+    /* Estilos para clasificaciones */
+    .tier-low { background-color: transparent; }
+    .tier-mid-low { background-color: transparent; }
+    .tier-mid { background-color: transparent; }
+    .tier-mid-high { background-color: transparent; }
+    .tier-high { background-color: transparent; }
+    .tier-high-plus { background-color: transparent; }
+
+    /* Estilos para headers ordenables */
+    .sortable-header {
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      transition: background-color 0.2s ease;
+    }
+
+    .sortable-header:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .sortable-header.active {
+      background-color: transparent;
+      font-weight: bold;
+    }
+
+    .sort-icon {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 0.9em;
+      opacity: 0.4;
+      transition: opacity 0.2s ease;
+    }
+
+    .sortable-header.active .sort-icon {
+      opacity: 1;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .sortable-header:hover .sort-icon {
+      opacity: 0.7;
+    }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+      .container {
+        max-width: 100%;
+        overflow-x: auto;
+      }
+      
+      .digimon-img {
+        width: 40px !important;
+        height: 40px !important;
+      }
+      
+      .ranking-table {
+        font-size: 0.8rem;
+      }
+      
+      .ranking-table th,
+      .ranking-table td {
+        padding: 0.3rem;
+        font-size: 0.7rem;
+      }
+    }
+
+    /* Wrapper para scroll horizontal en móviles */
+    .table-wrapper {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    /* Estilos para filtros */
+    .filters-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-end;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.02);
+      border-radius: 8px;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .filter-item label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .filter-item input,
+    .filter-item select {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      min-width: 150px;
+    }
+
+    .filter-item input[type="number"] {
+      min-width: 100px;
+    }
+
+    .filter-item input[type="range"] {
+      min-width: 100%;
+      cursor: pointer;
+    }
+
+    .filter-item input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #2196F3;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .filter-item input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: #2196F3;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+    }
+
+    .filter-dropdown {
+      position: relative;
+      min-width: 200px;
+    }
+
+    .filter-dropdown-button {
+      padding: 0.5rem;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #2b2b2b;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .filter-dropdown-button:hover {
+      background-color: #3a3a3a;
+      border-color: #555;
+    }
+
+    .filter-dropdown-button.active {
+      border-color: #2196F3;
+      border-width: 2px;
+    }
+
+    .filter-dropdown-arrow {
+      margin-left: 0.5rem;
+      font-size: 0.7rem;
+      transition: transform 0.2s ease;
+    }
+
+    .filter-dropdown-button.active .filter-dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    .checkbox-container {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid #444;
+      border-radius: 4px;
+      padding: 0.5rem;
+      background-color: #2b2b2b;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .checkbox-container.show {
+      display: block;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .checkbox-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      cursor: pointer;
+      width: auto;
+      min-width: auto;
+    }
+
+    .checkbox-item label {
+      cursor: pointer;
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: normal;
+      flex: 1;
+      color: white;
+    }
+
+    .checkbox-item.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .filter-count {
+      font-size: 0.75rem;
+      color: #666;
+      margin-left: 0.5rem;
+    }
+
+    .clear-filters-btn {
+      padding: 0.5rem 1rem;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      align-self: flex-end;
+    }
+
+    .clear-filters-btn:hover {
+      background-color: #d32f2f;
+    }
+
+    @media (max-width: 768px) {
+      .filters-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-item input,
+      .filter-item select {
+        min-width: 100%;
+      }
+
+      .clear-filters-btn {
+        align-self: stretch;
+      }
+    }
+
+    /* Estilos para botones de descarga */
+    .download-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .download-btn {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 2px solid #4CAF50;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .download-btn:hover {
+      background-color: #45a049;
+      border-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+    }
+
+    .download-btn.xlsx {
+      background-color: #2196F3;
+      border-color: #2196F3;
+    }
+
+    .download-btn.xlsx:hover {
+      background-color: #0b7dda;
+      border-color: #0b7dda;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Librería para exportar a XLSX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <script src="digimonReqDict.js"></script>
+  <script src="digimonstattier.js"></script>
+
+<!-- Menú de navegación hamburguesa -->
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3>🔧 Herramientas</h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Evo Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/Digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link active"><img src="./pageicons/Ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/Digidex.png" alt="Digidex"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/Agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <div class="nav-divider"></div>
+  <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="Créditos"> Créditos</h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomé prestado sus ideas para hacer las mejoras</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </div>
+</nav>
+
+  <main>
+    <section>
+      <div id="selectorContainer">
+        <div class="selectorItem">
+          <label for="selectNivel">Seleccionar Nivel:</label>
+          <select id="selectNivel">
+            <option value="">-- Elige un Nivel --</option>
+          </select>
+        </div>
+		<div class="selectorItem">
+		  <label for="selectTipoStats" id="labelTipoStats">Tipo de Stats:</label>
+		  <select id="selectTipoStats">
+			<option value="base">Stats Base</option>
+			<option value="heredados">Stats Heredados</option>
+		  </select>
+		</div>
+		<div class="selectorItem">
+		  <label for="selectIdioma" id="labelIdioma">Idioma:</label>
+		  <select id="selectIdioma">
+			<option value="es">Español</option>
+			<option value="en">English</option>
+		  </select>
+		</div>
+      </div>
+    </section>
+
+    <!-- Texto explicativo -->
+    <section>
+      <p id="explanationText" data-translate="explanation" style="display: block; max-width: 800px; margin: 1rem auto; text-align: center; font-style: italic; color: #666; line-height: 1.5;">
+        Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.
+      </p>
+
+      <!-- Botones de descarga -->
+      <div class="download-buttons" id="downloadButtons" style="display: flex; justify-content: center; gap: 1rem;">
+        <button class="download-btn csv" id="downloadCSV">
+          📥 Descargar CSV
+        </button>
+        <button class="download-btn xlsx" id="downloadXLSX">
+          📊 Descargar XLSX
+        </button>
+      </div>
+    </section>
+
+    <section class="container">
+      <!-- Filtros -->
+      <div id="filtersContainer" class="filters-container" style="display: flex;">
+        <div class="filter-item">
+          <label id="labelFilterDigimon">Filtrar por Digimon:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterDigimonButton">
+              <span id="filterDigimonText">Todos</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterDigimonContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item" id="filterEvolucionAnteriorItem">
+          <label id="labelFilterEvolucionAnterior">Evolución Anterior:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterEvolucionAnteriorButton">
+              <span id="filterEvolucionAnteriorText">Todas</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterEvolucionAnteriorContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item">
+          <label id="labelFilterClasificacion">Filtrar por Clasificación:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterClasificacionButton">
+              <span id="filterClasificacionText">Todas</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterClasificacionContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item">
+          <label id="labelFilterAtributo">Filtrar por Atributo:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterAtributoButton">
+              <span id="filterAtributoText">Todos</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterAtributoContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item">
+          <label id="labelFilterTipo">Filtrar por Tipo:</label>
+          <div class="filter-dropdown">
+            <button type="button" class="filter-dropdown-button" id="filterTipoButton">
+              <span id="filterTipoText">Todos</span>
+              <span class="filter-dropdown-arrow">▼</span>
+            </button>
+            <div class="checkbox-container" id="filterTipoContainer">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <div class="filter-item" style="min-width: 250px;">
+          <label id="labelFilterDigipuntos">
+            Digipuntos: <span id="digipuntosRangeValue">Todos</span>
+          </label>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="number" id="filterDigipuntosMin" min="0" max="100" step="0.1" value="0" style="width: 80px; padding: 0.3rem;">
+            <span style="color: #666;">-</span>
+            <input type="number" id="filterDigipuntosMax" min="0" max="100" step="0.1" value="100" style="width: 80px; padding: 0.3rem;">
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #666; margin-top: 0.3rem;">
+            <span>Min: <span id="digipuntosMinDisplay">0</span></span>
+            <span>Max: <span id="digipuntosMaxDisplay">100</span></span>
+          </div>
+        </div>
+        <button class="clear-filters-btn" id="clearFiltersBtn">Limpiar Filtros</button>
+      </div>
+
+      <div id="rankingContainer">
+        <div class="table-wrapper">
+          <table id="rankingTable" class="ranking-table" style="display: table;">
+            <thead>
+              <tr>
+                <th id="headerDigimon">Digimon</th>
+                <th id="headerLineaEvolutiva">Línea Evolutiva</th>
+                <th id="headerClasificacion">Clasificación</th>
+                <th id="headerAtributo" class="sortable-header" data-sort="atributo">Atributo<span class="sort-icon">↓</span></th>
+                <th id="headerTipo" class="sortable-header" data-sort="tipo">Tipo<span class="sort-icon">↓</span></th>
+                <th id="headerImagen">Imagen</th>
+                <th class="sortable-header" data-sort="hp">HP<span class="sort-icon">↓</span></th>
+                <th class="sortable-header" data-sort="atk">ATK<span class="sort-icon">↓</span></th>
+                <th class="sortable-header" data-sort="def">DEF<span class="sort-icon">↓</span></th>
+                <th class="sortable-header" data-sort="vel">SPD<span class="sort-icon">↓</span></th>
+                <th id="headerDigipuntos" class="sortable-header active" data-sort="digipuntos">Digipuntos<span class="sort-icon">↓</span></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+// Variables globales
+let idiomaActual = 'es';
+let campoOrdenamiento = 'digipuntos';
+let ordenDescendente = true;
+let datosActuales = [];
+let datosSinFiltrar = []; // Guardar datos sin filtrar
+let procesandoClick = false;
+let tipoStatsActual = 'base'; // 'base' o 'heredados'
+
+// Función para calcular stats heredados (40% con redondeo)
+function calcularStatsHeredados(babyIStats, babyIIStats, childBaseStats) {
+  const heredadoBabyI = {
+    atk: Math.round(babyIStats.ATK * 0.4),
+    def: Math.round(babyIStats.DEF * 0.4),
+    hp: Math.round(babyIStats.HP * 0.4),
+    vel: Math.round(babyIStats.Vel * 0.4)
+  };
+
+  const heredadoBabyII = {
+    atk: Math.round(babyIIStats.ATK * 0.4),
+    def: Math.round(babyIIStats.DEF * 0.4),
+    hp: Math.round(babyIIStats.HP * 0.4),
+    vel: Math.round(babyIIStats.Vel * 0.4)
+  };
+
+  return {
+    atk: childBaseStats.ATK + heredadoBabyI.atk + heredadoBabyII.atk,
+    def: childBaseStats.DEF + heredadoBabyI.def + heredadoBabyII.def,
+    hp: childBaseStats.HP + heredadoBabyI.hp + heredadoBabyII.hp,
+    vel: childBaseStats.Vel + heredadoBabyI.vel + heredadoBabyII.vel,
+    heredadoBabyI,
+    heredadoBabyII
+  };
+}
+
+// Función para calcular stats con herencia completa para cualquier Digimon
+function calcularStatsConHerencia(nombreDigimon, lineaEvolutiva) {
+  const statsBase = digimonstattier[nombreDigimon];
+  if (!statsBase) return null;
+
+  const nivel = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Baby I no tiene herencia
+  if (nivel === 1) {
+    return {
+      atk: statsBase.ATK,
+      def: statsBase.DEF,
+      hp: statsBase.HP,
+      vel: statsBase.Vel
+    };
+  }
+
+  // Baby II tiene herencia del Baby I (40%)
+  if (nivel === 2) {
+    // Encontrar Baby I en la línea evolutiva
+    let babyI = null;
+    lineaEvolutiva.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor === 1) babyI = predecesor;
+    });
+
+    if (!babyI) {
+      return {
+        atk: statsBase.ATK,
+        def: statsBase.DEF,
+        hp: statsBase.HP,
+        vel: statsBase.Vel
+      };
+    }
+
+    const babyIStats = digimonstattier[babyI];
+    if (!babyIStats) {
+      return {
+        atk: statsBase.ATK,
+        def: statsBase.DEF,
+        hp: statsBase.HP,
+        vel: statsBase.Vel
+      };
+    }
+
+    // Calcular 40% del Baby I
+    const heredadoBabyI = {
+      atk: Math.round(babyIStats.ATK * 0.4),
+      def: Math.round(babyIStats.DEF * 0.4),
+      hp: Math.round(babyIStats.HP * 0.4),
+      vel: Math.round(babyIStats.Vel * 0.4)
+    };
+
+    return {
+      atk: statsBase.ATK + heredadoBabyI.atk,
+      def: statsBase.DEF + heredadoBabyI.def,
+      hp: statsBase.HP + heredadoBabyI.hp,
+      vel: statsBase.Vel + heredadoBabyI.vel
+    };
+  }
+
+  // CASO ESPECIAL: Etemon y MetalEtemon usan stats calculados de Scumon
+  if (nombreDigimon === "Etemon" || nombreDigimon === "MetalEtemon") {
+    // Encontrar Baby I, Baby II, Child en la línea evolutiva
+    let babyI = null, babyII = null, child = null;
+
+    lineaEvolutiva.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor === 1) babyI = predecesor;
+      else if (nivelPredecesor === 2) babyII = predecesor;
+      else if (nivelPredecesor === 3) child = predecesor;
+    });
+
+    if (!babyI || !babyII || !child) return null;
+
+    const babyIStats = digimonstattier[babyI];
+    const babyIIStats = digimonstattier[babyII];
+    const childStats = digimonstattier[child];
+
+    if (!babyIStats || !babyIIStats || !childStats) return null;
+
+    // Calcular Scumon base: Child BASE × 1.34
+    const scumonBaseCalculado = {
+      atk: Math.round(childStats.ATK * 1.34),
+      def: Math.round(childStats.DEF * 1.34),
+      hp: Math.round(childStats.HP * 1.34),
+      vel: Math.round(childStats.Vel * 1.34)
+    };
+
+    let heredadoTotal = { atk: 0, def: 0, hp: 0, vel: 0 };
+
+    // Para Etemon: 40% × Scumon calculado + 40% × Child + 40% × Baby II + 40% × Baby I
+    if (nombreDigimon === "Etemon") {
+      heredadoTotal.atk = Math.round(scumonBaseCalculado.atk * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(babyIStats.ATK * 0.4);
+      heredadoTotal.def = Math.round(scumonBaseCalculado.def * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(babyIStats.DEF * 0.4);
+      heredadoTotal.hp = Math.round(scumonBaseCalculado.hp * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(babyIStats.HP * 0.4);
+      heredadoTotal.vel = Math.round(scumonBaseCalculado.vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(babyIStats.Vel * 0.4);
+    }
+    // Para MetalEtemon: 40% × Etemon base + 40% × Scumon calculado + 40% × Child + 40% × Baby II + 40% × Baby I
+    else if (nombreDigimon === "MetalEtemon") {
+      const etemonBase = digimonstattier["Etemon"];
+      if (!etemonBase) return null;
+
+      heredadoTotal.atk = Math.round(etemonBase.ATK * 0.4) + Math.round(scumonBaseCalculado.atk * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(babyIStats.ATK * 0.4);
+      heredadoTotal.def = Math.round(etemonBase.DEF * 0.4) + Math.round(scumonBaseCalculado.def * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(babyIStats.DEF * 0.4);
+      heredadoTotal.hp = Math.round(etemonBase.HP * 0.4) + Math.round(scumonBaseCalculado.hp * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(babyIStats.HP * 0.4);
+      heredadoTotal.vel = Math.round(etemonBase.Vel * 0.4) + Math.round(scumonBaseCalculado.vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(babyIStats.Vel * 0.4);
+    }
+
+    return {
+      atk: statsBase.ATK + heredadoTotal.atk,
+      def: statsBase.DEF + heredadoTotal.def,
+      hp: statsBase.HP + heredadoTotal.hp,
+      vel: statsBase.Vel + heredadoTotal.vel
+    };
+  }
+
+  // Calcular herencias basadas en la línea evolutiva (redondeando cada 40%)
+  let heredadoTotal = { atk: 0, def: 0, hp: 0, vel: 0 };
+
+  // Agregar 40% de cada predecesor en la línea (redondeando cada uno)
+  // IMPORTANTE: NO sumar heredados de Digimon del MISMO nivel (slides)
+  lineaEvolutiva.forEach(predecesor => {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+
+    // Si el predecesor es del mismo nivel, es un SLIDE - no sumar heredados
+    if (nivelPredecesor >= nivel) {
+      return; // Saltar este predecesor
+    }
+
+    const statsPredecesor = digimonstattier[predecesor];
+    if (statsPredecesor) {
+      heredadoTotal.atk += Math.round(statsPredecesor.ATK * 0.4);
+      heredadoTotal.def += Math.round(statsPredecesor.DEF * 0.4);
+      heredadoTotal.hp += Math.round(statsPredecesor.HP * 0.4);
+      heredadoTotal.vel += Math.round(statsPredecesor.Vel * 0.4);
+    }
+  });
+
+  return {
+    atk: statsBase.ATK + heredadoTotal.atk,
+    def: statsBase.DEF + heredadoTotal.def,
+    hp: statsBase.HP + heredadoTotal.hp,
+    vel: statsBase.Vel + heredadoTotal.vel
+  };
+}
+
+// Función para obtener TODAS las líneas evolutivas posibles de un Digimon
+function obtenerTodasLasLineasEvolutivas(nombreDigimon) {
+  const statsDigimon = digimonstattier[nombreDigimon];
+
+  if (!statsDigimon || !statsDigimon.Viene || statsDigimon.Viene.length === 0) {
+    return [[]]; // Retorna un array con una línea vacía
+  }
+
+  // Función recursiva para obtener todas las combinaciones
+  function obtenerCombinaciones(digimonActual, nivelActual) {
+    const stats = digimonstattier[digimonActual];
+
+    if (!stats || !stats.Viene || stats.Viene.length === 0) {
+      // Caso base: no hay más predecesores
+      return [[digimonActual]];
+    }
+
+    // Separar predecesores en válidos (nivel < actual) y slides (nivel >= actual)
+    const predecesoresValidos = [];
+    const predecesoresSlide = [];
+
+    stats.Viene.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor < nivelActual) {
+        predecesoresValidos.push(predecesor);
+      } else {
+        predecesoresSlide.push(predecesor);
+      }
+    });
+
+    // Si no hay predecesores válidos (todos son slides), saltar los slides y continuar con SUS predecesores
+    if (predecesoresValidos.length === 0 && predecesoresSlide.length > 0) {
+      const todasLasCombinaciones = [];
+
+      // Para cada slide, obtener las líneas de SUS predecesores (saltando el slide)
+      predecesoresSlide.forEach(slide => {
+        const statsSlide = digimonstattier[slide];
+        if (statsSlide && statsSlide.Viene && statsSlide.Viene.length > 0) {
+          // Recursivamente obtener líneas de los predecesores del slide
+          statsSlide.Viene.forEach(predecesorDelSlide => {
+            const nivelPredecesorDelSlide = digimonReqDict[predecesorDelSlide]?.Nivel || 0;
+            const combinaciones = obtenerCombinaciones(predecesorDelSlide, nivelPredecesorDelSlide);
+            combinaciones.forEach(combinacion => {
+              todasLasCombinaciones.push([...combinacion, digimonActual]);
+            });
+          });
+        }
+      });
+
+      // Si obtuvimos combinaciones saltando slides, retornarlas
+      if (todasLasCombinaciones.length > 0) {
+        return todasLasCombinaciones;
+      }
+
+      // Si no, retornar solo el Digimon actual
+      return [[digimonActual]];
+    }
+
+    // Si no hay predecesores válidos ni slides, detener aquí
+    if (predecesoresValidos.length === 0) {
+      return [[digimonActual]];
+    }
+
+    // Obtener todas las combinaciones para cada predecesor válido
+    const todasLasCombinaciones = [];
+
+    predecesoresValidos.forEach(predecesor => {
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      const combinacionesPredecesor = obtenerCombinaciones(predecesor, nivelPredecesor);
+      combinacionesPredecesor.forEach(combinacion => {
+        todasLasCombinaciones.push([...combinacion, digimonActual]);
+      });
+    });
+
+    return todasLasCombinaciones;
+  }
+
+  // Obtener todas las combinaciones para cada predecesor directo
+  const todasLasLineas = [];
+  const nivelDigimon = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  statsDigimon.Viene.forEach(predecesor => {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+    const combinaciones = obtenerCombinaciones(predecesor, nivelPredecesor);
+    todasLasLineas.push(...combinaciones);
+  });
+
+  return todasLasLineas;
+}
+
+// Función para formatear la línea evolutiva según el nivel
+function formatearLineaEvolutiva(nombreDigimon, lineaEvolutiva) {
+  const nivel = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Obtener el Tama del Baby I (siempre es el primero en la línea)
+  const babyI = lineaEvolutiva[0] || null;
+  const tama = babyI ? (digimonReqDict[babyI]?.Tama || "?") : (digimonReqDict[nombreDigimon]?.Tama || "?");
+
+  // Baby I y II: solo Tama
+  if (nivel <= 2) {
+    return tama;
+  }
+
+  // La línea evolutiva NO incluye al Digimon actual, solo sus predecesores
+  // Por ejemplo, para Chackmon (Perfect):
+  //   - Si viene de Yuki Agumon (Adult): ['Botamon', 'Koromon', 'Yuki Agumon'] - longitud 3
+  //   - Si viene de Icemon (Perfect): ['Botamon', 'Koromon', 'Yuki Agumon', 'Icemon'] - longitud 4
+
+  // Identificar niveles en la línea según su posición y datos
+  const niveles = lineaEvolutiva.map(digi => digimonReqDict[digi]?.Nivel || 0);
+
+  const child = lineaEvolutiva.find((_, i) => niveles[i] === 3) || null;
+  const adult = lineaEvolutiva.find((_, i) => niveles[i] === 4) || null;
+  const perfect = lineaEvolutiva.find((_, i) => niveles[i] === 5) || null;
+
+  // Child (nivel 3): Child (Tama)
+  if (nivel === 3) {
+    return `${nombreDigimon} (${tama})`;
+  }
+
+  // Adult (nivel 4): Child (Tama)
+  if (nivel === 4) {
+    return child ? `${child} (${tama})` : tama;
+  }
+
+  // Perfect (nivel 5): Child - Adult (Tama)
+  if (nivel === 5) {
+    if (child && adult) {
+      return `${child} - ${adult} (${tama})`;
+    } else if (child) {
+      return `${child} (${tama})`;
+    }
+    return tama;
+  }
+
+  // Ultimate (nivel 6): Child - Adult - Perfect (Tama)
+  if (nivel === 6) {
+    if (child && adult && perfect) {
+      return `${child} - ${adult} - ${perfect} (${tama})`;
+    } else if (child && adult) {
+      return `${child} - ${adult} (${tama})`;
+    } else if (child) {
+      return `${child} (${tama})`;
+    }
+    return tama;
+  }
+
+  return tama;
+}
+
+// Función para generar variantes de Scumon y GreatKingScumon
+function generarVariantesScumon() {
+  const variantes = [];
+  const variantesUnicas = new Map(); // Para evitar duplicados
+
+  // Obtener todos los Child que evolucionan a Scumon
+  const childsQueEvolucionan = Object.entries(digimonReqDict)
+    .filter(([nombre, data]) => {
+      const stats = digimonstattier[nombre];
+      return stats && stats.Evoluciona && stats.Evoluciona.includes("Scumon") && data.Nivel === 3;
+    })
+    .map(([nombre]) => nombre);
+
+  // Para cada Child, generar sus variantes de Scumon
+  childsQueEvolucionan.forEach(childNombre => {
+    const childStats = digimonstattier[childNombre];
+    const childData = digimonReqDict[childNombre];
+
+    // Obtener predecesores del Child
+    if (!childStats.Viene || childStats.Viene.length === 0) return;
+
+    // Procesar cada predecesor (puede ser Baby II o Child side evolution)
+    childStats.Viene.forEach(predecesorNombre => {
+      const predecesorStats = digimonstattier[predecesorNombre];
+      const predecesorData = digimonReqDict[predecesorNombre];
+
+      if (!predecesorStats || !predecesorData) return;
+
+      let babyIINombre, babyIIStats, babyIIData;
+
+      // Si el predecesor es un Baby II (nivel 2), usarlo directamente
+      if (predecesorData.Nivel === 2) {
+        babyIINombre = predecesorNombre;
+        babyIIStats = predecesorStats;
+        babyIIData = predecesorData;
+      }
+      // Si el predecesor es un Child (nivel 3) - es una side evolution
+      else if (predecesorData.Nivel === 3) {
+        // Buscar el Baby II del que viene este Child side
+        if (!predecesorStats.Viene || predecesorStats.Viene.length === 0) return;
+
+        // Tomar el primer Baby II encontrado
+        const babyIIFound = predecesorStats.Viene.find(nombre => {
+          const data = digimonReqDict[nombre];
+          return data && data.Nivel === 2;
+        });
+
+        if (!babyIIFound) return;
+
+        babyIINombre = babyIIFound;
+        babyIIStats = digimonstattier[babyIIFound];
+        babyIIData = digimonReqDict[babyIIFound];
+      } else {
+        return; // Ni Baby II ni Child, saltar
+      }
+
+      if (!babyIIStats || !babyIIStats.Viene || babyIIStats.Viene.length === 0) return;
+
+      // Obtener Baby I que viene antes del Baby II
+      babyIIStats.Viene.forEach(babyINombre => {
+        const babyIStats = digimonstattier[babyINombre];
+
+        if (!babyIStats) return;
+
+        // CORRECCIÓN: Scumon BASE = Child BASE × 1.34 (SIN heredados)
+        const scumonStatsBase = {
+          atk: Math.round(childStats.ATK * 1.34),
+          def: Math.round(childStats.DEF * 1.34),
+          hp: Math.round(childStats.HP * 1.34),
+          vel: Math.round(childStats.Vel * 1.34)
+        };
+
+        // Calcular heredados para Scumon
+        // SIEMPRE incluir 40% del Child ACTUAL (childStats)
+        // NO incluir el predecesor Child si es una side evolution
+        const esSideEvolution = predecesorData.Nivel === 3;
+
+        const heredadoScumon = {
+          atk: Math.round(babyIStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(childStats.ATK * 0.4),
+          def: Math.round(babyIStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(childStats.DEF * 0.4),
+          hp: Math.round(babyIStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(childStats.HP * 0.4),
+          vel: Math.round(babyIStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(childStats.Vel * 0.4)
+        };
+
+        // Stats finales de Scumon CON heredados
+        const scumonStatsCompletos = {
+          atk: scumonStatsBase.atk + heredadoScumon.atk,
+          def: scumonStatsBase.def + heredadoScumon.def,
+          hp: scumonStatsBase.hp + heredadoScumon.hp,
+          vel: scumonStatsBase.vel + heredadoScumon.vel
+        };
+
+        // Determinar qué stats mostrar según el tipo seleccionado
+        let scumonStatsFinal, gksStatsFinal;
+
+        if (tipoStatsActual === 'heredados') {
+          // Mostrar stats heredados (base + heredados de child)
+          scumonStatsFinal = scumonStatsCompletos;
+        } else {
+          // Mostrar solo stats base
+          scumonStatsFinal = scumonStatsBase;
+        }
+
+        // Calcular Digipuntos para Scumon
+        const scumonDigipuntos = parseFloat((((scumonStatsFinal.hp / 10) + scumonStatsFinal.atk + scumonStatsFinal.def + scumonStatsFinal.vel) / 10).toFixed(1));
+
+        // Crear línea evolutiva en formato: NombreChild (Tama)
+        // Obtenemos el Tama del Baby I desde digimonReqDict
+        const babyIData = digimonReqDict[babyINombre];
+        const tamaId = babyIData ? babyIData.Tama : "?";
+        const lineaEvolutiva = `${childNombre} (${tamaId})`;
+
+        // Crear clave única para evitar duplicados: Child + Baby I + Baby II
+        const claveUnica = `${childNombre}-${babyINombre}-${babyIINombre}`;
+
+        // Solo agregar si no existe esta combinación
+        if (!variantesUnicas.has(claveUnica)) {
+          variantesUnicas.set(claveUnica, true);
+
+          variantes.push({
+            nombre: "Scumon",
+            lineaEvolutiva: lineaEvolutiva,
+            evolucionAnterior: childNombre, // Scumon viene de Child
+            atk: scumonStatsFinal.atk,
+            def: scumonStatsFinal.def,
+            hp: scumonStatsFinal.hp,
+            vel: scumonStatsFinal.vel,
+            digipuntos: scumonDigipuntos,
+            nivel: 4
+          });
+
+          // PlatinumScumon usa la misma fórmula que Scumon (Child base × 1.34)
+          variantes.push({
+            nombre: "PlatinumScumon",
+            lineaEvolutiva: lineaEvolutiva,
+            evolucionAnterior: childNombre, // PlatinumScumon viene de Child
+            atk: scumonStatsFinal.atk,
+            def: scumonStatsFinal.def,
+            hp: scumonStatsFinal.hp,
+            vel: scumonStatsFinal.vel,
+            digipuntos: scumonDigipuntos,
+            nivel: 4
+          });
+
+          // Fórmula de GreatKingScumon: Scumon BASE × 2.25
+          const gksStatsBase = {
+            atk: Math.round(scumonStatsBase.atk * 2.25),
+            def: Math.round(scumonStatsBase.def * 2.25),
+            hp: Math.round(scumonStatsBase.hp * 2.25),
+            vel: Math.round(scumonStatsBase.vel * 2.25)
+          };
+
+          let gksStatsFinal;
+          if (tipoStatsActual === 'heredados') {
+            // GKS heredados: agregar 40% Baby I + 40% Baby II + 40% Child ACTUAL + 40% Scumon base
+            const heredadoGKS = {
+              atk: Math.round(babyIStats.ATK * 0.4) + Math.round(babyIIStats.ATK * 0.4) + Math.round(childStats.ATK * 0.4) + Math.round(scumonStatsBase.atk * 0.4),
+              def: Math.round(babyIStats.DEF * 0.4) + Math.round(babyIIStats.DEF * 0.4) + Math.round(childStats.DEF * 0.4) + Math.round(scumonStatsBase.def * 0.4),
+              hp: Math.round(babyIStats.HP * 0.4) + Math.round(babyIIStats.HP * 0.4) + Math.round(childStats.HP * 0.4) + Math.round(scumonStatsBase.hp * 0.4),
+              vel: Math.round(babyIStats.Vel * 0.4) + Math.round(babyIIStats.Vel * 0.4) + Math.round(childStats.Vel * 0.4) + Math.round(scumonStatsBase.vel * 0.4)
+            };
+
+            gksStatsFinal = {
+              atk: gksStatsBase.atk + heredadoGKS.atk,
+              def: gksStatsBase.def + heredadoGKS.def,
+              hp: gksStatsBase.hp + heredadoGKS.hp,
+              vel: gksStatsBase.vel + heredadoGKS.vel
+            };
+          } else {
+            gksStatsFinal = gksStatsBase;
+          }
+
+          // Calcular Digipuntos para GKS
+          const gksDigipuntos = parseFloat((((gksStatsFinal.hp / 10) + gksStatsFinal.atk + gksStatsFinal.def + gksStatsFinal.vel) / 10).toFixed(1));
+
+          variantes.push({
+            nombre: "GreatKingScumon",
+            lineaEvolutiva: lineaEvolutiva,
+            evolucionAnterior: "Scumon", // GreatKingScumon viene de Scumon
+            atk: gksStatsFinal.atk,
+            def: gksStatsFinal.def,
+            hp: gksStatsFinal.hp,
+            vel: gksStatsFinal.vel,
+            digipuntos: gksDigipuntos,
+            nivel: 5
+          });
+        }
+      });
+    });
+  });
+
+  return variantes;
+}
+
+// Traducciones
+const traducciones = {
+  es: {
+    titulo: "Ranking de Digimon por Digipuntos",
+    seleccionarNivel: "Seleccionar Nivel:",
+    eligeNivel: "-- Elige un Nivel --",
+    tipoStats: "Tipo de Stats:",
+    statsBase: "Stats Base",
+    statsHeredados: "Stats Heredados",
+    idioma: "Idioma:",
+    digimon: "Digimon",
+    lineaEvolutiva: "Línea Evolutiva",
+    clasificacion: "Clasificación",
+    atributo: "Atributo",
+    tipo: "Tipo",
+    imagen: "Imagen",
+    atk: "ATK",
+    def: "DEF",
+    hp: "HP",
+    spd: "SPD",
+    digipuntos: "Digipuntos",
+	subtitle: "Creado por Rodrigoalag",
+    explanation: "",
+    filtrarDigimon: "Filtrar por Digimon:",
+    filtrarEvolucionAnterior: "Evolución Anterior:",
+    filtrarClasificacion: "Filtrar por Clasificación:",
+    filtrarAtributo: "Filtrar por Atributo:",
+    filtrarTipo: "Filtrar por Tipo:",
+    filtrarDigipuntos: "Digipuntos:",
+    todasClasificaciones: "Todas las clasificaciones",
+    todosAtributos: "Todos",
+    todosTipos: "Todos",
+    todosDigimon: "Todos",
+    todasEvoluciones: "Todas",
+    todosDigipuntos: "Todos",
+    limpiarFiltros: "Limpiar Filtros",
+ },
+  en: {
+    titulo: "Digimon Ranking by Digipoints",
+    seleccionarNivel: "Select Level:",
+    eligeNivel: "-- Choose a Level --",
+    tipoStats: "Stats Type:",
+    statsBase: "Base Stats",
+    statsHeredados: "Inherited Stats",
+    idioma: "Language:",
+    digimon: "Digimon",
+    lineaEvolutiva: "Evolution Line",
+    clasificacion: "Classification",
+    atributo: "Attribute",
+    tipo: "Type",
+    imagen: "Image",
+    atk: "ATK",
+    def: "DEF",
+    hp: "HP",
+    spd: "SPD",
+    digipuntos: "Digipoints",
+	subtitle: "Created by Rodrigoalag",
+    explanation: "",
+    filtrarDigimon: "Filter by Digimon:",
+    filtrarEvolucionAnterior: "Previous Evolution:",
+    filtrarClasificacion: "Filter by Classification:",
+    filtrarAtributo: "Filter by Attribute:",
+    filtrarTipo: "Filter by Type:",
+    filtrarDigipuntos: "Digipoints:",
+    todasClasificaciones: "All classifications",
+    todosAtributos: "All",
+    todosTipos: "All",
+    todosDigimon: "All",
+    todasEvoluciones: "All",
+    todosDigipuntos: "All",
+    limpiarFiltros: "Clear Filters",
+ }
+};
+
+// Mapeo de niveles
+const nivelAEtapa = {
+  1: "Baby I",
+  2: "Baby II", 
+  3: "Child",
+  4: "Adult",
+  5: "Perfect",
+  6: "Ultimate"
+};
+
+// Clasificaciones de Digipuntos
+const clasificacionDigipuntos = [
+  { min: 0, max: 14.99, nombre: "Low Child", clase: "tier-low" },
+  { min: 15, max: 15.99, nombre: "Standard Child", clase: "tier-mid" },
+  { min: 16, max: 19.99, nombre: "High Child", clase: "tier-high" },
+  { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" },
+  { min: 30, max: 30.99, nombre: "Low Adult", clase: "tier-low" },
+  { min: 31, max: 34.99, nombre: "Mid Adult", clase: "tier-mid" },
+  { min: 35, max: 59.99, nombre: "High Adult", clase: "tier-high" },
+  { min: 60, max: 60.9, nombre: "Low Perfect", clase: "tier-low" },
+  { min: 61, max: 69.99, nombre: "Mid Perfect", clase: "tier-mid" },
+  { min: 70, max: Infinity, nombre: "High Perfect", clase: "tier-high" }
+];
+
+const selectNivel = document.getElementById("selectNivel");
+const rankingTable = document.getElementById("rankingTable");
+const rankingTableBody = document.querySelector("#rankingTable tbody");
+
+// Función para configurar delegación de eventos
+function configurarDelegacionEventos() {
+  const tablaContainer = document.getElementById('rankingContainer');
+  
+  tablaContainer.addEventListener('click', function(event) {
+    const header = event.target.closest('.sortable-header');
+    
+    if (!header || procesandoClick) return;
+    
+    procesandoClick = true;
+    
+    const campo = header.dataset.sort;
+    console.log(`Click en: ${campo}`);
+    
+    if (campoOrdenamiento === campo) {
+      ordenDescendente = !ordenDescendente;
+    } else {
+      campoOrdenamiento = campo;
+      ordenDescendente = true;
+    }
+    
+    if (datosActuales.length > 0) {
+      const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+      const tbody = document.querySelector('#rankingTable tbody');
+      generarTablaRankingSegura(datosOrdenados, tbody);
+      actualizarHeadersActivos();
+    }
+    
+    setTimeout(() => {
+      procesandoClick = false;
+    }, 300);
+  });
+}
+
+// Inicializar selector de niveles
+function inicializarSelector() {
+  const niveles = [...new Set(Object.values(digimonReqDict).map(d => d.Nivel))].sort((a, b) => a - b);
+  
+  niveles.forEach(nivel => {
+    const opt = document.createElement("option");
+    opt.value = nivel;
+    opt.textContent = nivelAEtapa[nivel] || `Nivel ${nivel}`;
+    selectNivel.appendChild(opt);
+  });
+}
+
+// Función para obtener clasificación (siempre usa stats BASE para determinar tier)
+function obtenerClasificacion(nivel, nombre) {
+  if (nombre === "GreatKingScumon" || nombre === "Scumon") {
+    return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+
+  // Obtener stats base del Digimon
+  const statsBase = digimonstattier[nombre];
+  if (!statsBase) {
+    return { min: 0, max: 0, nombre: "Unknown", clase: "tier-low" };
+  }
+
+  // Calcular digipuntos BASE (sin heredados)
+  const digipuntosBase = parseFloat((((statsBase.HP / 10) + statsBase.ATK + statsBase.DEF + statsBase.Vel) / 10).toFixed(1));
+
+  if (digipuntosBase < 15 && nivel <= 1) {
+    return { min: 0, max: 10.00, nombre: "Standard Baby 1", clase: "tier-low" };
+  }
+  if (digipuntosBase < 15 && nivel <= 2) {
+    return { min: 0, max: 10.00, nombre: "Standard Baby 2", clase: "tier-low" };
+  }
+
+  // Mutant solo aplica para Adult (nivel 4) con stats bajos
+  if (digipuntosBase < 30 && nivel === 4) {
+    return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+  if (digipuntosBase < 60 && nivel === 5) {
+    return { min: 20, max: 59.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+
+  if (nivel === 6) {
+    if (digipuntosBase >= 50 && digipuntosBase <= 59.99) {
+      return { min: 50, max: 59.99, nombre: "Standard Ultimate", clase: "tier-low" };
+    }
+    if (digipuntosBase >= 60 && digipuntosBase <= 69.99) {
+      return { min: 60, max: 69.99, nombre: "High Ultimate", clase: "tier-high" };
+    }
+    if (digipuntosBase >= 70) {
+      return { min: 70, max: Infinity, nombre: "High+ Ultimate", clase: "tier-high-plus" };
+    }
+  }
+
+  return clasificacionDigipuntos.find(c => digipuntosBase >= c.min && digipuntosBase < c.max) ||
+         clasificacionDigipuntos[clasificacionDigipuntos.length - 1];
+}
+
+// Función para cargar imagen
+function generarVariacionesNombre(nombre) {
+  const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
+  const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
+  const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
+  
+  return [...new Set([
+    nombreLimpio,
+    nombreEspacios,
+    nombreGuiones,
+    nombreOriginal.toLowerCase(),
+    nombreOriginal,
+    nombre.replace(/[^a-zA-Z0-9]/gi, "").toLowerCase()
+  ])];
+}
+
+// Función para ordenar datos
+function ordenarDatos(datos, campo, descendente = true) {
+  // Campos que son strings (ordenamiento alfabético)
+  const camposTexto = ['atributo', 'tipo'];
+
+  return [...datos].sort((a, b) => {
+    const valorA = a[campo] || (camposTexto.includes(campo) ? '' : 0);
+    const valorB = b[campo] || (camposTexto.includes(campo) ? '' : 0);
+
+    // Si es un campo de texto, usar comparación de strings
+    if (camposTexto.includes(campo)) {
+      const comparacion = valorA.localeCompare(valorB, 'es', { sensitivity: 'base' });
+      return descendente ? -comparacion : comparacion;
+    }
+
+    // Si es un campo numérico, usar comparación numérica
+    return descendente ? (valorB - valorA) : (valorA - valorB);
+  });
+}
+
+// Función para actualizar headers activos
+function actualizarHeadersActivos() {
+  document.querySelectorAll('.sortable-header').forEach(header => {
+    header.classList.remove('active');
+    const icon = header.querySelector('.sort-icon');
+    if (icon) {
+      icon.textContent = '↓';
+    }
+  });
+  
+  const headerActivo = document.querySelector(`[data-sort="${campoOrdenamiento}"]`);
+  if (headerActivo) {
+    headerActivo.classList.add('active');
+    const icon = headerActivo.querySelector('.sort-icon');
+    if (icon) {
+      icon.textContent = ordenDescendente ? '↓' : '↑';
+    }
+  }
+}
+
+function generarTablaRankingSegura(data, tbody) {
+  tbody.innerHTML = "";
+
+  data.forEach((item, index) => {
+    const fila = document.createElement("tr");
+    fila.className = item.clasificacion.clase;
+
+    // Nombre del Digimon
+    const tdNombre = document.createElement("td");
+    tdNombre.textContent = item.nombre;
+    fila.appendChild(tdNombre);
+
+    // Línea Evolutiva (solo si tiene)
+    const tdLineaEvolutiva = document.createElement("td");
+    tdLineaEvolutiva.textContent = item.lineaEvolutiva || "-";
+    tdLineaEvolutiva.style.fontSize = "0.85em";
+    fila.appendChild(tdLineaEvolutiva);
+
+    // Clasificación
+    const tdClasificacion = document.createElement("td");
+	tdClasificacion.textContent = traducciones[idiomaActual][item.clasificacion.nombre] || item.clasificacion.nombre;
+    fila.appendChild(tdClasificacion);
+
+    // Atributo
+    const tdAtributo = document.createElement("td");
+    tdAtributo.textContent = item.atributo || "-";
+    fila.appendChild(tdAtributo);
+
+    // Tipo
+    const tdTipo = document.createElement("td");
+    tdTipo.textContent = item.tipo || "-";
+    fila.appendChild(tdTipo);
+
+    // Imagen
+    const tdImagen = document.createElement("td");
+    const img = document.createElement("img");
+    img.className = "digimon-img";
+    img.alt = item.nombre;
+    
+    // Intentar cargar imagen
+    const variaciones = generarVariacionesNombre(item.nombre);
+    
+	const intentarCargarImagen = (indice = 0) => {
+	  if (indice >= variaciones.length) {
+		// Si fallan todas las variaciones, intentar con placeholder.png
+		console.log(`❌ No se encontró imagen específica para ${item.nombre}. Intentando placeholder.png...`);
+		
+		const testPlaceholder = new Image();
+		testPlaceholder.onload = () => {
+		  console.log(`✅ Usando placeholder.png para ${item.nombre}`);
+		  img.src = "img/placeholder.png";
+		};
+		testPlaceholder.onerror = () => {
+		  console.log(`❌ No se encontró placeholder.png. Usando placeholder SVG.`);
+		  // No se encontró imagen ni placeholder, usar SVG por defecto
+		  img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjMwIiB5PSIzNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
+		};
+		testPlaceholder.src = "img/placeholder.png";
+		return;
+	  }
+	  
+	  const testImg = new Image();
+	  testImg.onload = () => {
+		console.log(`✅ Imagen encontrada: img/${variaciones[indice]}.png`);
+		img.src = `img/${variaciones[indice]}.png`;
+	  };
+	  testImg.onerror = () => {
+		console.log(`❌ No encontrada: img/${variaciones[indice]}.png`);
+		intentarCargarImagen(indice + 1);
+	  };
+	  testImg.src = `img/${variaciones[indice]}.png`;
+	};
+    
+    intentarCargarImagen();
+    tdImagen.appendChild(img);
+    fila.appendChild(tdImagen);
+    
+    // HP
+    const tdHP = document.createElement("td");
+    tdHP.textContent = item.hp;
+    fila.appendChild(tdHP);
+    
+    // ATK
+    const tdATK = document.createElement("td");
+    tdATK.textContent = item.atk;
+    fila.appendChild(tdATK);
+    
+    // DEF
+    const tdDEF = document.createElement("td");
+    tdDEF.textContent = item.def;
+    fila.appendChild(tdDEF);
+    
+    // SPD (Vel)
+    const tdSPD = document.createElement("td");
+    tdSPD.textContent = item.vel;
+    fila.appendChild(tdSPD);
+    
+    // Digipuntos
+    const tdDigipuntos = document.createElement("td");
+    tdDigipuntos.textContent = item.digipuntos;
+    fila.appendChild(tdDigipuntos);
+    
+    tbody.appendChild(fila);
+  });
+}
+
+// Función para obtener la evolución anterior (un nivel atrás)
+function obtenerEvolucionAnterior(nombreDigimon, lineaEvolutiva) {
+  const nivelActual = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Baby I no tiene evolución anterior
+  if (nivelActual <= 1) return null;
+
+  // Si hay lineaEvolutiva (stats heredados), buscar en la línea
+  if (lineaEvolutiva && lineaEvolutiva.length > 0) {
+    // Buscar el último Digimon en la línea que sea del nivel anterior
+    for (let i = lineaEvolutiva.length - 1; i >= 0; i--) {
+      const predecesor = lineaEvolutiva[i];
+      const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+      if (nivelPredecesor === nivelActual - 1) {
+        return predecesor;
+      }
+    }
+  }
+
+  // Si no hay lineaEvolutiva o no se encontró en la línea, buscar en digimonstattier
+  const statsDigimon = digimonstattier[nombreDigimon];
+  if (!statsDigimon || !statsDigimon.Viene || statsDigimon.Viene.length === 0) {
+    return null;
+  }
+
+  // Buscar el primer predecesor que sea del nivel anterior
+  for (const predecesor of statsDigimon.Viene) {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+    if (nivelPredecesor === nivelActual - 1) {
+      return predecesor;
+    }
+  }
+
+  return null;
+}
+
+// Función para obtener TODAS las evoluciones anteriores de un Digimon (un nivel atrás)
+function obtenerTodasLasEvolucionesAnteriores(nombreDigimon) {
+  const nivelActual = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Baby I no tiene evolución anterior
+  if (nivelActual <= 1) return [];
+
+  const statsDigimon = digimonstattier[nombreDigimon];
+  if (!statsDigimon || !statsDigimon.Viene || statsDigimon.Viene.length === 0) {
+    return [];
+  }
+
+  // Obtener TODOS los predecesores que sean del nivel anterior
+  const evolucionesAnteriores = [];
+  for (const predecesor of statsDigimon.Viene) {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+    if (nivelPredecesor === nivelActual - 1) {
+      evolucionesAnteriores.push(predecesor);
+    }
+  }
+
+  return evolucionesAnteriores;
+}
+
+// ============================================
+// FUNCIONES DE FILTRADO
+// ============================================
+
+// Función para actualizar el texto del botón del dropdown
+function actualizarTextoDropdown(containerId, buttonTextId, todosText) {
+  const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`);
+  const seleccionados = Array.from(checkboxes)
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  const buttonText = document.getElementById(buttonTextId);
+  if (seleccionados.length === 0) {
+    buttonText.textContent = todosText;
+  } else if (seleccionados.length === 1) {
+    buttonText.textContent = seleccionados[0];
+  } else {
+    buttonText.textContent = `${seleccionados.length} seleccionados`;
+  }
+}
+
+// Función para toggle de dropdown
+function toggleDropdown(buttonId, containerId) {
+  const button = document.getElementById(buttonId);
+  const container = document.getElementById(containerId);
+
+  // Cerrar todos los demás dropdowns
+  document.querySelectorAll('.checkbox-container.show').forEach(c => {
+    if (c.id !== containerId) {
+      c.classList.remove('show');
+    }
+  });
+
+  document.querySelectorAll('.filter-dropdown-button.active').forEach(b => {
+    if (b.id !== buttonId) {
+      b.classList.remove('active');
+    }
+  });
+
+  // Toggle el actual
+  container.classList.toggle('show');
+  button.classList.toggle('active');
+}
+
+// Cerrar dropdowns al hacer click fuera
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.filter-dropdown')) {
+    document.querySelectorAll('.checkbox-container.show').forEach(c => {
+      c.classList.remove('show');
+    });
+    document.querySelectorAll('.filter-dropdown-button.active').forEach(b => {
+      b.classList.remove('active');
+    });
+  }
+});
+
+function aplicarFiltros() {
+  const rangeValueSpan = document.getElementById('digipuntosRangeValue');
+  const t = traducciones[idiomaActual];
+
+  let datosFiltrados = [...datosSinFiltrar];
+
+  // Obtener Digimon seleccionados (checkboxes marcados, excluyendo "Todos")
+  const digimonsSeleccionados = Array.from(
+    document.querySelectorAll('#filterDigimonContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por nombre de Digimon (si hay alguno seleccionado)
+  if (digimonsSeleccionados.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      digimonsSeleccionados.includes(item.nombre)
+    );
+  }
+
+  // Actualizar opciones de evolución anterior basado en Digimon seleccionados
+  actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados.length > 0 ? digimonsSeleccionados : null);
+
+  // Obtener evoluciones anteriores seleccionadas (checkboxes marcados, excluyendo "Todas")
+  const evolucionesSeleccionadas = Array.from(
+    document.querySelectorAll('#filterEvolucionAnteriorContainer input[type="checkbox"]:checked:not(:disabled)')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por evolución anterior (si hay alguna seleccionada)
+  if (evolucionesSeleccionadas.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item => {
+      // Si tiene el campo todasLasEvolucionesAnteriores (Stats Base), verificar contra ese array
+      if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
+        return item.todasLasEvolucionesAnteriores.some(evo => evolucionesSeleccionadas.includes(evo));
+      }
+      // Si no, verificar contra evolucionAnterior (Stats Heredados)
+      if (item.evolucionAnterior) {
+        return evolucionesSeleccionadas.includes(item.evolucionAnterior);
+      }
+      return false;
+    });
+  }
+
+  // Obtener clasificaciones seleccionadas (checkboxes marcados, excluyendo "Todas")
+  const clasificacionesSeleccionadas = Array.from(
+    document.querySelectorAll('#filterClasificacionContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por clasificación (si hay alguna seleccionada)
+  if (clasificacionesSeleccionadas.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      clasificacionesSeleccionadas.includes(item.clasificacion.nombre)
+    );
+  }
+
+  // Obtener atributos seleccionados (checkboxes marcados, excluyendo "Todos")
+  const atributosSeleccionados = Array.from(
+    document.querySelectorAll('#filterAtributoContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por atributo (si hay alguno seleccionado)
+  if (atributosSeleccionados.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      atributosSeleccionados.includes(item.atributo)
+    );
+  }
+
+  // Obtener tipos seleccionados (checkboxes marcados, excluyendo "Todos")
+  const tiposSeleccionados = Array.from(
+    document.querySelectorAll('#filterTipoContainer input[type="checkbox"]:checked')
+  )
+    .map(cb => cb.value)
+    .filter(val => val !== '');
+
+  // Filtrar por tipo (si hay alguno seleccionado)
+  if (tiposSeleccionados.length > 0) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      tiposSeleccionados.includes(item.tipo)
+    );
+  }
+
+  // Filtrar por Digipuntos (rango mín-máx)
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  const filterMin = parseFloat(inputMin.value);
+  const filterMax = parseFloat(inputMax.value);
+  const rangoMin = parseFloat(inputMin.min);
+  const rangoMax = parseFloat(inputMax.max);
+
+  // Filtrar si los valores no están en el rango completo
+  if (filterMin > rangoMin || filterMax < rangoMax) {
+    datosFiltrados = datosFiltrados.filter(item =>
+      item.digipuntos >= filterMin && item.digipuntos <= filterMax
+    );
+    rangeValueSpan.textContent = `${filterMin.toFixed(1)} - ${filterMax.toFixed(1)}`;
+  } else {
+    rangeValueSpan.textContent = t.todosDigipuntos;
+  }
+
+  datosActuales = datosFiltrados;
+
+  // Actualizar texto de los botones dropdown
+  actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
+  actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+  actualizarTextoDropdown('filterClasificacionContainer', 'filterClasificacionText', t.todasClasificaciones);
+  actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+  actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
+
+  // Ordenar y mostrar
+  const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+  const tbody = document.querySelector('#rankingTable tbody');
+  generarTablaRankingSegura(datosOrdenados, tbody);
+  actualizarHeadersActivos();
+}
+
+function limpiarFiltros() {
+  const t = traducciones[idiomaActual];
+
+  // Desmarcar todos los checkboxes excepto "Todos"
+  document.querySelectorAll('#filterDigimonContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
+  document.querySelectorAll('#filterEvolucionAnteriorContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+    cb.disabled = false;
+    cb.closest('.checkbox-item').classList.remove('disabled');
+  });
+
+  document.querySelectorAll('#filterClasificacionContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
+  document.querySelectorAll('#filterAtributoContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
+  document.querySelectorAll('#filterTipoContainer input[type="checkbox"]').forEach(cb => {
+    cb.checked = cb.value === '';
+  });
+
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  if (inputMin && inputMax) {
+    inputMin.value = inputMin.min;
+    inputMax.value = inputMax.max;
+  }
+  document.getElementById('digipuntosRangeValue').textContent = t.todosDigipuntos;
+
+  // Actualizar texto de botones
+  document.getElementById('filterDigimonText').textContent = t.todosDigimon;
+  document.getElementById('filterEvolucionAnteriorText').textContent = t.todasEvoluciones;
+  document.getElementById('filterClasificacionText').textContent = t.todasClasificaciones;
+  document.getElementById('filterAtributoText').textContent = t.todosAtributos;
+  document.getElementById('filterTipoText').textContent = t.todosTipos;
+
+  datosActuales = [...datosSinFiltrar];
+
+  const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+  const tbody = document.querySelector('#rankingTable tbody');
+  generarTablaRankingSegura(datosOrdenados, tbody);
+  actualizarHeadersActivos();
+}
+
+function actualizarOpcionesDigimon() {
+  const container = document.getElementById('filterDigimonContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener nombres únicos de Digimon ordenados alfabéticamente
+  const digimonsUnicos = [...new Set(datosSinFiltrar.map(item => item.nombre))].sort();
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todos"
+  const todosDiv = document.createElement('div');
+  todosDiv.className = 'checkbox-item';
+  todosDiv.innerHTML = `
+    <input type="checkbox" id="digimon-todos" value="" checked>
+    <label for="digimon-todos">${t.todosDigimon}</label>
+  `;
+  container.appendChild(todosDiv);
+
+  // Agregar checkbox para cada Digimon
+  digimonsUnicos.forEach(nombre => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `digimon-${nombre.replace(/\s+/g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${nombre}">
+      <label for="${id}">${nombre}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todos"
+  document.getElementById('digimon-todos').addEventListener('change', function() {
+    if (this.checked) {
+      // Si se marca "Todos", desmarcar todos los demás
+      container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        // Si se marca uno individual, desmarcar "Todos"
+        document.getElementById('digimon-todos').checked = false;
+      } else {
+        // Si todos están desmarcados, marcar "Todos"
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('digimon-todos').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar texto del botón
+  actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
+}
+
+function actualizarOpcionesEvolucionAnterior() {
+  const container = document.getElementById('filterEvolucionAnteriorContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener evoluciones anteriores únicas (filtrar los que tienen evolucionAnterior)
+  const evolucionesAnteriores = [...new Set(
+    datosSinFiltrar
+      .filter(item => item.evolucionAnterior)
+      .map(item => item.evolucionAnterior)
+  )].sort();
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todas"
+  const todasDiv = document.createElement('div');
+  todasDiv.className = 'checkbox-item';
+  todasDiv.innerHTML = `
+    <input type="checkbox" id="evolucion-todas" value="" checked>
+    <label for="evolucion-todas">${t.todasEvoluciones}</label>
+  `;
+  container.appendChild(todasDiv);
+
+  // Agregar checkbox para cada evolución
+  evolucionesAnteriores.forEach(evolucion => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `evolucion-${evolucion.replace(/\s+/g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${evolucion}">
+      <label for="${id}">${evolucion}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todas"
+  document.getElementById('evolucion-todas').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
+        if (!cb.disabled) cb.checked = false;
+      });
+    }
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('evolucion-todas').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas):not(:disabled)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('evolucion-todas').checked = true;
+        }
+      }
+      aplicarFiltros();
+    });
+  });
+}
+
+function actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados) {
+  const container = document.getElementById('filterEvolucionAnteriorContainer');
+  const t = traducciones[idiomaActual];
+
+  // Guardar el estado actual de los checkboxes antes de regenerar
+  const estadoCheckboxes = {};
+  container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    estadoCheckboxes[cb.value] = cb.checked;
+  });
+
+  // Obtener evoluciones válidas basadas en los Digimon seleccionados
+  let evolucionesValidas;
+
+  if (!digimonsSeleccionados || digimonsSeleccionados.length === 0) {
+    // Si no hay Digimon seleccionados, mostrar todas las evoluciones únicas
+    const evolucionesSet = new Set();
+    datosSinFiltrar.forEach(item => {
+      // Añadir evoluciones del campo todasLasEvolucionesAnteriores (Stats Base)
+      if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
+        item.todasLasEvolucionesAnteriores.forEach(evo => evolucionesSet.add(evo));
+      }
+      // Añadir evolución del campo evolucionAnterior (Stats Heredados)
+      if (item.evolucionAnterior) {
+        evolucionesSet.add(item.evolucionAnterior);
+      }
+    });
+    evolucionesValidas = [...evolucionesSet].sort();
+  } else {
+    // Si hay Digimon seleccionados, mostrar solo sus evoluciones anteriores
+    const evolucionesSet = new Set();
+    datosSinFiltrar
+      .filter(item => digimonsSeleccionados.includes(item.nombre))
+      .forEach(item => {
+        // Añadir evoluciones del campo todasLasEvolucionesAnteriores (Stats Base)
+        if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
+          item.todasLasEvolucionesAnteriores.forEach(evo => evolucionesSet.add(evo));
+        }
+        // Añadir evolución del campo evolucionAnterior (Stats Heredados)
+        if (item.evolucionAnterior) {
+          evolucionesSet.add(item.evolucionAnterior);
+        }
+      });
+
+    evolucionesValidas = [...evolucionesSet].sort();
+
+    console.log('Digimon seleccionados:', digimonsSeleccionados);
+    console.log('Evoluciones válidas únicas:', evolucionesValidas);
+  }
+
+  // Limpiar y regenerar el contenedor
+  container.innerHTML = '';
+
+  console.log('Regenerando container con', evolucionesValidas.length, 'opciones');
+
+  // Agregar checkbox "Todas"
+  const todasDiv = document.createElement('div');
+  todasDiv.className = 'checkbox-item';
+  const todasChecked = estadoCheckboxes[''] !== undefined ? estadoCheckboxes[''] : true;
+  todasDiv.innerHTML = `
+    <input type="checkbox" id="evolucion-todas" value="" ${todasChecked ? 'checked' : ''}>
+    <label for="evolucion-todas">${t.todasEvoluciones}</label>
+  `;
+  container.appendChild(todasDiv);
+
+  // Agregar solo las evoluciones válidas
+  evolucionesValidas.forEach(evolucion => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const isChecked = estadoCheckboxes[evolucion] || false;
+    div.innerHTML = `
+      <input type="checkbox" id="evolucion-${evolucion.replace(/\s+/g, '-')}" value="${evolucion}" ${isChecked ? 'checked' : ''}>
+      <label for="evolucion-${evolucion.replace(/\s+/g, '-')}">${evolucion}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  console.log('Checkboxes de evolución creados:', evolucionesValidas.length);
+
+  // Event listener para "Todas"
+  const todasCheckbox = document.getElementById('evolucion-todas');
+  if (todasCheckbox) {
+    todasCheckbox.addEventListener('change', function() {
+      console.log('Checkbox "Todas" changed:', this.checked);
+      if (this.checked) {
+        // Si se marca "Todas", desmarcar todos los demás
+        container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
+          cb.checked = false;
+        });
+      }
+      actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+      aplicarFiltros();
+    });
+  }
+
+  // Event listeners para cada checkbox individual
+  const checkboxesIndividuales = container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)');
+  console.log('Agregando listeners a', checkboxesIndividuales.length, 'checkboxes individuales');
+
+  checkboxesIndividuales.forEach((cb, index) => {
+    cb.addEventListener('change', function() {
+      console.log('Checkbox individual changed:', this.value, 'checked:', this.checked);
+      if (this.checked) {
+        // Si se marca uno individual, desmarcar "Todas"
+        document.getElementById('evolucion-todas').checked = false;
+      } else {
+        // Si todos están desmarcados, marcar "Todas"
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('evolucion-todas').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar el texto del botón
+  actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
+}
+
+function actualizarOpcionesClasificacion() {
+  const container = document.getElementById('filterClasificacionContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener clasificaciones únicas de los datos actuales sin filtrar
+  const clasificacionesUnicas = [...new Set(datosSinFiltrar.map(item => item.clasificacion.nombre))];
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todas"
+  const todasDiv = document.createElement('div');
+  todasDiv.className = 'checkbox-item';
+  todasDiv.innerHTML = `
+    <input type="checkbox" id="clasificacion-todas" value="" checked>
+    <label for="clasificacion-todas">${t.todasClasificaciones}</label>
+  `;
+  container.appendChild(todasDiv);
+
+  // Agregar checkbox para cada clasificación
+  clasificacionesUnicas.sort().forEach(clasificacion => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `clasificacion-${clasificacion.replace(/\s+/g, '-')}`;
+    const texto = traducciones[idiomaActual][clasificacion] || clasificacion;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${clasificacion}">
+      <label for="${id}">${texto}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todas"
+  document.getElementById('clasificacion-todas').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#clasificacion-todas)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#clasificacion-todas)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('clasificacion-todas').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#clasificacion-todas)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('clasificacion-todas').checked = true;
+        }
+      }
+      aplicarFiltros();
+    });
+  });
+}
+
+function actualizarOpcionesAtributo() {
+  const container = document.getElementById('filterAtributoContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener atributos únicos de los datos actuales sin filtrar
+  const atributosUnicos = [...new Set(datosSinFiltrar.map(item => item.atributo).filter(a => a && a !== '-'))];
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todos"
+  const todosDiv = document.createElement('div');
+  todosDiv.className = 'checkbox-item';
+  todosDiv.innerHTML = `
+    <input type="checkbox" id="atributo-todos" value="" checked>
+    <label for="atributo-todos">${t.todosAtributos}</label>
+  `;
+  container.appendChild(todosDiv);
+
+  // Agregar checkbox para cada atributo
+  atributosUnicos.sort().forEach(atributo => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `atributo-${atributo.replace(/\s+/g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${atributo}">
+      <label for="${id}">${atributo}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todos"
+  document.getElementById('atributo-todos').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#atributo-todos)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#atributo-todos)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('atributo-todos').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#atributo-todos)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('atributo-todos').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar texto del botón
+  actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
+}
+
+function actualizarOpcionesTipo() {
+  const container = document.getElementById('filterTipoContainer');
+  const t = traducciones[idiomaActual];
+
+  // Obtener tipos únicos de los datos actuales sin filtrar
+  const tiposUnicos = [...new Set(datosSinFiltrar.map(item => item.tipo).filter(a => a && a !== '-'))];
+
+  // Limpiar opciones previas
+  container.innerHTML = '';
+
+  // Agregar checkbox "Todos"
+  const todosDiv = document.createElement('div');
+  todosDiv.className = 'checkbox-item';
+  todosDiv.innerHTML = `
+    <input type="checkbox" id="tipo-todos" value="" checked>
+    <label for="tipo-todos">${t.todosTipos}</label>
+  `;
+  container.appendChild(todosDiv);
+
+  // Agregar checkbox para cada tipo
+  tiposUnicos.sort().forEach(tipo => {
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    const id = `tipo-${tipo.replace(/\s+/g, '-').replace(/\//g, '-')}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${id}" value="${tipo}">
+      <label for="${id}">${tipo}</label>
+    `;
+    container.appendChild(div);
+  });
+
+  // Event listener para "Todos"
+  document.getElementById('tipo-todos').addEventListener('change', function() {
+    if (this.checked) {
+      container.querySelectorAll('input[type="checkbox"]:not(#tipo-todos)').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+    actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
+    aplicarFiltros();
+  });
+
+  // Event listeners para cada checkbox individual
+  container.querySelectorAll('input[type="checkbox"]:not(#tipo-todos)').forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('tipo-todos').checked = false;
+      } else {
+        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#tipo-todos)')).some(c => c.checked);
+        if (!algunoMarcado) {
+          document.getElementById('tipo-todos').checked = true;
+        }
+      }
+      actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
+      aplicarFiltros();
+    });
+  });
+
+  // Actualizar texto del botón
+  actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
+}
+
+function actualizarRangoDigipuntos() {
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  const minDisplay = document.getElementById('digipuntosMinDisplay');
+  const maxDisplay = document.getElementById('digipuntosMaxDisplay');
+  const rangeValueSpan = document.getElementById('digipuntosRangeValue');
+  const t = traducciones[idiomaActual];
+
+  if (datosSinFiltrar.length === 0) return;
+
+  // Calcular min y max de digipuntos en los datos
+  const digipuntos = datosSinFiltrar.map(item => item.digipuntos);
+  const min = Math.floor(Math.min(...digipuntos) * 10) / 10; // Redondear hacia abajo
+  const max = Math.ceil(Math.max(...digipuntos) * 10) / 10;  // Redondear hacia arriba
+
+  // Configurar los inputs
+  inputMin.min = min;
+  inputMin.max = max;
+  inputMin.value = min;
+  inputMin.step = 0.1;
+
+  inputMax.min = min;
+  inputMax.max = max;
+  inputMax.value = max;
+  inputMax.step = 0.1;
+
+  // Actualizar labels
+  minDisplay.textContent = min.toFixed(1);
+  maxDisplay.textContent = max.toFixed(1);
+  rangeValueSpan.textContent = t.todosDigipuntos;
+}
+
+// ============================================
+// FIN FUNCIONES DE FILTRADO
+// ============================================
+
+// Función para generar el ranking (reutilizable)
+function generarRanking() {
+  const nivelSeleccionado = parseInt(selectNivel.value);
+  const downloadButtons = document.getElementById('downloadButtons');
+  const explanationText = document.getElementById('explanationText');
+  const filtersContainer = document.getElementById('filtersContainer');
+
+  if (!nivelSeleccionado) {
+    // Todo permanece visible pero la tabla vacía
+    const tbody = document.querySelector('#rankingTable tbody');
+    if (tbody) tbody.innerHTML = '';
+    return;
+  }
+
+  // Obtener Digimon del nivel seleccionado
+  const digimonDelNivel = Object.entries(digimonReqDict)
+    .filter(([_, data]) => data.Nivel === nivelSeleccionado)
+    .map(([nombre, _]) => nombre);
+
+  // Crear array de ranking con datos
+  datosActuales = [];
+
+  digimonDelNivel
+    .filter(nombre => nombre.toLowerCase() !== "burpmon")
+    .forEach(nombre => {
+      const statsData = digimonstattier[nombre];
+      if (!statsData) return;
+
+      // Excluir Scumon y GreatKingScumon normales (serán reemplazados por variantes)
+      if (nombre === "Scumon" || nombre === "GreatKingScumon" || nombre === "PlatinumScumon") {
+        return;
+      }
+
+      if (tipoStatsActual === 'heredados') {
+        // Obtener TODAS las líneas evolutivas posibles
+        const todasLasLineas = obtenerTodasLasLineasEvolutivas(nombre);
+
+        // Agrupar líneas por los stats que realmente heredan (excluyendo slides)
+        const lineasPorStats = new Map();
+
+        todasLasLineas.forEach(lineaEvolutiva => {
+          // Filtrar solo los predecesores que NO son slides (nivel < nivel actual)
+          const lineaSinSlides = lineaEvolutiva.filter(predecesor => {
+            const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+            return nivelPredecesor < nivelSeleccionado;
+          });
+
+          // Crear clave basada solo en los predecesores que aportan stats
+          const claveStats = lineaSinSlides.join('-');
+
+          // Si ya existe esta combinación de stats, no agregar duplicado
+          if (!lineasPorStats.has(claveStats)) {
+            lineasPorStats.set(claveStats, lineaEvolutiva);
+          }
+        });
+
+        // Generar una entrada por cada combinación ÚNICA de stats
+        lineasPorStats.forEach((lineaEvolutiva, claveStats) => {
+          const statsHeredados = calcularStatsConHerencia(nombre, lineaEvolutiva);
+
+          if (!statsHeredados) return;
+
+          const stats = statsHeredados;
+          const lineaEvo = formatearLineaEvolutiva(nombre, lineaEvolutiva);
+
+          // Calcular digipuntos
+          const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
+
+          // Obtener evolución anterior (un nivel atrás)
+          const evolucionAnterior = obtenerEvolucionAnterior(nombre, lineaEvolutiva);
+
+          datosActuales.push({
+            nombre,
+            lineaEvolutiva: lineaEvo,
+            evolucionAnterior: evolucionAnterior,
+            atributo: digimonReqDict[nombre]?.Atributo || "-",
+            tipo: digimonReqDict[nombre]?.Tipo || "-",
+            atk: stats.atk,
+            def: stats.def,
+            hp: stats.hp,
+            vel: stats.vel,
+            digipuntos: digipuntos,
+            clasificacion: obtenerClasificacion(nivelSeleccionado, nombre)
+          });
+        });
+      } else {
+        // Stats base - una sola entrada
+        const stats = {
+          atk: statsData.ATK || 0,
+          def: statsData.DEF || 0,
+          hp: statsData.HP || 0,
+          vel: statsData.Vel || 0
+        };
+
+        // Calcular digipuntos
+        const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
+
+        // Obtener evolución anterior (un nivel atrás) - solo la primera para mostrar
+        const evolucionAnterior = obtenerEvolucionAnterior(nombre, null);
+
+        datosActuales.push({
+          nombre,
+          lineaEvolutiva: null,
+          evolucionAnterior: evolucionAnterior,
+          todasLasEvolucionesAnteriores: obtenerTodasLasEvolucionesAnteriores(nombre), // Todas las opciones para el filtro
+          atributo: digimonReqDict[nombre]?.Atributo || "-",
+          tipo: digimonReqDict[nombre]?.Tipo || "-",
+          atk: stats.atk,
+          def: stats.def,
+          hp: stats.hp,
+          vel: stats.vel,
+          digipuntos: digipuntos,
+          clasificacion: obtenerClasificacion(nivelSeleccionado, nombre)
+        });
+      }
+    });
+
+  // Agregar variantes de Scumon y GreatKingScumon para niveles 4 (Adult) y 5 (Perfect)
+  if (nivelSeleccionado === 4 || nivelSeleccionado === 5) {
+    const variantes = generarVariantesScumon();
+    const variantesDelNivel = variantes.filter(v => v.nivel === nivelSeleccionado);
+
+    variantesDelNivel.forEach(variante => {
+      datosActuales.push({
+        nombre: variante.nombre,
+        lineaEvolutiva: variante.lineaEvolutiva,
+        atributo: digimonReqDict[variante.nombre]?.Atributo || "-",
+        tipo: digimonReqDict[variante.nombre]?.Tipo || "-",
+        atk: variante.atk,
+        def: variante.def,
+        hp: variante.hp,
+        vel: variante.vel,
+        digipuntos: variante.digipuntos,
+        clasificacion: obtenerClasificacion(nivelSeleccionado, variante.nombre)
+      });
+    });
+  }
+
+  // Guardar datos sin filtrar y copiarlos a datosActuales
+  datosSinFiltrar = [...datosActuales];
+
+  // Actualizar opciones de filtros disponibles (esto también los resetea)
+  actualizarOpcionesDigimon();
+  actualizarOpcionesEvolucionAnterior();
+  actualizarOpcionesClasificacion();
+  actualizarOpcionesAtributo();
+  actualizarOpcionesTipo();
+  actualizarRangoDigipuntos();
+
+  // Resetear inputs de digipuntos
+  const t = traducciones[idiomaActual];
+  const inputMin = document.getElementById('filterDigipuntosMin');
+  const inputMax = document.getElementById('filterDigipuntosMax');
+  if (inputMin && inputMax) {
+    inputMin.value = inputMin.min;
+    inputMax.value = inputMax.max;
+    document.getElementById('digipuntosRangeValue').textContent = t.todosDigipuntos;
+  }
+
+  // Ordenar datos y generar tabla
+  const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+  const tbody = document.querySelector('#rankingTable tbody');
+
+  generarTablaRankingSegura(datosOrdenados, tbody);
+  actualizarHeadersActivos();
+  rankingTable.style.display = "table";
+
+  // Mostrar filtros, texto explicativo y botones de descarga
+  if (filtersContainer) filtersContainer.style.display = "flex";
+  if (explanationText) explanationText.style.display = "block";
+  if (downloadButtons) downloadButtons.style.display = "flex";
+}
+
+// Event listener para el selector de nivel
+selectNivel.addEventListener("change", generarRanking);
+
+// Event listener para el selector de tipo de stats
+const selectTipoStats = document.getElementById("selectTipoStats");
+selectTipoStats.addEventListener("change", () => {
+  tipoStatsActual = selectTipoStats.value;
+
+  // Mostrar/ocultar filtro de Evolución Anterior según el tipo de stats
+  const filterEvolucionAnteriorItem = document.getElementById('filterEvolucionAnteriorItem');
+  if (filterEvolucionAnteriorItem) {
+    if (tipoStatsActual === 'heredados') {
+      filterEvolucionAnteriorItem.style.display = 'flex';
+    } else {
+      filterEvolucionAnteriorItem.style.display = 'none';
+    }
+  }
+
+  generarRanking();
+});
+
+// Función para actualizar traducciones
+function actualizarTraducciones() {
+  const t = traducciones[idiomaActual];
+
+  document.querySelector('h1').textContent = t.titulo;
+  document.querySelector('label[for="selectNivel"]').textContent = t.seleccionarNivel;
+  document.querySelector('#labelTipoStats').textContent = t.tipoStats;
+  document.querySelector('#labelIdioma').textContent = t.idioma;
+
+  const opcionPorDefecto = document.querySelector('#selectNivel option[value=""]');
+  if (opcionPorDefecto) {
+    opcionPorDefecto.textContent = t.eligeNivel;
+  }
+
+  // Actualizar opciones del selector de tipo de stats
+  const selectTipoStats = document.getElementById('selectTipoStats');
+  if (selectTipoStats) {
+    selectTipoStats.options[0].textContent = t.statsBase;
+    selectTipoStats.options[1].textContent = t.statsHeredados;
+  }
+
+  // Actualizar texto explicativo
+  const explanationText = document.getElementById('explanationText');
+  if (explanationText) {
+    explanationText.textContent = t.explanation;
+  }
+
+  // Actualizar labels de filtros
+  const labelFilterDigimon = document.getElementById('labelFilterDigimon');
+  const labelFilterEvolucionAnterior = document.getElementById('labelFilterEvolucionAnterior');
+  const labelFilterClasificacion = document.getElementById('labelFilterClasificacion');
+  const labelFilterAtributo = document.getElementById('labelFilterAtributo');
+  const labelFilterTipo = document.getElementById('labelFilterTipo');
+  const labelFilterDigipuntos = document.getElementById('labelFilterDigipuntos');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+  const digipuntosRangeValue = document.getElementById('digipuntosRangeValue');
+
+  if (labelFilterDigimon) labelFilterDigimon.textContent = t.filtrarDigimon;
+  if (labelFilterEvolucionAnterior) labelFilterEvolucionAnterior.textContent = t.filtrarEvolucionAnterior;
+  if (labelFilterClasificacion) labelFilterClasificacion.textContent = t.filtrarClasificacion;
+  if (labelFilterAtributo) labelFilterAtributo.textContent = t.filtrarAtributo;
+  if (labelFilterTipo) labelFilterTipo.textContent = t.filtrarTipo;
+  if (clearFiltersBtn) clearFiltersBtn.textContent = t.limpiarFiltros;
+
+  // Actualizar label de Digipuntos preservando el span de valor
+  if (labelFilterDigipuntos && digipuntosRangeValue) {
+    const valorActual = digipuntosRangeValue.textContent;
+    labelFilterDigipuntos.innerHTML = `${t.filtrarDigipuntos} <span id="digipuntosRangeValue">${valorActual}</span>`;
+  }
+
+  // Actualizar opciones de filtros (para que se traduzcan)
+  if (datosSinFiltrar.length > 0) {
+    actualizarOpcionesDigimon();
+    actualizarOpcionesEvolucionAnterior();
+    actualizarOpcionesClasificacion();
+    actualizarOpcionesAtributo();
+    actualizarOpcionesTipo();
+
+    // Actualizar el texto del valor de digipuntos si está en el rango completo
+    const inputMin = document.getElementById('filterDigipuntosMin');
+    const inputMax = document.getElementById('filterDigipuntosMax');
+    if (inputMin && inputMax &&
+        parseFloat(inputMin.value) === parseFloat(inputMin.min) &&
+        parseFloat(inputMax.value) === parseFloat(inputMax.max)) {
+      document.getElementById('digipuntosRangeValue').textContent = t.todosDigipuntos;
+    }
+  }
+
+  // Actualizar headers de la tabla
+  const headerDigimon = document.getElementById('headerDigimon');
+  const headerLineaEvolutiva = document.getElementById('headerLineaEvolutiva');
+  const headerClasificacion = document.getElementById('headerClasificacion');
+  const headerAtributo = document.getElementById('headerAtributo');
+  const headerTipo = document.getElementById('headerTipo');
+  const headerImagen = document.getElementById('headerImagen');
+  const headerDigipuntos = document.getElementById('headerDigipuntos');
+
+  if (headerDigimon) headerDigimon.textContent = t.digimon;
+  if (headerLineaEvolutiva) headerLineaEvolutiva.textContent = t.lineaEvolutiva;
+  if (headerClasificacion) headerClasificacion.textContent = t.clasificacion;
+  if (headerAtributo) {
+    const sortIcon = headerAtributo.querySelector('.sort-icon');
+    headerAtributo.textContent = t.atributo;
+    if (sortIcon) headerAtributo.appendChild(sortIcon);
+  }
+  if (headerTipo) {
+    const sortIcon = headerTipo.querySelector('.sort-icon');
+    headerTipo.textContent = t.tipo;
+    if (sortIcon) headerTipo.appendChild(sortIcon);
+  }
+  if (headerImagen) headerImagen.textContent = t.imagen;
+  if (headerDigipuntos) {
+    const sortIcon = headerDigipuntos.querySelector('.sort-icon');
+    headerDigipuntos.textContent = t.digipuntos;
+    if (sortIcon) headerDigipuntos.appendChild(sortIcon);
+  }
+
+  if (selectNivel.value && datosActuales.length > 0) {
+    const datosOrdenados = ordenarDatos(datosActuales, campoOrdenamiento, ordenDescendente);
+    const tbody = document.querySelector('#rankingTable tbody');
+    if (tbody) {
+      generarTablaRankingSegura(datosOrdenados, tbody);
+      actualizarHeadersActivos();
+    }
+  }
+}
+
+// ============================================
+// FUNCIONES DE DESCARGA
+// ============================================
+
+function descargarCSV() {
+  const table = document.getElementById('rankingTable');
+  if (!table || table.style.display === 'none') {
+    alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
+    return;
+  }
+
+  let csv = [];
+  const rows = table.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll('td, th');
+    const rowData = [];
+
+    cols.forEach((col, index) => {
+      // Saltar la columna de imagen (índice 5, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Tipo, Imagen)
+      if (index === 5) return;
+
+      let text = col.textContent.trim();
+      // Escapar comillas y envolver en comillas si contiene comas
+      text = text.replace(/"/g, '""');
+      if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+        text = `"${text}"`;
+      }
+      rowData.push(text);
+    });
+
+    csv.push(rowData.join(','));
+  });
+
+  const csvContent = csv.join('\n');
+  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+
+  const nivel = document.getElementById('selectNivel').value;
+  link.setAttribute('href', url);
+  link.setAttribute('download', `ranking_digimon_nivel_${nivel}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function descargarXLSX() {
+  const table = document.getElementById('rankingTable');
+  if (!table || table.style.display === 'none') {
+    alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
+    return;
+  }
+
+  // Crear un array de datos de la tabla
+  const data = [];
+  const rows = table.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    const rowData = [];
+    const cols = row.querySelectorAll('td, th');
+
+    cols.forEach((col, index) => {
+      // Saltar la columna de imagen (índice 5, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Tipo, Imagen)
+      if (index === 5) return;
+      rowData.push(col.textContent.trim());
+    });
+
+    data.push(rowData);
+  });
+
+  // Crear workbook y worksheet
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(data);
+
+  // Ajustar anchos de columnas
+  const colWidths = [
+    { wch: 20 }, // Digimon
+    { wch: 30 }, // Línea Evolutiva
+    { wch: 15 }, // Clasificación
+    { wch: 12 }, // Atributo
+    { wch: 15 }, // Tipo
+    { wch: 8 },  // HP
+    { wch: 8 },  // ATK
+    { wch: 8 },  // DEF
+    { wch: 8 },  // SPD
+    { wch: 12 }  // Digipuntos
+  ];
+  ws['!cols'] = colWidths;
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Ranking');
+
+  const nivel = document.getElementById('selectNivel').value;
+  XLSX.writeFile(wb, `ranking_digimon_nivel_${nivel}.xlsx`);
+}
+
+// Inicializar página - ejecutar inmediatamente sin esperar DOMContentLoaded
+function inicializarPaginaInmediatamente() {
+  const selectIdioma = document.getElementById("selectIdioma");
+  const downloadCSVBtn = document.getElementById('downloadCSV');
+  const downloadXLSXBtn = document.getElementById('downloadXLSX');
+
+  // Ocultar filtro de Evolución Anterior por defecto (Stats Base)
+  const filterEvolucionAnteriorItem = document.getElementById('filterEvolucionAnteriorItem');
+  if (filterEvolucionAnteriorItem) {
+    filterEvolucionAnteriorItem.style.display = 'none';
+  }
+
+  selectIdioma.addEventListener("change", () => {
+    idiomaActual = selectIdioma.value;
+    actualizarTraducciones();
+
+    // Actualizar textos de botones
+    if (downloadCSVBtn) {
+      downloadCSVBtn.textContent = idiomaActual === 'es' ? '📥 Descargar CSV' : '📥 Download CSV';
+    }
+    if (downloadXLSXBtn) {
+      downloadXLSXBtn.textContent = idiomaActual === 'es' ? '📊 Descargar XLSX' : '📊 Download XLSX';
+    }
+  });
+
+  // Event listeners para botones de descarga
+  if (downloadCSVBtn) {
+    downloadCSVBtn.addEventListener('click', descargarCSV);
+  }
+  if (downloadXLSXBtn) {
+    downloadXLSXBtn.addEventListener('click', descargarXLSX);
+  }
+
+  // Event listeners para filtros
+  const filterDigipuntosMin = document.getElementById('filterDigipuntosMin');
+  const filterDigipuntosMax = document.getElementById('filterDigipuntosMax');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+  // Event listeners para los inputs de digipuntos
+  if (filterDigipuntosMin) {
+    filterDigipuntosMin.addEventListener('input', aplicarFiltros);
+  }
+  if (filterDigipuntosMax) {
+    filterDigipuntosMax.addEventListener('input', aplicarFiltros);
+  }
+
+  // Event listener para limpiar filtros
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', limpiarFiltros);
+  }
+
+  // Event listeners para botones dropdown
+  const filterDigimonButton = document.getElementById('filterDigimonButton');
+  const filterEvolucionAnteriorButton = document.getElementById('filterEvolucionAnteriorButton');
+  const filterClasificacionButton = document.getElementById('filterClasificacionButton');
+  const filterAtributoButton = document.getElementById('filterAtributoButton');
+  const filterTipoButton = document.getElementById('filterTipoButton');
+
+  if (filterDigimonButton) {
+    filterDigimonButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterDigimonButton', 'filterDigimonContainer');
+    });
+  }
+
+  if (filterEvolucionAnteriorButton) {
+    filterEvolucionAnteriorButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterEvolucionAnteriorButton', 'filterEvolucionAnteriorContainer');
+    });
+  }
+
+  if (filterClasificacionButton) {
+    filterClasificacionButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterClasificacionButton', 'filterClasificacionContainer');
+    });
+  }
+
+  if (filterAtributoButton) {
+    filterAtributoButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterAtributoButton', 'filterAtributoContainer');
+    });
+  }
+
+  if (filterTipoButton) {
+    filterTipoButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown('filterTipoButton', 'filterTipoContainer');
+    });
+  }
+
+  inicializarSelector();
+  actualizarTraducciones();
+  configurarDelegacionEventos();
+
+  console.log('Página lista - selecciona un nivel para ver datos');
+}
+
+// Ejecutar inmediatamente si el documento ya está cargado, o esperar DOMContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarPaginaInmediatamente);
+} else {
+  inicializarPaginaInmediatamente();
+}
+  </script>
+
+<script>
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+
+// Cerrar con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeNav();
+  }
+});
+
+// Actualizar menú hamburguesa cuando cambia el idioma
+function updateNavMenuLanguage() {
+  const lang = typeof currentLanguage !== 'undefined' ? currentLanguage : (localStorage.getItem('digilang') || 'es');
+  const navHerramientas = document.getElementById("nav-herramientas");
+  if (navHerramientas) {
+    navHerramientas.innerHTML = '<img src="./pageicons/menu.png" alt="Herramientas"><span>' + (lang === 'es' ? 'Herramientas' : 'Tools') + '</span>';
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateNavMenuLanguage);
+} else {
+  updateNavMenuLanguage();
+}
+document.getElementById('languageSelector')?.addEventListener('change', updateNavMenuLanguage);
+</script>
+</body>
+</html>

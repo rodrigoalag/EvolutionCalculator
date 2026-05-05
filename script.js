@@ -2229,6 +2229,23 @@ nextDigimons.forEach(([_, info]) => {
       }
     }
   }
+  // Also extract fields from RequisitosCondicionados paths
+  if (info.RequisitosCondicionados) {
+    ["Con WR", "Con Driver"].forEach(path => {
+      const pathReqs = info.RequisitosCondicionados[path];
+      if (pathReqs) {
+        for (const key in pathReqs) {
+          if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Errores Minimos", "Placeholder"].includes(key)) {
+            if (key.includes("Bonus")) {
+              hayBonus = true;
+            } else {
+              fieldSet.add(key);
+            }
+          }
+        }
+      }
+    });
+  }
 });
 
 if (hayBonus) {
@@ -3091,14 +3108,15 @@ else if (bonusField === "Digimon Bonus") {
 
       let coincide = false;
 
-      // Primero verificar coincidencia exacta
-      if (digimonBonusNormalizado === esperadoBonusNormalizado) {
+      // Verificar coincidencia: el esperado puede ser un valor simple o lista separada por " / "
+      const partesEsperadas = esperadoBonusNormalizado.split('/').map(p => p.trim());
+      if (partesEsperadas.some(p => p === digimonBonusNormalizado)) {
         coincide = true;
       } else {
-        // Solo verificar excepciones si no hay coincidencia exacta
+        // Solo verificar excepciones si no hay coincidencia directa
         for (const excepcion of excepciones) {
           const enVariantes = excepcion.variantes.includes(digimonBonusNormalizado) &&
-                              excepcion.variantes.includes(esperadoBonusNormalizado);
+                              excepcion.variantes.some(v => partesEsperadas.includes(v));
           if (enVariantes) {
             coincide = true;
             break;

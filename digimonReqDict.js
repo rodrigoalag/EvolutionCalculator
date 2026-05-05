@@ -182,7 +182,7 @@ const digimonReqDict = {
   },
     "Etemon": {
 	"ID": 44, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Marioneta",
-    "Peso": 20, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Scumon", "WinRate": 70, "Combates Minimos": 25
+    "Peso": 20, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Scumon / ScumonTyumon / ScumonTyumonHigh", "WinRate": 70, "Combates Minimos": 25
   },
     "WaruMonzaemon": {
 	"ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Marioneta", "Peso": 30,
@@ -490,7 +490,7 @@ const digimonReqDict = {
   "% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 15, "WinRate": 50, "Xross": "1 SP013 Driver"
   },
     "ScumonTyumon": {
-	"ID": 185, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Xross": "Driverinstall"
+	"ID": 185, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Xross": "DriverInstall"
   },
     "PlatinumScumonTyumon": {
 	"ID": 187, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Comida": "Chatarra"

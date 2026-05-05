@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Main Hub - Digimon Tools</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <style>
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+}
+
+h1, h2, h3 { color: #4ecdc4; }
+
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+}
+
+header p {
+  margin: 0 0 2rem 0;
+  color: #888;
+  font-size: 1rem;
+}
+
+/* Main container */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Tools grid */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.tool-card {
+  background: rgba(30, 30, 50, 0.6);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tool-card:hover {
+  border-color: #4ecdc4;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(78, 205, 196, 0.2);
+  background: rgba(30, 30, 50, 0.8);
+}
+
+.tool-card-icon {
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+}
+
+.tool-card-icon img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.tool-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #4ecdc4;
+}
+
+/* Links section */
+.links-section {
+  margin-bottom: 3rem;
+}
+
+.links-section h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.link-card {
+  background: rgba(30, 30, 50, 0.6);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: #ccc;
+  transition: all 0.3s ease;
+}
+
+.link-card:hover {
+  border-color: #4ecdc4;
+  color: #fff;
+  background: rgba(30, 30, 50, 0.8);
+}
+
+.link-card::after {
+  content: ' ↗';
+  font-size: 0.8rem;
+}
+
+/* Explanations */
+.explanation {
+  background: rgba(30, 30, 50, 0.4);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.explanation h2 {
+  color: #4ecdc4;
+  margin-top: 0;
+}
+
+.explanation code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: #4ecdc4;
+}
+
+.explanation ul, .explanation ol {
+  line-height: 1.8;
+}
+
+.explanation li {
+  margin-bottom: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  body { padding-top: 60px; }
+  #nav-toggle { top: 10px; left: 10px; width: 38px; height: 38px; }
+  #nav-toggle span { width: 18px; }
+  #lang-selector { top: 10px; right: 10px; }
+  #lang-selector select { padding: 5px 8px; font-size: 0.75rem; }
+  header h1 { font-size: 1.5rem; }
+  .tools-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+  .tool-card { padding: 1.5rem 1rem; }
+}
+  </style>
+</head>
+<body>
+
+
+<div class="main-container">
+  <header>
+    <h1 id="mainTitle">Main Hub de las diferentes herramientas para Net Driver</h1>
+    <p id="mainSubtitle">Creado por Rodrigoalag</p>
+    <select id="languageSelector" onchange="changeLanguage()" style="margin-top: 1rem; background: rgba(30, 30, 50, 0.9); color: white; border: 1px solid rgba(78, 205, 196, 0.3); border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; cursor: pointer;">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+
+  <!-- Tools Grid -->
+  <div class="tools-grid">
+    <a href="./digimonreqs.html?v=2" class="tool-card">
+      <div class="tool-card-icon"><img src="./pageicons/Digidex.png" alt="DigiDex"></div>
+      <h3>DigiDex Selector</h3>
+    </a>
+    <a href="./calculadora.html" class="tool-card">
+      <div class="tool-card-icon"><img src="./pageicons/Calculator.png" alt="Calculadora"></div>
+      <h3>Evo Calculator</h3>
+    </a>
+    <a href="./StatRanking.html" class="tool-card">
+      <div class="tool-card-icon"><img src="./pageicons/Ranking.png" alt="Ranking"></div>
+      <h3>Stat Ranking</h3>
+    </a>
+    <a href="./digidexprogress.html" class="tool-card">
+      <div class="tool-card-icon"><img src="./pageicons/Digidex.png" alt="Progress"></div>
+      <h3>Digidex Progress</h3>
+    </a>
+    <a href="./BalanceCalculator.html" class="tool-card">
+      <div class="tool-card-icon"><img src="./pageicons/Calculator.png" alt="Balance"></div>
+      <h3>Balance Calc</h3>
+    </a>
+    <a href="./Enemigosdelared.html" class="tool-card">
+      <div class="tool-card-icon"><img src="./icon/Agumon.png" alt="Enemigos"></div>
+      <h3>Enemigos de la Red</h3>
+    </a>
+    <a href="./dropsdelared.html" class="tool-card">
+      <div class="tool-card-icon"><img src="./itemimg/Zanahoria.png" alt="Drops"></div>
+      <h3>Drops de la Red</h3>
+    </a>
+  </div>
+
+  <!-- Links Section -->
+  <div class="links-section">
+    <h2><img src="./pageicons/Link.png" alt="Links" style="width: 20px; margin-right: 10px; vertical-align: middle;">Links Externos</h2>
+    <div class="links-grid">
+      <a href="https://ndcalcs.github.io/" target="_blank" class="link-card">Carrow Website</a>
+      <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="link-card">WhiteRickle - Guides</a>
+      <a href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122" target="_blank" class="link-card">Driver Install Guide</a>
+      <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="link-card">LifeSpan Calculator</a>
+      <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="link-card">Deck Builder</a>
+    </div>
+  </div>
+
+  <!-- Explanations -->
+  <section id="explanation1" class="explanation"></section>
+  <section id="explanation2" class="explanation"></section>
+
+  <!-- Credits Section -->
+  <section class="explanation credits-section">
+    <h2><img src="./pageicons/audit.png" alt="Créditos" style="width: 24px; margin-right: 10px; vertical-align: middle;">Créditos</h2>
+    <p>Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:</p>
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomé prestado sus ideas para hacer las mejoras</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+const explanationHTML1 = {
+  es: `
+    <h2>Cómo usar Digimon Evo Calc</h2>
+    <p>En el tab de <strong>Digimon Evo Calc</strong> te vas a encontrar una calculadora para determinar cuáles son las evoluciones posibles de tu Digimon a la hora de evolucionar.</p>
+    <p>Como se muestra en la siguiente imagen de ejemplo, encontrarás una <strong>tabla dinámica</strong> con los resultados una vez aprietes el botón <strong>Calcular Evolución</strong>.</p>
+    <ul>
+      <li><code>1</code> si el requisito se cumple</li>
+      <li><code>0</code> si el requisito no se cumple, pero no es obligatorio</li>
+      <li><code>-10</code> si el requisito es obligatorio, y no se cumple</li>
+    </ul>
+    <h3>Puntaje Total</h3>
+    <ul>
+      <li>El puntaje debe ser <strong>mayor a 3</strong> para evolucionar.</li>
+      <li>En empate (3 puntos), se muestran <strong>todas las posibles evoluciones</strong>.</li>
+      <li>Con más de 3 puntos, se da <strong>prioridad</strong>.</li>
+      <li>Algunas tienen <strong>prioridad absoluta</strong>, como GeoGreymon.</li>
+    </ul>
+   <img src="img/ExplicaciontablaES.png" alt="Ejemplo de tabla de evolución" style="max-width: 100%; height: auto;">
+  `,
+  en: `
+    <h2>How to use Digimon Evo Calc</h2>
+    <p>In the <strong>Digimon Evo Calc</strong> tab, you will find a calculator to determine the possible evolutions of your Digimon.</p>
+    <p>As shown in the example image, you will see a <strong>dynamic table</strong> with results after clicking <strong>Calculate Evolution</strong>.</p>
+    <ul>
+      <li><code>1</code> if the requisite is met</li>
+      <li><code>0</code> if the requisite is not met but its not obligatory</li>
+      <li><code>-10</code> if it's an obligatory requisite</li>
+    </ul>
+    <h3>Total Score</h3>
+    <ul>
+      <li>You need a score <strong>greater than 3</strong> to evolve.</li>
+      <li>On tie (3 points), <strong>all evolutions</strong> are shown.</li>
+      <li>Higher score (e.g., <code>4</code>) gives <strong>priority</strong>.</li>
+      <li>Some evolutions have <strong>absolute priority</strong>, like GeoGreymon.</li>
+    </ul>
+    <img src="img/ExplicaciontablaEN.png" alt="Ejemplo de tabla de evolución" style="max-width: 100%; height: auto;">
+  `
+};
+
+const explanationHTML2 = {
+  es: `
+    <h2>Prioridades de Evolución</h2>
+    <p>En caso de empate entre 2 Digimon (ambos con 3 puntos), el juego considera lo siguiente:</p>
+    <ol>
+      <li><strong>Programs / Evoluciones exclusivas*</strong></li>
+      <li><strong>Mayor cantidad de stat base</strong></li>
+      <li><strong>Digimon no registrados</strong> en el Digidex</li>
+      <li><strong>Moneda al azar</strong></li>
+    </ol>
+    <p><strong>*</strong> Ej: Agumon (2006) → GeoGreymon o BlackVeedramon → BAeroVeedramon, con prioridad incluso con 4 puntos.</p>
+    <p>Si 3 o más Digimon empatan, el juego elige <strong>al azar</strong>. Las únicas excepciones a esto son los Digimon Program o las evoluciones exclusivas. Estos tienen una prioridad mayor incluso en caso de empate triple.</p>
+  `,
+  en: `
+    <h2>Evolution Priorities</h2>
+    <p>If 2 Digimon are tied (both with 3 points), the game considers:</p>
+    <ol>
+      <li><strong>Programs / Exclusive evolutions* </strong></li>
+      <li><strong>Higher base stat total</strong></li>
+      <li><strong>Unregistered Digimon</strong> in the Digidex</li>
+      <li><strong>Coin flip</strong></li>
+    </ol>
+    <p><strong>*</strong> E.g., Agumon (2006) → GeoGreymon or BlackVeedramon → BAeroVeedramon, gets priority even if another has 4 points.</p>
+    <p>If 3 or more Digimon tie, the game chooses <strong>randomly</strong>. Only exception to this are Program Digimon or Exclusive evolutions. Those have a higher priority in case of triple tie.</p>
+  `
+};
+
+const langTexts = {
+  es: {
+    mainTitle: "Main Hub de las diferentes herramientas para Net Driver",
+    subtitle: "Creado por Rodrigoalag"
+  },
+  en: {
+    mainTitle: "Main hub for the different Net Driver tools",
+    subtitle: "Created by Rodrigoalag"
+  }
+};
+
+const selector = document.getElementById("languageSelector");
+function changeLanguage() {
+  updateLanguage(selector.value);
+}
+
+function updateLanguage(lang) {
+  const text = langTexts[lang];
+  document.getElementById("mainTitle").textContent = text.mainTitle;
+  document.getElementById("mainSubtitle").textContent = text.subtitle;
+  document.getElementById("explanation1").innerHTML = explanationHTML1[lang];
+  document.getElementById("explanation2").innerHTML = explanationHTML2[lang];
+  localStorage.setItem("digilang", lang);
+}
+
+const savedLang = localStorage.getItem("digilang") || "es";
+selector.value = savedLang;
+updateLanguage(savedLang);
+selector.addEventListener("change", () => updateLanguage(selector.value));
+</script>
+
+</body>
+</html>

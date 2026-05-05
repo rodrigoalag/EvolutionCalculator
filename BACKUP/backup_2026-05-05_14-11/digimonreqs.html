@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>DigiDex Web - Net Driver</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <style>
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 70px;
+}
+
+h1, h2, h3 { color: #4ecdc4; }
+
+/* Menú hamburguesa */
+#nav-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.95);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: #4ecdc4;
+  border-radius: 2px;
+}
+
+#nav-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: rgba(20, 20, 40, 0.98);
+  border-right: 1px solid rgba(78, 205, 196, 0.3);
+  z-index: 150;
+  padding: 20px;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78, 205, 196, 0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#nav-menu h3 img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link {
+  display: block;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.nav-link img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link:hover { background: rgba(78, 205, 196, 0.2); color: #fff; }
+.nav-link.active { background: rgba(78, 205, 196, 0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.5;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.nav-credits ul {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+.nav-credits li {
+  margin-bottom: 8px;
+}
+.nav-credits a {
+  color: #4ecdc4;
+  text-decoration: none;
+}
+.nav-credits a:hover {
+  text-decoration: underline;
+}
+#nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
+  display: none;
+}
+#nav-overlay.active { display: block; }
+
+/* Selector de idioma */
+#lang-selector {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 200;
+}
+#lang-selector select {
+  background: rgba(30, 30, 50, 0.9);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+#lang-selector select:hover { border-color: #4ecdc4; }
+
+/* Contenedor principal */
+.main-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.welcome-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  color: #ccc;
+}
+
+/* Cards de selección */
+.selection-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.selection-card {
+  background: rgba(30, 30, 50, 0.6);
+  border: 2px solid rgba(78, 205, 196, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selection-card:hover {
+  border-color: #4ecdc4;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(78, 205, 196, 0.2);
+}
+
+.selection-card .icon {
+  font-size: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selection-card .icon img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.selection-card h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.selection-card p {
+  color: #888;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Sección de créditos */
+.credits-section {
+  background: rgba(30, 30, 50, 0.4);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.credits-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.credits-section p {
+  color: #999;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.credits-section ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.credits-section li {
+  margin-bottom: 0.8rem;
+  color: #ccc;
+}
+
+.credits-section a {
+  color: #4ecdc4;
+  text-decoration: none;
+}
+
+.credits-section a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    padding-top: 60px;
+  }
+
+  #nav-toggle {
+    top: 10px;
+    left: 10px;
+    width: 38px;
+    height: 38px;
+  }
+  #nav-toggle span {
+    width: 18px;
+  }
+
+  #lang-selector {
+    top: 10px;
+    right: 10px;
+  }
+  #lang-selector select {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+  }
+
+  .welcome-text {
+    font-size: 0.95rem;
+  }
+
+  .selection-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .selection-card {
+    padding: 1.5rem;
+  }
+
+  .selection-card .icon {
+    font-size: 3rem;
+  }
+
+  .selection-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .credits-section {
+    padding: 1.5rem;
+  }
+}
+  </style>
+</head>
+<body>
+
+<!-- Menú de navegación hamburguesa -->
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Evo Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/Digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/Ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/Digidex.png" alt="Digidex"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/Agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <div class="nav-divider"></div>
+  <h3 id="nav-links"><img src="./pageicons/Link.png" alt="Links"><span>Links Externos</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <div class="nav-divider"></div>
+  <h3 id="nav-creditos"><img src="./pageicons/audit.png" alt="Créditos"><span>Créditos</span></h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomé prestado sus ideas para hacer las mejoras</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Selector de idioma -->
+<div id="lang-selector">
+  <select id="languageSelector" onchange="changeLanguage()">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</div>
+
+<div class="main-container">
+  <h1 class="welcome-title" id="welcomeTitle">Bienvenido a DigiDex Web</h1>
+  <p class="welcome-subtitle" id="welcomeSubtitle">Net Driver - Herramientas de la comunidad</p>
+
+  <p class="welcome-text" id="welcomeText">
+    Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la información mediante el árbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.
+  </p>
+
+  <div class="selection-cards">
+    <a href="./arbolCanvas.html" class="selection-card">
+      <span class="icon"><img src="./pageicons/arbolevolutivo.png" alt="Árbol"></span>
+      <h2 id="treeTitle">Árbol Evolutivo</h2>
+      <p id="treeDesc">Visualiza las evoluciones de forma interactiva con un árbol gráfico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.</p>
+    </a>
+
+    <a href="./digidex.html?v=2" class="selection-card">
+      <span class="icon"><img src="./pageicons/Digidex.png" alt="DigiDex"></span>
+      <h2 id="reqsTitle">Entradas DigiDex</h2>
+      <p id="reqsDesc">Consulta la información detallada de cada Digimon: requisitos de evolución, stats base, y toda la información necesaria para evolucionar.</p>
+    </a>
+  </div>
+
+  <div class="credits-section">
+    <h3><span id="creditsTitle">Créditos</span></h3>
+    <p id="creditsIntro">Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:</p>
+    <ul>
+      <li><strong>JorgeTitor</strong> - <span id="credit1">Por ser el de la idea original de llevar un registro de todos los requisitos</span></li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - <span id="credit2">Tuvo la idea original del árbol evolutivo, tomó prestado sus ideas para hacer las mejoras</span></li>
+      <li><strong>Panoli</strong> - <span id="credit3">Por darme todas las imágenes recortadas del juego</span></li>
+      <li id="credit4">Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+// Traducciones
+const translations = {
+  es: {
+    welcomeTitle: "Bienvenido a DigiDex Web",
+    welcomeSubtitle: "Net Driver - Herramientas de la comunidad",
+    welcomeText: "Bienvenido al selector de la DigiDex web de Net Driver. Por favor, seleccione si quiere ver la información mediante el árbol evolutivo interactivo o mediante las entradas detalladas de la DigiDex.",
+    treeTitle: "Árbol Evolutivo",
+    treeDesc: "Visualiza las evoluciones de forma interactiva con un árbol gráfico. Navega por las diferentes ramas evolutivas y descubre las conexiones entre Digimons.",
+    reqsTitle: "Entradas DigiDex",
+    reqsDesc: "Consulta la información detallada de cada Digimon: requisitos de evolución, stats base, y toda la información necesaria para evolucionar.",
+    creditsTitle: "Créditos",
+    creditsIntro: "Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:",
+    credit1: "Por ser el de la idea original de llevar un registro de todos los requisitos",
+    credit2: "Tuvo la idea original del árbol evolutivo, tomó prestado sus ideas para hacer las mejoras",
+    credit3: "Por darme todas las imágenes recortadas del juego",
+    credit4: "Y a todos los que han ayudado a mejorar la base de datos con sus tageos"
+  },
+  en: {
+    welcomeTitle: "Welcome to DigiDex Web",
+    welcomeSubtitle: "Net Driver - Community Tools",
+    welcomeText: "Welcome to the Net Driver DigiDex web selector. Please choose whether you want to view the information through the interactive evolution tree or through the detailed DigiDex entries.",
+    treeTitle: "Evolution Tree",
+    treeDesc: "Visualize evolutions interactively with a graphical tree. Navigate through different evolutionary branches and discover the connections between Digimons.",
+    reqsTitle: "DigiDex Entries",
+    reqsDesc: "Check detailed information for each Digimon: evolution requirements, base stats, and all the information needed to evolve.",
+    creditsTitle: "Credits",
+    creditsIntro: "Special thanks to the following people, without whose help I couldn't have done many things on these pages:",
+    credit1: "For being the one with the original idea of keeping a record of all requirements",
+    credit2: "Had the original idea for the evolution tree, I borrowed his ideas to make improvements",
+    credit3: "For giving me all the cropped images from the game",
+    credit4: "And to everyone who has helped improve the database with their tags"
+  }
+};
+
+let currentLanguage = localStorage.getItem('digilang') || 'es';
+
+function changeLanguage() {
+  currentLanguage = document.getElementById('languageSelector').value;
+  localStorage.setItem('digilang', currentLanguage);
+  updateTexts();
+}
+
+function updateTexts() {
+  const t = translations[currentLanguage];
+  document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
+  document.getElementById('welcomeSubtitle').textContent = t.welcomeSubtitle;
+  document.getElementById('welcomeText').textContent = t.welcomeText;
+  document.getElementById('treeTitle').textContent = t.treeTitle;
+  document.getElementById('treeDesc').textContent = t.treeDesc;
+  document.getElementById('reqsTitle').textContent = t.reqsTitle;
+  document.getElementById('reqsDesc').textContent = t.reqsDesc;
+  document.getElementById('creditsTitle').textContent = t.creditsTitle;
+  document.getElementById('creditsIntro').textContent = t.creditsIntro;
+  document.getElementById('credit1').textContent = t.credit1;
+  document.getElementById('credit2').textContent = t.credit2;
+  document.getElementById('credit3').textContent = t.credit3;
+  document.getElementById('credit4').textContent = t.credit4;
+}
+
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+
+// Cerrar con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeNav();
+  }
+});
+
+// Inicializar
+document.getElementById('languageSelector').value = currentLanguage;
+updateTexts();
+
+// Actualizar menú hamburguesa
+function updateNavMenuLanguage() {
+  const lang = typeof currentLanguage !== 'undefined' ? currentLanguage : (localStorage.getItem('digilang') || 'es');
+  const navHerramientas = document.getElementById("nav-herramientas");
+  if (navHerramientas) {
+    navHerramientas.innerHTML = '<img src="./pageicons/menu.png" alt="Herramientas"><span>' + (lang === 'es' ? 'Herramientas' : 'Tools') + '</span>';
+  }
+  const navLinks = document.getElementById("nav-links");
+  if (navLinks) {
+    navLinks.innerHTML = '<img src="./pageicons/Link.png" alt="Links"><span>' + (lang === 'es' ? 'Links Externos' : 'External Links') + '</span>';
+  }
+  const navCreditos = document.getElementById("nav-creditos");
+  if (navCreditos) {
+    navCreditos.innerHTML = '<img src="./pageicons/audit.png" alt="Créditos"><span>' + (lang === 'es' ? 'Créditos' : 'Credits') + '</span>';
+  }
+}
+// Ejecutar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateNavMenuLanguage);
+} else {
+  updateNavMenuLanguage();
+}
+// Ejecutar cuando cambia el idioma
+document.getElementById('languageSelector')?.addEventListener('change', updateNavMenuLanguage);
+</script>
+
+</body>
+</html>
+
+

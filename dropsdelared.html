@@ -342,6 +342,112 @@ h1, h2, h3 { color: #4ecdc4; }
     padding: 1.5rem;
   }
 }
+
+/* ===== DROPS SPECIFIC STYLES ===== */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pool-container {
+  background-image: url('font/Font1.jpg');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 0;
+}
+
+.pool-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.item-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-entry img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.item-quantity {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.info-text {
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.info-text p {
+  margin: 0.5rem 0;
+}
+
+.selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.download-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#dropsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  #dropsContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .items-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pool-container {
+    min-width: auto;
+    width: 95%;
+  }
+}
   </style>
 </head>
 <body>

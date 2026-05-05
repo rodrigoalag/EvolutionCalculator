@@ -342,6 +342,317 @@ h1, h2, h3 { color: #4ecdc4; }
     padding: 1.5rem;
   }
 }
+
+/* ===== ENEMIGOS SPECIFIC STYLES ===== */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.enemy-container {
+  background-image: url('font/Font1.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.digimon-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.digimon-info img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+.digimon-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.digimon-nickname {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #ffcc00;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.digimon-errores {
+  font-size: 0.8rem;
+  color: #ff6666;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-top: 0.25rem;
+}
+
+.digimon-boss {
+  font-size: 0.75rem;
+  color: #ff9900;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(255, 153, 0, 0.2);
+  border-radius: 4px;
+}
+
+.digimon-fds {
+  font-size: 0.75rem;
+  color: #66ccff;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(102, 204, 255, 0.2);
+  border-radius: 4px;
+}
+
+.random-drop-msg {
+  width: 100%;
+  font-size: 0.75rem;
+  color: #ffcc00;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  margin-bottom: 0.25rem;
+}
+
+.enemy-drops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.drop-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.drop-entry img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.driver-container {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.driver-container .driver-bg {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.driver-container .driver-icon {
+  position: absolute;
+  top: 35%;
+  left: 38%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.driver-container.driver-container-Verde .driver-bg {
+  width: 115px;
+  height: 115px;
+}
+
+.driver-container.driver-container-Verde {
+  width: 115px;
+  height: 115px;
+}
+
+.driver-container.driver-container-Verde .driver-icon {
+  top: 38%;
+  left: 40%;
+  width: 50px;
+  height: 50px;
+}
+
+.drop-name {
+  font-size: 1rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.drops-title {
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 0.25rem;
+}
+
+.build-stats-btn {
+  background: linear-gradient(135deg, #4a90d9, #357abd);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.build-stats-btn:hover {
+  background: linear-gradient(135deg, #5a9fe9, #4589cd);
+  transform: scale(1.05);
+}
+
+.build-stats-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.5;
+}
+
+.build-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.build-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.build-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.build-modal-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  display: block;
+  border-radius: 8px;
+}
+
+.build-modal-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 36px;
+  height: 36px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  transition: background 0.2s ease;
+}
+
+.build-modal-close:hover {
+  background: #ff6666;
+}
+
+.info-text {
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.info-text p {
+  margin: 0.5rem 0;
+}
+
+.selector-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.download-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#enemigosContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  #enemigosContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .enemy-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .enemy-container {
+    min-width: auto;
+    width: 95%;
+  }
+}
   </style>
 </head>
 <body>

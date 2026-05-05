@@ -342,6 +342,265 @@ h1, h2, h3 { color: #4ecdc4; }
     padding: 1.5rem;
   }
 }
+
+/* ===== CALCULATOR-SPECIFIC STYLES ===== */
+#languageSelector {
+  float: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: auto;
+}
+
+nav a {
+  margin-right: 10px;
+}
+
+#editableFieldsTable,
+#editableFieldsTable2,
+#editableFieldsTable3 {
+  width: 100%;
+  margin-bottom: 0px;
+}
+#editableFieldsTable th,
+#editableFieldsTable td,
+#editableFieldsTable2 th,
+#editableFieldsTable2 td,
+#editableFieldsTable3 th,
+#editableFieldsTable3 td {
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 16px;
+}
+#editableFieldsTable th,
+#editableFieldsTable2 th,
+#editableFieldsTable3 th {
+  font-weight: bold;
+}
+
+#autoFieldsTable {
+  width: 100%;
+  margin-bottom: 20px;
+}
+#autoFieldsTable th,
+#autoFieldsTable td {
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 16px;
+}
+#autoFieldsTable th {
+  font-weight: bold;
+}
+
+.help-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.help-icon:hover {
+  background-color: #0056b3;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.popup-overlay.show {
+  display: flex;
+}
+
+.popup-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: popupIn 0.3s ease-out;
+}
+
+@keyframes popupIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.popup-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+#resultados {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+#resultadosCompletos {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  overflow-x: auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  display: none;
+}
+
+#resultados table {
+  width: 100%;
+  table-layout: auto;
+}
+
+#evolucionTexto {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  #editableFieldsTable th,
+  #editableFieldsTable td,
+  #editableFieldsTable2 th,
+  #editableFieldsTable2 td,
+  #editableFieldsTable3 th,
+  #editableFieldsTable3 td {
+    font-size: 12px;
+    padding: 4px 2px;
+  }
+
+  #editableFieldsTable input,
+  #editableFieldsTable select,
+  #editableFieldsTable2 input,
+  #editableFieldsTable2 select,
+  #editableFieldsTable3 input,
+  #editableFieldsTable3 select {
+    font-size: 11px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  #languageSelector {
+    float: none;
+    display: block;
+    margin: 10px auto;
+  }
+
+  .popup-container {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+
+  .popup-close {
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    top: 5px;
+    right: 10px;
+  }
+
+  .help-icon {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  #editableFieldsTable th,
+  #editableFieldsTable td,
+  #editableFieldsTable2 th,
+  #editableFieldsTable2 td,
+  #editableFieldsTable3 th,
+  #editableFieldsTable3 td {
+    font-size: 12px;
+    padding: 4px 2px;
+  }
+
+  #editableFieldsTable input,
+  #editableFieldsTable select,
+  #editableFieldsTable2 input,
+  #editableFieldsTable2 select,
+  #editableFieldsTable3 input,
+  #editableFieldsTable3 select {
+    font-size: 11px;
+  }
+
+  .popup-overlay {
+    padding: 10px;
+  }
+
+  .popup-container {
+    max-width: 98vw;
+    max-height: 90vh;
+  }
+}
   </style>
 </head>
 <body>

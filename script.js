@@ -1,7 +1,4 @@
 // #region Constantes
-// Variable global para el idioma actual (por defecto español)
-let currentLanguage = 'es';
-
   // Mapeo de textos en español a claves de traducción
   const headerMappingJS = {
     'Peso': 'peso',

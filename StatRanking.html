@@ -182,10 +182,51 @@ h1, h2, h3 { color: #4ecdc4; }
 
     #selectorContainer {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 1.5rem;
+      justify-content: center;
+      gap: 1rem 2rem;
       margin: 2rem auto;
+      padding: 1.5rem;
+      background: rgba(30, 30, 50, 0.4);
+      border: 1px solid rgba(78, 205, 196, 0.2);
+      border-radius: 8px;
+    }
+
+    .selectorItem {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .selectorItem label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #ccc;
+    }
+
+    .selectorItem select {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 6px;
+      background: rgba(40, 40, 60, 0.8);
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .selectorItem select:hover {
+      border-color: #4ecdc4;
+      background: rgba(40, 40, 60, 1);
+    }
+
+    .selectorItem select:focus {
+      outline: none;
+      border-color: #4ecdc4;
+      box-shadow: 0 0 8px rgba(78, 205, 196, 0.3);
     }
 
     /* Estilos para la tabla de ranking */

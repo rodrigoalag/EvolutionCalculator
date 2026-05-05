@@ -626,27 +626,29 @@ h1, h2, h3 { color: #4ecdc4; }
 			<option value="en">English</option>
 		  </select>
 		</div>
+      </div>
+    </section>
 
-        <!-- Texto explicativo -->
-        <p id="explanationText" data-translate="explanation" style="display: none; max-width: 800px; margin: 1rem auto; text-align: center; font-style: italic; color: #666; line-height: 1.5;">
-          Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.
-        </p>
+    <!-- Texto explicativo -->
+    <section>
+      <p id="explanationText" data-translate="explanation" style="display: block; max-width: 800px; margin: 1rem auto; text-align: center; font-style: italic; color: #666; line-height: 1.5;">
+        Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.
+      </p>
 
-        <!-- Botones de descarga -->
-        <div class="download-buttons" id="downloadButtons" style="display: none;">
-          <button class="download-btn csv" id="downloadCSV">
-            📥 Descargar CSV
-          </button>
-          <button class="download-btn xlsx" id="downloadXLSX">
-            📊 Descargar XLSX
-          </button>
-        </div>
+      <!-- Botones de descarga -->
+      <div class="download-buttons" id="downloadButtons" style="display: flex; justify-content: center; gap: 1rem;">
+        <button class="download-btn csv" id="downloadCSV">
+          📥 Descargar CSV
+        </button>
+        <button class="download-btn xlsx" id="downloadXLSX">
+          📊 Descargar XLSX
+        </button>
       </div>
     </section>
 
     <section class="container">
       <!-- Filtros -->
-      <div id="filtersContainer" class="filters-container" style="display: none;">
+      <div id="filtersContainer" class="filters-container" style="display: flex;">
         <div class="filter-item">
           <label id="labelFilterDigimon">Filtrar por Digimon:</label>
           <div class="filter-dropdown">
@@ -726,7 +728,7 @@ h1, h2, h3 { color: #4ecdc4; }
 
       <div id="rankingContainer">
         <div class="table-wrapper">
-          <table id="rankingTable" class="ranking-table" style="display: none;">
+          <table id="rankingTable" class="ranking-table" style="display: table;">
             <thead>
               <tr>
                 <th id="headerDigimon">Digimon</th>
@@ -2390,10 +2392,9 @@ function generarRanking() {
   const filtersContainer = document.getElementById('filtersContainer');
 
   if (!nivelSeleccionado) {
-    rankingTable.style.display = "none";
-    if (downloadButtons) downloadButtons.style.display = "none";
-    if (explanationText) explanationText.style.display = "none";
-    if (filtersContainer) filtersContainer.style.display = "none";
+    // Todo permanece visible pero la tabla vacía
+    const tbody = document.querySelector('#rankingTable tbody');
+    if (tbody) tbody.innerHTML = '';
     return;
   }
 
@@ -2781,8 +2782,8 @@ function descargarXLSX() {
   XLSX.writeFile(wb, `ranking_digimon_nivel_${nivel}.xlsx`);
 }
 
-// Inicializar
-document.addEventListener("DOMContentLoaded", () => {
+// Inicializar página - ejecutar inmediatamente sin esperar DOMContentLoaded
+function inicializarPaginaInmediatamente() {
   const selectIdioma = document.getElementById("selectIdioma");
   const downloadCSVBtn = document.getElementById('downloadCSV');
   const downloadXLSXBtn = document.getElementById('downloadXLSX');
@@ -2877,8 +2878,16 @@ document.addEventListener("DOMContentLoaded", () => {
   inicializarSelector();
   actualizarTraducciones();
   configurarDelegacionEventos();
-  console.log('Delegación de eventos configurada');
-});
+
+  console.log('Página lista - selecciona un nivel para ver datos');
+}
+
+// Ejecutar inmediatamente si el documento ya está cargado, o esperar DOMContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarPaginaInmediatamente);
+} else {
+  inicializarPaginaInmediatamente();
+}
   </script>
 
 <script>

@@ -726,7 +726,7 @@ h1, h2, h3 { color: #4ecdc4; }
 
       <div id="rankingContainer">
         <div class="table-wrapper">
-          <table id="rankingTable" class="ranking-table" style="display: none;">
+          <table id="rankingTable" class="ranking-table" style="display: table;">
             <thead>
               <tr>
                 <th id="headerDigimon">Digimon</th>
@@ -2390,7 +2390,9 @@ function generarRanking() {
   const filtersContainer = document.getElementById('filtersContainer');
 
   if (!nivelSeleccionado) {
-    rankingTable.style.display = "none";
+    // Tabla permanece visible pero vacía
+    const tbody = document.querySelector('#rankingTable tbody');
+    if (tbody) tbody.innerHTML = '';
     if (downloadButtons) downloadButtons.style.display = "none";
     if (explanationText) explanationText.style.display = "none";
     if (filtersContainer) filtersContainer.style.display = "none";
@@ -2878,12 +2880,7 @@ function inicializarPaginaInmediatamente() {
   actualizarTraducciones();
   configurarDelegacionEventos();
 
-  // Generar tabla default (Perfect / Nivel 5) sin cambiar el selector visualmente
-  selectNivel.value = 5;
-  generarRanking();
-  selectNivel.value = '';
-
-  console.log('Tabla generada al cargar');
+  console.log('Página lista - selecciona un nivel para ver datos');
 }
 
 // Ejecutar inmediatamente si el documento ya está cargado, o esperar DOMContentLoaded

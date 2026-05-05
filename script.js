@@ -1463,6 +1463,18 @@ function generarFormulario() {
         if (driverEquipadoOp[selected]) {
             opciones = [...driverEquipadoOp[selected]];
         }
+        // También recopilar opciones de RequisitosCondicionados de las evoluciones destino
+        nextDigimons.forEach(([_, info]) => {
+            if (info.RequisitosCondicionados) {
+                ["Con WR", "Con Driver"].forEach(path => {
+                    const pathReqs = info.RequisitosCondicionados[path];
+                    if (pathReqs && pathReqs["Driver Equipado"]) {
+                        const val = pathReqs["Driver Equipado"];
+                        if (!opciones.includes(val)) opciones.push(val);
+                    }
+                });
+            }
+        });
         opciones.push("Ninguno");
         return opciones;
     }

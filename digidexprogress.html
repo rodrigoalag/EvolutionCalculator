@@ -435,6 +435,43 @@ main {
 </head>
 
 <body>
+<!-- Menú hamburguesa -->
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3>🔧 Herramientas</h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/Digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/Ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link active"><img src="./pageicons/Digidex.png" alt="Progress"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/Agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="Créditos"> Créditos</h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Ideas del árbol evolutivo</li>
+      <li><strong>Panoli</strong> - Imágenes recortadas del juego</li>
+    </ul>
+  </div>
+</nav>
+
   <script src="digimonReqDict.js"></script>
 
   <header>
@@ -893,6 +930,21 @@ document.addEventListener("DOMContentLoaded", () => {
   inicializarSelector();
   actualizarTraducciones();
 });
+
+// Hamburger menu functions
+function toggleNav() {
+  const navMenu = document.getElementById('nav-menu');
+  const navOverlay = document.getElementById('nav-overlay');
+  navMenu.classList.toggle('active');
+  navOverlay.classList.toggle('active');
+}
+
+function closeNav() {
+  const navMenu = document.getElementById('nav-menu');
+  const navOverlay = document.getElementById('nav-overlay');
+  navMenu.classList.remove('active');
+  navOverlay.classList.remove('active');
+}
   </script>
 </body>
 </html>

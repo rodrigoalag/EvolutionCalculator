@@ -628,12 +628,12 @@ h1, h2, h3 { color: #4ecdc4; }
 		</div>
 
         <!-- Texto explicativo -->
-        <p id="explanationText" data-translate="explanation" style="display: none; max-width: 800px; margin: 1rem auto; text-align: center; font-style: italic; color: #666; line-height: 1.5;">
+        <p id="explanationText" data-translate="explanation" style="display: block; max-width: 800px; margin: 1rem auto; text-align: center; font-style: italic; color: #666; line-height: 1.5;">
           Los stats base de Scumon/PlatScumon y GreatKingScumon son un promedio de todos los childs, estos ya tienen los heredados contrario a los demás digis.
         </p>
 
         <!-- Botones de descarga -->
-        <div class="download-buttons" id="downloadButtons" style="display: none;">
+        <div class="download-buttons" id="downloadButtons" style="display: flex;">
           <button class="download-btn csv" id="downloadCSV">
             📥 Descargar CSV
           </button>
@@ -646,7 +646,7 @@ h1, h2, h3 { color: #4ecdc4; }
 
     <section class="container">
       <!-- Filtros -->
-      <div id="filtersContainer" class="filters-container" style="display: none;">
+      <div id="filtersContainer" class="filters-container" style="display: flex;">
         <div class="filter-item">
           <label id="labelFilterDigimon">Filtrar por Digimon:</label>
           <div class="filter-dropdown">
@@ -2390,12 +2390,9 @@ function generarRanking() {
   const filtersContainer = document.getElementById('filtersContainer');
 
   if (!nivelSeleccionado) {
-    // Tabla permanece visible pero vacía
+    // Todo permanece visible pero la tabla vacía
     const tbody = document.querySelector('#rankingTable tbody');
     if (tbody) tbody.innerHTML = '';
-    if (downloadButtons) downloadButtons.style.display = "none";
-    if (explanationText) explanationText.style.display = "none";
-    if (filtersContainer) filtersContainer.style.display = "none";
     return;
   }
 

@@ -418,7 +418,7 @@ const digimonReqDict = {
      "Raptordramon": {
 	"ID": "153", "Tama": "PR", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina", "Peso": 25,
 	"% Entrenamiento": 100, "Error Maximo": 0, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100,
-	"Tienes registrado a DexDorugamon y Dorugamon?": "Si", "Bonus Digimon":"Dorumon"
+	"Tienes registrado a DexDorugamon y Dorugamon?": "Si", "Digimon Bonus":"Dorumon"
   },
      "Doruguremon": {
 	"ID": "150", "Tama": "PR", "Nivel": 5, "Atributo": "Data", "Tipo": "Bestia / Dragon", "Peso": 36,

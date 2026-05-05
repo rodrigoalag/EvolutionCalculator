@@ -723,23 +723,68 @@ function generarTabla(digimonDelTama, tbody, tamaSeleccionado) {
   });
 }
 
+// Global variable for selected tama
+let selectedTama = '';
+
+// Create Tama icons
+function createTamaIcons() {
+  const container = document.getElementById('tama-icons');
+  if (!container) return;
+
+  container.innerHTML = '';
+  const allTamas = [...new Set(Object.values(digimonReqDict).map(d => d.Tama))];
+
+  allTamas.forEach(tama => {
+    const btn = document.createElement('button');
+    btn.className = 'tama-icon-btn';
+    btn.dataset.tama = tama;
+    btn.innerHTML = `
+      <img src="Tama/${tama}.png" alt="${tama}" onerror="this.src='icon/placeholder.png'">
+      <span>${tama}</span>
+    `;
+    btn.addEventListener('click', () => selectTamaIcon(tama));
+    container.appendChild(btn);
+  });
+}
+
+// Select Tama from icons
+function selectTamaIcon(tama) {
+  selectedTama = tama;
+
+  // Update visual state
+  document.querySelectorAll('.tama-icon-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tama === tama);
+  });
+
+  // Load Digimon for selected Tama
+  const digimonDelTama = obtenerDigimonDelTama(tama);
+  const tbody = document.querySelector('#checklistTable tbody');
+  if (tbody) {
+    generarTabla(digimonDelTama, tbody, tama);
+  }
+  actualizarEstadisticas(digimonDelTama);
+
+  // Update progress title
+  const statsHeader = document.querySelector('.stats-header h2');
+  if (statsHeader) {
+    statsHeader.textContent = `${traducciones[idiomaActual].progresoTama} - ${tama}`;
+  }
+
+  // Show table and controls
+  document.getElementById("checklistTable").style.display = "table";
+  document.getElementById("statsHeader").style.display = "block";
+  document.getElementById("controls").style.display = "flex";
+}
+
 // Inicializar selector de tamas
 function inicializarSelector() {
-  const selectTama = document.getElementById("selectTama");
-  const allTamas = [...new Set(Object.values(digimonReqDict).map(d => d.Tama))];
-  
-  allTamas.forEach(tama => {
-    const opt = document.createElement("option");
-    opt.value = tama;
-    opt.textContent = getTamaNombre(tama);
-    selectTama.appendChild(opt);
-  });
+  createTamaIcons();
 }
 
 // Funciones de control
 function marcarTodosTama() {
-  const tamaSeleccionado = document.getElementById("selectTama").value;
-  if (!tamaSeleccionado) return;
+  if (!selectedTama) return;
+  const tamaSeleccionado = selectedTama;
   
   const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
   
@@ -755,8 +800,8 @@ function marcarTodosTama() {
 }
 
 function desmarcarTodosTama() {
-  const tamaSeleccionado = document.getElementById("selectTama").value;
-  if (!tamaSeleccionado) return;
+  if (!selectedTama) return;
+  const tamaSeleccionado = selectedTama;
   
   const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
   
@@ -815,23 +860,10 @@ function importarDatos() {
 // Función para actualizar traducciones
 function actualizarTraducciones() {
   const t = traducciones[idiomaActual];
-  
-  document.querySelector('h1').textContent = t.titulo;
-  document.querySelector('label[for="selectTama"]').textContent = t.seleccionarTama;
-  document.querySelector('label[for="selectIdioma"]').textContent = t.idioma;
-  
-  const opcionPorDefecto = document.querySelector('#selectTama option[value=""]');
-  if (opcionPorDefecto) {
-    opcionPorDefecto.textContent = t.eligeTama;
-  }
 
-  // Actualizar nombres de Tama según idioma
-  const selectTama = document.getElementById("selectTama");
-  Array.from(selectTama.options).forEach(option => {
-    if (option.value !== "") {
-      option.textContent = getTamaNombre(option.value);
-    }
-  });
+  document.querySelector('h1').textContent = t.titulo;
+  document.querySelector('#tamaTitle').textContent = t.seleccionarTama;
+  document.querySelector('label[for="selectIdioma"]').textContent = t.idioma;
 
   const headers = document.querySelectorAll('#checklistTable thead th');
   if (headers.length > 0) {
@@ -847,33 +879,6 @@ function actualizarTraducciones() {
   }
 }
 
-// Event listener para el selector de tama
-document.getElementById("selectTama").addEventListener("change", function() {
-  const tamaSeleccionado = this.value;
-  
-  if (!tamaSeleccionado) {
-    document.getElementById("checklistTable").style.display = "none";
-    document.getElementById("statsHeader").style.display = "none";
-    document.getElementById("controls").style.display = "none";
-    return;
-  }
-
-  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
-
-  const tbody = document.querySelector('#checklistTable tbody');
-  generarTabla(digimonDelTama, tbody, tamaSeleccionado);
-  actualizarEstadisticas(digimonDelTama);
-  
-  // Actualizar título de progreso con el nombre del Tama
-  const statsHeader = document.querySelector('.stats-header h2');
-  if (statsHeader) {
-    statsHeader.textContent = `${traducciones[idiomaActual].progresoTama} - ${tamaSeleccionado}`;
-  }
-  
-  document.getElementById("checklistTable").style.display = "table";
-  document.getElementById("statsHeader").style.display = "block";
-  document.getElementById("controls").style.display = "flex";
-});
 
 // Inicializar
 document.addEventListener("DOMContentLoaded", () => {

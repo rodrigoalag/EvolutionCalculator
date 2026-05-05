@@ -330,33 +330,186 @@
     width: 95%;
   }
 }
+
+/* Menú hamburguesa */
+#nav-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.95);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: #4ecdc4;
+  border-radius: 2px;
+}
+
+#nav-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: rgba(20, 20, 40, 0.98);
+  border-right: 1px solid rgba(78, 205, 196, 0.3);
+  z-index: 150;
+  padding: 20px;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78, 205, 196, 0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#nav-menu h3 img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link {
+  display: block;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.nav-link img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link:hover { background: rgba(78, 205, 196, 0.2); color: #fff; }
+.nav-link.active { background: rgba(78, 205, 196, 0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.5;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.nav-credits ul {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+.nav-credits li {
+  margin-bottom: 8px;
+}
+.nav-credits a {
+  color: #4ecdc4;
+  text-decoration: none;
+}
+.nav-credits a:hover {
+  text-decoration: underline;
+}
+#nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
+  display: none;
+}
+#nav-overlay.active { display: block; }
   </style>
 </head>
 <body>
-  <header>
-    <h1 id="pageTitle">Enemigos de la Red</h1>
-    <nav>
-      <a href="./index.html">Main Hub</a>
-      <a href="./calculadora.html">Digimon Evo Calc</a>
-      <a href="./digimonreqs.html">Digimon Reqs</a>
-      <a href="./StatRanking.html">Digimon Stat Ranking</a>
-      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
-      <a href="./digidexprogress.html">Digidex Progress Checklist</a>
-      <a href="./BalanceCalculator.html">Balance Calculator</a>
-      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
-      <a href="./dropsdelared.html">Drops de la Red</a>
-      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
-      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
-      <a target="_blank" href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122">Driver Installation Guide</a>
-      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
-      <a target="_blank" href="https://nd-deck-builder-5188c6.gitlab.io/">Deck Builder</a>
-    </nav>
-    <label for="languageSelector">Idioma / Language:</label>
-    <select id="languageSelector">
-      <option value="es">Español</option>
-      <option value="en">English</option>
-    </select>
-  </header>
+<!-- Menú hamburguesa -->
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3>🔧 Herramientas</h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/Digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/Ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/Digidex.png" alt="Progress"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/Calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./Enemigosdelared.html" class="nav-link active"><img src="./icon/Agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <div class="nav-divider"></div>
+  <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://docs.google.com/spreadsheets/d/1WzSCjaje4apqByKV9HyXsLXEao92MoT07VQsNRqeAvI/edit?gid=1769528122#gid=1769528122" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="Créditos"> Créditos</h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomé prestado sus ideas para hacer las mejoras</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </div>
+</nav>
+
+<header>
+  <h1 id="pageTitle">Enemigos de la Red</h1>
+  <label for="languageSelector">Idioma / Language:</label>
+  <select id="languageSelector">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</header>
 
   <!-- Modal para Build&Stats -->
 <div id="buildModal" class="build-modal-overlay">
@@ -1238,6 +1391,28 @@
       // Inicializar textos
       actualizarTextosUI();
     });
+  </script>
+
+  <!-- Menú hamburguesa funciones -->
+  <script>
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+
+// Cerrar con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeNav();
+  }
+});
   </script>
 </body>
 </html>

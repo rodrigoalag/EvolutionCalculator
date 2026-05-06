@@ -2123,6 +2123,31 @@ const specialDigimonConfig = {
     "Requisitos Obligatorios": ["Program"]
   }
   },
+"PrinceMamemon":  {
+  requisitosOrigen: {
+    columnaOrigenLabel: "Metodo",
+    "Con WR": {
+      gruposColumnas: {
+        "No se considera en el puntaje": ["Peso", "Error Maximo"],
+        "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Program"]
+      },
+      valores: {
+        "Peso": "55-65", "Error Maximo": "0-6",
+        "% Entrenamiento": "100%", "WinRate": "80%", "Combates Minimos": "50", "Program": "Royal"
+      }
+    },
+    "Con Driver": {
+      gruposColumnas: {
+        "No se considera en el puntaje": ["Peso", "Error Maximo"],
+        "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Victorias", "Driver Equipado"]
+      },
+      valores: {
+        "Peso": "55-65", "Error Maximo": "0-6",
+        "% Entrenamiento": "100%", "Combates Minimos": "250", "Victorias": "130", "Driver Equipado": "1 EX009 Driver"
+      }
+    }
+  }
+  },  
 "Daipenmon":  {
   gruposColumnas: {
     "No se considera en el puntaje": ["Peso", "Error Maximo"],
@@ -4018,35 +4043,11 @@ const gruposColumnas = obtenerGruposColumnas(nombre);
 const evolucionesMultiples = detectarEvolucionesMultiples(nombre);
 
 // Detectar si tiene requisitosOrigen (diferentes requisitos según digimon de origen)
-// o RequisitosCondicionados en digimonReqDict
-let tieneRequisitosOrigen = specialDigimonConfig[nombre]?.requisitosOrigen;
-if (!tieneRequisitosOrigen && datosOriginales?.RequisitosCondicionados) {
-  const _rc = datosOriginales.RequisitosCondicionados;
-  const _paths = Object.entries(_rc).filter(([k]) => k !== 'condicion' && k !== 'valorCondicion');
-  const _peso = datosOriginales.Peso;
-  tieneRequisitosOrigen = { columnaOrigenLabel: 'Metodo' };
-  _paths.forEach(([pathName, pathData]) => {
-    const _fields = Object.keys(pathData);
-    const _noPuntaje = ['Peso', ...(_fields.includes('Error Maximo') ? ['Error Maximo'] : [])];
-    const _obligatorios = _fields.filter(f => f !== 'Error Maximo');
-    const _valores = { 'Peso': formatearPeso(_peso) };
-    _fields.forEach(f => {
-      const v = pathData[f];
-      if (f === 'Error Maximo') _valores[f] = formatearErrorMaximo(v, nombre);
-      else if (f === 'WinRate') _valores[f] = formatearWinRate(v);
-      else if (f === '% Entrenamiento') _valores[f] = formatearPorcentajeEntrenamiento(v, nombre);
-      else _valores[f] = String(v);
-    });
-    tieneRequisitosOrigen[pathName] = {
-      gruposColumnas: { 'No se considera en el puntaje': _noPuntaje, 'Requisitos Obligatorios': _obligatorios },
-      valores: _valores
-    };
-  });
-}
+const tieneRequisitosOrigen = specialDigimonConfig[nombre]?.requisitosOrigen;
 
 // Si tiene requisitosOrigen, generar tabla especial con headers separados por origen
 if (tieneRequisitosOrigen) {
-  const requisitosOrigen = tieneRequisitosOrigen;
+  const requisitosOrigen = specialDigimonConfig[nombre].requisitosOrigen;
   const columnaOrigenLabel = requisitosOrigen.columnaOrigenLabel || "Digimon";
   const origenes = Object.keys(requisitosOrigen).filter(k => k !== "columnaOrigenLabel");
 

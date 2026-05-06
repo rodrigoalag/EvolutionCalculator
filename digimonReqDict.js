@@ -74,7 +74,7 @@ const digimonReqDict = {
 	"Program": "Virus"
   },
     "V-Dramon": {
-	"ID": 7, "Tama": "V0", "Nivel": 4, "Atributo": "Vaccine", "Tipo": "Dragon",
+	"ID": 7, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dragon",
     "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Bonus WinRate": 70, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100
   }, 
     "Deltamon": {

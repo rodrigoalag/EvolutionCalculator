@@ -1526,6 +1526,25 @@ const digimonVariantesPorPreEvo = {
         "Vinculo al momento de evolucionar": "-", "Program": "Death"
       }
     }
+  },
+  "PrinceMamemon": {
+    noImage: true,
+    categorias: {
+      "No se considera en el puntaje": ["Peso", "Error Maximo"],
+      "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Victorias", "Program", "Driver Equipado"]
+    },
+    preEvos: {
+      "Con WR": {
+        "Peso": "60", "Error Maximo": "6",
+        "% Entrenamiento": "100%", "WinRate": "80%", "Combates Minimos": "50",
+        "Victorias": "-", "Program": "Royal", "Driver Equipado": "-"
+      },
+      "Con Driver": {
+        "Peso": "60", "Error Maximo": "6",
+        "% Entrenamiento": "100%", "WinRate": "80%", "Combates Minimos": "250",
+        "Victorias": "130", "Program": "-", "Driver Equipado": "1 EX009 Driver"
+      }
+    }
   }
 };
 
@@ -2933,37 +2952,7 @@ function showInfo(data, evolutions, preEvolutions) {
   }
 
   // Verificar si tiene variantes por pre-evolución (como Mugendramon)
-  // o RequisitosCondicionados en digimonReqDict
-  let variantesPorPreEvoConfig = digimonVariantesPorPreEvo[data.label];
-  if (!variantesPorPreEvoConfig) {
-    const _rc = digimonReqDict[data.label]?.RequisitosCondicionados;
-    if (_rc) {
-      const _paths = Object.entries(_rc).filter(([k]) => k !== 'condicion' && k !== 'valorCondicion');
-      const _peso = digimonReqDict[data.label].Peso;
-      const _preEvos = {};
-      const _allFields = new Set();
-      _paths.forEach(([pathName, pathData]) => {
-        const vals = { 'Peso': String(_peso) };
-        Object.entries(pathData).forEach(([k, v]) => {
-          let fmtV = String(v);
-          if (k === 'WinRate' || k === '% Entrenamiento') fmtV = v + '%';
-          vals[k] = fmtV;
-          _allFields.add(k);
-        });
-        _preEvos[pathName] = vals;
-      });
-      const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])];
-      const _obligatorios = [..._allFields].filter(f => f !== 'Error Maximo');
-      variantesPorPreEvoConfig = {
-        noImage: true,
-        categorias: {
-          'No se considera en el puntaje': _noPuntaje,
-          'Requisitos Obligatorios': _obligatorios
-        },
-        preEvos: _preEvos
-      };
-    }
-  }
+  const variantesPorPreEvoConfig = digimonVariantesPorPreEvo[data.label];
   if (variantesPorPreEvoConfig) {
     const { categorias, preEvos } = variantesPorPreEvoConfig;
 

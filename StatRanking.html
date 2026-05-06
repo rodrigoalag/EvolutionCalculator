@@ -2582,7 +2582,8 @@ selectTipoStats.addEventListener("change", () => {
 function actualizarTraducciones() {
   const t = traducciones[idiomaActual];
 
-  document.querySelector('h1').textContent = t.titulo;
+  const h1El = document.querySelector('h1');
+  if (h1El) h1El.textContent = t.titulo;
   document.querySelector('label[for="selectNivel"]').textContent = t.seleccionarNivel;
   document.querySelector('#labelTipoStats').textContent = t.tipoStats;
   document.querySelector('#labelIdioma').textContent = t.idioma;

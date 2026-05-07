@@ -1165,6 +1165,10 @@ const specialDigimonConfig = {
   "Soulmon LT": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
   "Soulmon MT": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
 
+  // === Spirit Evolution ===
+  "Chackmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
+  "Blizzarmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
+
   // === DexDoru family ===
   "DexDorugamon": { "⚠️ Requisitos desconocidos": ["Los requisitos han cambiado"] },
   "DexDoruguremon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"] },
@@ -1181,6 +1185,19 @@ const specialDigimonConfig = {
 
 // Casos especiales donde % Entrenamiento varía según evolución o condición
 const specialEntrenamientoCases = {
+  "Chackmon": {
+    "Icemon": 100,
+    "Yukidarumon": 100,
+    "Yuki Agumon": 80,
+    "Penmon": 80
+  },
+  "Blizzarmon": {
+    "Icemon": 80,
+    "Yukidarumon": 80,
+    "Chackmon": 80,
+    "Chackmon (Sin Install)": 80,
+    "Polarbearmon": 100
+  },
   "DexDoruguremon": {
     "Dorugamon": 50,
     "DexDorugamon": 100,
@@ -1221,6 +1238,218 @@ const digimonVariantes = {
 
 // Digimons con variantes por pre-evolución (tablas separadas)
 const digimonVariantesPorPreEvo = {
+  "Chackmon": {
+    categorias: {
+      "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+      "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+    },
+    preEvos: {
+      "Icemon": {
+        "Peso": "10", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP000 Driver"
+      },
+      "Yukidarumon": {
+        "Peso": "10", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP000 Driver"
+      },
+      "Yuki Agumon": {
+        "Peso": "10", "% Entrenamiento": "80%", "Error Maximo": "0-6",
+        "WinRate": "60%", "Combates Minimos": "15", "Xross": "1 SP000 Driver"
+      },
+      "Penmon": {
+        "Peso": "10", "% Entrenamiento": "80%", "Error Maximo": "0-6",
+        "WinRate": "60%", "Combates Minimos": "15", "Xross": "1 SP000 Driver"
+      }
+    }
+  },
+  "Blizzarmon": {
+    categorias: {
+      "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+      "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+    },
+    preEvos: {
+      "Icemon": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "1 SP001 Driver"
+      },
+      "Yukidarumon": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "1 SP001 Driver"
+      },
+      "Chackmon": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "1 SP001 Driver"
+      },
+      "Chackmon (Sin Install)": {
+        "Peso": "30", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "70%", "Combates Minimos": "25", "Xross": "-"
+      },
+      "Polarbearmon": {
+        "Peso": "30", "% Entrenamiento": "100%", "Error Maximo": "0-2",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP001 Driver"
+      }
+    }
+  },
+  "Mercuremon": {
+    categorias: {
+      "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+      "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+    },
+    preEvos: {
+      "Tyumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "Pillomon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "Numemon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "Scumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "Nanimon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "BomberNanimon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "ScumonTyumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "PlatinumScumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "PlatinumScumonTyumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "ScumonTyumonHigh": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "PlatinumScumonTyumonHigh": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "KaratsukiNumemon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "Geremon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "GoldNumemon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "0-2",
+        "WinRate": "50%", "Combates Minimos": "15", "Xross": "1 SP013 Driver"
+      },
+      "Thunderballmon": {
+        "Peso": "15", "% Entrenamiento": "100%", "Error Maximo": "0-2",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver"
+      },
+      "Starmon": {
+        "Peso": "15", "% Entrenamiento": "100%", "Error Maximo": "0-2",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver"
+      }
+    }
+  },
+  "Sephirothmon": {
+    categorias: {
+      "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+      "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+    },
+    preEvos: {
+      "Numemon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "Scumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "Nanimon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "BomberNanimon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "ScumonTyumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "PlatinumScumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "PlatinumScumonTyumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "ScumonTyumonHigh": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "PlatinumScumonTyumonHigh": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "KaratsukiNumemon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "Geremon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "Thunderballmon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "GoldNumemon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      },
+      "Mercuremon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "-"
+      },
+      "SuperStarmon": {
+        "Peso": "15", "% Entrenamiento": "100%", "Error Maximo": "-",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver"
+      },
+      "DarkSuperStarmon": {
+        "Peso": "15", "% Entrenamiento": "100%", "Error Maximo": "-",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver"
+      },
+      "Mamemon": {
+        "Peso": "15", "% Entrenamiento": "100%", "Error Maximo": "-",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver"
+      },
+      "Digitamamon": {
+        "Peso": "15", "% Entrenamiento": "100%", "Error Maximo": "-",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver"
+      },
+      "BlackKingNumemon": {
+        "Peso": "15", "% Entrenamiento": "100%", "Error Maximo": "-",
+        "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver"
+      },
+      "GreatKingScumon": {
+        "Peso": "15", "% Entrenamiento": "80%", "Error Maximo": "1",
+        "WinRate": "60%", "Combates Minimos": "25", "Xross": "1 SP014 Driver"
+      }
+    }
+  },
   "Wargreymon": {
     categorias: {
       "No se considera en el puntaje": ["Peso"],
@@ -2709,40 +2938,28 @@ function showInfo(data, evolutions, preEvolutions) {
   if (!variantesPorPreEvoConfig) {
     const _rc = digimonReqDict[data.label]?.RequisitosCondicionados;
     if (_rc) {
-      const _paths = Object.entries(_rc).filter(([k]) => k !== 'condicion' && k !== 'valorCondicion' && k !== 'categorias');
+      const _paths = Object.entries(_rc).filter(([k]) => k !== 'condicion' && k !== 'valorCondicion');
       const _peso = digimonReqDict[data.label].Peso;
       const _preEvos = {};
       const _allFields = new Set();
       _paths.forEach(([pathName, pathData]) => {
         const vals = { 'Peso': String(_peso) };
         Object.entries(pathData).forEach(([k, v]) => {
-          let fmtV;
-          if (v === '-' || v === null || v === undefined) {
-            fmtV = '-';
-          } else if (k === 'WinRate' || k === '% Entrenamiento') {
-            fmtV = v + '%';
-          } else if (k === 'Error Maximo') {
-            const vs = String(v);
-            fmtV = vs.includes('-') || isNaN(vs) ? vs : '0-' + vs;
-          } else {
-            fmtV = String(v);
-          }
+          let fmtV = String(v);
+          if (k === 'WinRate' || k === '% Entrenamiento') fmtV = v + '%';
           vals[k] = fmtV;
           _allFields.add(k);
         });
         _preEvos[pathName] = vals;
       });
-      let _categorias;
-      if (_rc.categorias) {
-        _categorias = _rc.categorias;
-      } else {
-        const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])];
-        const _obligatorios = [..._allFields].filter(f => f !== 'Error Maximo');
-        _categorias = { 'No se considera en el puntaje': _noPuntaje, 'Requisitos Obligatorios': _obligatorios };
-      }
+      const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])];
+      const _obligatorios = [..._allFields].filter(f => f !== 'Error Maximo');
       variantesPorPreEvoConfig = {
         noImage: true,
-        categorias: _categorias,
+        categorias: {
+          'No se considera en el puntaje': _noPuntaje,
+          'Requisitos Obligatorios': _obligatorios
+        },
         preEvos: _preEvos
       };
     }

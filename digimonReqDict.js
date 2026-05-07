@@ -288,11 +288,40 @@ const digimonReqDict = {
   },
      "Chackmon": {
 	"ID": 93, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Hielo","Peso":10,
-	"% Entrenamiento": 80,"Error Maximo": 6, "Combates Minimos": 15, "WinRate": 60, "Xross": "1 SP000 Driver"
+	"% Entrenamiento": 80,"Error Maximo": 6, "Combates Minimos": 15, "WinRate": 60, "Xross": "1 SP000 Driver",
+    "RequisitosCondicionados": {
+      "condicion": "Origen",
+      "categorias": {
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+        "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+      },
+      "Icemon, Yukidarumon": {
+        "% Entrenamiento": 100, "Error Maximo": 6, "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP000 Driver"
+      },
+      "Yuki Agumon, Penmon": {
+        "% Entrenamiento": 80, "Error Maximo": 6, "WinRate": 60, "Combates Minimos": 15, "Xross": "1 SP000 Driver"
+      }
+    }
   },
     "Blizzarmon": {
 	"ID": 94, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Hielo","Peso":30,
-	"% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 25, "WinRate": 70, "Xross": "1 SP001 Driver"
+	"% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 25, "WinRate": 70, "Xross": "1 SP001 Driver",
+    "RequisitosCondicionados": {
+      "condicion": "Origen",
+      "categorias": {
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+        "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+      },
+      "Polarbearmon": {
+        "% Entrenamiento": 100, "Error Maximo": 2, "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP001 Driver"
+      },
+      "Icemon, Yukidarumon, Chackmon": {
+        "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 70, "Combates Minimos": 25, "Xross": "1 SP001 Driver"
+      },
+      "Chackmon (Sin Install)": {
+        "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 70, "Combates Minimos": 25, "Xross": "-"
+      }
+    }
   },
     "Daipenmon": {
 	"ID": 95, "Tama": "SP", "Nivel": 6, "Atributo": "Free", "Tipo": "Hielo","Peso":40,
@@ -487,7 +516,23 @@ const digimonReqDict = {
   },
     "Mercuremon": {
 	"ID": 189, "Tama": "SP", "Nivel": 4, "Atributo": "Free", "Tipo": "Mutante", "Peso": 15,
-  "% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 15, "WinRate": 50, "Xross": "1 SP013 Driver"
+  "% Entrenamiento": 80,"Error Maximo": 2, "Combates Minimos": 15, "WinRate": 50, "Xross": "1 SP013 Driver",
+    "RequisitosCondicionados": {
+      "condicion": "Origen",
+      "categorias": {
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+        "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+      },
+      "Tyumon, Pillomon": {
+        "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver"
+      },
+      "Numemon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, GoldNumemon": {
+        "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver"
+      },
+      "Thunderballmon, Starmon": {
+        "% Entrenamiento": 100, "Error Maximo": 2, "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver"
+      }
+    }
   },
     "ScumonTyumon": {
 	"ID": 185, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Xross": "DriverInstall"
@@ -503,8 +548,24 @@ const digimonReqDict = {
 	"ID": 188, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante", "Peso": 20, "Comida": "Chatarra"
   },
     "Sephirothmon": {
-	"ID": 190, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Mutante", "Peso": 30,
-  "% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 25, "WinRate": 60, "Xross": "1 SP014 Driver"
+	"ID": 190, "Tama": "SP", "Nivel": 5, "Atributo": "Free", "Tipo": "Mutante", "Peso": 15,
+  "% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 25, "WinRate": 60, "Xross": "1 SP014 Driver",
+    "RequisitosCondicionados": {
+      "condicion": "Origen",
+      "categorias": {
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"],
+        "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"]
+      },
+      "Numemon, Mercuremon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, Thunderballmon, GoldNumemon, GreatKingScumon": {
+        "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 60, "Combates Minimos": 25, "Xross": "1 SP014 Driver"
+      },
+      "Mercuremon": {
+        "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 60, "Combates Minimos": 25, "Xross": "-"
+      },
+      "SuperStarmon, DarkSuperStarmon, Mamemon, Digitamamon, BlackKingNumemon": {
+        "% Entrenamiento": 100, "Error Maximo": "-", "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver"
+      }
+    }
   },
     "Chiropmon": {
 	"ID": 156, "Tama": "BG", "Nivel": 3, "Atributo": "Virus", "Tipo": "Bestia",
@@ -585,4 +646,22 @@ const specialxrossScoring = {
     "Scumon": ["Scumon Driver"],
     "Tyumon": ["Tyumon Driver"]
     },
+  "Mercuremon": {
+    "Tyumon":                    ["Steel Spirit H"],
+    "Pillomon":                  ["Steel Spirit H"],
+    "Numemon":                   ["Steel Spirit H"],
+    "Scumon":                    ["Steel Spirit H"],
+    "Nanimon":                   ["Steel Spirit H"],
+    "BomberNanimon":             ["Steel Spirit H"],
+    "ScumonTyumon":              ["Steel Spirit H"],
+    "PlatinumScumon":            ["Steel Spirit H"],
+    "PlatinumScumonTyumon":      ["Steel Spirit H"],
+    "ScumonTyumonHigh":          ["Steel Spirit H"],
+    "PlatinumScumonTyumonHigh":  ["Steel Spirit H"],
+    "KaratsukiNumemon":          ["Steel Spirit H"],
+    "Geremon":                   ["Steel Spirit H"],
+    "GoldNumemon":               ["Steel Spirit H"],
+    "Thunderballmon":            ["Steel Spirit H"],
+    "Starmon":                   ["Steel Spirit H"],
+  },
 };

@@ -453,13 +453,30 @@ const xrossinstallop = {
     "Blizzarmon": ["Ice Spirit H"],
     "Chackmon": ["Ice Spirit B"],
     "Polarbearmon": ["Ice Spirit A", "Ice Spirit B + Ice Spirit H"], // Combinando ambos valores
-    "Nanimon": ["1 Mamemon Driver"],
+    "Nanimon": ["1 Mamemon Driver", "Steel Spirit H"],
     "Shoutmon": ["Starmons Driver"],
     "Shoutmon (Black)": ["Starmons Driver"],
     "Koromon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
     "Pickmon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
     "Fluffymon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
     "Dorimon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
+    // Mercuremon pre-evos (SP013 = Steel Spirit H)
+    "Mercuremon": ["Steel Spirit B"],
+    "Tyumon": ["Steel Spirit H"],
+    "Pillomon": ["Steel Spirit H"],
+    "Numemon": ["Steel Spirit H"],
+    "Scumon": ["Steel Spirit H"],
+    "BomberNanimon": ["Steel Spirit H"],
+    "ScumonTyumon": ["Steel Spirit H"],
+    "PlatinumScumon": ["Steel Spirit H"],
+    "PlatinumScumonTyumon": ["Steel Spirit H"],
+    "ScumonTyumonHigh": ["Steel Spirit H"],
+    "PlatinumScumonTyumonHigh": ["Steel Spirit H"],
+    "KaratsukiNumemon": ["Steel Spirit H"],
+    "Geremon": ["Steel Spirit H"],
+    "GoldNumemon": ["Steel Spirit H"],
+    "Thunderballmon": ["Steel Spirit H"],
+    "Starmon": ["Steel Spirit H"],
 };
 //Lo mismo pero para driver equipado
 const driverEquipadoOp = {
@@ -471,7 +488,8 @@ const evonatural = {
 	"Blizzarmon": ["Chackmon"],
 	"Yukidarumon": ["Penmon"],
 	"Icemon": ["Penmon"],
-	"Chackmon": ["Penmon"]
+	"Chackmon": ["Penmon"],
+	"Sephirothmon": ["Mercuremon"],
 }
 
 
@@ -3666,8 +3684,8 @@ else if (field === "Program") {
 // CÓDIGO DE EVALUACIÓN MODIFICADO PARA XROSS
 else if (field === "Xross") {
 	// Verificar si es un caso especial
-	if (specialxrossCases[name]) {
-		const validXross = specialxrossCases[name];
+	if (specialxrossScoring[name]) {
+		const validXross = specialxrossScoring[name];
 		
 		// Si hay un digimon seleccionado y existe un xross válido para él
 		if (selected && validXross[selected]) {

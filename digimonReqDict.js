@@ -353,7 +353,7 @@ const digimonReqDict = {
   
       "SkullGreymon": {
 	"ID": 104, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto", "Peso": 20,
-	"% Entrenamiento": 50,"Errores Minimos": 6, "Victorias Minimas": 30, "Vinculo al momento de evolucionar": -50, "Program":"Death", "Comida": "Carne X"
+	"% Entrenamiento": 50, "Errores Minimos": 6, "Victorias Minimas": 30, "Vinculo al momento de evolucionar": -50, "Program":"Death", "Comida": "Carne X"
   }, 
       "Fantomon": {
 	"ID": 102, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",

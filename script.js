@@ -197,7 +197,7 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Errores Minimos", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados"];
 
 
 const bloqueosEvolucion = {
@@ -234,7 +234,7 @@ const bloqueosEvolucion = {
   "Chackmon": ["Icemon","Yuki Agumon","Yukidarumon", "Penmon"],
   "Blizzarmon": ["Polarbearmon", "Icemon", "Chackmon", "Yukidarumon"],
   "Daipenmon": ["Polarbearmon", "Blizzarmon"],
-  "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon"],
+  "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon", "Armalizamon"],
   "Fantomon": ["Bakemon LT", "Soulmon LT", "Bakemon MT", "Soulmon MT"],
   "Soulmon LT": ["Bakemon LT"],
   "Soulmon MT": ["Bakemon MT"],
@@ -1112,124 +1112,7 @@ function generarFormulario() {
     }
   });
 
-  console.log("Lista ANTES de filtrar por Tama (desde digimonstattier):", nextDigimons.map(([name]) => name));
-
-  // FILTRADO UNIFICADO: Tama + Cross Tama Evolution + Bloqueos Evolución
-  if (currentTama !== "Todos") {
-    console.log(`Filtrando por Tama: ${currentTama}`);
-    const selectedNormalizado = selected.toLowerCase().trim();
-
-    nextDigimons = nextDigimons.filter(([name, _]) => {
-      // Excepción especial para Numemon y Scumon - nunca eliminar
-      if (name === "Numemon" || name === "Scumon" || name === "Nanimon") {
-        console.log(`${name} mantenido por excepción especial`);
-        return true;
-      }
-
-      // Buscar el digimon en digimonReqDict
-      const digimonData = digimonReqDict[name];
-
-      if (digimonData && digimonData["Tama"]) {
-        const tamaDigimon = digimonData["Tama"];
-
-        // Si el Tama coincide, mantenerlo
-        if (tamaDigimon === currentTama) {
-          console.log(`${name} mantenido - Tama coincide: ${tamaDigimon}`);
-          return true;
-        }
-
-        // Si el Tama NO coincide, verificar Cross Tama Evolution
-        console.log(`${name} tiene Tama diferente: ${tamaDigimon} vs ${currentTama}`);
-
-        // Verificar si este digimon puede ser obtenido por Cross Tama Evolution
-        const crossEvoData = crosstamaevo[name];
-        if (crossEvoData && Array.isArray(crossEvoData)) {
-          // Verificar si el digimon selected está en la lista de fuentes para este cross evo
-          const puedeHacerCrossEvo = crossEvoData.some(source =>
-            source.toLowerCase().trim() === selectedNormalizado
-          );
-
-          if (puedeHacerCrossEvo) {
-            console.log(`${name} mantenido por Cross Tama Evolution - ${selected} puede evolucionar a ${name}`);
-            return true;
-          }
-        }
-
-        // Verificar si el selected está en bloqueosEvolucion y este digimon es el valor principal
-        if (bloqueosEvolucion[name] && Array.isArray(bloqueosEvolucion[name])) {
-          const estaEnBloqueos = bloqueosEvolucion[name].some(blockedSource =>
-            blockedSource.toLowerCase().trim() === selectedNormalizado
-          );
-
-          if (estaEnBloqueos) {
-            console.log(`${name} mantenido por Bloqueos Evolución - ${selected} está en la lista de bloqueos para ${name}`);
-            return true;
-          }
-        }
-
-        // Si no cumple ninguna condición, eliminarlo
-        console.log(`${name} eliminado - No hay Cross Tama Evolution ni Bloqueos Evolución disponible desde ${selected}`);
-        return false;
-      }
-
-      console.log(`${name} eliminado - No encontrado en digimonReqDict o sin Tama`);
-      return false;
-    });
-
-    console.log("Lista después de filtrar por Tama + Cross Tama Evolution + Bloqueos Evolución:", nextDigimons.map(([name]) => name));
-  }
-
-  // Buscar si el digimon actual tiene excepciones absolutas
-  let tieneExcepcionAbsoluta = false;
-  let digimonExcepcion = null;
-  for (const [resultado, permitido] of Object.entries(bloqueosexcepciones)) {
-    if (permitido.toLowerCase().trim() === selected.toLowerCase().trim()) {
-      tieneExcepcionAbsoluta = true;
-      digimonExcepcion = resultado;
-      break;
-    }
-  }
-
-  if (tieneExcepcionAbsoluta) {
-    console.log(`EXCEPCIÓN ABSOLUTA: ${selected} solo puede evolucionar a ${digimonExcepcion}`);
-    
-    // Filtrar para mostrar ÚNICAMENTE el digimon de excepción
-    nextDigimons = nextDigimons.filter(([name, _]) => {
-      const nameNormalizado = name.toLowerCase().trim();
-      const excepcionNormalizada = digimonExcepcion.toLowerCase().trim();
-      return nameNormalizado === excepcionNormalizada;
-    });
-    
-    console.log("Lista después de aplicar excepción absoluta:", nextDigimons.map(([name]) => name));
-  } else {
-    // Si no hay excepción absoluta, aplicar lógica normal de bloqueos
-    console.log(`No hay excepciones absolutas para ${selected}, aplicando bloqueos normales`);
-    nextDigimons = nextDigimons.filter(([name, _]) => {
-      // Si el digimon resultado está en la lista de bloqueos
-      if (bloqueosEvolucion.hasOwnProperty(name)) {
-        const permitidos = bloqueosEvolucion[name] || [];
-        
-        // Normalizar nombres para comparación
-        const permitidosNormalizados = permitidos.map(perm => perm.toLowerCase().trim());
-        const selectedNormalizado = selected.toLowerCase().trim();
-        
-        // Si el digimon actual NO está en la lista de permitidos, se bloquea
-        if (!permitidosNormalizados.includes(selectedNormalizado)) {
-          console.log(`Bloqueando ${name} porque ${selected} no está en su lista de permitidos: [${permitidos.join(", ")}]`);
-          return false;
-        } else {
-          console.log(`Permitiendo ${name} porque ${selected} SÍ está en su lista de permitidos`);
-        }
-      }
-      
-      return true; // Mantener si no está en bloqueos o si está permitido
-    });
-    
-    console.log("Lista después del filtro de bloqueos:", nextDigimons.map(([name]) => name));
-  }
-
-  // Ya no necesitamos filtrar sides manualmente, digimonstattier ya tiene toda la info correcta
-  console.log("Lista después de aplicar filtros (las evoluciones ya incluyen sides correctas):", nextDigimons.map(([name]) => name));
+  console.log("Evoluciones desde digimonstattier:", nextDigimons.map(([name]) => name));
   const burpmonNombre = "Burpmon";
   const burpmonExiste = nextDigimons.some(([name, _]) => name.toLowerCase().trim() === burpmonNombre.toLowerCase());
 
@@ -1268,7 +1151,7 @@ function generarFormulario() {
 
     for (const key in info) {
       if (!excludelist.includes(key) && key !== "Stat Superior" && key !== "Bonus Stat Superior" && !camposAOcultar.includes(key)) {
-        fieldSet.add(key);
+        fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
         console.log(`✅ Campo dinámico agregado: ${key}`);
       }
     }
@@ -1280,7 +1163,7 @@ function generarFormulario() {
         if (pathReqs) {
           for (const key in pathReqs) {
             if (!excludelist.includes(key) && key !== "Stat Superior" && !camposAOcultar.includes(key)) {
-              fieldSet.add(key);
+              fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
               console.log(`✅ Campo de RequisitosCondicionados[${path}] agregado: ${key}`);
             }
           }
@@ -2086,139 +1969,8 @@ evolucionesDisponibles.forEach(nombreEvo => {
   }
 });
 
-console.log("Lista de evoluciones desde digimonstattier (botón):", nextDigimons.map(([name]) => name));
-console.log("Seleccionado:", selected);
-console.log("Digis:", nextDigimons);
+console.log("Evoluciones desde digimonstattier (botón):", nextDigimons.map(([name]) => name));
 
-// Primero verificar si hay excepciones absolutas
-console.log(`Verificando excepciones absolutas para ${selected}`);
-
-// Buscar si el digimon actual tiene excepciones absolutas
-let tieneExcepcionAbsoluta = false;
-let digimonExcepcion = null;
-
-for (const [resultado, permitido] of Object.entries(bloqueosexcepciones)) {
-  if (permitido.toLowerCase().trim() === selected.toLowerCase().trim()) {
-    tieneExcepcionAbsoluta = true;
-    digimonExcepcion = resultado;
-    break;
-  }
-}
-
-if (tieneExcepcionAbsoluta) {
-  console.log(`EXCEPCIÓN ABSOLUTA: ${selected} solo puede evolucionar a ${digimonExcepcion}`);
-  
-  // Filtrar para mostrar ÚNICAMENTE el digimon de excepción
-  nextDigimons = nextDigimons.filter(([name, _]) => {
-    const nameNormalizado = name.toLowerCase().trim();
-    const excepcionNormalizada = digimonExcepcion.toLowerCase().trim();
-    return nameNormalizado === excepcionNormalizada;
-  });
-  
-  console.log("Lista después de aplicar excepción absoluta:", nextDigimons.map(([name]) => name));
-} else {
-  // Si no hay excepción absoluta, aplicar lógica normal de bloqueos
-  console.log(`No hay excepciones absolutas para ${selected}, aplicando bloqueos normales`);
-  nextDigimons = nextDigimons.filter(([name, _]) => {
-    // Si el digimon resultado está en la lista de bloqueos
-    if (bloqueosEvolucion.hasOwnProperty(name)) {
-      const permitidos = bloqueosEvolucion[name] || [];
-      
-      // Normalizar nombres para comparación
-      const permitidosNormalizados = permitidos.map(perm => perm.toLowerCase().trim());
-      const selectedNormalizado = selected.toLowerCase().trim();
-      
-      // Si el digimon actual NO está en la lista de permitidos, verificar si puede acceder por otras vías
-      if (!permitidosNormalizados.includes(selectedNormalizado)) {
-        // Verificar si puede acceder por Cross Tama Evolution
-        const crossEvoData = crosstamaevo[name];
-        const puedeHacerCrossEvo = crossEvoData && Array.isArray(crossEvoData) && 
-          crossEvoData.some(source => source.toLowerCase().trim() === selectedNormalizado);
-        
-        if (puedeHacerCrossEvo) {
-          console.log(`Manteniendo ${name} - aunque está bloqueado, puede acceder por Cross Tama Evolution`);
-          return true;
-        }
-        
-        // Si no puede acceder por Cross Tama Evolution, bloquearlo
-        console.log(`Bloqueando ${name} porque ${selected} no está en su lista de permitidos: [${permitidos.join(", ")}] y no hay Cross Tama Evolution`);
-        return false;
-      } else {
-        console.log(`Permitiendo ${name} porque ${selected} SÍ está en su lista de permitidos`);
-      }
-    }
-    
-    return true; // Mantener si no está en bloqueos o si está permitido
-  });
-  
-  console.log("Lista después del filtro de bloqueos:", nextDigimons.map(([name]) => name));
-}
-
-// FILTRADO UNIFICADO: Tama + Cross Tama Evolution + Bloqueos Evolución
-if (!tieneExcepcionAbsoluta && currentTama !== "Todos") {
-  console.log(`Filtrando por Tama: ${currentTama}`);
-  const selectedNormalizado = selected.toLowerCase().trim();
-
-  nextDigimons = nextDigimons.filter(([name, _]) => {
-    // Excepción especial para Numemon y Scumon - nunca eliminar
-    if (name === "Numemon" || name === "Scumon" || name === "Nanimon") {
-      console.log(`${name} mantenido por excepción especial`);
-      return true;
-    }
-
-    // Buscar el digimon en digimonReqDict
-    const digimonData = digimonReqDict[name];
-
-    if (digimonData && digimonData["Tama"]) {
-      const tamaDigimon = digimonData["Tama"];
-
-      // Si el Tama coincide, mantenerlo
-      if (tamaDigimon === currentTama) {
-        console.log(`${name} mantenido - Tama coincide: ${tamaDigimon}`);
-        return true;
-      }
-
-      // Si el Tama NO coincide, verificar condiciones especiales
-      console.log(`${name} tiene Tama diferente: ${tamaDigimon} vs ${currentTama}`);
-
-      // 1. Verificar Cross Tama Evolution
-      const crossEvoData = crosstamaevo[name];
-      if (crossEvoData && Array.isArray(crossEvoData)) {
-        const puedeHacerCrossEvo = crossEvoData.some(source =>
-          source.toLowerCase().trim() === selectedNormalizado
-        );
-
-        if (puedeHacerCrossEvo) {
-          console.log(`${name} mantenido por Cross Tama Evolution - ${selected} puede evolucionar a ${name}`);
-          return true;
-        }
-      }
-
-      // 2. Verificar Bloqueos Evolución (selected está en la lista de permitidos)
-      if (bloqueosEvolucion[name] && Array.isArray(bloqueosEvolucion[name])) {
-        const estaEnBloqueos = bloqueosEvolucion[name].some(blockedSource =>
-          blockedSource.toLowerCase().trim() === selectedNormalizado
-        );
-
-        if (estaEnBloqueos) {
-          console.log(`${name} mantenido por Bloqueos Evolución - ${selected} está en la lista de permitidos para ${name}`);
-          return true;
-        }
-      }
-
-      // Si no cumple ninguna condición especial, eliminarlo
-      console.log(`${name} eliminado - Tama diferente y sin condiciones especiales desde ${selected}`);
-      return false;
-    }
-
-    console.log(`${name} eliminado - No encontrado en digimonReqDict o sin Tama`);
-    return false;
-  });
-
-  console.log("Lista después de filtrar por Tama + Cross Tama Evolution + Bloqueos Evolución:", nextDigimons.map(([name]) => name));
-}
-
-console.log("Lista después del filtro de bloqueos:", nextDigimons.map(([name]) => name));
 fieldSet = new Set();
 let hayBonus = false;
 		console.log("Lista después de filtrar sides por Tama:", nextDigimons.map(([name]) => name));
@@ -2239,11 +1991,11 @@ let hayBonus = false;
 		
 nextDigimons.forEach(([_, info]) => {
   for (const key in info) {
-    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Errores Minimos", "Placeholder", "RequisitosCondicionados"].includes(key)) {
+    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder", "RequisitosCondicionados"].includes(key)) {
       if (key.includes("Bonus")) {
         hayBonus = true;
       } else {
-        fieldSet.add(key);
+        fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
       }
     }
   }
@@ -2253,11 +2005,11 @@ nextDigimons.forEach(([_, info]) => {
       const pathReqs = info.RequisitosCondicionados[path];
       if (pathReqs) {
         for (const key in pathReqs) {
-          if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Errores Minimos", "Placeholder"].includes(key)) {
+          if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder"].includes(key)) {
             if (key.includes("Bonus")) {
               hayBonus = true;
             } else {
-              fieldSet.add(key);
+              fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
             }
           }
         }
@@ -2463,7 +2215,7 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             // Obtener valores de los campos obligatorios
             const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
             const erroresMinimos = Number(inputValues["Error Maximo"]);
-            const combatesMinimos = Number(inputValues["Combates Minimos"]);
+            const combatesMinimos = Number(inputValues["Victorias Minimas"]);
             
             // Para el vínculo, buscar en diferentes campos posibles
             let vinculoMomento = 0;
@@ -2484,7 +2236,7 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
             console.log(`🔥 SkullGreymon - Errores: ${erroresCorrecto} (${erroresMinimos} >= ${requisitos["Errores Minimos"]})`);
             console.log(`🔥 SkullGreymon - Victorias Minimas: ${combatesCorrecto} (${combatesMinimos} >= ${requisitos["Victorias Minimas"]})`);
             console.log(`🔥 SkullGreymon - Vinculo: ${vinculoCorrecto} (${vinculoMomento} <= ${requisitos["Vinculo al momento de evolucionar"]})`);
-            
+
             // Si TODOS los campos obligatorios se cumplen, dar +4
             if (entrenamientoCorrecto && erroresCorrecto && combatesCorrecto && vinculoCorrecto) {
                 puntaje += 4;

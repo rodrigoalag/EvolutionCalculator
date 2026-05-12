@@ -197,95 +197,8 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados", "Death Evo", "Digipuntos", "Clasificacion", "Victorias Minimas", "Errores Minimos"];
 
-
-const bloqueosEvolucion = {
-  "V-Dramon": ["Agumon", "Yuki Agumon", "Agumon (2006)", "Kokuwamon", "Agumon Hakase"],
-  "Greymon": ["Agumon", "Kokuwamon", "Agumon", "Agumon Hakase"],
-  "Tuskmon": ["Agumon (Black)"],
-  "Yukidarumon": ["Yuki Agumon", "Penmon"],
-  "GeoGreymon": ["Agumon (2006)"],
-  "Mametyramon": ["Thunderballmon"],
-  "RizeGreymon":["GeoGreymon"],
-  "Polarbearmon": ["Yukidarumon"],
-  "Master Tyranomon": ["Tyranomon"],
-  "Aero V-dramon (Black)": ["Tuskmon","Dark Tyranomon", "V-dramon (Black)"],
-  "Aero V-dramon": ["Greymon","Tyranomon", "V-dramon", "Deltamon","Thunderballmon","Guardromon","GoldGuardromon","GeoGreymon","Clockmon","Yukidarumon"],
-  "Geremon": ["Numemon"],
-  "KaratsukiNumemon": ["Numemon"],
-  "GoldNumemon": ["Numemon"],
-  "Monzaemon": ["Numemon", "GoldNumemon","KaratsukiNumemon","Geremon"],
-  "GreatKingScumon": ["Scumon"],
-  "Black King Numemon": ["Numemon", "GoldNumemon","KaratsukiNumemon","Geremon"],
-  "Etemon": ["Scumon","PlatinumScumon"],
-  "MetalEtemon" : ["Etemon"],
-  "PlatinumNumemon": ["Black King Numemon"],
-  "Icemon": ["Gotsumon","Yuki Agumon"],
-  "Insekimon Low Tier": ["Icemon"],
-  "Insekimon Mid Tier Dark": ["Icemon"],
-  "Insekimon Mid Tier Super": ["Icemon"],
-  "Insekimon High Tier": ["Icemon"],
-  "SuperStarmon": ["Starmon","ShootingStarmon", "Icemon"],
-  "DarkSuperStarmon": ["Starmon","ShootingStarmon", "Icemon"],
-  "Starmon": ["Starmons","Gotsumon"],
-  "ShootingStarmon": ["Starmons"],
-  "Mugendramon": ["Metal Greymon (Virus)","Megadramon", "Andromon", "Metal Tyranomon", "MetalMamemon","Gigadramon"],
-  "Chackmon": ["Icemon","Yuki Agumon","Yukidarumon", "Penmon"],
-  "Blizzarmon": ["Polarbearmon", "Icemon", "Chackmon", "Yukidarumon"],
-  "Daipenmon": ["Polarbearmon", "Blizzarmon"],
-  "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon", "Armalizamon"],
-  "Fantomon": ["Bakemon LT", "Soulmon LT", "Bakemon MT", "Soulmon MT"],
-  "Soulmon LT": ["Bakemon LT"],
-  "Soulmon MT": ["Bakemon MT"],
-  "Metal Fantomon": ["Fantomon"],
-  "Chamblemon":["Mushmon"],
-  "BomberNanimon": ["Nanimon"],
-  "Digitamamon": ["Nanimon","BomberNanimon"],
-  "Devitamamon": ["Digitamamon"],
-  "PrinceMamemon":["Mamemon"],
-  "King Shoutmon":["Shoutmon","Shoutmon (Black)","Shoutmon SH", "Shoutmon + Star Sword"],
-  "Omega Shoutmon": ["King Shoutmon"],
-  "Wargreymon": ["Metal Greymon", "MetalGreymon Alterous"],
-  "Doruguremon": ["Dorugamon"],
-  "Grademon": ["Raptordramon"],
-  "Grademon VICE": ["Grademon"],
-  "DexDorugamon": ["Dorumon", "Dorugamon"],
-  "DexDoruguremon": ["Dorugamon", "DexDorugamon", "Doruguremon"]
-};
-const bloqueosexcepciones = {
-	"Aero V-dramon (Black)":"RedVdramon",
-	"Numemon":"Pillomon",
-	};
-const SideEvolutionSelected = {
-  "Tyranomon": ["Dark Tyranomon"],
-  "Guardromon": ["GoldGuardromon"],
-  "V-Dramon": ["RedVdramon"],
-  "Metal Greymon": ["MetalGreymon Alterous"],
-  "Mamemon": ["BigMamemon","MetalMamemon"],
-  "Megadramon": ["Gigadramon"],
-  "Numemon": ["Karatsukinumemon","GoldNumemon","Geremon"],
-  "Scumon": ["PlatinumScumon"],
-  "Monzaemon": ["WaruMonzaemon"],
-  "Monzaemon": ["GigaWaruMonzaemon"],
-  "WaruMonzaemon": ["GigaWaruMonzaemon"],
-  "Polarbearmon": ["Blizzarmon"],
-  "Icemon": ["Chackmon", "Blizzarmon"],
-  "Yukidarumon":["Chackmon","Blizzarmon"],
-  "Chackmon":["Blizzarmon"],
-  "Fantomon":["Metal Fantomon"],
-  "Bakemon LT":["Soulmon LT"],
-  "Bakemon MT":["Soulmon MT"],
-  "Nanimon":["BomberNanimon"],
-  "Shoutmon":["Shoutmon SH","Shoutmon + Star Sword"],
-  "Shoutmon (Black)":["Shoutmon SH","Shoutmon + Star Sword"],
-  "Starmons":["Shoutmon SH","Shoutmon + Star Sword"],
-  "Grademon":["Grademon VICE"],
-  "Dorumon":["DexDorugamon"],
-  "Dorugamon":["DexDorugamon", "DexDoruguremon"],
-  "DexDorugamon":["DexDoruguremon"],
-  "Doruguremon":["DexDoruguremon"]
-};
 
 // Campos a ocultar de evoluciones específicas según el origen seleccionado
 const ocultarCamposPorOrigen = {
@@ -295,69 +208,7 @@ const ocultarCamposPorOrigen = {
   }
 };
 
-const EvoListSpecial = {
-  "Polarbearmon": ["Blizzarmon"],
-  "Icemon": ["Chackmon"],
-  "Yukidarumon":["Chackmon"],
-  "Blizzarmon":["Chackmon"],
-  "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon"],
-  "Nanimon": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon"],
-  "GreatKingScumon": ["Scumon"]
-};
-const crosstamaevo = {
-  "Icemon": ["Yuki Agumon", "Penmon"],
-  "Blizzarmon": ["Yukidarumon", "Icemon", "Polarbearmon"],
-  "Yukidarumon": ["Penmon"],
-  "Chackmon": ["Yuki Agumon", "Icemon", "Yukidarumon", "Penmon"],
-  "Daipenmon": ["Polarbearmon"],
-  "Ghostmon": ["Koromon","Pickmon","Fluffymon","Dorimon","Kekkomon"],
-  "Bakemon LT": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon", "Gekkomon", "Penmon"],
-  "Nanimon": ["Ghostmon", "Pillomon", "Agumon", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon SH", "Shoutmon + Star Sword", "Dorumon","Gekkomon", "Penmon"],
-  "SkullGreymon": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon","Armalizamon"],
-  "Mushmon": ["Koromon","Pickmon","Fluffymon","Dorimon","Kekkomon"],
-  "Penmon": ["Koromon","Pickmon","Fluffymon","Dorimon","Kekkomon"],
-};
 
-const SideEvolutionlist = {
-  "Dark Tyranomon": [4],
-  "GoldGuardromon": [4],
-  "Karatsukinumemon": [4],
-  "Geremon": [4],
-  "GoldNumemon": [4],
-  "PlatinumScumon": [4],
-  "RedVDramon": [4],
-  "MetalGreymon Alterous": [5],
-  "BigMamemon": [5],
-  "WaruMonzaemon": [5],
-  "GigaWaruMonzaemon": [5],
-  "MetalMamemon":[5],
-  "Gigadramon":[5],
-  "Blizzarmon":[5],
-  "Chackmon":[4],
-  "Soulmon LT":[4],
-  "Soulmon MT":[4],
-  "Metal Fantomon":[5],
-  "BomberNanimon":[4],
-  "Shoutmon SH":[3],
-  "Shoutmon + Star Sword":[3],
-  "Grademon VICE":[5],
-  "DexDorugamon":[4],
-  "DexDoruguremon":[5]
-};
-
-const SideandEvoList = {
-  "Chackmon": ["Blizzarmon"],
-  "Yuki Agumon": ["Chackmon"],
-  "Polarbearmon": ["Blizzarmon"]
-};
-
-const excepcionesProgram = {
-    "V-Dramon (Black)": ["Agumon (Black)"],
-	"GeoGreymon": ["Agumon (2006)"],
-	"Yukidarumon": ["Yuki Agumon","Penmon"],
-	"RizeGreymon": ["GeoGreymon"],
-	"Aero V-dramon (Black)": ["V-Dramon (Black)"],
-  };
 
 
 const PesoSet = new Set([
@@ -380,117 +231,22 @@ const nivelAEtapa = {
   5: "Perfect",
   6: "Ultimate"
 };
-const specialProgramCases = {
-    "Icemon": {
-        "Yuki Agumon": "Ore",
-        "Gotsumon": "Frost",
-        "Penmon": "Ore"
-}};
-
-// specialxrossCases is defined in digimonReqDict.js
-/*const specialfoodcases = {
-    "Icemon": {
-		"Gotsumon": ["Verdura Congelada", "Hongo Congelado"],
-		"Yuki Agumon": ["Verdura Congelada", "Hongo Congelado"]
-	}
-}*/
-
-const specialfoodcases = {
-    "Icemon": ["Verdura Congelada", "Hongo Congelado"]
-};
-const specialEntrenamientoCases = {
-    "Chackmon": {
-        "Icemon": 100,
-        "Yukidarumon": 100,
-		  "Yuki Agumon": 80,
-      "Penmon": 80,
-},
-    "Blizzarmon": {
-        "Icemon": 80,
-        "Yukidarumon": 80,
-		"Chackmon":80,
-		"Polarbearmon": 100
-	}
-};
-
-const specialVictoriasCases = {
-    "Wargreymon": {
-        "Metal Greymon": 140,
-        "MetalGreymon Alterous": 175
-    },
-    "BlackWargreymon": {
-        "SkullGreymon": 140
+function getFieldFromRC(name, selected, field) {
+    const rc = digimonReqDict[name]?.RequisitosCondicionados;
+    if (!rc || rc.condicion !== "Origen") return undefined;
+    for (const [key, val] of Object.entries(rc)) {
+        if (key === "condicion" || key === "categorias") continue;
+        if (typeof val !== "object" || val === null) continue;
+        const keys = key.split(",").map(k => k.trim());
+        if (keys.includes(selected)) {
+            const raw = val[field];
+            return raw != null && typeof raw === "object" ? raw.val : raw;
+        }
     }
-};
-
-const specialBatallasCases = {
-    "Wargreymon": {
-        "Metal Greymon": 250,
-        "MetalGreymon Alterous": 300
-    },
-    "BlackWargreymon": {
-        "SkullGreymon": 250
-    }
-};
-
-// Diccionario corregido - eliminando duplicados y organizando mejor la data
-const xrossinstallop = {
-    "Mamemon": ["3 Mamemon Driver"],
-    "Starmons": ["4 Pickmon Driver", "Shoutmon Driver", "Shoutmon (Black) Driver", "King Shoutmon Driver", "Shoutmon SH Driver", "Shoutmon + Star Sword Driver"],
-    "Monzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon"],
-    "WaruMonzaemon": ["3 Monzaemon Driver en WaruMonzaemon o 1 WaruMonzaemon + 2 Monzaemon Driver en Monzaemon"],
-    "Black King Numemon": ["5 PlatinumScumon Driver"],
-    "Megadramon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
-	"Gigadramon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
-    "Metal Greymon (Virus)": ["Megadramon Driver + Metal Tyranomon Driver + MetalMamemon Driver + Andromon Driver"],
-    "Metal Tyranomon": ["Metal Greymon (Virus) Driver + Megadramon Driver + MetalMamemon Driver + Andromon Driver"],
-    "MetalMamemon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + Megadramon Driver + Andromon Driver"],
-    "Andromon": ["Metal Greymon (Virus) Driver + Metal Tyranomon Driver + MetalMamemon Driver + Megadramon Driver"],
-    "Yuki Agumon": ["Ice Spirit H"],
-    "Penmon": ["Ice Spirit H"],
-    "Icemon": ["Ice Spirit H", "Ice Spirit B"], // Combinando ambos valores
-    "Yukidarumon": ["Ice Spirit H", "Ice Spirit B"], // Combinando ambos valores
-    "Blizzarmon": ["Ice Spirit H"],
-    "Chackmon": ["Ice Spirit B"],
-    "Polarbearmon": ["Ice Spirit A", "Ice Spirit B + Ice Spirit H"], // Combinando ambos valores
-    "Nanimon": ["1 Mamemon Driver", "Steel Spirit H"],
-    "Shoutmon": ["Starmons Driver"],
-    "Shoutmon (Black)": ["Starmons Driver"],
-    "Koromon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
-    "Pickmon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
-    "Fluffymon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
-    "Dorimon":["Ice Spirit A o Ice Spirit H + Ice Spirit B"],
-    // Mercuremon pre-evos (SP013 = Steel Spirit H)
-    "Mercuremon": ["Steel Spirit B"],
-    "Tyumon": ["Steel Spirit H"],
-    "Pillomon": ["Steel Spirit H"],
-    "Numemon": ["Steel Spirit H"],
-    "Scumon": ["Steel Spirit H"],
-    "BomberNanimon": ["Steel Spirit H"],
-    "ScumonTyumon": ["Steel Spirit H"],
-    "PlatinumScumon": ["Steel Spirit H"],
-    "PlatinumScumonTyumon": ["Steel Spirit H"],
-    "ScumonTyumonHigh": ["Steel Spirit H"],
-    "PlatinumScumonTyumonHigh": ["Steel Spirit H"],
-    "KaratsukiNumemon": ["Steel Spirit H"],
-    "Geremon": ["Steel Spirit H"],
-    "GoldNumemon": ["Steel Spirit H"],
-    "Thunderballmon": ["Steel Spirit H"],
-    "Starmon": ["Steel Spirit H"],
-};
-//Lo mismo pero para driver equipado
-const driverEquipadoOp = {
-	"Thunderballmon": ["Tyranomon Driver"],
-	"Icemon": ["SuperStarmon Driver",  "DarkSuperStarmon Driver", "Starmon o ShootingStarmon Driver", "SuperStarmon y DarkSuperStarmon Driver"]
-};
-
-const evonatural = {
-	"Blizzarmon": ["Chackmon"],
-	"Yukidarumon": ["Penmon"],
-	"Icemon": ["Penmon"],
-	"Chackmon": ["Penmon"],
-	"Sephirothmon": ["Mercuremon"],
+    return undefined;
 }
+
+
 
 
 // #endregion
@@ -604,11 +360,14 @@ function initSearch() {
 }
 
 function cargarImagenIcono(nombre, elementoImg) {
-  const variaciones = [nombre, nombre.replace(/ /g, ''), nombre.replace(/ /g, '_')];
+  const normalized = nombre.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const variaciones = [normalized, nombre, nombre.replace(/ /g, ''), nombre.replace(/ /g, '_')];
+  const seen = new Set();
+  const unique = variaciones.filter(v => seen.has(v) ? false : seen.add(v));
   let i = 0;
   function intentar() {
-    if (i >= variaciones.length) return;
-    const srcTry = `icon/${variaciones[i]}.png`;
+    if (i >= unique.length) return;
+    const srcTry = `icon/${unique[i]}.png`;
     const testImg = new Image();
     testImg.onload = () => { elementoImg.src = srcTry; };
     testImg.onerror = () => { i++; intentar(); };
@@ -808,6 +567,11 @@ const CAMPOS_ESTATICOS = {
     tipo: "calculado",
     header: "Stat Superior",
     calcular: calcularStatSuperior
+  },
+  "WinRate": {
+    tipo: "calculado",
+    header: "WinRate",
+    calcular: calcularWinRate
   }
 };
 
@@ -867,6 +631,15 @@ function calcularStatSuperiorOLD(datosActuales) {
   // 🔍 LOGS DE ANÁLISIS
   console.log("🎯 Análisis de balance:");
 */
+
+// WinRate = Victorias / Combates Minimos * 100
+function calcularWinRate(datosActuales) {
+  const victorias = parseFloat(datosActuales["Victorias"]);
+  const batallas  = parseFloat(datosActuales["Combates Minimos"]);
+  if (!batallas || isNaN(victorias)) return { texto: "" };
+  const wr = (victorias / batallas * 100).toFixed(1);
+  return { texto: `${wr}%` };
+}
 
 // Función de cálculo para Stat Superior (NUEVA - basada en %)
 function calcularStatSuperior(datosActuales) {
@@ -1073,9 +846,9 @@ function recalcularCamposCalculados() {
             elemento.style.border = `1px solid ${colorConfig.border}`;
           }
         } else {
-          // Para otros campos calculados (si los hay en el futuro)
-          elemento.textContent = resultado;
-          elemento.style.fontWeight = resultado ? "bold" : "normal";
+          const text = resultado?.texto ?? resultado ?? "";
+          elemento.textContent = text;
+          elemento.style.fontWeight = text ? "bold" : "normal";
           elemento.style.color = "#6c757d";
         }
       }
@@ -1140,6 +913,11 @@ function generarFormulario() {
     fieldSet.add(campo);
     console.log(`✅ Campo estático agregado: ${campo}`);
   });
+
+  // Campos fijos de fila 2 — siempre visibles
+  ['% Entrenamiento', 'Peso', 'Error Maximo', 'Victorias', 'Combates Minimos', 'Vinculo Minimo alcanzado', 'Vinculo al momento de evolucionar'].forEach(campo => {
+    fieldSet.add(campo);
+  });
   
   console.log(`📊 Campos estáticos en fieldSet: ${Array.from(fieldSet)}`);
   
@@ -1150,25 +928,34 @@ function generarFormulario() {
     const camposAOcultar = ocultarCamposPorOrigen[name]?.[selected] || [];
 
     for (const key in info) {
+      if (/^\d+$/.test(key)) continue;
       if (!excludelist.includes(key) && key !== "Stat Superior" && key !== "Bonus Stat Superior" && !camposAOcultar.includes(key)) {
-        fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
+        fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key === "Victorias Minimas" ? "Victorias" : key);
         console.log(`✅ Campo dinámico agregado: ${key}`);
       }
     }
 
-    // Si tiene RequisitosCondicionados, agregar campos de TODOS los paths al fieldSet
     if (info.RequisitosCondicionados) {
-      ["Con WR", "Con Driver"].forEach(path => {
-        const pathReqs = info.RequisitosCondicionados[path];
-        if (pathReqs) {
-          for (const key in pathReqs) {
-            if (!excludelist.includes(key) && key !== "Stat Superior" && !camposAOcultar.includes(key)) {
-              fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
-              console.log(`✅ Campo de RequisitosCondicionados[${path}] agregado: ${key}`);
+      const _FORM_STRUCT = new Set(["condicion","valorCondicion","pathSi","pathNo","modo","puntajeOk","puntajeNo","Obligatorios","AlMenosUno","Obligatorio","Incumplir","puntaje","Death Evo","categorias"]);
+      function _extraerFormCampos(obj) {
+        if (!obj || typeof obj !== "object") return;
+        for (const [k, v] of Object.entries(obj)) {
+          if (_FORM_STRUCT.has(k)) continue;
+          if (/^\d+$/.test(k)) continue;
+          if (typeof v !== "object" || v === null) {
+            if (!excludelist.includes(k) && k !== "Stat Superior" && !camposAOcultar.includes(k)) {
+              if (k.includes("Bonus")) { /* bonus handled elsewhere */ }
+              else fieldSet.add(k === "Errores Minimos" ? "Error Maximo" : k === "Victorias Minimas" ? "Victorias" : k);
             }
+          } else if ("op" in v) {
+            if (!excludelist.includes(k) && !camposAOcultar.includes(k))
+              fieldSet.add(k === "Errores Minimos" ? "Error Maximo" : k === "Victorias Minimas" ? "Victorias" : k);
+          } else {
+            _extraerFormCampos(v);
           }
         }
-      });
+      }
+      _extraerFormCampos(info.RequisitosCondicionados);
     }
   });
 
@@ -1184,6 +971,13 @@ function generarFormulario() {
   if (tieneBonusVictorias && !fieldSet.has("Victorias")) {
     fieldSet.add("Victorias");
     console.log("✅ Campo 'Victorias' agregado por excepción (existe Bonus Victorias)");
+  }
+
+  // EXCEPCIÓN: Si alguna evolución tiene "Bonus Comida", asegurar que "Comida" esté en fieldSet
+  const tieneBonusComida = nextDigimons.some(([_, info]) => info["Bonus Comida"] !== undefined);
+  if (tieneBonusComida && !fieldSet.has("Comida")) {
+    fieldSet.add("Comida");
+    console.log("✅ Campo 'Comida' agregado por excepción (existe Bonus Comida)");
   }
 
   console.log(`📊 Todos los campos en fieldSet: ${Array.from(fieldSet)}`);
@@ -1212,7 +1006,7 @@ function generarFormulario() {
 
   // Definir qué campos van a cada fila
   const fila1Fields = ['HP Entrenado', 'ATK Entrenado', 'SPD Entrenado', 'Stat Superior'];
-  const fila2Fields = ['Peso', 'Error Maximo', '% Entrenamiento', 'Vinculo Minimo alcanzado', 'WinRate', 'Combates Minimos'];
+  const fila2Fields = ['% Entrenamiento', 'Peso', 'Error Maximo', 'Victorias', 'Combates Minimos', 'WinRate', 'Vinculo Minimo alcanzado', 'Vinculo al momento de evolucionar'];
 
   // DEBUG: Imprimir todos los campos disponibles
   console.log("🔍 === CAMPOS DISPONIBLES ===");
@@ -1232,16 +1026,27 @@ function generarFormulario() {
     return 3; // Todo lo demás va a la fila 3
   }
 
+  // Ordenar campos: fila1 → fila2 (en orden definido) → fila3 (resto)
+  const fila3Fields = Array.from(fieldSet).filter(f => !fila1Fields.includes(f) && !fila2Fields.includes(f));
+  const orderedFields = [
+    ...fila1Fields.filter(f => fieldSet.has(f)),
+    ...fila2Fields.filter(f => fieldSet.has(f)),
+    ...fila3Fields
+  ];
+
   // Generar headers y campos para las 3 filas
   console.log("🏷️ Creando headers y campos...");
-  fieldSet.forEach(field => {
+  orderedFields.forEach(field => {
     console.log(`🏷️ Procesando campo: ${field}`);
 
     const header = field === "Error Maximo" ? "Errores" :
       field === "EntrenamientoHecho" ? "¿Entrenamiento Hecho en Baby 2?" :
       field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
       field === "Combates Minimos" ? "Batallas":
-      field === "Vinculo Minimo alcanzado"?"Vinculo Maximo Alcanzado":
+      field === "Vinculo Minimo alcanzado" ? "Vinculo":
+      field === "Vinculo al momento de evolucionar" ? "Vinculo al Evolucionar":
+      field === "Bonus Vinculo al momento de evolucionar" ? "Vinculo al momento de evolucionar":
+      field === "Xross" ? "Xross/Install":
       field === "Muerte inducida sin Carne X o Program (30% de salir)" ? "Muerte inducida sin Carne X o Program":
       CAMPOS_ESTATICOS[field]?.header || field; // Usar header personalizado si existe
 
@@ -1261,7 +1066,7 @@ function generarFormulario() {
 
   console.log("🔧 Creando campos de input...");
   // Generar campos (lógica mejorada)
-  fieldSet.forEach(field => {
+  orderedFields.forEach(field => {
     console.log(`🔧 Procesando campo: ${field}`);
 
     // Determinar en qué fila va el campo
@@ -1285,14 +1090,16 @@ function generarFormulario() {
         span.style.fontWeight = "bold";
         span.style.padding = "6px 8px";
         span.style.display = "inline-block";
-        span.style.minWidth = "120px"; // Aumentar ancho para dos resultados
+        span.style.minWidth = field === "WinRate" ? "70px" : "120px";
         span.style.textAlign = "center";
-        span.style.border = "1px solid #ddd";
-        span.style.borderRadius = "4px";
-        span.style.backgroundColor = "#f8f9fa";
         span.style.fontSize = "14px";
         span.style.lineHeight = "1.2";
-        span.title = "Formato: [Balanceado /] Stat Superior"; // Tooltip explicativo
+        if (field !== "WinRate") {
+          span.title = "Formato: [Balanceado /] Stat Superior";
+          span.style.border = "1px solid #ddd";
+          span.style.borderRadius = "4px";
+          span.style.backgroundColor = "#f8f9fa";
+        }
         td.appendChild(span);
         targetFields.appendChild(td);
         console.log(`✅ Campo calculado creado: ${field} en fila ${rowNumber}`);
@@ -1351,10 +1158,7 @@ function generarFormulario() {
 
     // Funciones para obtener opciones (mantener exactas)
     function getXrossOptions(selected) {
-        let opciones = [];
-        if (xrossinstallop[selected]) {
-            opciones = [...xrossinstallop[selected]];
-        }
+        const opciones = getXrossInstallOptions(selected);
         opciones.push("Ninguno");
         return opciones;
     }
@@ -1362,6 +1166,9 @@ function generarFormulario() {
     // Resuelve "N CODE Driver" → "N NombreDriver Driver" usando driverNombres.js
     function resolverNombreDriver(driverStr) {
         if (!driverStr || driverStr === "Ninguno") return driverStr;
+        if (driverStr.includes(" + ")) {
+            return driverStr.split(" + ").map(p => resolverNombreDriver(p.trim())).join(" + ");
+        }
         const match = driverStr.match(/^(\d+)\s+([A-Z0-9]+)\s+Driver$/);
         if (match && typeof driverNombres !== "undefined" && driverNombres[match[2]]) {
             return `${match[1]} ${driverNombres[match[2]].nombre} Driver`;
@@ -1370,22 +1177,7 @@ function generarFormulario() {
     }
 
     function getDriverEquipadoOptions(selected) {
-        let opciones = [];
-        if (driverEquipadoOp[selected]) {
-            opciones = [...driverEquipadoOp[selected]];
-        }
-        // También recopilar opciones de RequisitosCondicionados de las evoluciones destino
-        nextDigimons.forEach(([_, info]) => {
-            if (info.RequisitosCondicionados) {
-                ["Con WR", "Con Driver"].forEach(path => {
-                    const pathReqs = info.RequisitosCondicionados[path];
-                    if (pathReqs && pathReqs["Driver Equipado"]) {
-                        const val = pathReqs["Driver Equipado"];
-                        if (!opciones.includes(val)) opciones.push(val);
-                    }
-                });
-            }
-        });
+        const opciones = getDriverEquipadoInstallOptions(selected);
         opciones.push("Ninguno");
         return opciones;
     }
@@ -1393,8 +1185,11 @@ function generarFormulario() {
     function getBonusComidaOptions(selected) {
         let opciones = [];
         nextDigimons.forEach(([name, requisitos]) => {
-            if (specialfoodcases[name] && Array.isArray(specialfoodcases[name])) {
-                opciones.push(...specialfoodcases[name]);
+            const bonusComida = requisitos["Bonus Comida"];
+            if (Array.isArray(bonusComida)) {
+                opciones.push(...bonusComida);
+            } else if (typeof bonusComida === "string") {
+                opciones.push(bonusComida);
             }
             if (requisitos && requisitos["Comida"]) {
                 opciones.push(requisitos["Comida"]);
@@ -1462,7 +1257,7 @@ function generarFormulario() {
 
     // Lógica principal para campos string (mantener exacta pero sin Stat Superior)
     // EXCEPCIÓN: % Entrenamiento, Hora, Vinculo Minimo alcanzado y Nickname siempre deben ser inputs, incluso si el valor esperado es string o undefined
-    if (typeof sampleValue === "string" && field !== "% Entrenamiento" && field !== "Hora" && field !== "Vinculo Minimo alcanzado" && field !== "Nickname") {
+    if ((typeof sampleValue === "string" || field === "Xross" || field === "Driver Equipado" || field === "Comida") && field !== "% Entrenamiento" && field !== "Hora" && field !== "Vinculo Minimo alcanzado" && field !== "Vinculo al momento de evolucionar" && field !== "Nickname") {
         let opciones = [];
         if (field === "EntrenamientoHecho") {
             opciones = ["Si", "No"];
@@ -1509,7 +1304,7 @@ function generarFormulario() {
             let option = document.createElement("option");
             option.value = op;
             // Para Driver Equipado, mostrar nombre resuelto pero conservar código como value
-            option.textContent = (field === "Driver Equipado") ? resolverNombreDriver(op) : op;
+            option.textContent = (field === "Driver Equipado" || field === "Xross") ? resolverNombreDriver(op) : op;
             select.appendChild(option);
         });
         
@@ -1950,6 +1745,181 @@ editableFields3.addEventListener('blur', (e) => {
 
 // #endregion
 
+// ===== EVALUACIÓN GENÉRICA DE RequisitosCondicionados =====
+const _COND_STRUCT = new Set(["modo","puntajeOk","puntajeNo","Obligatorios","AlMenosUno","Obligatorio","Incumplir","Puntos","puntaje","Death Evo"]);
+
+function _evalCmp(campo, ingresado, esperado) {
+  if (typeof esperado === "number") {
+    const n = Number(ingresado) || 0;
+    if (campo === "Peso") return Math.abs(n - esperado) <= 5;
+    const isLessOrEqual = campo === "Error Maximo" || campo === "Errores Minimos" || campo === "Vinculo al momento de evolucionar";
+    return isLessOrEqual ? n <= esperado : n >= esperado;
+  }
+  return (String(ingresado || "")).toLowerCase() === String(esperado).toLowerCase();
+}
+
+function _getInputVal(campo, inputValues) {
+  if (campo === "Errores Minimos") return inputValues["Error Maximo"];
+  if (campo === "Victorias Minimas") return inputValues["Victorias"];
+  return inputValues[campo];
+}
+
+function _normK(k) {
+  if (k === "Victorias Minimas") return "Victorias";
+  if (k === "Errores Minimos") return "Error Maximo";
+  return k;
+}
+
+function _evalPath(path, inputValues) {
+  const modo = path["Death Evo"] ? "BloqueTotal" : (path.modo || "BloqueTotal");
+  const pOk = path.puntajeOk ?? 4, pNo = path.puntajeNo ?? -10;
+  let pts = 0;
+  const campos = new Set();
+  const porCampo = new Map();
+
+  if (modo === "BloqueTotal") {
+    let ok = true;
+    for (const [k, v] of Object.entries(path)) {
+      if (_COND_STRUCT.has(k)) continue;
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (!_evalCmp(k, _getInputVal(k, inputValues), v)) ok = false;
+    }
+    pts += ok ? pOk : pNo;
+
+  } else if (modo === "ObligatoriosMasAlMenosUno") {
+    let ok = true;
+    for (const [k, v] of Object.entries(path.Obligatorios || {})) {
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (!_evalCmp(k, _getInputVal(k, inputValues), v)) ok = false;
+    }
+    pts += ok ? pOk : pNo;
+    let any = false;
+    for (const [k, v] of Object.entries(path.AlMenosUno || {})) {
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (_evalCmp(k, _getInputVal(k, inputValues), v)) any = true;
+    }
+    if (!any) pts += pNo;
+
+  } else if (modo === "ObligatoriosMasObligatorio") {
+    let ok = true;
+    for (const [k, v] of Object.entries(path.Obligatorios || {})) {
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (!_evalCmp(k, _getInputVal(k, inputValues), v)) ok = false;
+    }
+    pts += ok ? pOk : pNo;
+    for (const [k, v] of Object.entries(path.Obligatorio || {})) {
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (!_evalCmp(k, _getInputVal(k, inputValues), v)) pts += pNo;
+    }
+
+  } else if (modo === "SideEvolution") {
+    let obligOk = true;
+    for (const [k, v] of Object.entries(path.Obligatorio || {})) {
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (!_evalCmp(k, _getInputVal(k, inputValues), v)) obligOk = false;
+    }
+    let incumple = false;
+    for (const [k, v] of Object.entries(path.Incumplir || {})) {
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (!_evalCmp(k, _getInputVal(k, inputValues), v)) incumple = true;
+    }
+    pts += (obligOk && incumple) ? pOk : pNo;
+
+  } else if (modo === "PuntajeDirecto") {
+    let ok = true;
+    for (const [k, v] of Object.entries(path.Obligatorio || {})) {
+      campos.add(_normK(k));
+      if (v === "-") continue;
+      if (!_evalCmp(k, _getInputVal(k, inputValues), v)) ok = false;
+    }
+    pts += ok ? (path.puntaje ?? pOk) : pNo;
+
+  } else if (modo === "PuntajePorCampo") {
+    for (const [k, cfg] of Object.entries(path)) {
+      if (_COND_STRUCT.has(k)) continue;
+      campos.add(_normK(k));
+      const n = Number(_getInputVal(k, inputValues)) || 0;
+      const fp = (cfg.op === ">=" ? n >= cfg.val : n <= cfg.val) ? 1 : 0;
+      pts += fp;
+      porCampo.set(_normK(k), fp);
+    }
+
+  } else if (modo === "PuntajeIndividual") {
+    // Obligatorios: gate — if any non-"-" field fails → -10, show as 0
+    let obligOk = true;
+    for (const [k, v] of Object.entries(path.Obligatorios || {})) {
+      const normK = _normK(k);
+      campos.add(normK);
+      if (v === "-") continue;
+      const met = _evalCmp(k, _getInputVal(k, inputValues), v);
+      porCampo.set(normK, 0);
+      if (!met) obligOk = false;
+    }
+    if (!obligOk) {
+      pts = pNo;
+    } else {
+      // Puntos: +1 if met, 0 if not, shown individually
+      for (const [k, v] of Object.entries(path.Puntos || {})) {
+        const normK = _normK(k);
+        campos.add(normK);
+        if (v === "-") continue;
+        const met = _evalCmp(k, _getInputVal(k, inputValues), v);
+        const fp = met ? 1 : 0;
+        pts += fp;
+        porCampo.set(normK, fp);
+      }
+    }
+  }
+
+  return { puntaje: pts, campos, porCampo: porCampo.size ? porCampo : null };
+}
+
+function evaluarCondicionados(condReqs, inputValues, selected) {
+  let path;
+  if (condReqs.condicion === "Origen") {
+    const norm = (selected || "").toLowerCase().trim();
+    let key = Object.keys(condReqs).find(k => {
+      if (k === "condicion" || k === "categorias") return false;
+      return k.split(",").map(s => s.trim().toLowerCase()).includes(norm);
+    });
+    if (!key) return { puntaje: -10, campos: new Set(), porCampo: null };
+
+    // If matched compound path requires a driver but user has none,
+    // try the standalone key for this origin (e.g. "Penmon" → no-driver path)
+    const matchedPath = condReqs[key];
+    const pathXross = matchedPath?.Xross;
+    const inputXross = (inputValues["Xross"] || "").trim();
+    if (pathXross && pathXross !== "-" && (inputXross === "Ninguno" || inputXross === "")) {
+      if (condReqs[selected]) key = selected;
+    }
+
+    path = condReqs[key];
+  } else if (condReqs.condicion) {
+    const fv = (inputValues[condReqs.condicion] || "").trim();
+    const met = fv && fv !== "Ninguno" && fv.toLowerCase() === (condReqs.valorCondicion || "").toLowerCase();
+    const allPaths = Object.entries(condReqs).filter(([k, v]) =>
+      !["condicion","valorCondicion","pathSi","pathNo"].includes(k) && typeof v === "object" && v !== null
+    );
+    let metPath = null, notMetPath = null;
+    for (const [, p] of allPaths) {
+      if (condReqs.condicion in p) metPath = p; else notMetPath = p;
+    }
+    path = met ? (metPath || allPaths[1]?.[1]) : (notMetPath || allPaths[0]?.[1]);
+  } else {
+    path = condReqs;
+  }
+  if (!path) return { puntaje: -10, campos: new Set(), porCampo: null };
+  return _evalPath(path, inputValues);
+}
+// ===== FIN EVALUACIÓN GENÉRICA =====
+
 // #region calcularBtn Event Listener
 calcularBtn.addEventListener("click", () => {
 const selected = digimonSelect.value;
@@ -1991,30 +1961,32 @@ let hayBonus = false;
 		
 nextDigimons.forEach(([_, info]) => {
   for (const key in info) {
-    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder", "RequisitosCondicionados"].includes(key)) {
+    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder", "RequisitosCondicionados", "Death Evo", "Clasificacion", "Digipuntos"].includes(key)) {
       if (key.includes("Bonus")) {
         hayBonus = true;
       } else {
-        fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
+        fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key === "Victorias Minimas" ? "Victorias" : key);
       }
     }
   }
-  // Also extract fields from RequisitosCondicionados paths
   if (info.RequisitosCondicionados) {
-    ["Con WR", "Con Driver"].forEach(path => {
-      const pathReqs = info.RequisitosCondicionados[path];
-      if (pathReqs) {
-        for (const key in pathReqs) {
-          if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder"].includes(key)) {
-            if (key.includes("Bonus")) {
-              hayBonus = true;
-            } else {
-              fieldSet.add(key === "Errores Minimos" ? "Error Maximo" : key);
-            }
-          }
+    const _CALC_STRUCT = new Set(["condicion","valorCondicion","pathSi","pathNo","modo","puntajeOk","puntajeNo","Obligatorios","AlMenosUno","Obligatorio","Incumplir","puntaje","Death Evo","categorias"]);
+    const _CALC_EXCL = new Set(["ID","Tama","Nivel","Tipo","Atributo","Stat Superior 2","Placeholder"]);
+    function _extraerCalcCampos(obj) {
+      if (!obj || typeof obj !== "object") return;
+      for (const [k, v] of Object.entries(obj)) {
+        if (_CALC_STRUCT.has(k) || _CALC_EXCL.has(k)) continue;
+        if (typeof v !== "object" || v === null) {
+          if (k.includes("Bonus")) hayBonus = true;
+          else fieldSet.add(k === "Errores Minimos" ? "Error Maximo" : k === "Victorias Minimas" ? "Victorias" : k);
+        } else if ("op" in v) {
+          fieldSet.add(k === "Errores Minimos" ? "Error Maximo" : k === "Victorias Minimas" ? "Victorias" : k);
+        } else {
+          _extraerCalcCampos(v);
         }
       }
-    });
+    }
+    _extraerCalcCampos(info.RequisitosCondicionados);
   }
 });
 
@@ -2033,6 +2005,12 @@ const tieneBonusVinculo = nextDigimons.some(([_, info]) => info["Bonus Vinculo A
 if (tieneBonusVinculo && !fieldSet.has("Vinculo Minimo alcanzado")) {
   fieldSet.add("Vinculo Minimo alcanzado");
   console.log("✅ Campo 'Vinculo Minimo alcanzado' agregado por excepción en Calcular (existe Bonus Vinculo Alcanzado)");
+}
+
+// EXCEPCIÓN: Si alguna evolución tiene "Bonus Comida", agregar "Comida"
+const tieneBonusComidaCalc = nextDigimons.some(([_, info]) => info["Bonus Comida"] !== undefined);
+if (tieneBonusComidaCalc && !fieldSet.has("Comida")) {
+  fieldSet.add("Comida");
 }
 
 const allKeys = new Set();
@@ -2054,7 +2032,8 @@ fieldSet.forEach(field => {
     // Si el elemento no existe (campo calculado), buscar el span calculado
     if (!element) {
       const calcElement = document.getElementById(`calc_${field}`);
-      inputValues[field] = calcElement ? calcElement.textContent : "";
+      const calcText = calcElement ? calcElement.textContent : "";
+      inputValues[field] = calcText.endsWith('%') ? calcText.slice(0, -1) : calcText;
       console.log(`⏭️ Saltando validación de campo calculado: ${field}`);
       return; // Saltar a la siguiente iteración
     }
@@ -2159,7 +2138,9 @@ fieldSet.forEach(field => {
       field === "EntrenamientoHecho" ? "¿Entrenamiento Hecho en Baby 2?" :
       field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
       field === "Combates Minimos" ? "Batallas":
-      field === "Vinculo Minimo alcanzado" ? "Vinculo" :
+      field === "Vinculo Minimo alcanzado" ? "Vinculo Maximo Alcanzado" :
+      field === "Xross" ? "Xross/Install" :
+      field === "Bonus Vinculo al momento de evolucionar" ? "Vinculo al momento de evolucionar" :
       field;
 
     const translateKey = headerMappingJS[header] || header.toLowerCase();
@@ -2177,14 +2158,11 @@ nextDigimons.forEach(([name, requisitos]) => {
 
 // Agregar esta variable ANTES del map
 let pillomonEvaluated = false;
-let skullGreymonEvaluated = false; // AGREGADO PARA SKULLGREYMON
-let dexDorugamonEvaluated = false; // AGREGADO PARA DEXDORUGAMON
-let dexDoruguremonEvaluated = false; // AGREGADO PARA DEXDORUGUREMON
-let bakemonLTEvaluated = false; // AGREGADO PARA BAKEMON LT
-let shoutmonEvaluated = false; // AGREGADO PARA SHOUTMON
-let shoutmonBlackEvaluated = false; // AGREGADO PARA SHOUTMON BLACK
-let warGreymonEvaluated = false; // AGREGADO PARA WARGREYMON Y BLACKWARGREYMON
-let princeMamemonEvaluated = false; // AGREGADO PARA PRINCEMAMEMON
+let bakemonLTEvaluated = false;
+let shoutmonEvaluated = false;
+let shoutmonBlackEvaluated = false;
+let warGreymonEvaluated = false;
+const condicionadoState = new Map(); // handler genérico para RequisitosCondicionados
 
 const celdas = Array.from(fieldSet)
   .filter(field => {
@@ -2203,388 +2181,55 @@ const celdas = Array.from(fieldSet)
     esperado = requisitos["Bonus Stat Superior"];
     fieldToEvaluate = "Bonus Stat Superior";
   }
+  // Alias: "Victorias" ← "Victorias Minimas", "Error Maximo" ← "Errores Minimos"
+  if (esperado === undefined && field === "Victorias") esperado = requisitos["Victorias Minimas"];
+  if (esperado === undefined && field === "Error Maximo") esperado = requisitos["Errores Minimos"];
   const ingresado = inputValues[field];
   let punto = 0;
 
 console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
 
-        // LÓGICA ESPECIAL PARA SKULLGREYMON - AGREGADO
-        if (name === "SkullGreymon" && !skullGreymonEvaluated) {
-            console.log("🔥 Evaluando SkullGreymon con lógica especial");
-            
-            // Obtener valores de los campos obligatorios
-            const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
-            const erroresMinimos = Number(inputValues["Error Maximo"]);
-            const combatesMinimos = Number(inputValues["Victorias Minimas"]);
-            
-            // Para el vínculo, buscar en diferentes campos posibles
-            let vinculoMomento = 0;
-            if (inputValues["Vinculo al momento de evolucionar"]) {
-                vinculoMomento = Number(inputValues["Vinculo al momento de evolucionar"]);
-            } else if (inputValues["Bonus Vinculo al momento de evolucionar"]) {
-                const vinculoStr = inputValues["Bonus Vinculo al momento de evolucionar"].toString();
-                vinculoMomento = Number(vinculoStr.replace(/[<>=\s]/g, ''));
+        // ===== HANDLER GENÉRICO PARA RequisitosCondicionados =====
+        if (requisitos.RequisitosCondicionados) {
+            const isFirst = !condicionadoState.has(name);
+            if (isFirst) {
+                const res = evaluarCondicionados(requisitos.RequisitosCondicionados, inputValues, selected);
+                puntaje += res.puntaje;
+                condicionadoState.set(name, res);
             }
-            
-            // Verificar si los 4 campos obligatorios se cumplen
-            const entrenamientoCorrecto = porcentajeEntrenamiento >= requisitos["% Entrenamiento"];
-            const erroresCorrecto = erroresMinimos >= requisitos["Errores Minimos"];
-            const combatesCorrecto = combatesMinimos >= requisitos["Victorias Minimas"];
-            const vinculoCorrecto = vinculoMomento <= requisitos["Vinculo al momento de evolucionar"];
-
-            console.log(`🔥 SkullGreymon - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= ${requisitos["% Entrenamiento"]})`);
-            console.log(`🔥 SkullGreymon - Errores: ${erroresCorrecto} (${erroresMinimos} >= ${requisitos["Errores Minimos"]})`);
-            console.log(`🔥 SkullGreymon - Victorias Minimas: ${combatesCorrecto} (${combatesMinimos} >= ${requisitos["Victorias Minimas"]})`);
-            console.log(`🔥 SkullGreymon - Vinculo: ${vinculoCorrecto} (${vinculoMomento} <= ${requisitos["Vinculo al momento de evolucionar"]})`);
-
-            // Si TODOS los campos obligatorios se cumplen, dar +4
-            if (entrenamientoCorrecto && erroresCorrecto && combatesCorrecto && vinculoCorrecto) {
-                puntaje += 4;
-                console.log("🔥 SkullGreymon - Todos los campos obligatorios cumplidos: +4 puntos");
-            } else {
-                puntaje += -10;
-                console.log("🔥 SkullGreymon - No todos los campos obligatorios cumplidos: -10 puntos");
-            }
-            
-            // Evaluar Program y Comida (al menos uno debe cumplirse)
-            const programCorrecto = inputValues["Program"] && requisitos["Program"] &&
-                inputValues["Program"].toLowerCase() === requisitos["Program"].toLowerCase();
-            const comidaCorrecta = inputValues["Comida"] && requisitos["Comida"] &&
-                inputValues["Comida"].toLowerCase() === requisitos["Comida"].toLowerCase();
-            
-            console.log(`🔥 SkullGreymon - Program correcto: ${programCorrecto} ("${inputValues["Program"]}" vs "${requisitos["Program"]}")`);
-            console.log(`🔥 SkullGreymon - Comida correcta: ${comidaCorrecta} ("${inputValues["Comida"]}" vs "${requisitos["Comida"]}")`);
-            
-            if (programCorrecto || comidaCorrecta) {
-                // Al menos uno se cumple: +0
-                console.log("🔥 SkullGreymon - Al menos Program o Comida cumplidos: +0 puntos");
-            } else {
-                puntaje += -10;
-                console.log("🔥 SkullGreymon - Ni Program ni Comida cumplidos: -10 puntos");
-            }
-            
-            skullGreymonEvaluated = true;
-            
-            // Para SkullGreymon, mostrar "Evaluado" en sus campos especiales
-            if (["% Entrenamiento", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            const res = condicionadoState.get(name);
+            if (res.campos.has(field)) {
+                if (res.porCampo && res.porCampo.has(field)) {
+                    return `<td class="detail-column">${res.porCampo.get(field)}</td>`;
+                }
+                return `<td class="detail-column" style="display: none;">${isFirst ? 'Evaluado' : '-'}</td>`;
             }
         }
+        // ===== FIN HANDLER GENÉRICO =====
 
-        // Si ya se evaluó SkullGreymon y es uno de sus campos especiales, no evaluar de nuevo
-        if (name === "SkullGreymon" && skullGreymonEvaluated &&
-            ["% Entrenamiento", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-            return `<td class="detail-column" style="display: none;">-</td>`;
-        }
-        // FIN LÓGICA ESPECIAL PARA SKULLGREYMON
-
-        // LÓGICA ESPECIAL PARA PRINCEMAMEMON - RequisitosCondicionados
-        if (name === "PrinceMamemon" && !princeMamemonEvaluated) {
-            const condReqs = requisitos.RequisitosCondicionados;
-            if (condReqs) {
-                const driverIngresado = (inputValues["Driver Equipado"] || "").trim();
-                const usarDriver = driverIngresado &&
-                    driverIngresado !== "Ninguno" &&
-                    driverIngresado.toLowerCase() === condReqs.valorCondicion.toLowerCase();
-
-                const reqPath = usarDriver ? condReqs["Con Driver"] : condReqs["Con WR"];
-
-                const entrenamientoOk = Number(inputValues["% Entrenamiento"]) >= reqPath["% Entrenamiento"];
-                const erroresOk = Number(inputValues["Error Maximo"]) <= reqPath["Error Maximo"];
-                const combatesOk = Number(inputValues["Combates Minimos"]) >= reqPath["Combates Minimos"];
-
-                let allOk;
-                if (usarDriver) {
-                    const victoriasOk = Number(inputValues["Victorias"]) >= reqPath["Victorias"];
-                    const driverOk = driverIngresado.toLowerCase() === reqPath["Driver Equipado"].toLowerCase();
-                    allOk = entrenamientoOk && erroresOk && combatesOk && victoriasOk && driverOk;
-                    console.log(`👑 PrinceMamemon [Con Driver] - Entrenamiento:${entrenamientoOk} Errores:${erroresOk} Combates:${combatesOk} Victorias:${victoriasOk} Driver:${driverOk}`);
-                } else {
-                    const winRateOk = Number(inputValues["WinRate"]) >= reqPath["WinRate"];
-                    const programOk = (inputValues["Program"] || "").toLowerCase() === (reqPath["Program"] || "").toLowerCase();
-                    allOk = entrenamientoOk && erroresOk && combatesOk && winRateOk && programOk;
-                    console.log(`👑 PrinceMamemon [Con WR] - Entrenamiento:${entrenamientoOk} Errores:${erroresOk} Combates:${combatesOk} WinRate:${winRateOk} Program:${programOk}`);
+        // ===== HANDLER PARA Death Evo TAG =====
+        if (requisitos["Death Evo"]) {
+            const isFirst = !condicionadoState.has(name);
+            if (isFirst) {
+                let allMet = true;
+                const campos = new Set();
+                for (const [k, v] of Object.entries(requisitos)) {
+                    const mappedKey = _normK(k);
+                    if (!fieldSet.has(mappedKey) || mappedKey === "Peso") continue;
+                    campos.add(mappedKey);
+                    if (mappedKey === "Comida") continue; // bonus field, not a Death Evo gate
+                    if (!_evalCmp(mappedKey, _getInputVal(mappedKey, inputValues), v)) allMet = false;
                 }
-
-                puntaje += allOk ? 4 : -10;
-                console.log(`👑 PrinceMamemon - Resultado: ${allOk ? "+4" : "-10"} (path: ${usarDriver ? "Con Driver" : "Con WR"})`);
+                const pts = allMet ? 4 : -10;
+                puntaje += pts;
+                condicionadoState.set(name, { puntaje: pts, campos, porCampo: null });
             }
-            princeMamemonEvaluated = true;
-
-            if (["% Entrenamiento", "Error Maximo", "WinRate", "Combates Minimos", "Victorias", "Program", "Driver Equipado"].includes(field)) {
-                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            const res = condicionadoState.get(name);
+            if (res.campos.has(field)) {
+                return `<td class="detail-column" style="display: none;">${isFirst ? 'Evaluado' : '-'}</td>`;
             }
         }
-
-        if (name === "PrinceMamemon" && princeMamemonEvaluated &&
-            ["% Entrenamiento", "Error Maximo", "WinRate", "Combates Minimos", "Victorias", "Program", "Driver Equipado"].includes(field)) {
-            return `<td class="detail-column" style="display: none;">-</td>`;
-        }
-        // FIN LÓGICA ESPECIAL PARA PRINCEMAMEMON
-
-        // ⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen
-        // La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
-        // Se mantiene como referencia hasta que se conozcan los nuevos requisitos
-        // LÓGICA ESPECIAL PARA DEXDORUGAMON - Condicionada por origen
-        if (name === "DexDorugamon" && !dexDorugamonEvaluated) {
-            console.log("🔮 Evaluando DexDorugamon con lógica especial (⚠️ REQUISITOS ANTIGUOS)");
-
-            const selectedNormalizado = selected.toLowerCase().trim();
-            const vieneDeDorumon = selectedNormalizado === "dorumon";
-            const vieneDeDorugamon = selectedNormalizado === "dorugamon";
-
-            // Verificar Program Death (obligatorio en ambos casos)
-            const programCorrecto = inputValues["Program"] &&
-                inputValues["Program"].toLowerCase() === "death";
-
-            if (vieneDeDorumon) {
-                // CASO PLACEHOLDER: Desde Dorumon - probabilidad basada en % entrenamiento
-                console.log("🔮 DexDorugamon desde Dorumon (PLACEHOLDER)");
-                const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
-                const entrenamientoCorrecto = porcentajeEntrenamiento >= 50;
-
-                console.log(`🔮 DexDorugamon - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= 50)`);
-                console.log(`🔮 DexDorugamon - Program Death: ${programCorrecto}`);
-
-                if (entrenamientoCorrecto && programCorrecto) {
-                    puntaje += 4; // Evolución al azar
-                    console.log("🔮 DexDorugamon - Requisitos cumplidos: +4 puntos (evolución al azar)");
-                } else {
-                    puntaje += -10;
-                    console.log("🔮 DexDorugamon - Requisitos no cumplidos: -10 puntos");
-                }
-            } else if (vieneDeDorugamon) {
-                // CASO SIDE EVOLUTION: Desde Dorugamon - debe INCUMPLIR al menos un requisito de DexDoruguremon
-                console.log("🔮 DexDorugamon desde Dorugamon (Side Evolution)");
-
-                // Requisitos de DexDoruguremon que debe INCUMPLIR al menos uno
-                const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
-                const errores = Number(inputValues["Error Maximo"]);
-                const combates = Number(inputValues["Combates Minimos"]);
-                let vinculoMomento = 0;
-                if (inputValues["Vinculo al momento de evolucionar"]) {
-                    vinculoMomento = Number(inputValues["Vinculo al momento de evolucionar"]);
-                }
-
-                // Verificar si CUMPLE los requisitos de DexDoruguremon (lo que queremos evitar)
-                const cumpleEntrenamiento = porcentajeEntrenamiento >= 50;
-                const cumpleErrores = errores >= 6;
-                const cumpleCombates = combates >= 30;
-                const cumpleVinculo = vinculoMomento <= -50;
-
-                // Para hacer side a DexDorugamon, debe INCUMPLIR al menos uno
-                const incumpleAlMenosUno = !cumpleEntrenamiento || !cumpleErrores || !cumpleCombates || !cumpleVinculo;
-
-                console.log(`🔮 DexDorugamon Side - Entrenamiento < 50: ${!cumpleEntrenamiento} (${porcentajeEntrenamiento})`);
-                console.log(`🔮 DexDorugamon Side - Errores < 6: ${!cumpleErrores} (${errores})`);
-                console.log(`🔮 DexDorugamon Side - Combates < 30: ${!cumpleCombates} (${combates})`);
-                console.log(`🔮 DexDorugamon Side - Vinculo > -50: ${!cumpleVinculo} (${vinculoMomento})`);
-                console.log(`🔮 DexDorugamon Side - Program Death: ${programCorrecto}`);
-                console.log(`🔮 DexDorugamon Side - Incumple al menos uno: ${incumpleAlMenosUno}`);
-
-                if (programCorrecto && incumpleAlMenosUno) {
-                    puntaje += 6; // Side evolution exitoso
-                    console.log("🔮 DexDorugamon - Side evolution: +6 puntos");
-                } else {
-                    puntaje += -10;
-                    console.log("🔮 DexDorugamon - No cumple condiciones de side: -10 puntos");
-                }
-            } else {
-                // Otro origen no válido
-                puntaje += -10;
-                console.log("🔮 DexDorugamon - Origen no válido: -10 puntos");
-            }
-
-            dexDorugamonEvaluated = true;
-
-            // Para DexDorugamon, mostrar "Evaluado" en sus campos especiales
-            if (["% Entrenamiento", "Program", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar"].includes(field)) {
-                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
-            }
-        }
-
-        // Si ya se evaluó DexDorugamon y es uno de sus campos especiales, no evaluar de nuevo
-        if (name === "DexDorugamon" && dexDorugamonEvaluated &&
-            ["% Entrenamiento", "Program", "Error Maximo", "Combates Minimos", "Vinculo al momento de evolucionar"].includes(field)) {
-            return `<td class="detail-column" style="display: none;">-</td>`;
-        }
-        // FIN LÓGICA ESPECIAL PARA DEXDORUGAMON
-
-        // ⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen
-        // La siguiente lógica está basada en requisitos antiguos y puede no ser precisa
-        // Se mantiene como referencia hasta que se conozcan los nuevos requisitos
-        // LÓGICA ESPECIAL PARA DEXDORUGUREMON (similar a SkullGreymon pero condicionado)
-        if (name === "DexDoruguremon" && !dexDoruguremonEvaluated) {
-            console.log("🔮 Evaluando DexDoruguremon con lógica especial (⚠️ REQUISITOS ANTIGUOS)");
-
-            // Verificar si viene de Dorugamon (requisitos conocidos) o de otros (requisitos no claros)
-            const selectedNormalizado = selected.toLowerCase().trim();
-            const vieneDeDorugamon = selectedNormalizado === "dorugamon";
-
-            if (vieneDeDorugamon) {
-                // Misma lógica que SkullGreymon
-                const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]);
-                const erroresMinimos = Number(inputValues["Error Maximo"]);
-                const combatesMinimos = Number(inputValues["Combates Minimos"]);
-
-                let vinculoMomento = 0;
-                if (inputValues["Vinculo al momento de evolucionar"]) {
-                    vinculoMomento = Number(inputValues["Vinculo al momento de evolucionar"]);
-                }
-
-                const entrenamientoCorrecto = porcentajeEntrenamiento >= requisitos["% Entrenamiento"];
-                const erroresCorrecto = erroresMinimos >= requisitos["Errores Minimos"];
-                const combatesCorrecto = combatesMinimos >= requisitos["Victorias Minimas"];
-                const vinculoCorrecto = vinculoMomento <= requisitos["Vinculo al momento de evolucionar"];
-
-                console.log(`🔮 DexDoruguremon - Entrenamiento: ${entrenamientoCorrecto} (${porcentajeEntrenamiento} >= ${requisitos["% Entrenamiento"]})`);
-                console.log(`🔮 DexDoruguremon - Errores: ${erroresCorrecto} (${erroresMinimos} >= ${requisitos["Errores Minimos"]})`);
-                console.log(`🔮 DexDoruguremon - Victorias Minimas: ${combatesCorrecto} (${combatesMinimos} >= ${requisitos["Victorias Minimas"]})`);
-                console.log(`🔮 DexDoruguremon - Vinculo: ${vinculoCorrecto} (${vinculoMomento} <= ${requisitos["Vinculo al momento de evolucionar"]})`);
-
-                if (entrenamientoCorrecto && erroresCorrecto && combatesCorrecto && vinculoCorrecto) {
-                    puntaje += 4;
-                    console.log("🔮 DexDoruguremon - Todos los campos obligatorios cumplidos: +4 puntos");
-                } else {
-                    puntaje += -10;
-                    console.log("🔮 DexDoruguremon - No todos los campos obligatorios cumplidos: -10 puntos");
-                }
-
-                // Evaluar Program (requisito obligatorio)
-                const programCorrecto = inputValues["Program"] &&
-                    inputValues["Program"].toLowerCase() === requisitos["Program"].toLowerCase();
-
-                console.log(`🔮 DexDoruguremon - Program correcto: ${programCorrecto}`);
-
-                if (programCorrecto) {
-                    console.log("🔮 DexDoruguremon - Program cumplido: +0 puntos");
-                } else {
-                    puntaje += -10;
-                    console.log("🔮 DexDoruguremon - Program no cumplido: -10 puntos");
-                }
-                dexDoruguremonEvaluated = true;
-            } else if (selectedNormalizado === "doruguremon") {
-                // Viene de Doruguremon - Solo necesita Death Program
-                const programCorrecto = inputValues["Program"] &&
-                    inputValues["Program"].toLowerCase() === "death";
-
-                if (programCorrecto) {
-                    puntaje += 5; // Puntaje especial para evolución directa
-                    console.log("🔮 DexDoruguremon desde Doruguremon - Death Program cumplido: +5 puntos (evolución directa)");
-                } else {
-                    puntaje += -10;
-                    console.log("🔮 DexDoruguremon desde Doruguremon - Death Program no cumplido: -10 puntos");
-                }
-                dexDoruguremonEvaluated = true;
-            } else if (selectedNormalizado === "dexdorugamon") {
-                // Viene de DexDorugamon - Requisitos específicos
-                // Obligatorio: Combates Minimos >= 30 (no da puntaje, pero si no cumple -10)
-                // Da puntaje: % Entrenamiento >= 100, Peso >= 36, Error Maximo <= 6
-                const combatesMinimos = Number(inputValues["Combates Minimos"]) || 0;
-                const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]) || 0;
-                const pesoActual = Number(inputValues["Peso"]) || 0;
-                const errores = Number(inputValues["Error Maximo"]) || 0;
-
-                // Combates Minimos >= 30: +1 si cumple, 0 si no
-                const combatesCumplido = combatesMinimos >= 30;
-
-                console.log(`🔮 DexDoruguremon desde DexDorugamon:`);
-                console.log(`   - Combates: ${combatesCumplido} (${combatesMinimos} >= 30)`);
-
-                if (combatesCumplido) {
-                    puntaje += 1;
-                    console.log("🔮 DexDoruguremon - Combates cumplido: +1 punto");
-                } else {
-                    console.log("🔮 DexDoruguremon - Combates NO cumplido: 0 puntos");
-                }
-
-                // % Entrenamiento >= 100: +1 si cumple
-                if (porcentajeEntrenamiento >= 100) {
-                    puntaje += 1;
-                    console.log(`🔮 DexDoruguremon - Entrenamiento cumplido (${porcentajeEntrenamiento} >= 100): +1 punto`);
-                } else {
-                    console.log(`🔮 DexDoruguremon - Entrenamiento NO cumplido (${porcentajeEntrenamiento} < 100): 0 puntos`);
-                }
-
-                // Peso >= 36: +1 si cumple
-                if (pesoActual >= 36) {
-                    puntaje += 1;
-                    console.log(`🔮 DexDoruguremon - Peso cumplido (${pesoActual} >= 36): +1 punto`);
-                } else {
-                    console.log(`🔮 DexDoruguremon - Peso NO cumplido (${pesoActual} < 36): 0 puntos`);
-                }
-
-                // Error Maximo <= 6: +1 si cumple
-                if (errores <= 6) {
-                    puntaje += 1;
-                    console.log(`🔮 DexDoruguremon - Errores cumplido (${errores} <= 6): +1 punto`);
-                } else {
-                    console.log(`🔮 DexDoruguremon - Errores NO cumplido (${errores} > 6): 0 puntos`);
-                }
-
-                console.log(`🔮 DexDoruguremon desde DexDorugamon - Puntaje total: ${puntaje}`);
-
-                dexDoruguremonEvaluated = true;
-
-                // Retornar puntaje individual para cada campo
-                if (field === "Combates Minimos") {
-                    return `<td class="detail-column">${combatesCumplido ? 1 : 0}</td>`;
-                }
-                if (field === "% Entrenamiento") {
-                    return `<td class="detail-column">${porcentajeEntrenamiento >= 100 ? 1 : 0}</td>`;
-                }
-                if (field === "Peso") {
-                    return `<td class="detail-column">${pesoActual >= 36 ? 1 : 0}</td>`;
-                }
-                if (field === "Error Maximo") {
-                    return `<td class="detail-column">${errores <= 6 ? 1 : 0}</td>`;
-                }
-                // Campos no usados para DexDorugamon
-                if (["Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-                    return `<td class="detail-column">-</td>`;
-                }
-            }
-        }
-
-        // Si ya se evaluó DexDoruguremon y es uno de sus campos especiales, retornar puntaje individual
-        if (name === "DexDoruguremon" && dexDoruguremonEvaluated) {
-            const selectedNorm = selected.toLowerCase().trim();
-            if (selectedNorm === "dexdorugamon") {
-                const combatesMinimos = Number(inputValues["Combates Minimos"]) || 0;
-                const porcentajeEntrenamiento = Number(inputValues["% Entrenamiento"]) || 0;
-                const pesoActual = Number(inputValues["Peso"]) || 0;
-                const errores = Number(inputValues["Error Maximo"]) || 0;
-
-                if (field === "Combates Minimos") {
-                    return `<td class="detail-column">${combatesMinimos >= 30 ? 1 : 0}</td>`;
-                }
-                if (field === "% Entrenamiento") {
-                    return `<td class="detail-column">${porcentajeEntrenamiento >= 100 ? 1 : 0}</td>`;
-                }
-                if (field === "Peso") {
-                    return `<td class="detail-column">${pesoActual >= 36 ? 1 : 0}</td>`;
-                }
-                if (field === "Error Maximo") {
-                    return `<td class="detail-column">${errores <= 6 ? 1 : 0}</td>`;
-                }
-                if (["Vinculo al momento de evolucionar", "Program", "Comida"].includes(field)) {
-                    return `<td class="detail-column">-</td>`;
-                }
-            }
-            // Desde Doruguremon - Solo Program aplica, todos los demás campos muestran "-"
-            if (selectedNorm === "doruguremon") {
-                if (field === "Program") {
-                    const programCorrecto = inputValues["Program"] &&
-                        inputValues["Program"].toLowerCase() === "death";
-                    return `<td class="detail-column">${programCorrecto ? 5 : -10}</td>`;
-                }
-                // Todos los demás campos no aplican desde Doruguremon
-                if (["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar", "Peso", "Error Maximo", "Comida"].includes(field)) {
-                    return `<td class="detail-column">-</td>`;
-                }
-            }
-        }
-        // FIN LÓGICA ESPECIAL PARA DEXDORUGUREMON
+        // ===== FIN HANDLER Death Evo =====
 
         // LÓGICA ESPECIAL PARA WARGREYMON Y BLACKWARGREYMON
         if ((name === "Wargreymon" || name === "BlackWargreymon") && !warGreymonEvaluated) {
@@ -2614,17 +2259,9 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                 vinculoMomento = Number(inputValues["Vinculo al momento de evolucionar"]);
             }
 
-            // Obtener requisitos esperados (considerando casos especiales)
-            let batallasEsperadas = requisitos["Combates Minimos"];
-            let victoriasEsperadas = requisitos["Victorias"];
-
-            // Aplicar casos especiales si existen
-            if (specialBatallasCases[name] && selected && specialBatallasCases[name][selected]) {
-                batallasEsperadas = specialBatallasCases[name][selected];
-            }
-            if (specialVictoriasCases[name] && selected && specialVictoriasCases[name][selected]) {
-                victoriasEsperadas = specialVictoriasCases[name][selected];
-            }
+            // Obtener requisitos esperados (usando RC si existe)
+            let batallasEsperadas = getFieldFromRC(name, selected, "Combates Minimos") ?? requisitos["Combates Minimos"];
+            let victoriasEsperadas = getFieldFromRC(name, selected, "Victorias") ?? requisitos["Victorias"] ?? requisitos["Victorias Minimas"];
 
             // Verificar campos obligatorios comunes (para ambos)
             const entrenamientoCorrecto = porcentajeEntrenamiento >= requisitos["% Entrenamiento"];
@@ -2942,17 +2579,13 @@ else if (bonusField === "Bonus Batallas") {
     const digimonName = name;
     const comidaIngresada = inputValues["Comida"];
 
-    if (specialfoodcases[digimonName] && comidaIngresada && comidaIngresada !== "Ninguno") {
-        const validFood = specialfoodcases[digimonName];
-
-        if (Array.isArray(validFood)) {
-            const isValid = validFood.some(food =>
-                comidaIngresada.toLowerCase() === food.toLowerCase()
-            );
-
-            if (isValid) {
-                totalBonus += 1;
-            }
+    const bonusComidaList = requisitos["Bonus Comida"];
+    if (Array.isArray(bonusComidaList) && comidaIngresada && comidaIngresada !== "Ninguno") {
+        const isValid = bonusComidaList.some(food =>
+            comidaIngresada.toLowerCase() === food.toLowerCase()
+        );
+        if (isValid) {
+            totalBonus += 1;
         }
     }
 } else if (bonusField === "Bonus Vinculo Alcanzado") {
@@ -3034,24 +2667,15 @@ punto = totalBonus;}
 	}
 	else if (esperado !== undefined) {
 	if (field === "Peso") {
-	  // Verificar caso especial usando EvoListSpecial
-	  let isSpecialCase = false;
-	  if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) {
-		isSpecialCase = true;
-	  }
     if (name === "Burpmon") {
       if (ingresado == esperado) {
-        // Excepción Burpmon: si peso ingresado es igual al esperado, da +30 automáticamente
         punto = 3;
       } else {
-        // Si no es igual, penaliza con -10
         punto = -10;
       }
 	  } else if (name === "Bakemon LT" || name === "SkullGreymon" || name === "DexDorugamon" || name === "DexDoruguremon") {
       punto = 0;
-    } else if (isSpecialCase) {
-		punto = 0;
-	  } else if (PesoSet.has(name)) {
+    } else if (PesoSet.has(name)) {
 		punto = 0;
 	  } else {
 		const ingNum = Number(ingresado);
@@ -3066,15 +2690,8 @@ punto = totalBonus;}
 	}
 
 	// Error Maximo - Actualizado
-else if (field === "Error Maximo") { 
-	// Verificar caso especial usando EvoListSpecial 
-	let isSpecialCase = false; 
-	if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) { 
-		isSpecialCase = true; 
-	} 
-	if (isSpecialCase) { 
-		punto = 0; 
-	} else if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon", "Digitamamon", "Grademon VICE"].includes(name)) {
+else if (field === "Error Maximo") {
+	if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon", "Digitamamon", "Grademon VICE"].includes(name)) {
 		// Nuevo caso especial: penalización por error (requiere exactamente el valor esperado)
 		const ingNum = Number(ingresado);
 		const espNum = Number(esperado);
@@ -3202,28 +2819,19 @@ const tieneBalanceado = partesIngresado.some(p =>
   console.log(`  Resultado final para ${name}: ${punto} puntos`);
 }
 			else if (field === "% Entrenamiento") {
-				// Verificar si es un caso especial
-				if (specialEntrenamientoCases[name]) {
-					const validEntrenamiento = specialEntrenamientoCases[name];
-
-					// Si hay un digimon seleccionado y existe un entrenamiento válido para él
-					if (selected && validEntrenamiento[selected]) {
-						const expectedEntrenamiento = validEntrenamiento[selected];
-						const ingNum = Number(ingresado);
-						if (!isNaN(ingNum) && ingNum >= expectedEntrenamiento) {
-							punto = 1;
-						} else {
-							punto = 0;
-						}
+				const ingNum = Number(ingresado);
+				const rcEntrenamiento = getFieldFromRC(name, selected, "% Entrenamiento");
+				if (rcEntrenamiento !== undefined) {
+					if (!isNaN(ingNum) && ingNum >= rcEntrenamiento) {
+						punto = 1;
+					} else {
+						punto = 0;
 					}
 				} else {
 					// Código para casos normales
-					const ingNum = Number(ingresado);
-
 					if (["Pillomon","Numemon"].includes(name)) {
 						punto = 0;
 					} else if (typeof esperado === "string" && esperado.includes("-")) {
-						// Si esperado es un rango (ej: "0-79" o "80-100")
 						const [min, max] = esperado.split("-").map(Number);
 						if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) {
 							punto = 1;
@@ -3231,7 +2839,6 @@ const tieneBalanceado = partesIngresado.some(p =>
 							punto = 0;
 						}
 					} else if (!isNaN(ingNum) && ingNum >= esperado) {
-						// Lógica normal: mayor o igual
 						punto = 1;
 					} else {
 						punto = 0;
@@ -3266,26 +2873,15 @@ const tieneBalanceado = partesIngresado.some(p =>
 		}
 // WinRate - Actualizado
 else if (field === "WinRate") {
-    // Verificar caso especial usando EvoListSpecial
-    let isSpecialCase = false;
-    if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) {
-        isSpecialCase = true;
-    }
+    const rcWinRate = getFieldFromRC(name, selected, "WinRate");
 
     // Caso especial Clockmon: si Combates Minimos = 0 (variante Con Bonus), WinRate da 0
-    if (name === "Clockmon") {
-        const combatesIngresados = Number(inputValues["Combates Minimos"]) || 0;
-        if (combatesIngresados === 0) {
-            isSpecialCase = true;
-        }
-    }
+    const clockmonSinCombates = name === "Clockmon" && (Number(inputValues["Combates Minimos"]) || 0) === 0;
 
-    if (isSpecialCase) {
+    if (rcWinRate === "-" || clockmonSinCombates) {
         punto = 0;
     } else {
         const ingNum = Number(ingresado);
-
-        // Evaluar WinRate: >= esperado da 0, < esperado da -10
         if (!isNaN(ingNum) && ingNum >= esperado) {
             punto = 0;
         } else {
@@ -3296,29 +2892,15 @@ else if (field === "WinRate") {
 
 // Combates Minimos - Actualizado
 else if (field === "Combates Minimos") {
-    // Verificar caso especial usando EvoListSpecial
-    let isSpecialCase = false;
-    if (EvoListSpecial[selected] && EvoListSpecial[selected].includes(name)) {
-        isSpecialCase = true;
-    }
-
-    if (isSpecialCase) {
-        punto = 0;
-    } else {
+    {
         const ingNum = Number(ingresado);
 
-        // Verificar si es un caso especial de batallas
-        if (specialBatallasCases[name]) {
-            const validBatallas = specialBatallasCases[name];
-
-            // Si hay un digimon seleccionado y existe un valor válido para él
-            if (selected && validBatallas[selected]) {
-                const expectedBatallas = validBatallas[selected];
-                if (!isNaN(ingNum) && ingNum >= expectedBatallas) {
-                    punto = 0;
-                } else {
-                    punto = -10;
-                }
+        const rcBatallas = getFieldFromRC(name, selected, "Combates Minimos");
+        if (rcBatallas !== undefined) {
+            if (rcBatallas === "-" || (!isNaN(ingNum) && ingNum >= rcBatallas)) {
+                punto = 0;
+            } else {
+                punto = -10;
             }
         } else {
             const bonusBatallas = requisitos["Bonus Batallas"];
@@ -3351,26 +2933,16 @@ else if (field === "Program") {
             punto = -10; // -10 si el program es desigual
         }
     }
-    // Verificar si es un caso especial
-    else if (specialProgramCases[name]) {
-        const validPrograms = specialProgramCases[name];
-        
-        // Si hay un digimon seleccionado y existe un programa válido para él
-        if (selected && validPrograms[selected]) {
-            const expectedProgram = validPrograms[selected];
-            if (ingresado.toLowerCase() === expectedProgram.toLowerCase()) {
-                punto = 0;
-            } else {
-                punto = -10;
-            }
+    // Verificar si hay un programa condicionado por origen en RC
+    else if (getFieldFromRC(name, selected, "Program") !== undefined) {
+        const expectedProgram = getFieldFromRC(name, selected, "Program");
+        if (expectedProgram === "-" || ingresado.toLowerCase() === expectedProgram.toLowerCase()) {
+            punto = 0;
+        } else {
+            punto = -10;
         }
     } else {
-        // Código original para casos normales
-        const excepcionesOrigen = excepcionesProgram[name] || [];
-        if (
-            (esperado && ingresado.toLowerCase() === esperado.toLowerCase()) ||
-            excepcionesOrigen.map(e => e.toLowerCase()).includes(selected.toLowerCase())
-        ) {
+        if (esperado && ingresado.toLowerCase() === esperado.toLowerCase()) {
             punto = 0;
         } else {
             punto = -10;
@@ -3381,18 +2953,12 @@ else if (field === "Program") {
 	else if (field === "Victorias") {
 	  const ingNum = Number(ingresado);
 
-	  // Verificar si es un caso especial de victorias
-	  if (specialVictoriasCases[name]) {
-		const validVictorias = specialVictoriasCases[name];
-
-		// Si hay un digimon seleccionado y existe un valor válido para él
-		if (selected && validVictorias[selected]) {
-		  const expectedVictorias = validVictorias[selected];
-		  if (!isNaN(ingNum) && ingNum >= expectedVictorias) {
-			punto = 0;
-		  } else {
-			punto = -10;
-		  }
+	  const rcVictorias = getFieldFromRC(name, selected, "Victorias");
+	  if (rcVictorias !== undefined) {
+		if (!isNaN(ingNum) && ingNum >= rcVictorias) {
+		  punto = 0;
+		} else {
+		  punto = -10;
 		}
 	  } else {
 		// Lógica normal
@@ -3435,10 +3001,11 @@ else if (field === "Program") {
 
 // CÓDIGO DE EVALUACIÓN MODIFICADO PARA XROSS
 else if (field === "Xross") {
-	// Verificar si es un caso especial
-	if (specialxrossScoring[name]) {
-		const validXross = specialxrossScoring[name];
-		
+	// Verificar si es un caso especial (Xross con componentes por origen)
+	const xrossData = digimonReqDict[name]?.Xross;
+	if (xrossData && typeof xrossData === 'object' && !Array.isArray(xrossData)) {
+		const validXross = xrossData;
+
 		// Si hay un digimon seleccionado y existe un xross válido para él
 		if (selected && validXross[selected]) {
 			const expectedXross = validXross[selected];
@@ -3467,15 +3034,7 @@ else if (field === "Xross") {
 			}
 		}
 	} else {
-	// Verificar si el name está en evonatural y si selected está en el array correspondiente
-	if (evonatural.hasOwnProperty(name) && evonatural[name].includes(selected)) {
-		// Si coincide ingresado con esperado
-		if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
-			punto = 1;
-		} else {
-			punto = 0;
-		}
-	} else if (xrossSpecialNames.has(String(name))) {
+	if (xrossSpecialNames.has(String(name))) {
     // Case especial: cuando Penmon (origen) evoluciona
     if (selected === "Penmon") {
       if (ingresado.toLowerCase() === String(esperado).toLowerCase()) {
@@ -3626,11 +3185,10 @@ puntajes.forEach((digi, index) => {
             const digimonData = nextDigimons.find(([nombre, req]) => nombre === d.name);
             if (digimonData) {
                 const [nombre, requisitosDigimon] = digimonData;
-                // Incluir nivel 4, Burpmon, o sides de nivel 3
                 const esNivel4 = requisitosDigimon["Nivel"] === 4;
                 const esBurpmon = nombre === "Burpmon";
-                const esSideNivel3 = SideEvolutionlist.hasOwnProperty(nombre) && SideEvolutionlist[nombre].includes(3);
-                return esNivel4 || esBurpmon || esSideNivel3;
+                const esSideEvo = requisitosDigimon["Nivel"] === data["Nivel"];
+                return esNivel4 || esBurpmon || esSideEvo;
             }
             return false;
         });
@@ -4038,19 +3596,8 @@ function normalizar(txt = "") {
 
 // --- Calcular side evolutions válidas ---
 const sideEvosValidas = puntajes.filter(d => {
-  const nombreNormalizado = normalizar(d.name);
-  const nivelNormalizado = normalizar(data["Nivel"]);
-
-  const keyNormalizada = Object.keys(SideEvolutionlist)
-    .find(k => normalizar(k) === nombreNormalizado);
-
-  const nivelesPermitidos = keyNormalizada
-    ? SideEvolutionlist[keyNormalizada]
-    : undefined;
-
-  return nivelesPermitidos?.some(
-    nivel => normalizar(nivel) === nivelNormalizado
-  ) && d.puntaje >= 0;
+  const req = digimonReqDict[d.name];
+  return req && req.Nivel === data["Nivel"] && d.puntaje >= 0;
 });
 
 // --- EVALUACIÓN NIVEL 4 o 5 (CORREGIDO) ---
@@ -4102,12 +3649,13 @@ if (nextLevel === 4 || nextLevel === 5) {
            // Verificar si el usuario usó un Xross y si esta evolución lo requiere y coincide
            if (usuarioUsoXross && req["Xross"] !== undefined) {
              // Verificar si el Xross ingresado coincide con el requerido
-             const xrossRequerido = req["Xross"];
+             const _xrossRaw = req["Xross"];
+             const xrossRequerido = typeof _xrossRaw === "object" ? _xrossRaw[inputValues["selected"]] : _xrossRaw;
              const xrossIngresado = inputValues["Xross"];
 
              console.log(`🔍 DEBUG: ${d.name} - Xross requerido: "${xrossRequerido}", Ingresado: "${xrossIngresado}"`);
 
-             if (xrossRequerido.toLowerCase() === xrossIngresado.toLowerCase()) {
+             if (xrossRequerido && xrossRequerido.toLowerCase() === xrossIngresado.toLowerCase()) {
                console.log(`✅ ${d.name} COINCIDE con Xross - será incluido en prioridad absoluta`);
                return true; // El usuario usó el Xross correcto para esta evolución
              } else {
@@ -4143,16 +3691,12 @@ if (nextLevel === 4 || nextLevel === 5) {
            mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
            console.log("🏆 Driver/Xross USADOS correctamente - Mejor(es) con Driver/Xross (PRIORIDAD MÁXIMA):", mejoresDigimons);
          } else {
-           // PRIORIDAD 2: Programs/excepciones (solo si NO se usó Xross/Driver)
+           // PRIORIDAD 2: Programs (solo si NO se usó Xross/Driver)
            const conProgram = todosLosCandidatos.filter(d => {
              const req = digimonReqDict[d.name];
-             const tieneProgram = req.Program !== undefined;
-             const selectedNormalizado = selected.toLowerCase().trim();
-             const esExcepcion = Object.entries(excepcionesProgram).some(([resultado, permitidos]) => {
-               return d.name.toLowerCase().trim() === resultado.toLowerCase().trim() &&
-                      permitidos.some(p => p.toLowerCase().trim() === selectedNormalizado);
-             });
-             return tieneProgram || esExcepcion;
+             if (req.Program === undefined) return false;
+             const rcProgram = getFieldFromRC(d.name, selected, "Program");
+             return rcProgram !== "-";
            });
 
            if (conProgram.length > 0) {
@@ -4200,8 +3744,7 @@ if (data["Nivel"] === 5) {
     console.log("👑 Excepción: Burpmon tiene puntaje >= 3, se selecciona directamente.");
   } else {
     sideEvosValidas5 = puntajes.filter(d => {
-      const nivelesPermitidos = SideEvolutionlist[d.name];
-      const esSideValido = nivelesPermitidos?.includes(data["Nivel"]) && d.puntaje >= 0;
+      const esSideValido = digimonReqDict[d.name]?.Nivel === data["Nivel"] && d.puntaje >= 0;
       console.log(`valido ${esSideValido}`)
       if (esSideValido) {
         console.log(`✅ Side Evolution válida: ${d.name} (Puntaje: ${d.puntaje})`);

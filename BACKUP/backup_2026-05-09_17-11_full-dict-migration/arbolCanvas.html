@@ -6,7 +6,8 @@
   <title>Árbol Evolutivo - Digimon</title>
   <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
-  <script src="FullDigimonReqDict.js"></script>
+  <script src="digimonReqDict.js?v=22"></script>
+  <script src="digimonstattier.js?v=22"></script>
   <script src="driverNombres.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -316,14 +317,9 @@
     }
     .evo-item .name {
       flex: 1;
-      min-width: 0;
       font-size: 0.85rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
     .evo-item .level {
-      flex-shrink: 0;
       font-size: 0.7rem;
       color: #888;
     }
@@ -516,20 +512,17 @@
     .preevo-field {
       display: flex;
       justify-content: space-between;
-      flex-wrap: wrap;
       font-size: 0.65rem;
       margin-bottom: 6px;
-      gap: 4px 8px;
+      gap: 12px;
     }
     .preevo-field-label {
       color: #888;
-      flex-shrink: 0;
     }
     .preevo-field-value {
       color: #fff;
       font-weight: 500;
       text-align: right;
-      min-width: 0;
       display: flex;
       justify-content: flex-end;
       padding-right: 12px;
@@ -937,15 +930,12 @@
     .node-overlay .xross-driver-container.driver-Verde .driver-icon { width: 22px !important; height: 22px !important; }
     .item-icon-wrap { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; }
     .item-icon { width: 28px; height: 28px; object-fit: contain; }
-    .preevo-card .item-icon { width: 20px; height: 20px; }
     .node-overlay .item-icon-wrap { display: inline-flex; align-items: center; gap: 3px; }
     .node-overlay .item-icon { width: 56px; height: 56px; object-fit: contain; }
     .node-overlay .item-qty { font-size: 0.85rem; color: #fff; font-weight: bold; text-shadow: 0 1px 2px #000; }
     .node-overlay .overlay-sep { font-size: 0.72rem; color: #4ecdc4; font-weight: bold; text-shadow: 0 1px 2px #000; }
     .xross-list { list-style: none; margin: 4px 0 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
     .xross-list li { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .xross-method-item { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
-    .xross-method-drivers { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
     /* ===== FIN NODE OVERLAYS ===== */
   </style>
 </head>
@@ -1043,30 +1033,11 @@
       <p>Tama: <span id="info-tama"></span></p>
     </div>
 
-    <div id="scumon-lineage-row" style="display: none; padding: 4px 8px; flex-direction: column; gap: 6px;">
-      <div>
-        <label style="font-size: 0.75rem; color: #aaa;">Child:</label>
-        <select id="scumon-child-select" style="width: 100%; margin-top: 2px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
-      </div>
-      <div id="scumon-tama-row" style="display: none;">
-        <label style="font-size: 0.75rem; color: #aaa;">Tama:</label>
-        <select id="scumon-tama-select" style="width: 100%; margin-top: 2px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
-      </div>
-    </div>
-
     <div class="base-stats" id="base-stats">
       <div class="stat-row"><span class="stat-label">HP</span><span class="stat-value" id="stat-hp">-</span></div>
       <div class="stat-row"><span class="stat-label">ATK</span><span class="stat-value" id="stat-atk">-</span></div>
       <div class="stat-row"><span class="stat-label">DEF</span><span class="stat-value" id="stat-def">-</span></div>
       <div class="stat-row"><span class="stat-label">Vel</span><span class="stat-value" id="stat-vel">-</span></div>
-      <div class="stat-row" style="grid-column: 1 / -1; justify-content: space-between;">
-        <span class="stat-label">Digipuntos</span>
-        <span class="stat-value" id="stat-digipuntos">-</span>
-      </div>
-      <div class="stat-row" style="grid-column: 1 / -1; justify-content: space-between;">
-        <span class="stat-label">Clasificación</span>
-        <span class="stat-value" id="stat-clasificacion" style="font-size: 0.6rem;">-</span>
-      </div>
     </div>
 
     <div class="evo-section" id="section-from">
@@ -1195,8 +1166,8 @@ const specialDigimonConfig = {
   "Soulmon MT": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
 
   // === DexDoru family ===
-  "DexDorugamon": { "Requisitos Obligatorios": ["Program"], "Varía por origen": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar"] },
-  "DexDoruguremon": { "Varía por origen": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program", "Peso", "Error Maximo", "Combates Minimos"] },
+  "DexDorugamon": { "⚠️ Requisitos desconocidos": ["Los requisitos han cambiado"] },
+  "DexDoruguremon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"] },
 
   // === Doru family ===
   "Raptordramon": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDorugamon y Dorugamon?"] },
@@ -1209,7 +1180,13 @@ const specialDigimonConfig = {
 };
 
 // Casos especiales donde % Entrenamiento varía según evolución o condición
-const specialEntrenamientoCases = {};
+const specialEntrenamientoCases = {
+  "DexDoruguremon": {
+    "Dorugamon": 50,
+    "DexDorugamon": 100,
+    "Doruguremon": "-"
+  }
+};
 
 // Digimons con variantes completas (múltiples columnas de requisitos)
 const digimonVariantes = {
@@ -1320,7 +1297,7 @@ const digimonVariantesPorPreEvo = {
         "Vinculo al momento de evolucionar": "-", "Program": "Death"
       }
     }
-  },
+  }
 };
 
 // Configuración por defecto para Digimons sin configuración especial
@@ -2173,9 +2150,8 @@ const comidaImagen = {
   "Chatarra":          "restosdemetal.png",
   "Nuez Magica":       "nuezmagica.png",
   "Carne X":           "carnex.png",
-  "Verdura Congelada":   "Verduracongelada.png",
-  "Champiñon Congelado": "Champiñon congelado.png",
-  "Sardinas":            "digisardina.png",
+  "Verdura Congelada": "Verduracongelada.png",
+  "Sardinas":          "digisardina.png",
   "Caca":              "Caca.png"
 };
 
@@ -2190,7 +2166,6 @@ function renderProgram(valor) {
 function renderComida(valor) {
   if (!valor || valor === "-") return String(valor);
   const str = String(valor).trim();
-  if (str.includes(' o ')) return str.split(' o ').map(renderComida).join(' o ');
   if (str.includes(", ")) return str.split(", ").map(renderComida).join(" ");
   const m = str.match(/^(\d+)\s+(.+)$/);
   const cantidad = m ? parseInt(m[1]) : 1;
@@ -2237,14 +2212,13 @@ function renderNodeItem(name) {
   let program = reqData.Program;
   let comida = reqData.Comida;
 
-  if (xross && typeof xross === "string" && xross !== 'DriverInstall') return renderNodeXross(xross);
+  if (xross && xross !== 'DriverInstall') return renderNodeXross(xross);
 
-  // DriverInstall: Xross es un objeto — colectar códigos únicos de todos los pre-evos
-  const xrossObjData = digimonReqDict[name]?.Xross;
-  if (xrossObjData && typeof xrossObjData === "object") {
+  // DriverInstall: collect unique individual driver codes across all cases, show in one row
+  if (xross === 'DriverInstall' && specialxrossCases && specialxrossCases[name]) {
     const seen = new Set();
     const uniqueCodes = [];
-    Object.values(xrossObjData).forEach(val => {
+    Object.values(specialxrossCases[name]).forEach(val => {
       (Array.isArray(val) ? val : [val]).forEach(combo => {
         combo.split(' + ').forEach(part => {
           const m = part.trim().match(/^(\d+)\s+([A-Z0-9]+)\s+Driver$/);
@@ -2351,58 +2325,11 @@ function showInfo(data, evolutions, preEvolutions) {
   document.getElementById('info-tama').textContent = data.tama;
 
   // Base stats from digimonstattier
-  const statData    = digimonstattier[data.label];
-  const reqEntry    = digimonReqDict[data.label];
-  const lineageRow  = document.getElementById('scumon-lineage-row');
-  const childSelect = document.getElementById('scumon-child-select');
-
-  const tamaRow    = document.getElementById('scumon-tama-row');
-  const tamaSelect = document.getElementById('scumon-tama-select');
-
-  function applyScumonStats() {
-    const child   = childSelect.value;
-    const tamaOpt = tamaSelect.value ? JSON.parse(tamaSelect.value) : null;
-    const computed = computeScumonFamilyStats(data.label, child, tamaOpt?.babyII, tamaOpt?.babyI);
-    if (!computed) return;
-    document.getElementById('stat-hp').textContent  = computed.HP;
-    document.getElementById('stat-atk').textContent = computed.ATK;
-    document.getElementById('stat-def').textContent = computed.DEF;
-    document.getElementById('stat-vel').textContent = computed.Vel;
-    document.getElementById('stat-digipuntos').textContent    = computed.Digipuntos;
-    document.getElementById('stat-clasificacion').textContent = computed.Clasificacion?.nombre ?? '-';
-  }
-
-  function updateTamaSelector(childName) {
-    const lineages = getScumonLineageOptions(childName);
-    if (lineages.length > 1) {
-      tamaSelect.innerHTML = lineages.map(l => `<option value='${JSON.stringify({babyII:l.babyII,babyI:l.babyI})}'>${l.tama}</option>`).join('');
-      tamaRow.style.display = 'block';
-      tamaSelect.onchange = applyScumonStats;
-    } else {
-      tamaRow.style.display = 'none';
-      tamaSelect.innerHTML = '';
-      tamaSelect.onchange = null;
-    }
-    applyScumonStats();
-  }
-
-  if (SCUMON_FAMILY.has(data.label)) {
-    lineageRow.style.display = 'flex';
-    const childOptions = getScumonChildOptions();
-    childSelect.innerHTML = childOptions.map(c => `<option value="${c}">${c}</option>`).join('');
-    childSelect.onchange = () => updateTamaSelector(childSelect.value);
-    updateTamaSelector(childOptions[0]);
-  } else {
-    lineageRow.style.display = 'none';
-    childSelect.onchange = null;
-    document.getElementById('stat-hp').textContent  = statData?.HP  ?? '-';
-    document.getElementById('stat-atk').textContent = statData?.ATK ?? '-';
-    document.getElementById('stat-def').textContent = statData?.DEF ?? '-';
-    document.getElementById('stat-vel').textContent = statData?.Vel ?? '-';
-    document.getElementById('stat-digipuntos').textContent   = reqEntry?.Digipuntos ?? '-';
-    const clasif = reqEntry?.Clasificacion;
-    document.getElementById('stat-clasificacion').textContent = clasif ? clasif.nombre : '-';
-  }
+  const statData = digimonstattier[data.label];
+  document.getElementById('stat-hp').textContent = statData?.HP ?? '-';
+  document.getElementById('stat-atk').textContent = statData?.ATK ?? '-';
+  document.getElementById('stat-def').textContent = statData?.DEF ?? '-';
+  document.getElementById('stat-vel').textContent = statData?.Vel ?? '-';
 
   const badge = document.getElementById('info-badge');
   badge.textContent = data.etapa;
@@ -2519,31 +2446,16 @@ function showInfo(data, evolutions, preEvolutions) {
 
   // Renderiza campo Xross en el panel: igual que digidex.html (lista por digi con ícono)
   function renderXrossField(value, digimonName, preEvoName) {
-    const xrossObj = digimonReqDict[digimonName]?.Xross;
-    const hasXrossObj = xrossObj && typeof xrossObj === "object";
-    // Per-preevo: buscar driver exacto para este pre-evo
-    if (preEvoName && hasXrossObj && !Array.isArray(xrossObj) && xrossObj[preEvoName] !== undefined) {
-      const raw = xrossObj[preEvoName];
+    // Per-preevo: buscar driver exacto en specialxrossCases[digimon][preEvo]
+    if (preEvoName && specialxrossCases?.[digimonName]?.[preEvoName] !== undefined) {
+      const raw = specialxrossCases[digimonName][preEvoName];
       const codes = Array.isArray(raw) ? raw : [raw];
       return codes.map(code => renderDriverXross(code)).join('<span class="overlay-sep"> o </span>');
     }
-    // Xross array: métodos alternativos (ej. Penmon)
-    if (Array.isArray(xrossObj)) {
-      const labelBase = (typeof currentLanguage !== 'undefined' && currentLanguage === 'en') ? 'Method' : 'Método';
+    // DriverInstall: lista por digimon como en digidex.html
+    if ((value === 'DriverInstall' || specialxrossCases?.[digimonName]) && specialxrossCases?.[digimonName]) {
       return '<ul class="xross-list">' +
-        xrossObj.map((driverStr, idx) => {
-          const parts = driverStr.includes(' + ')
-            ? driverStr.split(' + ').map(p => renderDriverXross(p.trim()))
-            : [renderDriverXross(driverStr)];
-          const driversHTML = parts.join('<span class="xross-sep"> + </span>');
-          return `<li class="xross-method-item"><strong>${labelBase} ${idx + 1}:</strong><div class="xross-method-drivers">${driversHTML}</div></li>`;
-        }).join('') +
-        '</ul>';
-    }
-    // Xross objeto: lista por digimon
-    if (hasXrossObj) {
-      return '<ul class="xross-list">' +
-        Object.entries(xrossObj).map(([digi, drivers]) => {
+        Object.entries(specialxrossCases[digimonName]).map(([digi, drivers]) => {
           const lista = Array.isArray(drivers) ? drivers : [drivers];
           return lista.map(driver =>
             `<li><strong>${digi}:</strong> ${renderDriverXross(String(driver))}</li>`
@@ -2686,8 +2598,6 @@ function showInfo(data, evolutions, preEvolutions) {
     'No se considera en el puntaje': 'no-score',
     'Quota/Key Points': 'quota',
     'Requisitos Obligatorios': 'required',
-    'Incumplir al menos uno': 'no-score',
-    'Varía por origen': 'quota',
     '⚠️ Requisitos desconocidos': 'warning',
     'Evolución especial': 'warning',
     'Evolucion por muerte inducida': 'warning'
@@ -2698,9 +2608,7 @@ function showInfo(data, evolutions, preEvolutions) {
     en: {
       'No se considera en el puntaje': 'Not Counted in Score',
       'Requisitos Obligatorios': 'Mandatory Requirements',
-      'Incumplir al menos uno': 'Fail at Least One',
       'Quota/Key Points': 'Quota/Key Points',
-      'Varía por origen': 'Varies by Origin',
       '⚠️ Requisitos desconocidos': '⚠️ Unknown Requirements',
       'Evolución especial': 'Special Evolution',
       'Evolucion por muerte inducida': 'Death-Induced Evolution'
@@ -2797,12 +2705,6 @@ function showInfo(data, evolutions, preEvolutions) {
 
   // Verificar si tiene variantes por pre-evolución (como Mugendramon)
   // o RequisitosCondicionados en digimonReqDict
-  function flattenRCPath(path) {
-    if (!path || typeof path !== 'object') return path;
-    if (path.modo === 'PuntajeIndividual') return { ...path.Obligatorios, ...path.Puntos };
-    return path;
-  }
-
   let variantesPorPreEvoConfig = digimonVariantesPorPreEvo[data.label];
   if (!variantesPorPreEvoConfig) {
     const _rc = digimonReqDict[data.label]?.RequisitosCondicionados;
@@ -2811,49 +2713,9 @@ function showInfo(data, evolutions, preEvolutions) {
       const _peso = digimonReqDict[data.label].Peso;
       const _preEvos = {};
       const _allFields = new Set();
-      const _metaKeys = new Set(['puntajeOk', 'puntajeNo', 'puntaje', 'modo', 'Obligatorio', 'Obligatorios', 'Puntos', 'Incumplir', 'Death Evo']);
-      let _hasPerPathCategorias = false;
-      let _hasPuntajeIndividual = false;
-
       _paths.forEach(([pathName, pathData]) => {
-        // Handle PuntajeIndividual mode (natural evo without driver)
-        if (pathData.modo === 'PuntajeIndividual') {
-          _hasPuntajeIndividual = true;
-          const vals = _peso !== undefined ? { 'Peso': String(_peso) } : {};
-          const obligatoriosFields = [];
-          const puntosFields = [];
-
-          Object.entries(pathData.Obligatorios || {}).forEach(([k, v]) => {
-            const fmtV = v === '-' ? '-' : (k === 'WinRate' || k === '% Entrenamiento') ? v + '%' : String(v);
-            vals[k] = fmtV;
-            if (v !== '-') { obligatoriosFields.push(k); _allFields.add(k); }
-          });
-          Object.entries(pathData.Puntos || {}).forEach(([k, v]) => {
-            const vs = String(v);
-            const fmtV = (k === 'WinRate' || k === '% Entrenamiento') ? v + '%' :
-                         k === 'Error Maximo' ? (vs.includes('-') || isNaN(vs) ? vs : '0-' + vs) : vs;
-            vals[k] = fmtV;
-            puntosFields.push(k);
-            _allFields.add(k);
-          });
-
-          vals._categorias = {
-            'Quota/Key Points': puntosFields,
-            'Requisitos Obligatorios': obligatoriosFields
-          };
-          _preEvos[pathName] = vals;
-          return;
-        }
-
-        const hasObligatorio = pathData.Obligatorio && typeof pathData.Obligatorio === 'object';
-        const hasIncumplir = pathData.Incumplir && typeof pathData.Incumplir === 'object';
-        const isSpecialPath = hasObligatorio || hasIncumplir;
-
-        const vals = isSpecialPath ? {} : (_peso !== undefined ? { 'Peso': String(_peso) } : {});
-        const pathFlatFields = [];
-
+        const vals = { 'Peso': String(_peso) };
         Object.entries(pathData).forEach(([k, v]) => {
-          if (_metaKeys.has(k) || typeof v === 'object') return;
           let fmtV;
           if (v === '-' || v === null || v === undefined) {
             fmtV = '-';
@@ -2866,94 +2728,23 @@ function showInfo(data, evolutions, preEvolutions) {
             fmtV = String(v);
           }
           vals[k] = fmtV;
-          pathFlatFields.push(k);
           _allFields.add(k);
         });
-
-        // Fall back to base requisitos for fields in RC categorias not yet in vals
-        if (!isSpecialPath && _rc.categorias) {
-          const _basereq = digimonReqDict[data.label];
-          Object.values(_rc.categorias).flat().forEach(field => {
-            if (vals[field] === undefined && _basereq[field] !== undefined) {
-              const v = _basereq[field];
-              if (Array.isArray(v)) {
-                vals[field] = v.join(' o ');
-              } else if (typeof v !== 'object') {
-                vals[field] = String(v);
-              }
-              _allFields.add(field);
-            }
-          });
-        }
-
-        if (isSpecialPath) {
-          _hasPerPathCategorias = true;
-          const pathCats = {};
-          const obligFields = [...pathFlatFields];
-
-          if (hasObligatorio) {
-            Object.entries(pathData.Obligatorio).forEach(([k, v]) => {
-              vals[k] = String(v);
-              obligFields.push(k);
-            });
-          }
-          if (obligFields.length > 0) {
-            pathCats['Requisitos Obligatorios'] = obligFields;
-          }
-
-          if (hasIncumplir) {
-            const incumplirFields = [];
-            Object.entries(pathData.Incumplir).forEach(([k, v]) => {
-              const num = Number(v);
-              let fmtV;
-              if (!isNaN(num)) {
-                const op = num < 0 ? '>' : '<';
-                fmtV = (k === '% Entrenamiento') ? `${op} ${Math.abs(num)}%` : `${op} ${v}`;
-              } else {
-                fmtV = String(v);
-              }
-              vals[k] = fmtV;
-              incumplirFields.push(k);
-            });
-            pathCats['Incumplir al menos uno'] = incumplirFields;
-          }
-
-          vals._categorias = pathCats;
-        }
-
         _preEvos[pathName] = vals;
       });
-
-      if (_hasPerPathCategorias || _hasPuntajeIndividual) {
-        // Generar _categorias para los paths que no tienen Obligatorio/Incumplir
-        _paths.forEach(([pathName]) => {
-          const pvals = _preEvos[pathName];
-          if (!pvals._categorias) {
-            const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])].filter(f => pvals[f] !== undefined);
-            const _obligatFields = Object.keys(pvals).filter(k => !_noPuntaje.includes(k));
-            pvals._categorias = {
-              'No se considera en el puntaje': _noPuntaje,
-              'Requisitos Obligatorios': _obligatFields
-            };
-          }
-        });
-        variantesPorPreEvoConfig = _hasPerPathCategorias
-          ? { perPreEvoCategorias: true, preEvos: _preEvos }
-          : { perPreEvoPorDigi: true, preEvos: _preEvos };
+      let _categorias;
+      if (_rc.categorias) {
+        _categorias = _rc.categorias;
       } else {
-        let _categorias;
-        if (_rc.categorias) {
-          _categorias = _rc.categorias;
-        } else {
-          const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])];
-          const _obligatorios = [..._allFields].filter(f => f !== 'Error Maximo');
-          _categorias = { 'No se considera en el puntaje': _noPuntaje, 'Requisitos Obligatorios': _obligatorios };
-        }
-        variantesPorPreEvoConfig = {
-          categorias: _categorias,
-          preEvos: _preEvos
-        };
+        const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])];
+        const _obligatorios = [..._allFields].filter(f => f !== 'Error Maximo');
+        _categorias = { 'No se considera en el puntaje': _noPuntaje, 'Requisitos Obligatorios': _obligatorios };
       }
+      variantesPorPreEvoConfig = {
+        noImage: true,
+        categorias: _categorias,
+        preEvos: _preEvos
+      };
     }
   }
   if (variantesPorPreEvoConfig) {
@@ -2978,80 +2769,83 @@ function showInfo(data, evolutions, preEvolutions) {
     if (useGroupByNivel) {
       const groupMap = new Map();
       Object.entries(preEvos).forEach(([preEvoName, valores]) => {
-        const names = preEvoName.includes(',') ? preEvoName.split(',').map(s => s.trim()) : [preEvoName];
-        const nivel = getNivelForPreEvo(names[0]);
+        const nivel = getNivelForPreEvo(preEvoName);
         const groupKey = `${nivel}|${JSON.stringify(valores)}`;
         if (!groupMap.has(groupKey)) {
           groupMap.set(groupKey, { nivel, preEvoNames: [], valores });
         }
-        names.forEach(n => groupMap.get(groupKey).preEvoNames.push(n));
+        groupMap.get(groupKey).preEvoNames.push(preEvoName);
       });
       preEvoGroups = [...groupMap.values()]
         .sort((a, b) => (b.nivel || 0) - (a.nivel || 0));
     } else {
-      preEvoGroups = Object.entries(preEvos).map(([preEvoName, valores]) => {
-        const names = preEvoName.includes(',') ? preEvoName.split(',').map(s => s.trim()) : [preEvoName];
-        return { nivel: getNivelForPreEvo(names[0]), preEvoNames: names, valores };
-      });
+      preEvoGroups = Object.entries(preEvos).map(([preEvoName, valores]) => ({
+        nivel: getNivelForPreEvo(preEvoName),
+        preEvoNames: [preEvoName],
+        valores
+      }));
     }
 
-    // Helper para renderizar campos de una tarjeta preevo
-    function renderPreEvoCard(preEvoNames, valores, campos, representativePreEvo) {
-      const isGrouped = preEvoNames.length > 1;
-      let headerContent;
-      if (!variantesPorPreEvoConfig.noImage) {
-        if (isGrouped) {
-          headerContent = preEvoNames.map(name => {
-            const imgName = name.replace(/\s*\([^)]*\)\s*$/, '').trim();
-            return `<img data-digimon="${imgName}" src="icon/placeholder.png" alt=""><span>${name}</span>`;
-          }).join('');
-        } else {
-          const imgName = preEvoNames[0].replace(/\s*\([^)]*\)\s*$/, '').trim();
-          headerContent = `<img data-digimon="${imgName}" src="icon/placeholder.png" alt=""><span>${preEvoNames[0]}</span>`;
-        }
-      } else {
-        const label = isGrouped ? preEvoNames.join(', ') : preEvoNames[0];
-        headerContent = `<span>${label}</span>`;
-      }
+    // Mostrar cada categoría
+    Object.entries(categorias).forEach(([category, campos]) => {
+      const categoryClass = categoryClasses[category] || '';
+      reqHTML += `<div class="req-section">
+        <div class="req-section-title ${categoryClass}">${translateCategory(category)}</div>
+        <div class="preevo-cards">`;
 
-      let cardHTML = `<div class="preevo-card">
-        <div class="preevo-card-header">${headerContent}</div>
-        <div class="preevo-card-content">`;
+      preEvoGroups.forEach(({ nivel, preEvoNames, valores }) => {
+        const isGrouped = preEvoNames.length > 1;
+        const representativePreEvo = preEvoNames[0];
 
-      campos.forEach(campo => {
-        const label = fieldLabels[campo] || campo;
-        const rawValor = valores[campo];
-        let valorHTML;
-        if (rawValor === undefined || rawValor === null || rawValor === '-') {
-          valorHTML = '-';
-        } else if (campo === 'Program') {
-          valorHTML = renderProgram(String(rawValor));
-        } else if (campo === 'Comida' || campo === 'Bonus Comida') {
-          valorHTML = renderComida(String(rawValor));
-        } else if (campo === 'Xross' || campo === 'Driver Equipado') {
-          valorHTML = renderXrossField(String(rawValor), data.label, representativePreEvo);
+        let headerContent;
+        if (!variantesPorPreEvoConfig.noImage) {
+          if (isGrouped) {
+            // Icono + nombre por cada digimon del grupo
+            headerContent = preEvoNames.map(name => {
+              const imgName = name.replace(/\s*\([^)]*\)\s*$/, '').trim();
+              return `<img data-digimon="${imgName}" src="icon/placeholder.png" alt=""><span>${name}</span>`;
+            }).join('');
+          } else {
+            const imgName = preEvoNames[0].replace(/\s*\([^)]*\)\s*$/, '').trim();
+            headerContent = `<img data-digimon="${imgName}" src="icon/placeholder.png" alt=""><span>${preEvoNames[0]}</span>`;
+          }
         } else {
-          valorHTML = String(rawValor);
+          const label = isGrouped ? preEvoNames.join(', ') : preEvoNames[0];
+          headerContent = `<span>${label}</span>`;
         }
-        cardHTML += `<div class="preevo-field">
-          <span class="preevo-field-label">${label}</span>
-          <span class="preevo-field-value">${valorHTML}</span>
-        </div>`;
+
+        reqHTML += `<div class="preevo-card">
+          <div class="preevo-card-header">
+            ${headerContent}
+          </div>
+          <div class="preevo-card-content">`;
+
+        campos.forEach(campo => {
+          const label = fieldLabels[campo] || campo;
+          const rawValor = valores[campo];
+          let valorHTML;
+          if (rawValor === undefined || rawValor === null || rawValor === '-') {
+            valorHTML = '-';
+          } else if (campo === 'Program') {
+            valorHTML = renderProgram(String(rawValor));
+          } else if (campo === 'Comida') {
+            valorHTML = renderComida(String(rawValor));
+          } else if (campo === 'Xross' || campo === 'Driver Equipado') {
+            valorHTML = renderXrossField(String(rawValor), data.label, representativePreEvo);
+          } else {
+            valorHTML = String(rawValor);
+          }
+          reqHTML += `<div class="preevo-field">
+            <span class="preevo-field-label">${label}</span>
+            <span class="preevo-field-value">${valorHTML}</span>
+          </div>`;
+        });
+
+        reqHTML += `</div></div>`;
       });
 
-      cardHTML += `</div></div>`;
-      return cardHTML;
-    }
-
-    // Una tarjeta por digimon con todos sus campos combinados (sin secciones por categoría)
-    reqHTML += `<div class="preevo-cards">`;
-    preEvoGroups.forEach(({ preEvoNames, valores }) => {
-      const campos = valores._categorias
-        ? Object.values(valores._categorias).flat()
-        : Object.values(categorias || {}).flat();
-      reqHTML += renderPreEvoCard(preEvoNames, valores, campos, preEvoNames[0]);
+      reqHTML += `</div></div>`;
     });
-    reqHTML += `</div>`;
 
     reqGrid.innerHTML = reqHTML;
     reqGrid.querySelectorAll('img[data-digimon]').forEach(img => {
@@ -3104,33 +2898,21 @@ function showInfo(data, evolutions, preEvolutions) {
           return;
         }
 
-        // Campo especial "% Entrenamiento" — leer desde RequisitosCondicionados si aplica
-        if (field === '% Entrenamiento') {
-          const rc = digimonReqDict[data.label]?.RequisitosCondicionados;
-          const hasSpecial = rc?.condicion === "Origen" || specialEntrenamientoCases[data.label];
-          if (hasSpecial) {
-            const puntajeHTML = formatearPuntajeConColor(getPuntaje(category, field, nivel));
-            let variantesHTML = '<div class="variantes-table">';
-            if (rc?.condicion === "Origen") {
-              Object.entries(rc).filter(([k]) => k !== "condicion").forEach(([origen, path]) => {
-                const raw = path["% Entrenamiento"];
-                const num = raw != null && typeof raw === "object" ? raw.val : raw;
-                const valorStr = num == null || num === "-" ? '-' : `${num}-100%`;
-                variantesHTML += `<div class="variante-row"><span class="variante-label">${origen}:</span><span class="variante-value">${valorStr}</span></div>`;
-              });
-            } else {
-              Object.entries(specialEntrenamientoCases[data.label]).forEach(([variante, valor]) => {
-                const valorStr = valor === '-' ? '-' : valor + '%';
-                variantesHTML += `<div class="variante-row"><span class="variante-label">${variante}:</span><span class="variante-value">${valorStr}</span></div>`;
-              });
-            }
-            variantesHTML += '</div>';
-            reqHTML += `<div class="req-item full-width">
-              <span class="label">${label}${puntajeHTML}</span>
-              <span class="value">${variantesHTML}</span>
-            </div>`;
-            return;
-          }
+        // Campo especial "% Entrenamiento" con variantes (Clockmon, Chackmon, Blizzarmon, etc.)
+        if (field === '% Entrenamiento' && specialEntrenamientoCases[data.label]) {
+          const casos = specialEntrenamientoCases[data.label];
+          const puntajeHTML = formatearPuntajeConColor(getPuntaje(category, field, nivel));
+          let variantesHTML = '<div class="variantes-table">';
+          Object.entries(casos).forEach(([variante, valor]) => {
+            const valorStr = valor === '-' ? '-' : valor + '%';
+            variantesHTML += `<div class="variante-row"><span class="variante-label">${variante}:</span><span class="variante-value">${valorStr}</span></div>`;
+          });
+          variantesHTML += '</div>';
+          reqHTML += `<div class="req-item full-width">
+            <span class="label">${label}${puntajeHTML}</span>
+            <span class="value">${variantesHTML}</span>
+          </div>`;
+          return;
         }
 
         // Para campos con "Los requisitos han cambiado"

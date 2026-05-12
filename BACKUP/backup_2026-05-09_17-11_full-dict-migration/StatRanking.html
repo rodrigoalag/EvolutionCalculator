@@ -251,7 +251,6 @@ h1, h2, h3 { color: #4ecdc4; }
     .tier-mid-high { background-color: transparent; }
     .tier-high { background-color: transparent; }
     .tier-high-plus { background-color: transparent; }
-    .tier-mutant { background-color: transparent; }
 
     /* Estilos para headers ordenables */
     .sortable-header {
@@ -563,7 +562,8 @@ h1, h2, h3 { color: #4ecdc4; }
   <!-- Librería para exportar a XLSX -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-  <script src="FullDigimonReqDict.js"></script>
+  <script src="digimonReqDict.js"></script>
+  <script src="digimonstattier.js"></script>
 
 <!-- Menú de navegación hamburguesa -->
 <button id="nav-toggle" onclick="toggleNav()">
@@ -1362,6 +1362,20 @@ const nivelAEtapa = {
   6: "Ultimate"
 };
 
+// Clasificaciones de Digipuntos
+const clasificacionDigipuntos = [
+  { min: 0, max: 14.99, nombre: "Low Child", clase: "tier-low" },
+  { min: 15, max: 15.99, nombre: "Standard Child", clase: "tier-mid" },
+  { min: 16, max: 19.99, nombre: "High Child", clase: "tier-high" },
+  { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" },
+  { min: 30, max: 30.99, nombre: "Low Adult", clase: "tier-low" },
+  { min: 31, max: 34.99, nombre: "Mid Adult", clase: "tier-mid" },
+  { min: 35, max: 59.99, nombre: "High Adult", clase: "tier-high" },
+  { min: 60, max: 60.9, nombre: "Low Perfect", clase: "tier-low" },
+  { min: 61, max: 69.99, nombre: "Mid Perfect", clase: "tier-mid" },
+  { min: 70, max: Infinity, nombre: "High Perfect", clase: "tier-high" }
+];
+
 const selectNivel = document.getElementById("selectNivel");
 const rankingTable = document.getElementById("rankingTable");
 const rankingTableBody = document.querySelector("#rankingTable tbody");
@@ -1412,9 +1426,50 @@ function inicializarSelector() {
   });
 }
 
-// Función para obtener clasificación — lee desde digimonReqDict (computado en FullDigimonReqDict.js)
+// Función para obtener clasificación (siempre usa stats BASE para determinar tier)
 function obtenerClasificacion(nivel, nombre) {
-  return digimonReqDict[nombre]?.Clasificacion || { nombre: "Unknown", clase: "tier-low" };
+  if (nombre === "GreatKingScumon" || nombre === "Scumon") {
+    return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+
+  // Obtener stats base del Digimon
+  const statsBase = digimonstattier[nombre];
+  if (!statsBase) {
+    return { min: 0, max: 0, nombre: "Unknown", clase: "tier-low" };
+  }
+
+  // Calcular digipuntos BASE (sin heredados)
+  const digipuntosBase = parseFloat((((statsBase.HP / 10) + statsBase.ATK + statsBase.DEF + statsBase.Vel) / 10).toFixed(1));
+
+  if (digipuntosBase < 15 && nivel <= 1) {
+    return { min: 0, max: 10.00, nombre: "Standard Baby 1", clase: "tier-low" };
+  }
+  if (digipuntosBase < 15 && nivel <= 2) {
+    return { min: 0, max: 10.00, nombre: "Standard Baby 2", clase: "tier-low" };
+  }
+
+  // Mutant solo aplica para Adult (nivel 4) con stats bajos
+  if (digipuntosBase < 30 && nivel === 4) {
+    return { min: 20, max: 29.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+  if (digipuntosBase < 60 && nivel === 5) {
+    return { min: 20, max: 59.99, nombre: "Mutant", clase: "tier-mid" };
+  }
+
+  if (nivel === 6) {
+    if (digipuntosBase >= 50 && digipuntosBase <= 59.99) {
+      return { min: 50, max: 59.99, nombre: "Standard Ultimate", clase: "tier-low" };
+    }
+    if (digipuntosBase >= 60 && digipuntosBase <= 69.99) {
+      return { min: 60, max: 69.99, nombre: "High Ultimate", clase: "tier-high" };
+    }
+    if (digipuntosBase >= 70) {
+      return { min: 70, max: Infinity, nombre: "High+ Ultimate", clase: "tier-high-plus" };
+    }
+  }
+
+  return clasificacionDigipuntos.find(c => digipuntosBase >= c.min && digipuntosBase < c.max) ||
+         clasificacionDigipuntos[clasificacionDigipuntos.length - 1];
 }
 
 // Función para cargar imagen

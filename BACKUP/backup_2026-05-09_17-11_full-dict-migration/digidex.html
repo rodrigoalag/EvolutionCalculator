@@ -1531,7 +1531,8 @@ main {
   </style>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
-<script src="FullDigimonReqDict.js"></script>
+<script src="digimonReqDict.js?v=1"></script>
+<script src="digimonstattier.js"></script>
 <script src="driverNombres.js"></script>
 <body>
 
@@ -1638,30 +1639,11 @@ main {
       <p>Tama: <span id="info-tama"></span></p>
     </div>
 
-    <div id="scumon-lineage-row" style="display: none; padding: 4px 8px; display: flex; flex-direction: column; gap: 6px;">
-      <div>
-        <label style="font-size: 0.75rem; color: #aaa;">Child:</label>
-        <select id="scumon-child-select" style="width: 100%; margin-top: 2px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
-      </div>
-      <div id="scumon-tama-row" style="display: none;">
-        <label style="font-size: 0.75rem; color: #aaa;">Tama:</label>
-        <select id="scumon-tama-select" style="width: 100%; margin-top: 2px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
-      </div>
-    </div>
-
     <div class="base-stats-grid" id="base-stats" style="display: none;">
       <div class="stat-row"><span class="stat-label">HP</span><span class="stat-value" id="stat-hp">-</span></div>
       <div class="stat-row"><span class="stat-label">ATK</span><span class="stat-value" id="stat-atk">-</span></div>
       <div class="stat-row"><span class="stat-label">DEF</span><span class="stat-value" id="stat-def">-</span></div>
       <div class="stat-row"><span class="stat-label">Vel</span><span class="stat-value" id="stat-vel">-</span></div>
-      <div class="stat-row" style="grid-column: 1 / -1; justify-content: space-between;">
-        <span class="stat-label" id="label-digipuntos">Digipuntos</span>
-        <span class="stat-value" id="stat-digipuntos">-</span>
-      </div>
-      <div class="stat-row" style="grid-column: 1 / -1; justify-content: space-between;">
-        <span class="stat-label" id="label-clasificacion">Clasificación</span>
-        <span class="stat-value" id="stat-clasificacion" style="font-size: 0.75rem;">-</span>
-      </div>
     </div>
 
     <div class="evo-section" id="section-from" style="display: none;">
@@ -1838,12 +1820,12 @@ const warningMessages = {
     en: "SkullGreymon is a digimon that evolves with probability, only with 100% training is 100% guaranteed to get it, less training means you will have a probability of death, check with calculator"
   },
   dexdorugamon: {
-    es: "DexDorugamon evoluciona de forma diferente según el origen: desde Dorumon requiere % Entrenamiento ≥ 50% y Program Death (bloque total). Desde Dorugamon es una Side Evolution: necesita Program Death y deber incumplir al menos un requisito de DexDoruguremon.",
-    en: "DexDorugamon evolves differently depending on origin: from Dorumon requires % Training ≥ 50% and Program Death (total block). From Dorugamon it's a Side Evolution: needs Program Death and must fail at least one DexDoruguremon requirement."
+    es: "⚠️ ADVERTENCIA: Los requisitos de DexDorugamon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.",
+    en: "⚠️ WARNING: DexDorugamon requirements have changed and are currently unknown. The information shown may not be accurate."
   },
   dexdoruguremon: {
-    es: "DexDoruguremon tiene rutas según origen: desde Dorugamon requiere 4 campos obligatorios + Program Death. Desde Doruguremon solo necesita Program Death (+5 pts). Desde DexDorugamon da 1 punto por cada campo cumplido (Combates ≥ 30, Entrenamiento ≥ 100%, Peso ≥ 36, Errores ≤ 6).",
-    en: "DexDoruguremon has paths by origin: from Dorugamon requires 4 mandatory fields + Program Death. From Doruguremon only needs Program Death (+5 pts). From DexDorugamon gives 1 point per met field (Battles ≥ 30, Training ≥ 100%, Weight ≥ 36, Errors ≤ 6)."
+    es: "⚠️ ADVERTENCIA: Los requisitos de DexDoruguremon han cambiado y actualmente se desconocen. La información mostrada puede no ser precisa.",
+    en: "⚠️ WARNING: DexDoruguremon requirements have changed and are currently unknown. The information shown may not be accurate."
   },
   hora: {
     es: "Hora local de tu país, para la hora del servidor pasar el tiempo a UTC-3",
@@ -2263,37 +2245,60 @@ const specialDigimonConfig = {
 }
 },
 "DexDorugamon":  {
+  // ⚠️ REQUISITOS DESCONOCIDOS - Los requisitos han cambiado y actualmente no se conocen
+  /* REQUISITOS ANTIGUOS (COMENTADOS PARA REFERENCIA):
   requisitosOrigen: {
     "Dorumon": {
       gruposColumnas: {
         "No se considera en el puntaje": ["Peso"],
-        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"]
+        "Requisitos Obligatorios": ["% Entrenamiento", "Program"]
       },
       valores: {
-        "Peso": "25",
-        "Errores Minimos": "6",
-        "Victorias Minimas": "30",
-        "Vinculo al momento de evolucionar": "-50",
+        "Peso": "20-30",
+        "% Entrenamiento": "50-100%",
         "Program": "Death"
-      }
+      },
+      placeholder: true
     },
     "Dorugamon": {
       gruposColumnas: {
         "Requisitos Obligatorios": ["Program"],
-        "Incumplir al menos uno": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar"]
+        "Debes cumplir al menos uno": ["% Entrenamiento", "Errores", "Combates", "Vinculo"]
       },
       valores: {
-        "Peso": "25",
         "Program": "Death",
         "% Entrenamiento": "< 50%",
-        "Errores Minimos": "< 6",
-        "Combates Minimos": "< 30",
-        "Vinculo al momento de evolucionar": "> -50"
+        "Errores": "< 6",
+        "Combates": "< 30",
+        "Vinculo": "< -50"
       }
+    }
+  }
+  */
+  requisitosOrigen: {
+    "Dorumon": {
+      gruposColumnas: {
+        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
+      },
+      valores: {
+        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
+      },
+      placeholder: true
+    },
+    "Dorugamon": {
+      gruposColumnas: {
+        "⚠️ REQUISITOS DESCONOCIDOS": ["Los requisitos han cambiado y actualmente no se conocen"]
+      },
+      valores: {
+        "Los requisitos han cambiado y actualmente no se conocen": "⚠️"
+      },
+      placeholder: true
     }
   }
 },
 "DexDoruguremon":  {
+  // ⚠️ REQUISITOS DESCONOCIDOS - Los requisitos han cambiado y actualmente no se conocen
+  /* REQUISITOS ANTIGUOS (COMENTADOS PARA REFERENCIA):
   requisitosOrigen: {
     "Dorugamon": {
       gruposColumnas: {
@@ -2302,6 +2307,44 @@ const specialDigimonConfig = {
       },
       valores: {
         "Peso": "36",
+        "% Entrenamiento": "50-100%",
+        "Errores Minimos": "6",
+        "Victorias Minimas": "30",
+        "Vinculo al momento de evolucionar": "-50%",
+        "Program": "Death"
+      },
+      placeholder: true
+    },
+    "DexDorugamon": {
+      gruposColumnas: {
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos", "Victorias Minimas"]
+      },
+      valores: {
+        "Peso": "36",
+        "% Entrenamiento": "100%",
+        "Errores Minimos": "0-6",
+        "Victorias Minimas": "30"
+      }
+    },
+    "Doruguremon": {
+      gruposColumnas: {
+        "Requisitos Obligatorios": ["Program"]
+      },
+      valores: {
+        "Program": "Death"
+      }
+    }
+  }
+  */
+  requisitosOrigen: {
+    "Dorugamon": {
+      gruposColumnas: {
+        "No se considera en el puntaje": ["Peso"],
+        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"]
+      },
+      valores: {
+        "Peso": "36",
+        "% Entrenamiento": "50%",
         "Errores Minimos": "6",
         "Victorias Minimas": "30",
         "Vinculo al momento de evolucionar": "-50",
@@ -2310,13 +2353,14 @@ const specialDigimonConfig = {
     },
     "DexDorugamon": {
       gruposColumnas: {
-        "Quota/Key Points": ["Combates Minimos", "% Entrenamiento", "Peso", "Error Maximo"]
+        "Quota/Key Points": ["Peso", "% Entrenamiento", "Errores Minimos"],
+        "Requisitos Obligatorios": ["Combates Minimos"]
       },
       valores: {
-        "Combates Minimos": "30",
-        "% Entrenamiento": "100%",
         "Peso": "36",
-        "Error Maximo": "0-6"
+        "% Entrenamiento": "100%",
+        "Errores Minimos": "0-6",
+        "Combates Minimos": "30"
       }
     },
     "Doruguremon": {
@@ -2354,28 +2398,13 @@ const gruposColumnasDefault = {
   "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Vinculo al momento de evolucionar","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname"]
 };
 
-function flattenRCPath(path) {
-    if (!path || typeof path !== 'object') return path;
-    if (path.modo === 'PuntajeIndividual') return { ...path.Obligatorios, ...path.Puntos };
-    return path;
-}
-
-// Xross per-preevo data es leído de digimonReqDict[nombre].Xross (objeto) en FullDigimonReqDict.js
-function getFieldFromRC(name, selected, field) {
-    const rc = digimonReqDict[name]?.RequisitosCondicionados;
-    if (!rc || rc.condicion !== "Origen") return undefined;
-    for (const [key, val] of Object.entries(rc)) {
-        if (key === "condicion" || key === "categorias") continue;
-        if (typeof val !== "object" || val === null) continue;
-        const keys = key.split(",").map(k => k.trim());
-        if (keys.includes(selected)) {
-            const flat = flattenRCPath(val);
-            const raw = flat[field];
-            return raw != null && typeof raw === "object" ? raw.val : raw;
-        }
-    }
-    return undefined;
-}
+const specialProgramCases = { 
+  "Icemon": { 
+    "Yuki Agumon": "Ore", 
+    "Gotsumon": "Frost" 
+  }
+};
+// specialxrossCases centralizado en digimonReqDict.js
 const specialEntrenamientoCases = {
     "Chackmon": {
         "Icemon": 100,
@@ -2387,12 +2416,18 @@ const specialEntrenamientoCases = {
         "Icemon": 80,
         "Yukidarumon": 80,
 		"Chackmon":80,
+		"Chackmon (Sin Install)": 80,
 		"Polarbearmon": 100
 	},
     "Clockmon": {
         "Sin Bonus": 50,
         "Con Bonus": 50
     },
+    "DexDoruguremon": {
+        "Dorugamon": 50,
+        "DexDorugamon": 100,
+        "Doruguremon": "-"
+    }
 };
 
 const specialVictoriasCases = {
@@ -2424,6 +2459,9 @@ const specialErroresCases = {
     }
 };
 
+const specialfoodcases = {
+    "Icemon": ["Verdura Congelada", "Hongo Congelado"]
+};
 
 // Configuración de campos que deben estar vacíos para ciertas evoluciones
 // Solo para slide evolutions (mismo nivel) - las evoluciones normales mantienen todos los requisitos
@@ -2449,7 +2487,7 @@ const camposVaciosPorEvolucion = {
 };
 
   const dict = digimonReqDict;
-  const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo", "Peso", "Death Evo"];
+  const generales = ["ID", "Tama", "Nivel", "Atributo", "Tipo", "Peso"];
 
 // Configuración de puntajes por nivel y campo
 const puntajesPorNivel = {
@@ -2533,6 +2571,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
 
   // Excepciones en Adult (nivel 4)
   if (nivel === 4) {
+    // DexDorugamon: PLACEHOLDER - evolución al azar, no usar puntajes tradicionales
+    if (nombreDigimon === "DexDorugamon" && (campo === "% Entrenamiento" || campo === "Program")) {
+      return { cumple: 0, noCumple: 0, ocultar: true };
+    }
     if (nombreDigimon === "DarkTyranomon" && campo === "Program") {
       return { cumple: 3, noCumple: -10 };
     }
@@ -2597,27 +2639,31 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
         return { cumple: 1, noCumple: -10 };
       }
     }
-    // DexDoruguremon: puntajes según origen (derivados de RequisitosCondicionados en FullDigimonReqDict.js)
+    // DexDoruguremon: puntajes según origen
     if (nombreDigimon === "DexDoruguremon") {
       const evolucionActual = window.currentEvolutionDigimon;
 
-      // Desde DexDorugamon: PuntajePorCampo - cada campo da +1/0
+      // Desde DexDorugamon: Peso, Entrenamiento, Errores dan +1/0; Combates Minimos +1/-10
       if (evolucionActual === "DexDorugamon") {
-        if (campo === "Combates Minimos" || campo === "% Entrenamiento" || campo === "Peso" || campo === "Error Maximo") {
+        if (campo === "Peso" || campo === "% Entrenamiento" || campo === "Errores Minimos") {
           return { cumple: 1, noCumple: 0 };
+        }
+        if (campo === "Combates Minimos") {
+          return { cumple: 1, noCumple: -10 };
         }
       }
 
-      // Desde Doruguremon: PuntajeDirecto - solo Program, da +5 si cumple
+      // Desde Doruguremon: solo Program, todo lo demás no aplica
       if (evolucionActual === "Doruguremon") {
         if (campo === "Program") {
-          return { cumple: 5, noCumple: -10 };
+          return { cumple: 0, noCumple: -10 };
         }
         return { cumple: 0, noCumple: 0, ocultar: true };
       }
 
-      // Desde Dorugamon: ObligatoriosMasObligatorio - todos obligatorios
+      // Desde Dorugamon: misma lógica que SkullGreymon (evolución probabilística)
       if (evolucionActual === "Dorugamon") {
+        // Todos los requisitos obligatorios deben cumplirse para tener chance
         if (campo === "% Entrenamiento" || campo === "Errores Minimos" || campo === "Victorias Minimas" || campo === "Vinculo al momento de evolucionar" || campo === "Program") {
           return { cumple: 0, noCumple: -10 };
         }
@@ -3092,21 +3138,21 @@ function detectarEvolucionesMultiples(nombreDigimon) {
     Object.keys(specialEntrenamientoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
   }
 
-  // Revisar RC con Program por origen
-  const _rcProgram = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
-  if (_rcProgram?.condicion === "Origen") {
-    Object.entries(_rcProgram).forEach(([key, val]) => {
-      if (key === "condicion" || key === "categorias") return;
-      if (typeof val === "object" && val !== null && "Program" in flattenRCPath(val)) {
-        key.split(",").map(k => k.trim()).forEach(evo => evoluciones.add(evo));
-      }
-    });
+  // Revisar casos especiales de program
+  if (specialProgramCases[nombreDigimon]) {
+    Object.keys(specialProgramCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
   }
 
-  // Revisar casos especiales de xross (desde Xross objeto en el dict, no aplica para array de alternativas)
-  const _xrossObj = digimonReqDict[nombreDigimon]?.Xross;
-  if (_xrossObj && typeof _xrossObj === "object" && !Array.isArray(_xrossObj)) {
-    Object.keys(_xrossObj).forEach(evo => evoluciones.add(evo));
+  // Revisar casos especiales de xross
+  if (specialxrossCases[nombreDigimon]) {
+    Object.keys(specialxrossCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+  }
+
+  // Revisar casos especiales de comida
+  if (specialfoodcases[nombreDigimon]) {
+    if (typeof specialfoodcases[nombreDigimon] === 'object' && !Array.isArray(specialfoodcases[nombreDigimon])) {
+      Object.keys(specialfoodcases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
+    }
   }
 
   // Revisar casos especiales de victorias
@@ -3140,47 +3186,41 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
   }
 
   // Casos especiales de entrenamiento
-  if (campo === "% Entrenamiento") {
-    if (specialEntrenamientoCases[nombreDigimon]) {
-      const valor = specialEntrenamientoCases[nombreDigimon][evolucionDigimon];
-      if (valor !== undefined) return valor;
-    }
-    // Leer desde RequisitosCondicionados para Digimon con rutas por origen
-    const rc = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
-    if (rc?.condicion === "Origen") {
-      const path = rc[evolucionDigimon];
-      if (path !== undefined) {
-        const flat = flattenRCPath(path);
-        const raw = flat["% Entrenamiento"];
-        return raw != null && typeof raw === "object" ? raw.val : (raw ?? "-");
+  if (campo === "% Entrenamiento" && specialEntrenamientoCases[nombreDigimon]) {
+    const valor = specialEntrenamientoCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) return valor;
+  }
+
+  // Casos especiales de program
+  if (campo === "Program" && specialProgramCases[nombreDigimon]) {
+    const valor = specialProgramCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) return valor;
+    // Si no está definido para esta evolución, devolver vacío
+    return "-";
+  }
+
+  // Casos especiales de xross
+  if (campo === "Xross" && specialxrossCases[nombreDigimon]) {
+    const valor = specialxrossCases[nombreDigimon][evolucionDigimon];
+    if (valor !== undefined) {
+      if (Array.isArray(valor)) {
+        const sep = `<span class="xross-sep"> ${currentLanguage === 'en' ? 'or' : 'o'} </span>`;
+        return valor.map(v => renderDriverXross(String(v))).join(sep);
       }
+      return renderDriverXross(String(valor));
     }
+    // Si no está definido para esta evolución, devolver vacío
+    return "-";
   }
 
-  // Program por origen (desde RC)
-  if (campo === "Program") {
-    const rcProgram = getFieldFromRC(nombreDigimon, evolucionDigimon, "Program");
-    if (rcProgram !== undefined) return rcProgram;
-  }
-
-  // Casos especiales de xross (desde Xross objeto en el dict)
-  if (campo === "Xross") {
-    const xrossData = digimonReqDict[nombreDigimon]?.Xross;
-    // Alternativas planas (array): mismas para todos los orígenes
-    if (Array.isArray(xrossData)) {
-      const sep = `<span class="xross-sep"> ${currentLanguage === 'en' ? 'or' : 'o'} </span>`;
-      return xrossData.map(v => renderDriverXross(String(v))).join(sep);
-    }
-    // Per-preevo object
-    if (xrossData && typeof xrossData === "object") {
-      const valor = xrossData[evolucionDigimon];
+  // Casos especiales de comida
+  if (campo === "Bonus Comida" && specialfoodcases[nombreDigimon]) {
+    if (typeof specialfoodcases[nombreDigimon] === 'object' && !Array.isArray(specialfoodcases[nombreDigimon])) {
+      const valor = specialfoodcases[nombreDigimon][evolucionDigimon];
       if (valor !== undefined) {
-        if (Array.isArray(valor)) {
-          const sep = `<span class="xross-sep"> ${currentLanguage === 'en' ? 'or' : 'o'} </span>`;
-          return valor.map(v => renderDriverXross(String(v))).join(sep);
-        }
-        return renderDriverXross(String(valor));
+        return Array.isArray(valor) ? valor.join(", ") : valor;
       }
+      // Si no está definido para esta evolución, devolver vacío
       return "-";
     }
   }
@@ -3579,65 +3619,18 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     document.getElementById('info-type').innerHTML = tipoText;
     document.getElementById('info-tama').textContent = digimon.Tama || '-';
 
-    // Base stats
-    const statsData      = digimonstattier[nombre];
-    const reqData        = digimonReqDict[nombre];
-    const lineageRow     = document.getElementById('scumon-lineage-row');
-    const childSelect    = document.getElementById('scumon-child-select');
-
-    const tamaRow    = document.getElementById('scumon-tama-row');
-    const tamaSelect = document.getElementById('scumon-tama-select');
-
-    function applyScumonStats() {
-      const child    = childSelect.value;
-      const tamaOpt  = tamaSelect.value ? JSON.parse(tamaSelect.value) : null;
-      const computed = computeScumonFamilyStats(nombre, child, tamaOpt?.babyII, tamaOpt?.babyI);
-      if (!computed) return;
-      document.getElementById('stat-hp').textContent  = computed.HP;
-      document.getElementById('stat-atk').textContent = computed.ATK;
-      document.getElementById('stat-def').textContent = computed.DEF;
-      document.getElementById('stat-vel').textContent = computed.Vel;
-      document.getElementById('stat-digipuntos').textContent    = computed.Digipuntos;
-      document.getElementById('stat-clasificacion').textContent = computed.Clasificacion?.nombre ?? '-';
-    }
-
-    function updateTamaSelector(childName) {
-      const lineages = getScumonLineageOptions(childName);
-      if (lineages.length > 1) {
-        tamaSelect.innerHTML = lineages.map(l => `<option value='${JSON.stringify({babyII:l.babyII,babyI:l.babyI})}'>${l.tama}</option>`).join('');
-        tamaRow.style.display = 'block';
-        tamaSelect.onchange = applyScumonStats;
-      } else {
-        tamaRow.style.display = 'none';
-        tamaSelect.innerHTML = '';
-        tamaSelect.onchange = null;
-      }
-      applyScumonStats();
-    }
-
-    if (SCUMON_FAMILY.has(nombre)) {
-      lineageRow.style.display = 'flex';
-      const childOptions = getScumonChildOptions();
-      childSelect.innerHTML = childOptions.map(c => `<option value="${c}">${c}</option>`).join('');
-      childSelect.onchange = () => updateTamaSelector(childSelect.value);
-      updateTamaSelector(childOptions[0]);
+    // Base stats (del digimonstattier)
+    const statsData = digimonstattier[nombre];
+    if (statsData) {
+      document.getElementById('stat-hp').textContent = statsData.HP || '-';
+      document.getElementById('stat-atk').textContent = statsData.ATK || '-';
+      document.getElementById('stat-def').textContent = statsData.DEF || '-';
+      document.getElementById('stat-vel').textContent = statsData.Vel || '-';
     } else {
-      lineageRow.style.display = 'none';
-      childSelect.onchange = null;
-      if (statsData) {
-        document.getElementById('stat-hp').textContent  = statsData.HP  || '-';
-        document.getElementById('stat-atk').textContent = statsData.ATK || '-';
-        document.getElementById('stat-def').textContent = statsData.DEF || '-';
-        document.getElementById('stat-vel').textContent = statsData.Vel || '-';
-      } else {
-        document.getElementById('stat-hp').textContent  = '-';
-        document.getElementById('stat-atk').textContent = '-';
-        document.getElementById('stat-def').textContent = '-';
-        document.getElementById('stat-vel').textContent = '-';
-      }
-      document.getElementById('stat-digipuntos').textContent    = reqData?.Digipuntos ?? '-';
-      const clasif = reqData?.Clasificacion;
-      document.getElementById('stat-clasificacion').textContent = clasif ? clasif.nombre : '-';
+      document.getElementById('stat-hp').textContent = '-';
+      document.getElementById('stat-atk').textContent = '-';
+      document.getElementById('stat-def').textContent = '-';
+      document.getElementById('stat-vel').textContent = '-';
     }
 
     // Cargar imagen
@@ -3671,18 +3664,131 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	  const statsDigimon = digimonstattier[nombre];
 	  const filaStats = document.createElement("tr");
 
-	  // Stats en la tabla de requisitos
-	  if (SCUMON_FAMILY.has(nombre)) {
-	    const defaultChild    = getScumonChildOptions()[0];
-	    const defaultLineage  = defaultChild ? getScumonLineageOptions(defaultChild)[0] : null;
-	    const computed = defaultChild ? computeScumonFamilyStats(nombre, defaultChild, defaultLineage?.babyII, defaultLineage?.babyI) : null;
-	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(campo => {
+	  // Si es Scumon, PlatinumScumon, GreatKingScumon, ScumonTyumon o PlatinumScumonTyumon, agregar selector de Child
+	  if (nombre === "Scumon" || nombre === "PlatinumScumon" || nombre === "GreatKingScumon" || nombre === "ScumonTyumon" || nombre === "PlatinumScumonTyumon") {
+	    // ScumonTyumon y PlatinumScumonTyumon usan los mismos Children que Scumon
+	    // Obtener todos los Children que evolucionan a Scumon
+	    const childsQueEvolucionan = Object.entries(digimonReqDict)
+	      .filter(([nombreDigi, data]) => {
+	        const stats = digimonstattier[nombreDigi];
+	        return stats && stats.Evoluciona && stats.Evoluciona.includes("Scumon") && data.Nivel === 3;
+	      })
+	      .map(([nombreDigi]) => nombreDigi);
+
+	    // Obtener todas las líneas evolutivas posibles
+	    const lineasEvolutivas = [];
+	    childsQueEvolucionan.forEach(childNombre => {
+	      const childStats = digimonstattier[childNombre];
+	      if (!childStats.Viene || childStats.Viene.length === 0) return;
+
+	      childStats.Viene.forEach(babyIINombre => {
+	        const babyIIStats = digimonstattier[babyIINombre];
+	        if (!babyIIStats || !babyIIStats.Viene || babyIIStats.Viene.length === 0) return;
+
+	        babyIIStats.Viene.forEach(babyINombre => {
+	          const babyIData = digimonReqDict[babyINombre];
+	          const tamaId = babyIData ? babyIData.Tama : "?";
+	          lineasEvolutivas.push({
+	            child: childNombre,
+	            babyII: babyIINombre,
+	            babyI: babyINombre,
+	            tama: tamaId,
+	            label: `${childNombre} (${tamaId})`
+	          });
+	        });
+	      });
+	    });
+
+	    // Crear selector antes de la tabla para Scumon
+	    const tablaSt = document.querySelector("#tablaStats");
+	    const mensajeSelector = document.createElement("div");
+	    mensajeSelector.style.marginBottom = "1rem";
+	    mensajeSelector.style.display = "flex";
+	    mensajeSelector.style.flexDirection = "column";
+	    mensajeSelector.style.gap = "0.5rem";
+
+	    const label = document.createElement("label");
+	    label.textContent = t("eligeLineaEvolutiva") + ":";
+	    label.style.fontSize = "1rem";
+
+	    const select = document.createElement("select");
+	    select.id = "childSelector";
+
+	    const defaultOption = document.createElement("option");
+	    defaultOption.value = "";
+	    defaultOption.textContent = "-- " + t("eligeLineaEvolutiva") + " --";
+	    select.appendChild(defaultOption);
+
+	    lineasEvolutivas.forEach((linea, index) => {
+	      const option = document.createElement("option");
+	      option.value = index;
+	      option.textContent = linea.label;
+	      option.dataset.child = linea.child;
+	      option.dataset.babyii = linea.babyII;
+	      option.dataset.babyi = linea.babyI;
+	      select.appendChild(option);
+	    });
+
+	    mensajeSelector.appendChild(label);
+	    mensajeSelector.appendChild(select);
+	    tablaSt.parentElement.insertBefore(mensajeSelector, tablaSt);
+
+	    // Celdas para ATK, DEF, HP, Vel, Digipuntos (vacías inicialmente)
+	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(() => {
 	      const td = document.createElement("td");
-	      td.textContent = computed ? (campo === "ATK" ? computed.ATK : campo === "DEF" ? computed.DEF : campo === "HP" ? computed.HP : campo === "Vel" ? computed.Vel : computed.Digipuntos) : "-";
+	      td.textContent = "-";
 	      td.className = "stat-cell";
 	      filaStats.appendChild(td);
 	    });
+
+	    // Event listener para calcular stats cuando se seleccione una línea
+	    select.addEventListener("change", (e) => {
+	      const selectedIndex = e.target.value;
+	      if (!selectedIndex) {
+	        // Limpiar stats si no hay selección
+	        document.querySelectorAll(".stat-cell").forEach(cell => cell.textContent = "-");
+	        return;
+	      }
+
+	      const linea = lineasEvolutivas[selectedIndex];
+	      const childStats = digimonstattier[linea.child];
+
+	      // CORRECCIÓN: Scumon BASE = Child BASE × 1.34 (SIN heredados)
+	      const scumonStatsBase = {
+	        atk: Math.round(childStats.ATK * 1.34),
+	        def: Math.round(childStats.DEF * 1.34),
+	        hp: Math.round(childStats.HP * 1.34),
+	        vel: Math.round(childStats.Vel * 1.34)
+	      };
+
+	      let statsFinales;
+	      if (nombre === "Scumon" || nombre === "PlatinumScumon" || nombre === "ScumonTyumon" || nombre === "PlatinumScumonTyumon") {
+	        // Scumon, PlatinumScumon, ScumonTyumon y PlatinumScumonTyumon: solo BASE (sin heredados)
+	        statsFinales = scumonStatsBase;
+	      } else {
+	        // GreatKingScumon: BASE = Scumon base × 2.25 (sin heredados)
+	        statsFinales = {
+	          atk: Math.round(scumonStatsBase.atk * 2.25),
+	          def: Math.round(scumonStatsBase.def * 2.25),
+	          hp: Math.round(scumonStatsBase.hp * 2.25),
+	          vel: Math.round(scumonStatsBase.vel * 2.25)
+	        };
+	      }
+
+	      // Calcular Digipuntos
+	      statsFinales.digipuntos = parseFloat((((statsFinales.hp / 10) + statsFinales.atk + statsFinales.def + statsFinales.vel) / 10).toFixed(1));
+
+	      // Actualizar celdas
+	      const cells = document.querySelectorAll(".stat-cell");
+	      cells[0].textContent = statsFinales.atk;
+	      cells[1].textContent = statsFinales.def;
+	      cells[2].textContent = statsFinales.hp;
+	      cells[3].textContent = statsFinales.vel;
+	      cells[4].textContent = statsFinales.digipuntos;
+	    });
+
 	  } else {
+	    // Digimon normal: stats estáticos sin columna de línea evolutiva
 	    ["ATK", "DEF", "HP", "Vel", "Digipuntos"].forEach(campo => {
 	      const td = document.createElement("td");
 	      td.textContent = statsDigimon[campo] ?? "-";
@@ -3788,31 +3894,14 @@ const evolucionesMultiples = detectarEvolucionesMultiples(nombre);
 // Detectar si tiene requisitosOrigen (diferentes requisitos según digimon de origen)
 // o RequisitosCondicionados en digimonReqDict
 let tieneRequisitosOrigen = specialDigimonConfig[nombre]?.requisitosOrigen;
-if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.RequisitosCondicionados) {
+if (!tieneRequisitosOrigen && datosOriginales?.RequisitosCondicionados) {
   const _rc = datosOriginales.RequisitosCondicionados;
   const _paths = Object.entries(_rc).filter(([k]) => k !== 'condicion' && k !== 'valorCondicion' && k !== 'categorias');
   const _peso = datosOriginales.Peso;
   const _label = _rc.condicion === 'Origen' ? 'Digimon' : 'Metodo';
   tieneRequisitosOrigen = { columnaOrigenLabel: _label };
-  const _metaKeys = new Set(['puntajeOk', 'puntajeNo', 'puntaje', 'modo', 'Obligatorio', 'Incumplir', 'Death Evo']);
   _paths.forEach(([pathName, pathData]) => {
-    if (pathData.modo === 'PuntajeIndividual') {
-      const obligFields = Object.keys(pathData.Obligatorios || {}).filter(f => pathData.Obligatorios[f] !== '-');
-      const puntosFields = Object.keys(pathData.Puntos || {});
-      const _gruposColumnas = { 'Quota/Key Points': puntosFields, 'Requisitos Obligatorios': obligFields };
-      const _valores = { 'Peso': formatearPeso(_peso) };
-      const formatField = (f, v) => {
-        if (f === 'Error Maximo') return formatearErrorMaximo(v, nombre);
-        if (f === 'WinRate') return formatearWinRate(v);
-        if (f === '% Entrenamiento') return formatearPorcentajeEntrenamiento(v, nombre);
-        return String(v);
-      };
-      puntosFields.forEach(f => { _valores[f] = formatField(f, pathData.Puntos[f]); });
-      obligFields.forEach(f => { _valores[f] = formatField(f, pathData.Obligatorios[f]); });
-      tieneRequisitosOrigen[pathName] = { gruposColumnas: _gruposColumnas, valores: _valores };
-      return;
-    }
-    const _fields = Object.keys(pathData).filter(f => !_metaKeys.has(f) && typeof pathData[f] !== 'object');
+    const _fields = Object.keys(pathData);
     let _gruposColumnas;
     if (_rc.categorias) {
       _gruposColumnas = _rc.categorias;
@@ -3933,17 +4022,7 @@ if (tieneRequisitosOrigen) {
       Object.entries(gruposOrigen).forEach(([nombreGrupo, campos]) => {
         campos.forEach(campo => {
           const td = document.createElement("td");
-          let valor = config.valores?.[campo];
-          if (valor === undefined && campo === "% Entrenamiento") {
-            const rc = digimonReqDict[nombre]?.RequisitosCondicionados;
-            if (rc?.condicion === "Origen" && rc[origen]) {
-              const raw = rc[origen]["% Entrenamiento"];
-              if (raw !== undefined) {
-                const num = raw != null && typeof raw === "object" ? raw.val : raw;
-                if (num !== undefined) valor = formatearPorcentajeEntrenamiento(num, nombre) + "%";
-              }
-            }
-          }
+          const valor = config.valores?.[campo];
 
           let puntajeHTML = "";
           if (mostrarPuntaje) {
@@ -3958,22 +4037,8 @@ if (tieneRequisitosOrigen) {
             let valorHtml = String(valor);
             if (campo === "Program") valorHtml = renderProgram(valorHtml);
             else if (campo === "Comida") valorHtml = renderComida(valorHtml);
-            else if (campo === "Bonus Comida") {
-              const flatVal = datosOriginales["Bonus Comida"];
-              if (Array.isArray(flatVal)) valorHtml = flatVal.map(renderComida).join(' o ');
-              else valorHtml = renderComida(valorHtml);
-            }
             else if (campo === "Driver Equipado" || campo === "Xross") valorHtml = renderDriverXross(valorHtml);
             td.innerHTML = valorHtml + puntajeHTML;
-          } else if (campo === "Bonus Comida") {
-            const flatVal = datosOriginales["Bonus Comida"];
-            if (Array.isArray(flatVal)) {
-              td.innerHTML = flatVal.map(renderComida).join(' o ') + puntajeHTML;
-            } else if (flatVal) {
-              td.innerHTML = renderComida(String(flatVal)) + puntajeHTML;
-            } else {
-              td.textContent = "-";
-            }
           } else {
             td.textContent = "-";
           }
@@ -4117,14 +4182,9 @@ if (evolucionesMultiples.length > 0) {
 
       // Para campos con casos especiales
       const camposEspeciales = ["% Entrenamiento", "Xross", "Program", "Bonus Comida"];
-      const _xrossObjNombre = digimonReqDict[nombre]?.Xross;
-      const _rcNombre = digimonReqDict[nombre]?.RequisitosCondicionados;
-      const _rcHasProgram = _rcNombre?.condicion === "Origen" && Object.entries(_rcNombre).some(([k, v]) =>
-        k !== "condicion" && k !== "categorias" && typeof v === "object" && v !== null && "Program" in v
-      );
       const esCampoEspecial = camposEspeciales.includes(campo) &&
-        (specialEntrenamientoCases[nombre] || (_xrossObjNombre && typeof _xrossObjNombre === "object" && !Array.isArray(_xrossObjNombre)) ||
-         _rcHasProgram);
+        (specialEntrenamientoCases[nombre] || specialxrossCases[nombre] ||
+         specialProgramCases[nombre] || specialfoodcases[nombre]);
 
       // Obtener puntaje para este campo
       const puntaje = obtenerPuntaje(campo, nombre, grupo);
@@ -4139,11 +4199,7 @@ if (evolucionesMultiples.length > 0) {
         } else if (campo === "Program" && valorOriginal !== "-" && valorOriginal !== undefined) {
           valorFinal = renderProgram(valorOriginal) + puntajeHTML;
         } else if (campo === "Bonus Comida" && valorOriginal !== "-" && valorOriginal !== undefined) {
-          if (Array.isArray(valorOriginal)) {
-            valorFinal = valorOriginal.map(v => renderComida(String(v))).join(' o ') + puntajeHTML;
-          } else {
-            valorFinal = renderComida(valorOriginal) + puntajeHTML;
-          }
+          valorFinal = renderComida(valorOriginal) + puntajeHTML;
         } else {
           valorFinal = valorOriginal + (valorOriginal !== "-" ? puntajeHTML : "");
         }
@@ -4434,6 +4490,12 @@ headersGrupos.forEach(th => {
 	if (evoFromTitle) evoFromTitle.textContent = "⬅ " + t("Viene");
 	if (evoToTitle) evoToTitle.textContent = "➡ " + t("Evoluciona");
 
+	// Actualizar el selector de Scumon/GreatKingScumon si existe
+	const childSelector = document.getElementById("childSelector");
+	if (childSelector && childSelector.options.length > 0) {
+		childSelector.options[0].textContent = t("eligeLineaEvolutiva");
+	}
+
 	// Actualizar menú hamburguesa
 	const navHerramientas = document.getElementById("nav-herramientas");
 	if (navHerramientas) {
@@ -4684,10 +4746,9 @@ const comidaImagen = {
   "Chatarra":          "restosdemetal.png",
   "Nuez Magica":       "nuezmagica.png",
   "Carne X":           "carnex.png",
-  "Verdura Congelada":   "Verduracongelada.png",
-  "Champiñon Congelado": "Champiñon congelado.png",
-  "Sardinas":            "digisardina.png",
-  "Caca":                "Caca.png"
+  "Verdura Congelada": "Verduracongelada.png",
+  "Sardinas":          "digisardina.png",
+  "Caca":              "Caca.png"
 };
 
 function renderProgram(valor) {
@@ -4812,20 +4873,21 @@ function traducirValor(campo, valor, nombreDigimon = null) {
   // Manejo especial para "Program"
   if (campo === "Program") {
     const digimonSeleccionado = selectDigimon.value;
-    const rc = digimonSeleccionado && digimonReqDict[digimonSeleccionado]?.RequisitosCondicionados;
-    if (rc?.condicion === "Origen") {
-      const programEntries = [];
-      Object.entries(rc).forEach(([key, val]) => {
-        if (key === "condicion" || key === "categorias") return;
-        if (typeof val === "object" && val !== null && "Program" in val) {
-          key.split(",").map(k => k.trim()).forEach(preevo => {
-            programEntries.push("<li>" + preevo + ": " + renderProgram(val["Program"]) + "</li>");
-          });
-        }
-      });
-      if (programEntries.length > 0) {
-        return "<ul>" + programEntries.join('') + "</ul>";
-      }
+    if (digimonSeleccionado && specialProgramCases[digimonSeleccionado]) {
+      const programsForDigimon = specialProgramCases[digimonSeleccionado];
+      return "<ul>" +
+        Object.entries(programsForDigimon)
+          .map(function([digimon, program]) {
+            if (Array.isArray(program)) {
+              return program.map(function(p) {
+                return "<li>" + digimon + ": " + renderProgram(p) + "</li>";
+              }).join('');
+            } else {
+              return "<li>" + digimon + ": " + renderProgram(program) + "</li>";
+            }
+          })
+          .join('') +
+        "</ul>";
     }
     if (valor) return renderProgram(String(valor));
   }
@@ -4842,14 +4904,8 @@ function traducirValor(campo, valor, nombreDigimon = null) {
 
   if (campo === "Xross") {
     const digimonSeleccionado = selectDigimon.value;
-    const xrossForDigimon = digimonSeleccionado && digimonReqDict[digimonSeleccionado]?.Xross;
-    // Alternativas planas (array): mismas para todos los orígenes
-    if (Array.isArray(xrossForDigimon)) {
-      const sep = `<span class="xross-sep">— ${currentLanguage === 'en' ? 'or' : 'o'} —</span>`;
-      return xrossForDigimon.map(v => renderDriverXross(String(v))).join(sep);
-    }
-    // Per-preevo object
-    if (xrossForDigimon && typeof xrossForDigimon === "object") {
+    if (digimonSeleccionado && specialxrossCases[digimonSeleccionado]) {
+      const xrossForDigimon = specialxrossCases[digimonSeleccionado];
       return "<ul>" +
         Object.entries(xrossForDigimon)
           .map(function([digimon, drivers]) {
@@ -4880,12 +4936,33 @@ function traducirValor(campo, valor, nombreDigimon = null) {
     }
   }
 
-// Manejo especial para "Bonus Comida"
+// Reemplaza la sección de "Comida" en la función traducirValor con esto:
+
+// Manejo especial para "Bonus Comida" (flexible para ambos formatos)
 if (campo === "Bonus Comida") {
   const digimonSeleccionado = selectDigimon.value;
-  const bonusComida = digimonSeleccionado && digimonReqDict[digimonSeleccionado]?.["Bonus Comida"];
-  if (Array.isArray(bonusComida)) {
-    return bonusComida.map(renderComida).join(' ');
+  if (digimonSeleccionado && specialfoodcases[digimonSeleccionado]) {
+    const foodForDigimon = specialfoodcases[digimonSeleccionado];
+    
+    // Formato nuevo simplificado: ["Verdura Congelada", "Hongo Congelado"]
+    if (Array.isArray(foodForDigimon)) {
+      return foodForDigimon.map(renderComida).join(' ');
+    }
+
+    // Formato complejo: { "Gotsumon": ["Verdura Congelada"], "Yuki Agumon": [...] }
+    if (typeof foodForDigimon === 'object' && !Array.isArray(foodForDigimon)) {
+      return "<ul>" +
+        Object.entries(foodForDigimon)
+          .map(function([digimon, comida]) {
+            if (Array.isArray(comida)) {
+              return "<li>" + digimon + ": " + comida.map(renderComida).join(' ') + "</li>";
+            } else {
+              return "<li>" + digimon + ": " + renderComida(comida) + "</li>";
+            }
+          })
+          .join('') +
+        "</ul>";
+    }
   }
   if (valor) return renderComida(String(valor));
 }

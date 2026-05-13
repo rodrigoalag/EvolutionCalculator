@@ -544,7 +544,7 @@ const fullDigimonReqDict = {
   },
   "Mametyramon": {
     "ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
-    "Requisitos": { "Peso": 10, "Error Maximo": 2, "% Entrenamiento": 60, "Bonus Errores": "1+", "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 V0003 Driver" },
+    "Requisitos": { "Peso": 10, "Error Maximo": 2, "% Entrenamiento": 60, "Bonus Errores": "1-6", "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 V0003 Driver" },
     "Stat Base": { "ATK": 180, "DEF": 85, "HP": 2200, "Vel": 135, "Digipuntos": 62 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Thunderballmon"] }
   },
@@ -586,7 +586,7 @@ const fullDigimonReqDict = {
   },
   "Mamemon": {
     "ID": 24, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
-    "Requisitos": { "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 25, "Bonus Errores": "1+" },
+    "Requisitos": { "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 25, "Bonus Errores": "1-6" },
     "Stat Base": { "ATK": 185, "DEF": 75, "HP": 2000, "Vel": 140, "Digipuntos": 60 },
     "Evoluciones": { "Evoluciona": ["MetalMamemon", "BigMamemon", "PrinceMamemon", "BanchoMamemon", "Sephirothmon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },

@@ -2562,6 +2562,14 @@ function showInfo(data, evolutions, preEvolutions) {
     if (percentFields.includes(key) && typeof value === 'number') {
       return value + '%';
     }
+
+    // Formatear Error Maximo como rango "0-N" (si es número)
+    if (key === 'Error Maximo') {
+      const vs = String(value);
+      if (!vs.includes('-') && !isNaN(vs) && vs.trim() !== '') return '0-' + vs;
+      return vs;
+    }
+
     return value;
   }
 

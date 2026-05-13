@@ -1752,7 +1752,7 @@ function _evalCmp(campo, ingresado, esperado) {
   if (typeof esperado === "number") {
     const n = Number(ingresado) || 0;
     if (campo === "Peso") return Math.abs(n - esperado) <= 5;
-    const isLessOrEqual = campo === "Error Maximo" || campo === "Errores Minimos" || campo === "Vinculo al momento de evolucionar";
+    const isLessOrEqual = campo === "Error Maximo" || campo === "Vinculo al momento de evolucionar";
     return isLessOrEqual ? n <= esperado : n >= esperado;
   }
   return (String(ingresado || "")).toLowerCase() === String(esperado).toLowerCase();
@@ -2472,11 +2472,12 @@ bonusFields.forEach(bonusField => {
   
   if (bonusField === "Bonus Errores") {
     const ingNum = Number(inputValues["Error Maximo"]);
-    if (esperadoBonus.toString().includes("+")) {
-      const valorEsperado = Number(esperadoBonus.toString().replace("+", ""));
-      totalBonus += (ingNum >= valorEsperado) ? 1 : 0;
+    const espStr = esperadoBonus.toString();
+    if (espStr.includes('-')) {
+      const [min, max] = espStr.split('-').map(Number);
+      totalBonus += (ingNum >= min && ingNum <= max) ? 1 : 0;
     } else {
-      totalBonus += (ingNum === Number(esperadoBonus)) ? 1 : 0;
+      totalBonus += (ingNum === Number(espStr)) ? 1 : 0;
     }
   } else if (bonusField === "Bonus Vinculo al momento de evolucionar") {
   const vinculoValue = document.getElementById("field_Bonus Vinculo al momento de evolucionar")?.value;

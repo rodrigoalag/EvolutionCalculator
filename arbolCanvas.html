@@ -1115,7 +1115,7 @@ const levelGroupingConfig = {
 
 // Configuración especial de requisitos por Digimon (copiado EXACTAMENTE de digimonreqs.html)
 const specialDigimonConfig = {
-  // === Digimons con procesarCampos especial ===
+  // === Digimons con procesarCampos especial (no migrados a FullDigimonReqDict) ===
   "SkullGreymon": {
     "No se considera en el puntaje": ["Peso"],
     "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program o Comida"]
@@ -1125,87 +1125,8 @@ const specialDigimonConfig = {
     "Evolucion por muerte inducida": ["Muerte inducida sin Carne X o Program (30% de salir)", "Program / Comida (Asegura evolucion)"]
   },
 
-  // === Numemon family ===
-  "Numemon": { "No se considera en el puntaje": ["Peso"] },
-  "Scumon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
-  "Geremon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
-  "GoldNumemon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
-  "KaratsukiNumemon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
-  "PlatinumScumon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
-
-  // === Otros especiales ===
-  "Pillomon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "EntrenamientoHecho"] },
-  "Burpmon": { "Requisitos Obligatorios": ["Peso"] },
-  "GreatKingScumon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Menos de 15 entrenamientos?"] },
-
-  // === Rookies/Childs ===
-  "Kokuwamon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior"] },
-  "Agumon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho"] },
-  "Agumon (Black)": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"] },
-  "Yuki Agumon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"] },
-  "Agumon (2006)": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program", "2Ciclos"] },
-  "Agumon Hakase": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Nickname"] },
-
-  // === V-Dramon family ===
-  "V-Dramon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
-  "V-Dramon (Black)": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Batallas"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"] },
-  "Aero V-dramon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
-  "Aero V-dramon (Black)": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"] },
-
-  // === Clockmon ===
-  "Clockmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Batallas"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
-
-  // === Otros Champions/Adults ===
-  "Tyranomon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Stat Superior", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
-  "Monzaemon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
-  "Black King Numemon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"] },
-  "Etemon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
-  "Fantomon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
-  "Digitamamon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
-  "Insekimon High Tier": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Driver Equipado"] },
-
-  // === Nanimon family ===
-  "Nanimon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Vinculo al momento de evolucionar"] },
-  "BomberNanimon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
-  "Mushmon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
-
-  // === Mega/Ultimate tier ===
-  "Wargreymon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Error Maximo", "% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"] },
-  "BlackWargreymon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"] },
-  "Mugendramon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"] },
-  "PlatinumNumemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"] },
-  "MetalEtemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"] },
-  "PrinceMamemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"] },
-  "PrinceMamemon Con Driver": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Victorias", "Combates Minimos", "WinRate", "Driver Equipado"] },
-  "Daipenmon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"] },
-  "Devitamamon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Vinculo al momento de evolucionar"] },
-
-  // === Shoutmon family ===
-  "Shoutmon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"] },
-  "Shoutmon (Black)": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"] },
-  "Shoutmon SH": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
-  "Shoutmon + Star Sword": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
-  "King Shoutmon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Program"] },
-  "ShootingStarmon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Xross"] },
-
-  // === Otros ===
-  "Metal Fantomon": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Program"] },
-  "Master Tyranomon": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Victorias"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"] },
-  "Soulmon LT": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
-  "Soulmon MT": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
-
-  // === DexDoru family ===
-  "DexDorugamon": { "Requisitos Obligatorios": ["Program"], "Varía por origen": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar"] },
-  "DexDoruguremon": { "Varía por origen": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program", "Peso", "Error Maximo", "Combates Minimos"] },
-
-  // === Doru family ===
-  "Raptordramon": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDorugamon y Dorugamon?"] },
-  "Grademon": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDoruguremon y Doruguremon?"] },
-  "Grademon VICE": { "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Vinculo Minimo alcanzado", "Tienes registrado a DexDoruguremon y Doruguremon?"] },
-  "Doruguremon": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
-
-  // === Otros ===
-  "BanchoMamemon": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Program"] }
+  // === PrinceMamemon Con Driver (no existe en FullDigimonReqDict) ===
+  "PrinceMamemon Con Driver": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Victorias", "Combates Minimos", "WinRate", "Driver Equipado"] }
 };
 
 // Casos especiales donde % Entrenamiento varía según evolución o condición
@@ -2452,7 +2373,7 @@ function showInfo(data, evolutions, preEvolutions) {
   // Requisitos de digimonReqDict
   const reqData = digimonReqDict[data.label] || {};
   const reqGrid = document.getElementById('req-grid');
-  const specialConfig = specialDigimonConfig[data.label];
+  const specialConfig = digimonReqDict[data.label]?.categorias || specialDigimonConfig[data.label];
 
   // Campos que usan porcentaje
   const percentFields = ['% Entrenamiento', 'WinRate', 'Bonus WinRate'];

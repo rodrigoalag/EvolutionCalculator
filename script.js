@@ -197,7 +197,7 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados", "Death Evo", "Digipuntos", "Clasificacion", "Victorias Minimas", "Errores Minimos"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados", "Death Evo", "Digipuntos", "Clasificacion", "Victorias Minimas", "Errores Minimos", "categorias", "EvoNatural"];
 
 
 // Campos a ocultar de evoluciones específicas según el origen seleccionado
@@ -1961,7 +1961,7 @@ let hayBonus = false;
 		
 nextDigimons.forEach(([_, info]) => {
   for (const key in info) {
-    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder", "RequisitosCondicionados", "Death Evo", "Clasificacion", "Digipuntos"].includes(key)) {
+    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder", "RequisitosCondicionados", "Death Evo", "Clasificacion", "Digipuntos", "categorias", "EvoNatural"].includes(key)) {
       if (key.includes("Bonus")) {
         hayBonus = true;
       } else {
@@ -3178,85 +3178,17 @@ else if (field === "Comida") {
     puntajes.push({ name, puntaje, filaSimple, filaCompleta, etapa });
   });
 
-// APLICAR LÓGICA DE NUMEMON, NANIMON Y SCUMON ANTES DEL ORDENAMIENTO
-puntajes.forEach((digi, index) => {
-    if (digi.name === "Numemon" || digi.name === "Nanimon" || digi.name === "Scumon") {
-        // Buscar todos los digis de nivel 4, Burpmon, o sides de nivel 3
-        const digisNivel4yBurpmon = puntajes.filter(d => {
-            const digimonData = nextDigimons.find(([nombre, req]) => nombre === d.name);
-            if (digimonData) {
-                const [nombre, requisitosDigimon] = digimonData;
-                const esNivel4 = requisitosDigimon["Nivel"] === 4;
-                const esBurpmon = nombre === "Burpmon";
-                const esSideEvo = requisitosDigimon["Nivel"] === data["Nivel"];
-                return esNivel4 || esBurpmon || esSideEvo;
-            }
-            return false;
-        });
-
-        // Verifica si todos tienen puntaje menor a 3
-        const todosMenorA3 = digisNivel4yBurpmon.every(d => d.puntaje < 3);
-
-        // Buscar Scumon
-        const scumon = puntajes.find(d => d.name === "Scumon");
-        const scumonPuntajeMenorA0 = !scumon || scumon.puntaje < 0;
-
-        if (todosMenorA3 && scumonPuntajeMenorA0) {
-
-            // Función auxiliar para obtener el vínculo desde el input del formulario
-            function obtenerVinculoDOM() {
-                const vinculoInput = document.getElementById('field_Vinculo al momento de evolucionar');
-                if (vinculoInput && vinculoInput.value.trim() !== '') {
-                    return parseInt(vinculoInput.value);
-                }
-                return null;
-            }
-
-            // Lógica específica según el digimon
-            if (digi.name === "Nanimon") {
-                const vinculoEvolucion = obtenerVinculoDOM();
-                const numemonIndex = puntajes.findIndex(d => d.name === "Numemon");
-
-                if (vinculoEvolucion === -50) {
-                    // Vínculo = -50: Nanimon recibe +3, Numemon recibe 0
-                    puntajes[index].puntaje = 3;
-
-                    if (numemonIndex !== -1) {
-                        puntajes[numemonIndex].puntaje = 0;
-                    }
-
-                } else if (vinculoEvolucion > -50) {
-                    // Vínculo > -50: Nanimon recibe -10, Numemon recibe +3
-                    puntajes[index].puntaje = -10;
-
-                    if (numemonIndex !== -1) {
-                        puntajes[numemonIndex].puntaje = 3;
-                    }
-                }
-
-            } else if (digi.name === "Numemon") {
-                // Para Numemon, verificar si Nanimon existe
-                const nanimon = puntajes.find(d => d.name === "Nanimon");
-
-                if (nanimon) {
-                    const vinculoNanimon = obtenerVinculoDOM();
-
-                    if (vinculoNanimon === -50) {
-                        // Si Nanimon tiene vínculo = -50, Numemon recibe 0
-                        puntajes[index].puntaje = 0;
-                    } else if (vinculoNanimon > -50) {
-                        // Si Nanimon tiene vínculo > -50, Numemon recibe +3
-                        puntajes[index].puntaje = 3;
-                    }
-                } else {
-                    // Si no hay Nanimon, Numemon recibe 0
-                    puntajes[index].puntaje = 0;
-                }
-
-            }
+// APLICAR LÓGICA DE EVO NATURAL ANTES DEL ORDENAMIENTO
+const evoNaturalNombre = digimonReqDict[selected]?.EvoNatural;
+if (evoNaturalNombre) {
+    const evoNatIdx = puntajes.findIndex(d => d.name === evoNaturalNombre);
+    if (evoNatIdx !== -1) {
+        const otrosEvos = puntajes.filter(d => d.name !== evoNaturalNombre && d.name !== "Burpmon");
+        if (otrosEvos.every(d => d.puntaje < 3)) {
+            puntajes[evoNatIdx].puntaje = 3;
         }
     }
-});
+}
 
 // Reconstruir filas con puntajes actualizados
 puntajes.forEach((digi) => {

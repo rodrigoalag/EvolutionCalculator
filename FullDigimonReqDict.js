@@ -542,6 +542,7 @@ const fullDigimonReqDict = {
   },
   "Dorugamon": {
     "ID": "149", "Tama": "PR", "Nivel": 4, "Atributo": "Data", "Tipo": "Bestia / Dragon",
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 20, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Bonus Vinculo Alcanzado": 80  },
     "Stat Base": { "ATK": 80, "DEF": 65, "HP": 1250, "Vel": 55, "Digipuntos": 32.5 },
     "Evoluciones": { "Evoluciona": ["DexDorugamon", "DexDoruguremon", "Doruguremon", "Burpmon"], "Viene": ["Dorumon"] }

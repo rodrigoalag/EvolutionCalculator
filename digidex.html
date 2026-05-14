@@ -3480,6 +3480,7 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
       const _gruposColumnas = { 'Quota/Key Points': puntosFields, 'Requisitos Obligatorios': obligFields };
       const _valores = { 'Peso': formatearPeso(_peso) };
       const formatField = (f, v) => {
+        if (f === 'Peso') return formatearPeso(v);
         if (f === 'Error Maximo') return formatearErrorMaximo(v, nombre);
         if (f === 'WinRate') return formatearWinRate(v);
         if (f === '% Entrenamiento') return formatearPorcentajeEntrenamiento(v, nombre);

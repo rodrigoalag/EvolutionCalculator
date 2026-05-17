@@ -1346,6 +1346,16 @@ header select:hover {
         digimonInfo.appendChild(bossSpan);
       }
 
+      // Boss especial - aparece en múltiples rangos de entreno
+      if (enemigo.bossEspecial) {
+        const bossSpan = document.createElement('span');
+        bossSpan.className = 'digimon-boss';
+        bossSpan.textContent = currentLanguage === 'es'
+          ? '⚠️ Jefe especial - aparece desde 50% de entreno'
+          : '⚠️ Special boss - appears from 50%+ training';
+        digimonInfo.appendChild(bossSpan);
+      }
+
       // Entreno 100% - leyenda especial
       if (enemigo.entreno100) {
         const entreno100Span = document.createElement('span');

@@ -946,7 +946,7 @@ const fullDigimonReqDict = {
       "RequisitosCondicionados": {
         "condicion": "Driver Equipado", "valorCondicion": "1 EX009 Driver",
         "Con WR": { "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal" },
-        "Con Driver": { "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 200, "Victorias": 100, "Driver Equipado": "1 EX009 Driver" }
+        "Con Driver": { "% Entrenamiento": 100, "Error Maximo": 6, "Victorias": 100, "Driver Equipado": "1 EX009 Driver" }
       },
     },
     "Stat Base": { "ATK": 150, "DEF": 205, "HP": 750, "Vel": 120, "Digipuntos": 55 },

@@ -574,9 +574,9 @@ const enemigosData = [
     digimon: "Gigantic Numemon",
     nickName: "Gigantic Numemon",
     niveles: [4],
-    entrenamientos: ["70-100"],
+    entrenamientos: ["50-69.99", "70-100"],
     errores: "0-6",
-    boss: true,
+    bossEspecial: true,
     itemDrop: [
       { tipo: "driver", driver: "BO007", cantidad: 1 }
     ]

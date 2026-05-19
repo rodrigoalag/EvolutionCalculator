@@ -301,7 +301,8 @@ const fullDigimonReqDict = {
       "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Bonus Batallas": 25, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus",
       "RequisitosCondicionados": {
         "condicion": "Origen",
-        "Agumon (Black)": { "Program": "-" }
+        "Agumon, Agumon Hakase, Kokuwamon, Yuki Agumon, Agumon (2006)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus" }, "Puntos": { "Peso": 25, "% Entrenamiento": 100 } },
+        "Agumon (Black)": { "modo": "PuntajeIndividual", "Program": "-", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100 }, "Puntos": { "Peso": 25, "% Entrenamiento": 100 } }
       }
     },
     "Stat Base": { "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75, "Digipuntos": 35 },
@@ -467,8 +468,8 @@ const fullDigimonReqDict = {
       "RequisitosCondicionados": {
         "condicion": "Origen",
         "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
-        "Icemon, Yukidarumon": { "% Entrenamiento": 100, "Error Maximo": 6, "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP000 Driver" },
-        "Yuki Agumon, Penmon": { "% Entrenamiento": 80, "Error Maximo": 6, "WinRate": 60, "Combates Minimos": 15, "Xross": "1 SP000 Driver" },
+        "Icemon, Yukidarumon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP000 Driver" }, "Puntos": { "Peso": 10, "% Entrenamiento": 100, "Error Maximo": 6 } },
+        "Yuki Agumon, Penmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Xross": "1 SP000 Driver" }, "Puntos": { "Peso": 10, "% Entrenamiento": 80, "Error Maximo": 6 } },
         "Penmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Xross": "-" }, "Puntos": { "Peso": 10, "% Entrenamiento": 80, "Error Maximo": 6 } }
       }
     },
@@ -482,9 +483,9 @@ const fullDigimonReqDict = {
       "RequisitosCondicionados": {
         "condicion": "Origen",
         "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
-        "Tyumon, Pillomon": { "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" },
-        "Numemon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, GoldNumemon": { "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" },
-        "Thunderballmon, Starmon": { "% Entrenamiento": 100, "Error Maximo": 2, "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver" }
+        "Tyumon, Pillomon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 80, "Error Maximo": 2 } },
+        "Numemon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, GoldNumemon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 80, "Error Maximo": 2 } },
+        "Thunderballmon, Starmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 100, "Error Maximo": 2 } }
       }
     },
     "Stat Base": { "ATK": 90, "DEF": 30, "HP": 800, "Vel": 100, "Digipuntos": 30.0 },
@@ -785,8 +786,8 @@ const fullDigimonReqDict = {
       "RequisitosCondicionados": {
         "condicion": "Origen",
         "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
-        "Polarbearmon": { "% Entrenamiento": 100, "Error Maximo": 2, "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP001 Driver" },
-        "Icemon, Yukidarumon, Chackmon": { "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 70, "Combates Minimos": 25, "Xross": "1 SP001 Driver" },
+        "Polarbearmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP001 Driver" }, "Puntos": { "Peso": 30, "% Entrenamiento": 100, "Error Maximo": 2 } },
+        "Icemon, Yukidarumon, Chackmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 70, "Combates Minimos": 25, "Xross": "1 SP001 Driver" }, "Puntos": { "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 2 } },
         "Chackmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 70, "Combates Minimos": 25, "Xross": "-" }, "Puntos": { "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 2 } }
       }
     },
@@ -800,9 +801,9 @@ const fullDigimonReqDict = {
       "RequisitosCondicionados": {
         "condicion": "Origen",
         "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
-        "Numemon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, Thunderballmon, GoldNumemon, GreatKingScumon": { "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 60, "Combates Minimos": 25, "Xross": "1 SP014 Driver" },
+        "Numemon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, Thunderballmon, GoldNumemon, GreatKingScumon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 25, "Xross": "1 SP014 Driver" }, "Puntos": { "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 2 } },
         "Mercuremon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 25, "Xross": "-" }, "Puntos": { "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 2 } },
-        "SuperStarmon, DarkSuperStarmon, Mamemon, Digitamamon, BlackKingNumemon": { "% Entrenamiento": 100, "Error Maximo": "-", "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver" }
+        "SuperStarmon, DarkSuperStarmon, Mamemon, Digitamamon, BlackKingNumemon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver" }, "Puntos": { "Peso": 30, "% Entrenamiento": 100, "Error Maximo": "-" } }
       }
     },
     "Stat Base": { "ATK": 150, "DEF": 150, "HP": 2500, "Vel": 50, "Digipuntos": 60.0 },
@@ -908,8 +909,8 @@ const fullDigimonReqDict = {
       "Peso": 30, "% Entrenamiento": 100, "Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias": 175,
       "RequisitosCondicionados": {
         "condicion": "Origen",
-        "Metal Greymon": { "Victorias": 140, "Combates Minimos": 250 },
-        "MetalGreymon Alterous": { "Victorias": 175, "Combates Minimos": 300 }
+        "Metal Greymon": { "puntajeOk": 0, "puntajeNo": 0, "Victorias": 140, "Combates Minimos": 250 },
+        "MetalGreymon Alterous": { "puntajeOk": 0, "puntajeNo": 0, "Victorias": 175, "Combates Minimos": 300 }
       }
     },
     "Stat Base": { "ATK": 150, "DEF": 90, "HP": 1600, "Vel": 100, "Digipuntos": 50 },
@@ -945,8 +946,8 @@ const fullDigimonReqDict = {
       "Peso": 60,
       "RequisitosCondicionados": {
         "condicion": "Driver Equipado", "valorCondicion": "1 EX009 Driver",
-        "Con WR": { "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal" },
-        "Con Driver": { "% Entrenamiento": 100, "Error Maximo": 6, "Victorias": 100, "Driver Equipado": "1 EX009 Driver" }
+        "Con WR": { "puntajeOk": 0, "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Royal" },
+        "Con Driver": { "puntajeOk": 0, "% Entrenamiento": 100, "Error Maximo": 6, "Victorias": 100, "Driver Equipado": "1 EX009 Driver" }
       },
     },
     "Stat Base": { "ATK": 150, "DEF": 205, "HP": 750, "Vel": 120, "Digipuntos": 55 },

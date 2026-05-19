@@ -2703,23 +2703,24 @@ else if (field === "Error Maximo") {
 		}
 	} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons", "GreatKingScumon", "Shoutmon", "Shoutmon (Black)"].includes(name)) {
 		punto = 0; 
-	} else { 
-		const ingNum = Number(ingresado); 
-		if (typeof esperado === "string" && esperado.includes("-")) { 
-			const [min, max] = esperado.split("-").map(Number); 
-			if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) { 
-				punto = 1; 
-			} else { 
-				punto = 0; 
-			} 
-		} else { 
-			if (!isNaN(ingNum) && ingNum <= esperado) { 
-				punto = 1; 
-			} else { 
-				punto = 0; 
-			} 
-		} 
-	} 
+	} else {
+		const ingNum = Number(ingresado);
+		const esObligatorio = digimonReqDict[name]?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
+		if (typeof esperado === "string" && esperado.includes("-")) {
+			const [min, max] = esperado.split("-").map(Number);
+			if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) {
+				punto = 1;
+			} else {
+				punto = esObligatorio ? -10 : 0;
+			}
+		} else {
+			if (!isNaN(ingNum) && ingNum <= esperado) {
+				punto = 1;
+			} else {
+				punto = esObligatorio ? -10 : 0;
+			}
+		}
+	}
 }
 
 	  else if (field === "EntrenamientoHecho") {

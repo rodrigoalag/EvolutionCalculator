@@ -1749,6 +1749,10 @@ editableFields3.addEventListener('blur', (e) => {
 const _COND_STRUCT = new Set(["modo","puntajeOk","puntajeNo","Obligatorios","AlMenosUno","Obligatorio","Incumplir","Puntos","puntaje","Death Evo"]);
 
 function _evalCmp(campo, ingresado, esperado) {
+  if (Array.isArray(esperado)) {
+    const ing = (String(ingresado || "")).toLowerCase();
+    return esperado.some(v => ing === String(v).toLowerCase());
+  }
   if (typeof esperado === "number") {
     const n = Number(ingresado) || 0;
     if (campo === "Peso") return Math.abs(n - esperado) <= 5;

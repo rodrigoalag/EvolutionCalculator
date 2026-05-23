@@ -217,7 +217,6 @@ h1, h2, h3 { color: #4ecdc4; }
       width: 100%;
       border-collapse: collapse;
       margin-top: 2rem;
-      overflow-x: auto;
     }
 
     .ranking-table th,
@@ -290,30 +289,64 @@ h1, h2, h3 { color: #4ecdc4; }
 
     /* Responsividad */
     @media (max-width: 768px) {
-      .container {
-        max-width: 100%;
-        overflow-x: auto;
+      body {
+        padding: 0.5rem;
+        padding-top: 70px;
       }
-      
+
+      /* Forzar ancho completo en el contenedor de la tabla */
+      #rankingContainer {
+        width: 100%;
+      }
+
       .digimon-img {
-        width: 40px !important;
-        height: 40px !important;
+        width: 36px !important;
+        height: 36px !important;
       }
-      
+
       .ranking-table {
-        font-size: 0.8rem;
+        font-size: 0.72rem;
       }
-      
-      .ranking-table th,
+
+      .ranking-table th {
+        white-space: nowrap;
+        padding: 0.35rem 0.25rem;
+        font-size: 0.68rem;
+      }
+
       .ranking-table td {
-        padding: 0.3rem;
-        font-size: 0.7rem;
+        padding: 0.25rem 0.25rem;
+        font-size: 0.68rem;
+      }
+
+      /* Columna Digimon: ancho fijo pequeño */
+      .ranking-table th:nth-child(1),
+      .ranking-table td:nth-child(1) {
+        max-width: 80px;
+        min-width: 60px;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 0.65rem;
+      }
+
+      /* Ocultar columnas menos importantes en móvil:
+         col 2 = Línea Evolutiva, col 8 = ATK, col 9 = DEF, col 10 = SPD */
+      .ranking-table th:nth-child(2),
+      .ranking-table td:nth-child(2),
+      .ranking-table th:nth-child(8),
+      .ranking-table td:nth-child(8),
+      .ranking-table th:nth-child(9),
+      .ranking-table td:nth-child(9),
+      .ranking-table th:nth-child(10),
+      .ranking-table td:nth-child(10) {
+        display: none;
       }
     }
 
     /* Wrapper para scroll horizontal en móviles */
     .table-wrapper {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       width: 100%;
     }
 

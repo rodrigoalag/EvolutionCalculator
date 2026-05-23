@@ -453,9 +453,9 @@ const fullDigimonReqDict = {
       "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 50, "Combates Minimos": 15, "Program": "Frost", "Bonus Comida": ["Verdura Congelada", "Champiñon Congelado"],
       "RequisitosCondicionados": {
         "condicion": "Origen",
-        "categorias": { "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program", "Bonus Comida"] },
-        "Gotsumon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Program": "Frost" }, "Puntos": { "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80 } },
-        "Yuki Agumon, Penmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Program": "Ore" }, "Puntos": { "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80 } }
+        "categorias": { "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Comida"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"] },
+        "Gotsumon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Program": "Frost" }, "Puntos": { "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "Bonus Comida": ["Verdura Congelada", "Champiñon Congelado"] } },
+        "Yuki Agumon, Penmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Program": "Ore" }, "Puntos": { "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "Bonus Comida": ["Verdura Congelada", "Champiñon Congelado"] } }
       }
     },
     "Stat Base": { "ATK": 60, "DEF": 90, "HP": 1000, "Vel": 50, "Digipuntos": 30 },

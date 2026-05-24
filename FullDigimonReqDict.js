@@ -1285,3 +1285,24 @@ function getDriverEquipadoInstallOptions(digimonName) {
   });
   return opts;
 }
+
+// Digimon que reciben a TODOS los childs (Nivel 3) como origen.
+// "exclude": childs que NO pueden evolucionar a ese digimon en particular.
+const UNIVERSAL_SINK_CONFIG = {
+  "Numemon":    { exclude: ["Tyumon", "Burpmon"] },
+  "Scumon":     { exclude: ["Burpmon"] },
+  "Nanimon":    { exclude: ["Burpmon"] },
+  "Bakemon LT": { exclude: ["Burpmon"] },
+};
+
+(function buildUniversalSinkViene() {
+  const allLevel3 = Object.keys(digimonReqDict).filter(
+    name => digimonReqDict[name].Nivel === 3
+  );
+  for (const [sink, cfg] of Object.entries(UNIVERSAL_SINK_CONFIG)) {
+    if (!digimonstattier[sink]) continue;
+    digimonstattier[sink].Viene = allLevel3.filter(
+      name => !cfg.exclude.includes(name)
+    );
+  }
+})();

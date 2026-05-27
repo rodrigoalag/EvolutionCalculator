@@ -3492,17 +3492,25 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
       return;
     }
     const _fields = Object.keys(pathData).filter(f => !_metaKeys.has(f) && typeof pathData[f] !== 'object');
+    // Usar categorias del digimon (si existen) para mostrar todos los campos, no solo los del path
+    const _dictCategorias = digimonReqDict[nombre]?.categorias;
     let _gruposColumnas;
     if (_rc.categorias) {
       _gruposColumnas = _rc.categorias;
+    } else if (_dictCategorias) {
+      _gruposColumnas = _dictCategorias;
     } else {
       const _noPuntaje = ['Peso', ...(_fields.includes('Error Maximo') ? ['Error Maximo'] : [])];
       const _obligatorios = _fields.filter(f => f !== 'Error Maximo');
       _gruposColumnas = { 'No se considera en el puntaje': _noPuntaje, 'Requisitos Obligatorios': _obligatorios };
     }
+    // Construir valores: el path tiene prioridad, datosOriginales como fallback para campos base
+    const _allFields = [...new Set(Object.values(_gruposColumnas).flat())];
     const _valores = { 'Peso': formatearPeso(_peso) };
-    _fields.forEach(f => {
-      const v = pathData[f];
+    _allFields.forEach(f => {
+      if (f === 'Peso') return;
+      const v = pathData[f] !== undefined ? pathData[f] : datosOriginales[f];
+      if (v === undefined) return;
       if (f === 'Error Maximo') _valores[f] = formatearErrorMaximo(v, nombre);
       else if (f === 'WinRate') _valores[f] = formatearWinRate(v);
       else if (f === '% Entrenamiento') _valores[f] = formatearPorcentajeEntrenamiento(v, nombre);

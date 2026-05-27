@@ -2166,6 +2166,7 @@ let bakemonLTEvaluated = false;
 let shoutmonEvaluated = false;
 let shoutmonBlackEvaluated = false;
 let warGreymonEvaluated = false;
+const warGreymonFieldResults = new Map(); // resultados por campo para mostrar en display
 const condicionadoState = new Map(); // handler genérico para RequisitosCondicionados
 
 const celdas = Array.from(fieldSet)
@@ -2308,20 +2309,37 @@ console.log(`✅ Esperado Nombre: "${name}" esperado "${esperado}"`);
                 }
             }
 
+            // Guardar resultados individuales para mostrar en display
+            if (name === "Wargreymon") {
+                const erroresCorrecto = errores <= requisitos["Error Maximo"];
+                warGreymonFieldResults.set("% Entrenamiento", entrenamientoCorrecto ? 0 : -10);
+                warGreymonFieldResults.set("Error Maximo", erroresCorrecto ? 0 : -10);
+                warGreymonFieldResults.set("Vinculo al momento de evolucionar", vinculoCorrecto ? 0 : -10);
+            }
+
             warGreymonEvaluated = true;
 
-            // Para WarGreymon/BlackWarGreymon, mostrar "Evaluado" en sus campos especiales
-            if (name === "Wargreymon" && ["% Entrenamiento", "Error Maximo", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
-                return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+            // Para WarGreymon: mostrar campos visibles individualmente, ocultar Combates/Victorias
+            if (name === "Wargreymon") {
+                if (["Combates Minimos", "Victorias"].includes(field)) {
+                    return `<td class="detail-column" style="display: none;">Evaluado</td>`;
+                }
+                if (warGreymonFieldResults.has(field)) {
+                    return `<td class="detail-column">${warGreymonFieldResults.get(field)}</td>`;
+                }
             } else if (name === "BlackWargreymon" && ["% Entrenamiento", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
                 return `<td class="detail-column" style="display: none;">Evaluado</td>`;
             }
         }
 
-        // Si ya se evaluó WarGreymon/BlackWarGreymon y es uno de sus campos especiales, no evaluar de nuevo
-        if (name === "Wargreymon" && warGreymonEvaluated &&
-            ["% Entrenamiento", "Error Maximo", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {
-            return `<td class="detail-column" style="display: none;">-</td>`;
+        // Si ya se evaluó Wargreymon y es uno de sus campos especiales, no evaluar de nuevo
+        if (name === "Wargreymon" && warGreymonEvaluated) {
+            if (["Combates Minimos", "Victorias"].includes(field)) {
+                return `<td class="detail-column" style="display: none;">-</td>`;
+            }
+            if (warGreymonFieldResults.has(field)) {
+                return `<td class="detail-column">${warGreymonFieldResults.get(field)}</td>`;
+            }
         }
         if (name === "BlackWargreymon" && warGreymonEvaluated &&
             ["% Entrenamiento", "Vinculo al momento de evolucionar", "Combates Minimos", "Victorias"].includes(field)) {

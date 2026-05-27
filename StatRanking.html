@@ -329,16 +329,9 @@ h1, h2, h3 { color: #4ecdc4; }
         font-size: 0.65rem;
       }
 
-      /* Ocultar columnas menos importantes en móvil:
-         col 2 = Línea Evolutiva, col 8 = ATK, col 9 = DEF, col 10 = SPD */
+      /* Ocultar Línea Evolutiva en móvil (col 2) — el resto scrollea */
       .ranking-table th:nth-child(2),
-      .ranking-table td:nth-child(2),
-      .ranking-table th:nth-child(8),
-      .ranking-table td:nth-child(8),
-      .ranking-table th:nth-child(9),
-      .ranking-table td:nth-child(9),
-      .ranking-table th:nth-child(10),
-      .ranking-table td:nth-child(10) {
+      .ranking-table td:nth-child(2) {
         display: none;
       }
     }

@@ -2479,8 +2479,18 @@ function showInfo(data, evolutions, preEvolutions) {
   function formatValue(key, value) {
     if (value === undefined || value === null || value === '') return null;
 
-    // Formatear porcentajes
-    if (percentFields.includes(key) && typeof value === 'number') {
+    // Formatear Peso como rango ±5
+    if (key === 'Peso' && typeof value === 'number') {
+      return `${Math.max(0, value - 5)}-${value + 5}`;
+    }
+
+    // Formatear % Entrenamiento como rango N-100%
+    if (key === '% Entrenamiento' && typeof value === 'number') {
+      return `${value}-100%`;
+    }
+
+    // Formatear WinRate y Bonus WinRate con %
+    if ((key === 'WinRate' || key === 'Bonus WinRate') && typeof value === 'number') {
       return value + '%';
     }
 

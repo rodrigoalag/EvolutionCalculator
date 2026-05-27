@@ -429,7 +429,7 @@ const fullDigimonReqDict = {
   },
   "ShootingStarmon": {
     "ID": 57, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto",
-    "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Xross"] },
+    "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Xross"] },
     "Requisitos": { "Peso": 30, "Error Maximo": 6, "% Entrenamiento": 80, "WinRate": 65, "Combates Minimos": 20, "Xross": "4 VS000 Driver" },
     "Stat Base": { "ATK": 120, "DEF": 40, "HP": 900, "Vel": 75, "Digipuntos": 32.5 },
     "Evoluciones": { "Evoluciona": ["SuperStarmon", "DarkSuperStarmon", "Burpmon"], "Viene": ["Starmons"] }

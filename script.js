@@ -637,7 +637,7 @@ function calcularWinRate(datosActuales) {
   const victorias = parseFloat(datosActuales["Victorias"]);
   const batallas  = parseFloat(datosActuales["Combates Minimos"]);
   if (!batallas || isNaN(victorias)) return { texto: "" };
-  const wr = (victorias / batallas * 100).toFixed(1);
+  const wr = Math.ceil(victorias / batallas * 100);
   return { texto: `${wr}%` };
 }
 

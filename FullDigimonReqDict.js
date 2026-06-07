@@ -218,7 +218,7 @@ const fullDigimonReqDict = {
   "Gekkomon": {
     "ID": 177, "Tama": "BG", "Nivel": 3, "Atributo": "Data", "Tipo": "Dinosaurio",
     "EvoNatural": "Numemon",
-    "Requisitos": { "Peso": 18, "Error Maximo": 6, "Stat Superior": "HP" },
+    "Requisitos": { "Peso": 18, "Error Maximo": 6, "Stat Superior": "ATK" },
     "Stat Base": { "ATK": 35, "DEF": 35, "HP": 450, "Vel": 35, "Digipuntos": 15.0 },
     "Evoluciones": { "Evoluciona": ["Armalizamon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -229,7 +229,7 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["Armalizamon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
   "Pristimon": {
-    "ID": 195, "Tama": "BG", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Marioneta",
+    "ID": 999, "Tama": "BG", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Marioneta",
     "Requisitos": { "Peso": "", "Error Maximo": 6, "Stat Superior": "ATK" },
     "Stat Base": { "ATK": 60, "DEF": 25, "HP": 250, "Vel": 40, "Digipuntos": 15 },
     "Evoluciones": { "Evoluciona": ["Armalizamon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
@@ -580,7 +580,7 @@ const fullDigimonReqDict = {
     "ID": 178, "Tama": "BG", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Digimon Bonus": "Gekkomon" },
     "Stat Base": { "ATK": 70, "DEF": 100, "HP": 850, "Vel": 70, "Digipuntos": 32.5 },
-    "Evoluciones": { "Evoluciona": ["SkullGreymon", "MonarchLizamon", "Burpmon"], "Viene": ["Gekkomon", "Chiropmon", "Pristimon"] }
+    "Evoluciones": { "Evoluciona": ["SkullGreymon", "Burpmon"], "Viene": ["Gekkomon", "Chiropmon", "Pristimon"] }
   },
 
   // ===== PERFECT =====
@@ -694,7 +694,7 @@ const fullDigimonReqDict = {
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 40, "Error Maximo": 0, "% Entrenamiento": 100, "Digimon Bonus": "Numemon", "WinRate": 70, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 235, "DEF": 150, "HP": 2300, "Vel": 135, "Digipuntos": 75 },
-    "Evoluciones": { "Evoluciona": ["WaruMonzaemon", "GigaWaruMonzaemon", "Lilithmon", "Burpmon"], "Viene": ["Numemon", "KaratsukiNumemon", "GoldNumemon", "Geremon"] }
+    "Evoluciones": { "Evoluciona": ["WaruMonzaemon", "GigaWaruMonzaemon", "Burpmon"], "Viene": ["Numemon", "KaratsukiNumemon", "GoldNumemon", "Geremon"] }
   },
   "Black King Numemon": {
     "ID": 46, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
@@ -819,13 +819,6 @@ const fullDigimonReqDict = {
     },
     "Stat Base": { "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70, "Digipuntos": 60 },
     "Evoluciones": { "Evoluciona": ["Burpmon", "BlackWargreymon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon", "Armalizamon", "Parasaumon"] }
-  },
-  "MonarchLizamon": {
-    "ID": 183, "Tama": "BG", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
-    "Requisitos": { "Peso": 55, "% Entrenamiento": 100, "Errores Minimos": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100 },
-    "Stat Base": { "ATK": 150, "DEF": 300, "HP": 2000, "Vel": 50, "Digipuntos": 75.0 },
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Armalizamon"] }
   },
   "Fantomon": {
     "ID": 102, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",
@@ -996,13 +989,6 @@ const fullDigimonReqDict = {
     },
     "Stat Base": { "ATK": 160, "DEF": 160, "HP": 1200, "Vel": 110, "Digipuntos": 55 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Polarbearmon", "Blizzarmon"] }
-  },
-  "Lilithmon": {
-    "ID": 196, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Oscuridad",
-    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Combates Minimos", "Errores Minimos", "Victorias", "% Entrenamiento", "Comida"] },
-    "Requisitos": { "Peso": 15, "Combates Minimos": 150, "Errores Minimos": 6, "Victorias": 75, "% Entrenamiento": 100, "Comida": "Cresta de la Lujuria" },
-    "Stat Base": { "ATK": 170, "DEF": 90, "HP": 700, "Vel": 190, "Digipuntos": 50.0 },
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Monzaemon"] }
   },
 
 };

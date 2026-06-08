@@ -830,7 +830,7 @@ const fullDigimonReqDict = {
   },
   "MonarchLizamon": {
     "ID": 183, "Tama": "BG", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Minimos", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 55, "% Entrenamiento": 100, "Errores Minimos": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100 },
     "Stat Base": { "ATK": 150, "DEF": 300, "HP": 2000, "Vel": 50, "Digipuntos": 75.0 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Armalizamon"] }
@@ -1007,7 +1007,7 @@ const fullDigimonReqDict = {
   },
   "Lilithmon": {
     "ID": 196, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Oscuridad",
-    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Combates Minimos", "Errores Minimos", "Victorias", "% Entrenamiento", "Comida"] },
+    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Errores Minimos", "Victorias", "% Entrenamiento", "Comida"] },
     "Requisitos": { "Peso": 15, "Errores Minimos": 6, "Victorias": 150, "% Entrenamiento": 100, "Comida": "1 Cresta de la Lujuria" },
     "Stat Base": { "ATK": 170, "DEF": 90, "HP": 700, "Vel": 190, "Digipuntos": 50.0 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Monzaemon"] }

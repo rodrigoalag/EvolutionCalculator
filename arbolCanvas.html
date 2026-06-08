@@ -1671,7 +1671,7 @@ function buildGraphData(tamaFilter) {
   const totalGraphWidth = (maxAtAnyLevel - 1) * hSpacing;
 
   sortedNiveles.forEach((nivel, levelIndex) => {
-    const digimons = niveles[nivel];
+    const digimons = niveles[nivel].slice().sort((a, b) => Number(a.data.ID) - Number(b.data.ID));
     const totalAtLevel = digimons.length;
     const levelWidth = (totalAtLevel - 1) * hSpacing;
     // Centrar este nivel dentro del ancho del nivel más ancho
@@ -1991,6 +1991,10 @@ function selectDigimon(node) {
     const rowY = centerY + spacingY + (rowIndex * spacingY);
     const rowTotalWidth = (totalAtNivel - 1) * spacingX;
     const rowStartX = centerX - (rowTotalWidth / 2);
+
+    // Ordenar por ID antes de posicionar
+    evosAtNivel.existing.sort((a, b) => Number(digimonReqDict[a.data('label')]?.ID || 0) - Number(digimonReqDict[b.data('label')]?.ID || 0));
+    evosAtNivel.temp.sort((a, b) => Number(a.data.ID || 0) - Number(b.data.ID || 0));
 
     // Posicionar evos existentes en esta fila
     evosAtNivel.existing.forEach((n, i) => {

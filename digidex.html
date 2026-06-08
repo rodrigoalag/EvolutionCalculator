@@ -2603,7 +2603,7 @@ function formatearPuntajeConColor(puntaje) {
       "Combates Minimos": "Combates Mínimos",
 	  "% Entrenamiento": "Rango de % Entrenamiento",
 	  "Bonus Batallas": "Bonus Combates Mínimos",
-	  "Comida" : "Comida",
+	  "Comida" : "Comida/Item",
 	  "Victorias": "Victorias Mínimas",
 	  "Bonus Victorias": "Bonus Victorias Mínimas",
 	  "Driver Equipado": "Driver Equipado",
@@ -2718,7 +2718,7 @@ function formatearPuntajeConColor(puntaje) {
       "Combates Minimos": "Minimum Battles",
 	  "% Entrenamiento": "Training % Range",
 	  "Bonus Batallas": "Min Battle Bonus",
-	  "Comida" : "Food",
+	  "Comida" : "Food/Item",
 	  "Victorias": "Minimum Victories",
 	  "Bonus Victorias": "Minimum Victory Bonus",
 	  "Driver Equipado": "Driver Equipped",
@@ -4376,7 +4376,8 @@ const comidaImagen = {
   "Verdura Congelada":   "Verduracongelada.png",
   "Champiñon Congelado": "Champiñon congelado.png",
   "Sardinas":            "digisardina.png",
-  "Caca":                "Caca.png"
+  "Caca":                "Caca.png",
+  "Cresta de la Lujuria": "crestadelalujuria.png"
 };
 
 function renderProgram(valor) {
@@ -4397,7 +4398,7 @@ function renderComida(valor) {
   const cantidad = m ? parseInt(m[1]) : 1;
   const nombre = m ? m[2].trim() : str;
   const filename = comidaImagen[nombre];
-  if (!filename) return str;
+  if (!filename) return t(nombre);
   return `<span class="item-icon-wrap"><img class="item-icon" src="itemimg/${filename}" alt="${nombre}" title="${nombre}"><span class="item-qty">x${cantidad}</span></span>`;
 }
 

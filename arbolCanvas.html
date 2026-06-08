@@ -534,6 +534,19 @@
       justify-content: flex-end;
       padding-right: 12px;
     }
+    .preevo-section-title {
+      font-size: 0.58rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-top: 6px;
+      padding-top: 4px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .preevo-section-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .preevo-section-title.no-score { color: #f0ad4e; }
+    .preevo-section-title.required { color: #4ecdc4; }
+    .preevo-section-title.quota { color: #a8d8ea; }
 
     /* Instrucciones */
     #instructions {
@@ -2097,7 +2110,8 @@ const comidaImagen = {
   "Verdura Congelada":   "Verduracongelada.png",
   "Champiñon Congelado": "Champiñon congelado.png",
   "Sardinas":            "digisardina.png",
-  "Caca":              "Caca.png"
+  "Caca":              "Caca.png",
+  "Cresta de la Lujuria": "crestadelalujuria.png"
 };
 
 function renderProgram(valor) {
@@ -2673,7 +2687,7 @@ function showInfo(data, evolutions, preEvolutions) {
     'Program': 'Program',
     '2Ciclos': '2 Ciclos',
     'Nickname': 'Nickname',
-    'Comida': 'Comida',
+    'Comida': 'Comida/Item',
     'Xross': 'Xross',
     'Hora': 'Hora',
     'Tienes registrado a DexDorugamon y Dorugamon?': '¿Registrado DexDoru/Doru?',
@@ -2935,7 +2949,7 @@ function showInfo(data, evolutions, preEvolutions) {
     }
 
     // Helper para renderizar campos de una tarjeta preevo
-    function renderPreEvoCard(preEvoNames, valores, campos, representativePreEvo) {
+    function renderPreEvoCard(preEvoNames, valores, campos, representativePreEvo, perCategorias) {
       const isGrouped = preEvoNames.length > 1;
       let headerContent;
       if (!variantesPorPreEvoConfig.noImage) {
@@ -2957,7 +2971,7 @@ function showInfo(data, evolutions, preEvolutions) {
         <div class="preevo-card-header">${headerContent}</div>
         <div class="preevo-card-content">`;
 
-      campos.forEach(campo => {
+      function renderFieldRow(campo) {
         const label = fieldLabels[campo] || campo;
         const rawValor = valores[campo];
         let valorHTML;
@@ -2972,23 +2986,35 @@ function showInfo(data, evolutions, preEvolutions) {
         } else {
           valorHTML = String(rawValor);
         }
-        cardHTML += `<div class="preevo-field">
+        return `<div class="preevo-field">
           <span class="preevo-field-label">${label}</span>
           <span class="preevo-field-value">${valorHTML}</span>
         </div>`;
-      });
+      }
+
+      if (perCategorias) {
+        Object.entries(perCategorias).forEach(([catName, catCampos]) => {
+          if (!catCampos || catCampos.length === 0) return;
+          const catClass = categoryClasses[catName] || '';
+          cardHTML += `<div class="preevo-section-title ${catClass}">${translateCategory(catName)}</div>`;
+          catCampos.forEach(campo => { cardHTML += renderFieldRow(campo); });
+        });
+      } else {
+        campos.forEach(campo => { cardHTML += renderFieldRow(campo); });
+      }
 
       cardHTML += `</div></div>`;
       return cardHTML;
     }
 
-    // Una tarjeta por digimon con todos sus campos combinados (sin secciones por categoría)
+    // Una tarjeta por digimon con todos sus campos combinados
     reqHTML += `<div class="preevo-cards">`;
     preEvoGroups.forEach(({ preEvoNames, valores }) => {
-      const campos = valores._categorias
-        ? Object.values(valores._categorias).flat()
+      const perCats = valores._categorias || null;
+      const campos = perCats
+        ? Object.values(perCats).flat()
         : Object.values(categorias || {}).flat();
-      reqHTML += renderPreEvoCard(preEvoNames, valores, campos, preEvoNames[0]);
+      reqHTML += renderPreEvoCard(preEvoNames, valores, campos, preEvoNames[0], perCats);
     });
     reqHTML += `</div>`;
 

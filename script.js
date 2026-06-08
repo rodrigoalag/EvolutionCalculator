@@ -1043,7 +1043,7 @@ function generarFormulario() {
       field === "EntrenamientoHecho" ? "¿Entrenamiento Hecho en Baby 2?" :
       field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
       field === "Combates Minimos" ? "Batallas":
-      field === "Vinculo Minimo alcanzado" ? "Vinculo":
+      field === "Vinculo Minimo alcanzado" ? "Vinculo Minimo Alcanzado":
       field === "Vinculo al momento de evolucionar" ? "Vinculo al Evolucionar":
       field === "Bonus Vinculo al momento de evolucionar" ? "Vinculo al momento de evolucionar":
       field === "Xross" ? "Xross/Install":

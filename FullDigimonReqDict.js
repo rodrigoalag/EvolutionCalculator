@@ -181,10 +181,10 @@ const fullDigimonReqDict = {
   },
   "Ghostmon": {
     "ID": 99, "Tama": "D", "Nivel": 3, "Atributo": "Data", "Tipo": "No Muerto",
-    "EvoNatural": "Numemon",
+    "EvoNatural": "Bakemon LT",
     "Requisitos": { "Peso": 10, "Program": "Death" },
     "Stat Base": { "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65, "Digipuntos": 16 },
-    "Evoluciones": { "Evoluciona": ["Bakemon LT", "Bakemon MT", "Numemon", "Scumon", "Nanimon", "Burpmon"], "Viene": [] }
+    "Evoluciones": { "Evoluciona": ["Bakemon LT", "Bakemon MT", "Scumon", "Nanimon", "Burpmon"], "Viene": [] }
   },
   "Mushmon": {
     "ID": 112, "Tama": "P", "Nivel": 3, "Atributo": "Virus", "Tipo": "Planta",
@@ -394,6 +394,13 @@ const fullDigimonReqDict = {
     "Stat Base": { "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55, "Digipuntos": 20 },
     "Evoluciones": { "Evoluciona": ["Digitamamon", "BomberNanimon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pomumon", "Pteromon", "Tyumon"] }
   },
+  "Raremon": {
+    "ID": 194, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
+    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
+    "Requisitos": { "Peso": 10, "Program": "Mecha" },
+    "Stat Base": { "ATK": 30, "DEF": 100, "HP": 500, "Vel": 20, "Digipuntos": 20 },
+    "Evoluciones": { "Evoluciona": ["ExTyranomon", "Burpmon"], "Viene": [] }
+  },
   "BomberNanimon": {
     "ID": 111, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
@@ -530,8 +537,9 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["Burpmon", "Entmon"], "Viene": ["Mushmon"] }
   },
   "Kiwimon": {
-    "ID": 176, "Tama": "P", "Nivel": 4, "Atributo": "Data", "Tipo": "Planta / Viento",
-    "Requisitos": { "Peso": "" },
+    "ID": 176, "Tama": "VL", "Nivel": 4, "Atributo": "Data", "Tipo": "Planta / Viento",
+    "categorias": { "Quota/Key Points": ["Peso", "Errores Minimos", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+    "Requisitos": { "Peso": 15, "Errores Minimos": 3, "% Entrenamiento": 40, "WinRate": 50, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 50, "DEF": 40, "HP": 1100, "Vel": 100, "Digipuntos": 30.0 },
     "Evoluciones": { "Evoluciona": ["GrandGalemon", "Burpmon", "Delumon", "Entmon"], "Viene": ["Pomumon", "Pteromon"] }
   },
@@ -896,7 +904,7 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Grademon"] }
   },
   "Delumon": {
-    "ID": 176, "Tama": "P", "Nivel": 5, "Atributo": "Data", "Tipo": "Planta / Viento",
+    "ID": 176, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Planta / Viento",
     "Requisitos": { "Peso": "" },
     "Stat Base": { "ATK": 80, "DEF": 80, "HP": 2600, "Vel": 180, "Digipuntos": 60.0 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Kiwimon"] }
@@ -1000,7 +1008,7 @@ const fullDigimonReqDict = {
   "Lilithmon": {
     "ID": 196, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Oscuridad",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Combates Minimos", "Errores Minimos", "Victorias", "% Entrenamiento", "Comida"] },
-    "Requisitos": { "Peso": 15, "Combates Minimos": 150, "Errores Minimos": 6, "Victorias": 75, "% Entrenamiento": 100, "Comida": "Cresta de la Lujuria" },
+    "Requisitos": { "Peso": 15, "Errores Minimos": 6, "Victorias": 150, "% Entrenamiento": 100, "Comida": "1 Cresta de la Lujuria" },
     "Stat Base": { "ATK": 170, "DEF": 90, "HP": 700, "Vel": 190, "Digipuntos": 50.0 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Monzaemon"] }
   },
@@ -1302,21 +1310,28 @@ function getDriverEquipadoInstallOptions(digimonName) {
 
 // Digimon que reciben a TODOS los childs (Nivel 3) como origen.
 // "exclude": childs que NO pueden evolucionar a ese digimon en particular.
+// "requireProgram": si está definido, excluye automáticamente los childs que ya tienen un Program distinto.
 const UNIVERSAL_SINK_CONFIG = {
-  "Numemon":    { exclude: ["Tyumon", "Burpmon"] },
+  "Numemon":    { exclude: ["Tyumon", "Burpmon", "Ghostmon"] },
   "Scumon":     { exclude: ["Burpmon"] },
   "Nanimon":    { exclude: ["Burpmon"] },
   "Bakemon LT": { exclude: ["Burpmon"] },
+  "Raremon":    { exclude: ["Burpmon"] },
 };
 
-(function buildUniversalSinkViene() {
+(function buildUniversalSinks() {
   const allLevel3 = Object.keys(digimonReqDict).filter(
     name => digimonReqDict[name].Nivel === 3
   );
   for (const [sink, cfg] of Object.entries(UNIVERSAL_SINK_CONFIG)) {
     if (!digimonstattier[sink]) continue;
-    digimonstattier[sink].Viene = allLevel3.filter(
-      name => !cfg.exclude.includes(name)
-    );
+    const eligible = allLevel3.filter(name => !cfg.exclude.includes(name));
+    // Actualizar Viene del sink
+    digimonstattier[sink].Viene = eligible;
+    // Agregar el sink al Evoluciona de cada child elegible si no está ya
+    eligible.forEach(childName => {
+      const evo = digimonstattier[childName]?.Evoluciona;
+      if (evo && !evo.includes(sink)) evo.push(sink);
+    });
   }
 })();

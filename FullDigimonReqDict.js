@@ -830,7 +830,7 @@ const fullDigimonReqDict = {
   },
   "MonarchLizamon": {
     "ID": 183, "Tama": "BG", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Minimos", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Errores Minimos", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 55, "% Entrenamiento": 100, "Errores Minimos": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100 },
     "Stat Base": { "ATK": 150, "DEF": 300, "HP": 2000, "Vel": 50, "Digipuntos": 75.0 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Armalizamon"] }

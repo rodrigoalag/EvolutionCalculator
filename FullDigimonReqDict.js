@@ -173,10 +173,10 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["King Shoutmon", "Burpmon", "Numemon", "Nanimon", "Bakemon LT", "Scumon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Starmons"] }
   },
   "Pteromon": {
-    "ID": 49, "Tama": "VL", "Nivel": 3, "Atributo": "Data", "Tipo": "Viento",
+    "ID": 49, "Tama": "VL", "Nivel": 3, "Atributo": "Data", "Tipo": "Viento g",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 10, "Error Maximo": 6 },
-    "Stat Base": { "ATK": 20, "DEF": 20, "HP": 250, "Vel": 65, "Digipuntos": 13 },
+    "Stat Base": { "ATK": 20, "DEF": 25, "HP": 170, "Vel": 65, "Digipuntos": 12.7 },
     "Evoluciones": { "Evoluciona": ["Burpmon", "Galemon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Kiwimon"], "Viene": [] }
   },
   "Ghostmon": {
@@ -499,10 +499,10 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["Sephirothmon", "Burpmon"], "Viene": ["Tyumon", "Pillomon", "Numemon", "Scumon", "Nanimon", "BomberNanimon", "ScumonTyumon", "PlatinumScumon", "PlatinumScumonTyumon", "ScumonTyumonHigh", "PlatinumScumonTyumonHigh", "KaratsukiNumemon", "Geremon", "Thunderballmon", "GoldNumemon"] }
   },
   "Galemon": {
-    "ID": 50, "Tama": "VL", "Nivel": 4, "Atributo": "Data", "Tipo": "Viento",
+    "ID": 50, "Tama": "VL", "Nivel": 4, "Atributo": "Data", "Tipo": "Viento / Dragon",
     "Requisitos": { "Peso": 15, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 95, "DEF": 40, "HP": 650, "Vel": 100, "Digipuntos": 30 },
-    "Evoluciones": { "Evoluciona": ["Burpmon", "GrandGalemon"], "Viene": ["Pteromon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon", "GrandGalemon","Delumon"], "Viene": ["Pteromon"] }
   },
   "Bakemon LT": {
     "ID": 100, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
@@ -550,7 +550,7 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["SkullGreymon", "Burpmon"], "Viene": ["Pomumon"] }
   },
   "Dorugamon": {
-    "ID": "149", "Tama": "PR", "Nivel": 4, "Atributo": "Data", "Tipo": "Bestia / Dragon",
+    "ID": "149", "Tama": "PR", "Nivel": 4, "Atributo": "Data", "Tipo": "Bestia g",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 20, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Bonus Vinculo Alcanzado": 80  },
     "Stat Base": { "ATK": 80, "DEF": 65, "HP": 1250, "Vel": 55, "Digipuntos": 32.5 },
@@ -850,7 +850,7 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Fantomon"] }
   },
   "GrandGalemon": {
-    "ID": 51, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Viento",
+    "ID": 51, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Viento / Dragon",
     "Requisitos": { "Peso": 25, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 240, "DEF": 110, "HP": 1000, "Vel": 200, "Digipuntos": 65 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Galemon", "Kiwimon"] }
@@ -904,10 +904,11 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Grademon"] }
   },
   "Delumon": {
-    "ID": 176, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Planta / Viento",
-    "Requisitos": { "Peso": "" },
+    "ID": 198, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Planta / Viento",
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+    "Requisitos": { "Peso": 20, "% Entrenamiento": 60, "Error Maximo": 3, "WinRate": 60, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 80, "DEF": 80, "HP": 2600, "Vel": 180, "Digipuntos": 60.0 },
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Kiwimon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Kiwimon","Galemon"] }
   },
   "Entmon": {
     "ID": 176, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",

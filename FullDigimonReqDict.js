@@ -173,7 +173,7 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["King Shoutmon", "Burpmon", "Numemon", "Nanimon", "Bakemon LT", "Scumon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Starmons"] }
   },
   "Pteromon": {
-    "ID": 49, "Tama": "VL", "Nivel": 3, "Atributo": "Data", "Tipo": "Viento g",
+    "ID": 49, "Tama": "VL", "Nivel": 3, "Atributo": "Data", "Tipo": "Viento / Dragon",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 10, "Error Maximo": 6 },
     "Stat Base": { "ATK": 20, "DEF": 25, "HP": 170, "Vel": 65, "Digipuntos": 12.7 },

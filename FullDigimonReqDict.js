@@ -301,8 +301,8 @@ const fullDigimonReqDict = {
       "Peso": 25, "Error Maximo": 0, "% Entrenamiento": 100, "Bonus Batallas": 25, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus",
       "RequisitosCondicionados": {
         "condicion": "Origen",
-        "Agumon, Agumon Hakase, Kokuwamon, Yuki Agumon, Agumon (2006)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus" }, "Puntos": { "Peso": 25, "% Entrenamiento": 100 } },
-        "Agumon (Black)": { "modo": "PuntajeIndividual", "Program": "-", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100 }, "Puntos": { "Peso": 25, "% Entrenamiento": 100 } }
+        "Agumon, Agumon Hakase, Kokuwamon, Yuki Agumon, Agumon (2006)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus", "Error Maximo": 0 }, "Puntos": { "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25 } },
+        "Agumon (Black)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "-", "Error Maximo": 0 }, "Puntos": { "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25 } }
       }
     },
     "Stat Base": { "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75, "Digipuntos": 35 },

@@ -2960,12 +2960,10 @@ function showInfo(data, evolutions, preEvolutions) {
       if (!variantesPorPreEvoConfig.noImage) {
         if (isGrouped) {
           headerContent = preEvoNames.map(name => {
-            const imgName = name.replace(/\s*\([^)]*\)\s*$/, '').trim();
-            return `<img data-digimon="${imgName}" src="icon/placeholder.png" alt=""><span>${name}</span>`;
+            return `<img data-digimon="${name}" src="icon/placeholder.png" alt=""><span>${name}</span>`;
           }).join('');
         } else {
-          const imgName = preEvoNames[0].replace(/\s*\([^)]*\)\s*$/, '').trim();
-          headerContent = `<img data-digimon="${imgName}" src="icon/placeholder.png" alt=""><span>${preEvoNames[0]}</span>`;
+          headerContent = `<img data-digimon="${preEvoNames[0]}" src="icon/placeholder.png" alt=""><span>${preEvoNames[0]}</span>`;
         }
       } else {
         const label = isGrouped ? preEvoNames.join(', ') : preEvoNames[0];

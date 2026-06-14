@@ -490,9 +490,9 @@ const fullDigimonReqDict = {
       "RequisitosCondicionados": {
         "condicion": "Origen",
         "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Xross"] },
-        "Tyumon, Pillomon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 80, "Error Maximo": 2 } },
-        "Numemon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, GoldNumemon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 80, "Error Maximo": 2 } },
-        "Thunderballmon, Starmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 100, "Error Maximo": 2 } }
+        "Tyumon, Pillomon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 60, "Error Maximo": 2 } },
+        "Numemon, Scumon, Nanimon, BomberNanimon, ScumonTyumon, PlatinumScumon, PlatinumScumonTyumon, ScumonTyumonHigh, PlatinumScumonTyumonHigh, KaratsukiNumemon, Geremon, GoldNumemon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 60, "Error Maximo": 2 } },
+        "Thunderballmon, Starmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 60, "Error Maximo": 2 } }
       }
     },
     "Stat Base": { "ATK": 90, "DEF": 30, "HP": 800, "Vel": 100, "Digipuntos": 30.0 },
@@ -1013,7 +1013,6 @@ const fullDigimonReqDict = {
     "Stat Base": { "ATK": 170, "DEF": 90, "HP": 700, "Vel": 190, "Digipuntos": 50.0 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Monzaemon"] }
   },
-
 };
 
 

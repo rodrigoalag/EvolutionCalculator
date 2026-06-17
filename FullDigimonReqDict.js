@@ -538,8 +538,8 @@ const fullDigimonReqDict = {
   },
   "Kiwimon": {
     "ID": 176, "Tama": "VL", "Nivel": 4, "Atributo": "Data", "Tipo": "Planta / Viento",
-    "categorias": { "Quota/Key Points": ["Peso", "Errores Minimos", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
-    "Requisitos": { "Peso": 15, "Errores Minimos": 3, "% Entrenamiento": 40, "WinRate": 50, "Combates Minimos": 15 },
+    "categorias": { "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+    "Requisitos": { "Peso": 15, "Error Maximo": "3-6", "% Entrenamiento": 40, "WinRate": 50, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 50, "DEF": 40, "HP": 1100, "Vel": 100, "Digipuntos": 30.0 },
     "Evoluciones": { "Evoluciona": ["GrandGalemon", "Burpmon", "Delumon", "Entmon"], "Viene": ["Pomumon", "Pteromon"] }
   },
@@ -590,6 +590,8 @@ const fullDigimonReqDict = {
     "Stat Base": { "ATK": 70, "DEF": 100, "HP": 850, "Vel": 70, "Digipuntos": 32.5 },
     "Evoluciones": { "Evoluciona": ["SkullGreymon", "MonarchLizamon", "Burpmon"], "Viene": ["Gekkomon", "Chiropmon", "Pristimon"] }
   },
+
+  
 
   // ===== PERFECT =====
   "Metal Greymon (Virus)": {
@@ -916,6 +918,7 @@ const fullDigimonReqDict = {
     "Stat Base": { "ATK": 230, "DEF": 40, "HP": 2800, "Vel": 50, "Digipuntos": 60.0 },
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Chamblemon", "Parasaumon", "Kiwimon"] }
   },
+
 
   // ===== ULTIMATE =====
   "Wargreymon": {

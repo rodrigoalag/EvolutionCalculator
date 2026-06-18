@@ -1,0 +1,2683 @@
+
+
+// Constantes
+    // Escalado de HP, alguien mateme como que es 0.025974 con posiblemente mas decimales
+    const HP_MULTIPLIER = 0.025974;
+    // Multiplicador de puntos de entrenamiento de ATK y SPD
+    const ATK_SPD_MULTIPLIER = 2;
+    // Puntos Maximos de entrenamiento para cada Stage
+    const MAX_POINTS = { Child: 87.5, Adult: 162.5, Perfect: 350, Ultimate: 350 };
+    // Multiplicador de Stats hederados
+    const INHERITED_MULTIPLIER = 0.4;
+   
+    // Crit probability multipliers by stage
+    const critProbSPDMultiplier = {
+    perfect: 0.178,
+    adult: 0.24,
+    child: 0.30
+    };
+   
+    // Crit damage constants multipliers
+    const critDamageSPDMultiplier = [0.051186, -0.002247, 1.5];
+
+
+    const digimonBackgroundGif = 'https://i.imgur.com/pF6zDpi.gif';
+// Imagenes de la calculadora
+    const digimonImages = {
+      "Agumon": "https://i.imgur.com/gcwxouE.gif",
+      "Agumon-Hakase": "https://i.imgur.com/gcwxouE.gif",
+      "YukiAgumon": "https://i.imgur.com/z6edv46.gif",
+      "BlackAgumon": "https://i.imgur.com/TgHaHaY.gif",
+      "Agumon06": "https://i.imgur.com/IrzpMlW.gif",
+      "Kokuwamon": "https://i.imgur.com/NRX8X8M.gif",
+      "Gottsumon": "https://i.imgur.com/TEvVS6r.gif",
+      "Starmons": "https://i.imgur.com/OdjDjYQ.gif",
+      "Shoutmon": "https://i.imgur.com/JKCUq7T.gif",
+      "Shoutmon B": "https://i.imgur.com/CRV2Vnu.gif",
+      "Shoutmon SW": "https://i.imgur.com/ViD8COE.gif",
+      "Shoutmon SH": "https://i.imgur.com/yWBqfo7.gif",
+      "Pteromon": "https://i.imgur.com/GfRD23V.gif",
+      "Galemon": "https://i.imgur.com/z4d7CUz.gif",
+      "Grandgalemon": "https://i.imgur.com/64fKr2M.gif",
+      "OmegaShoutmon": "https://i.imgur.com/y8VXnJO.gif",
+      "KingShoutmon": "https://i.imgur.com/C248AHV.gif",
+      "Pillomon": "https://i.imgur.com/HzTPlgj.gif",
+      "Greymon": "https://i.imgur.com/x6haPgY.png",
+      "Tyrannomon": "https://i.imgur.com/rfsDJdQ.gif",
+      "Guardromon": "https://i.imgur.com/X4DgHn8.gif",
+      "GoldGuardromon": "https://i.imgur.com/LFZYRKu.gif",
+      "Veedramon": "https://i.imgur.com/Yj5LvZm.gif",
+      "RedVeedramon": "https://i.imgur.com/SkeC2kX.gif",
+      "BlackVeedramon": "https://i.imgur.com/uXnfR7n.gif",
+      "DarkTyrannomon": "https://i.imgur.com/dQ1j3gq.png",
+      "Tuskmon": "https://i.imgur.com/HudT38H.gif",
+      "Yukidarumon": "https://i.imgur.com/I2o5YkA.gif",
+      "Chackmon": "https://i.imgur.com/fjbYyK2.png",
+      "GeoGreymon": "https://i.imgur.com/aclrw7C.gif",
+      "Deltamon": "https://i.imgur.com/0nxuwRH.gif",
+      "Clockmon": "https://i.imgur.com/vgLLNJl.gif",
+      "Thunderballmon": "https://i.imgur.com/DL6dtZG.gif",
+      "Numemon": "https://i.imgur.com/cPBKc3A.gif",
+      "Nanimon": "https://i.imgur.com/6Z1QwRq.png",
+      "BomberNanimon": "https://i.imgur.com/GQjdVhC.png",
+      "Geremon": "https://i.imgur.com/cE2JoKj.gif",
+      "GoldNumemon": "https://i.imgur.com/o4hjF7g.gif",
+      "ShellNumemon": "https://i.imgur.com/nDMFw8a.gif",
+      "Scumon": "https://i.imgur.com/W1kFU9J.gif",
+      "Scumon HT": "https://i.imgur.com/BZw6GgP.png",
+      "Platinum Scumon HT": "https://i.imgur.com/sg0XXy5.png",
+      "KingScumon": "https://i.imgur.com/uG2qILG.gif",
+      "Starmon": "https://i.imgur.com/tkmTsD3.png",
+      "ShootingStarmon": "https://i.imgur.com/9hdfC7O.gif",
+      "Icemon": "https://i.imgur.com/sCNu81j.gif",
+      "AeroVeedramon": "https://i.imgur.com/DXsoO1n.gif",
+      "RizeGreymon": "https://i.imgur.com/vmcPoEG.png",
+      "Andromon": "https://i.imgur.com/c9PqpSK.gif",
+      "BigMamemon": "https://i.imgur.com/6pF7Wv5.gif",
+      "BlackKingNumemon": "https://i.imgur.com/bZH1Ayk.gif",
+      "BlackAeroVeedramon": "https://i.imgur.com/SucRvuo.gif",
+      "Gigadramon": "https://i.imgur.com/qcxfdhb.gif",
+      "GigaWaruMonzaemon": "https://i.imgur.com/uLwojMi.gif",
+      "Mamemon": "https://i.imgur.com/7aai41k.gif",
+      "MameTyramon": "https://i.imgur.com/HimdyoP.png",
+      "MasterTyrannomon": "https://i.imgur.com/NMJXXrB.gif",
+      "Megadramon": "https://i.imgur.com/2gwgjWi.gif",
+      "MetalGreymon": "https://i.imgur.com/9li2gy9.gif",
+      "MetalGreymonAlter": "https://i.imgur.com/BGb4Mke.gif",
+      "MetalGreymonVirus": "https://i.imgur.com/BdZLpxL.gif",
+      "MetalMamemon": "https://i.imgur.com/4VL3c0c.png",
+      "MetalTyrannomon": "https://i.imgur.com/fGWCx5e.gif",
+      "Monzaemon": "https://i.imgur.com/E9LFRTI.gif",
+      "Polarbearmon": "https://i.imgur.com/CUsvzZA.gif",
+      "Blizzardmon": "https://i.imgur.com/e11hJPQ.gif",
+      "Triceramon": "https://i.imgur.com/4ZwJXgx.gif",
+      "Etemon": "https://i.imgur.com/jMnDPot.gif",
+      "WaruMonzaemon": "https://i.imgur.com/Nt6lSKE.gif",
+      "InsekimonLow": "https://i.imgur.com/yaKdYDE.gif",
+      "InsekimonSuper": "https://i.imgur.com/yaKdYDE.gif",
+      "InsekimonDark": "https://i.imgur.com/yaKdYDE.gif",
+      "InsekimonHigh": "https://i.imgur.com/yaKdYDE.gif",
+      "DarkSuperStarmon": "https://i.imgur.com/63tYdkU.gif",
+      "SuperStarmon": "https://i.imgur.com/DmLqCXa.gif",
+      "Daipenmon": "https://i.imgur.com/l80nvi9.gif",
+      "MetalEtemon": "https://i.imgur.com/UZKbSKM.gif",
+      "PlatinumNumemon": "https://i.imgur.com/DkIQace.gif",
+      "Machinedramon": "https://i.imgur.com/TCXASAS.gif",
+      "PrinceMamemon": "https://i.imgur.com/4vlp3Oh.png",
+      "Why": "https://i.imgur.com/oqXKAAf.png",
+      "Ghostmon": "https://i.imgur.com/mTCyoBy.gif",
+      "Bakemon": "https://i.imgur.com/XEAoCBM.png",
+      "BakemonHT": "https://i.imgur.com/XEAoCBM.png",
+      "Soulmon": "https://i.imgur.com/Qhn9hzQ.gif",
+      "SoulmonHT": "https://i.imgur.com/Qhn9hzQ.gif",
+      "Skullgreymon": "https://i.imgur.com/AK54Sjn.png",
+      "Fantomon": "https://i.imgur.com/6YDEgZP.png",
+      "Metal Fantomon": "https://i.imgur.com/SGiZV4e.gif",
+      "Mushmon": "https://i.imgur.com/abT96kS.png",
+      "Chamblemon": "https://i.imgur.com/abT96kS.png",
+      "Digitamamon": "https://i.imgur.com/6AoJC2V.png",
+      "Devitamamon": "https://i.imgur.com/ZJnliRe.png",
+      "Wargreymon-Black": "https://i.imgur.com/C5cN7BD.png",
+      "Wargreymon": "https://i.imgur.com/e3vDwGt.png",
+      "DORUmon": "https://i.imgur.com/iZyBkfh.gif",
+      "DORUgamon": "https://i.imgur.com/H7f8e1o.png",
+      "Death-X-DORUgamon": "https://i.imgur.com/PS3JKnc.png",
+      "DORUguremon": "https://i.imgur.com/z68KYPn.png",
+      "Death-X-DORUguremon": "https://i.imgur.com/KMU3ZhQ.png",
+      "Raptordramon": "https://i.imgur.com/OAGiHro.png",
+      "Grademon": "https://i.imgur.com/vBztzIm.png",
+      "Grademon(Vice)": "https://i.imgur.com/npWznOP.png",
+      "Penmon": "https://i.imgur.com/fJGDBua.png",
+      "Gekkomon": "https://i.imgur.com/vnmsIbJ.gif",
+      "Armalizamon": "https://i.imgur.com/5nd8oJN.gif",
+      "BanchoMamemon": "https://i.imgur.com/bwaBpoc.gif",
+      "Pomumon":"https://i.imgur.com/Ip1bv44.png",
+      "Kiwimon":"https://i.imgur.com/GwBh76x.png",
+      "Parasaurmon":"https://i.imgur.com/bLX9yXG.png",
+      "Delumon":"https://i.imgur.com/9oyFRyj.png",
+      "Entmon":"https://i.imgur.com/S2LfsaY.gif",
+      "Tyumon": "https://i.imgur.com/MiiW2q4.png",
+      "Mercurymon": "https://i.imgur.com/uD14E6R.jpeg",
+      "Sephirothmon": "https://i.imgur.com/rowrsIS.png",
+      "Chiropmon": "https://i.imgur.com/Gb2uMCY.gif",
+      "Lilithmon": "https://i.imgur.com/HDnjvdY.png",
+      "MetalTuskmon": "https://i.imgur.com/yCLQSMW.png",
+      "Raremon": "https://i.imgur.com/5osVdRO.png",
+      "V0": "https://i.imgur.com/vntjAwc.png",
+      "MU": "https://i.imgur.com/zkS75TR.png",
+      "ST": "https://i.imgur.com/uZlhlYn.png",
+      "DS": "https://i.imgur.com/d7xRiS9.png",
+      "DT": "https://i.imgur.com/t2xR3As.png",
+      "PT": "https://i.imgur.com/flMuLE7.png",
+      "VL": "https://i.imgur.com/Ho0XvUh.png",
+      "AP": "https://i.imgur.com/iPvhgbw.png",
+      "GK": "https://i.imgur.com/4bnGa5K.png",
+    };
+    const chibiImages = {
+      "Agumon": "https://i.imgur.com/9OxQepE.png",
+      "Agumon-Hakase": "https://i.imgur.com/9OxQepE.png",
+      "Kokuwamon": "https://i.imgur.com/TI7PRnA.png",
+      "YukiAgumon": "https://i.imgur.com/4xDAGxs.png",
+      "BlackAgumon": "https://i.imgur.com/gPYI9FB.png",
+      "Agumon06": "https://i.imgur.com/uSjPoeh.png",
+      "Gottsumon": "https://i.imgur.com/x23AaE6.png",
+      "Starmons": "https://i.imgur.com/DalxDed.png",
+      "Shoutmon": "https://i.imgur.com/JKCUq7T.gif",
+      "Shoutmon B": "https://i.imgur.com/CRV2Vnu.gif",
+      "Shoutmon SW": "https://i.imgur.com/ViD8COE.gif",
+      "Shoutmon SH": "https://i.imgur.com/yWBqfo7.gif",
+      "Pteromon": "https://i.imgur.com/uqFwhto.gif",
+      "Galemon": "https://i.imgur.com/leZ7u44.gif",
+      "Grandgalemon": "https://i.imgur.com/qmszc2W.gif",
+      "OmegaShoutmon": "https://i.imgur.com/y8VXnJO.gif",
+      "KingShoutmon": "https://i.imgur.com/C248AHV.gif",
+      "Pillomon": "https://i.imgur.com/1bLBqqq.png",
+      "Greymon": "https://i.imgur.com/wyYDPdE.png",
+      "Tyrannomon": "https://i.imgur.com/wJUyHAv.png",
+      "Guardromon": "https://i.imgur.com/YSeDg3n.png",
+      "GoldGuardromon": "https://i.imgur.com/rOocBfn.png",
+      "Veedramon": "https://i.imgur.com/OtcVBzJ.png",
+      "RedVeedramon": "https://i.imgur.com/F1RiXpb.png",
+      "BlackVeedramon": "https://i.imgur.com/ojq5Ch8.png",
+      "DarkTyrannomon": "https://i.imgur.com/A28DIO7.png",
+      "Tuskmon": "https://i.imgur.com/eMKECfe.png",
+      "Yukidarumon": "https://i.imgur.com/J2LkatR.png",
+      "Chackmon": "https://i.imgur.com/RVjw5xZ.png",
+      "GeoGreymon": "https://i.imgur.com/yr1q7HH.png",
+      "Deltamon": "https://i.imgur.com/HgPEzjp.png",
+      "Clockmon": "https://i.imgur.com/UcuIpM5.png",
+      "Thunderballmon": "https://i.imgur.com/V6hTgEw.png",
+      "Numemon": "https://i.imgur.com/czYBRGk.png",
+      "Nanimon": "https://i.imgur.com/xi1QGFa.png",
+      "BomberNanimon": "https://i.imgur.com/I0UF1rp.png",
+      "Geremon": "https://i.imgur.com/ENJ0RrE.png",
+      "GoldNumemon": "https://i.imgur.com/rca7JBc.png",
+      "ShellNumemon": "https://i.imgur.com/ZLznHWK.png",
+      "Scumon": "https://i.imgur.com/rjXpvuF.png",
+      "Scumon HT": "https://i.imgur.com/rjXpvuF.png",
+      "Platinum Scumon HT": "https://i.imgur.com/sg0XXy5.png",
+      "KingScumon": "https://i.imgur.com/HUv7skG.png",
+      "Starmon": "https://i.imgur.com/aqHZrNB.png",
+      "ShootingStarmon": "https://i.imgur.com/MoNBAFy.png",
+      "Icemon": "https://i.imgur.com/HpKt2in.png",
+      "AeroVeedramon": "https://i.imgur.com/U304QDw.png",
+      "RizeGreymon": "https://i.imgur.com/Wa3ivW4.png",
+      "Andromon": "https://i.imgur.com/6Jrg8C3.png",
+      "BigMamemon": "https://i.imgur.com/D0fomOm.png",
+      "BlackKingNumemon": "https://i.imgur.com/ygZi3Cv.png",
+      "BlackAeroVeedramon": "https://i.imgur.com/YeruKUv.png",
+      "Gigadramon": "https://i.imgur.com/yW0Jyul.png",
+      "GigaWaruMonzaemon": "https://i.imgur.com/DIorS0D.png",
+      "Mamemon": "https://i.imgur.com/K24v8Wx.png",
+      "MameTyramon": "https://i.imgur.com/6R9ZDW7.png",
+      "MasterTyrannomon": "https://i.imgur.com/OoGeifS.png",
+      "Megadramon": "https://i.imgur.com/NKKSIVK.png",
+      "MetalGreymon": "https://i.imgur.com/EOmsSae.png",
+      "MetalGreymonAlter": "https://i.imgur.com/j9FWXe4.png",
+      "MetalGreymonVirus": "https://i.imgur.com/8qBO61R.png",
+      "MetalMamemon": "https://i.imgur.com/Xodbkc7.png",
+      "MetalTyrannomon": "https://i.imgur.com/IwEjiDv.png",
+      "Monzaemon": "https://i.imgur.com/rgZn4Xv.png",
+      "Polarbearmon": "https://i.imgur.com/Asl2Gd0.png",
+      "Blizzardmon": "https://i.imgur.com/A4cC3T5.png",
+      "Triceramon": "https://i.imgur.com/KTzSGtW.png",
+      "WaruMonzaemon": "https://i.imgur.com/63kqj56.png",
+      "InsekimonLow": "https://i.imgur.com/KOztaMy.png",
+      "InsekimonSuper": "https://i.imgur.com/KOztaMy.png",
+      "InsekimonDark": "https://i.imgur.com/KOztaMy.png",
+      "InsekimonHigh": "https://i.imgur.com/KOztaMy.png",
+      "DarkSuperStarmon": "https://i.imgur.com/2VX4dux.png",
+      "SuperStarmon": "https://i.imgur.com/312f0ou.png",
+      "Daipenmon": "https://i.imgur.com/hp5437q.png",
+      "MetalEtemon": "https://i.imgur.com/6BwmElx.png",
+      "PlatinumNumemon": "https://i.imgur.com/BnYqhWR.gif",
+      "Machinedramon": "https://i.imgur.com/LHvfd4o.png",
+      "PrinceMamemon": "https://i.imgur.com/4vlp3Oh.png",
+      "Ghostmon": "https://i.imgur.com/mTCyoBy.gif",
+      "Bakemon": "https://i.imgur.com/XEAoCBM.png",
+      "BakemonHT": "https://i.imgur.com/XEAoCBM.png",
+      "Soulmon": "https://i.imgur.com/Qhn9hzQ.gif",
+      "SoulmonHT": "https://i.imgur.com/Qhn9hzQ.gif",
+      "Skullgreymon": "https://i.imgur.com/JMmCd1y.png",
+      "Fantomon": "https://i.imgur.com/6YDEgZP.png",
+      "Metal Fantomon": "https://i.imgur.com/6YDEgZP.png",
+      "Mushmon": "https://i.imgur.com/pmmLz8W.png",
+      "Chamblemon": "https://i.imgur.com/pmmLz8W.png",
+      "Digitamamon": "https://i.imgur.com/6AoJC2V.png",
+      "Devitamamon": "https://i.imgur.com/I3QNU8n.png",
+      "Wargreymon-Black": "https://i.imgur.com/C5cN7BD.png",
+      "Wargreymon": "https://i.imgur.com/e3vDwGt.png",
+      "DORUmon": "https://i.imgur.com/zsI3ztm.png",
+      "DORUgamon": "https://i.imgur.com/H7f8e1o.png",
+      "Death-X-DORUgamon": "https://i.imgur.com/PS3JKnc.png",
+      "DORUguremon": "https://i.imgur.com/z68KYPn.png",
+      "Death-X-DORUguremon": "https://i.imgur.com/KMU3ZhQ.png",
+      "Raptordramon": "https://i.imgur.com/OAGiHro.png",
+      "Grademon": "https://i.imgur.com/vBztzIm.png",
+      "Grademon(Vice)": "https://i.imgur.com/npWznOP.png",
+      "Penmon": "https://i.imgur.com/fJGDBua.png",
+      "Gekkomon": "https://i.imgur.com/KM6XSmy.png",
+      "Armalizamon": "https://i.imgur.com/5nd8oJN.gif",
+      "BanchoMamemon": "https://i.imgur.com/bwaBpoc.gif",
+      "Pomumon":"https://i.imgur.com/Ip1bv44.png",
+      "Kiwimon":"https://i.imgur.com/GwBh76x.png",
+      "Parasaurmon":"https://i.imgur.com/bLX9yXG.png",
+      "Delumon":"https://i.imgur.com/9oyFRyj.png",
+      "Entmon":"https://i.imgur.com/S2LfsaY.gif",
+      "Tyumon": "https://i.imgur.com/MiiW2q4.png",
+      "Mercurymon": "https://i.imgur.com/uD14E6R.jpeg",
+      "Etemon": "https://i.imgur.com/jMnDPot.gif",
+      "Sephirothmon": "https://i.imgur.com/rowrsIS.png",
+      "Chiropmon": "https://i.imgur.com/pAyqhKi.gif",
+      "Lilithmon": "https://i.imgur.com/MdTCl3R.png",
+      "MetalTuskmon": "https://i.imgur.com/yCLQSMW.png",
+    };
+    const placeholderImage = "https://i.imgur.com/oqXKAAf.png";
+    const emptySlotImage = "https://i.imgur.com/zwbzL6D.png";
+    const typeImages = {
+      "Vaccine": "https://i.imgur.com/YGzRMEF.png",
+      "Virus": "https://i.imgur.com/zrYAfGL.png",
+      "Data": "https://i.imgur.com/5nEVT4H.png",
+      "Free": "https://i.imgur.com/kfck0jO.png"
+    };
+   
+    const DtypeImages = {
+      "S.Mutant": "https://i.imgur.com/Ot8izZa.png",
+      "Mutant": "https://i.imgur.com/w7IN5Eb.png",
+      "Undead": "https://i.imgur.com/tUhcPG1.png",
+      "Wind": "https://i.imgur.com/GpwKPKm.png",
+      "Dragon": "https://i.imgur.com/C2PaPMH.png",
+      "Ground": "https://i.imgur.com/jDAmxNp.png",
+      "Dinosaur": "https://i.imgur.com/p1bhAOe.png",
+      "Machine": "https://i.imgur.com/tNrTE3U.png",
+      "Beast": "https://i.imgur.com/zmlQ4xo.png",
+      "Composite": "https://i.imgur.com/lG1vSOW.png",
+      "Plant": "https://i.imgur.com/1fU8aXa.png",
+      "Ice": "https://i.imgur.com/s1clwwV.png",
+      "Warrior": "https://i.imgur.com/ncFTx0t.png",
+    };
+   
+    const babyStages = ["Baby1", "Baby2"]
+    const availableLevels = ["Child", "Adult", "Perfect", "Ultimate"];
+   
+    // Digitamas
+    const DIGITAMAS = ["V0", "MU", "ST", "DS", "DT", "PT", "VL", "AP", "GK"
+                    //, AP
+                    ];
+    /// AGREGAR TAMAS CON BABYS ACÁ
+    const babyTamas = ["V0", "ST", "VL", "AP", "GK"
+                    //, AP
+                    ]
+    const digitamaOptions = [
+        { value: "V0", label: "V-0", image: digimonImages["V0"] },
+        { value: "MU", label: "Mutantes", image: digimonImages["MU"] },
+        { value: "ST", label: "Meteoros Xruzados", image: digimonImages["ST"] },
+        { value: "DS", label: "Spirits", image: digimonImages["DS"] },
+        { value: "DT", label: "Death", image: digimonImages["DT"] },
+        { value: "PT", label: "Plant", image: digimonImages["PT"] },
+        { value: "VL", label: "Cielos Liberados", image: digimonImages["VL"] },
+        { value: "AP", label: "Alpha Prototype", image: digimonImages["AP"] },
+        { value: "GK", label: "Gekko", image: digimonImages["GK"] }
+      ];
+    // Entrenamientos preseleccionados
+    const trainingSplits = {
+      "HyperOffense": [0.2, 0.5, 0.3],
+      "HyperDefense": [0.5, 0.15, 0.35],
+      "TyrannoSpecial": [0.35, 0.3, 0.35],
+      "BalancedOffense": [0.24, 0.38, 0.38],
+      "SpeedMeta": [0.30, 0.15, 0.55],
+      "HybridTank": [0.4, 0.3, 0.3],
+      "PerfectBalance": [1/3, 1/3, 1/3],
+      "BK Special": [1, 0, 0],
+    };
+// STATS AGREGAR LOS STATS DE DIGIMON NUEVOS
+    const DigimonStats = {
+      "Botamon": {"Digitama": "V0", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 50, "ATK": 6, "SPD": 4, "DEF": 6},
+      "Koromon": {"Digitama": "V0", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 90, "ATK": 9, "SPD": 6, "DEF": 6},
+      "Agumon": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Dinosaur", "HP": 250, "ATK": 50, "SPD": 50, "DEF": 25},
+      "Agumon-Hakase": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Dinosaur", "HP": 350, "ATK": 45, "SPD": 35, "DEF": 35},
+      "Kokuwamon": {"Digitama": "V0", "Stage": "Child", "Type": "Data", "DType": "Machine", "HP": 450, "ATK": 40, "SPD": 25, "DEF": 40},
+      "YukiAgumon": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Ice", "HP": 350, "ATK": 40, "SPD": 45, "DEF": 30},
+      "BlackAgumon": {"Digitama": "V0", "Stage": "Child", "Type": "Virus", "DType": "Dinosaur", "HP": 300, "ATK": 55, "SPD": 40, "DEF": 25},
+      "Agumon06": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Dinosaur", "HP": 250, "ATK": 55, "SPD": 55, "DEF": 25},
+      "Clockmon": {"Digitama": "V0", "Stage": "Adult", "Type": "Data", "DType": "Machine", "HP": 1050, "ATK": 80, "SPD": 65, "DEF": 50},
+      "DarkTyrannomon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dinosaur", "HP": 1050, "ATK": 80, "SPD": 65, "DEF": 50},
+      "Deltamon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Composite", "HP": 900, "ATK": 115, "SPD": 55, "DEF": 40},
+      "Greymon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Dinosaur", "HP": 1000, "ATK": 100, "SPD": 65, "DEF": 60},
+      "Guardromon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Machine", "HP": 1100, "ATK": 50, "SPD": 30, "DEF": 110},
+      "GoldGuardromon": {"Digitama": "V0", "Stage": "Adult", "Type": "Free", "DType": "Machine", "HP": 1100, "ATK": 50, "SPD": 30, "DEF": 120},
+      "Thunderballmon": {"Digitama": "V0", "Stage": "Adult", "Type": "Data", "DType": "Mutant", "HP": 900, "ATK": 85, "SPD": 75, "DEF": 50},
+      "Tuskmon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dinosaur", "HP": 1250, "ATK": 105, "SPD": 40, "DEF": 55},
+      "Tyrannomon": {"Digitama": "V0", "Stage": "Adult", "Type": "Data", "DType": "Dinosaur", "HP": 1150, "ATK": 65, "SPD": 50, "DEF": 70},
+      "Yukidarumon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Ice", "HP": 1150, "ATK": 80, "SPD": 50, "DEF": 80},
+      "Veedramon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Dragon", "HP": 1050, "ATK": 100, "SPD": 90, "DEF": 55},
+      "RedVeedramon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dragon", "HP": 950, "ATK": 110, "SPD": 100, "DEF": 45},
+      "BlackVeedramon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dragon", "HP": 1050, "ATK": 105, "SPD": 75, "DEF": 65},
+      "GeoGreymon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Dinosaur", "HP": 1000, "ATK": 110, "SPD": 70, "DEF": 60},
+      "AeroVeedramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Dragon", "HP": 2250, "ATK": 215, "SPD": 150, "DEF": 110},
+      "Andromon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 2250, "ATK": 100, "SPD": 50, "DEF": 225},
+      "BigMamemon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 2800, "ATK": 165, "SPD": 70, "DEF": 95},
+      "BlackAeroVeedramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Dragon", "HP": 2050, "ATK": 235, "SPD": 150, "DEF": 110},
+      "Gigadramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 1800, "ATK": 220, "SPD": 140, "DEF": 110},
+      "Mamemon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 2000, "ATK": 185, "SPD": 140, "DEF": 75},
+      "MameTyramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Dinosaur", "HP": 2200, "ATK": 180, "SPD": 135, "DEF": 85},
+      "MasterTyrannomon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Dinosaur", "HP": 2100, "ATK": 190, "SPD": 95, "DEF": 180},
+      "Megadramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 1750, "ATK": 210, "SPD": 135, "DEF": 80},
+      "MetalGreymon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 2000, "ATK": 225, "SPD": 130, "DEF": 120},
+      "MetalGreymonAlter": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 2050, "ATK": 235, "SPD": 135, "DEF": 125},
+      "MetalGreymonVirus": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 1900, "ATK": 220, "SPD": 130, "DEF": 110},
+      "MetalMamemon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Machine", "HP": 2000, "ATK": 190, "SPD": 140, "DEF": 120},
+      "MetalTyrannomon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 2150, "ATK": 175, "SPD": 85, "DEF": 125},
+      "Polarbearmon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Ice", "HP": 2300, "ATK": 110, "SPD": 100, "DEF": 210},
+      "RizeGreymon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 1950, "ATK": 230, "SPD": 140, "DEF": 110},
+      "Triceramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Dinosaur", "HP": 2100, "ATK": 125, "SPD": 75, "DEF": 190},
+      "Machinedramon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Virus", "DType": "Machine", "HP": 1700, "ATK": 140, "SPD": 70, "DEF": 170},
+      "PrinceMamemon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Data", "DType": "Mutant", "HP": 750, "ATK": 150, "SPD": 120, "DEF": 205},
+      "Wargreymon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Vaccine", "DType": "Dragon", "HP": 1600, "ATK": 150, "SPD": 100, "DEF": 90},
+      "BanchoMamemon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Data", "DType": "Mutant", "HP": 1500, "ATK": 180, "SPD": 130, "DEF": 90},
+      
+      "Pillomon": {"Digitama": "MU", "Stage": "Child", "Type": "Vaccine", "DType": "Mutant", "HP": 500, "ATK": 25, "SPD": 35, "DEF": 40},
+      "Tyumon": {"Digitama": "MU", "Stage": "Child", "Type": "Virus", "DType": "Mutant", "HP": 600, "ATK": 30, "SPD": 25, "DEF": 25},
+      "Numemon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 750, "ATK": 45, "SPD": 40, "DEF": 40},
+      "Nanimon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "Mutant", "HP": 650, "ATK": 50, "SPD": 55, "DEF": 30},
+      "BomberNanimon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "Mutant", "HP": 400, "ATK": 70, "SPD": 80, "DEF": 10},
+      "Geremon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 750, "ATK": 50, "SPD": 45, "DEF": 40},
+      "GoldNumemon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 750, "ATK": 50, "SPD": 45, "DEF": 50},
+      "ShellNumemon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 800, "ATK": 50, "SPD": 30, "DEF": 70},
+      "Scumon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 0, "ATK": 0, "SPD": 0, "DEF": 0},
+      "Scumon HT": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 700, "ATK": 100, "SPD": 30, "DEF": 40},
+      "Platinum Scumon HT": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 850, "ATK": 75, "SPD": 30, "DEF": 50},
+      "Raremon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 500, "ATK": 30, "SPD": 20, "DEF": 100},
+      "Monzaemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Vaccine", "DType": "Mutant", "HP": 2300, "ATK": 235, "SPD": 135, "DEF": 150},
+      "GigaWaruMonzaemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "Composite", "HP": 2000, "ATK": 255, "SPD": 165, "DEF": 130},
+      "BlackKingNumemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "S.Mutant", "HP": 2400, "ATK": 85, "SPD": 75, "DEF": 200},
+      "WaruMonzaemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "Mutant", "HP": 2150, "ATK": 245, "SPD": 145, "DEF": 145},
+      "Etemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "Mutant", "HP": 2000, "ATK": 240, "SPD": 125, "DEF": 185},
+      "KingScumon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "S.Mutant", "HP": 0, "ATK": 0, "SPD": 0, "DEF": 0},
+      "Digitamamon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 2700, "ATK": 210, "SPD": 100, "DEF": 170},
+      "MetalEtemon": {"Digitama": "MU", "Stage": "Ultimate", "Type": "Virus", "DType": "Mutant", "HP": 1300, "ATK": 180, "SPD": 90, "DEF": 150},
+      "PlatinumNumemon": {"Digitama": "MU", "Stage": "Ultimate", "Type": "Virus", "DType": "Mutant", "HP": 2000, "ATK": 100, "SPD": 60, "DEF": 190},
+      "Devitamamon": {"Digitama": "MU", "Stage": "Ultimate", "Type": "Data", "DType": "Mutant", "HP": 2200, "ATK": 150, "SPD": 60, "DEF": 120},
+      "Lilithmon": {"Digitama": "MU", "Stage": "Ultimate", "Type": "Virus", "DType": "Demon Lord", "HP": 700, "ATK": 150, "SPD": 190, "DEF": 90},
+      
+      "Chibickmon": {"Digitama": "ST", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 40, "ATK": 7, "SPD": 6, "DEF": 4},
+      "Pickmon": {"Digitama": "ST", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 70, "ATK": 10, "SPD": 8, "DEF": 5},
+      "Gottsumon": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Ground", "HP": 400, "ATK": 35, "SPD": 35, "DEF": 40},
+      "Starmons": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 40, "SPD": 60, "DEF": 20},
+      "Shoutmon": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 45, "SPD": 40, "DEF": 25},
+      "Shoutmon B": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 40, "SPD": 45, "DEF": 25},
+      "Shoutmon SW": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 65, "SPD": 40, "DEF": 25},
+      "Shoutmon SH": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 45, "SPD": 60, "DEF": 25},
+      "Icemon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Ice", "HP": 1000, "ATK": 60, "SPD": 50, "DEF": 90},
+      "ShootingStarmon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Composite", "HP": 900, "ATK": 120, "SPD": 75, "DEF": 40},
+      "KingShoutmon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Composite", "HP": 900, "ATK": 95, "SPD": 80, "DEF": 60},
+      "Starmon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Mutant", "HP": 1100, "ATK": 70, "SPD": 70, "DEF": 50},
+      "DarkSuperStarmon": {"Digitama": "ST", "Stage": "Perfect", "Type": "Virus", "DType": "Mutant", "HP": 2000, "ATK": 150, "SPD": 90, "DEF": 160},
+      "SuperStarmon": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 1900, "ATK": 160, "SPD": 160, "DEF": 90},
+      "OmegaShoutmon": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Composite", "HP": 1800, "ATK": 220, "SPD": 160, "DEF": 140},
+      "InsekimonHigh": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 2000, "ATK": 160, "SPD": 140, "DEF": 200},
+      "InsekimonLow": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 2000, "ATK": 150, "SPD": 90, "DEF": 160},
+      "InsekimonSuper": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 1900, "ATK": 160, "SPD": 160, "DEF": 140},
+      "InsekimonDark": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 2000, "ATK": 150, "SPD": 90, "DEF": 210},
+      "Why": {"Digitama": "ST", "Stage": "Ultimate", "Type": "Data", "DType": "None", "HP": 1, "ATK": 1, "SPD": 1, "DEF": 1},
+
+      "Penmon": {"Digitama": "DS", "Stage": "Child", "Type": "Vaccine", "DType": "Ice", "HP": 350, "ATK": 35, "SPD": 55, "DEF": 25},
+      "Chackmon": {"Digitama": "DS", "Stage": "Adult", "Type": "Free", "DType": "Ice", "HP": 950, "ATK": 80, "SPD": 70, "DEF": 80},
+      "Blizzardmon": {"Digitama": "DS", "Stage": "Perfect", "Type": "Free", "DType": "Ice", "HP": 2100, "ATK": 160, "SPD": 120, "DEF": 160},
+      "Daipenmon": {"Digitama": "DS", "Stage": "Ultimate", "Type": "Free", "DType": "Ice", "HP": 1200, "ATK": 160, "SPD": 110, "DEF": 160},
+      "Mercurymon": {"Digitama": "DS", "Stage": "Adult", "Type": "Free", "DType": "Mutant", "HP": 800, "ATK": 90, "SPD": 100, "DEF": 30},
+      "Sephirothmon": {"Digitama": "DS", "Stage": "Perfect", "Type": "Free", "DType": "Mutant", "HP": 2500, "ATK": 150, "SPD": 50, "DEF": 150},
+      
+      "Ghostmon": {"Digitama": "DT", "Stage": "Child", "Type": "Data", "DType": "Undead", "HP": 250, "ATK": 46, "SPD": 64, "DEF": 25},
+      "Bakemon": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 600, "ATK": 40, "SPD": 60, "DEF": 40},
+      "BakemonHT": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 700, "ATK": 50, "SPD": 70, "DEF": 50},
+      "Soulmon": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 600, "ATK": 50, "SPD": 40, "DEF": 70},
+      "SoulmonHT": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 700, "ATK": 60, "SPD": 80, "DEF": 50},
+      "Skullgreymon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 1600, "ATK": 270, "SPD": 70, "DEF": 100},
+      "Fantomon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 2200, "ATK": 250, "SPD": 180, "DEF": 100},
+      "Metal Fantomon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Data", "DType": "Machine", "HP": 2200, "ATK": 240, "SPD": 150, "DEF": 140},
+      "Wargreymon-Black": {"Digitama": "DT", "Stage": "Ultimate", "Type": "Virus", "DType": "Dragon", "HP": 1900, "ATK": 175, "SPD": 85, "DEF": 100},
+
+      
+      "Mushmon": {"Digitama": "PT", "Stage": "Child", "Type": "Virus", "DType": "Plant", "HP": 550, "ATK": 30, "SPD": 40, "DEF": 25},
+      "Chamblemon": {"Digitama": "PT", "Stage": "Adult","Type": "Virus", "DType": "Plant", "HP": 1000, "ATK": 50, "SPD": 70, "DEF": 50},
+      
+      "Yolkmon": {"Digitama": "VL", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 40, "ATK": 3, "SPD": 13, "DEF": 1},
+      "Fluffymon": {"Digitama": "VL", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 50, "ATK": 3, "SPD": 21, "DEF": 1},
+      "Pteromon": {"Digitama": "VL", "Stage": "Child", "Type": "Data", "DType": "Wind", "HP": 170, "ATK": 20, "SPD": 65, "DEF": 25},
+      "Pomumon": {"Digitama": "VL", "Stage": "Child", "Type": "Data", "DType": "Plant", "HP": 550, "ATK": 35, "SPD": 35, "DEF": 30},
+      "Kiwimon": {"Digitama": "VL", "Stage": "Adult", "Type": "Data", "DType": "Plant", "HP": 1100, "ATK": 50, "SPD": 100, "DEF": 40},
+      "Parasaurmon": {"Digitama": "VL", "Stage": "Adult", "Type": "Data", "DType": "Dinosaur", "HP": 1500, "ATK": 55, "SPD": 45, "DEF": 65},
+      "Galemon": {"Digitama": "VL", "Stage": "Adult", "Type": "Data", "DType": "Wind", "HP": 650, "ATK": 95, "SPD": 100, "DEF": 40},
+      "Grandgalemon": {"Digitama": "VL", "Stage": "Perfect", "Type": "Data", "DType": "Wind", "HP": 1000, "ATK": 240, "SPD": 200, "DEF": 110},
+      "Delumon": {"Digitama": "VL", "Stage": "Perfect", "Type": "Data", "DType": "Plant", "HP": 2600, "ATK": 80, "SPD": 180, "DEF": 80},
+      "Entmon": {"Digitama": "VL", "Stage": "Perfect", "Type": "Virus", "DType": "Plant", "HP": 2800, "ATK": 230, "SPD": 50, "DEF": 40},
+      
+      "Dodomon": {"Digitama": "AP", "Stage": "Baby1", "Type": "Data", "DType": "None", "HP": 60, "ATK": 7, "SPD": 4, "DEF": 4},
+      "Dorimon": {"Digitama": "AP", "Stage": "Baby2", "Type": "Data", "DType": "None", "HP": 100, "ATK": 10, "SPD": 5, "DEF": 5},
+      "DORUmon": {"Digitama": "AP", "Stage": "Child", "Type": "Data", "DType": "Dragon", "HP": 400, "ATK": 55, "SPD": 25, "DEF": 35},
+      "DORUgamon": {"Digitama": "AP", "Stage": "Adult", "Type": "Data", "DType": "Dragon", "HP": 1250, "ATK": 80, "SPD": 55, "DEF": 65},
+      "Death-X-DORUgamon": {"Digitama": "AP", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 900, "ATK": 100, "SPD": 60, "DEF": 50},
+      "Death-X-DORUguremon": {"Digitama": "AP", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 1500, "ATK": 250, "SPD": 100, "DEF": 100},
+      "DORUguremon": {"Digitama": "AP", "Stage": "Perfect", "Type": "Data", "DType": "Dragon", "HP": 2350, "ATK": 190, "SPD": 90, "DEF": 135},
+      "Death-X-DORUguremon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 1500, "ATK": 250, "SPD": 100, "DEF": 100},
+      "Raptordramon": {"Digitama": "AP", "Stage": "Adult", "Type": "Vaccine","DType": "Machine", "HP": 1300, "ATK": 90, "SPD": 60, "DEF": 70},
+      "Grademon": {"Digitama": "AP", "Stage": "Perfect", "Type": "Vaccine","DType": "Warrior", "HP": 2100, "ATK": 210, "SPD": 150, "DEF": 130},
+      "Grademon(Vice)": {"Digitama": "AP", "Stage": "Perfect", "Type": "Virus", "DType": "Warrior", "HP": 2000, "ATK": 245, "SPD": 130, "DEF": 125},
+      
+      "Kekomon": {"Digitama": "GK", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 150, "ATK": 2, "SPD": 2, "DEF": 2},
+      "Kekkomon": {"Digitama": "GK", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 220, "ATK": 2, "SPD": 2, "DEF": 4},
+      "Gekkomon": {"Digitama": "GK", "Stage": "Child", "Type": "Data", "DType": "Dinosaur", "HP": 450, "ATK": 35, "SPD": 35, "DEF": 35},
+      "Chiropmon": {"Digitama": "GK", "Stage": "Child", "Type": "Data", "DType": "Beast", "HP": 300, "ATK": 35, "SPD": 60, "DEF": 25},
+      "Armalizamon": {"Digitama": "GK", "Stage": "Adult", "Type": "Data", "DType": "Dinosaur", "HP": 850, "ATK": 70, "SPD": 70, "DEF": 100},
+      "MetalTuskmon": {"Digitama": "GK", "Stage": "Perfect", "Type": "Data", "DType": "Machine", "HP": 2000, "ATK": 150, "SPD": 50, "DEF": 300},
+    };
+
+    // Mapas de Lineas evolutivas
+    const specialChildren = ["Ghostmon", "Pillomon", "Mushmon", "Penmon", "Tyumon"];
+    
+    const X_Digi = [
+      "DORUmon",
+      "DORUgamon",
+      "Death-X-DORUgamon",
+      "DORUguremon",
+      "Death-X-DORUguremon",
+      "Raptordramon",
+      "Grademon",
+      "Grademon(Vice)",
+      "MameTyramon"
+    ];
+    
+    const inheritMap = {
+      "Clockmon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "DarkTyrannomon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Deltamon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Greymon": ["Agumon","Agumon-Hakase", "Kokuwamon"],
+      "Guardromon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "GoldGuardromon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Thunderballmon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Tuskmon": ["BlackAgumon"],
+      "Tyrannomon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Yukidarumon": ["YukiAgumon", "Penmon"],
+      "Chackmon": ["YukiAgumon", "Gottsumon", "Penmon"],
+      "Veedramon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06"],
+      "RedVeedramon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06"],
+      "BlackVeedramon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "GeoGreymon": ["Agumon06"],
+      "Icemon": ["Gottsumon", "YukiAgumon", "Penmon"],
+      "ShootingStarmon": ["Starmons"],
+      "KingShoutmon" : ["Shoutmon", "Shoutmon SW", "Shoutmon SH", "Shoutmon B" ],
+      "Starmon": ["Gottsumon", "Starmons"],
+      "BakemonHT": ["Ghostmon"],
+      "SoulmonHT": ["Ghostmon"],
+      "Chamblemon": ["Mushmon"],
+      "Galemon": ["Pteromon"],
+      "DORUgamon": ["DORUmon"],
+      "Death-X-DORUgamon": ["DORUmon"],
+      "Raptordramon": ["DORUmon"],
+      "Armalizamon": ["Gekkomon", "Chiropmon"],
+      "Kiwimon": ["Pomumon"],
+      "Parasaurmon": ["Pomumon"],
+      "Scumon HT":["Tyumon"],
+      "Platinum Scumon HT":["Tyumon"],
+      "Numemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Nanimon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "BomberNanimon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Geremon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "GoldNumemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "ShellNumemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Soulmon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Scumon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Bakemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Mercurymon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Raremon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+     
+    };
+    const perfectInheritMap = {
+    "AeroVeedramon": ["Clockmon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "Andromon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "BigMamemon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "BlackAeroVeedramon": ["BlackVeedramon", "DarkTyrannomon", "RedVeedramon", "Tuskmon"],
+    "BlackKingNumemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "Blizzardmon": ["Chackmon", "Icemon", "Yukidarumon"],
+    "DarkSuperStarmon": ["Icemon", "ShootingStarmon", "Starmon"],
+    "OmegaShoutmon": ["KingShoutmon"],
+    "Digitamamon": ["BomberNanimon", "Nanimon"],
+    "Fantomon": ["Bakemon", "BakemonHT", "Soulmon", "SoulmonHT"],
+    "Gigadramon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "GigaWaruMonzaemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "InsekimonDark": ["Icemon"],
+    "InsekimonHigh": ["Icemon"],
+    "InsekimonLow": ["Icemon"],
+    "InsekimonSuper": ["Icemon"],
+    "KingScumon": ["Scumon"],
+    "Mamemon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MameTyramon": ["Thunderballmon"],
+    "MasterTyrannomon": ["Tyrannomon"],
+    "Megadramon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "Metal Fantomon": ["Bakemon", "BakemonHT", "Soulmon", "SoulmonHT"],
+    "MetalGreymon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GoldGuardromon", "Greymon","GeoGreymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalGreymonAlter": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GoldGuardromon", "Greymon", "GeoGreymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalGreymonVirus": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalMamemon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalTyrannomon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "Monzaemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "Etemon": ["Scumon", "Scumon HT", "Platinum Scumon HT"],
+    "Polarbearmon": ["Yukidarumon"],
+    "RizeGreymon": ["GeoGreymon"],
+    "Skullgreymon": ["DarkTyrannomon", "GeoGreymon", "Greymon", "Tuskmon", "Tyrannomon", "Armalizamon", "Parasaurmon"],
+    "SuperStarmon": ["Icemon", "ShootingStarmon", "Starmon"],
+    "Triceramon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "WaruMonzaemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "Grandgalemon": ["Galemon", "Kiwimon"],
+    "DORUguremon": ["DORUgamon"],
+    "Death-X-DORUguremon": ["Death-X-DORUgamon","DORUgamon"],
+    "Grademon": ["Raptordramon"],
+    "Grademon(Vice)": ["Raptordramon"],
+    "Delumon": ["Kiwimon"],
+    "Entmon": ["Chamblemon", "Parasaurmon", "Kiwimon"],
+    "Sephirothmon": ["Scumon", "Thunderballmon", "Geremon", "GoldNumemon", "Numemon", "ShellNumemon", "BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon", "Nanimon", "BomberNanimon", "Scumon HT", "Platinum Scumon HT", "Mercurymon"],
+    "MetalTuskmon": ["Armalizamon"],
+    };
+    const ultimateInheritMap = {
+      "Daipenmon": ["Blizzardmon", "Polarbearmon"],
+      "MetalEtemon": ["Etemon"],
+      "PlatinumNumemon": ["BlackKingNumemon"],
+      "Machinedramon": ["MetalGreymonVirus", "MetalTyrannomon", "Gigadramon", "Andromon", "MetalMamemon", "Megadramon"],
+      "PrinceMamemon": ["Mamemon"],
+      "Why": ["DarkSuperStarmon", "SuperStarmon", "InsekimonHigh", "InsekimonLow", "InsekimonSuper", "InsekimonDark"],
+      "Devitamamon": ["Digitamamon"],
+      "Wargreymon-Black": ["Skullgreymon"],
+      "Wargreymon": ["MetalGreymon", "MetalGreymonAlter"],
+      "BanchoMamemon": ["Mamemon"],
+      "Lilithmon": ["Monzaemon"],
+    };
+    const sideEvolutions = {
+      "Veedramon": ["RedVeedramon"],
+      "Numemon": ["Geremon", "GoldNumemon", "ShellNumemon"],
+      "Guardromon": ["GoldGuardromon"],
+      "Mamemon": ["BigMamemon", "MetalMamemon"],
+      "MetalGreymon": ["MetalGreymonAlter"],
+      "Tyrannomon": ["DarkTyrannomon"],
+      "Megadramon": ["Gigadramon"],
+      "Yukidarumon": ["Chackmon"],
+      "Icemon": ["Chackmon"],
+      "Polarbearmon": ["Blizzardmon"],
+      "Monzaemon": ["WaruMonzaemon", "GigaWaruMonzaemon"],
+      "Bakemon": ["Soulmon"],
+      "BakemonHT": ["SoulmonHT"],
+      "Fantomon": ["Metal Fantomon"],
+      "Nanimon": ["BomberNanimon"],
+      "Shoutmon": ["Shoutmon SW", "Shoutmon SH", "Shoutmon B"],
+      "Death-X-DORUgamon": ["DORUgamon"],
+      "Grademon(Vice)": ["Grademon"],
+      "Death-X-DORUguremon": ["DORUguremon"],
+      "Sephirothmon": ["Mamemon", "BlackKingNumemon", "Digitamamon", "KingScumon"],
+      "Scumon HT": ["Platinum Scumon HT"],
+    };
+    
+      function calculateScumonBaseStats(child) {
+      const childStats = Object.fromEntries( Object.entries(DigimonStats).filter(([_, stats]) =>
+        stats.Stage === "Child").map(([name, stats]) => [name,stats]) )[child];
+      if (!childStats) return null;
+      const multiplier = 1.34;
+      return {
+        HP: Math.round(childStats.HP * multiplier),
+        ATK: Math.round(childStats.ATK * multiplier),
+        SPD: Math.round(childStats.SPD * multiplier),
+        DEF: Math.round(childStats.DEF * multiplier),
+        Type: "Virus"
+      };
+    }
+    function calculateKingScumonBaseStats(child) {
+      const scumonBase = calculateScumonBaseStats(child);
+      if (!scumonBase) return null;
+      const multiplier = 2.25;
+      return {
+        HP: Math.round(scumonBase.HP * multiplier),
+        ATK: Math.round(scumonBase.ATK * multiplier),
+        SPD: Math.round(scumonBase.SPD * multiplier),
+        DEF: Math.round(scumonBase.DEF * multiplier),
+        Type: "Virus"
+      };
+    }  
+    
+    
+    
+    const digimonGroups = {};
+    Object.keys(sideEvolutions).forEach(original => {
+      const group = [original, ...sideEvolutions[original]];
+      group.forEach(digimon => {
+        digimonGroups[digimon] = group;
+      });
+    });
+// Stats hederados
+    const BABY_STAGES = ["Baby1", "Baby2"];
+    const buildBabyTamaStats = (stats, babyTamas) => {
+        return babyTamas.reduce((acc, tama) => {
+            acc[tama] = { HP: 0, ATK: 0, SPD: 0, DEF: 0 };
+        for (const d of Object.values(stats)) {
+            if (d.Digitama !== tama) continue;
+            if (!BABY_STAGES.includes(d.Stage)) continue;
+            acc[tama].HP += Math.round(d.HP * INHERITED_MULTIPLIER);
+            acc[tama].ATK += Math.round(d.ATK * INHERITED_MULTIPLIER);
+            acc[tama].SPD += Math.round(d.SPD * INHERITED_MULTIPLIER);
+            acc[tama].DEF += Math.round(d.DEF * INHERITED_MULTIPLIER);
+            }
+            return acc;
+            }, {});
+        };
+    const babyInherit = buildBabyTamaStats(DigimonStats, babyTamas);
+    const applyBabyInheritanceToChild = (stats, babyInheritedStats, babyTamas) => {
+        const babyTamasSet = new Set(babyTamas);
+        const result = {};
+        for (const [name, d] of Object.entries(stats)) {
+            // Filtro DURANTE la generación
+            if (d.Stage !== "Child") continue;
+            if (!babyTamasSet.has(d.Digitama)) continue;
+        const inherited = babyInheritedStats[d.Digitama] ?? {
+              HP: 0, ATK: 0, SPD: 0, DEF: 0,
+        };
+        result[name] = {
+              ...d,
+              HP: d.HP * INHERITED_MULTIPLIER + inherited.HP,
+              ATK: d.ATK * INHERITED_MULTIPLIER + inherited.ATK,
+              SPD: d.SPD * INHERITED_MULTIPLIER + inherited.SPD,
+              DEF: d.DEF * INHERITED_MULTIPLIER + inherited.DEF,
+        };
+    }
+        return result;
+    };
+    const childInherit = applyBabyInheritanceToChild(DigimonStats, babyInherit, babyTamas);
+    const adultToPerfectInherit = Object.fromEntries(
+      Object.entries(DigimonStats)
+        .filter(([_, stats]) =>
+          stats.Stage === "Adult"
+        )
+        .map(([name, stats]) => [
+          name,
+          {
+            HP: Math.round(stats.HP * INHERITED_MULTIPLIER),
+            ATK: Math.round(stats.ATK * INHERITED_MULTIPLIER),
+            DEF: Math.round(stats.DEF * INHERITED_MULTIPLIER),
+            SPD: Math.round(stats.SPD * INHERITED_MULTIPLIER)
+          }
+        ])
+      );
+    const perfectToUltimateInherit = Object.fromEntries(
+      Object.entries(DigimonStats)
+        .filter(([_, stats]) =>
+          stats.Stage === "Perfect"
+        )
+        .map(([name, stats]) => [
+          name,
+          {
+            HP: Math.round(stats.HP * INHERITED_MULTIPLIER),
+            ATK: Math.round(stats.ATK * INHERITED_MULTIPLIER),
+            DEF: Math.round(stats.DEF * INHERITED_MULTIPLIER),
+            SPD: Math.round(stats.SPD * INHERITED_MULTIPLIER)
+          }
+        ])
+      );
+    // Selector de Stats Bases
+    const getBaseStats = (digimon, stage, digitama, child = null) => {
+      if (digimon === "Scumon" && stage === "Adult" && child) {
+        return calculateScumonBaseStats(child);
+      } else if (digimon === "KingScumon" && stage === "Perfect" && child) {
+        return calculateKingScumonBaseStats(child);
+      } else {
+        return DigimonStats[digimon]};
+        return null;
+        };
+    // Calculadora de Stats
+    const getNaturalStats = (digimon, level, child, adult, perfect, digitama, selectedBaby = "V0") => {
+      const base = getBaseStats(digimon, level, digitama, child);
+      if (!base) return null;
+      if (level === "Child") {
+        if (babyTamas.includes(digitama)) {
+          const inheritance = babyInherit[digitama];
+          return {
+            HP: base.HP + inheritance.HP,
+            ATK: base.ATK + inheritance.ATK,
+            SPD: base.SPD + inheritance.SPD,
+            DEF: base.DEF + inheritance.DEF,
+            Type: base.Type,
+            DType: base.DType
+          };
+        } else {
+          if (specialChildren.includes(digimon)) {
+            const selectedBabyInherit = babyInherit[selectedBaby];
+            return {
+              HP: base.HP + selectedBabyInherit.HP,
+              ATK: base.ATK + selectedBabyInherit.ATK,
+              SPD: base.SPD + selectedBabyInherit.SPD,
+              DEF: base.DEF + selectedBabyInherit.DEF,
+              Type: base.Type,
+              DType: base.DType
+            };
+          } else {
+            return base;
+          }
+        }
+      } else if (level === "Adult") {
+        const isSpecial = specialChildren.includes(child);
+        let childInheritance;
+        if (isSpecial) {
+          const childBase = Object.fromEntries( Object.entries(DigimonStats).filter(([_, stats]) =>
+        stats.Stage === "Child").map(([name, stats]) => [name,stats]) )[child];
+          const selectedBabyInherit = babyInherit[selectedBaby];
+          childInheritance = {
+            HP: selectedBabyInherit.HP + Math.round(0.4 * childBase.HP),
+            ATK: selectedBabyInherit.ATK + Math.round(0.4 * childBase.ATK),
+            SPD: selectedBabyInherit.SPD + Math.round(0.4 * childBase.SPD),
+            DEF: selectedBabyInherit.DEF + Math.round(0.4 * childBase.DEF)
+          };
+        } else {
+          childInheritance = childInherit[child];
+        }
+        if (!childInheritance) return null;
+        return {
+          HP: base.HP + childInheritance.HP,
+          ATK: base.ATK + childInheritance.ATK,
+          SPD: base.SPD + childInheritance.SPD,
+          DEF: base.DEF + childInheritance.DEF
+        };
+      } else if (level === "Perfect") {
+        const isSpecial = specialChildren.includes(child);
+        let childInheritance;
+        if (isSpecial) {
+          const childBase = Object.fromEntries( Object.entries(DigimonStats).filter(([_, stats]) =>
+        stats.Stage === "Child").map(([name, stats]) => [name,stats]) )[child];
+          const selectedBabyInherit = babyInherit[selectedBaby];
+          childInheritance = {
+            HP: selectedBabyInherit.HP + Math.round(0.4 * childBase.HP),
+            ATK: selectedBabyInherit.ATK + Math.round(0.4 * childBase.ATK),
+            SPD: selectedBabyInherit.SPD + Math.round(0.4 * childBase.SPD),
+            DEF: selectedBabyInherit.DEF + Math.round(0.4 * childBase.DEF)
+          };
+        } else {
+          childInheritance = childInherit[child];
+        }
+        if (!childInheritance) return null;
+        let adultInheritance;
+        if (adult === "Scumon") {
+          const scumonBase = calculateScumonBaseStats(child);
+          if (!scumonBase) return null;
+          adultInheritance = {
+            HP: Math.round(scumonBase.HP * 0.4),
+            ATK: Math.round(scumonBase.ATK * 0.4),
+            SPD: Math.round(scumonBase.SPD * 0.4),
+            DEF: Math.round(scumonBase.DEF * 0.4)
+          };
+        } else {
+          adultInheritance = adultToPerfectInherit[adult];
+        }
+        if (!adultInheritance) return null;
+        return {
+          HP: base.HP + childInheritance.HP + adultInheritance.HP,
+          ATK: base.ATK + childInheritance.ATK + adultInheritance.ATK,
+          SPD: base.SPD + childInheritance.SPD + adultInheritance.SPD,
+          DEF: base.DEF + childInheritance.DEF + adultInheritance.DEF
+        };
+      } else if (level === "Ultimate") {
+        const isSpecial = specialChildren.includes(child);
+        let childInheritance;
+        if (isSpecial) {
+          const childBase = Object.fromEntries( Object.entries(DigimonStats).filter(([_, stats]) =>
+        stats.Stage === "Child").map(([name, stats]) => [name,stats]) )[child];
+          const selectedBabyInherit = babyInherit[selectedBaby];
+          childInheritance = {
+            HP: selectedBabyInherit.HP + Math.round(0.4 * childBase.HP),
+            ATK: selectedBabyInherit.ATK + Math.round(0.4 * childBase.ATK),
+            SPD: selectedBabyInherit.SPD + Math.round(0.4 * childBase.SPD),
+            DEF: selectedBabyInherit.DEF + Math.round(0.4 * childBase.DEF)
+          };
+        } else {
+          childInheritance = childInherit[child];
+        }
+        let adultInheritance;
+        if (adult === "Scumon") {
+          const scumonBase = calculateScumonBaseStats(child);
+          if (!scumonBase) return null;
+          adultInheritance = {
+            HP: Math.round(scumonBase.HP * 0.4),
+            ATK: Math.round(scumonBase.ATK * 0.4),
+            SPD: Math.round(scumonBase.SPD * 0.4),
+            DEF: Math.round(scumonBase.DEF * 0.4)
+          };
+        } else {
+          adultInheritance = adultToPerfectInherit[adult];
+        }
+        const perfectInheritance = perfectToUltimateInherit[perfect];
+        if (!childInheritance || !adultInheritance || !perfectInheritance) return null;
+        return {
+          HP: base.HP + childInheritance.HP + adultInheritance.HP + perfectInheritance.HP,
+          ATK: base.ATK + childInheritance.ATK + adultInheritance.ATK + perfectInheritance.ATK,
+          SPD: base.SPD + childInheritance.SPD + adultInheritance.SPD + perfectInheritance.SPD,
+          DEF: base.DEF + childInheritance.DEF + adultInheritance.DEF + perfectInheritance.DEF
+        };
+      }
+      return null;
+    };
+    function CustomSelect({ options, value, onChange, placeholder, darkMode, disabled, showImage = true }) {
+      const [isOpen, setIsOpen] = React.useState(false);
+      const ref = React.useRef(null);
+      const selectedOption = options.find(option => option.value === value);
+      const handleSelect = (newValue) => {
+        onChange(newValue);
+        setIsOpen(false);
+      };
+      React.useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (ref.current && !ref.current.contains(event.target)) {
+            setIsOpen(false);
+          }
+        };
+        if (isOpen) {
+          document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, [isOpen]);
+      return (
+        <div ref={ref} className="relative">
+          <button
+            type="button"
+            className={`w-full p-2 border rounded text-left font-bold ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-gray-600'}`}
+            onClick={() => !disabled && setIsOpen(!isOpen)}
+            disabled={disabled}
+          >
+            {selectedOption ? (
+              <span className="flex items-center">
+                {showImage && selectedOption.image && <img src={selectedOption.image} alt={selectedOption.label} className="w-6 h-6 mr-2" />}
+                {selectedOption.label}
+              </span>
+            ) : (placeholder)}
+          </button>
+          {isOpen && (
+            <ul className={`absolute z-10 w-full mt-1 border rounded shadow-lg max-h-60 overflow-y-auto ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}>
+              {options.map(option => (
+                <li
+                  key={option.value}
+                  className={`p-2 cursor-pointer flex items-center ${darkMode ? 'text-gray-100 hover:bg-gray-600' : 'text-gray-900 hover:bg-gray-200'} ${option.value === value ? 'bg-gray-300 dark:bg-gray-500' : ''}`}
+                  onClick={() => handleSelect(option.value)}
+                >
+                  {showImage && option.image && <img src={option.image} alt={option.label} className="w-6 h-6 mr-2" />}
+                  {option.label}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      );
+    }
+    const getOptionsWithImages = (items) => items.map(item => ({
+      value: item,
+      label: item,
+      image: chibiImages[item] || placeholderImage
+    }));
+    function NumberInput({ value, onChange, step, min, format, darkMode, max, disabled }) {
+      const [inputValue, setInputValue] = React.useState(format(value));
+      React.useEffect(() => {
+        setInputValue(format(value));
+      }, [value]);
+      const handleChange = (e) => {
+        setInputValue(e.target.value);
+      };
+      const handleBlur = () => {
+        let parsedValue = parseFloat(inputValue) || 0;
+        if (max !== undefined && parsedValue > max) {
+          parsedValue = max;
+        }
+        if (parsedValue < min){
+          parsedValue = min;
+        }
+        setInputValue(format(parsedValue));
+        onChange(parsedValue);
+      };
+      const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          handleBlur();
+        }
+      };
+      return (
+        <input
+          type="number"
+          step={step}
+          min={min}
+          max={max}
+          value={inputValue}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          className={`w-full p-1 border rounded text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} ${disabled ? 'opacity-50' : ''}`}
+        />
+      );
+    }
+    function DigimonCalculator() {
+      const [showTrainingItems, setShowTrainingItems] = React.useState(false);
+      const [digitama, setDigitama] = React.useState("V0");
+      const [level, setLevel] = React.useState("Child");
+      const [prevLevel, setPrevLevel] = React.useState("Child"); //lineage exclusive
+      const [selectedDigimon, setSelectedDigimon] = React.useState("");
+      const [selectedChild, setSelectedChild] = React.useState("");
+      const [selectedAdult, setSelectedAdult] = React.useState("");
+      const [selectedPerfect, setSelectedPerfect] = React.useState("");
+      const [selectedBaby, setSelectedBaby] = React.useState("V0");
+      const [selectedSplit, setSelectedSplit] = React.useState("PerfectBalance");
+      const [inputMethod, setInputMethod] = React.useState("Porcentaje");
+      const [trainingPoints, setTrainingPoints] = React.useState({
+        child: { hp: 0, atk: 0, spd: 0 },
+        adult: { hp: 0, atk: 0, spd: 0 },
+        perfect: { hp: 0, atk: 0, spd: 0 },
+        ultimate: { hp: 0, atk: 0, spd: 0 }
+      });
+      const [percentages, setPercentages] = React.useState({
+        child: { hp: 33.33, atk: 33.33, spd: 33.34 },
+        adult: { hp: 33.33, atk: 33.33, spd: 33.34 },
+        perfect: { hp: 33.33, atk: 33.33, spd: 33.34 },
+        ultimate: { hp: 33.33, atk: 33.33, spd: 33.34 }
+      });
+      const [statIncreaseInput, setStatIncreaseInput] = React.useState({
+        child: { hp: "", atk: "", spd: "" },
+        adult: { hp: "", atk: "", spd: "" },
+        perfect: { hp: "", atk: "", spd: "" },
+        ultimate: { hp: "", atk: "", spd: "" }
+      });
+      const [stats, setStats] = React.useState(null);
+      const [compareStats, setCompareStats] = React.useState(null);
+      const [pointsError, setPointsError] = React.useState({ child: "", adult: "", perfect: "", ultimate: "" });
+      const [darkMode, setDarkMode] = React.useState(true);
+      const [showCompare, setShowCompare] = React.useState(false);
+      const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+      const [mobileView, setMobileView] = React.useState("current");
+      const [lockedStats, setLockedStats] = React.useState({
+        child: { hp: false, atk: false, spd: false },
+        adult: { hp: false, atk: false, spd: false },
+        perfect: { hp: false, atk: false, spd: false },
+        ultimate: { hp: false, atk: false, spd: false }
+      });
+      const [savedDigimon, setSavedDigimon] = React.useState(Array(6).fill(null));
+      const [selectedCompareSlot, setSelectedCompareSlot] = React.useState(null);
+      const [savedLineage, setSavedLineage] = React.useState(null);
+      const [showTrainingInstall, setShowTrainingInstall] = React.useState(false);
+/Lineage order limiter/
+      React.useEffect(() => {
+        const levelOrder = { Child: 0, Adult: 1, Perfect: 2, Ultimate: 3 };
+        if (levelOrder[level] < levelOrder[prevLevel]) {
+          setSavedLineage(null);
+        }
+        setPrevLevel(level);
+      }, [level, prevLevel]);
+      React.useEffect(() => {
+        const handleResize = () => {
+          const mobile = window.innerWidth < 768;
+          setIsMobile(mobile);
+          if (!mobile) {
+            setShowCompare(false);
+            setMobileView("current");
+          }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+      }, []);
+      const toggleDarkMode = () => setDarkMode(!darkMode);
+      const toggleCompare = () => {
+        if (isMobile) setMobileView(mobileView === "current" ? "compare" : "current");
+        else setShowCompare(!showCompare);
+      };
+      const handleSaveLineage = () => {
+        const stage = level.toLowerCase();
+        setSavedLineage({
+          hp: trainingPoints[stage].hp,
+          atk: trainingPoints[stage].atk,
+          spd: trainingPoints[stage].spd
+        });
+      };
+      const saveToSlot = (index) => {
+        if (stats) {
+          const newSaved = [...savedDigimon];
+          newSaved[index] = stats;
+          setSavedDigimon(newSaved);
+        }
+      };
+      const compareWithSlot = (index) => {
+        setCompareStats(savedDigimon[index]);
+        setSelectedCompareSlot(index);
+        if (!isMobile) setShowCompare(true);
+        else setMobileView("compare");
+      };
+      const toggleLock = (stage, stat) => {
+        setLockedStats(prev => {
+          const newLocked = {...prev};
+          const stageStats = {...newLocked[stage]};
+          stageStats[stat] = !stageStats[stat];
+          newLocked[stage] = stageStats;
+          return newLocked;
+        });
+      };
+     
+      // Cambio: AvailableChildren fue automatizado
+      const getAvailableChildren = () => {
+        if (level === "Child")
+          return Object.entries(DigimonStats).filter(([_, stats]) => stats.Digitama === digitama && stats.Stage === "Child").map(([name]) => name);
+        else if (level === "Adult") return inheritMap[selectedDigimon] || [];
+        else if (level === "Perfect") return inheritMap[selectedAdult] || [];
+        else if (level === "Ultimate") return inheritMap[selectedAdult] || [];
+        return [];
+      };
+      const getAvailableAdults = () => {
+        if (level === "Perfect") return perfectInheritMap[selectedDigimon] || [];
+        else if (level === "Ultimate") return perfectInheritMap[selectedPerfect] || [];
+        return [];
+      };
+      const getAvailablePerfects = () => level === "Ultimate" ? ultimateInheritMap[selectedDigimon] || [] : [];
+      const availableChildren = getAvailableChildren();
+      const availableAdults = getAvailableAdults();
+      const availablePerfects = getAvailablePerfects();
+      React.useEffect(() => {
+        if (selectedSplit === "Lineage") {
+          if (savedLineage) {
+            const activeStage = level.toLowerCase();
+            const newPoints = {
+              ...trainingPoints
+            };
+            newPoints[activeStage] = {
+              hp: savedLineage.hp,
+              atk: savedLineage.atk,
+              spd: savedLineage.spd
+            };
+            setTrainingPoints(newPoints);
+            const total = savedLineage.hp + savedLineage.atk + savedLineage.spd || 1;
+            const newPercentagesStage = {
+              hp: (savedLineage.hp / total) * 100,
+              atk: (savedLineage.atk / total) * 100,
+              spd: (savedLineage.spd / total) * 100
+            };
+            const newPercentages = {...percentages};
+            newPercentages[activeStage] = newPercentagesStage;
+            setPercentages(newPercentages);
+            const naturalStats = getNaturalStats(selectedDigimon, level, selectedChild, selectedAdult, selectedPerfect, digitama, selectedBaby);
+            if (naturalStats) {
+              const hpIncrease = naturalStats.HP * HP_MULTIPLIER * savedLineage.hp;
+              const atkIncrease = ATK_SPD_MULTIPLIER * savedLineage.atk;
+              const spdIncrease = ATK_SPD_MULTIPLIER * savedLineage.spd;
+              const newStatIncrease = {...statIncreaseInput};
+              newStatIncrease[activeStage] = {
+                hp: hpIncrease.toFixed(2),
+                atk: atkIncrease.toFixed(2),
+                spd: spdIncrease.toFixed(2)
+              };
+              setStatIncreaseInput(newStatIncrease);
+            }
+            const newPointsError = {...pointsError};
+            newPointsError[activeStage] = "";
+            setPointsError(newPointsError);
+          }
+        } else if (selectedSplit !== "Custom") {
+          const [hpPct, atkPct, spdPct] = trainingSplits[selectedSplit];
+          const activeStage = level.toLowerCase();
+          const newPercentages = {
+            ...percentages
+          };
+          newPercentages[activeStage] = { hp: hpPct * 100, atk: atkPct * 100, spd: spdPct * 100 };
+          setPercentages(newPercentages);
+          const newPointsError = {...pointsError};
+          newPointsError[activeStage] = "";
+          setPointsError(newPointsError);
+          const maxPoints = MAX_POINTS[level];
+          const newPoints = {
+            ...trainingPoints
+          };
+          newPoints[activeStage] = {
+            hp: maxPoints * hpPct,
+            atk: maxPoints * atkPct,
+            spd: maxPoints * spdPct
+          };
+          setTrainingPoints(newPoints);
+          const naturalStats = getNaturalStats(selectedDigimon, level, selectedChild, selectedAdult, selectedPerfect, digitama, selectedBaby);
+          if (naturalStats) {
+            const hpIncrease = naturalStats.HP * HP_MULTIPLIER * newPoints[activeStage].hp;
+            const atkIncrease = ATK_SPD_MULTIPLIER * newPoints[activeStage].atk;
+            const spdIncrease = ATK_SPD_MULTIPLIER * newPoints[activeStage].spd;
+            const newStatIncrease = {...statIncreaseInput};
+            newStatIncrease[activeStage] = {
+              hp: hpIncrease.toFixed(2),
+              atk: atkIncrease.toFixed(2),
+              spd: spdIncrease.toFixed(2)
+            };
+            setStatIncreaseInput(newStatIncrease);
+          }
+        }
+      }, [selectedSplit, level, selectedBaby, savedLineage]);
+      const updateAllInputs = (stage, newPoints) => {
+        const maxPoints = MAX_POINTS[level];
+        let totalPoints = 0;
+        let lockedTotal = 0;
+        const unlockedPoints = {};
+        ['hp', 'atk', 'spd'].forEach(stat => {
+          if (lockedStats[stage][stat]) {
+            newPoints[stat] = trainingPoints[stage][stat];
+            lockedTotal += newPoints[stat];
+          } else {
+            unlockedPoints[stat] = newPoints[stat];
+            totalPoints += newPoints[stat];
+          }
+        });
+        if (lockedTotal + totalPoints > maxPoints) {
+          const remainingPoints = maxPoints - lockedTotal;
+          const scale = totalPoints > 0 ? remainingPoints / totalPoints : 0;
+          Object.keys(unlockedPoints).forEach(stat => {
+            newPoints[stat] = Math.max(0, unlockedPoints[stat] * scale);
+          });
+          const newPointsError = {...pointsError};
+          newPointsError[stage] = `Puntos ajustados al máximo (${maxPoints})`;
+          setPointsError(newPointsError);
+        } else {
+          const newPointsError = {...pointsError};
+          newPointsError[stage] = "";
+          setPointsError(newPointsError);
+        }
+        const newTrainingPoints = {...trainingPoints};
+        newTrainingPoints[stage] = newPoints;
+        setTrainingPoints(newTrainingPoints);
+        const total = newPoints.hp + newPoints.atk + newPoints.spd || 1;
+        const newPercentagesStage = {
+          hp: (newPoints.hp / total) * 100,
+          atk: (newPoints.atk / total) * 100,
+          spd: (newPoints.spd / total) * 100
+        };
+        const newPercentages = {...percentages};
+        newPercentages[stage] = newPercentagesStage;
+        setPercentages(newPercentages);
+        const naturalStats = getNaturalStats(selectedDigimon, level, selectedChild, selectedAdult, selectedPerfect, digitama, selectedBaby);
+        if (naturalStats) {
+          const hpIncrease = naturalStats.HP * HP_MULTIPLIER * newPoints.hp;
+          const atkIncrease = ATK_SPD_MULTIPLIER * newPoints.atk;
+          const spdIncrease = ATK_SPD_MULTIPLIER * newPoints.spd;
+          const newStatIncrease = {...statIncreaseInput};
+          newStatIncrease[stage] = {
+            hp: hpIncrease.toFixed(2),
+            atk: atkIncrease.toFixed(2),
+            spd: spdIncrease.toFixed(2)
+          };
+          setStatIncreaseInput(newStatIncrease);
+        }
+      };
+      const handlePercentageChange = (stage, stat, value) => {
+        if (lockedStats[stage][stat]) return;
+        const numValue = Math.max(0, Math.min(100, parseFloat(value) || 0));
+        const lockedSum = ['hp', 'atk', 'spd'].reduce((sum, s) => sum + (lockedStats[stage][s] ? percentages[stage][s] : 0), 0);
+        const maxAllowable = 100 - lockedSum;
+        const adjustedValue = Math.min(numValue, maxAllowable);
+        const newPercentagesStage = { ...percentages[stage], [stat]: adjustedValue };
+        const unlockedStats = ['hp', 'atk', 'spd'].filter(s => !lockedStats[stage][s] && s !== stat);
+        const remainingPercentage = 100 - lockedSum - adjustedValue;
+        if (unlockedStats.length === 0) {
+          newPercentagesStage[stat] = maxAllowable;
+        } else if (remainingPercentage <= 0) {
+          unlockedStats.forEach(s => newPercentagesStage[s] = 0);
+        } else {
+          const totalUnlocked = unlockedStats.reduce((sum, s) => sum + percentages[stage][s], 0) || 1;
+          unlockedStats.forEach(s => {
+            newPercentagesStage[s] = Math.round((percentages[stage][s] / totalUnlocked) * remainingPercentage * 100) / 100;
+          });
+        }
+        const newPercentages = {...percentages};
+        newPercentages[stage] = newPercentagesStage;
+        setPercentages(newPercentages);
+        const maxPoints = MAX_POINTS[level];
+        const newPoints = {
+          hp: maxPoints * (newPercentagesStage.hp / 100),
+          atk: maxPoints * (newPercentagesStage.atk / 100),
+          spd: maxPoints * (newPercentagesStage.spd / 100)
+        };
+        updateAllInputs(stage, newPoints);
+      };
+      const handlePointsChange = (stage, stat, value) => {
+        if (lockedStats[stage][stat]) return;
+        const numValue = Math.max(0, parseFloat(value) || 0);
+        const lockedSum = (lockedStats[stage].hp ? trainingPoints[stage].hp : 0) +
+                          (lockedStats[stage].atk ? trainingPoints[stage].atk : 0) +
+                          (lockedStats[stage].spd ? trainingPoints[stage].spd : 0);
+        const maxPoints = MAX_POINTS[level];
+        const maxAllowable = maxPoints - lockedSum;
+        const adjustedValue = Math.min(numValue, maxAllowable);
+        const newPoints = { ...trainingPoints[stage], [stat]: adjustedValue };
+        const unlockedStats = ['hp', 'atk', 'spd'].filter(s => !lockedStats[stage][s] && s !== stat);
+        const remainingPoints = maxPoints - lockedSum - adjustedValue;
+        if (unlockedStats.length > 0) {
+          if (remainingPoints <= 0) {
+            unlockedStats.forEach(s => newPoints[s] = 0);
+          } else {
+            const totalUnlocked = unlockedStats.reduce((sum, s) => sum + trainingPoints[stage][s], 0) || 1;
+            unlockedStats.forEach(s => {
+              newPoints[s] = (trainingPoints[stage][s] / totalUnlocked) * remainingPoints;
+            });
+          }
+        }
+        updateAllInputs(stage, newPoints);
+      };
+      const handleStatIncreaseChange = (stage, stat, value) => {
+        if (lockedStats[stage][stat]) return;
+        const numValue = Math.max(0, parseFloat(value) || 0);
+        const naturalStats = getNaturalStats(selectedDigimon, level, selectedChild, selectedAdult, selectedPerfect, digitama, selectedBaby);
+        if (!naturalStats) return;
+        const newStatIncreaseStage = { ...statIncreaseInput[stage], [stat]: numValue.toString() };
+        const newStatIncrease = {...statIncreaseInput};
+        newStatIncrease[stage] = newStatIncreaseStage;
+        setStatIncreaseInput(newStatIncrease);
+        const points = {
+          hp: (parseFloat(newStatIncreaseStage.hp) || 0) / (naturalStats.HP * HP_MULTIPLIER),
+          atk: (parseFloat(newStatIncreaseStage.atk) || 0) / ATK_SPD_MULTIPLIER,
+          spd: (parseFloat(newStatIncreaseStage.spd) || 0) / ATK_SPD_MULTIPLIER
+        };
+        const lockedSum = ['hp', 'atk', 'spd'].reduce((sum, s) => sum + (lockedStats[stage][s] ? trainingPoints[stage][s] : 0), 0);
+        const maxPoints = MAX_POINTS[level];
+        const maxAllowable = maxPoints - lockedSum;
+        const adjustedValue = Math.min(points[stat], maxAllowable);
+        const newPoints = { ...trainingPoints[stage], [stat]: adjustedValue };
+        const unlockedStats = ['hp', 'atk', 'spd'].filter(s => !lockedStats[stage][s] && s !== stat);
+        const remainingPoints = maxPoints - lockedSum - adjustedValue;
+        if (unlockedStats.length > 0) {
+          if (remainingPoints <= 0) {
+            unlockedStats.forEach(s => newPoints[s] = 0);
+          } else {
+            const totalUnlocked = unlockedStats.reduce((sum, s) => sum + trainingPoints[stage][s], 0) || 1;
+            unlockedStats.forEach(s => {
+              newPoints[s] = (trainingPoints[stage][s] / totalUnlocked) * remainingPoints;
+            });
+          }
+        }
+        updateAllInputs(stage, newPoints);
+      };
+      const applyBoost = (type) => {
+        const stage = level.toLowerCase();
+        const maxPoints = MAX_POINTS[level];
+        let pointsToAdd;
+        const newPoints = { ...trainingPoints[stage] };
+
+        switch (type) {
+          case 'Lemon': pointsToAdd = 0.02 * maxPoints; break;
+          case 'C.Acorn': pointsToAdd = 1.25; break;
+          case 'M.Shroom': pointsToAdd = 0.10 * maxPoints; break;
+          case 'Red+Shroom': pointsToAdd = 0.30 * maxPoints; newPoints.atk += pointsToAdd; break;
+          case 'Blue+Shroom': pointsToAdd = 0.30 * maxPoints; newPoints.spd += pointsToAdd; break;
+          case 'Green+Shroom': pointsToAdd = 0.30 * maxPoints; newPoints.hp += pointsToAdd; break;
+          case 'Meat1': pointsToAdd = 1; newPoints.atk += pointsToAdd; break;
+          case 'Meat2': pointsToAdd = 1.25; newPoints.atk += pointsToAdd; break;
+          case 'Meat3': newPoints.hp += 1; newPoints.atk += 1.25; break;
+          case 'MeatX': pointsToAdd = 0.02 * maxPoints; newPoints.atk += pointsToAdd; newPoints.spd += pointsToAdd; break;
+          default: return;
+        }
+
+        if (type.startsWith('Red') || type.startsWith('Blue') || type.startsWith('Green')|| type === 'Meat1' || type === 'Meat2' || type === 'Meat3' || type === 'MeatX') {
+          updateAllInputs(stage, newPoints);
+        } else {
+          ['hp', 'atk', 'spd'].forEach(stat => {
+            if (!lockedStats[stage][stat]) newPoints[stat] += pointsToAdd;
+          });
+          updateAllInputs(stage, newPoints);
+        }
+      };
+      
+      const calculateTrainedStats = (naturalStats, points) => {
+        const hpIncrease = naturalStats.HP * HP_MULTIPLIER * points.hp;
+        const atkIncrease = ATK_SPD_MULTIPLIER * points.atk;
+        const spdIncrease = ATK_SPD_MULTIPLIER * points.spd;
+        return {
+          HP: Math.round(naturalStats.HP + hpIncrease),
+          ATK: Math.round(naturalStats.ATK + atkIncrease),
+          SPD: Math.round(naturalStats.SPD + spdIncrease),
+          DEF: naturalStats.DEF,
+          hpIncrease: Math.round(hpIncrease * 100) / 100,
+          atkIncrease: Math.round(atkIncrease * 100) / 100,
+          spdIncrease: Math.round(spdIncrease * 100) / 100
+        };
+      };
+      const calculateStats = () => {
+        if (!selectedDigimon || (level !== "Child" && !selectedChild) || (level === "Perfect" && !selectedAdult) || (level === "Ultimate" && (!selectedAdult || !selectedPerfect))) return;
+        let naturalStats = {};
+        let trainedStats = {};
+        let result = {};
+        const base = getBaseStats(selectedDigimon, level, digitama, selectedChild);
+        if (!base) return;
+        const stage = level.toLowerCase();
+        if (level === "Child") {
+          naturalStats = getNaturalStats(selectedDigimon, level, selectedChild, selectedAdult, selectedPerfect, digitama, selectedBaby);
+          trainedStats = calculateTrainedStats(naturalStats, trainingPoints.child);
+          result = {
+            "Name": selectedDigimon,
+            "Type": naturalStats.Type,
+            "DType": base.DType,
+            "Level": "Child",
+            "NaturalHP": naturalStats.HP,
+            "NaturalATK": naturalStats.ATK,
+            "NaturalSPD": naturalStats.SPD,
+            "DEF": naturalStats.DEF,
+            "TrainedHP": trainedStats.hpIncrease,
+            "TrainedATK": trainedStats.atkIncrease,
+            "TrainedSPD": trainedStats.spdIncrease,
+            "TotalHP": trainedStats.HP,
+            "TotalATK": trainedStats.ATK,
+            "TotalSPD": trainedStats.SPD,
+            "TrainingPercent": Math.round((trainingPoints.child.hp + trainingPoints.child.atk + trainingPoints.child.spd) / MAX_POINTS.Child * 100),
+            "RemainingPoints": { child: MAX_POINTS.Child - (trainingPoints.child.hp + trainingPoints.child.atk + trainingPoints.child.spd) }
+          };
+        } else if (level === "Adult") {
+          const isSpecial = specialChildren.includes(selectedChild);
+          let childInheritance;
+          if (isSpecial) {
+            const childBase = Object.fromEntries( Object.entries(DigimonStats).filter(([_, stats]) =>
+        stats.Stage === "Child").map(([name, stats]) => [name,stats]) )[selectedChild];
+            const selectedBabyInherit = babyInherit[selectedBaby];
+            childInheritance = {
+              HP: selectedBabyInherit.HP + Math.round(0.4 * childBase.HP),
+              ATK: selectedBabyInherit.ATK + Math.round(0.4 * childBase.ATK),
+              SPD: selectedBabyInherit.SPD + Math.round(0.4 * childBase.SPD),
+              DEF: selectedBabyInherit.DEF + Math.round(0.4 * childBase.DEF)
+            };
+          } else {
+            childInheritance = childInherit[selectedChild];
+          }
+          if (!childInheritance) return;
+          naturalStats = {
+            HP: base.HP + childInheritance.HP,
+            ATK: base.ATK + childInheritance.ATK,
+            SPD: base.SPD + childInheritance.SPD,
+            DEF: base.DEF + childInheritance.DEF
+          };
+          trainedStats = calculateTrainedStats(naturalStats, trainingPoints.adult);
+          result = {
+            "Name": selectedDigimon,
+            "Child": selectedChild,
+            "Type": base.Type,
+            "DType": base.DType,
+            "Level": "Adult",
+            "NaturalHP": naturalStats.HP,
+            "NaturalATK": naturalStats.ATK,
+            "NaturalSPD": naturalStats.SPD,
+            "DEF": naturalStats.DEF,
+            "TrainedHP": trainedStats.hpIncrease,
+            "TrainedATK": trainedStats.atkIncrease,
+            "TrainedSPD": trainedStats.spdIncrease,
+            "TotalHP": trainedStats.HP,
+            "TotalATK": trainedStats.ATK,
+            "TotalSPD": trainedStats.SPD,
+            "TrainingPercent": Math.round((trainingPoints.adult.hp + trainingPoints.adult.atk + trainingPoints.adult.spd) / MAX_POINTS.Adult * 100),
+            "RemainingPoints": { adult: MAX_POINTS.Adult - (trainingPoints.adult.hp + trainingPoints.adult.atk + trainingPoints.adult.spd) }
+          };
+        } else if (level === "Perfect") {
+          const isSpecial = specialChildren.includes(selectedChild);
+          let childInheritance;
+          if (isSpecial) {
+            const childBase = Object.fromEntries( Object.entries(DigimonStats).filter(([_, stats]) =>
+        stats.Stage === "Child").map(([name, stats]) => [name,stats]) )[selectedChild];
+            const selectedBabyInherit = babyInherit[selectedBaby];
+            childInheritance = {
+              HP: selectedBabyInherit.HP + Math.round(0.4 * childBase.HP),
+              ATK: selectedBabyInherit.ATK + Math.round(0.4 * childBase.ATK),
+              SPD: selectedBabyInherit.SPD + Math.round(0.4 * childBase.SPD),
+              DEF: selectedBabyInherit.DEF + Math.round(0.4 * childBase.DEF)
+            };
+          } else {
+            childInheritance = childInherit[selectedChild];
+          }
+          if (!childInheritance) return;
+          let adultInheritance;
+          if (selectedAdult === "Scumon") {
+            const scumonBase = calculateScumonBaseStats(selectedChild);
+            if (!scumonBase) return null;
+            adultInheritance = {
+              HP: Math.round(scumonBase.HP * 0.4),
+              ATK: Math.round(scumonBase.ATK * 0.4),
+              SPD: Math.round(scumonBase.SPD * 0.4),
+              DEF: Math.round(scumonBase.DEF * 0.4)
+            };
+          } else {
+            adultInheritance = adultToPerfectInherit[selectedAdult];
+          }
+          if (!adultInheritance) return null;
+          naturalStats = {
+            HP: base.HP + childInheritance.HP + adultInheritance.HP,
+            ATK: base.ATK + childInheritance.ATK + adultInheritance.ATK,
+            SPD: base.SPD + childInheritance.SPD + adultInheritance.SPD,
+            DEF: base.DEF + childInheritance.DEF + adultInheritance.DEF
+          };
+          trainedStats = calculateTrainedStats(naturalStats, trainingPoints.perfect);
+          result = {
+            "Name": selectedDigimon,
+            "Child": selectedChild,
+            "Adult": selectedAdult,
+            "Type": base.Type,
+            "DType": base.DType,
+            "Level": "Perfect",
+            "NaturalHP": naturalStats.HP,
+            "NaturalATK": naturalStats.ATK,
+            "NaturalSPD": naturalStats.SPD,
+            "DEF": naturalStats.DEF,
+            "TrainedHP": trainedStats.hpIncrease,
+            "TrainedATK": trainedStats.atkIncrease,
+            "TrainedSPD": trainedStats.spdIncrease,
+            "TotalHP": trainedStats.HP,
+            "TotalATK": trainedStats.ATK,
+            "TotalSPD": trainedStats.SPD,
+            "TrainingPercent": Math.round((trainingPoints.perfect.hp + trainingPoints.perfect.atk + trainingPoints.perfect.spd) / MAX_POINTS.Perfect * 100),
+            "RemainingPoints": { perfect: MAX_POINTS.Perfect - (trainingPoints.perfect.hp + trainingPoints.perfect.atk + trainingPoints.perfect.spd) }
+          };
+        } else if (level === "Ultimate") {
+          const isSpecial = specialChildren.includes(selectedChild);
+          let childInheritance;
+          if (isSpecial) {
+            const childBase = Object.fromEntries( Object.entries(DigimonStats).filter(([_, stats]) =>
+        stats.Stage === "Child").map(([name, stats]) => [name,stats]) )[selectedChild];
+            const selectedBabyInherit = babyInherit[selectedBaby];
+            childInheritance = {
+              HP: selectedBabyInherit.HP + Math.round(0.4 * childBase.HP),
+              ATK: selectedBabyInherit.ATK + Math.round(0.4 * childBase.ATK),
+              SPD: selectedBabyInherit.SPD + Math.round(0.4 * childBase.SPD),
+              DEF: selectedBabyInherit.DEF + Math.round(0.4 * childBase.DEF)
+            };
+          } else {
+            childInheritance = childInherit[selectedChild];
+          }
+          let adultInheritance;
+          if (selectedAdult === "Scumon") {
+            const scumonBase = calculateScumonBaseStats(selectedChild);
+            if (!scumonBase) return null;
+            adultInheritance = {
+              HP: Math.round(scumonBase.HP * 0.4),
+              ATK: Math.round(scumonBase.ATK * 0.4),
+              SPD: Math.round(scumonBase.SPD * 0.4),
+              DEF: Math.round(scumonBase.DEF * 0.4)
+            };
+          } else {
+            adultInheritance = adultToPerfectInherit[selectedAdult];
+          }
+          const perfectInheritance = perfectToUltimateInherit[selectedPerfect];
+          if (!childInheritance || !adultInheritance || !perfectInheritance) return null;
+          naturalStats = {
+            HP: base.HP + childInheritance.HP + adultInheritance.HP + perfectInheritance.HP,
+            ATK: base.ATK + childInheritance.ATK + adultInheritance.ATK + perfectInheritance.ATK,
+            SPD: base.SPD + childInheritance.SPD + adultInheritance.SPD + perfectInheritance.SPD,
+            DEF: base.DEF + childInheritance.DEF + adultInheritance.DEF + perfectInheritance.DEF
+          };
+          trainedStats = calculateTrainedStats(naturalStats, trainingPoints.ultimate);
+          result = {
+            "Name": selectedDigimon,
+            "Child": selectedChild,
+            "Adult": selectedAdult,
+            "Perfect": selectedPerfect,
+            "Type": base.Type,
+            "DType": base.DType,
+            "Level": "Ultimate",
+            "NaturalHP": naturalStats.HP,
+            "NaturalATK": naturalStats.ATK,
+            "NaturalSPD": naturalStats.SPD,
+            "DEF": naturalStats.DEF,
+            "TrainedHP": trainedStats.hpIncrease,
+            "TrainedATK": trainedStats.atkIncrease,
+            "TrainedSPD": trainedStats.spdIncrease,
+            "TotalHP": trainedStats.HP,
+            "TotalATK": trainedStats.ATK,
+            "TotalSPD": trainedStats.SPD,
+            "TrainingPercent": Math.round((trainingPoints.ultimate.hp + trainingPoints.ultimate.atk + trainingPoints.ultimate.spd) / MAX_POINTS.Ultimate * 100),
+            "RemainingPoints": { ultimate: MAX_POINTS.Ultimate - (trainingPoints.ultimate.hp + trainingPoints.ultimate.atk + trainingPoints.ultimate.spd) }
+          };
+        }
+        setStats(result);
+      };
+      React.useEffect(() => {
+        calculateStats();
+      }, [selectedDigimon, selectedChild, selectedAdult, selectedPerfect, trainingPoints, level, digitama, selectedBaby]);
+     
+    /note: here to add a digitama or a new stage to existing digitama/
+      let availableDigimon = [];
+      if (level === "Child") availableDigimon = Object.entries(DigimonStats).filter(([_, stats]) => stats.Digitama === digitama && stats.Stage === "Child").map(([name]) => name);
+      else if (level === "Adult") availableDigimon = Object.entries(DigimonStats).filter(([_, stats]) => stats.Digitama === digitama && stats.Stage === "Adult").map(([name]) => name);
+      else if (level === "Perfect") availableDigimon = Object.entries(DigimonStats).filter(([_, stats]) => stats.Digitama === digitama && stats.Stage === "Perfect").map(([name]) => name);
+      else if (level === "Ultimate") availableDigimon = Object.entries(DigimonStats).filter(([_, stats]) => stats.Digitama === digitama && stats.Stage === "Ultimate").map(([name]) => name);
+      const maxPoints = MAX_POINTS[level];
+      const pointsToAddLemon = 0.02 * maxPoints;
+      const pointsToAddAcorn = 1.25;
+      const pointsToAddMShroom = 0.10 * maxPoints;
+      const pointsToAddShroom = 0.30 * maxPoints;
+      const remainingPoints = stats ? stats.RemainingPoints[level.toLowerCase()] : 0;
+      const isLemonDisabled = !stats || remainingPoints < 3 * pointsToAddLemon;
+      const isAcornDisabled = !stats || remainingPoints < 3 * pointsToAddAcorn;
+      const isMShroomDisabled = !stats || remainingPoints < 3 * pointsToAddMShroom;
+      const isRedShroomDisabled = !stats || remainingPoints < pointsToAddShroom || lockedStats[level.toLowerCase()].atk;
+      const isBlueShroomDisabled = !stats || remainingPoints < pointsToAddShroom || lockedStats[level.toLowerCase()].spd;
+      const isGreenShroomDisabled = !stats || remainingPoints < pointsToAddShroom || lockedStats[level.toLowerCase()].hp;
+      
+      const pointsToAddMeat1 = 1;
+      const isMeat1Disabled = !stats || remainingPoints < 1 * pointsToAddMeat1|| lockedStats[level.toLowerCase()].atk;
+      const pointsToAddMeat2 = 1.25;
+      const isMeat2Disabled = !stats || remainingPoints < 1.25 * pointsToAddMeat2|| lockedStats[level.toLowerCase()].atk;
+      
+      const pointsToAddMeat3HP = 1;
+      const pointsToAddMeat3ATK = 1.25;
+      const totalMeat3Cost = pointsToAddMeat3HP + pointsToAddMeat3ATK;
+      const isAdultOrHigher = level !== "Child";
+      const isMeat3Disabled =
+        !stats ||
+        remainingPoints < totalMeat3Cost ||
+        lockedStats[level.toLowerCase()].hp ||
+        lockedStats[level.toLowerCase()].atk ||
+        !isAdultOrHigher;
+      
+      const pointsToAddMeatX = 0.02 * maxPoints;
+      const isXDigi = stats && X_Digi.includes(stats.Name);
+      const isMeatXDisabled =
+        !stats ||
+        remainingPoints < 2 * pointsToAddMeatX ||
+        lockedStats[level.toLowerCase()].atk ||
+        lockedStats[level.toLowerCase()].spd ||
+        !isXDigi;
+        
+      const isCompareDisabled = !savedDigimon.some(slot => slot !== null);
+      const FoodItems = () => (
+        <div className="w-full mb-4">
+          <h2 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Food Items</h2>
+          <div className="space-y-2">
+            <button
+              aria-label="Lemon"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isLemonDisabled ? 'bg-gray-300 text-gray-500' : 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300'}`}
+              disabled={isLemonDisabled}
+              onClick={() => applyBoost('Lemon')}
+              style={{ backgroundImage: `url('https://i.imgur.com/JWys8Lb.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isLemonDisabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="C.Acorn"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isAcornDisabled ? 'bg-gray-300 text-gray-500' : 'bg-blue-300 text-blue-900 hover:bg-blue-400'}`}
+              disabled={isAcornDisabled}
+              onClick={() => applyBoost('C.Acorn')}
+              style={{ backgroundImage: `url('https://i.imgur.com/CZuzYg0.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isAcornDisabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="M.Shroom"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isMShroomDisabled ? 'bg-gray-300 text-gray-500' : 'bg-red-200 text-white hover:bg-red-300'}`}
+              disabled={isMShroomDisabled}
+              onClick={() => applyBoost('M.Shroom')}
+              style={{ backgroundImage: `url('https://i.imgur.com/VPtxmpw.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isMShroomDisabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="Red+Shroom"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isRedShroomDisabled ? 'bg-gray-300 text-gray-500' : 'bg-red-400 text-red-900 hover:bg-red-500'}`}
+              disabled={isRedShroomDisabled}
+              onClick={() => applyBoost('Red+Shroom')}
+              style={{ backgroundImage: `url('https://i.imgur.com/JhMHupV.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isRedShroomDisabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="Blue+Shroom"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isBlueShroomDisabled ? 'bg-gray-300 text-gray-500' : 'bg-blue-400 text-blue-900 hover:bg-blue-500'}`}
+              disabled={isBlueShroomDisabled}
+              onClick={() => applyBoost('Blue+Shroom')}
+              style={{ backgroundImage: `url('https://i.imgur.com/RkLw1JM.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isBlueShroomDisabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="Green+Shroom"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isGreenShroomDisabled ? 'bg-gray-300 text-gray-500' : 'bg-green-400 text-green-900 hover:bg-green-500'}`}
+              disabled={isGreenShroomDisabled}
+              onClick={() => applyBoost('Green+Shroom')}
+              style={{ backgroundImage: `url('https://i.imgur.com/uQwuuvF.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isGreenShroomDisabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="Aged Meat"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isMeat1Disabled ? 'bg-gray-300 text-gray-500' : 'bg-[#B86B6B] text-white hover:bg-[#9E5A5A]'}`}
+              disabled={isMeat1Disabled}
+              onClick={() => applyBoost('Meat1')}
+              style={{ backgroundImage: `url('https://i.imgur.com/NyKg25d.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isMeat1Disabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="Dense Meat"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isMeat2Disabled ? 'bg-gray-300 text-gray-500' : 'bg-[#8c697b] text-white hover:bg-[#72586a]'}`}
+              disabled={isMeat2Disabled}
+              onClick={() => applyBoost('Meat2')}
+              style={{ backgroundImage: `url('https://i.imgur.com/mDm7eLc.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isMeat2Disabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="Jurassic Meat"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isMeat3Disabled ? 'bg-gray-300 text-gray-500' : 'bg-[#9c7494] text-white hover:bg-[#826379]'}`}
+              disabled={isMeat3Disabled}
+              onClick={() => applyBoost('Meat3')}
+              style={{ backgroundImage: `url('https://i.imgur.com/4mIRlHi.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isMeat3Disabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+            <button
+              aria-label="Meat-X"
+              className={`food-button w-full py-1 px-2 rounded font-bold truncate ${isMeatXDisabled ? 'bg-gray-300 text-gray-500' : 'bg-[#a384a5] text-white hover:bg-[#897394]'}`}
+              disabled={isMeatXDisabled}
+              onClick={() => applyBoost('MeatX')}
+              style={{ backgroundImage: `url('https://i.imgur.com/XHUxeZC.png')`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', filter: isMeatXDisabled ? 'grayscale(100%)' : 'none' }}
+            ></button>
+          </div>
+        </div>
+      );
+      const TrainingInstall = () => {
+        const [installValue, setInstallValue] = React.useState(1);
+        const [selectedStat, setSelectedStat] = React.useState("hp");
+        const stage = level.toLowerCase();
+        const pointsToAdd = installValue === 15 ? 3.625 : installValue * 0.175;
+        const remaining = stats ? stats.RemainingPoints[stage] : 0;
+        const isDisabled = !stats || remaining < pointsToAdd || lockedStats[stage][selectedStat];
+        const applyInstall = () => {
+          if (isDisabled) return;
+          const newPoints = { ...trainingPoints[stage] };
+          newPoints[selectedStat] += pointsToAdd;
+          updateAllInputs(stage, newPoints);
+        };
+        return (
+          <div className="w-full mb-4">
+            <h2 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Training Install</h2>
+            <div className="mb-3">
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Value:</label>
+              <select
+                className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+                value={installValue}
+                onChange={(e) => setInstallValue(parseInt(e.target.value))}
+              >
+                {Array.from({ length: 15 }, (_, i) => i + 1).map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+              <div className="flex justify-around mb-3">
+    <button
+      className={`w-10 h-10 rounded ${selectedStat === "hp" ? "bg-green-600 shadow-lg border-4 border-black" : "bg-green-500"} ${
+        lockedStats[stage].hp ? "opacity-50 cursor-not-allowed" : "hover:bg-green-500"
+      }`}
+      onClick={() => !lockedStats[stage].hp && setSelectedStat("hp")}
+      disabled={lockedStats[stage].hp}
+    ></button>
+    <button
+      className={`w-10 h-10 rounded ${selectedStat === "atk" ? "bg-red-600 shadow-lg border-4 border-black" : "bg-red-500"} ${
+        lockedStats[stage].atk ? "opacity-50 cursor-not-allowed" : "hover:bg-red-500"
+      }`}
+      onClick={() => !lockedStats[stage].atk && setSelectedStat("atk")}
+      disabled={lockedStats[stage].atk}
+    ></button>
+    <button
+      className={`w-10 h-10 rounded ${selectedStat === "spd" ? "bg-blue-600 shadow-lg border-4 border-black" : "bg-blue-500"} ${
+        lockedStats[stage].spd ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-500"
+      }`}
+      onClick={() => !lockedStats[stage].spd && setSelectedStat("spd")}
+      disabled={lockedStats[stage].spd}
+    ></button>
+  </div>
+  <button
+    className={`w-full py-2 rounded font-bold ${isDisabled ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-purple-500 text-white hover:bg-purple-600"}`}
+    disabled={isDisabled}
+    onClick={applyInstall}
+  >
+    Install
+  </button>
+</div>
+        );
+      };
+      const SaveSlotsPanel = ({ darkMode, savedDigimon, saveToSlot, compareWithSlot, isMobile, mobileView, showCompare, compareStats }) => (
+        <div className="w-full mb-4">
+          <h2 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Save Slots</h2>
+          <div className="space-y-2">
+            {[0,1,2,3,4,5].map(index => (
+              <div key={index} className="flex items-center justify-between">
+                <button
+                  className={`food-button w-full py-1 px-2 rounded font-bold flex items-center justify-start ${savedDigimon[index] ? 'bg-gray-100 hover:bg-gray-200' : 'bg-gray-200 hover:bg-gray-300'}`}
+                  onClick={() => saveToSlot(index)}
+                >
+                  {savedDigimon[index] ? (
+                    <div className="flex items-center">
+                      <img src={chibiImages[savedDigimon[index].Name] || placeholderImage} alt={savedDigimon[index].Name} className="w-6 h-6 mr-2" />
+                      <span className="slot-text">{savedDigimon[index].Name}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center">
+                      <img src={emptySlotImage} alt="Empty Slot" className="w-6 h-6 mr-2" />
+                      <span className="slot-text">Slot {index + 1}</span>
+                    </div>
+                  )}
+                </button>
+                {savedDigimon[index] && (
+                  <button
+                    className={`ml-2 p-1 rounded ${darkMode ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                    onClick={() => compareWithSlot(index)}
+                  >
+                    Compare
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+      const CurrentDigimonPanel = ({ darkMode, stats, level, percentages, maxPoints, isMobile, mobileView, toggleCompare, isCompareDisabled }) => (
+        <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <div className="w-full">
+            <div className="flex items-end justify-between mb-3">
+              <h2 className={`text-xl font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Current Digimon</h2>
+              <button
+                className={`py-1 px-2 rounded font-bold ${isCompareDisabled ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : darkMode ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                disabled={isCompareDisabled}
+                onClick={toggleCompare}
+              >
+                Compare
+              </button>
+            </div>
+            {(!isMobile || mobileView === "current") && (
+              <Results stats={stats} level={level} percentages={percentages} maxPoints={maxPoints} darkMode={darkMode} onSwitchDigimon={setSelectedDigimon} />
+            )}
+          </div>
+        </div>
+      );
+      const CompareDigimonPanel = ({ darkMode, compareStats, level, percentages, maxPoints }) => (
+        <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <h2 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Compare Digimon</h2>
+          {compareStats ? (
+            <Results stats={compareStats} level={compareStats.Level} percentages={percentages} maxPoints={maxPoints} darkMode={darkMode} isCompare={true} />
+          ) : (
+            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Selecciona un slot para comparar</p>
+          )}
+        </div>
+      );
+      const TrainingConfigurationPanel = () => (
+        <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <TrainingConfiguration
+            selectedSplit={selectedSplit}
+            setSelectedSplit={setSelectedSplit}
+            inputMethod={inputMethod}
+            setInputMethod={setInputMethod}
+            trainingPoints={trainingPoints}
+            setTrainingPoints={setTrainingPoints}
+            percentages={percentages}
+            setPercentages={setPercentages}
+            level={level}
+            pointsError={pointsError}
+            handlePercentageChange={handlePercentageChange}
+            handlePointsChange={handlePointsChange}
+            handleStatIncreaseChange={handleStatIncreaseChange}
+            statIncreaseInput={statIncreaseInput}
+            darkMode={darkMode}
+            lockedStats={lockedStats[level.toLowerCase()]}
+            toggleLock={(stat) => toggleLock(level.toLowerCase(), stat)}
+            savedLineage={savedLineage}
+          />
+        </div>
+      );
+     
+<button
+  className={`absolute md:top-4 md:right-32 top-16 right-2 p-2 rounded ${darkMode ? 'bg-gray-800 text-gray-100 hover:bg-gray-700' : 'bg-gray-200 text-gray-900 hover:bg-gray-300'}`}
+  onClick={() => setShowTrainingItems(!showTrainingItems)}
+>
+  {showTrainingItems ? 'Hide Training Items' : 'Training Items'}
+</button>
+      return (
+        <div className="relative">
+          <img src="https://i.imgur.com/uuK10iI.png" alt="Tamer Assist Advanced - Training Calculator" className="w-72 mb-4 absolute top-4 left-[calc(50%-10rem)] z-10 hidden md:block" />
+          <img src="https://i.imgur.com/uuK10iI.png" alt="Tamer Assist Advanced - Training Calculator" className="w-72 mb-4 block md:hidden mx-auto" />
+          <button
+            className={`absolute md:top-4 md:right-4 top-16 right-2 p-2 rounded ${darkMode ? 'bg-gray-800 text-gray-100 hover:bg-gray-700' : 'bg-gray-200 text-gray-900 hover:bg-gray-300'}`}
+            onClick={toggleDarkMode}
+          >
+            {darkMode ? 'Light Mode' : 'Dark Mode'}
+          </button>
+<div className="pt-32 md:pt-24 p-4 md:p-6 max-w-none mx-auto">
+  {(!isMobile && showCompare) ? (
+    // ── Desktop layout when comparison is active ──
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+      {/* panel 1: configuracion de digi*/}
+      <ConfigurationPanel
+        digitama={digitama}
+        setDigitama={setDigitama}
+        level={level}
+        setLevel={setLevel}
+        selectedDigimon={selectedDigimon}
+        setSelectedDigimon={setSelectedDigimon}
+        selectedChild={selectedChild}
+        setSelectedChild={setSelectedChild}
+        selectedAdult={selectedAdult}
+        setSelectedAdult={setSelectedAdult}
+        selectedPerfect={selectedPerfect}
+        setSelectedPerfect={setSelectedPerfect}
+        selectedBaby={selectedBaby}
+        setSelectedBaby={setSelectedBaby}
+        availableDigimon={availableDigimon}
+        availableChildren={availableChildren}
+        availableAdults={availableAdults}
+        availablePerfects={availablePerfects}
+        darkMode={darkMode}
+        handleSaveLineage={handleSaveLineage}
+      />
+      {/* panel 2: configuracion de entrenamiento*/}
+      <TrainingConfigurationPanel />
+      {/* panel 3: digi actual*/}
+      <CurrentDigimonPanel
+        darkMode={darkMode}
+        stats={stats}
+        level={level}
+        percentages={percentages}
+        maxPoints={maxPoints}
+        isMobile={isMobile}
+        mobileView={mobileView}
+        toggleCompare={toggleCompare}
+        isCompareDisabled={isCompareDisabled}
+      />
+      {/* panel 4: digi guardado en comparacion activa */}
+      <CompareDigimonPanel
+        darkMode={darkMode}
+        compareStats={compareStats}
+        level={level}
+        percentages={percentages}
+        maxPoints={maxPoints}
+      />
+      {/* panel 5: items de entrenamiento*/}
+      <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        <button
+          className={`w-full py-2 mb-4 rounded font-bold ${darkMode ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
+          onClick={() => setShowTrainingInstall(!showTrainingInstall)}
+        >
+          Switch to {showTrainingInstall ? 'Food Items' : 'Training Install'}
+        </button>
+        {showTrainingInstall ? <TrainingInstall /> : <FoodItems />}
+      </div>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      {/* Panel 1: Configuracion */}
+      <ConfigurationPanel
+        digitama={digitama}
+        setDigitama={setDigitama}
+        level={level}
+        setLevel={setLevel}
+        selectedDigimon={selectedDigimon}
+        setSelectedDigimon={setSelectedDigimon}
+        selectedChild={selectedChild}
+        setSelectedChild={setSelectedChild}
+        selectedAdult={selectedAdult}
+        setSelectedAdult={setSelectedAdult}
+        selectedPerfect={selectedPerfect}
+        setSelectedPerfect={setSelectedPerfect}
+        selectedBaby={selectedBaby}
+        setSelectedBaby={setSelectedBaby}
+        availableDigimon={availableDigimon}
+        availableChildren={availableChildren}
+        availableAdults={availableAdults}
+        availablePerfects={availablePerfects}
+        darkMode={darkMode}
+        handleSaveLineage={handleSaveLineage}
+      />
+      {/* Panel 2 entrenamiento y save slots*/}
+      <div className="space-y-6">
+        <TrainingConfigurationPanel />
+        <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <SaveSlotsPanel
+            darkMode={darkMode}
+            savedDigimon={savedDigimon}
+            saveToSlot={saveToSlot}
+            compareWithSlot={compareWithSlot}
+            isMobile={isMobile}
+            mobileView={mobileView}
+            showCompare={showCompare}
+            compareStats={compareStats}
+          />
+        </div>
+      </div>
+      {/* Column 3: Current Digimon */}
+      <CurrentDigimonPanel
+        darkMode={darkMode}
+        stats={stats}
+        level={level}
+        percentages={percentages}
+        maxPoints={maxPoints}
+        isMobile={isMobile}
+        mobileView={mobileView}
+        toggleCompare={toggleCompare}
+        isCompareDisabled={isCompareDisabled}
+      />
+      {/* Column 4: Food/Install switcher */}
+      <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        {isMobile && mobileView === "compare" ? (
+          <CompareDigimonPanel
+            darkMode={darkMode}
+            compareStats={compareStats}
+            level={level}
+            percentages={percentages}
+            maxPoints={maxPoints}
+          />
+        ) : (
+          <>
+            <button
+              className={`w-full py-2 mb-4 rounded font-bold ${darkMode ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
+              onClick={() => setShowTrainingInstall(!showTrainingInstall)}
+            >
+              Switch to {showTrainingInstall ? 'Food Items' : 'Training Install'}
+            </button>
+            {showTrainingInstall ? <TrainingInstall /> : <FoodItems />}
+            {/* Save slots no longer here */}
+          </>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+        </div>
+      );
+    }
+    // Cambios por hacer acá
+    // estas son la funccion y constantes para los childs especiales y su selector de tama
+    function ConfigurationPanel({ digitama, setDigitama, level, setLevel, selectedDigimon, setSelectedDigimon, selectedChild, setSelectedChild, selectedAdult, setSelectedAdult, selectedPerfect, setSelectedPerfect, selectedBaby, setSelectedBaby, availableDigimon, availableChildren, availableAdults, availablePerfects, darkMode, handleSaveLineage }) {
+      const [showPopup, setShowPopup] = React.useState(false);
+      const levelOptions = ["Child", "Adult", "Perfect", "Ultimate"].map(lvl => ({ value: lvl, label: lvl, image: placeholderImage }));
+      const digimonOptions = getOptionsWithImages(availableDigimon);
+      const childOptions = getOptionsWithImages(availableChildren);
+      const adultOptions = getOptionsWithImages(availableAdults);
+      const perfectOptions = getOptionsWithImages(availablePerfects);
+      const babyOptions = [{value: "V0", label: "V0"}, {value: "ST", label: "ST"}, {value: "VL", label: "VL"}, {value: "AP", label: "AP"}, {value: "GK", label: "GK"} ];
+      const isSpecialChild = (level !== "Child" && selectedChild && specialChildren.includes(selectedChild)) || (level === "Child" && selectedDigimon && specialChildren.includes(selectedDigimon));
+      const handleLineageClick = () => {
+        handleSaveLineage();
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 2000);
+      };
+      return (
+        <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <h2 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Configuración</h2>
+          <div className="mb-3">
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Digitama:</label>
+            <CustomSelect options={digitamaOptions} value={digitama} onChange={setDigitama} placeholder="Selecciona Digitama" darkMode={darkMode} />
+            <p className={`mt-1 text-sm ${digitama === "MU" ? "text-pink-500" : digitama === "ST" ? "text-yellow-500" : digitama === "DS" ? "text-gray-900 dark:text-white" : digitama === "DT" ? "text-purple-500" : darkMode ? "text-gray-300" : "text-gray-700"}`}>
+              Seleccionado: {digitama}
+            </p>
+          </div>
+          <div className="mb-3">
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Nivel:</label>
+            <CustomSelect options={levelOptions} value={level} onChange={setLevel} placeholder="Selecciona Nivel" darkMode={darkMode} showImage={false} />
+          </div>
+          <div className="mb-3">
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Digimon:</label>
+            <CustomSelect options={digimonOptions} value={selectedDigimon} onChange={(value) => { setSelectedDigimon(value); setSelectedChild(""); setSelectedAdult(""); setSelectedPerfect(""); }} placeholder="Selecciona Digimon" darkMode={darkMode} />
+          </div>
+          {level === "Ultimate" && (
+            <div className="mb-3">
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Digimon Perfect:</label>
+              <CustomSelect options={perfectOptions} value={selectedPerfect} onChange={(value) => { setSelectedPerfect(value); setSelectedAdult(""); setSelectedChild(""); }} placeholder="Seleccione Perfect" darkMode={darkMode} disabled={!selectedDigimon || availablePerfects.length === 0} />
+            </div>
+          )}
+          {(level === "Perfect" || level === "Ultimate") && (
+            <div className="mb-3">
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Digimon Adult:</label>
+              <CustomSelect options={adultOptions} value={selectedAdult} onChange={(value) => { setSelectedAdult(value); setSelectedChild(""); }} placeholder="Seleccione Adult" darkMode={darkMode} disabled={!selectedDigimon || (level === "Ultimate" && !selectedPerfect) || availableAdults.length === 0} />
+            </div>
+          )}
+          {level !== "Child" && (
+            <div className="mb-3">
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Digimon Child:</label>
+              <CustomSelect options={childOptions} value={selectedChild} onChange={setSelectedChild} placeholder="Seleccione Child" darkMode={darkMode} disabled={!selectedDigimon || (level === "Perfect" && !selectedAdult) || (level === "Ultimate" && (!selectedAdult || !selectedPerfect)) || availableChildren.length === 0} />
+            </div>
+          )}
+          {isSpecialChild && (
+            <div className="mb-3">
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Select Baby:</label>
+              <CustomSelect options={babyOptions} value={selectedBaby} onChange={setSelectedBaby} placeholder="Select Baby" darkMode={darkMode} showImage={false} />
+            </div>
+          )}
+          <div className="mb-3 relative">
+            <button
+              className={`w-full p-2 rounded font-bold transition transform active:scale-95 ${darkMode ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-purple-500 hover:bg-purple-600 text-white'}`}
+              onClick={handleLineageClick}
+            >
+              Lineage
+            </button>
+            {showPopup && (
+              <div className={`absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs whitespace-nowrap shadow-lg z-10 ${darkMode ? 'bg-gray-900' : ''}`}>
+                saved lineage to presets
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+    function TrainingConfiguration({selectedSplit,setSelectedSplit,inputMethod, setInputMethod, trainingPoints, setTrainingPoints, percentages, setPercentages, level, pointsError, handlePercentageChange, handlePointsChange, handleStatIncreaseChange, statIncreaseInput, darkMode, lockedStats, toggleLock, savedLineage }) {
+  const stage = level.toLowerCase();
+  const maxPoints = MAX_POINTS[level];
+
+  const handleReset = () => {
+    const zeroPoints = { hp: 0, atk: 0, spd: 0 };
+
+    setTrainingPoints((prev) => ({
+      ...prev,
+      [stage]: zeroPoints,
+    }));
+
+
+    setPercentages((prev) => ({
+      ...prev,
+      [stage]: zeroPoints,
+    }));
+  };
+
+  return (
+    <div className={`p-4 rounded-lg mt-4 relative ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+      <h2 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+        Configuración de Entrenamiento
+      </h2>
+
+      <div className="mb-3">
+        <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          Configuración de Entrenamiento:
+        </label>
+        <select
+          className={`w-full p-2 border rounded mb-2 ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+          value={selectedSplit}
+          onChange={(e) => setSelectedSplit(e.target.value)}
+        >
+          {Object.keys(trainingSplits).map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+          <option value="Lineage" disabled={!savedLineage}>
+            Lineage
+          </option>
+          <option value="Custom">Personalizado</option>
+        </select>
+
+        {selectedSplit === "Custom" && (
+          <div className="mt-2">
+            <div className="mb-3">
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                Método de Entrada:
+              </label>
+              <select
+                className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+                value={inputMethod}
+                onChange={(e) => setInputMethod(e.target.value)}
+              >
+                <option value="Porcentaje">Porcentaje</option>
+                <option value="PuntosEntrenamiento">Puntos de Entrenamiento</option>
+                <option value="PuntosVisibles">Puntos Visibles</option>
+              </select>
+            </div>
+
+            {inputMethod === "Porcentaje" && (
+              <div>
+                <h3 className={`text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Distribución de Entrenamiento (Porcentaje)
+                </h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {['hp', 'atk', 'spd'].map((stat) => (
+                    <div key={stat} className="flex items-center">
+                      <div className="w-full">
+                        <label className={`block text-xs ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {stat.toUpperCase()} %
+                        </label>
+                        <NumberInput
+                          value={percentages[stage][stat]}
+                          onChange={(value) => handlePercentageChange(stage, stat, value)}
+                          step="0.001"
+                          min="0"
+                          format={(val) => val.toFixed(3)}
+                          darkMode={darkMode}
+                          max={100}
+                          disabled={lockedStats[stat]}
+                        />
+                      </div>
+                      <button
+                        onClick={() => toggleLock(stat)}
+                        className={`ml-2 p-1 ${lockedStats[stat] ? 'text-yellow-500' : 'text-gray-500'}`}
+                      >
+                        {lockedStats[stat] ? '🔒' : '🔓'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <p className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Suma: {(percentages[stage].hp + percentages[stage].atk + percentages[stage].spd).toFixed(2)}%
+                </p>
+              </div>
+            )}
+
+            {inputMethod === "PuntosEntrenamiento" && (
+              <div>
+                <h3 className={`text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Puntos de Entrenamiento
+                </h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {['hp', 'atk', 'spd'].map((stat) => (
+                    <div key={stat} className="flex items-center">
+                      <div className="w-full">
+                        <label className={`block text-xs ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {stat.toUpperCase()} Puntos
+                        </label>
+                        <NumberInput
+                          value={trainingPoints[stage][stat]}
+                          onChange={(value) => handlePointsChange(stage, stat, value)}
+                          step="0.01"
+                          min="0"
+                          format={(val) => val.toFixed(2)}
+                          darkMode={darkMode}
+                          max={maxPoints}
+                          disabled={lockedStats[stat]}
+                        />
+                      </div>
+                      <button
+                        onClick={() => toggleLock(stat)}
+                        className={`ml-2 p-1 ${lockedStats[stat] ? 'text-yellow-500' : 'text-gray-500'}`}
+                      >
+                        {lockedStats[stat] ? '🔒' : '🔓'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <p className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Total Puntos: {(trainingPoints[stage].hp + trainingPoints[stage].atk + trainingPoints[stage].spd).toFixed(2)} / {maxPoints}
+                </p>
+                {pointsError[stage] && <p className="text-red-500 text-xs mt-1">{pointsError[stage]}</p>}
+              </div>
+            )}
+
+            {inputMethod === "PuntosVisibles" && (
+              <div>
+                <h3 className={`text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Puntos Visibles Ganados
+                </h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {['hp', 'atk', 'spd'].map((stat) => (
+                    <div key={stat} className="flex items-center">
+                      <div className="w-full">
+                        <label className={`block text-xs ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {stat.toUpperCase()} Puntos
+                        </label>
+                        <NumberInput
+                          value={statIncreaseInput[stage][stat]}
+                          onChange={(value) => handleStatIncreaseChange(stage, stat, value)}
+                          step="1"
+                          min="0"
+                          format={(val) => val.toString()}
+                          darkMode={darkMode}
+                          disabled={lockedStats[stat]}
+                        />
+                      </div>
+                      <button
+                        onClick={() => toggleLock(stat)}
+                        className={`ml-2 p-1 ${lockedStats[stat] ? 'text-yellow-500' : 'text-gray-500'}`}
+                      >
+                        {lockedStats[stat] ? '🔒' : '🔓'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                {pointsError[stage] && <p className="text-red-500 text-xs mt-1">{pointsError[stage]}</p>}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="absolute bottom-4 left-4">
+        <button
+          onClick={handleReset}
+          title="Todos los puntos de entrenamiento se vuelven 0"
+          className={`
+            px-4 py-2 rounded-md text-sm font-medium
+            bg-red-600 hover:bg-red-700 active:bg-red-800
+            text-white shadow-sm
+            transition-colors duration-150
+            focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+            ${darkMode ? 'focus:ring-offset-gray-900' : 'focus:ring-offset-white'}
+            flex items-center gap-1.5
+          `}
+        >
+          <span className="text-base">⟳</span>
+          Reset
+        </button>
+      </div>
+
+      {/* Small padding at bottom so content doesn't get hidden under the button */}
+      <div className="h-12 md:h-10"></div>
+    </div>
+  );
+}
+function Results({ stats, level, percentages, maxPoints, darkMode, isCompare = false, onSwitchDigimon }) {
+  const [showSideEvos, setShowSideEvos] = React.useState(false);
+  const resultsRef = React.useRef(null);
+  const pieRef = React.useRef(null);
+  if (!stats || (stats.Level !== level && !isCompare)) {
+    return (
+      <div className={`p-6 rounded-xl shadow-xl ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <p className={`text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          {isCompare ? "No hay Digimon para comparar aún." : "Configura tu Digimon para ver los resultados."}
+        </p>
+      </div>
+    );
+  }
+  const imageSrc = digimonImages[stats.Name] || placeholderImage;
+  const handleScreenshot = () => {
+    if (resultsRef.current) {
+      html2canvas(resultsRef.current, {
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        scale: 2,
+        logging: false
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `${stats.Name}_stats.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  };
+  const overweightDef = Math.round(stats.DEF * 1.15);
+  const buffedDef = Math.round(overweightDef * 1.1);
+  const stageKey = stats.Level.toLowerCase();
+  const spdMultiplier = critProbSPDMultiplier[stageKey] ?? 0.178;
+  const critRate = 5 + (stats.NaturalSPD * spdMultiplier) + (stats.TrainedSPD * 0.021);
+  const critDamage = (
+    critDamageSPDMultiplier[2] +
+    (Math.pow(stats.TrainedSPD / 100, 2) * critDamageSPDMultiplier[0]) +
+    ((stats.TrainedSPD / 100) * critDamageSPDMultiplier[1])
+  ) * 100;
+  const digimonScale = {
+    Child: 0.4,
+    Adult: 0.7,
+    Perfect: 1,
+    Ultimate: 1
+  }[level] || 1;
+  const effectiveHP = stats.TotalHP / 10;
+  const totalForPie = effectiveHP + stats.TotalATK + stats.TotalSPD;
+  // barra crit damage
+  const trainedSpd = stats?.TrainedSPD || 0;
+  const critDamagePercent =
+    critDamageSPDMultiplier[2] +
+    (Math.pow(trainedSpd / 100, 2) * critDamageSPDMultiplier[0]) +
+    ((trainedSpd / 100) * critDamageSPDMultiplier[1]);
+  const critDamageMultiplier = critDamagePercent;
+  const minMultiplier = 1.5;
+  const maxMultiplier = 4.0;
+  const visualRange = maxMultiplier - minMultiplier;
+  let fillPercentage = ((critDamageMultiplier - minMultiplier) / visualRange) * 100;
+  fillPercentage = Math.max(0, Math.min(100, fillPercentage));
+  const displayCritMult = critDamageMultiplier.toFixed(2) + "×";
+  // marcas con highlight
+  const marks = [1.5, 2, 2.5, 3, 3.5, 4];
+  let highestReachedIndex = -1;
+  for (let i = marks.length - 1; i >= 0; i--) {
+    if (critDamageMultiplier >= marks[i]) {
+      highestReachedIndex = i;
+      break;
+    }
+  }
+// barra crit damage ^
+  React.useEffect(() => {
+    const canvas = pieRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (totalForPie <= 0) {
+      ctx.fillStyle = '#6b7280';
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2 - 8, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = canvas.width / 2 - 8;
+    let startAngle = -Math.PI / 2;
+    const hpSlice = (effectiveHP / totalForPie) * Math.PI * 2;
+    ctx.fillStyle = '#22c55e';
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, startAngle, startAngle + hpSlice);
+    ctx.closePath();
+    ctx.fill();
+    startAngle += hpSlice;
+    const atkSlice = (stats.TotalATK / totalForPie) * Math.PI * 2;
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, startAngle, startAngle + atkSlice);
+    ctx.closePath();
+    ctx.fill();
+    startAngle += atkSlice;
+    const spdSlice = (stats.TotalSPD / totalForPie) * Math.PI * 2;
+    ctx.fillStyle = '#3b82f6';
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, startAngle, startAngle + spdSlice);
+    ctx.closePath();
+    ctx.fill();
+  }, [stats, effectiveHP, totalForPie]);
+  return (
+    <div>
+      <div ref={resultsRef} className={`rounded-xl overflow-hidden shadow-xl ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        {/* Title */}
+        <div className={`py-3 px-6 ${darkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
+          <h2
+            className="text-2xl font-bold text-center text-white"
+            style={{ textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}
+          >
+            {stats.Name}
+          </h2>
+        </div>
+        <div className="flex flex-col md:flex-row">
+          {/* Stats Cards */}
+          <div className="md:w-1/2 p-4 space-y-4">
+            <div className={`px-4 py-3 rounded ${darkMode ? 'bg-green-900' : 'bg-green-100'}`}>
+              <div className="flex justify-between"><span className={`font-medium ${darkMode ? 'text-green-100' : 'text-green-700'}`}>Base:</span> <span className="font-bold text-white">{stats.NaturalHP}</span></div>
+              <div className="flex justify-between"><span className={`font-medium ${darkMode ? 'text-green-100' : 'text-green-700'}`}>Trained:</span> <span className="font-bold text-white">{stats.TrainedHP.toFixed(0)}</span></div>
+              <div className="flex justify-between text-xl"><span className={`font-medium ${darkMode ? 'text-green-100' : 'text-green-700'}`}>Total:</span> <span className="font-bold text-white">{stats.TotalHP}</span></div>
+            </div>
+            <div className={`px-4 py-3 rounded ${darkMode ? 'bg-red-900' : 'bg-red-100'}`}>
+              <div className="flex justify-between"><span className={`font-medium ${darkMode ? 'text-red-100' : 'text-red-700'}`}>Base:</span> <span className="font-bold text-white">{stats.NaturalATK}</span></div>
+              <div className="flex justify-between"><span className={`font-medium ${darkMode ? 'text-red-100' : 'text-red-700'}`}>Trained:</span> <span className="font-bold text-white">{stats.TrainedATK.toFixed(0)}</span></div>
+              <div className="flex justify-between text-xl"><span className={`font-medium ${darkMode ? 'text-red-100' : 'text-red-700'}`}>Total:</span> <span className="font-bold text-white">{stats.TotalATK}</span></div>
+            </div>
+            <div className={`px-4 py-3 rounded ${darkMode ? 'bg-blue-900' : 'bg-blue-100'}`}>
+              <div className="flex justify-between"><span className={`font-medium ${darkMode ? 'text-blue-100' : 'text-blue-700'}`}>Base:</span> <span className="font-bold text-white">{stats.NaturalSPD}</span></div>
+              <div className="flex justify-between"><span className={`font-medium ${darkMode ? 'text-blue-100' : 'text-blue-700'}`}>Trained:</span> <span className="font-bold text-white">{stats.TrainedSPD.toFixed(0)}</span></div>
+              <div className="flex justify-between text-xl"><span className={`font-medium ${darkMode ? 'text-blue-100' : 'text-blue-700'}`}>Total:</span> <span className="font-bold text-white">{stats.TotalSPD}</span></div>
+            </div>
+            <div className={`px-4 py-3 rounded ${darkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
+              <div className="flex justify-between text-xl"><span className={`font-medium ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>Defense:</span> <span className="font-bold text-white">{stats.DEF} - {buffedDef}</span></div>
+            </div>
+          </div>
+          {/* attribute */}
+          <div className="md:w-1/2 relative overflow-hidden">
+<div className="h-[18%] flex items-center justify-between px-4 md:px-1.5 border-b border-white/20">
+  <div className="relative w-28 h-20 md:w-28 md:h-16">
+    <div className="absolute flex items-center justify-center bg-gray-900/75 rounded-xl border-2 border-gray-500/60 shadow-inner p-1.5 md:p-1 ">
+      <img
+        src={typeImages[stats.Type]}
+        alt={stats.Type}
+        className="w-full h-full object-contain"
+      />
+    </div>
+  </div>
+  {/* DType*/}
+  {stats.DType && DtypeImages[stats.DType] && (
+    <div className="relative w-16 h-16 md:w-20 md:h-20">
+      <div className="absolute flex items-center justify-center bg-gray-900/75 rounded-xl border-2 border-gray-500/60 shadow-inner p-1.5">
+        <img
+          src={DtypeImages[stats.DType]}
+          alt={stats.DType}
+          className="max-w-[100%] max-h-[100%] object-contain"
+        />
+      </div>
+    </div>
+  )}
+</div>
+
+  {/* background en resultados*/}
+   <div className="relative flex items-center justify-center 
+     w-[210px] h-[210px] 
+     overflow-hidden">
+   <img
+    src={digimonBackgroundGif}
+    alt="Background"
+    className="absolute inset-0 w-full h-full object-cover opacity-50 z-0 pointer-events-none"
+    crossOrigin="anonymous"
+   />
+  {/* Imagen del Digi en resultados */}
+   <img
+    src={imageSrc}
+    alt={stats.Name}
+    className="relative z-10 object-contain max-w-[85%] max-h-[85%]"
+    style={{
+      transform: `scale(${digimonScale})`,
+      transformOrigin: 'center bottom'
+    }}
+    crossOrigin="anonymous"
+   />
+</div>
+
+<div className="h-[16%] flex items-center justify-center border-t border-white/20 bg-black/40 relative">
+  <div
+    className="absolute inset-4 rounded-xl bg-gradient-to-b from-gray-900/90 to-gray-950/80 border border-gray-700/60 shadow-inner"
+    style={{ boxShadow: 'inset 0 2px 12px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.6)' }}
+  />
+  <svg
+    viewBox="40 0 350 200"
+    className="w-36 h-36 md:w-40 md:h-25 drop-shadow-2xl z-10"
+    style={{ transform: 'translateX(-14px)' }}
+  >
+    <defs>
+      <filter id="softglow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2.2" result="glow"/>
+        <feMerge>
+          <feMergeNode in="glow"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    <g transform="translate(150,130)">
+      {(() => {
+        if (totalForPie <= 0) {
+          return (
+            <circle r="64" fill="#1f2937" stroke="#4b5563" strokeWidth="1.5" opacity="0.65"/>
+          );
+        }
+        let currentAngle = -90;
+        const total = effectiveHP + stats.TotalATK + stats.TotalSPD;
+        const segments = [
+          { val: effectiveHP, color: '#22c55e', label: 'HP', pct: percentages[level.toLowerCase()]?.hp || 0 },
+          { val: stats.TotalATK, color: '#ef4444', label: 'ATK', pct: percentages[level.toLowerCase()]?.atk || 0 },
+          { val: stats.TotalSPD, color: '#3b82f6', label: 'SPD', pct: percentages[level.toLowerCase()]?.spd || 0 },
+        ].filter(s => s.val > 0);
+        // ─── Pie slices ────────────────────────────────────────
+        const slices = segments.map((seg, i) => {
+          const angleSize = (seg.val / total) * 360;
+          const endAngle = currentAngle + angleSize;
+          const r = 60;
+          const x1 = r * Math.cos(currentAngle * Math.PI/180);
+          const y1 = r * Math.sin(currentAngle * Math.PI/180);
+          const x2 = r * Math.cos(endAngle * Math.PI/180);
+          const y2 = r * Math.sin(endAngle * Math.PI/180);
+          const largeArc = angleSize > 180 ? 1 : 0;
+          currentAngle = endAngle;
+          return (
+            <path
+              key={`slice-${i}`}
+              d={`M 0 0 L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`}
+              fill={seg.color}
+              fillOpacity="0.95"
+              stroke="#ffffff22"
+              strokeWidth="1"
+            />
+          );
+        });
+        // ─── Leader lines + labels ───
+        const labels = segments.map((seg, i) => {
+          const row = i * 40; // ↑ slightly more spacing
+          const baseX = 112; // labels farther right
+          const lineEndX = baseX - 20;
+          const approxMidAngle = -90 + (
+            segments.slice(0, i).reduce((sum, s) => sum + (s.val / total * 360), 0) +
+            (seg.val / total * 360) / 2
+          );
+          const rad = approxMidAngle * Math.PI / 180;
+          const lineStartX = 56 * Math.cos(rad);
+          const lineStartY = 56 * Math.sin(rad);
+          return (
+            <g key={`label-${i}`}>
+              <line
+                x1={lineStartX}
+                y1={lineStartY}
+                x2={lineEndX}
+                y2={-42 + row}
+                stroke={seg.color}
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                opacity="0.85"
+              />
+              <g
+                transform={`translate(${baseX}, ${-54 + row})`}
+                textAnchor="start"
+                fontSize="20.5"
+                filter="url(#softglow)"
+              >
+                <text
+                  fill={seg.color}
+                  fontWeight="bold"
+                  dy="1"
+                >
+                  {seg.label}
+                </text>
+                <text
+                  fill="white"
+                  fontWeight="bold"
+                  fontSize="20.5"
+                  dy="17"
+                >
+                  {seg.pct.toFixed(1)}%
+                </text>
+              </g>
+            </g>
+          );
+        });
+        return [...slices, ...labels];
+      })()}
+    </g>
+  </svg>
+</div>
+            {digimonGroups[stats.Name] && digimonGroups[stats.Name].length > 1 && !isCompare && (
+              <button
+                className="absolute top-3 right-3 bg-yellow-600 hover:bg-yellow-500 text-white px-2.5 py-1 rounded text-xs font-bold z-20 shadow-md"
+                onClick={() => setShowSideEvos(true)}
+              >
+                Side
+              </button>
+            )}
+            {showSideEvos && (
+              <div className="side-evos-popup">
+                <h3 className="font-bold mb-2 text-sm">Side Evolutions</h3>
+                {digimonGroups[stats.Name].filter(d => d !== stats.Name).map(evo => (
+                  <div key={evo} className="flex items-center mb-1 cursor-pointer" onClick={() => onSwitchDigimon(evo)}>
+                    <img src={digimonImages[evo]} alt={evo} className="w-6 h-6 mr-1" crossOrigin="anonymous" />
+                    <span className="text-xs">{evo}</span>
+                  </div>
+                ))}
+                <button className="mt-2 bg-red-500 text-white px-2 py-1 rounded text-xs" onClick={() => setShowSideEvos(false)}>
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+        {/* === CRIT DAMAGE THERMOMETER */}
+<div className="px-6 py-5 bg-gray-900/80 border-t border-gray-700">
+  <div className="mb-4 grid grid-cols-2 gap-4 items-center">
+  {/* Crit Damage Multiplier */}
+  <div className="text-left">
+    <div className="text-sm font-semibold text-gray-300">
+      Crit Damage Multiplier
+    </div>
+    <div className="text-2xl font-bold text-yellow-300 mt-1 tracking-wider">
+      {critDamageMultiplier.toFixed(2)}×
+    </div>
+  </div>
+  {/* Critico Estimado */}
+  <div className="text-left">
+    <div className="text-sm font-semibold text-gray-300">
+      Crítico Estimado
+    </div>
+    <div className="text-2xl font-bold text-yellow-300 mt-1 tracking-wider">
+      {critRate.toFixed(1)}%
+    </div>
+  </div>
+</div>
+  <div className="relative pt-1 pb-3">
+    {/* Numbers */}
+    <div className="flex justify-between mb-2 px-1 relative z-10">
+      {marks.map((mark, idx) => {
+        const reached = critDamageMultiplier >= mark;
+        const isCurrent = idx === highestReachedIndex;
+        const isNext = idx === highestReachedIndex + 1;
+        let cls = "text-xs font-medium transition-all duration-300 flex flex-col items-center relative ";
+        if (reached) {
+          cls += "text-yellow-300 ";
+          if (isCurrent) cls += "font-bold scale-125 drop-shadow-[0_0_8px_#fbbf24]";
+        } else if (isNext) {
+          cls += "text-cyan-300/80 font-semibold";
+        } else {
+          cls += "text-gray-500";
+        }
+        return (
+          <div key={mark} className={cls}>
+            <span>{mark.toFixed(1)}</span>
+            {isCurrent && (
+              <div className="absolute -bottom-2 w-1.5 h-1.5 bg-yellow-400 rounded-full shadow-[0_0_10px_#fbbf24] animate-pulse"></div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+    <div className="relative h-5 bg-gray-800 rounded-full overflow-hidden border border-gray-700 shadow-inner">
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-800 to-gray-950 opacity-50"></div>
+      <div
+        className="absolute left-0 inset-y-0 bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-200 rounded-full transition-all duration-700 ease-out shadow-[0_2px_12px_#fbbf24aa]"
+        style={{ width: `${fillPercentage}%` }}
+      />
+      {marks.map((mark) => {
+        const pos = ((mark - 1.5) / (4 - 1.5)) * 100;
+        const past = critDamageMultiplier >= mark;
+        return (
+          <div
+            key={mark}
+            className={`absolute top-0 bottom-0 w-px z-10 ${past ? 'bg-yellow-400/70' : 'bg-gray-600/70'}`}
+            style={{ left: `${pos}%` }}
+          />
+        );
+      })}
+    </div>
+  </div>
+</div>
+        <div className="p-4 bg-gray-800/50">
+          <div className="flex items-center justify-center gap-4">
+            <span className="font-bold text-white">Herencias:</span>
+            {(() => {
+              const lineage = [];
+              if (stats.Child) lineage.push(stats.Child);
+              if (stats.Adult) lineage.push(stats.Adult);
+              if (stats.Perfect) lineage.push(stats.Perfect);
+              if (lineage.length === 0) return null;
+              return lineage.map((digi, i) => (
+                <React.Fragment key={i}>
+                  <img src={chibiImages[digi] || placeholderImage} alt={digi} className="lineage-chibi" />
+                  {i < lineage.length - 1 && <span className="lineage-arrow">→</span>}
+                </React.Fragment>
+              ));
+            })()}
+          </div>
+        </div>
+        <div className={`p-4 text-sm space-y-2 ${darkMode ? 'bg-gray-800' : 'bg-gray-200'} text-white`}>
+          <div className="flex justify-between"><span className="font-medium">Training %:</span> <span className="font-bold">{stats.TrainingPercent}%</span></div>
+          <div className="flex justify-between"><span className="font-medium">{stats.Level} Split:</span>
+            <span className="font-bold">
+              {percentages[stats.Level.toLowerCase()].hp.toFixed(1)}%HP -
+              {percentages[stats.Level.toLowerCase()].atk.toFixed(1)}%ATK -
+              {percentages[stats.Level.toLowerCase()].spd.toFixed(1)}%SPD
+            </span>
+          </div>
+          <div className="flex justify-between"><span className="font-medium">Remaining points:</span>
+            <span className="font-bold">{stats.RemainingPoints[stats.Level.toLowerCase()].toFixed(2)}/{maxPoints}</span>
+          </div>
+        </div>
+      </div>
+      {!isCompare && (
+        <button
+          className={`mt-4 w-full py-2 rounded font-bold ${darkMode ? 'bg-green-500 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} text-white`}
+          onClick={handleScreenshot}
+        >
+          Tomar Captura
+        </button>
+      )}
+    </div>
+  );
+}
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<DigimonCalculator />);
+  

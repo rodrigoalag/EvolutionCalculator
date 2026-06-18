@@ -1,0 +1,4032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="https://i.imgur.com/7ytXTdA.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tamer Assist: Portable Advance</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.12.17/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0a0c14;
+      --bg-panel: #111520;
+      --bg-card: #161b2e;
+      --bg-elevated: #1e2540;
+      --accent-cyan: #00d4ff;
+      --accent-gold: #ffd700;
+      --accent-red: #ff4444;
+      --accent-green: #00ff88;
+      --accent-blue: #4488ff;
+      --border-glow: rgba(0,212,255,0.3);
+      --text-primary: #e8eaf6;
+      --text-secondary: #8892b0;
+      --text-dim: #4a5568;
+    }
+    * { 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent; 
+    }
+    html, body { 
+      margin:0; 
+      padding:0; 
+      background:var(--bg-deep); 
+      color:var(--text-primary); 
+      font-family:'Rajdhani',sans-serif; 
+      overflow-x:hidden; 
+      min-height:100vh; 
+    }
+
+    /* === MOBILE SHELL === */
+    .mob-shell { 
+      display:flex; 
+      flex-direction:column; 
+      height:100dvh; 
+      overflow:hidden; 
+    }
+    .mob-header { 
+      background:linear-gradient(180deg,#0d1117 0%,var(--bg-panel) 100%); 
+      border-bottom:1px solid var(--border-glow); 
+      padding:8px 12px 6px; 
+      flex-shrink:0; 
+      position:relative; 
+      z-index:10; 
+    }
+    .mob-header::after { 
+      content:''; 
+      position:absolute; 
+      bottom:-1px; 
+      left:0; 
+      right:0; 
+      height:1px; 
+      background:linear-gradient(90deg,transparent,var(--accent-cyan),transparent); 
+    }
+    .header-logo { 
+      height:30px; 
+      width:auto; 
+      filter:drop-shadow(0 0 8px rgba(0,212,255,0.5)); 
+    }
+    .mob-content { 
+      flex:1; 
+      overflow-y:auto; 
+      overflow-x:hidden; 
+      -webkit-overflow-scrolling:touch; 
+      padding-bottom:68px; 
+    }
+    .mob-content::-webkit-scrollbar { 
+      display:none; 
+    }
+
+    /* === Botones del fondo */
+    .mob-nav { 
+      position:fixed; 
+      bottom:0; 
+      left:0; 
+      right:0; 
+      background:var(--bg-panel); 
+      border-top:1px solid var(--border-glow); 
+      display:flex; 
+      z-index:100; 
+      height:62px; 
+      padding-bottom:env(safe-area-inset-bottom,0); 
+    }
+    .mob-nav::before { 
+      content:''; 
+      position:absolute; 
+      top:-1px; 
+      left:0; 
+      right:0; 
+      height:1px; 
+      background:linear-gradient(90deg,transparent,var(--accent-cyan),transparent); 
+    }
+    .nav-tab { 
+      flex:1; 
+      display:flex; 
+      flex-direction:column; 
+      align-items:center; 
+      justify-content:center; 
+      gap:2px; 
+      cursor:pointer; 
+      border:none; 
+      background:transparent; 
+      color:var(--text-dim); 
+      font-family:'Rajdhani',sans-serif; 
+      font-size:9px; 
+      font-weight:700; 
+      letter-spacing:0.5px; 
+      text-transform:uppercase; 
+      transition:all 0.15s; 
+      position:relative; 
+      padding:0; 
+    }
+    .nav-tab.active { 
+      color:var(--accent-cyan); 
+    }
+    .nav-tab.active::before { 
+      content:''; 
+      position:absolute; 
+      top:0; 
+      left:20%; 
+      right:20%; 
+      height:2px; 
+      background:var(--accent-cyan); 
+      border-radius:0 0 3px 3px; 
+      box-shadow:0 0 8px var(--accent-cyan); 
+    }
+    .nav-icon { 
+      font-size:17px; 
+      line-height:1; 
+    }
+
+    /* === PANELS === */
+    .panel { 
+      padding:10px; 
+      animation:panelIn 0.18s ease; 
+    }
+    @keyframes panelIn { 
+      from{opacity:0;transform:translateY(6px)} 
+      to{opacity:1;transform:translateY(0)} 
+    }
+    .section-card { 
+      background:var(--bg-card); 
+      border:1px solid rgba(255,255,255,0.07); 
+      border-radius:12px; 
+      padding:12px 14px; 
+      margin-bottom:10px; 
+      position:relative; 
+      overflow:visible; 
+    }
+    .section-card::before { 
+      content:''; 
+      position:absolute; 
+      top:0; 
+      left:0; 
+      right:0; 
+      height:2px; 
+      background:linear-gradient(90deg,transparent,var(--accent-cyan),transparent); 
+      opacity:0.4; 
+      border-radius:12px 12px 0 0; 
+    }
+    .section-title { 
+      font-family:'Orbitron',monospace; 
+      font-size:10px; 
+      font-weight:700; 
+      letter-spacing:2px; 
+      text-transform:uppercase; 
+      color:var(--accent-cyan); 
+      margin-bottom:10px; 
+      display:flex; 
+      align-items:center; 
+      gap:8px; 
+    }
+    .section-title::after { 
+      content:''; 
+      flex:1; 
+      height:1px; 
+      background:linear-gradient(90deg,var(--border-glow),transparent); 
+    }
+
+    /* === DROPDOWN — fixed to viewport === */
+    .mob-select-wrap { 
+      position:relative; 
+    }
+    .mob-select-btn { 
+      width:100%; 
+      background:var(--bg-elevated); 
+      border:1px solid rgba(255,255,255,0.1); 
+      border-radius:8px; 
+      padding:10px 12px; 
+      color:var(--text-primary); 
+      font-family:'Rajdhani',sans-serif; 
+      font-size:15px; 
+      font-weight:600; 
+      display:flex; 
+      align-items:center; 
+      gap:8px; 
+      cursor:pointer; 
+      transition:border-color 0.15s; 
+    }
+    .mob-select-btn:active { 
+      border-color:var(--accent-cyan); 
+    }
+    .mob-select-btn:disabled { 
+      opacity:0.4; 
+      cursor:not-allowed; 
+    }
+    .mob-select-btn .arrow { 
+      margin-left:auto; 
+      color:var(--text-secondary); 
+      font-size:11px; 
+    }
+
+    /* Dropdown rendered as fixed overlay */
+    .mob-dropdown-overlay { 
+      position:fixed; 
+      inset:0; 
+      z-index:9999; 
+      display:flex; 
+      flex-direction:column; 
+      justify-content:flex-end; 
+      background:rgba(0,0,0,0.7); 
+      animation:fadeIn 0.15s ease; 
+    }
+    @keyframes fadeIn { 
+      from{opacity:0} 
+      to{opacity:1} 
+    }
+    .mob-dropdown-sheet { 
+      background:#1a1f35; 
+      border-top:1px solid var(--border-glow); 
+      border-radius:16px 16px 0 0; 
+      max-height:55vh; 
+      display:flex; 
+      flex-direction:column; 
+    }
+    .mob-dropdown-header { 
+      padding:12px 16px; 
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between; 
+      border-bottom:1px solid rgba(255,255,255,0.08); 
+      flex-shrink:0; 
+    }
+    .mob-dropdown-title { 
+      font-family:'Orbitron',monospace; 
+      font-size:11px; 
+      font-weight:700; 
+      color:var(--accent-cyan); 
+      letter-spacing:2px; 
+    }
+    .mob-dropdown-close { 
+      background:rgba(255,68,68,0.1); 
+      border:1px solid rgba(255,68,68,0.3); 
+      border-radius:6px; 
+      padding:4px 12px; 
+      color:var(--accent-red); 
+      font-family:'Orbitron',monospace; 
+      font-size:10px; 
+      cursor:pointer; 
+    }
+    .mob-dropdown-list { 
+      overflow-y:auto; 
+      flex:1; 
+      padding:4px 0; 
+    }
+    .mob-dropdown-list::-webkit-scrollbar { 
+      width:3px; 
+    }
+    .mob-dropdown-list::-webkit-scrollbar-thumb { 
+      background:var(--accent-cyan); 
+      border-radius:2px; 
+    }
+    .mob-dropdown-item { 
+      padding:13px 16px; 
+      display:flex; 
+      align-items:center; 
+      gap:12px; 
+      cursor:pointer; 
+      font-size:15px; 
+      font-weight:600; 
+      color:var(--text-primary); 
+      border-bottom:1px solid rgba(255,255,255,0.04); 
+      transition:background 0.1s; 
+    }
+    .mob-dropdown-item:active, 
+    .mob-dropdown-item.selected { 
+      background:rgba(0,212,255,0.12); 
+      color:var(--accent-cyan); 
+    }
+
+    /* === LEVEL PILLS === */
+    .level-pills { 
+      display:grid; 
+      grid-template-columns:repeat(4,1fr); 
+      gap:6px; 
+    }
+    .level-pill { 
+      background:var(--bg-elevated); 
+      border:1px solid rgba(255,255,255,0.08); 
+      border-radius:8px; 
+      padding:9px 4px; 
+      text-align:center; 
+      font-family:'Orbitron',monospace; 
+      font-size:9px; 
+      font-weight:700; 
+      letter-spacing:0.5px; 
+      color:var(--text-secondary); 
+      cursor:pointer; 
+      transition:all 0.15s; 
+    }
+    .level-pill.active { 
+      background:rgba(0,212,255,0.15); 
+      border-color:var(--accent-cyan); 
+      color:var(--accent-cyan); 
+      box-shadow:0 0 12px rgba(0,212,255,0.2); 
+    }
+
+    /* === mini cartas de stats === */
+    .stat-card-mini { 
+      display:flex; 
+      align-items:center; 
+      gap:5px; 
+      padding:8px 7px; 
+      border-radius:8px; 
+    }
+    .stat-card-mini.hp { background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.25); }
+    .stat-card-mini.atk { background:rgba(255,68,68,0.1); border:1px solid rgba(255,68,68,0.25); }
+    .stat-card-mini.spd { background:rgba(68,136,255,0.1); border:1px solid rgba(68,136,255,0.25); }
+    .stat-card-mini.def { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); }
+    .stat-mini-label { 
+      font-family:'Orbitron',monospace; 
+      font-size:9px; 
+      font-weight:700; 
+      letter-spacing:0.5px; 
+      flex-shrink:0; 
+      width:24px; 
+    }
+    .stat-mini-vals { 
+      text-align:left; 
+    }
+    .stat-mini-total { 
+      font-family:'Orbitron',monospace; 
+      font-size:17px; 
+      font-weight:700; 
+      line-height:1; 
+    }
+    .stat-mini-breakdown { 
+      font-size:11px; 
+      font-weight:600; 
+      color:rgba(255,255,255,0.55); 
+      margin-top:2px; 
+    }
+
+    /* === RESULT HERO === */
+    .result-hero { 
+      background:var(--bg-card); 
+      border:1px solid rgba(255,255,255,0.07); 
+      border-radius:16px; 
+      overflow:hidden; 
+      margin-bottom:10px; 
+    }
+    .result-header { 
+      background:linear-gradient(135deg,#0d1117,#1a2035); 
+      padding:10px 14px; 
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between; 
+      border-bottom:1px solid rgba(0,212,255,0.2); 
+    }
+    .result-name { 
+      font-family:'Orbitron',monospace; 
+      font-size:18px; 
+      font-weight:900; 
+      color:white; 
+      text-shadow:0 0 20px rgba(0,212,255,0.6); 
+      letter-spacing:1px; 
+    }
+    .result-digi-area { 
+      display:flex; 
+      align-items:stretch; 
+      border-bottom:1px solid rgba(255,255,255,0.06); 
+    }
+    .result-img-container { 
+      flex:1; 
+      min-width:0; 
+      position:relative; 
+      overflow:hidden; 
+      display:flex; 
+      align-items:flex-end; 
+      justify-content:center; 
+      min-height:160px; 
+    }
+    .result-img-bg { 
+      position:absolute; 
+      inset:0; 
+      width:100%; 
+      height:100%; 
+      object-fit:cover; 
+      object-position:center bottom; 
+      opacity:0.35; 
+    }
+    .result-img { 
+      position:relative; 
+      z-index:1; 
+      max-width:100%; 
+      width:auto; 
+      height:100%; 
+      max-height:100%; 
+      object-fit:contain; 
+      object-position:bottom center; 
+      display:block; 
+    }
+    .result-stats-grid { 
+      width:110px; 
+      flex-shrink:0; 
+      padding:6px 6px; 
+      display:flex; 
+      flex-direction:column; 
+      justify-content:space-evenly; 
+    }
+
+    /* === TRAINING STAT BLOCK === */
+    .training-stat-block { 
+      margin-bottom:12px; 
+    }
+    .training-stat-header { 
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between; 
+      margin-bottom:5px; 
+    }
+    .training-stat-name { 
+      font-family:'Orbitron',monospace; 
+      font-size:10px; 
+      font-weight:700; 
+      letter-spacing:1px; 
+    }
+    .training-stat-pct { 
+      font-family:'Orbitron',monospace; 
+      font-size:12px; 
+      font-weight:700; 
+      color:var(--accent-gold); 
+    }
+    input[type=range] { 
+      -webkit-appearance:none; 
+      width:100%; 
+      height:7px; 
+      border-radius:4px; 
+      outline:none; 
+      cursor:pointer; 
+    }
+    input[type=range]::-webkit-slider-thumb { 
+      -webkit-appearance:none; 
+      width:22px; 
+      height:22px; 
+      border-radius:50%; 
+      background:white; 
+      border:2px solid var(--accent-cyan); 
+      box-shadow:0 0 8px rgba(0,212,255,0.4); 
+      cursor:pointer; 
+    }
+    input[type=range]:disabled { 
+      opacity:0.4; 
+      cursor:not-allowed; 
+    }
+
+    /* === LOCK BTN === */
+    .lock-btn { 
+      width:32px; 
+      height:32px; 
+      border-radius:6px; 
+      border:1px solid rgba(255,255,255,0.1); 
+      background:var(--bg-elevated); 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      cursor:pointer; 
+      font-size:14px; 
+      flex-shrink:0; 
+      transition:all 0.15s; 
+    }
+    .lock-btn.locked { 
+      border-color:var(--accent-gold); 
+      background:rgba(255,215,0,0.15); 
+    }
+
+    /* === ACTION BTNS === */
+    .action-btn { 
+      width:100%; 
+      padding:12px; 
+      border-radius:10px; 
+      border:none; 
+      font-family:'Orbitron',monospace; 
+      font-size:11px; 
+      font-weight:700; 
+      letter-spacing:1px; 
+      cursor:pointer; 
+      transition:all 0.15s; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      gap:8px; 
+    }
+    .action-btn:active { 
+      transform:scale(0.98); 
+    }
+    .action-btn.primary { 
+      background:rgba(0,212,255,0.12); 
+      border:1px solid var(--accent-cyan); 
+      color:var(--accent-cyan); 
+    }
+    .action-btn.danger { 
+      background:rgba(255,68,68,0.1); 
+      border:1px solid rgba(255,68,68,0.4); 
+      color:var(--accent-red); 
+    }
+    .action-btn.success { 
+      background:rgba(0,255,136,0.1); 
+      border:1px solid rgba(0,255,136,0.3); 
+      color:var(--accent-green); 
+    }
+    .action-btn.gold { 
+      background:rgba(255,215,0,0.1); 
+      border:1px solid rgba(255,215,0,0.4); 
+      color:var(--accent-gold); 
+    }
+    .action-btn.purple { 
+      background:rgba(168,85,247,0.12); 
+      border:1px solid rgba(168,85,247,0.4); 
+      color:#c084fc; 
+    }
+    .action-btn:disabled { 
+      opacity:0.4; 
+      cursor:not-allowed; 
+      transform:none; 
+    }
+
+    /* === CRIT SECTION === */
+    .crit-section { 
+      background:linear-gradient(135deg,rgba(255,215,0,0.06),rgba(255,215,0,0.02)); 
+      border:1px solid rgba(255,215,0,0.2); 
+      border-radius:10px; 
+      padding:12px; 
+      margin-bottom:10px; 
+    }
+    .crit-bar-track { 
+      height:8px; 
+      background:rgba(255,255,255,0.06); 
+      border-radius:4px; 
+      overflow:hidden; 
+    }
+    .crit-bar-fill { 
+      height:100%; 
+      border-radius:4px; 
+      background:linear-gradient(90deg,#f59e0b,#ffd700,#fffacd); 
+      transition:width 0.5s ease; 
+      box-shadow:0 0 8px rgba(255,215,0,0.5); 
+    }
+    .crit-mark { 
+      font-family:'Orbitron',monospace; 
+      font-size:8px; 
+      color:var(--text-dim); 
+    }
+    .crit-mark.active { 
+      color:var(--accent-gold); 
+      font-weight:700; 
+    }
+
+    /* === SAVE SLOTS === */
+    .save-slot { 
+      display:flex; 
+      align-items:center; 
+      gap:10px; 
+      padding:10px 12px; 
+      background:var(--bg-elevated); 
+      border:1px solid rgba(255,255,255,0.07); 
+      border-radius:10px; 
+      margin-bottom:7px; 
+      cursor:pointer; 
+      transition:all 0.15s; 
+    }
+    .save-slot:active { 
+      background:rgba(0,212,255,0.08); 
+      border-color:var(--border-glow); 
+    }
+    .save-slot-icon { 
+      width:36px; 
+      height:36px; 
+      border-radius:8px; 
+      background:var(--bg-deep); 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      overflow:hidden; 
+      flex-shrink:0; 
+    }
+    .save-slot-name { 
+      flex:1; 
+      font-family:'Rajdhani',sans-serif; 
+      font-size:14px; 
+      font-weight:700; 
+    }
+    .compare-btn-sm { 
+      padding:6px 10px; 
+      border-radius:6px; 
+      border:1px solid var(--accent-blue); 
+      background:rgba(68,136,255,0.15); 
+      color:var(--accent-blue); 
+      font-family:'Orbitron',monospace; 
+      font-size:9px; 
+      font-weight:700; 
+      cursor:pointer; 
+      letter-spacing:0.5px; 
+    }
+
+    /* === FOOD ITEMS === */
+    .food-grid { 
+      display:grid; 
+      grid-template-columns:repeat(3,1fr); 
+      gap:8px; 
+    }
+    .food-item-btn { 
+      aspect-ratio:1; 
+      border-radius:10px; 
+      border:1px solid rgba(255,255,255,0.1); 
+      background:var(--bg-elevated); 
+      display:flex; 
+      flex-direction:column; 
+      align-items:center; 
+      justify-content:center; 
+      cursor:pointer; 
+      padding:6px; 
+      gap:3px; 
+    }
+    .food-item-btn:active:not(:disabled) { 
+      transform:scale(0.94); 
+      background:rgba(0,212,255,0.1); 
+      border-color:var(--accent-cyan); 
+    }
+    .food-item-btn:disabled { 
+      opacity:0.35; 
+      cursor:not-allowed; 
+      filter:grayscale(80%); 
+    }
+    .food-item-btn img { 
+      width:40px; 
+      height:40px; 
+      object-fit:contain; 
+    }
+    .food-item-label { 
+      font-size:10px; 
+      font-family:'Rajdhani',sans-serif; 
+      font-weight:700; 
+      color:var(--text-secondary); 
+      text-align:center; 
+    }
+
+    /* === INSTALL === */
+    .install-value-grid { 
+      display:grid; 
+      grid-template-columns:repeat(5,1fr); 
+      gap:5px; 
+      margin-bottom:12px; 
+    }
+    .install-val-btn { 
+      padding:8px 4px; 
+      border-radius:8px; 
+      border:1px solid rgba(255,255,255,0.08); 
+      background:var(--bg-elevated); 
+      color:var(--text-secondary); 
+      font-family:'Orbitron',monospace; 
+      font-size:12px; 
+      font-weight:700; 
+      cursor:pointer; 
+      text-align:center; 
+      transition:all 0.15s; 
+    }
+    .install-val-btn.active { 
+      background:rgba(168,85,247,0.2); 
+      border-color:#a855f7; 
+      color:#c084fc; 
+    }
+    .install-stat-selector { 
+      display:grid; 
+      grid-template-columns:repeat(3,1fr); 
+      gap:8px; 
+      margin-bottom:12px; 
+    }
+    .install-stat-btn { 
+      padding:12px; 
+      border-radius:10px; 
+      border:2px solid rgba(255,255,255,0.1); 
+      background:var(--bg-elevated); 
+      cursor:pointer; 
+      transition:all 0.15s; 
+      font-family:'Orbitron',monospace; 
+      font-size:10px; 
+      font-weight:700; 
+      display:flex; 
+      flex-direction:column; 
+      align-items:center; 
+      gap:5px; 
+    }
+    .install-stat-btn .dot { 
+      width:12px; 
+      height:12px; 
+      border-radius:50%; 
+    }
+
+    /* === COMPARE OVERLAY === */
+    .compare-overlay { 
+      position:fixed; 
+      inset:0; 
+      background:rgba(0,0,0,0.85); 
+      z-index:300; 
+      display:flex; 
+      flex-direction:column; 
+      animation:fadeIn 0.2s ease; 
+    }
+    .compare-header { 
+      background:var(--bg-panel); 
+      border-bottom:1px solid var(--border-glow); 
+      padding:12px 16px; 
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between; 
+      flex-shrink:0; 
+    }
+    .compare-content { 
+      flex:1; 
+      overflow-y:auto; 
+      padding:12px; 
+      display:flex; 
+      flex-direction:column; 
+      gap:10px; 
+    }
+    .compare-content::-webkit-scrollbar { 
+      display:none; 
+    }
+
+    /* === MINI PREVIEW (Train tab) === */
+    .mini-preview { 
+      background:var(--bg-card); 
+      border:1px solid rgba(255,255,255,0.07); 
+      border-radius:10px; 
+      padding:10px 12px; 
+      margin-bottom:10px; 
+      display:flex; 
+      gap:10px; 
+      align-items:center; 
+    }
+    .mini-preview-img { 
+      width:56px; 
+      height:56px; 
+      object-fit:contain; 
+      flex-shrink:0; 
+    }
+    .mini-stat-row { 
+      display:flex; 
+      align-items:center; 
+      gap:6px; 
+    }
+    .mini-stat-label { 
+      font-family:'Orbitron',monospace; 
+      font-size:9px; 
+      width:28px; 
+      flex-shrink:0; 
+    }
+    .mini-stat-bar { 
+      flex:1; 
+      height:5px; 
+      background:rgba(255,255,255,0.06); 
+      border-radius:3px; 
+      overflow:hidden; 
+    }
+    .mini-stat-fill { 
+      height:100%; 
+      border-radius:3px; 
+    }
+    .mini-stat-val { 
+      font-family:'Orbitron',monospace; 
+      font-size:10px; 
+      font-weight:700; 
+      width:36px; 
+      text-align:right; 
+      flex-shrink:0; 
+    }
+
+    /* === TOAST === */
+    .toast { 
+      position:fixed; 
+      bottom:76px; 
+      left:50%; 
+      transform:translateX(-50%); 
+      background:rgba(0,212,255,0.12); 
+      border:1px solid var(--accent-cyan); 
+      border-radius:20px; 
+      padding:7px 18px; 
+      color:var(--accent-cyan); 
+      font-family:'Orbitron',monospace; 
+      font-size:10px; 
+      font-weight:700; 
+      letter-spacing:1px; 
+      z-index:500; 
+      backdrop-filter:blur(10px); 
+      white-space:nowrap; 
+      animation:toastAnim 2s ease forwards; 
+    }
+    @keyframes toastAnim { 
+      0%{opacity:0;transform:translateX(-50%) translateY(12px)} 
+      15%{opacity:1;transform:translateX(-50%) translateY(0)} 
+      75%{opacity:1} 
+      100%{opacity:0;transform:translateX(-50%) translateY(-8px)} 
+    }
+
+    /* num input */
+    .num-input { 
+      background:var(--bg-elevated); 
+      border:1px solid rgba(255,255,255,0.1); 
+      border-radius:8px; 
+      padding:9px 10px; 
+      color:var(--text-primary); 
+      font-family:'Orbitron',monospace; 
+      font-size:13px; 
+      font-weight:600; 
+      width:100%; 
+      outline:none; 
+      transition:border-color 0.15s; 
+    }
+    .num-input:focus { 
+      border-color:var(--accent-cyan); 
+    }
+
+    /* method toggle */
+    .method-toggle { 
+      display:grid; 
+      grid-template-columns:repeat(3,1fr); 
+      gap:3px; 
+      background:var(--bg-deep); 
+      border-radius:10px; 
+      padding:3px; 
+      margin-bottom:12px; 
+    }
+    .method-btn { 
+      padding:7px 3px; 
+      border-radius:7px; 
+      border:none; 
+      background:transparent; 
+      color:var(--text-dim); 
+      font-family:'Rajdhani',sans-serif; 
+      font-size:10px; 
+      font-weight:700; 
+      cursor:pointer; 
+      transition:all 0.15s; 
+      line-height:1.2; 
+    }
+    .method-btn.active { 
+      background:var(--bg-elevated); 
+      color:var(--accent-cyan); 
+    }
+
+    /* lineage */
+    .lineage-display { 
+      display:flex; 
+      align-items:center; 
+      gap:6px; 
+      flex-wrap:wrap; 
+      padding:8px; 
+      background:rgba(0,0,0,0.3); 
+      border-radius:8px; 
+    }
+    .lineage-badge { 
+      display:flex; 
+      align-items:center; 
+      gap:4px; 
+      background:rgba(255,255,255,0.05); 
+      border-radius:6px; 
+      padding:4px 8px; 
+    }
+
+    /* type badges */
+    .type-badge-img { 
+      height:26px; 
+      width:auto; 
+      filter:drop-shadow(0 0 4px rgba(255,255,255,0.3)); 
+    }
+
+    /* progress ring */
+    .ring-svg { 
+      transform:rotate(-90deg); 
+    }
+    .ring-track { 
+      fill:none; 
+      stroke:rgba(255,255,255,0.08); 
+    }
+    .ring-fill { 
+      fill:none; 
+      stroke-linecap:round; 
+      transition:stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1); 
+    }
+
+    @media(min-width:768px){
+      body { 
+        background-image:url('https://i.imgur.com/DieNWGz.png'); 
+        background-size:cover; 
+        background-position:center; 
+        font-family:Consolas,monospace; 
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    /* ─── Data & Constants ─────────────────────────────── */
+    const digimonBG = 'https://i.imgur.com/pF6zDpi.gif';
+
+    const digimonImages = {
+      "Agumon": "https://i.imgur.com/gcwxouE.gif",
+      "Agumon-Hakase": "https://i.imgur.com/gcwxouE.gif",
+      "YukiAgumon": "https://i.imgur.com/z6edv46.gif",
+      "BlackAgumon": "https://i.imgur.com/TgHaHaY.gif",
+      "Agumon06": "https://i.imgur.com/IrzpMlW.gif",
+      "Kokuwamon": "https://i.imgur.com/NRX8X8M.gif",
+      "Gottsumon": "https://i.imgur.com/TEvVS6r.gif",
+      "Starmons": "https://i.imgur.com/OdjDjYQ.gif",
+      "Shoutmon": "https://i.imgur.com/JKCUq7T.gif",
+      "Shoutmon B": "https://i.imgur.com/CRV2Vnu.gif",
+      "Shoutmon SW": "https://i.imgur.com/ViD8COE.gif",
+      "Shoutmon SH": "https://i.imgur.com/yWBqfo7.gif",
+      "Pteromon": "https://i.imgur.com/GfRD23V.gif",
+      "Galemon": "https://i.imgur.com/z4d7CUz.gif",
+      "Grandgalemon": "https://i.imgur.com/64fKr2M.gif",
+      "OmegaShoutmon": "https://i.imgur.com/y8VXnJO.gif",
+      "KingShoutmon": "https://i.imgur.com/C248AHV.gif",
+      "Pillomon": "https://i.imgur.com/HzTPlgj.gif",
+      "Greymon": "https://i.imgur.com/x6haPgY.png",
+      "Tyrannomon": "https://i.imgur.com/rfsDJdQ.gif",
+      "Guardromon": "https://i.imgur.com/X4DgHn8.gif",
+      "GoldGuardromon": "https://i.imgur.com/LFZYRKu.gif",
+      "Veedramon": "https://i.imgur.com/Yj5LvZm.gif",
+      "RedVeedramon": "https://i.imgur.com/SkeC2kX.gif",
+      "BlackVeedramon": "https://i.imgur.com/uXnfR7n.gif",
+      "DarkTyrannomon": "https://i.imgur.com/dQ1j3gq.png",
+      "Tuskmon": "https://i.imgur.com/HudT38H.gif",
+      "Yukidarumon": "https://i.imgur.com/I2o5YkA.gif",
+      "Chackmon": "https://i.imgur.com/fjbYyK2.png",
+      "GeoGreymon": "https://i.imgur.com/aclrw7C.gif",
+      "Deltamon": "https://i.imgur.com/0nxuwRH.gif",
+      "Clockmon": "https://i.imgur.com/vgLLNJl.gif",
+      "Thunderballmon": "https://i.imgur.com/DL6dtZG.gif",
+      "Numemon": "https://i.imgur.com/cPBKc3A.gif",
+      "Nanimon": "https://i.imgur.com/6Z1QwRq.png",
+      "BomberNanimon": "https://i.imgur.com/GQjdVhC.png",
+      "Geremon": "https://i.imgur.com/cE2JoKj.gif",
+      "GoldNumemon": "https://i.imgur.com/o4hjF7g.gif",
+      "ShellNumemon": "https://i.imgur.com/nDMFw8a.gif",
+      "Scumon": "https://i.imgur.com/W1kFU9J.gif",
+      "Scumon HT": "https://i.imgur.com/BZw6GgP.png",
+      "Platinum Scumon HT": "https://i.imgur.com/sg0XXy5.png",
+      "KingScumon": "https://i.imgur.com/uG2qILG.gif",
+      "Starmon": "https://i.imgur.com/tkmTsD3.png",
+      "ShootingStarmon": "https://i.imgur.com/9hdfC7O.gif",
+      "Icemon": "https://i.imgur.com/sCNu81j.gif",
+      "AeroVeedramon": "https://i.imgur.com/DXsoO1n.gif",
+      "RizeGreymon": "https://i.imgur.com/vmcPoEG.png",
+      "Andromon": "https://i.imgur.com/c9PqpSK.gif",
+      "BigMamemon": "https://i.imgur.com/6pF7Wv5.gif",
+      "BlackKingNumemon": "https://i.imgur.com/bZH1Ayk.gif",
+      "BlackAeroVeedramon": "https://i.imgur.com/SucRvuo.gif",
+      "Gigadramon": "https://i.imgur.com/qcxfdhb.gif",
+      "GigaWaruMonzaemon": "https://i.imgur.com/uLwojMi.gif",
+      "Mamemon": "https://i.imgur.com/7aai41k.gif",
+      "MameTyramon": "https://i.imgur.com/HimdyoP.png",
+      "MasterTyrannomon": "https://i.imgur.com/NMJXXrB.gif",
+      "Megadramon": "https://i.imgur.com/2gwgjWi.gif",
+      "MetalGreymon": "https://i.imgur.com/9li2gy9.gif",
+      "MetalGreymonAlter": "https://i.imgur.com/BGb4Mke.gif",
+      "MetalGreymonVirus": "https://i.imgur.com/BdZLpxL.gif",
+      "MetalMamemon": "https://i.imgur.com/4VL3c0c.png",
+      "MetalTyrannomon": "https://i.imgur.com/fGWCx5e.gif",
+      "Monzaemon": "https://i.imgur.com/E9LFRTI.gif",
+      "Polarbearmon": "https://i.imgur.com/CUsvzZA.gif",
+      "Blizzardmon": "https://i.imgur.com/e11hJPQ.gif",
+      "Triceramon": "https://i.imgur.com/4ZwJXgx.gif",
+      "Etemon": "https://i.imgur.com/jMnDPot.gif",
+      "WaruMonzaemon": "https://i.imgur.com/Nt6lSKE.gif",
+      "InsekimonLow": "https://i.imgur.com/yaKdYDE.gif",
+      "InsekimonSuper": "https://i.imgur.com/yaKdYDE.gif",
+      "InsekimonDark": "https://i.imgur.com/yaKdYDE.gif",
+      "InsekimonHigh": "https://i.imgur.com/yaKdYDE.gif",
+      "DarkSuperStarmon": "https://i.imgur.com/63tYdkU.gif",
+      "SuperStarmon": "https://i.imgur.com/DmLqCXa.gif",
+      "Daipenmon": "https://i.imgur.com/l80nvi9.gif",
+      "MetalEtemon": "https://i.imgur.com/UZKbSKM.gif",
+      "PlatinumNumemon": "https://i.imgur.com/DkIQace.gif",
+      "Machinedramon": "https://i.imgur.com/TCXASAS.gif",
+      "PrinceMamemon": "https://i.imgur.com/4vlp3Oh.png",
+      "Why": "https://i.imgur.com/oqXKAAf.png",
+      "Ghostmon": "https://i.imgur.com/mTCyoBy.gif",
+      "Bakemon": "https://i.imgur.com/XEAoCBM.png",
+      "BakemonHT": "https://i.imgur.com/XEAoCBM.png",
+      "Soulmon": "https://i.imgur.com/Qhn9hzQ.gif",
+      "SoulmonHT": "https://i.imgur.com/Qhn9hzQ.gif",
+      "Skullgreymon": "https://i.imgur.com/AK54Sjn.png",
+      "Fantomon": "https://i.imgur.com/6YDEgZP.png",
+      "Metal Fantomon": "https://i.imgur.com/SGiZV4e.gif",
+      "Mushmon": "https://i.imgur.com/abT96kS.png",
+      "Chamblemon": "https://i.imgur.com/abT96kS.png",
+      "Digitamamon": "https://i.imgur.com/6AoJC2V.png",
+      "Devitamamon": "https://i.imgur.com/ZJnliRe.png",
+      "Wargreymon-Black": "https://i.imgur.com/C5cN7BD.png",
+      "Wargreymon": "https://i.imgur.com/e3vDwGt.png",
+      "DORUmon": "https://i.imgur.com/iZyBkfh.gif",
+      "DORUgamon": "https://i.imgur.com/H7f8e1o.png",
+      "Death-X-DORUgamon": "https://i.imgur.com/PS3JKnc.png",
+      "DORUguremon": "https://i.imgur.com/z68KYPn.png",
+      "Death-X-DORUguremon": "https://i.imgur.com/KMU3ZhQ.png",
+      "Raptordramon": "https://i.imgur.com/OAGiHro.png",
+      "Grademon": "https://i.imgur.com/vBztzIm.png",
+      "Grademon(Vice)": "https://i.imgur.com/npWznOP.png",
+      "Penmon": "https://i.imgur.com/fJGDBua.png",
+      "Gekkomon": "https://i.imgur.com/vnmsIbJ.gif",
+      "Armalizamon": "https://i.imgur.com/5nd8oJN.gif",
+      "BanchoMamemon": "https://i.imgur.com/bwaBpoc.gif",
+      "Pomumon":"https://i.imgur.com/Ip1bv44.png",
+      "Kiwimon":"https://i.imgur.com/GwBh76x.png",
+      "Parasaurmon":"https://i.imgur.com/bLX9yXG.png",
+      "Delumon":"https://i.imgur.com/9oyFRyj.png",
+      "Entmon":"https://i.imgur.com/S2LfsaY.gif",
+      "Tyumon": "https://i.imgur.com/MiiW2q4.png",
+      "Mercurymon": "https://i.imgur.com/uD14E6R.jpeg",
+      "Sephirothmon": "https://i.imgur.com/rowrsIS.png",
+      "Chiropmon": "https://i.imgur.com/Gb2uMCY.gif",
+      
+    };
+
+    const digitamaImages = {
+      "V0": "https://i.imgur.com/vntjAwc.png",
+      "MU": "https://i.imgur.com/zkS75TR.png",
+      "ST": "https://i.imgur.com/uZlhlYn.png",
+      "DS": "https://i.imgur.com/d7xRiS9.png",
+      "DT": "https://i.imgur.com/t2xR3As.png",
+      "PT": "https://i.imgur.com/flMuLE7.png",
+      "VL": "https://i.imgur.com/Ho0XvUh.png",
+      "AP": "https://i.imgur.com/iPvhgbw.png",
+      "GK": "https://i.imgur.com/vESrftZ.png"
+    };
+
+    const chibiImages = {
+      "Agumon": "https://i.imgur.com/9OxQepE.png",
+      "Agumon-Hakase": "https://i.imgur.com/9OxQepE.png",
+      "Kokuwamon": "https://i.imgur.com/TI7PRnA.png",
+      "YukiAgumon": "https://i.imgur.com/4xDAGxs.png",
+      "BlackAgumon": "https://i.imgur.com/gPYI9FB.png",
+      "Agumon06": "https://i.imgur.com/uSjPoeh.png",
+      "Gottsumon": "https://i.imgur.com/x23AaE6.png",
+      "Starmons": "https://i.imgur.com/DalxDed.png",
+      "Shoutmon": "https://i.imgur.com/JKCUq7T.gif",
+      "Shoutmon B": "https://i.imgur.com/CRV2Vnu.gif",
+      "Shoutmon SW": "https://i.imgur.com/ViD8COE.gif",
+      "Shoutmon SH": "https://i.imgur.com/yWBqfo7.gif",
+      "Pteromon": "https://i.imgur.com/uqFwhto.gif",
+      "Galemon": "https://i.imgur.com/leZ7u44.gif",
+      "Grandgalemon": "https://i.imgur.com/qmszc2W.gif",
+      "OmegaShoutmon": "https://i.imgur.com/y8VXnJO.gif",
+      "KingShoutmon": "https://i.imgur.com/C248AHV.gif",
+      "Pillomon": "https://i.imgur.com/1bLBqqq.png",
+      "Greymon": "https://i.imgur.com/wyYDPdE.png",
+      "Tyrannomon": "https://i.imgur.com/wJUyHAv.png",
+      "Guardromon": "https://i.imgur.com/YSeDg3n.png",
+      "GoldGuardromon": "https://i.imgur.com/rOocBfn.png",
+      "Veedramon": "https://i.imgur.com/OtcVBzJ.png",
+      "RedVeedramon": "https://i.imgur.com/F1RiXpb.png",
+      "BlackVeedramon": "https://i.imgur.com/ojq5Ch8.png",
+      "DarkTyrannomon": "https://i.imgur.com/A28DIO7.png",
+      "Tuskmon": "https://i.imgur.com/eMKECfe.png",
+      "Yukidarumon": "https://i.imgur.com/J2LkatR.png",
+      "Chackmon": "https://i.imgur.com/RVjw5xZ.png",
+      "GeoGreymon": "https://i.imgur.com/yr1q7HH.png",
+      "Deltamon": "https://i.imgur.com/HgPEzjp.png",
+      "Clockmon": "https://i.imgur.com/UcuIpM5.png",
+      "Thunderballmon": "https://i.imgur.com/V6hTgEw.png",
+      "Numemon": "https://i.imgur.com/czYBRGk.png",
+      "Nanimon": "https://i.imgur.com/xi1QGFa.png",
+      "BomberNanimon": "https://i.imgur.com/I0UF1rp.png",
+      "Geremon": "https://i.imgur.com/ENJ0RrE.png",
+      "GoldNumemon": "https://i.imgur.com/rca7JBc.png",
+      "ShellNumemon": "https://i.imgur.com/ZLznHWK.png",
+      "Scumon": "https://i.imgur.com/rjXpvuF.png",
+      "Scumon HT": "https://i.imgur.com/rjXpvuF.png",
+      "Platinum Scumon HT": "https://i.imgur.com/sg0XXy5.png",
+      "KingScumon": "https://i.imgur.com/HUv7skG.png",
+      "Starmon": "https://i.imgur.com/aqHZrNB.png",
+      "ShootingStarmon": "https://i.imgur.com/MoNBAFy.png",
+      "Icemon": "https://i.imgur.com/HpKt2in.png",
+      "AeroVeedramon": "https://i.imgur.com/U304QDw.png",
+      "RizeGreymon": "https://i.imgur.com/Wa3ivW4.png",
+      "Andromon": "https://i.imgur.com/6Jrg8C3.png",
+      "BigMamemon": "https://i.imgur.com/D0fomOm.png",
+      "BlackKingNumemon": "https://i.imgur.com/ygZi3Cv.png",
+      "BlackAeroVeedramon": "https://i.imgur.com/YeruKUv.png",
+      "Gigadramon": "https://i.imgur.com/yW0Jyul.png",
+      "GigaWaruMonzaemon": "https://i.imgur.com/DIorS0D.png",
+      "Mamemon": "https://i.imgur.com/K24v8Wx.png",
+      "MameTyramon": "https://i.imgur.com/6R9ZDW7.png",
+      "MasterTyrannomon": "https://i.imgur.com/OoGeifS.png",
+      "Megadramon": "https://i.imgur.com/NKKSIVK.png",
+      "MetalGreymon": "https://i.imgur.com/EOmsSae.png",
+      "MetalGreymonAlter": "https://i.imgur.com/j9FWXe4.png",
+      "MetalGreymonVirus": "https://i.imgur.com/8qBO61R.png",
+      "MetalMamemon": "https://i.imgur.com/Xodbkc7.png",
+      "MetalTyrannomon": "https://i.imgur.com/IwEjiDv.png",
+      "Monzaemon": "https://i.imgur.com/rgZn4Xv.png",
+      "Polarbearmon": "https://i.imgur.com/Asl2Gd0.png",
+      "Blizzardmon": "https://i.imgur.com/A4cC3T5.png",
+      "Triceramon": "https://i.imgur.com/KTzSGtW.png",
+      "WaruMonzaemon": "https://i.imgur.com/63kqj56.png",
+      "InsekimonLow": "https://i.imgur.com/KOztaMy.png",
+      "InsekimonSuper": "https://i.imgur.com/KOztaMy.png",
+      "InsekimonDark": "https://i.imgur.com/KOztaMy.png",
+      "InsekimonHigh": "https://i.imgur.com/KOztaMy.png",
+      "DarkSuperStarmon": "https://i.imgur.com/2VX4dux.png",
+      "SuperStarmon": "https://i.imgur.com/312f0ou.png",
+      "Daipenmon": "https://i.imgur.com/hp5437q.png",
+      "MetalEtemon": "https://i.imgur.com/6BwmElx.png",
+      "PlatinumNumemon": "https://i.imgur.com/BnYqhWR.gif",
+      "Machinedramon": "https://i.imgur.com/LHvfd4o.png",
+      "PrinceMamemon": "https://i.imgur.com/4vlp3Oh.png",
+      "Ghostmon": "https://i.imgur.com/mTCyoBy.gif",
+      "Bakemon": "https://i.imgur.com/XEAoCBM.png",
+      "BakemonHT": "https://i.imgur.com/XEAoCBM.png",
+      "Soulmon": "https://i.imgur.com/Qhn9hzQ.gif",
+      "SoulmonHT": "https://i.imgur.com/Qhn9hzQ.gif",
+      "Skullgreymon": "https://i.imgur.com/JMmCd1y.png",
+      "Fantomon": "https://i.imgur.com/6YDEgZP.png",
+      "Metal Fantomon": "https://i.imgur.com/6YDEgZP.png",
+      "Mushmon": "https://i.imgur.com/pmmLz8W.png",
+      "Chamblemon": "https://i.imgur.com/pmmLz8W.png",
+      "Digitamamon": "https://i.imgur.com/6AoJC2V.png",
+      "Devitamamon": "https://i.imgur.com/I3QNU8n.png",
+      "Wargreymon-Black": "https://i.imgur.com/C5cN7BD.png",
+      "Wargreymon": "https://i.imgur.com/e3vDwGt.png",
+      "DORUmon": "https://i.imgur.com/zsI3ztm.png",
+      "DORUgamon": "https://i.imgur.com/H7f8e1o.png",
+      "Death-X-DORUgamon": "https://i.imgur.com/PS3JKnc.png",
+      "DORUguremon": "https://i.imgur.com/z68KYPn.png",
+      "Death-X-DORUguremon": "https://i.imgur.com/KMU3ZhQ.png",
+      "Raptordramon": "https://i.imgur.com/OAGiHro.png",
+      "Grademon": "https://i.imgur.com/vBztzIm.png",
+      "Grademon(Vice)": "https://i.imgur.com/npWznOP.png",
+      "Penmon": "https://i.imgur.com/fJGDBua.png",
+      "Gekkomon": "https://i.imgur.com/KM6XSmy.png",
+      "Armalizamon": "https://i.imgur.com/5nd8oJN.gif",
+      "BanchoMamemon": "https://i.imgur.com/bwaBpoc.gif",
+      "Pomumon":"https://i.imgur.com/Ip1bv44.png",
+      "Kiwimon":"https://i.imgur.com/GwBh76x.png",
+      "Parasaurmon":"https://i.imgur.com/bLX9yXG.png",
+      "Delumon":"https://i.imgur.com/9oyFRyj.png",
+      "Entmon":"https://i.imgur.com/S2LfsaY.gif",
+      "Tyumon": "https://i.imgur.com/MiiW2q4.png",
+      "Mercurymon": "https://i.imgur.com/uD14E6R.jpeg",
+      "Etemon": "https://i.imgur.com/jMnDPot.gif",
+      "Sephirothmon": "https://i.imgur.com/rowrsIS.png",
+      "Chiropmon": "https://i.imgur.com/pAyqhKi.gif",
+      "V0": "https://i.imgur.com/vntjAwc.png",
+      "MU": "https://i.imgur.com/zkS75TR.png",
+      "ST": "https://i.imgur.com/uZlhlYn.png",
+      "DS": "https://i.imgur.com/d7xRiS9.png",
+      "DT": "https://i.imgur.com/t2xR3As.png",
+      "PT": "https://i.imgur.com/flMuLE7.png",
+      "VL": "https://i.imgur.com/Ho0XvUh.png",
+      "AP": "https://i.imgur.com/iPvhgbw.png",
+      "GK": "https://i.imgur.com/vESrftZ.png"
+    };
+
+    const placeholderImg = "https://i.imgur.com/oqXKAAf.png";
+    const emptySlotImg   = "https://i.imgur.com/zwbzL6D.png";
+
+    const typeImages = { 
+      "Vaccine": "https://i.imgur.com/YGzRMEF.png",
+      "Virus": "https://i.imgur.com/zrYAfGL.png",
+      "Data": "https://i.imgur.com/5nEVT4H.png",
+      "Free": "https://i.imgur.com/kfck0jO.png" 
+    };
+
+    const DtypeImages = { 
+      "S.Mutant": "https://i.imgur.com/Ot8izZa.png",
+      "Mutant": "https://i.imgur.com/w7IN5Eb.png",
+      "Undead": "https://i.imgur.com/tUhcPG1.png",
+      "Wind": "https://i.imgur.com/GpwKPKm.png",
+      "Dragon": "https://i.imgur.com/C2PaPMH.png",
+      "Ground": "https://i.imgur.com/jDAmxNp.png",
+      "Dinosaur": "https://i.imgur.com/p1bhAOe.png",
+      "Machine": "https://i.imgur.com/tNrTE3U.png",
+      "Beast": "https://i.imgur.com/zmlQ4xo.png",
+      "Composite": "https://i.imgur.com/lG1vSOW.png",
+      "Plant": "https://i.imgur.com/1fU8aXa.png",
+      "Ice": "https://i.imgur.com/s1clwwV.png",
+      "Warrior": "https://i.imgur.com/ncFTx0t.png",
+    };
+
+    const HP_MULT = 0.025974;
+    const ATK_SPD_MULT = 2;
+    const INH_MULT = 0.4;
+    const MAX_PTS = { Child: 87.5, Adult: 162.5, Perfect: 350, Ultimate: 350 };
+    const critProbMult = { perfect: 0.178, adult: 0.24, child: 0.30 };
+    const critDmgConst = [0.051186, -0.002247, 1.5];
+
+    const DIGITAMAS = ["V0","MU","ST","DS","DT","PT","VL","AP","GK"];
+    const babyTamas = ["V0","ST","VL","AP","GK"];
+
+    const digitamaOptions = [
+      { value: "V0",  label: "V-0",               image: "https://i.imgur.com/vntjAwc.png" },
+      { value: "MU",  label: "Mutantes",           image: "https://i.imgur.com/zkS75TR.png" },
+      { value: "ST",  label: "Meteoros Xruzados",  image: "https://i.imgur.com/uZlhlYn.png" },
+      { value: "DS",  label: "Spirits",            image: "https://i.imgur.com/d7xRiS9.png" },
+      { value: "DT",  label: "Death",              image: "https://i.imgur.com/t2xR3As.png" },
+      { value: "PT",  label: "Plant",              image: "https://i.imgur.com/flMuLE7.png" },
+      { value: "VL",  label: "Cielos Liberados",   image: "https://i.imgur.com/Ho0XvUh.png" },
+      { value: "AP",  label: "Alpha Prototype",    image: "https://i.imgur.com/iPvhgbw.png" },
+      { value: "GK",  label: "Gekko",              image: "https://i.imgur.com/vESrftZ.png" }
+    ];
+
+    const specialChildren = ["Ghostmon", "Pillomon", "Mushmon", "Penmon", "Tyumon"];
+    const trainingSplits = { 
+      "HyperOffense": [0.2, 0.5, 0.3],
+      "HyperDefense": [0.5, 0.15, 0.35],
+      "TyrannoSpecial": [0.35, 0.3, 0.35],
+      "BalancedOffense": [0.24, 0.38, 0.38],
+      "SpeedMeta": [0.30, 0.15, 0.55],
+      "HybridTank": [0.4, 0.3, 0.3],
+      "PerfectBalance": [1/3, 1/3, 1/3],
+      "BK Special": [1, 0, 0],
+    };
+    const X_Digi = [
+      "DORUmon",
+      "DORUgamon",
+      "Death-X-DORUgamon",
+      "DORUguremon",
+      "Death-X-DORUguremon",
+      "Raptordramon",
+      "Grademon",
+      "Grademon(Vice)",
+      "MameTyramon"
+      ];
+
+    const DigimonStats = {
+      "Botamon": {"Digitama": "V0", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 50, "ATK": 6, "SPD": 4, "DEF": 6},
+      "Koromon": {"Digitama": "V0", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 90, "ATK": 9, "SPD": 6, "DEF": 6},
+      "Agumon": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Dinosaur", "HP": 250, "ATK": 50, "SPD": 50, "DEF": 25},
+      "Agumon-Hakase": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Dinosaur", "HP": 350, "ATK": 45, "SPD": 35, "DEF": 35},
+      "Kokuwamon": {"Digitama": "V0", "Stage": "Child", "Type": "Data", "DType": "Machine", "HP": 450, "ATK": 40, "SPD": 25, "DEF": 40},
+      "YukiAgumon": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Ice", "HP": 350, "ATK": 40, "SPD": 45, "DEF": 30},
+      "BlackAgumon": {"Digitama": "V0", "Stage": "Child", "Type": "Virus", "DType": "Dinosaur", "HP": 300, "ATK": 55, "SPD": 40, "DEF": 25},
+      "Agumon06": {"Digitama": "V0", "Stage": "Child", "Type": "Vaccine", "DType": "Dinosaur", "HP": 250, "ATK": 55, "SPD": 55, "DEF": 25},
+      "Clockmon": {"Digitama": "V0", "Stage": "Adult", "Type": "Data", "DType": "Machine", "HP": 1050, "ATK": 80, "SPD": 65, "DEF": 50},
+      "DarkTyrannomon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dinosaur", "HP": 1050, "ATK": 80, "SPD": 65, "DEF": 50},
+      "Deltamon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Composite", "HP": 900, "ATK": 115, "SPD": 55, "DEF": 40},
+      "Greymon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Dinosaur", "HP": 1000, "ATK": 100, "SPD": 65, "DEF": 60},
+      "Guardromon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Machine", "HP": 1100, "ATK": 50, "SPD": 30, "DEF": 110},
+      "GoldGuardromon": {"Digitama": "V0", "Stage": "Adult", "Type": "Free", "DType": "Machine", "HP": 1100, "ATK": 50, "SPD": 30, "DEF": 120},
+      "Thunderballmon": {"Digitama": "V0", "Stage": "Adult", "Type": "Data", "DType": "Mutant", "HP": 900, "ATK": 85, "SPD": 75, "DEF": 50},
+      "Tuskmon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dinosaur", "HP": 1250, "ATK": 105, "SPD": 40, "DEF": 55},
+      "Tyrannomon": {"Digitama": "V0", "Stage": "Adult", "Type": "Data", "DType": "Dinosaur", "HP": 1150, "ATK": 65, "SPD": 50, "DEF": 70},
+      "Yukidarumon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Ice", "HP": 1150, "ATK": 80, "SPD": 50, "DEF": 80},
+      "Veedramon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Dragon", "HP": 1050, "ATK": 100, "SPD": 90, "DEF": 55},
+      "RedVeedramon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dragon", "HP": 950, "ATK": 110, "SPD": 100, "DEF": 45},
+      "BlackVeedramon": {"Digitama": "V0", "Stage": "Adult", "Type": "Virus", "DType": "Dragon", "HP": 1050, "ATK": 105, "SPD": 75, "DEF": 65},
+      "GeoGreymon": {"Digitama": "V0", "Stage": "Adult", "Type": "Vaccine", "DType": "Dinosaur", "HP": 1000, "ATK": 110, "SPD": 70, "DEF": 60},
+      "AeroVeedramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Dragon", "HP": 2250, "ATK": 215, "SPD": 150, "DEF": 110},
+      "Andromon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 2250, "ATK": 100, "SPD": 50, "DEF": 225},
+      "BigMamemon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 2800, "ATK": 165, "SPD": 70, "DEF": 95},
+      "BlackAeroVeedramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Dragon", "HP": 2050, "ATK": 235, "SPD": 150, "DEF": 110},
+      "Gigadramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 1800, "ATK": 220, "SPD": 140, "DEF": 110},
+      "Mamemon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 2000, "ATK": 185, "SPD": 140, "DEF": 75},
+      "MameTyramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Dinosaur", "HP": 2200, "ATK": 180, "SPD": 135, "DEF": 85},
+      "MasterTyrannomon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Dinosaur", "HP": 2100, "ATK": 190, "SPD": 95, "DEF": 180},
+      "Megadramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 1750, "ATK": 210, "SPD": 135, "DEF": 80},
+      "MetalGreymon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 2000, "ATK": 225, "SPD": 130, "DEF": 120},
+      "MetalGreymonAlter": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 2050, "ATK": 235, "SPD": 135, "DEF": 125},
+      "MetalGreymonVirus": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 1900, "ATK": 220, "SPD": 130, "DEF": 110},
+      "MetalMamemon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Machine", "HP": 2000, "ATK": 190, "SPD": 140, "DEF": 120},
+      "MetalTyrannomon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Virus", "DType": "Machine", "HP": 2150, "ATK": 175, "SPD": 85, "DEF": 125},
+      "Polarbearmon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Ice", "HP": 2300, "ATK": 110, "SPD": 100, "DEF": 210},
+      "RizeGreymon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Vaccine", "DType": "Machine", "HP": 1950, "ATK": 230, "SPD": 140, "DEF": 110},
+      "Triceramon": {"Digitama": "V0", "Stage": "Perfect", "Type": "Data", "DType": "Dinosaur", "HP": 2100, "ATK": 125, "SPD": 75, "DEF": 190},
+      "Machinedramon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Virus", "DType": "Machine", "HP": 1700, "ATK": 140, "SPD": 70, "DEF": 170},
+      "PrinceMamemon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Data", "DType": "Mutant", "HP": 750, "ATK": 150, "SPD": 120, "DEF": 205},
+      "Wargreymon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Vaccine", "DType": "Dragon", "HP": 1600, "ATK": 150, "SPD": 100, "DEF": 90},
+      "BanchoMamemon": {"Digitama": "V0", "Stage": "Ultimate", "Type": "Data", "DType": "Mutant", "HP": 1500, "ATK": 180, "SPD": 130, "DEF": 90},
+      
+      "Pillomon": {"Digitama": "MU", "Stage": "Child", "Type": "Vaccine", "DType": "Mutant", "HP": 500, "ATK": 25, "SPD": 35, "DEF": 40},
+      "Tyumon": {"Digitama": "MU", "Stage": "Child", "Type": "Virus", "DType": "Mutant", "HP": 600, "ATK": 30, "SPD": 25, "DEF": 25},
+      "Numemon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 750, "ATK": 45, "SPD": 40, "DEF": 40},
+      "Nanimon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "Mutant", "HP": 650, "ATK": 50, "SPD": 55, "DEF": 30},
+      "BomberNanimon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "Mutant", "HP": 400, "ATK": 70, "SPD": 80, "DEF": 10},
+      "Geremon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 750, "ATK": 50, "SPD": 45, "DEF": 40},
+      "GoldNumemon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 750, "ATK": 50, "SPD": 45, "DEF": 50},
+      "ShellNumemon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 800, "ATK": 50, "SPD": 30, "DEF": 70},
+      "Scumon": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 0, "ATK": 0, "SPD": 0, "DEF": 0},
+      "Scumon HT": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 700, "ATK": 100, "SPD": 30, "DEF": 40},
+      "Platinum Scumon HT": {"Digitama": "MU", "Stage": "Adult", "Type": "Virus", "DType": "S.Mutant", "HP": 850, "ATK": 75, "SPD": 30, "DEF": 50},
+      "Monzaemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Vaccine", "DType": "Mutant", "HP": 2300, "ATK": 235, "SPD": 135, "DEF": 150},
+      "GigaWaruMonzaemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "Composite", "HP": 2000, "ATK": 255, "SPD": 165, "DEF": 130},
+      "BlackKingNumemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "S.Mutant", "HP": 2400, "ATK": 85, "SPD": 75, "DEF": 200},
+      "WaruMonzaemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "Mutant", "HP": 2150, "ATK": 245, "SPD": 145, "DEF": 145},
+      "Etemon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "Mutant", "HP": 2000, "ATK": 240, "SPD": 125, "DEF": 185},
+      "KingScumon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Virus", "DType": "S.Mutant", "HP": 0, "ATK": 0, "SPD": 0, "DEF": 0},
+      "Digitamamon": {"Digitama": "MU", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 2700, "ATK": 210, "SPD": 100, "DEF": 170},
+      "MetalEtemon": {"Digitama": "MU", "Stage": "Ultimate", "Type": "Virus", "DType": "Mutant", "HP": 1300, "ATK": 180, "SPD": 90, "DEF": 150},
+      "PlatinumNumemon": {"Digitama": "MU", "Stage": "Ultimate", "Type": "Virus", "DType": "Mutant", "HP": 2000, "ATK": 100, "SPD": 60, "DEF": 190},
+      "Devitamamon": {"Digitama": "MU", "Stage": "Ultimate", "Type": "Data", "DType": "Mutant", "HP": 2200, "ATK": 150, "SPD": 60, "DEF": 120},
+      
+      "Chibickmon": {"Digitama": "ST", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 40, "ATK": 7, "SPD": 6, "DEF": 4},
+      "Pickmon": {"Digitama": "ST", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 70, "ATK": 10, "SPD": 8, "DEF": 5},
+      "Gottsumon": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Ground", "HP": 400, "ATK": 35, "SPD": 35, "DEF": 40},
+      "Starmons": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 40, "SPD": 60, "DEF": 20},
+      "Shoutmon": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 45, "SPD": 40, "DEF": 25},
+      "Shoutmon B": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 40, "SPD": 45, "DEF": 25},
+      "Shoutmon SW": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 65, "SPD": 40, "DEF": 25},
+      "Shoutmon SH": {"Digitama": "ST", "Stage": "Child", "Type": "Data", "DType": "Composite", "HP": 300, "ATK": 45, "SPD": 60, "DEF": 25},
+      "Icemon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Ice", "HP": 1000, "ATK": 60, "SPD": 50, "DEF": 90},
+      "ShootingStarmon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Composite", "HP": 900, "ATK": 120, "SPD": 75, "DEF": 40},
+      "KingShoutmon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Composite", "HP": 900, "ATK": 95, "SPD": 80, "DEF": 60},
+      "Starmon": {"Digitama": "ST", "Stage": "Adult", "Type": "Data", "DType": "Mutant", "HP": 1100, "ATK": 70, "SPD": 70, "DEF": 50},
+      "DarkSuperStarmon": {"Digitama": "ST", "Stage": "Perfect", "Type": "Virus", "DType": "Mutant", "HP": 2000, "ATK": 150, "SPD": 90, "DEF": 160},
+      "SuperStarmon": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Mutant", "HP": 1900, "ATK": 160, "SPD": 160, "DEF": 90},
+      "OmegaShoutmon": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Composite", "HP": 1800, "ATK": 220, "SPD": 160, "DEF": 140},
+      "InsekimonHigh": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 2000, "ATK": 160, "SPD": 140, "DEF": 200},
+      "InsekimonLow": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 2000, "ATK": 150, "SPD": 90, "DEF": 160},
+      "InsekimonSuper": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 1900, "ATK": 160, "SPD": 160, "DEF": 140},
+      "InsekimonDark": {"Digitama": "ST", "Stage": "Perfect", "Type": "Data", "DType": "Ground", "HP": 2000, "ATK": 150, "SPD": 90, "DEF": 210},
+      "Why": {"Digitama": "ST", "Stage": "Ultimate", "Type": "Data", "DType": "None", "HP": 1, "ATK": 1, "SPD": 1, "DEF": 1},
+
+      "Penmon": {"Digitama": "DS", "Stage": "Child", "Type": "Vaccine", "DType": "Ice", "HP": 350, "ATK": 35, "SPD": 55, "DEF": 25},
+      "Chackmon": {"Digitama": "DS", "Stage": "Adult", "Type": "Free", "DType": "Ice", "HP": 950, "ATK": 80, "SPD": 70, "DEF": 80},
+      "Blizzardmon": {"Digitama": "DS", "Stage": "Perfect", "Type": "Free", "DType": "Ice", "HP": 2100, "ATK": 160, "SPD": 120, "DEF": 160},
+      "Daipenmon": {"Digitama": "DS", "Stage": "Ultimate", "Type": "Free", "DType": "Ice", "HP": 1200, "ATK": 160, "SPD": 110, "DEF": 160},
+      "Mercurymon": {"Digitama": "DS", "Stage": "Adult", "Type": "Free", "DType": "Mutant", "HP": 800, "ATK": 90, "SPD": 100, "DEF": 30},
+      "Sephirothmon": {"Digitama": "DS", "Stage": "Perfect", "Type": "Free", "DType": "Mutant", "HP": 2500, "ATK": 150, "SPD": 50, "DEF": 150},
+      
+      "Ghostmon": {"Digitama": "DT", "Stage": "Child", "Type": "Data", "DType": "Undead", "HP": 250, "ATK": 45, "SPD": 65, "DEF": 25},
+      "Bakemon": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 600, "ATK": 40, "SPD": 60, "DEF": 40},
+      "BakemonHT": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 700, "ATK": 50, "SPD": 70, "DEF": 50},
+      "Soulmon": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 600, "ATK": 50, "SPD": 40, "DEF": 70},
+      "SoulmonHT": {"Digitama": "DT", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 700, "ATK": 60, "SPD": 80, "DEF": 50},
+      "Skullgreymon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 1600, "ATK": 270, "SPD": 70, "DEF": 100},
+      "Fantomon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 2200, "ATK": 250, "SPD": 180, "DEF": 100},
+      "Metal Fantomon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Data", "DType": "Machine", "HP": 2200, "ATK": 240, "SPD": 150, "DEF": 140},
+      "Wargreymon-Black": {"Digitama": "DT", "Stage": "Ultimate", "Type": "Virus", "DType": "Dragon", "HP": 1900, "ATK": 175, "SPD": 85, "DEF": 100},
+
+      
+      "Mushmon": {"Digitama": "PT", "Stage": "Child", "Type": "Virus", "DType": "Plant", "HP": 550, "ATK": 30, "SPD": 40, "DEF": 25},
+      "Chamblemon": {"Digitama": "PT", "Stage": "Adult","Type": "Virus", "DType": "Plant", "HP": 1000, "ATK": 50, "SPD": 70, "DEF": 50},
+      
+      "Yolkmon": {"Digitama": "VL", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 40, "ATK": 3, "SPD": 13, "DEF": 1},
+      "Fluffymon": {"Digitama": "VL", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 50, "ATK": 3, "SPD": 21, "DEF": 1},
+      "Pteromon": {"Digitama": "VL", "Stage": "Child", "Type": "Data", "DType": "Wind", "HP": 200, "ATK": 20, "SPD": 65, "DEF": 20},
+      "Pomumon": {"Digitama": "VL", "Stage": "Child", "Type": "Data", "DType": "Plant", "HP": 550, "ATK": 35, "SPD": 35, "DEF": 30},
+      "Kiwimon": {"Digitama": "VL", "Stage": "Adult", "Type": "Data", "DType": "Plant", "HP": 1100, "ATK": 50, "SPD": 100, "DEF": 40},
+      "Parasaurmon": {"Digitama": "VL", "Stage": "Adult", "Type": "Data", "DType": "Dinosaur", "HP": 1500, "ATK": 55, "SPD": 45, "DEF": 65},
+      "Galemon": {"Digitama": "VL", "Stage": "Adult", "Type": "Data", "DType": "Wind", "HP": 650, "ATK": 95, "SPD": 100, "DEF": 40},
+      "Grandgalemon": {"Digitama": "VL", "Stage": "Perfect", "Type": "Data", "DType": "Wind", "HP": 1000, "ATK": 240, "SPD": 200, "DEF": 110},
+      "Delumon": {"Digitama": "VL", "Stage": "Perfect", "Type": "Data", "DType": "Plant", "HP": 2600, "ATK": 80, "SPD": 180, "DEF": 80},
+      "Entmon": {"Digitama": "VL", "Stage": "Perfect", "Type": "Virus", "DType": "Plant", "HP": 2800, "ATK": 230, "SPD": 50, "DEF": 40},
+      
+      "Dodomon": {"Digitama": "AP", "Stage": "Baby1", "Type": "Data", "DType": "None", "HP": 60, "ATK": 7, "SPD": 4, "DEF": 4},
+      "Dorimon": {"Digitama": "AP", "Stage": "Baby2", "Type": "Data", "DType": "None", "HP": 100, "ATK": 10, "SPD": 5, "DEF": 5},
+      "DORUmon": {"Digitama": "AP", "Stage": "Child", "Type": "Data", "DType": "Dragon", "HP": 400, "ATK": 55, "SPD": 25, "DEF": 35},
+      "DORUgamon": {"Digitama": "AP", "Stage": "Adult", "Type": "Data", "DType": "Dragon", "HP": 1250, "ATK": 80, "SPD": 55, "DEF": 65},
+      "Death-X-DORUgamon": {"Digitama": "AP", "Stage": "Adult", "Type": "Virus", "DType": "Undead", "HP": 900, "ATK": 100, "SPD": 60, "DEF": 50},
+      "Death-X-DORUguremon": {"Digitama": "AP", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 1500, "ATK": 250, "SPD": 100, "DEF": 100},
+      "DORUguremon": {"Digitama": "AP", "Stage": "Perfect", "Type": "Data", "DType": "Dragon", "HP": 2350, "ATK": 190, "SPD": 90, "DEF": 135},
+      "Death-X-DORUguremon": {"Digitama": "DT", "Stage": "Perfect", "Type": "Virus", "DType": "Undead", "HP": 1500, "ATK": 250, "SPD": 100, "DEF": 100},
+      "Raptordramon": {"Digitama": "AP", "Stage": "Adult", "Type": "Vaccine","DType": "Machine", "HP": 1300, "ATK": 90, "SPD": 60, "DEF": 70},
+      "Grademon": {"Digitama": "AP", "Stage": "Perfect", "Type": "Vaccine","DType": "Warrior", "HP": 2100, "ATK": 210, "SPD": 150, "DEF": 130},
+      "Grademon(Vice)": {"Digitama": "AP", "Stage": "Perfect", "Type": "Virus", "DType": "Warrior", "HP": 2000, "ATK": 245, "SPD": 130, "DEF": 125},
+      
+      "Kekomon": {"Digitama": "GK", "Stage": "Baby1", "Type": "Free", "DType": "None", "HP": 150, "ATK": 2, "SPD": 2, "DEF": 2},
+      "Kekkomon": {"Digitama": "GK", "Stage": "Baby2", "Type": "Free", "DType": "None", "HP": 220, "ATK": 2, "SPD": 2, "DEF": 4},
+      "Gekkomon": {"Digitama": "GK", "Stage": "Child", "Type": "Data", "DType": "Dinosaur", "HP": 450, "ATK": 35, "SPD": 35, "DEF": 35},
+      "Chiropmon": {"Digitama": "GK", "Stage": "Child", "Type": "Data", "DType": "Beast", "HP": 300, "ATK": 35, "SPD": 60, "DEF": 25},
+      "Armalizamon": {"Digitama": "GK", "Stage": "Adult", "Type": "Data", "DType": "Dinosaur", "HP": 850, "ATK": 70, "SPD": 70, "DEF": 100},
+    };
+
+    const BABY_STAGES = ["Baby1","Baby2"];
+
+    function buildBabyInherit(stats, tamas) {
+      return tamas.reduce((acc, t) => {
+        acc[t] = {HP:0, ATK:0, SPD:0, DEF:0};
+        for (const d of Object.values(stats)) {
+          if (d.Digitama !== t || !BABY_STAGES.includes(d.Stage)) continue;
+          acc[t].HP += Math.round(d.HP * INH_MULT);
+          acc[t].ATK += Math.round(d.ATK * INH_MULT);
+          acc[t].SPD += Math.round(d.SPD * INH_MULT);
+          acc[t].DEF += Math.round(d.DEF * INH_MULT);
+        }
+        return acc;
+      }, {});
+    }
+
+    const babyInherit = buildBabyInherit(DigimonStats, babyTamas);
+
+    const childInherit = (() => {
+      const r = {};
+      for (const [n, d] of Object.entries(DigimonStats)) {
+        if (d.Stage !== "Child" || !babyTamas.includes(d.Digitama)) continue;
+        const ih = babyInherit[d.Digitama] || {HP:0, ATK:0, SPD:0, DEF:0};
+        r[n] = {
+          ...d,
+          HP:  d.HP  * INH_MULT + ih.HP,
+          ATK: d.ATK * INH_MULT + ih.ATK,
+          SPD: d.SPD * INH_MULT + ih.SPD,
+          DEF: d.DEF * INH_MULT + ih.DEF
+        };
+      }
+      return r;
+    })();
+
+    const adult2PerfInherit = Object.fromEntries(
+      Object.entries(DigimonStats)
+        .filter(([_, s]) => s.Stage === "Adult")
+        .map(([n, s]) => [n, {
+          HP:  Math.round(s.HP  * INH_MULT),
+          ATK: Math.round(s.ATK * INH_MULT),
+          DEF: Math.round(s.DEF * INH_MULT),
+          SPD: Math.round(s.SPD * INH_MULT)
+        }])
+    );
+
+    const perf2UltInherit = Object.fromEntries(
+      Object.entries(DigimonStats)
+        .filter(([_, s]) => s.Stage === "Perfect")
+        .map(([n, s]) => [n, {
+          HP:  Math.round(s.HP  * INH_MULT),
+          ATK: Math.round(s.ATK * INH_MULT),
+          DEF: Math.round(s.DEF * INH_MULT),
+          SPD: Math.round(s.SPD * INH_MULT)
+        }])
+    );
+
+    const inheritMap = {
+      "Clockmon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "DarkTyrannomon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Deltamon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Greymon": ["Agumon","Agumon-Hakase", "Kokuwamon"],
+      "Guardromon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "GoldGuardromon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Thunderballmon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Tuskmon": ["BlackAgumon"],
+      "Tyrannomon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "Yukidarumon": ["YukiAgumon", "Penmon"],
+      "Chackmon": ["YukiAgumon", "Gottsumon", "Penmon"],
+      "Veedramon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06"],
+      "RedVeedramon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06"],
+      "BlackVeedramon": ["Agumon","Agumon-Hakase", "Kokuwamon", "YukiAgumon", "Agumon06", "BlackAgumon"],
+      "GeoGreymon": ["Agumon06"],
+      "Icemon": ["Gottsumon", "YukiAgumon", "Penmon"],
+      "ShootingStarmon": ["Starmons"],
+      "KingShoutmon" : ["Shoutmon", "Shoutmon SW", "Shoutmon SH", "Shoutmon B" ],
+      "Starmon": ["Gottsumon", "Starmons"],
+      "BakemonHT": ["Ghostmon"],
+      "SoulmonHT": ["Ghostmon"],
+      "Chamblemon": ["Mushmon"],
+      "Galemon": ["Pteromon"],
+      "DORUgamon": ["DORUmon"],
+      "Death-X-DORUgamon": ["DORUmon"],
+      "Raptordramon": ["DORUmon"],
+      "Armalizamon": ["Gekkomon", "Chiropmon"],
+      "Kiwimon": ["Pomumon"],
+      "Parasaurmon": ["Pomumon"],
+      "Scumon HT":["Tyumon"],
+      "Platinum Scumon HT":["Tyumon"],
+      "Numemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Nanimon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "BomberNanimon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Geremon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "GoldNumemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "ShellNumemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Soulmon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Scumon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Bakemon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+      "Mercurymon": Object.entries(DigimonStats).filter(([_, stats]) => stats.Stage === "Child").map(([name]) => name),
+     
+    };
+    const perfectInheritMap = {
+    "AeroVeedramon": ["Clockmon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "Andromon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "BigMamemon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "BlackAeroVeedramon": ["BlackVeedramon", "DarkTyrannomon", "RedVeedramon", "Tuskmon"],
+    "BlackKingNumemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "Blizzardmon": ["Chackmon", "Icemon", "Yukidarumon"],
+    "DarkSuperStarmon": ["Icemon", "ShootingStarmon", "Starmon"],
+    "OmegaShoutmon": ["KingShoutmon"],
+    "Digitamamon": ["BomberNanimon", "Nanimon"],
+    "Fantomon": ["Bakemon", "BakemonHT", "Soulmon", "SoulmonHT"],
+    "Gigadramon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "GigaWaruMonzaemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "InsekimonDark": ["Icemon"],
+    "InsekimonHigh": ["Icemon"],
+    "InsekimonLow": ["Icemon"],
+    "InsekimonSuper": ["Icemon"],
+    "KingScumon": ["Scumon"],
+    "Mamemon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MameTyramon": ["Thunderballmon"],
+    "MasterTyrannomon": ["Tyrannomon"],
+    "Megadramon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "Metal Fantomon": ["Bakemon", "BakemonHT", "Soulmon", "SoulmonHT"],
+    "MetalGreymon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GoldGuardromon", "Greymon","GeoGreymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalGreymonAlter": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GoldGuardromon", "Greymon", "GeoGreymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalGreymonVirus": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalMamemon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "MetalTyrannomon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "Monzaemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "Etemon": ["Scumon", "Scumon HT", "Platinum Scumon HT"],
+    "Polarbearmon": ["Yukidarumon"],
+    "RizeGreymon": ["GeoGreymon"],
+    "Skullgreymon": ["DarkTyrannomon", "GeoGreymon", "Greymon", "Tuskmon", "Tyrannomon", "Armalizamon", "Parasaurmon"],
+    "SuperStarmon": ["Icemon", "ShootingStarmon", "Starmon"],
+    "Triceramon": ["BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Thunderballmon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon"],
+    "WaruMonzaemon": ["Geremon", "GoldNumemon", "Numemon", "ShellNumemon"],
+    "Grandgalemon": ["Galemon", "Kiwimon"],
+    "DORUguremon": ["DORUgamon"],
+    "Death-X-DORUguremon": ["Death-X-DORUgamon","DORUgamon"],
+    "Grademon": ["Raptordramon"],
+    "Grademon(Vice)": ["Raptordramon"],
+    "Delumon": ["Kiwimon"],
+    "Entmon": ["Chamblemon", "Parasaurmon", "Kiwimon"],
+    "Sephirothmon": ["Scumon", "Thunderballmon", "Geremon", "GoldNumemon", "Numemon", "ShellNumemon", "BlackVeedramon", "Clockmon", "DarkTyrannomon", "Deltamon", "GeoGreymon", "GoldGuardromon", "Greymon", "Guardromon", "Tuskmon", "Tyrannomon", "Veedramon", "Yukidarumon", "Nanimon", "BomberNanimon", "Scumon HT", "Platinum Scumon HT", "Mercurymon"]
+    };
+
+    const ultimateInheritMap = {
+      "Daipenmon": ["Blizzardmon", "Polarbearmon"],
+      "MetalEtemon": ["NewEtemon"],
+      "NewMetalEtemon": ["NewEtemon"],
+      "PlatinumNumemon": ["BlackKingNumemon"],
+      "Machinedramon": ["MetalGreymonVirus", "MetalTyrannomon", "Gigadramon", "Andromon", "MetalMamemon", "Megadramon"],
+      "PrinceMamemon": ["Mamemon"],
+      "Why": ["DarkSuperStarmon", "SuperStarmon", "InsekimonHigh", "InsekimonLow", "InsekimonSuper", "InsekimonDark"],
+      "Devitamamon": ["Digitamamon"],
+      "Wargreymon-Black": ["Skullgreymon"],
+      "Wargreymon": ["MetalGreymon", "MetalGreymonAlter"],
+      "BanchoMamemon": ["Mamemon"]
+    };
+
+    const sideEvos = {
+      "Veedramon": ["RedVeedramon"],
+      "Numemon": ["Geremon", "GoldNumemon", "ShellNumemon"],
+      "Guardromon": ["GoldGuardromon"],
+      "Mamemon": ["BigMamemon", "MetalMamemon"],
+      "MetalGreymon": ["MetalGreymonAlter"],
+      "Tyrannomon": ["DarkTyrannomon"],
+      "Megadramon": ["Gigadramon"],
+      "Yukidarumon": ["Chackmon"],
+      "Icemon": ["Chackmon"],
+      "Polarbearmon": ["Blizzardmon"],
+      "Monzaemon": ["WaruMonzaemon", "GigaWaruMonzaemon"],
+      "Bakemon": ["Soulmon"],
+      "BakemonHT": ["SoulmonHT"],
+      "Fantomon": ["Metal Fantomon"],
+      "Nanimon": ["BomberNanimon"],
+      "Shoutmon": ["Shoutmon SW", "Shoutmon SH", "Shoutmon B"],
+      "Death-X-DORUgamon": ["DORUgamon"],
+      "Grademon(Vice)": ["Grademon"],
+      "Death-X-DORUguremon": ["DORUguremon"],
+      "Sephirothmon": ["Mamemon", "BlackKingNumemon", "Digitamamon", "KingScumon"],
+      "Scumon HT": ["Platinum Scumon HT"],
+    };
+
+    const digimonGroups = {};
+    Object.keys(sideEvos).forEach(o => {
+      const g = [o, ...sideEvos[o]];
+      g.forEach(d => { digimonGroups[d] = g; });
+    });
+
+    function scumonBase(child) {
+      const s = DigimonStats[child];
+      if (!s) return null;
+      const m = 1.34;
+      return {
+        HP:  Math.round(s.HP  * m),
+        ATK: Math.round(s.ATK * m),
+        SPD: Math.round(s.SPD * m),
+        DEF: Math.round(s.DEF * m),
+        Type: "Virus"
+      };
+    }
+
+    function kingScumonBase(child) {
+      const s = scumonBase(child);
+      if (!s) return null;
+      const m = 2.25;
+      return {
+        HP:  Math.round(s.HP  * m),
+        ATK: Math.round(s.ATK * m),
+        SPD: Math.round(s.SPD * m),
+        DEF: Math.round(s.DEF * m),
+        Type: "Virus"
+      };
+    }
+
+    function getBase(digi, lvl, digi2, child) {
+      if (digi === "Scumon" && lvl === "Adult" && child) return scumonBase(child);
+      if (digi === "KingScumon" && lvl === "Perfect" && child) return kingScumonBase(child);
+      return DigimonStats[digi];
+    }
+
+    function getChildInh(child, selBaby) {
+      if (specialChildren.includes(child)) {
+        const cb = DigimonStats[child];
+        const sbi = babyInherit[selBaby] || {HP:0,ATK:0,SPD:0,DEF:0};
+        return {
+          HP:  sbi.HP  + Math.round(0.4 * cb.HP),
+          ATK: sbi.ATK + Math.round(0.4 * cb.ATK),
+          SPD: sbi.SPD + Math.round(0.4 * cb.SPD),
+          DEF: sbi.DEF + Math.round(0.4 * cb.DEF)
+        };
+      }
+      return childInherit[child];
+    }
+
+    function getAdultInh(adult, child) {
+      if (adult === "Scumon") {
+        const s = scumonBase(child);
+        return s ? {
+          HP:  Math.round(s.HP  * 0.4),
+          ATK: Math.round(s.ATK * 0.4),
+          SPD: Math.round(s.SPD * 0.4),
+          DEF: Math.round(s.DEF * 0.4)
+        } : null;
+      }
+      return adult2PerfInherit[adult];
+    }
+
+    function getNatStats(digi, lvl, child, adult, perfect, digi2, selBaby = "V0") {
+      const base = getBase(digi, lvl, digi2, child);
+      if (!base) return null;
+
+      if (lvl === "Child") {
+        if (babyTamas.includes(digi2)) {
+          const ih = babyInherit[digi2];
+          return {
+            HP: base.HP + ih.HP,
+            ATK: base.ATK + ih.ATK,
+            SPD: base.SPD + ih.SPD,
+            DEF: base.DEF + ih.DEF,
+            Type: base.Type,
+            DType: base.DType
+          };
+        }
+        if (specialChildren.includes(digi)) {
+          const sbi = babyInherit[selBaby];
+          return {
+            HP: base.HP + sbi.HP,
+            ATK: base.ATK + sbi.ATK,
+            SPD: base.SPD + sbi.SPD,
+            DEF: base.DEF + sbi.DEF,
+            Type: base.Type,
+            DType: base.DType
+          };
+        }
+        return base;
+      }
+
+      if (lvl === "Adult") {
+        const ci = getChildInh(child, selBaby);
+        if (!ci) return null;
+        return {
+          HP:  base.HP  + ci.HP,
+          ATK: base.ATK + ci.ATK,
+          SPD: base.SPD + ci.SPD,
+          DEF: base.DEF + ci.DEF
+        };
+      }
+
+      if (lvl === "Perfect") {
+        const ci = getChildInh(child, selBaby);
+        const ai = getAdultInh(adult, child);
+        if (!ci || !ai) return null;
+        return {
+          HP:  base.HP  + ci.HP  + ai.HP,
+          ATK: base.ATK + ci.ATK + ai.ATK,
+          SPD: base.SPD + ci.SPD + ai.SPD,
+          DEF: base.DEF + ci.DEF + ai.DEF
+        };
+      }
+
+      if (lvl === "Ultimate") {
+        const ci = getChildInh(child, selBaby);
+        const ai = getAdultInh(adult, child);
+        const pi = perf2UltInherit[perfect];
+        if (!ci || !ai || !pi) return null;
+        return {
+          HP:  base.HP  + ci.HP  + ai.HP  + pi.HP,
+          ATK: base.ATK + ci.ATK + ai.ATK + pi.ATK,
+          SPD: base.SPD + ci.SPD + ai.SPD + pi.SPD,
+          DEF: base.DEF + ci.DEF + ai.DEF + pi.DEF
+        };
+      }
+      return null;
+    }
+
+    function calcTrained(ns, pts) {
+      const hI = ns.HP * HP_MULT * pts.hp;
+      const aI = ATK_SPD_MULT * pts.atk;
+      const sI = ATK_SPD_MULT * pts.spd;
+      return {
+        HP:  Math.round(ns.HP + hI),
+        ATK: Math.round(ns.ATK + aI),
+        SPD: Math.round(ns.SPD + sI),
+        DEF: ns.DEF,
+        hpI:  Math.round(hI  * 100) / 100,
+        atkI: Math.round(aI  * 100) / 100,
+        spdI: Math.round(sI  * 100) / 100
+      };
+    }
+
+    /* ─── Bottom-sheet Select ────── */
+    function MobSelect({ label, options, value, onChange, disabled, showImage = true }) {
+      const [open, setOpen] = React.useState(false);
+      const sel = options.find(o => o.value === value);
+
+      if (disabled) {
+        return (
+          <button className="mob-select-btn" disabled style={{ marginBottom: 0 }}>
+            <span style={{ color: 'var(--text-dim)', flex: 1 }}>
+              {sel ? sel.label : `Select ${label || '...'}`}
+            </span>
+            <span className="arrow">▾</span>
+          </button>
+        );
+      }
+
+      return (
+        <>
+          <button 
+            className="mob-select-btn" 
+            onClick={() => setOpen(true)} 
+            type="button" 
+            style={{ marginBottom: 0 }}
+          >
+            {sel ? (
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1 }}>
+                {showImage && (
+                  <img 
+                    src={chibiImages[sel.value] || placeholderImg} 
+                    alt="" 
+                    onError={e => e.target.style.display = 'none'} 
+                    style={{ 
+                      width: 24, 
+                      height: 24, 
+                      objectFit: 'contain', 
+                      borderRadius: 4, 
+                      background: 'rgba(0,0,0,0.3)' 
+                    }} 
+                  />
+                )}
+                <span>{sel.label}</span>
+              </span>
+            ) : (
+              <span style={{ color: 'var(--text-dim)', flex: 1 }}>Select {label}</span>
+            )}
+            <span className="arrow">▾</span>
+          </button>
+
+          {open && (
+            <div 
+              className="mob-dropdown-overlay" 
+              onClick={() => setOpen(false)}
+            >
+              <div 
+                className="mob-dropdown-sheet" 
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="mob-dropdown-header">
+                  <span className="mob-dropdown-title">{label || 'SELECT'}</span>
+                  <button 
+                    className="mob-dropdown-close" 
+                    onClick={() => setOpen(false)}
+                  >
+                    ✕ CLOSE
+                  </button>
+                </div>
+                <div className="mob-dropdown-list">
+                  {options.map(opt => (
+                    <div 
+                      key={opt.value} 
+                      className={`mob-dropdown-item ${opt.value === value ? 'selected' : ''}`}
+                      onClick={() => { onChange(opt.value); setOpen(false); }}
+                    >
+                      {showImage && (
+                        <img 
+                          src={chibiImages[opt.value] || placeholderImg} 
+                          alt="" 
+                          onError={e => e.target.style.display = 'none'} 
+                          style={{ 
+                            width: 32, 
+                            height: 32, 
+                            objectFit: 'contain', 
+                            borderRadius: 6, 
+                            background: 'rgba(0,0,0,0.3)' 
+                          }} 
+                        />
+                      )}
+                      <span>{opt.label}</span>
+                      {opt.value === value && (
+                        <span style={{ marginLeft: 'auto', color: 'var(--accent-cyan)', fontSize: 14 }}>✓</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    /* ─── Toast ────*/
+    function Toast({ msg, onDone }) {
+      React.useEffect(() => {
+        const t = setTimeout(onDone, 2500);
+        return () => clearTimeout(t);
+      }, []);
+
+      if (msg && msg.type === 'item') {
+        const { item, delta } = msg;
+        const parts = [];
+        if (delta.hp)  parts.push({ label: 'HP',  val: delta.hp,  color: '#00ff88' });
+        if (delta.atk) parts.push({ label: 'ATK', val: delta.atk, color: '#ff6666' });
+        if (delta.spd) parts.push({ label: 'SPD', val: delta.spd, color: '#4488ff' });
+
+        return (
+          <div className="toast" style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 160 }}>
+            <div style={{ 
+              fontFamily: "'Orbitron',monospace", 
+              fontSize: 9, 
+              color: 'rgba(255,255,255,0.5)', 
+              letterSpacing: 1, 
+              textTransform: 'uppercase' 
+            }}>
+              Added · {item}
+            </div>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+              {parts.map(({ label, val, color }) => (
+                <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 8, 
+                    color: 'rgba(255,255,255,0.45)', 
+                    letterSpacing: 0.5 
+                  }}>
+                    {label}
+                  </span>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 13, 
+                    fontWeight: 700, 
+                    color 
+                  }}>
+                    {val > 0 ? '+' : ''}{val}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      return <div className="toast">{msg}</div>;
+    }
+
+    /* scrapped piechart i need to clean up */
+    function PieChart({ hpPct, atkPct, spdPct }) {
+      const W = 160;
+      const CX = 60;
+      const CY = 60;
+      const R = 50;
+      const LEN = 40;
+
+      const segs = [
+        { pct: hpPct,  color: '#00ff88', label: 'HP' },
+        { pct: atkPct, color: '#ff4444', label: 'ATK' },
+        { pct: spdPct, color: '#4488ff', label: 'SPD' }
+      ].filter(s => s.pct > 0);
+
+      let start = -90;
+      const slices = [];
+
+      segs.forEach((seg, i) => {
+        const angle = seg.pct / 100 * 360;
+        const end = start + angle;
+        const midAngle = (start + end) / 2;
+        const rad = Math.PI / 180;
+
+        const x1 = CX + R * Math.cos(start * rad);
+        const y1 = CY + R * Math.sin(start * rad);
+        const x2 = CX + R * Math.cos(end   * rad);
+        const y2 = CY + R * Math.sin(end   * rad);
+
+        const la = angle > 180 ? 1 : 0;
+        const mx = CX + (R + 8) * Math.cos(midAngle * rad);
+        const my = CY + (R + 8) * Math.sin(midAngle * rad);
+
+        const lx2 = CX + 100;
+        const ly2 = 40 + i * 36;
+
+        slices.push({
+          ...seg,
+          pathD: `M${CX},${CY} L${x1},${y1} A${R},${R},0,${la},1,${x2},${y2} Z`,
+          midX: mx,
+          midY: my,
+          lx2,
+          ly2,
+          end
+        });
+
+        start = end;
+      });
+
+      return (
+        <svg 
+          viewBox={`0 0 ${W} 135`} 
+          style={{ width: '100%', maxWidth: 260, display: 'block', margin: '0 auto' }}
+        >
+          {slices.map((s, i) => (
+            <g key={i}>
+              <path 
+                d={s.pathD} 
+                fill={s.color} 
+                opacity="0.9" 
+                stroke="rgba(0,0,0,0.3)" 
+                strokeWidth="1" 
+              />
+              <line 
+                x1={s.midX} 
+                y1={s.midY} 
+                x2={s.lx2} 
+                y2={s.ly2} 
+                stroke={s.color} 
+                strokeWidth="1.5" 
+                opacity="0.8" 
+              />
+              <circle 
+                cx={s.lx2} 
+                cy={s.ly2} 
+                r="2" 
+                fill={s.color} 
+              />
+              <text 
+                x={s.lx2 + 5} 
+                y={s.ly2 - 6} 
+                fill={s.color} 
+                fontSize="9" 
+                fontFamily="Orbitron,monospace" 
+                fontWeight="700"
+              >
+                {s.label}
+              </text>
+              <text 
+                x={s.lx2 + 5} 
+                y={s.ly2 + 7} 
+                fill="white" 
+                fontSize="11" 
+                fontFamily="Orbitron,monospace" 
+                fontWeight="700"
+              >
+                {s.pct.toFixed(1)}%
+              </text>
+            </g>
+          ))}
+        </svg>
+      );
+    }
+
+    /* ─── Progress Ring ────────────────────────────────── */
+    function ProgressRing({ pct, usedPts, maxPts }) {
+      const r = 42;
+      const circ = 2 * Math.PI * r;
+      const offset = circ * (1 - pct / 100);
+
+      const gradId = "ringGrad";
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <defs>
+              <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ffd700" />
+                <stop offset="100%" stopColor="#ff2244" />
+              </linearGradient>
+            </defs>
+            <circle 
+              cx="55" 
+              cy="55" 
+              r={r} 
+              fill="none" 
+              stroke="rgba(255,255,255,0.07)" 
+              strokeWidth="10" 
+            />
+            <circle 
+              cx="55" 
+              cy="55" 
+              r={r} 
+              fill="none" 
+              stroke={`url(#${gradId})`} 
+              strokeWidth="10"
+              strokeLinecap="round" 
+              strokeDasharray={circ} 
+              strokeDashoffset={offset}
+              transform="rotate(-90 55 55)" 
+              style={{ transition: 'stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1)' }}
+            />
+            <text 
+              x="55" 
+              y="49" 
+              textAnchor="middle" 
+              fill="white" 
+              fontFamily="Orbitron,monospace" 
+              fontSize="14" 
+              fontWeight="700"
+            >
+              {Math.floor(usedPts * 10) / 10}
+            </text>
+            <text 
+              x="55" 
+              y="64" 
+              textAnchor="middle" 
+              fill="rgba(255,255,255,0.4)" 
+              fontFamily="Orbitron,monospace" 
+              fontSize="9"
+            >
+              USED
+            </text>
+            <text 
+              x="55" 
+              y="76" 
+              textAnchor="middle" 
+              fill="rgba(255,255,255,0.3)" 
+              fontFamily="Orbitron,monospace" 
+              fontSize="9"
+            >
+              /{maxPts}
+            </text>
+          </svg>
+          <div style={{ 
+            fontFamily: "'Orbitron',monospace", 
+            fontSize: 11, 
+            color: pct > 80 ? '#ff4444' : pct > 50 ? '#ffd700' : '#00ff88', 
+            fontWeight: 700 
+          }}>
+            {pct.toFixed(0)}% TRAINED
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return <MobileApp />;
+    }
+
+    function MobileApp() {
+      const [tab, setTab] = React.useState("config");
+      const [toast, setToast] = React.useState(null);
+
+      const [digitama, setDigitama] = React.useState("V0");
+      const [level, setLevel] = React.useState("Child");
+      const [prevLevel, setPrevLevel] = React.useState("Child");
+      const [selDigi, setSelDigi] = React.useState("");
+      const [selChild, setSelChild] = React.useState("");
+      const [selAdult, setSelAdult] = React.useState("");
+      const [selPerf, setSelPerf] = React.useState("");
+      const [selBaby, setSelBaby] = React.useState("V0");
+      const [selSplit, setSelSplit] = React.useState("PerfectBalance");
+      const [inputMethod, setInputMethod] = React.useState("Porcentaje");
+
+      const [tp, setTp] = React.useState({
+        child:    { hp: 0, atk: 0, spd: 0 },
+        adult:    { hp: 0, atk: 0, spd: 0 },
+        perfect:  { hp: 0, atk: 0, spd: 0 },
+        ultimate: { hp: 0, atk: 0, spd: 0 }
+      });
+
+      const [pct, setPct] = React.useState({
+        child:    { hp: 33.33, atk: 33.33, spd: 33.34 },
+        adult:    { hp: 33.33, atk: 33.33, spd: 33.34 },
+        perfect:  { hp: 33.33, atk: 33.33, spd: 33.34 },
+        ultimate: { hp: 33.33, atk: 33.33, spd: 33.34 }
+      });
+
+      const [siInput, setSiInput] = React.useState({
+        child:    { hp: "", atk: "", spd: "" },
+        adult:    { hp: "", atk: "", spd: "" },
+        perfect:  { hp: "", atk: "", spd: "" },
+        ultimate: { hp: "", atk: "", spd: "" }
+      });
+
+      const [stats, setStats] = React.useState(null);
+      const [locked, setLocked] = React.useState({
+        child:    { hp: false, atk: false, spd: false },
+        adult:    { hp: false, atk: false, spd: false },
+        perfect:  { hp: false, atk: false, spd: false },
+        ultimate: { hp: false, atk: false, spd: false }
+      });
+
+      const [savedSlots, setSavedSlots] = React.useState(Array(6).fill(null));
+      const [savedLineage, setSavedLineage] = React.useState(null);
+      const [compareStats, setCompareStats] = React.useState(null);
+      const [showCompare, setShowCompare] = React.useState(false);
+      const [showSideEvos, setShowSideEvos] = React.useState(false);
+
+      const stage = level.toLowerCase();
+      const maxPts = MAX_PTS[level];
+      const stLocked = locked[stage];
+
+      React.useEffect(() => {
+        const lo = { Child: 0, Adult: 1, Perfect: 2, Ultimate: 3 };
+        if (lo[level] < lo[prevLevel]) setSavedLineage(null);
+        setPrevLevel(level);
+      }, [level]);
+
+      // Available digimon lists
+      const availDigi = Object.entries(DigimonStats)
+        .filter(([_, s]) => s.Digitama === digitama && s.Stage === level)
+        .map(([n]) => n);
+
+      const availChild = level === "Child" 
+        ? availDigi 
+        : level === "Adult" 
+          ? (inheritMap[selDigi] || []) 
+          : (inheritMap[selAdult] || []);
+
+      const availAdult = level === "Perfect" 
+        ? (perfectInheritMap[selDigi] || []) 
+        : level === "Ultimate" 
+          ? (perfectInheritMap[selPerf] || []) 
+          : [];
+
+      const availPerf = level === "Ultimate" 
+        ? (ultimateInheritMap[selDigi] || []) 
+        : [];
+
+      // Update all training inputs
+      const updateAll = React.useCallback((stg, newPts, lvl, changedStat) => {
+        const mp = MAX_PTS[lvl || level];
+        const lk = locked[stg];
+
+        // 1. Restore locked stats
+        ['hp','atk','spd'].forEach(s => {
+          if (lk[s]) newPts[s] = tp[stg][s];
+        });
+
+        // 2. Clamp changedStat
+        if (changedStat && !lk[changedStat]) {
+          const otherLocked = ['hp','atk','spd']
+            .filter(s => s !== changedStat && lk[s])
+            .reduce((a, s) => a + newPts[s], 0);
+          newPts[changedStat] = Math.max(0, Math.min(mp - otherLocked, newPts[changedStat]));
+        }
+
+        // 3. Budget remaining for unlocked others
+        const lockedTotal = ['hp','atk','spd']
+          .filter(s => lk[s])
+          .reduce((a, s) => a + newPts[s], 0);
+
+        const changedVal = changedStat && !lk[changedStat] ? newPts[changedStat] : null;
+        const budget = mp - lockedTotal - (changedVal !== null ? changedVal : 0);
+        const others = ['hp','atk','spd'].filter(s => !lk[s] && s !== changedStat);
+
+        if (others.length > 0) {
+          const othersTotal = others.reduce((a, s) => a + newPts[s], 0);
+          if (othersTotal > budget) {
+            const scale = budget > 0 && othersTotal > 0 ? budget / othersTotal : 0;
+            others.forEach(s => {
+              newPts[s] = Math.max(0, newPts[s] * scale);
+            });
+          }
+        }
+
+        // 4. Final safety clamp
+        const total = ['hp','atk','spd'].reduce((a, s) => a + newPts[s], 0);
+        if (total > mp) {
+          const over = total - mp;
+          const trimOrder = [...others, ...(changedStat && !lk[changedStat] ? [changedStat] : [])];
+          let remaining = over;
+          for (const s of trimOrder) {
+            const trim = Math.min(newPts[s], remaining);
+            newPts[s] -= trim;
+            remaining -= trim;
+            if (remaining <= 0) break;
+          }
+        }
+
+        setTp(prev => ({ ...prev, [stg]: newPts }));
+
+        const tot = newPts.hp + newPts.atk + newPts.spd || 1;
+        setPct(prev => ({
+          ...prev,
+          [stg]: {
+            hp:  (newPts.hp  / tot) * 100,
+            atk: (newPts.atk / tot) * 100,
+            spd: (newPts.spd / tot) * 100
+          }
+        }));
+
+        const ns = getNatStats(selDigi, level, selChild, selAdult, selPerf, digitama, selBaby);
+        if (ns) {
+          setSiInput(prev => ({
+            ...prev,
+            [stg]: {
+              hp:  (ns.HP * HP_MULT * newPts.hp).toFixed(2),
+              atk: (ATK_SPD_MULT * newPts.atk).toFixed(2),
+              spd: (ATK_SPD_MULT * newPts.spd).toFixed(2)
+            }
+          }));
+        }
+      }, [tp, locked, level, selDigi, selChild, selAdult, selPerf, digitama, selBaby]);
+
+      // Apply split preset
+      React.useEffect(() => {
+        if (selSplit === "Lineage") {
+          if (!savedLineage) return;
+          setTp(prev => ({ ...prev, [stage]: { hp: savedLineage.hp, atk: savedLineage.atk, spd: savedLineage.spd } }));
+          const tot = savedLineage.hp + savedLineage.atk + savedLineage.spd || 1;
+          setPct(prev => ({
+            ...prev,
+            [stage]: {
+              hp:  (savedLineage.hp  / tot) * 100,
+              atk: (savedLineage.atk / tot) * 100,
+              spd: (savedLineage.spd / tot) * 100
+            }
+          }));
+        } else if (selSplit !== "Custom") {
+          const [hP, aP, sP] = trainingSplits[selSplit];
+          setPct(prev => ({
+            ...prev,
+            [stage]: { hp: hP * 100, atk: aP * 100, spd: sP * 100 }
+          }));
+          setTp(prev => ({
+            ...prev,
+            [stage]: { hp: maxPts * hP, atk: maxPts * aP, spd: maxPts * sP }
+          }));
+        }
+      }, [selSplit, level, selBaby, savedLineage]);
+
+      // Recalculate stats
+      React.useEffect(() => {
+        if (!selDigi) { setStats(null); return; }
+        if (level !== "Child" && !selChild) { setStats(null); return; }
+        if (level === "Perfect" && !selAdult) { setStats(null); return; }
+        if (level === "Ultimate" && (!selAdult || !selPerf)) { setStats(null); return; }
+
+        const base = getBase(selDigi, level, digitama, selChild);
+        if (!base) { setStats(null); return; }
+
+        const ns = getNatStats(selDigi, level, selChild, selAdult, selPerf, digitama, selBaby);
+        if (!ns) { setStats(null); return; }
+
+        const cur = tp[stage];
+        const ts = calcTrained(ns, cur);
+        const totalPts = cur.hp + cur.atk + cur.spd;
+
+        setStats({
+          Name: selDigi,
+          Level: level,
+          Type: base.Type,
+          DType: base.DType,
+          Digitama: digitama,
+          Child: selChild || null,
+          Adult: selAdult || null,
+          Perfect: selPerf || null,
+          NatHP: ns.HP,
+          NatATK: ns.ATK,
+          NatSPD: ns.SPD,
+          DEF: ns.DEF,
+          TrHP: ts.hpI,
+          TrATK: ts.atkI,
+          TrSPD: ts.spdI,
+          TotHP: ts.HP,
+          TotATK: ts.ATK,
+          TotSPD: ts.SPD,
+          TrainPct: Math.round(totalPts / MAX_PTS[level] * 100),
+          Remaining: MAX_PTS[level] - totalPts
+        });
+      }, [selDigi, selChild, selAdult, selPerf, tp, level, digitama, selBaby]);
+
+      const handlePctChange = (stat, val) => {
+        if (stLocked[stat]) return;
+        const nv = Math.max(0, Math.min(100, parseFloat(val) || 0));
+        const lkSum = ['hp','atk','spd'].reduce((s, st) => s + (stLocked[st] ? pct[stage][st] : 0), 0);
+        const adj = Math.min(nv, 100 - lkSum);
+        const nPs = { ...pct[stage], [stat]: adj };
+        const ul = ['hp','atk','spd'].filter(s => !stLocked[s] && s !== stat);
+        const rem = 100 - lkSum - adj;
+
+        if (ul.length === 0) nPs[stat] = 100 - lkSum;
+        else if (rem <= 0) ul.forEach(s => nPs[s] = 0);
+        else {
+          const tot2 = ul.reduce((s, st) => s + pct[stage][st], 0) || 1;
+          ul.forEach(s => {
+            nPs[s] = Math.round((pct[stage][s] / tot2) * rem * 100) / 100;
+          });
+        }
+
+        setPct(prev => ({ ...prev, [stage]: nPs }));
+        updateAll(stage, {
+          hp:  maxPts * (nPs.hp  / 100),
+          atk: maxPts * (nPs.atk / 100),
+          spd: maxPts * (nPs.spd / 100)
+        });
+      };
+
+      const handlePtsChange = (stat, val) => {
+        if (stLocked[stat]) return;
+        const nv = Math.max(0, parseFloat(val) || 0);
+        const nPs = { ...tp[stage], [stat]: nv };
+        updateAll(stage, nPs, undefined, stat);
+      };
+
+      const handleVisPtsChange = (stat, val) => {
+        if (stLocked[stat]) return;
+        const nv = Math.max(0, parseFloat(val) || 0);
+        const ns = getNatStats(selDigi, level, selChild, selAdult, selPerf, digitama, selBaby);
+        if (!ns) return;
+
+        setSiInput(prev => ({
+          ...prev,
+          [stage]: { ...prev[stage], [stat]: val }
+        }));
+
+        const ptVal = stat === 'hp' ? nv / (ns.HP * HP_MULT) : nv / ATK_SPD_MULT;
+        const nPs = { ...tp[stage], [stat]: ptVal };
+        updateAll(stage, nPs, undefined, stat);
+      };
+
+      const handleReset = () => {
+        setTp(prev => ({ ...prev, [stage]: { hp: 0, atk: 0, spd: 0 } }));
+        setPct(prev => ({ ...prev, [stage]: { hp: 0, atk: 0, spd: 0 } }));
+      };
+
+      const toggleLock = (stat) => {
+        setLocked(prev => ({
+          ...prev,
+          [stage]: { ...prev[stage], [stat]: !prev[stage][stat] }
+        }));
+      };
+
+      const handleSaveLineage = () => {
+        setSavedLineage({ hp: tp[stage].hp, atk: tp[stage].atk, spd: tp[stage].spd });
+        setToast("Lineage saved!");
+      };
+
+      const saveToSlot = (i) => {
+        if (stats) {
+          const n = [...savedSlots];
+          n[i] = stats;
+          setSavedSlots(n);
+          setToast(`Saved to Slot ${i + 1}`);
+        }
+      };
+
+      const compareWithSlot = (i) => {
+        setCompareStats(savedSlots[i]);
+        setShowCompare(true);
+      };
+
+      const applyBoost = (type) => {
+        const before = { ...tp[stage] };
+        const nPs = { ...tp[stage] };
+        const mp = maxPts;
+
+        switch (type) {
+          case 'Lemon':      ['hp','atk','spd'].forEach(s => { if (!stLocked[s]) nPs[s] += 0.02 * mp; }); break;
+          case 'C.Acorn':    ['hp','atk','spd'].forEach(s => { if (!stLocked[s]) nPs[s] += 1.25; }); break;
+          case 'M.Shroom':   ['hp','atk','spd'].forEach(s => { if (!stLocked[s]) nPs[s] += 0.10 * mp; }); break;
+          case 'Red+Shroom': nPs.atk += 0.30 * mp; break;
+          case 'Blue+Shroom':nPs.spd += 0.30 * mp; break;
+          case 'Green+Shroom':nPs.hp += 0.30 * mp; break;
+          case 'Meat1':      nPs.atk += 1; break;
+          case 'Meat2':      nPs.atk += 1.25; break;
+          case 'Meat3':      nPs.hp += 1; nPs.atk += 1.25; break;
+          case 'MeatX':      nPs.atk += 0.02 * mp; nPs.spd += 0.02 * mp; break;
+          default: return;
+        }
+
+        const delta = {
+          hp:  +(nPs.hp  - before.hp).toFixed(2),
+          atk: +(nPs.atk - before.atk).toFixed(2),
+          spd: +(nPs.spd - before.spd).toFixed(2)
+        };
+
+        updateAll(stage, nPs);
+        setToast({ type: 'item', item: type, delta });
+      };
+
+      const totalUsed = tp[stage].hp + tp[stage].atk + tp[stage].spd;
+      const remaining = maxPts - totalUsed;
+      const hasSideEvos = stats && digimonGroups[stats.Name] && digimonGroups[stats.Name].length > 1;
+
+      const navItems = [
+  { 
+    id: "config", 
+    icon: "https://i.imgur.com/D4puzs5.png", 
+    label: "Config" 
+  },
+  { 
+    id: "train", 
+    icon: "https://i.imgur.com/w83c8Zm.png", 
+    label: "Training" 
+  },
+  { 
+    id: "results", 
+    icon: "https://i.imgur.com/omyPg60.png", 
+    label: "Stats" 
+  },
+  { 
+    id: "items", 
+    icon: "https://i.imgur.com/KKQIk7T.png", 
+    label: "Items" 
+  },
+  { 
+    id: "slots", 
+    icon: "https://i.imgur.com/6BooWHv.png", 
+    label: "Save Slots" 
+  }
+];
+      return (
+        <div className="mob-shell">
+          <div className="mob-header">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <img 
+                src="https://i.imgur.com/9v0Bqen.png" 
+                alt="Tamer Assist Portable Advance" 
+                className="header-logo" 
+              />
+              {stats ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <img 
+                    src={chibiImages[stats.Name] || placeholderImg} 
+                    alt="" 
+                    style={{ width: 26, height: 26, objectFit: 'contain' }} 
+                  />
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 11, 
+                    fontWeight: 700, 
+                    color: 'var(--accent-cyan)' 
+                  }}>
+                    {stats.Name}
+                  </span>
+                  <span style={{ 
+                    background: 'rgba(0,212,255,0.15)', 
+                    border: '1px solid var(--accent-cyan)', 
+                    borderRadius: 4, 
+                    padding: '1px 6px', 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 9, 
+                    color: 'var(--accent-cyan)' 
+                  }}>
+                    {level}
+                  </span>
+                </div>
+              ) : (
+                <span style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 9, 
+                  color: 'var(--text-dim)', 
+                  letterSpacing: 2 
+                }}>
+                  SELECT DIGIMON
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="mob-content">
+            {tab === "config" && (
+              <ConfigTab 
+                digitama={digitama}
+                setDigitama={setDigitama}
+                level={level}
+                setLevel={v => { setLevel(v); setSelDigi(""); setSelChild(""); setSelAdult(""); setSelPerf(""); }}
+                selDigi={selDigi}
+                setSelDigi={v => { setSelDigi(v); setSelChild(""); setSelAdult(""); setSelPerf(""); }}
+                selChild={selChild}
+                setSelChild={setSelChild}
+                selAdult={selAdult}
+                setSelAdult={v => { setSelAdult(v); setSelChild(""); }}
+                selPerf={selPerf}
+                setSelPerf={v => { setSelPerf(v); setSelAdult(""); setSelChild(""); }}
+                selBaby={selBaby}
+                setSelBaby={setSelBaby}
+                availDigi={availDigi}
+                availChild={availChild}
+                availAdult={availAdult}
+                availPerf={availPerf}
+                handleSaveLineage={handleSaveLineage}
+              />
+            )}
+            {tab === "train" && (
+              <TrainTab 
+                level={level}
+                stage={stage}
+                maxPts={maxPts}
+                tp={tp}
+                pct={pct}
+                siInput={siInput}
+                selSplit={selSplit}
+                setSelSplit={setSelSplit}
+                inputMethod={inputMethod}
+                setInputMethod={setInputMethod}
+                locked={stLocked}
+                toggleLock={toggleLock}
+                handlePctChange={handlePctChange}
+                handlePtsChange={handlePtsChange}
+                handleVisPtsChange={handleVisPtsChange}
+                savedLineage={savedLineage}
+                handleReset={handleReset}
+                stats={stats}
+                totalUsed={totalUsed}
+                remaining={remaining}
+              />
+            )}
+            {tab === "results" && (
+              <ResultsTab 
+                stats={stats}
+                level={level}
+                pct={pct}
+                maxPts={maxPts}
+                setSelDigi={setSelDigi}
+                showSideEvos={showSideEvos}
+                setShowSideEvos={setShowSideEvos}
+                hasSideEvos={hasSideEvos}
+                totalUsed={totalUsed}
+                digitama={digitama}
+              />
+            )}
+            {tab === "items" && (
+              <ItemsTab 
+                applyBoost={applyBoost}
+                stats={stats}
+                level={level}
+                stage={stage}
+                tp={tp}
+                locked={stLocked}
+                updateAll={updateAll}
+                remaining={remaining}
+              />
+            )}
+            {tab === "slots" && (
+              <SlotsTab 
+                savedSlots={savedSlots}
+                saveToSlot={saveToSlot}
+                compareWithSlot={compareWithSlot}
+                stats={stats}
+              />
+            )}
+          </div>
+
+          <nav className="mob-nav">
+  {navItems.map(n => (
+    <button 
+      key={n.id} 
+      className={`nav-tab ${tab === n.id ? 'active' : ''}`} 
+      onClick={() => setTab(n.id)}
+    >
+      <img 
+        src={n.icon} 
+        alt={n.label} 
+        className="nav-icon"
+        style={{ 
+          width: '19px', 
+          height: '19px', 
+          objectFit: 'contain',
+          filter: tab === n.id ? 'drop-shadow(0 0 3px var(--accent-cyan))' : 'none'
+        }}
+      />
+      <span>{n.label}</span>
+    </button>
+  ))}
+</nav>
+
+          {showCompare && compareStats && (
+            <div className="compare-overlay">
+              <div className="compare-header">
+                <span style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 13, 
+                  fontWeight: 700, 
+                  color: 'var(--accent-cyan)' 
+                }}>
+                  COMPARE
+                </span>
+                <button 
+                  onClick={() => setShowCompare(false)} 
+                  style={{ 
+                    background: 'rgba(255,68,68,0.1)', 
+                    border: '1px solid rgba(255,68,68,0.3)', 
+                    borderRadius: 8, 
+                    padding: '6px 14px', 
+                    color: 'var(--accent-red)', 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 11, 
+                    fontWeight: 700, 
+                    cursor: 'pointer' 
+                  }}
+                >
+                  CLOSE
+                </button>
+              </div>
+              <div className="compare-content">
+                {stats && <CompareCard stats={stats} label="CURRENT" accent="var(--accent-cyan)" />}
+                <CompareCard stats={compareStats} label="SAVED" accent="var(--accent-gold)" />
+              </div>
+            </div>
+          )}
+
+          {toast && <Toast msg={toast} onDone={() => setToast(null)} />}
+        </div>
+      );
+    }
+
+    /* ─── CONFIG TAB ─────────────────────────────────── */
+    function ConfigTab({
+      digitama, setDigitama,
+      level, setLevel,
+      selDigi, setSelDigi,
+      selChild, setSelChild,
+      selAdult, setSelAdult,
+      selPerf, setSelPerf,
+      selBaby, setSelBaby,
+      availDigi, availChild, availAdult, availPerf,
+      handleSaveLineage
+    }) {
+      const digiOpts = availDigi.map(n => ({ value: n, label: n }));
+      const childOpts = availChild.map(n => ({ value: n, label: n }));
+      const adultOpts = availAdult.map(n => ({ value: n, label: n }));
+      const perfOpts = availPerf.map(n => ({ value: n, label: n }));
+      const babyOpts = [
+        { value: "V0", label: "V0" },
+        { value: "ST", label: "ST" },
+        { value: "VL", label: "VL" },
+        { value: "AP", label: "AP" },
+        { value: "GK", label: "GK" }
+      ];
+
+      const isSpecial = (level !== "Child" && selChild && specialChildren.includes(selChild)) ||
+                        (level === "Child" && selDigi && specialChildren.includes(selDigi));
+
+      return (
+        <div className="panel">
+          {/* Digitama selector */}
+          <div className="section-card" style={{ overflow: 'visible' }}>
+            <div className="section-title">Digitama</div>
+            <MobSelect 
+              label="DIGITAMA" 
+              options={digitamaOptions} 
+              value={digitama} 
+              onChange={v => { 
+                setDigitama(v); 
+                setSelDigi(""); 
+                setSelChild(""); 
+                setSelAdult(""); 
+                setSelPerf(""); 
+              }} 
+              showImage={true} 
+            />
+          </div>
+
+          <div className="section-card">
+            <div className="section-title">Stage</div>
+            <div className="level-pills">
+              {["Child","Adult","Perfect","Ultimate"].map(l => (
+                <div 
+                  key={l} 
+                  className={`level-pill ${level === l ? 'active' : ''}`} 
+                  onClick={() => setLevel(l)}
+                >
+                  {l}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="section-card" style={{ overflow: 'visible' }}>
+            <div className="section-title">Lineage</div>
+
+            {level === "Ultimate" && (
+              <div style={{ marginBottom: 10 }}>
+                <div style={{ 
+                  fontSize: 10, 
+                  color: 'var(--text-secondary)', 
+                  fontWeight: 700, 
+                  marginBottom: 5, 
+                  letterSpacing: 1, 
+                  fontFamily: "'Orbitron',monospace" 
+                }}>
+                  PERFECT STAGE
+                </div>
+                <MobSelect 
+                  label="Perfect" 
+                  options={perfOpts} 
+                  value={selPerf} 
+                  onChange={v => { setSelPerf(v); setSelAdult(""); setSelChild(""); }} 
+                  disabled={!perfOpts.length} 
+                />
+              </div>
+            )}
+
+            {(level === "Perfect" || level === "Ultimate") && (
+              <div style={{ marginBottom: 10 }}>
+                <div style={{ 
+                  fontSize: 10, 
+                  color: 'var(--text-secondary)', 
+                  fontWeight: 700, 
+                  marginBottom: 5, 
+                  letterSpacing: 1, 
+                  fontFamily: "'Orbitron',monospace" 
+                }}>
+                  ADULT STAGE
+                </div>
+                <MobSelect 
+                  label="Adult" 
+                  options={adultOpts} 
+                  value={selAdult} 
+                  onChange={v => { setSelAdult(v); setSelChild(""); }} 
+                  disabled={!selDigi || (level === "Ultimate" && !selPerf) || !adultOpts.length} 
+                />
+              </div>
+            )}
+
+            {(level === "Adult" || level === "Perfect" || level === "Ultimate") && (
+              <div style={{ marginBottom: 10 }}>
+                <div style={{ 
+                  fontSize: 10, 
+                  color: 'var(--text-secondary)', 
+                  fontWeight: 700, 
+                  marginBottom: 5, 
+                  letterSpacing: 1, 
+                  fontFamily: "'Orbitron',monospace" 
+                }}>
+                  CHILD STAGE
+                </div>
+                <MobSelect 
+                  label="Child" 
+                  options={childOpts} 
+                  value={selChild} 
+                  onChange={setSelChild} 
+                  disabled={!selDigi || (level === "Perfect" && !selAdult) || (level === "Ultimate" && (!selAdult || !selPerf)) || !childOpts.length} 
+                />
+              </div>
+            )}
+
+            <div style={{ marginBottom: isSpecial ? 10 : 0 }}>
+              <div style={{ 
+                fontSize: 10, 
+                color: 'var(--text-secondary)', 
+                fontWeight: 700, 
+                marginBottom: 5, 
+                letterSpacing: 1, 
+                fontFamily: "'Orbitron',monospace" 
+              }}>
+                {level.toUpperCase()} STAGE
+              </div>
+              <MobSelect 
+                label={level} 
+                options={digiOpts} 
+                value={selDigi} 
+                onChange={setSelDigi} 
+                disabled={!digiOpts.length} 
+              />
+            </div>
+
+            {isSpecial && (
+              <div>
+                <div style={{ 
+                  fontSize: 10, 
+                  color: 'var(--text-secondary)', 
+                  fontWeight: 700, 
+                  marginBottom: 5, 
+                  letterSpacing: 1, 
+                  fontFamily: "'Orbitron',monospace" 
+                }}>
+                  BABY TYPE
+                </div>
+                <MobSelect 
+                  label="Baby" 
+                  options={babyOpts} 
+                  value={selBaby} 
+                  onChange={setSelBaby} 
+                  showImage={false} 
+                />
+              </div>
+            )}
+          </div>
+
+          <button 
+            className="action-btn gold" 
+            onClick={handleSaveLineage}
+          >
+            ⚡ Save Lineage to Presets
+          </button>
+        </div>
+      );
+    }
+
+    /* ─── TRAIN TAB ──────────────────────────────────── */
+    function TrainTab({
+      level,
+      stage,
+      maxPts,
+      tp,
+      pct,
+      siInput,
+      selSplit,
+      setSelSplit,
+      inputMethod,
+      setInputMethod,
+      locked,
+      toggleLock,
+      handlePctChange,
+      handlePtsChange,
+      handleVisPtsChange,
+      savedLineage,
+      handleReset,
+      stats,
+      totalUsed,
+      remaining
+    }) {
+      const trainPct = stats ? stats.TrainPct : 0;
+     // nomenclatura; Vis puntos visibles, TP Training points 
+      // tuve que reworkear esto porque con UI nueva se rompio, evita que el sistema te pelee al borrar
+      const [ptsDraft, setPtsDraft] = React.useState({ hp: '', atk: '', spd: '' });
+      const [visDraft, setVisDraft] = React.useState({ hp: '', atk: '', spd: '' });
+
+      // S
+      React.useEffect(() => {
+        setPtsDraft({
+          hp:  tp[stage].hp.toFixed(2),
+          atk: tp[stage].atk.toFixed(2),
+          spd: tp[stage].spd.toFixed(2)
+        });
+      }, [tp[stage].hp, tp[stage].atk, tp[stage].spd]);
+
+      React.useEffect(() => {
+        setVisDraft({
+          hp:  siInput[stage].hp  || '',
+          atk: siInput[stage].atk || '',
+          spd: siInput[stage].spd || ''
+        });
+      }, [siInput[stage].hp, siInput[stage].atk, siInput[stage].spd]);
+
+      const statDefs = [
+        { key: 'hp',  label: 'HP',  color: '#00ff88' },
+        { key: 'atk', label: 'ATK', color: '#ff4444' },
+        { key: 'spd', label: 'SPD', color: '#4488ff' }
+      ];
+
+      const splitOptions = Object.keys(trainingSplits).map(k => ({ value: k, label: k }));
+      splitOptions.push({ value: 'Lineage', label: 'Lineage' + (savedLineage ? '' : ' (no saved)') });
+      splitOptions.push({ value: 'Custom', label: 'Custom' });
+
+      return (
+        <div className="panel">
+          {/* preview de stats en panel de entrenamiento */}
+          {stats ? (
+            <div style={{ 
+              background: 'var(--bg-card)', 
+              border: '1px solid rgba(255,255,255,0.07)', 
+              borderRadius: 10, 
+              padding: '10px 12px', 
+              marginBottom: 10 
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+                <span style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 12, 
+                  fontWeight: 700, 
+                  color: 'white' 
+                }}>
+                  {stats.Name}
+                </span>
+                <span style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 9, 
+                  color: 'var(--text-secondary)', 
+                  letterSpacing: 1 
+                }}>
+                  {stats.Level}
+                </span>
+              </div>
+
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: '28px 1fr 1fr 1fr', 
+                gap: 4, 
+                marginBottom: 4 
+              }}>
+                <span />
+                {['BASE', '+TRAIN', 'TOTAL'].map(h => (
+                  <span 
+                    key={h} 
+                    style={{ 
+                      fontFamily: "'Orbitron',monospace", 
+                      fontSize: 8, 
+                      color: 'var(--text-dim)', 
+                      textAlign: 'right', 
+                      letterSpacing: 0.5 
+                    }}
+                  >
+                    {h}
+                  </span>
+                ))}
+              </div>
+
+              {[
+                { label: 'HP',  color: '#00ff88', base: stats.NatHP, tr: Math.round(stats.TrHP), tot: stats.TotHP },
+                { label: 'ATK', color: '#ff4444', base: stats.NatATK, tr: Math.round(stats.TrATK), tot: stats.TotATK },
+                { label: 'SPD', color: '#4488ff', base: stats.NatSPD, tr: Math.round(stats.TrSPD), tot: stats.TotSPD },
+                { label: 'DEF', color: '#8892b0', base: stats.DEF,    tr: 0,                      tot: stats.DEF }
+              ].map(({ label, color, base, tr, tot }) => (
+                <div 
+                  key={label} 
+                  style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: '28px 1fr 1fr 1fr', 
+                    gap: 4, 
+                    padding: '4px 0', 
+                    borderTop: '1px solid rgba(255,255,255,0.04)' 
+                  }}
+                >
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 9, 
+                    color, 
+                    fontWeight: 700, 
+                    letterSpacing: 0.5 
+                  }}>
+                    {label}
+                  </span>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 11, 
+                    color: 'var(--text-secondary)', 
+                    textAlign: 'right' 
+                  }}>
+                    {base}
+                  </span>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 11, 
+                    color: tr > 0 ? color : 'var(--text-dim)', 
+                    textAlign: 'right' 
+                  }}>
+                    {tr > 0 ? `+${tr}` : '-'}
+                  </span>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 12, 
+                    color, 
+                    fontWeight: 700, 
+                    textAlign: 'right' 
+                  }}>
+                    {tot}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ 
+              background: 'rgba(255,255,255,0.03)', 
+              border: '1px dashed rgba(255,255,255,0.1)', 
+              borderRadius: 10, 
+              padding: 14, 
+              marginBottom: 10, 
+              textAlign: 'center', 
+              color: 'var(--text-dim)', 
+              fontFamily: "'Orbitron',monospace", 
+              fontSize: 9, 
+              letterSpacing: 2 
+            }}>
+              SELECT A DIGIMON TO SEE STATS
+            </div>
+          )}
+
+          {/* Anille de progreso en el entrenamiento y encima animado si pones reset */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 12, 
+            background: 'var(--bg-card)', 
+            border: '1px solid rgba(255,255,255,0.07)', 
+            borderRadius: 12, 
+            padding: '12px 14px', 
+            marginBottom: 10 
+          }}>
+            <ProgressRing pct={trainPct} usedPts={totalUsed} maxPts={maxPts} />
+            <div style={{ flex: 1 }}>
+              <div style={{ 
+                fontFamily: "'Orbitron',monospace", 
+                fontSize: 9, 
+                color: 'var(--text-secondary)', 
+                letterSpacing: 1, 
+                marginBottom: 6 
+              }}>
+                DISTRIBUTION
+              </div>
+              {statDefs.map(({ key, label, color }) => (
+                <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 8, 
+                    color, 
+                    width: 28, 
+                    letterSpacing: 1 
+                  }}>
+                    {label}
+                  </span>
+                  <div style={{ 
+                    flex: 1, 
+                    height: 5, 
+                    background: 'rgba(255,255,255,0.06)', 
+                    borderRadius: 3, 
+                    overflow: 'hidden' 
+                  }}>
+                    <div style={{ 
+                      height: '100%', 
+                      background: color, 
+                      width: `${pct[stage][key] || 0}%`, 
+                      borderRadius: 3, 
+                      transition: 'width 0.4s' 
+                    }} />
+                  </div>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 9, 
+                    color, 
+                    width: 34, 
+                    textAlign: 'right' 
+                  }}>
+                    {(pct[stage][key] || 0).toFixed(1)}%
+                  </span>
+                </div>
+              ))}
+              <div style={{ 
+                marginTop: 8, 
+                paddingTop: 6, 
+                borderTop: '1px solid rgba(255,255,255,0.06)', 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center' 
+              }}>
+                <span style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 8, 
+                  color: 'var(--text-dim)' 
+                }}>
+                  REMAINING
+                </span>
+                <span style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 11, 
+                  color: remaining < maxPts * 0.1 ? '#ff4444' : remaining < maxPts * 0.3 ? '#ffd700' : '#00ff88', 
+                  fontWeight: 700 
+                }}>
+                  {remaining.toFixed(1)}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="section-card">
+            <div className="section-title">Split Preset</div>
+            <div style={{ marginBottom: selSplit === 'Custom' ? 12 : 0 }}>
+              <MobSelect 
+                label="PRESET" 
+                options={splitOptions} 
+                value={selSplit} 
+                onChange={v => setSelSplit(selSplit === 'Lineage' && !savedLineage ? selSplit : v)} 
+                showImage={false} 
+              />
+            </div>
+
+            {selSplit === "Custom" && (
+              <>
+                <div style={{ marginTop: 12 }}>
+                  <div className="method-toggle">
+                    {[
+                      ["Porcentaje", "%"],
+                      ["PuntosEntrenamiento", "Training Points"],
+                      ["PuntosVisibles", "Visible Points"]
+                    ].map(([v, l]) => (
+                      <button 
+                        key={v} 
+                        className={`method-btn ${inputMethod === v ? 'active' : ''}`} 
+                        onClick={() => setInputMethod(v)}
+                      >
+                        {l}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {statDefs.map(({ key, label, color }) => (
+                  <div key={key} className="training-stat-block">
+                    <div className="training-stat-header">
+                      <span className="training-stat-name" style={{ color }}>
+                        {label}
+                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {inputMethod === "Porcentaje" && (
+                          <span className="training-stat-pct">
+                            {(pct[stage][key] || 0).toFixed(1)}%
+                          </span>
+                        )}
+                        {inputMethod === "PuntosEntrenamiento" && (
+                          <span className="training-stat-pct">
+                            {(tp[stage][key] || 0).toFixed(1)}
+                            <span style={{ fontSize: 9, opacity: 0.6 }}>pts</span>
+                          </span>
+                        )}
+                        <button 
+                          className={`lock-btn ${locked[key] ? 'locked' : ''}`} 
+                          onClick={() => toggleLock(key)}
+                        >
+                          {locked[key] ? '🔒' : '🔓'}
+                        </button>
+                      </div>
+                    </div>
+
+                    {inputMethod === "Porcentaje" && (
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        step="0.5"
+                        value={pct[stage][key] || 0}
+                        style={{ 
+                          background: `linear-gradient(to right, ${color} 0%, ${color} ${pct[stage][key] || 0}%, rgba(255,255,255,0.1) ${pct[stage][key] || 0}%)` 
+                        }}
+                        disabled={locked[key]}
+                        onChange={e => handlePctChange(key, e.target.value)}
+                      />
+                    )}
+
+                    {inputMethod === "PuntosEntrenamiento" && (
+                      <input 
+                        className="num-input" 
+                        type="number" 
+                        min="0" 
+                        step="0.01" 
+                        max={maxPts}
+                        value={ptsDraft[key]}
+                        disabled={locked[key]}
+                        onDoubleClick={e => e.target.select()}
+                        onChange={e => {
+                          const raw = e.target.value;
+                          setPtsDraft(prev => ({ ...prev, [key]: raw }));
+                        }}
+                        onBlur={e => {
+                          const v = e.target.value;
+                          handlePtsChange(key, v === '' ? '0' : v);
+                        }}
+                      />
+                    )}
+
+                    {inputMethod === "PuntosVisibles" && (
+                      <input 
+                        className="num-input" 
+                        type="number" 
+                        min="0" 
+                        step="1"
+                        value={visDraft[key]}
+                        disabled={locked[key]}
+                        onDoubleClick={e => e.target.select()}
+                        onChange={e => {
+                          const raw = e.target.value;
+                          setVisDraft(prev => ({ ...prev, [key]: raw }));
+                        }}
+                        onBlur={e => {
+                          const v = e.target.value;
+                          handleVisPtsChange(key, v === '' ? '0' : v);
+                        }}
+                        placeholder="0"
+                      />
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+
+          <button 
+            className="action-btn danger" 
+            onClick={handleReset}
+          >
+            <span>⟳</span> Reset Training
+          </button>
+        </div>
+      );
+    }
+
+    /* ─── RESULTS TAB ────────────────────────────────── */
+    function ResultsTab({
+      stats,
+      level,
+      pct,
+      maxPts,
+      setSelDigi,
+      showSideEvos,
+      setShowSideEvos,
+      hasSideEvos,
+      totalUsed,
+      digitama
+    }) {
+      const resultsRef = React.useRef(null);
+
+      if (!stats || stats.Level !== level) {
+        return (
+          <div className="panel" style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            minHeight: 300, 
+            gap: 16 
+          }}>
+            <div style={{ fontSize: 48, opacity: 0.25 }}>📊</div>
+            <div style={{ 
+              fontFamily: "'Orbitron',monospace", 
+              fontSize: 11, 
+              color: 'var(--text-dim)', 
+              letterSpacing: 2, 
+              textAlign: 'center' 
+            }}>
+              SELECT A DIGIMON<br/>TO SEE STATS
+            </div>
+          </div>
+        );
+      }
+
+      const sk = stats.Level.toLowerCase();
+      const sm = critProbMult[sk] ?? 0.178;
+      const critRate = 5 + (stats.NatSPD * sm) + (stats.TrSPD * 0.021);
+      const critDmg = critDamageSPDMultiplier(stats.TrSPD);
+      const ovrDef = Math.round(stats.DEF * 1.15);
+      const buffDef = Math.round(ovrDef * 1.1);
+      const marks = [1.5, 2, 2.5, 3, 3.5, 4];
+      const hiMark = marks.reduce((a, m, i) => critDmg >= m ? i : a, -1);
+      const critFill = Math.max(0, Math.min(100, ((critDmg - 1.5) / (4 - 1.5)) * 100));
+      const trainPct = stats.TrainPct;
+
+      const handleScreenshot = () => {
+        if (!resultsRef.current) return;
+        const el = resultsRef.current;
+        const prev = el.style.background;
+        el.style.background = '#000';
+
+        html2canvas(el, { 
+          useCORS: true, 
+          allowTaint: true, 
+          backgroundColor: '#000', 
+          scale: 2, 
+          logging: false 
+        }).then(c => {
+          el.style.background = prev;
+          const a = document.createElement('a');
+          a.download = `${stats.Name}_stats.png`;
+          a.href = c.toDataURL();
+          a.click();
+        }).catch(() => {
+          el.style.background = prev;
+        });
+      };
+
+      return (
+        <div className="panel">
+          <div ref={resultsRef}>
+            {/* Hero card */}
+            <div className="result-hero">
+              <div className="result-header">
+                <div>
+                  <div className="result-name">{stats.Name}</div>
+                  <div style={{ 
+                    fontSize: 10, 
+                    color: 'var(--text-secondary)', 
+                    fontFamily: "'Orbitron',monospace", 
+                    letterSpacing: 1, 
+                    marginTop: 2 
+                  }}>
+                    {stats.Level}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    {typeImages[stats.Type] && <img src={typeImages[stats.Type]} alt="" className="type-badge-img" />}
+                    {stats.DType && DtypeImages[stats.DType] && <img src={DtypeImages[stats.DType]} alt="" className="type-badge-img" />}
+                  </div>
+                  {hasSideEvos && (
+                    <button 
+                      onClick={() => setShowSideEvos(!showSideEvos)} 
+                      style={{ 
+                        background: 'rgba(255,215,0,0.12)', 
+                        border: '1px solid rgba(255,215,0,0.4)', 
+                        borderRadius: 6, 
+                        padding: '3px 8px', 
+                        color: 'var(--accent-gold)', 
+                        fontFamily: "'Orbitron',monospace", 
+                        fontSize: 8, 
+                        fontWeight: 700, 
+                        cursor: 'pointer', 
+                        letterSpacing: 1 
+                      }}
+                    >
+                      SIDE EVO
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {showSideEvos && hasSideEvos && (
+                <div style={{ 
+                  background: 'rgba(255,215,0,0.04)', 
+                  borderBottom: '1px solid rgba(255,215,0,0.15)', 
+                  padding: '10px 14px' 
+                }}>
+                  {digimonGroups[stats.Name]
+                    .filter(d => d !== stats.Name)
+                    .map(evo => (
+                      <div 
+                        key={evo} 
+                        style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: 8, 
+                          padding: '7px 0', 
+                          borderBottom: '1px solid rgba(255,255,255,0.04)', 
+                          cursor: 'pointer' 
+                        }} 
+                        onClick={() => { setSelDigi(evo); setShowSideEvos(false); }}
+                      >
+                        <img 
+                          src={digimonImages[evo] || placeholderImg} 
+                          alt={evo} 
+                          style={{ width: 32, height: 32, objectFit: 'contain' }} 
+                        />
+                        <span style={{ 
+                          fontFamily: "'Rajdhani',sans-serif", 
+                          fontSize: 14, 
+                          fontWeight: 700 
+                        }}>
+                          {evo}
+                        </span>
+                        <span style={{ marginLeft: 'auto', color: 'var(--accent-cyan)', fontSize: 14 }}>→</span>
+                      </div>
+                    ))}
+                  <button 
+                    onClick={() => setShowSideEvos(false)} 
+                    style={{ 
+                      marginTop: 8, 
+                      width: '100%', 
+                      padding: '6px', 
+                      background: 'rgba(255,68,68,0.08)', 
+                      border: '1px solid rgba(255,68,68,0.25)', 
+                      borderRadius: 6, 
+                      color: 'var(--accent-red)', 
+                      fontFamily: "'Orbitron',monospace", 
+                      fontSize: 9, 
+                      cursor: 'pointer' 
+                    }}
+                  >
+                    CLOSE
+                  </button>
+                </div>
+              )}
+
+              {/* Digimon image*/}
+              <div className="result-digi-area">
+                <div className="result-img-container">
+                  <img 
+                    src={digimonBG} 
+                    alt="" 
+                    className="result-img-bg" 
+                    crossOrigin="anonymous" 
+                  />
+                  <img 
+                    src={digimonImages[stats.Name] || placeholderImg} 
+                    alt={stats.Name} 
+                    className="result-img"
+                    style={{ 
+                      height: ({ 
+                        'Child': '30%', 
+                        'Adult': '70%', 
+                        'Perfect': '100%', 
+                        'Ultimate': '100%' 
+                      }[stats.Level] || '100%') 
+                    }}
+                    crossOrigin="anonymous" 
+                  />
+                </div>
+                <div className="result-stats-grid">
+                  {[
+                    { cls: 'hp',  label: 'HP',  nat: stats.NatHP,  tr: stats.TrHP,  tot: stats.TotHP,  c: '#00ff88' },
+                    { cls: 'atk', label: 'ATK', nat: stats.NatATK, tr: stats.TrATK, tot: stats.TotATK, c: '#ff4444' },
+                    { cls: 'spd', label: 'SPD', nat: stats.NatSPD, tr: stats.TrSPD, tot: stats.TotSPD, c: '#4488ff' },
+                    { cls: 'def', label: 'DEF', nat: stats.DEF,    tr: 0,           tot: stats.DEF,    c: '#8892b0' }
+                  ].map(({ cls, label, nat, tr, tot, c }) => (
+                    <div key={label} className={`stat-card-mini ${cls}`}>
+                      <span className="stat-mini-label" style={{ color: c }}>{label}</span>
+                      <div className="stat-mini-vals">
+                        <div className="stat-mini-total" style={{ color: c }}>{tot}</div>
+                        <div className="stat-mini-breakdown">
+                          {nat}
+                          {tr > 0 && <span style={{ color: c }}> +{Math.round(tr)}</span>}
+                          {label === 'DEF' && <span style={{ opacity: 0.5 }}> → {buffDef}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Distribution + training ring */}
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 12, 
+              background: 'var(--bg-card)', 
+              border: '1px solid rgba(255,255,255,0.07)', 
+              borderRadius: 12, 
+              padding: '12px 14px', 
+              marginBottom: 10 
+            }}>
+              <ProgressRing pct={trainPct} usedPts={totalUsed} maxPts={maxPts} />
+              <div style={{ flex: 1 }}>
+                <div style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 9, 
+                  color: 'var(--text-secondary)', 
+                  letterSpacing: 1, 
+                  marginBottom: 6 
+                }}>
+                  DISTRIBUTION
+                </div>
+                {[
+                  { key: 'hp',  label: 'HP',  color: '#00ff88' },
+                  { key: 'atk', label: 'ATK', color: '#ff4444' },
+                  { key: 'spd', label: 'SPD', color: '#4488ff' }
+                ].map(({ key, label, color }) => (
+                  <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                    <span style={{ 
+                      fontFamily: "'Orbitron',monospace", 
+                      fontSize: 8, 
+                      color, 
+                      width: 28, 
+                      letterSpacing: 1 
+                    }}>
+                      {label}
+                    </span>
+                    <div style={{ 
+                      flex: 1, 
+                      height: 5, 
+                      background: 'rgba(255,255,255,0.06)', 
+                      borderRadius: 3, 
+                      overflow: 'hidden' 
+                    }}>
+                      <div style={{ 
+                        height: '100%', 
+                        background: color, 
+                        width: `${pct[sk]?.[key] || 0}%`, 
+                        borderRadius: 3, 
+                        transition: 'width 0.4s' 
+                      }} />
+                    </div>
+                    <span style={{ 
+                      fontFamily: "'Orbitron',monospace", 
+                      fontSize: 9, 
+                      color, 
+                      width: 34, 
+                      textAlign: 'right' 
+                    }}>
+                      {(pct[sk]?.[key] || 0).toFixed(1)}%
+                    </span>
+                  </div>
+                ))}
+                <div style={{ 
+                  marginTop: 8, 
+                  paddingTop: 6, 
+                  borderTop: '1px solid rgba(255,255,255,0.06)', 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center' 
+                }}>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 8, 
+                    color: 'var(--text-dim)' 
+                  }}>
+                    REMAINING
+                  </span>
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 11, 
+                    color: stats.Remaining < maxPts * 0.1 ? '#ff4444' : stats.Remaining < maxPts * 0.3 ? '#ffd700' : '#00ff88', 
+                    fontWeight: 700 
+                  }}>
+                    {(stats.Remaining || 0).toFixed(1)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Crit stats */}
+            <div className="crit-section">
+              <div style={{ 
+                fontFamily: "'Orbitron',monospace", 
+                fontSize: 9, 
+                fontWeight: 700, 
+                letterSpacing: 2, 
+                color: 'var(--accent-gold)', 
+                marginBottom: 8 
+              }}>
+                CRITICAL STATS
+              </div>
+              <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
+                {[
+                  { label: 'CRIT RATE', val: `${critRate.toFixed(1)}%` },
+                  { label: 'CRIT DMG',  val: `${critDmg.toFixed(2)}×` }
+                ].map(({ label, val }) => (
+                  <div 
+                    key={label} 
+                    style={{ 
+                      flex: 1, 
+                      background: 'rgba(0,0,0,0.3)', 
+                      borderRadius: 8, 
+                      padding: '8px', 
+                      textAlign: 'center' 
+                    }}
+                  >
+                    <div style={{ 
+                      fontFamily: "'Orbitron',monospace", 
+                      fontSize: 8, 
+                      color: 'rgba(255,215,0,0.6)', 
+                      letterSpacing: 1, 
+                      marginBottom: 3 
+                    }}>
+                      {label}
+                    </div>
+                    <div style={{ 
+                      fontFamily: "'Orbitron',monospace", 
+                      fontSize: 18, 
+                      fontWeight: 700, 
+                      color: 'var(--accent-gold)' 
+                    }}>
+                      {val}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="crit-bar-track">
+                <div className="crit-bar-fill" style={{ width: `${critFill}%` }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+                {marks.map((m, i) => (
+                  <span 
+                    key={m} 
+                    className={`crit-mark ${i === hiMark ? 'active' : ''}`}
+                  >
+                    {m.toFixed(1)}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Lineage */}
+            <div className="section-card">
+              <div className="section-title">Lineage</div>
+              <div className="lineage-display">
+                {/* Digitama first */}
+                <div 
+                  className="lineage-badge" 
+                  style={{ 
+                    background: 'rgba(255,215,0,0.08)', 
+                    border: '1px solid rgba(255,215,0,0.2)' 
+                  }}
+                >
+                  <img 
+                    src={digitamaImages[digitama] || placeholderImg} 
+                    alt={digitama} 
+                    style={{ width: 22, height: 22, objectFit: 'contain' }} 
+                  />
+                  <span style={{ 
+                    fontFamily: "'Orbitron',monospace", 
+                    fontSize: 10, 
+                    fontWeight: 700, 
+                    color: 'var(--accent-gold)' 
+                  }}>
+                    {(digitamaOptions.find(o => o.value === digitama) || { label: digitama }).label}
+                  </span>
+                </div>
+
+                {[stats.Child, stats.Adult, stats.Perfect].filter(Boolean).length > 0 && (
+                  <span style={{ color: 'var(--accent-gold)', fontSize: 12 }}>→</span>
+                )}
+
+                {[stats.Child, stats.Adult, stats.Perfect]
+                  .filter(Boolean)
+                  .map((d, i, arr) => (
+                    <React.Fragment key={i}>
+                      <div className="lineage-badge">
+                        <img 
+                          src={chibiImages[d] || placeholderImg} 
+                          alt={d} 
+                          style={{ width: 22, height: 22, objectFit: 'contain' }} 
+                        />
+                        <span style={{ 
+                          fontFamily: "'Rajdhani',sans-serif", 
+                          fontSize: 12, 
+                          fontWeight: 700 
+                        }}>
+                          {d}
+                        </span>
+                      </div>
+                      {i < arr.length - 1 && <span style={{ color: 'var(--accent-gold)', fontSize: 12 }}>→</span>}
+                    </React.Fragment>
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          <button 
+            className="action-btn success" 
+            style={{ marginTop: 4 }} 
+            onClick={handleScreenshot}
+          >
+            <span>📸</span> Save Screenshot
+          </button>
+        </div>
+      );
+    }
+
+    function critDamageSPDMultiplier(trainedSpd) {
+      return critDmgConst[2] +
+             (Math.pow(trainedSpd / 100, 2) * critDmgConst[0]) +
+             ((trainedSpd / 100) * critDmgConst[1]);
+    }
+
+    /* ─── ITEMS TAB ──────────────────────────────────── */
+    function ItemsTab({ applyBoost, stats, level, stage, tp, locked, updateAll, remaining }) {
+      const [mode, setMode] = React.useState("food");
+      const [instVal, setInstVal] = React.useState(1);
+      const [instStat, setInstStat] = React.useState("hp");
+
+      const mp = MAX_PTS[level] || 87.5;
+      const lk = locked;
+
+      const ptLemon   = 0.02 * mp;
+      const ptAcorn   = 1.25;
+      const ptMShroom = 0.10 * mp;
+      const ptShroom  = 0.30 * mp;
+      const ptMeatX   = 0.02 * mp;
+
+      const isXDigi     = stats && X_Digi.includes(stats.Name);
+      const isAdultPlus = level !== "Child";
+
+      const disLemon     = !stats || remaining < 3 * ptLemon;
+      const disAcorn     = !stats || remaining < 3 * ptAcorn;
+      const disMShroom   = !stats || remaining < 3 * ptMShroom;
+      const disRedShroom = !stats || remaining < ptShroom || lk.atk;
+      const disBluShroom = !stats || remaining < ptShroom || lk.spd;
+      const disGrnShroom = !stats || remaining < ptShroom || lk.hp;
+      const disMeat1     = !stats || remaining < 1 || lk.atk;
+      const disMeat2     = !stats || remaining < 1.25 || lk.atk;
+      const disMeat3     = !stats || remaining < (1 + 1.25) || lk.hp || lk.atk || !isAdultPlus;
+      const disMeatX     = !stats || remaining < 2 * ptMeatX || lk.atk || lk.spd || !isXDigi;
+
+      const foodItems = [
+        { id: 'Lemon',       img: 'https://i.imgur.com/cSCXM1V.png', label: 'Lemon',      disabled: disLemon },
+        { id: 'C.Acorn',     img: 'https://i.imgur.com/TFUn72E.png', label: 'C.Acorn',    disabled: disAcorn },
+        { id: 'M.Shroom',    img: 'https://i.imgur.com/ltvFKTU.png', label: 'M.Shroom',   disabled: disMShroom },
+        { id: 'Red+Shroom',  img: 'https://i.imgur.com/LtJq9a6.png', label: 'Shroom+ATK',       disabled: disRedShroom },
+        { id: 'Blue+Shroom', img: 'https://i.imgur.com/AIzesAR.png', label: 'Shroom+SPD',       disabled: disBluShroom },
+        { id: 'Green+Shroom',img: 'https://i.imgur.com/U047z9I.png', label: 'Shroom+HP',        disabled: disGrnShroom },
+        { id: 'Meat1',       img: 'https://i.imgur.com/23iVUfb.png', label: 'Aged Meat',  disabled: disMeat1 },
+        { id: 'Meat2',       img: 'https://i.imgur.com/KexkNJ5.png', label: 'Dense Meat', disabled: disMeat2 },
+        { id: 'Meat3',       img: 'https://i.imgur.com/EY4V4ca.png', label: 'Jurassic',   disabled: disMeat3 },
+        { id: 'MeatX',       img: 'https://i.imgur.com/KjHuIem.png', label: 'Meat-X',     disabled: disMeatX }
+      ];
+
+      const ptAdd = instVal === 15 ? 3.625 : instVal * 0.175;
+      const instDis = !stats || remaining < ptAdd || locked[instStat];
+
+      const applyInstall = () => {
+        if (instDis) return;
+        const nPs = { ...tp[stage] };
+        nPs[instStat] += ptAdd;
+        updateAll(stage, nPs, undefined, instStat);
+      };
+
+      return (
+        <div className="panel">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+            <button 
+              className={`action-btn ${mode === 'food' ? 'primary' : ''}`} 
+              style={mode !== 'food' ? { 
+                background: 'var(--bg-elevated)', 
+                border: '1px solid rgba(255,255,255,0.08)', 
+                color: 'var(--text-secondary)' 
+              } : {}}
+              onClick={() => setMode('food')}
+            >
+              🍋 Food
+            </button>
+            <button 
+              className={`action-btn ${mode === 'install' ? 'purple' : ''}`} 
+              style={mode !== 'install' ? { 
+                background: 'var(--bg-elevated)', 
+                border: '1px solid rgba(255,255,255,0.08)', 
+                color: 'var(--text-secondary)' 
+              } : {}}
+              onClick={() => setMode('install')}
+            >
+              ⚡ Install
+            </button>
+          </div>
+
+          {mode === 'food' && (
+            <div className="section-card">
+              <div className="section-title">Food Items</div>
+              <div className="food-grid">
+                {foodItems.map(item => (
+                  <button 
+                    key={item.id} 
+                    className="food-item-btn" 
+                    disabled={item.disabled} 
+                    onClick={() => applyBoost(item.id)}
+                    style={{ 
+                      filter: item.disabled ? 'grayscale(100%) opacity(0.4)' : 'none', 
+                      transition: 'filter 0.2s' 
+                    }}
+                  >
+                    <img 
+                      src={item.img} 
+                      alt={item.label} 
+                      onError={e => { e.target.style.display = 'none'; }} 
+                    />
+                    <span className="food-item-label">{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {mode === 'install' && (
+            <div className="section-card">
+              <div className="section-title">Training Install</div>
+              <div style={{ 
+                fontFamily: "'Orbitron',monospace", 
+                fontSize: 9, 
+                color: 'var(--text-secondary)', 
+                letterSpacing: 1, 
+                marginBottom: 7 
+              }}>
+                VALUE
+              </div>
+              <div className="install-value-grid">
+                {Array.from({ length: 15 }, (_, i) => i + 1).map(v => (
+                  <button 
+                    key={v} 
+                    className={`install-val-btn ${instVal === v ? 'active' : ''}`} 
+                    onClick={() => setInstVal(v)}
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ 
+                fontFamily: "'Orbitron',monospace", 
+                fontSize: 9, 
+                color: 'var(--text-secondary)', 
+                letterSpacing: 1, 
+                marginBottom: 7 
+              }}>
+                STAT
+              </div>
+              <div className="install-stat-selector">
+                {[
+                  { k: 'hp',  l: 'HP',  c: '#00ff88' },
+                  { k: 'atk', l: 'ATK', c: '#ff4444' },
+                  { k: 'spd', l: 'SPD', c: '#4488ff' }
+                ].map(({ k, l, c }) => (
+                  <button 
+                    key={k} 
+                    className={`install-stat-btn ${k} ${instStat === k ? 'active' : ''}`}
+                    style={instStat === k 
+                      ? { borderColor: c, background: `${c}18`, color: c } 
+                      : { color: 'var(--text-secondary)' }
+                    }
+                    disabled={locked[k]} 
+                    onClick={() => !locked[k] && setInstStat(k)}
+                  >
+                    <div 
+                      className="dot" 
+                      style={{ 
+                        background: c, 
+                        boxShadow: instStat === k ? `0 0 8px ${c}` : 'none' 
+                      }} 
+                    />
+                    {l}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ 
+                background: 'rgba(0,0,0,0.3)', 
+                borderRadius: 8, 
+                padding: '10px 12px', 
+                marginBottom: 12, 
+                display: 'flex', 
+                justifyContent: 'space-between' 
+              }}>
+                <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Points to add:</span>
+                <span style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 14, 
+                  fontWeight: 700, 
+                  color: '#c084fc' 
+                }}>
+                  {ptAdd.toFixed(3)}
+                </span>
+              </div>
+
+              <button 
+                className="action-btn purple" 
+                disabled={instDis} 
+                onClick={applyInstall}
+              >
+                ⚡ Apply Install
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* ─── SLOTS TAB ──────────────────────────────────── */
+    function SlotsTab({ savedSlots, saveToSlot, compareWithSlot, stats }) {
+      return (
+        <div className="panel">
+          <div className="section-card">
+            <div className="section-title">Save Slots</div>
+            <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10 }}>
+              Tap slot to save current. Tap CMP to compare.
+            </div>
+            {[0,1,2,3,4,5].map(i => (
+              <div 
+                key={i} 
+                className="save-slot" 
+                onClick={() => saveToSlot(i)}
+              >
+                <div className="save-slot-icon">
+                  {savedSlots[i] ? (
+                    <img 
+                      src={chibiImages[savedSlots[i].Name] || placeholderImg} 
+                      alt="" 
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                    />
+                  ) : (
+                    <span style={{ color: 'var(--text-dim)', fontSize: 16 }}>+</span>
+                  )}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div 
+                    className="save-slot-name" 
+                    style={{ color: savedSlots[i] ? 'var(--text-primary)' : 'var(--text-dim)' }}
+                  >
+                    {savedSlots[i] ? savedSlots[i].Name : `Slot ${i + 1}`}
+                  </div>
+                  {savedSlots[i] && (
+                    <div style={{ 
+                      fontSize: 10, 
+                      color: 'var(--text-secondary)', 
+                      fontFamily: "'Orbitron',monospace" 
+                    }}>
+                      {savedSlots[i].Level} • {savedSlots[i].TrainPct}%
+                    </div>
+                  )}
+                </div>
+                {savedSlots[i] && (
+                  <button 
+                    className="compare-btn-sm" 
+                    onClick={e => { e.stopPropagation(); compareWithSlot(i); }}
+                  >
+                    CMP
+                  </button>
+                )}
+              </div>
+            ))}
+            {!stats && (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '10px', 
+                color: 'var(--text-dim)', 
+                fontFamily: "'Orbitron',monospace", 
+                fontSize: 9, 
+                letterSpacing: 1 
+              }}>
+                NO ACTIVE DIGIMON
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    /* ─── COMPARE CARD ───────────────────────────────── */
+    function CompareCard({ stats, label, accent }) {
+      const ovrDef = Math.round(stats.DEF * 1.15);
+      const buffDef = Math.round(ovrDef * 1.1);
+
+      return (
+        <div style={{ 
+          background: 'var(--bg-card)', 
+          border: `1px solid ${accent}33`, 
+          borderRadius: 12, 
+          overflow: 'hidden' 
+        }}>
+          <div style={{ 
+            padding: '10px 14px', 
+            background: 'rgba(0,0,0,0.4)', 
+            borderBottom: `1px solid ${accent}22`, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between' 
+          }}>
+            <div>
+              <div style={{ 
+                fontFamily: "'Orbitron',monospace", 
+                fontSize: 9, 
+                fontWeight: 700, 
+                color: accent, 
+                letterSpacing: 2, 
+                marginBottom: 2 
+              }}>
+                {label}
+              </div>
+              <div style={{ 
+                fontFamily: "'Orbitron',monospace", 
+                fontSize: 16, 
+                fontWeight: 900, 
+                color: 'white' 
+              }}>
+                {stats.Name}
+              </div>
+              <div style={{ 
+                fontSize: 10, 
+                color: 'var(--text-secondary)', 
+                fontFamily: "'Orbitron',monospace" 
+              }}>
+                {stats.Level} • {stats.TrainPct}%
+              </div>
+            </div>
+            <img 
+              src={chibiImages[stats.Name] || placeholderImg} 
+              alt="" 
+              style={{ width: 44, height: 44, objectFit: 'contain' }} 
+            />
+          </div>
+          <div style={{ padding: 12, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            {[
+              { l: 'HP',  v: stats.TotHP,  c: '#00ff88' },
+              { l: 'ATK', v: stats.TotATK, c: '#ff4444' },
+              { l: 'SPD', v: stats.TotSPD, c: '#4488ff' },
+              { l: 'DEF', v: `${stats.DEF}→${buffDef}`, c: '#8892b0' }
+            ].map(({ l, v, c }) => (
+              <div 
+                key={l} 
+                style={{ 
+                  background: 'rgba(0,0,0,0.3)', 
+                  borderRadius: 8, 
+                  padding: '8px 10px' 
+                }}
+              >
+                <div style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 9, 
+                  color: 'var(--text-secondary)', 
+                  letterSpacing: 1, 
+                  marginBottom: 3 
+                }}>
+                  {l}
+                </div>
+                <div style={{ 
+                  fontFamily: "'Orbitron',monospace", 
+                  fontSize: 18, 
+                  fontWeight: 700, 
+                  color: c 
+                }}>
+                  {v}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function DesktopApp() {
+     }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

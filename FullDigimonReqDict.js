@@ -565,7 +565,7 @@ const fullDigimonReqDict = {
         "condicion": "Origen",
         "Dorumon": {
           "Death Evo": true, "puntajeOk": 4, "puntajeNo": -10,
-          "% Entrenamiento": 50, "Errores Minimos": 6, "Victorias Minimas": 30, "Vinculo al momento de evolucionar": -50, "Program": "Death"
+          "% Entrenamiento": 50, "Errores Minimos": 6, "Victorias Minimas": 20, "Vinculo al momento de evolucionar": -50, "Program": "Death"
         },
         "Dorugamon": {
           "modo": "SideEvolution", "puntajeOk": 6, "puntajeNo": -10,

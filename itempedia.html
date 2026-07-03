@@ -1,0 +1,1421 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Itempedia</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <style>
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 70px;
+}
+
+h1, h2, h3 { color: #4ecdc4 !important; }
+header h1 { color: #4ecdc4 !important; }
+
+/* Menú hamburguesa */
+#nav-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.95);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: #4ecdc4;
+  border-radius: 2px;
+}
+
+#nav-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: rgba(20, 20, 40, 0.98);
+  border-right: 1px solid rgba(78, 205, 196, 0.3);
+  z-index: 150;
+  padding: 20px;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78, 205, 196, 0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#nav-menu h3 img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link {
+  display: block;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.nav-link img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link:hover { background: rgba(78, 205, 196, 0.2); color: #fff; }
+.nav-link.active { background: rgba(78, 205, 196, 0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.5;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.nav-credits ul { margin: 10px 0 0 0; padding-left: 20px; }
+.nav-credits li { margin-bottom: 8px; }
+.nav-credits a { color: #4ecdc4; text-decoration: none; }
+.nav-credits a:hover { text-decoration: underline; }
+#nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
+  display: none;
+}
+#nav-overlay.active { display: block; }
+
+/* Selector de idioma */
+#lang-selector {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 200;
+}
+#lang-selector select {
+  background: rgba(30, 30, 50, 0.9);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+#lang-selector select:hover { border-color: #4ecdc4; }
+
+/* Header */
+header {
+  background: rgba(20, 20, 40, 0.6);
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+  text-align: center;
+}
+header h1 {
+  color: #4ecdc4;
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+}
+header p {
+  color: #999;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Main layout */
+main {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* Controles */
+.controls-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: rgba(30, 30, 50, 0.4);
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+.search-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+#searchInput {
+  flex: 1;
+  background: rgba(20, 20, 40, 0.8);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  color: #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#searchInput:focus { border-color: #4ecdc4; }
+#searchInput::placeholder { color: #666; }
+
+.result-count {
+  color: #888;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #ccc;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover {
+  border-color: rgba(78, 205, 196, 0.5);
+  color: #fff;
+}
+.filter-btn.active {
+  background: rgba(78, 205, 196, 0.25);
+  border-color: #4ecdc4;
+  color: #4ecdc4;
+  font-weight: bold;
+}
+
+/* Item Grid */
+#itemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+/* Item Card */
+.item-card {
+  background: rgba(25, 25, 45, 0.75);
+  border: 1px solid rgba(78, 205, 196, 0.15);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.item-card:hover {
+  border-color: rgba(78, 205, 196, 0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.item-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.item-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.item-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #ffffff;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+/* Classification badges */
+.item-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+}
+.badge-Carne        { background: rgba(244, 67, 54, 0.2);   color: #ef9a9a; border: 1px solid rgba(244,67,54,0.4); }
+.badge-Hongo        { background: rgba(121, 85, 72, 0.3);   color: #bcaaa4; border: 1px solid rgba(121,85,72,0.4); }
+.badge-Fruta        { background: rgba(233, 30, 99, 0.2);   color: #f48fb1; border: 1px solid rgba(233,30,99,0.4); }
+.badge-Manzana      { background: rgba(233, 30, 99, 0.25);  color: #ff80ab; border: 1px solid rgba(233,30,99,0.5); }
+.badge-Verdura      { background: rgba(76, 175, 80, 0.25);  color: #81c784; border: 1px solid rgba(76,175,80,0.4); }
+.badge-Semilla      { background: rgba(139, 195, 74, 0.25); color: #aed581; border: 1px solid rgba(139,195,74,0.4); }
+.badge-Pescado      { background: rgba(3, 169, 244, 0.2);   color: #81d4fa; border: 1px solid rgba(3,169,244,0.4); }
+.badge-Consumible   { background: rgba(0, 172, 193, 0.2);   color: #80deea; border: 1px solid rgba(0,172,193,0.4); }
+.badge-Fertilizante { background: rgba(101, 85, 52, 0.35);  color: #a5956a; border: 1px solid rgba(101,85,52,0.5); }
+.badge-Caja         { background: rgba(249, 168, 37, 0.2);  color: #ffe082; border: 1px solid rgba(249,168,37,0.4); }
+.badge-Misceláneo   { background: rgba(120, 120, 120, 0.25);color: #bdbdbd; border: 1px solid rgba(180,180,180,0.3); }
+.badge-Clave        { background: rgba(25, 118, 210, 0.25); color: #90caf9; border: 1px solid rgba(25,118,210,0.4); }
+.badge-Program      { background: rgba(156, 39, 176, 0.25); color: #ce93d8; border: 1px solid rgba(156,39,176,0.4); }
+
+/* Info table inside card */
+.item-info {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.info-label {
+  color: #8a9bb5;
+  padding-right: 6px;
+}
+
+.info-value {
+  color: #dde;
+  word-break: break-word;
+}
+
+.info-value.empty {
+  color: #555;
+}
+
+/* Stats row (hambre/peso/vínculo) */
+.stats-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  margin-top: 0.2rem;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(78, 205, 196, 0.08);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: 0.78rem;
+  color: #9be8e4;
+}
+
+.stat-chip .stat-label {
+  color: #6b8a8a;
+}
+
+.stat-stage {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 5px;
+  border-left: 1px solid rgba(78,205,196,0.18);
+}
+
+.stage-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #4a7070;
+  letter-spacing: 0.02em;
+}
+
+.plant-stats-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(139, 195, 74, 0.15);
+  margin-top: 0.1rem;
+}
+
+.plant-chip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: rgba(139, 195, 74, 0.08);
+  border: 1px solid rgba(139, 195, 74, 0.2);
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: 0.78rem;
+  color: #c5e1a5;
+}
+
+.plant-chip .stat-label {
+  color: #6b8a6b;
+}
+
+.plant-stage {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 5px;
+  border-left: 1px solid rgba(139, 195, 74, 0.18);
+}
+
+.plant-stage-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #5a7a4a;
+  letter-spacing: 0.02em;
+}
+
+.age-stats-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(210, 160, 50, 0.2);
+  margin-top: 0.1rem;
+}
+
+.age-chip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: rgba(180, 130, 40, 0.1);
+  border: 1px solid rgba(210, 160, 50, 0.25);
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: 0.78rem;
+  color: #e8c96a;
+}
+
+.age-chip .stat-label {
+  color: #8a7040;
+}
+
+.age-stage {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 5px;
+  border-left: 1px solid rgba(210, 160, 50, 0.2);
+}
+
+.age-stage-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #7a6030;
+  letter-spacing: 0.02em;
+}
+
+/* Vínculo tabla (por tipo) */
+.vinculo-tabla-section {
+  padding: 0.5rem 0.75rem 0.4rem;
+  border-top: 1px solid rgba(78, 205, 196, 0.12);
+  margin-top: 0.1rem;
+}
+.vinculo-tabla-header {
+  font-size: 0.7rem;
+  color: #6b8a8a;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.vinculo-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+.vinculo-tabla td {
+  padding: 1px 6px;
+  color: #9be8e4;
+}
+.vinculo-tabla tr:nth-child(odd) { background: rgba(78, 205, 196, 0.04); }
+.vinculo-tabla .vt-tipo {
+  color: #6b8a8a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+.vinculo-tabla .vt-neg { color: #f47b7b; }
+.vinculo-tabla .vt-pos { color: #81e6d9; }
+
+/* No results */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #666;
+  padding: 3rem;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body { padding: 0.5rem; padding-top: 58px; }
+
+  #nav-toggle { top: 10px; left: 10px; width: 38px; height: 38px; }
+  #nav-toggle span { width: 18px; }
+  #lang-selector { top: 10px; right: 10px; }
+  #lang-selector select { padding: 5px 8px; font-size: 0.75rem; }
+
+  header { padding: 1.2rem 0.75rem; margin-bottom: 1rem; }
+  header h1 { font-size: 1.6rem; }
+  header p { font-size: 0.82rem; }
+
+  .controls-bar { padding: 0.75rem; gap: 0.6rem; }
+  .filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter-btn { flex-shrink: 0; padding: 4px 11px; font-size: 0.78rem; }
+
+  #itemGrid { grid-template-columns: 1fr; gap: 0.75rem; }
+
+  .item-card { padding: 0.75rem; gap: 0.45rem; }
+
+  .item-img { width: 52px; height: 52px; }
+  .item-name { font-size: 0.88rem; }
+  .item-badge { font-size: 0.68rem; padding: 2px 8px; }
+
+  .info-row { font-size: 0.75rem; grid-template-columns: 44% 56%; }
+  .info-label { font-size: 0.73rem; }
+
+  .stats-row { gap: 0.35rem; }
+  .stat-chip { padding: 3px 7px; font-size: 0.73rem; gap: 3px; }
+  .stat-stage { padding: 0 4px; }
+  .stage-lbl { font-size: 0.6rem; }
+
+  .plant-stats-row, .age-stats-row { gap: 0.35rem; }
+  .plant-chip, .age-chip { padding: 3px 7px; font-size: 0.73rem; gap: 3px; }
+  .plant-stage, .age-stage { padding: 0 4px; }
+  .plant-stage-lbl, .age-stage-lbl { font-size: 0.6rem; }
+}
+  </style>
+</head>
+<body>
+
+<!-- Menú hamburguesa -->
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span><span></span><span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3>🔧 Herramientas</h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/calculator.png" alt="Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/digidex.png" alt="Progress"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <a href="./itempedia.html" class="nav-link active"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
+  <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
+  <div class="nav-divider"></div>
+  <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://driverdatabase.neocities.org/Driver%20DB" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="Créditos"> Créditos</h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomé prestado sus ideas para hacer las mejoras</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Selector de idioma -->
+<div id="lang-selector">
+  <select id="languageSelector">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</div>
+
+<header>
+  <h1 id="pageTitle">Itempedia</h1>
+  <p id="pageSubtitle">Base de datos de ítems del juego</p>
+</header>
+
+<main>
+  <div class="controls-bar">
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Buscar ítem...">
+      <span class="result-count" id="resultCount"></span>
+    </div>
+    <div class="filter-row" id="filterRow">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <div id="itemGrid">
+    <!-- Populated by JS -->
+  </div>
+</main>
+
+<script src="driverNombres.js"></script>
+<script src="itempedia.js"></script>
+<script>
+  let currentLang = 'es';
+  let activeFilter = 'all';
+
+  const traducciones = {
+    es: {
+      pageTitle: "Itempedia",
+      pageSubtitle: "Base de datos de ítems del juego",
+      searchPlaceholder: "Buscar ítem...",
+      allFilter: "Todos",
+      resultCount: (n) => `${n} ítem${n !== 1 ? 's' : ''}`,
+      noResults: "No se encontraron ítems.",
+      labelDesc: "Descripción",
+      labelEfectoFC: "Efecto Fuera de Combate",
+      labelEfectoEnt: "Efecto Entrenamiento y Batalla",
+      labelEfectoBat: "Efecto Entrenamiento y Batalla",
+      labelPool: "Pool de Ítems",
+      labelDriverResultado: "Driver obtenido",
+      labelPrecioVenta: "Precio venta",
+      labelPrecioCompra: "Precio tienda",
+      labelLugar: "Obtención",
+      labelHambre: "Hambre",
+      labelPeso: "Peso",
+      labelVinculo: "Vínculo",
+      noTienda: "No disponible en tienda",
+      noData: "—",
+      labelResultadoPlant: "Resultado",
+      labelTiempoPlant: "Tiempo",
+      plantLabelFertA: "Fert A",
+      plantLabelFertB: "Fert B",
+      plantLabelCaca: "Caca",
+      plantLabelChamblemon: "Chamblemon c/Driver",
+      plantLabelHielo: "Tipo Hielo",
+      labelAñejado: "Añejado",
+      ageDuracion: "Duración",
+      ageCosto: "Costo",
+      clasificaciones: {
+        Carne: "Carne",
+        Hongo: "Hongo",
+        Fruta: "Fruta",
+        Manzana: "Manzana",
+        Verdura: "Verdura",
+        Semilla: "Semilla",
+        Pescado: "Pescado",
+        Consumible: "Consumible",
+        Fertilizante: "Fertilizante",
+        Caja: "Caja",
+        "Misceláneo": "Misceláneo",
+        Clave: "Clave",
+        Program: "Program"
+      }
+    },
+    en: {
+      pageTitle: "Itempedia",
+      pageSubtitle: "Game item database",
+      searchPlaceholder: "Search item...",
+      allFilter: "All",
+      resultCount: (n) => `${n} item${n !== 1 ? 's' : ''}`,
+      noResults: "No items found.",
+      labelDesc: "Description",
+      labelEfectoFC: "Out of Battle Effect",
+      labelEfectoEnt: "Training and Battle Effect",
+      labelEfectoBat: "Training and Battle Effect",
+      labelPool: "Item Pool",
+      labelDriverResultado: "Driver obtained",
+      labelPrecioVenta: "Sell Price",
+      labelPrecioCompra: "Shop Price",
+      labelLugar: "Location",
+      labelHambre: "Hunger",
+      labelPeso: "Weight",
+      labelVinculo: "Bond",
+      noTienda: "Not sold in shop",
+      noData: "—",
+      labelResultadoPlant: "Result",
+      labelTiempoPlant: "Time",
+      plantLabelFertA: "Fert A",
+      plantLabelFertB: "Fert B",
+      plantLabelCaca: "Poop",
+      plantLabelChamblemon: "Chamblemon w/Driver",
+      plantLabelHielo: "Ice Type",
+      labelAñejado: "Aging",
+      ageDuracion: "Duration",
+      ageCosto: "Cost",
+      strings: {
+        "Recupera hambre": "Recovers hunger",
+        "Tu digimon obtiene data del program Combat": "Your Digimon obtains Combat program data",
+        "Tu digimon obtiene data del program Death": "Your Digimon obtains Death program data",
+        "Tu digimon obtiene data del program Frost": "Your Digimon obtains Frost program data",
+        "Tu digimon obtiene data del program Mecha": "Your Digimon obtains Mecha program data",
+        "Tu digimon obtiene data del program Mush": "Your Digimon obtains Mush program data",
+        "Tu digimon obtiene data del program Ore": "Your Digimon obtains Ore program data",
+        "Tu digimon obtiene data del program Trash": "Your Digimon obtains Trash program data",
+        "Tu digimon obtiene data del program Vaccine": "Your Digimon obtains Vaccine program data",
+        "Tu digimon obtiene data del program Virus": "Your Digimon obtains Virus program data",
+        "Tu digimon obtiene data del program Royal": "Your Digimon obtains Royal program data",
+        "Agrega un slot de driver": "Adds a driver slot",
+        "Abre para obtener ítems": "Opens to obtain items",
+        "Reduce ATK del enemigo": "Reduces enemy ATK",
+        "Reduce HP del enemigo": "Reduces enemy HP",
+        "Reduce velocidad del enemigo": "Reduces enemy speed",
+        "Potencia los stats del Digimon": "Boosts Digimon stats",
+        "Reduce ATK del enemigo (mayor efecto)": "Reduces enemy ATK (greater effect)",
+        "Reduce HP del enemigo (mayor efecto)": "Reduces enemy HP (greater effect)",
+        "Reduce velocidad del enemigo (mayor efecto)": "Reduces enemy speed (greater effect)",
+        "Tienda / Drops": "Shop / Drops",
+        "Tienda / Caja": "Shop / Box",
+        "Drops": "Drops",
+        "Pesca / Drops": "Fishing / Drops",
+        "Crianza": "Breeding",
+        "Eventos": "Events",
+        "Drops / Eventos": "Drops / Events",
+        "Drops de Gekkomon": "Gekkomon Drops",
+        "Drops de la Red": "Net Drops",
+        "Plantación / Caja": "Planting / Box",
+        "Plantación / Drops de la Red": "Planting / Net Drops",
+        "Plantación / Caja / Tienda": "Planting / Box / Shop",
+        "Sube Peso": "Increases Weight",
+        "Valor del Entrenamiento x 2 (Solo mutantes que coman caca)": "Training Value x 2 (Mutants that eat poop only)",
+        "Mata al digi que no tenga Anticuerpo X. Intercambiable por Cepas o para misión": "Kills the Digimon if it lacks the X Antibody. Can be exchanged for Strains or for a mission",
+        "Drop de la red / Drop de enemigo": "Net Drop / Enemy Drop",
+        "+2 ATK Plano": "+2 Flat ATK",
+        "+2.5 ATK Plano": "+2.5 Flat ATK",
+        "Añejamiento": "Aging Shop",
+        "Añejamiento de Carne Añejada": "Aged Meat Aging",
+        "Plantación": "Planting",
+        "Recupera hambre. Da vínculo si llena a tu digi al 100%": "Recovers hunger. Gives bond if it fills your Digimon to 100%",
+        "Sube Peso. Mejora el entrenamiento y da Vínculo en digis que coman desperdicios": "Increases Weight. Improves training and gives Bond to Digimon that eat waste",
+        "Recupera hambre. Da Entrenamiento.": "Recovers hunger. Gives Training.",
+        "Recupera hambre. Da Entrenamiento. Añade 5 min extra de vida. Solo puede ser comida por Adultos": "Recovers hunger. Gives Training. Adds 5 extra minutes of life. Can only be eaten by Adults",
+        "+2.5 ATK Plano & +2.6% HP": "+2.5 Flat ATK & +2.6% HP",
+        "Recupera Hambre. Baja Peso.": "Recovers Hunger. Lowers Weight.",
+        "Solo puede ser usado en Mushmon/Chamblemon. Obtienes un driver de HIFA.": "Can only be used on Mushmon/Chamblemon. You obtain a HIFA driver.",
+        "Recupera Hambre. Reduce Vínculo en digis no hielo. Aumenta vínculo en digis de hielo.": "Recovers Hunger. Reduces Bond on non-ice Digimon. Increases Bond on ice Digimon.",
+        "Recupera Hambre. Da un Error excepto Raremon, Mushmon y Chamblemon. Disminuye Peso.": "Recovers Hunger. Gives an Error except to Raremon, Mushmon and Chamblemon. Decreases Weight.",
+        "Solo puede ser usado en Mushmon/Chamblemon. Obtienes un driver de Fungi World.": "Can only be used on Mushmon/Chamblemon. You obtain a Fungi World driver.",
+        "Recupera Hambre. Aumenta Vínculo. Disminuye Peso.": "Recovers Hunger. Increases Bond. Decreases Weight.",
+        "Recupera Hambre. Solo Chamblemon: Agrega 6hr al timer de vida.": "Recovers Hunger. Chamblemon only: Adds 6 hours to the life timer.",
+        "Recupera Hambre.": "Recovers Hunger.",
+        "Da un 3.33% de stats a ATK/HP/SPD entrenados (10% en total).": "Gives 3.33% stats to trained ATK/HP/SPD (10% total).",
+        "Da un 10% de stats a ATK/HP/SPD entrenados (30% en total). Si usas una Fruta del diablo previamente, aumenta el stat de la fruta en un 30% de stat entrenado.": "Gives 10% stats to trained ATK/HP/SPD (30% total). If you use a Devil Fruit beforehand, it increases the fruit's stat by 30% of the trained stat.",
+        "Valor del Entrenamiento x 3.": "Training Value x 3.",
+        "Valor del Entrenamiento x2.6 solo durante la hora Lunar (12AM hora Argentina). Agrega Doble Flecha Blanca.": "Training Value x2.6 only during Lunar hour (12AM Argentina time). Adds Double White Arrow.",
+        "Valor del Entrenamiento x2.6 solo durante la hora Solar (12PM hora Argentina). Agrega Doble Flecha Blanca.": "Training Value x2.6 only during Solar hour (12PM Argentina time). Adds Double White Arrow.",
+        "Solo en Mushmon/Chamblemon. Da un 3.33% de stats a ATK/HP/SPD entrenados (10% en total).": "Mushmon/Chamblemon only. Gives 3.33% stats to trained ATK/HP/SPD (10% total).",
+        "Ver guia de efectos multiples": "See multi-effects guide",
+        "Drops de la Red / Drops de enemigos / Caja": "Net Drops / Enemy Drops / Box",
+        "Drops de la Red / Plantación": "Net Drops / Planting",
+        "Cajas / Bebida Fermentada en Puppet": "Boxes / Fermented Drink at Puppet",
+        "Hongomaniaco (50% de probabilidad por 3 hongos y 100 bits)": "Shroomaniac (50% chance per 3 mushrooms and 100 bits)",
+        "Recupera Hambre. Tiene un % de matarte dependiendo de la cantidad de errores que tengas ((Cantidad de Errores/6)*100) te da el %). Aumenta 1 año de vida de tu digimon.": "Recovers Hunger. Has a % chance of killing you depending on your error count ((Errors/6)*100 gives the %). Adds 1 year to your Digimon's life.",
+        "Da un 2% de stats a ATK/HP/SPD entrenados (6% en total).": "Gives 2% stats to trained ATK/HP/SPD (6% total).",
+        "Recupera Hambre. Solo en Baby 1 y 2 da vinculo +5.": "Recovers Hunger. Only on Baby 1 and 2 gives +5 Bond.",
+        "Si eres un Child multiplica x2, Si eres Adult multiplicas por x2.25, Si eres Perfect, Multiplicas por x2.5": "If Child multiplies x2, if Adult multiplies x2.25, if Perfect multiplies x2.5",
+        "Drop de la red / Bebida Fermentada en Puppet": "Net Drop / Fermented Drink at Puppet",
+        "Recupera Hambre. Aumenta 10h al timer evolutivo.": "Recovers Hunger. Adds 10h to the evolution timer.",
+        "Ranking de PvP / Cajas": "PvP Ranking / Boxes",
+        "Multiplica tu entrenamiento x2. Agrega una doble flecha.": "Multiplies your training x2. Adds a double arrow.",
+        "Drop de la red / Bebida Fermentada en Puppet / Cajas": "Net Drop / Fermented Drink at Puppet / Boxes",
+        "Multiplica tu entrenamiento x3 solo si es al stat Velocidad. Asegura Doble flecha, pero agrega 5 flechas rojas.": "Multiplies your training x3 only for the Speed stat. Guarantees Double arrow, but adds 5 red arrows.",
+        "Multiplica tu entrenamiento x3 solo si es al stat Ataque. Asegura Doble flecha, pero agrega 5 flechas rojas.": "Multiplies your training x3 only for the ATK stat. Guarantees Double arrow, but adds 5 red arrows.",
+        "Multiplica tu entrenamiento x3 solo si es al stat HP. Asegura Doble flecha, pero agrega 5 flechas rojas.": "Multiplies your training x3 only for the HP stat. Guarantees Double arrow, but adds 5 red arrows.",
+        "Cajas": "Boxes",
+        "Ver guia de efectos variables": "See variable effects guide",
+        "Recupera Hambre. Disminuye la fatiga utilizada en tu próxima acción a la mitad.": "Recovers Hunger. Reduces the fatigue used in your next action by half.",
+        "Plantación / Drop de enemigos / Cajas": "Planting / Enemy Drops / Boxes",
+        "Plantación / Cajas": "Planting / Boxes",
+        "Tienda / Drop de la red / Cajas": "Shop / Net Drop / Boxes",
+        "Recupera Hambre. Aumenta 10h al timer evolutivo.": "Recovers Hunger. Adds 10h to the evolution timer.",
+        "Añejamiento": "Aging Shop"
+      },
+      clasificaciones: {
+        Carne: "Meat",
+        Hongo: "Mushroom",
+        Fruta: "Fruit",
+        Manzana: "Apple",
+        Verdura: "Vegetable",
+        Semilla: "Seed",
+        Pescado: "Fish",
+        Consumible: "Consumable",
+        Fertilizante: "Fertilizer",
+        Caja: "Box",
+        "Misceláneo": "Miscellaneous",
+        Clave: "Key",
+        Program: "Program"
+      }
+    }
+  };
+
+  function t(key) {
+    return traducciones[currentLang][key] || key;
+  }
+
+  function tClasif(clsf) {
+    return (traducciones[currentLang].clasificaciones[clsf]) || clsf;
+  }
+
+  function fmtValue(val) {
+    if (val === null || val === undefined || val === '') return null;
+    return String(val);
+  }
+
+  function fmtPrice(val) {
+    if (val === null) return { text: t('noTienda'), empty: false, shop: false };
+    if (val === '' || val === undefined) return { text: t('noData'), empty: true };
+    return { text: `${val} Bits`, empty: false };
+  }
+
+  function fmtStat(val) {
+    if (val === '' || val === undefined || val === null) return null;
+    const n = Number(val);
+    if (!isNaN(n)) return n >= 0 ? `+${n}` : `${n}`;
+    return String(val);
+  }
+
+  function fmtTime(min) {
+    const h = Math.floor(min / 60);
+    const m = min % 60;
+    if (h === 0) return `${m} min`;
+    if (m === 0) return `${h} h`;
+    return `${h} h ${m} min`;
+  }
+
+  function tStr(str) {
+    if (currentLang === 'es' || !str) return str;
+    const map = traducciones[currentLang].strings;
+    return (map && map[str] !== undefined) ? map[str] : str;
+  }
+
+  function buildFilterButtons() {
+    const row = document.getElementById('filterRow');
+    row.innerHTML = '';
+
+    const allBtn = document.createElement('button');
+    allBtn.className = 'filter-btn' + (activeFilter === 'all' ? ' active' : '');
+    allBtn.textContent = t('allFilter');
+    allBtn.dataset.filter = 'all';
+    allBtn.onclick = () => setFilter('all');
+    row.appendChild(allBtn);
+
+    for (const clsf of itemClasificaciones) {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (activeFilter === clsf ? ' active' : '');
+      btn.textContent = tClasif(clsf);
+      btn.dataset.filter = clsf;
+      btn.onclick = () => setFilter(clsf);
+      row.appendChild(btn);
+    }
+  }
+
+  function setFilter(filter) {
+    activeFilter = filter;
+    buildFilterButtons();
+    renderGrid();
+  }
+
+  function normalizarCaracteres(texto) {
+    return texto
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/ñ/g, 'n')
+      .replace(/Ñ/g, 'N')
+      .replace(/\s+/g, '');
+  }
+
+  function normalizarSinAcentos(texto) {
+    // Quita acentos vocálicos pero conserva ñ
+    return texto
+      .normalize('NFD')
+      .replace(/[̀-̂̄-ͯ]/g, '')
+      .normalize('NFC')
+      .replace(/\s+/g, '');
+  }
+
+  function generarVariacionesNombre(nombre) {
+    const norm = normalizarCaracteres(nombre);
+    const limpio = norm.replace(/[^a-zA-Z0-9]/gi, '');
+    const conNyeni = normalizarSinAcentos(nombre);
+    const limpioNyeni = conNyeni.replace(/[^a-zA-ZñÑ0-9]/gi, '');
+    return [...new Set([
+      limpio.toLowerCase(),
+      limpio.toUpperCase(),
+      limpio,
+      limpioNyeni,
+      limpioNyeni.toLowerCase(),
+      nombre.replace(/\s+/g, ''),
+      nombre.toLowerCase().replace(/\s+/g, ''),
+      nombre
+    ])];
+  }
+
+  function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'itemimg') {
+    const variaciones = generarVariacionesNombre(nombre);
+    let idx = 0;
+    const intentar = () => {
+      if (idx >= variaciones.length) {
+        elementoImg.src = `${carpeta}/placeholder.png`;
+        return;
+      }
+      const img = new Image();
+      img.onload = () => { elementoImg.src = `${carpeta}/${variaciones[idx]}.png`; };
+      img.onerror = () => { idx++; intentar(); };
+      img.src = `${carpeta}/${variaciones[idx]}.png`;
+    };
+    intentar();
+  }
+
+  function buildCard(name, item) {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+
+    // Header: image + name + badge
+    const header = document.createElement('div');
+    header.className = 'item-header';
+
+    const img = document.createElement('img');
+    img.className = 'item-img';
+    img.alt = name;
+    img.title = name;
+    cargarImagenConVariaciones(name, img);
+    img.onerror = function() { this.style.opacity = '0.3'; };
+    header.appendChild(img);
+
+    const titleSection = document.createElement('div');
+    titleSection.className = 'item-title-section';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'item-name';
+    nameEl.textContent = (currentLang === 'en' && item.nombreEN) ? item.nombreEN : name;
+    titleSection.appendChild(nameEl);
+
+    const badge = document.createElement('span');
+    badge.className = `item-badge badge-${item.clasificacion}`;
+    badge.textContent = tClasif(item.clasificacion);
+    titleSection.appendChild(badge);
+
+    header.appendChild(titleSection);
+    card.appendChild(header);
+
+    // Info section
+    const info = document.createElement('div');
+    info.className = 'item-info';
+
+    function addRow(label, value, isEmptyFallback) {
+      const display = value !== null && value !== undefined && value !== '' ? value : null;
+      const row = document.createElement('div');
+      row.className = 'info-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'info-label';
+      lbl.textContent = label + ':';
+      const val = document.createElement('span');
+      val.className = 'info-value' + (display === null ? ' empty' : '');
+      val.textContent = display !== null ? display : t('noData');
+      row.appendChild(lbl);
+      row.appendChild(val);
+      info.appendChild(row);
+    }
+
+    const desc = (currentLang === 'en' && item.descripcionEN) ? item.descripcionEN : item.descripcion;
+    addRow(t('labelDesc'), fmtValue(desc));
+
+    addRow(t('labelEfectoFC'), fmtValue(tStr(item.efectoFueraDeCombate)));
+
+    function makeLinkRow(labelKey, text, color) {
+      const row = document.createElement('div');
+      row.className = 'info-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'info-label';
+      lbl.textContent = t(labelKey) + ':';
+      const val = document.createElement('span');
+      val.className = 'info-value';
+      const a = document.createElement('a');
+      a.href = 'AlimentosEfectos.html';
+      a.textContent = text;
+      a.style.cssText = 'color:' + color + ';text-decoration:underline dotted;';
+      val.appendChild(a);
+      row.appendChild(lbl);
+      row.appendChild(val);
+      return row;
+    }
+
+    const entVal = tStr(item.efectoEntrenamiento);
+    if (entVal) card.appendChild(makeLinkRow('labelEfectoEnt', entVal, '#aed581'));
+
+    const batVal = tStr(item.efectoBatalla);
+    if (batVal) card.appendChild(makeLinkRow('labelEfectoBat', batVal, '#4ecdc4'));
+
+    if (item.pool) {
+      const poolRow = document.createElement('div');
+      poolRow.className = 'info-row';
+      const poolLbl = document.createElement('span');
+      poolLbl.className = 'info-label';
+      poolLbl.textContent = t('labelPool') + ':';
+      const poolVal = document.createElement('span');
+      poolVal.className = 'info-value';
+      const poolA = document.createElement('a');
+      const slug = item.pool.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      poolA.href = 'AlimentosEfectos.html#pool-' + slug;
+      poolA.textContent = currentLang === 'en' ? 'See item pool →' : 'Ver pool de ítems →';
+      poolA.style.cssText = 'color:#ffe082;text-decoration:underline dotted;';
+      poolVal.appendChild(poolA);
+      poolRow.appendChild(poolLbl);
+      poolRow.appendChild(poolVal);
+      card.appendChild(poolRow);
+    }
+
+    if (item.driverResultado) {
+      const driverCode = item.driverResultado;
+      const driverInfo = (typeof driverNombres !== 'undefined') ? driverNombres[driverCode] : null;
+      const driverColor = driverInfo ? driverInfo.color : 'Azul';
+      const driverNombre = driverInfo ? driverInfo.nombre : driverCode;
+      const prefijos2chars = ['ST','BO','EX','W0','V0','VL','PR','VS','SP'];
+      const primeros2 = driverCode.substring(0, 2);
+      const carpetaDriver = prefijos2chars.includes(primeros2) ? primeros2 : driverCode.substring(0, 1);
+
+      const dRow = document.createElement('div');
+      dRow.className = 'info-row';
+      const dLbl = document.createElement('span');
+      dLbl.className = 'info-label';
+      dLbl.textContent = t('labelDriverResultado') + ':';
+      const dVal = document.createElement('span');
+      dVal.className = 'info-value';
+      dVal.style.display = 'flex';
+      dVal.style.alignItems = 'center';
+      dVal.style.gap = '6px';
+
+      const driverWrap = document.createElement('span');
+      driverWrap.style.cssText = 'position:relative;display:inline-block;width:32px;height:32px;flex-shrink:0;';
+      const dBg = document.createElement('img');
+      dBg.src = `itemimg/driver${driverColor.toLowerCase()}.png`;
+      dBg.style.cssText = 'width:32px;height:32px;';
+      const dIcon = document.createElement('img');
+      dIcon.src = `driverlist/${carpetaDriver}/${driverCode}.png`;
+      dIcon.style.cssText = 'position:absolute;top:0;left:0;width:32px;height:32px;';
+      dIcon.onerror = () => { dIcon.style.display = 'none'; };
+      driverWrap.appendChild(dBg);
+      driverWrap.appendChild(dIcon);
+
+      const dName = document.createElement('span');
+      dName.textContent = `${driverNombre} (${driverCode})`;
+      dVal.appendChild(driverWrap);
+      dVal.appendChild(dName);
+      dRow.appendChild(dLbl);
+      dRow.appendChild(dVal);
+      card.appendChild(dRow);
+    }
+
+    addRow(t('labelPrecioVenta'), item.precioVenta !== '' && item.precioVenta !== null && item.precioVenta !== undefined ? `${item.precioVenta} Bits` : null);
+
+    // Shop price: null = not in shop (hide row), "" = unknown, number = price
+    if (item.precioCompra !== null && item.precioCompra !== undefined) {
+      const shopRow = document.createElement('div');
+      shopRow.className = 'info-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'info-label';
+      lbl.textContent = t('labelPrecioCompra') + ':';
+      const val = document.createElement('span');
+      if (item.precioCompra === '') {
+        val.className = 'info-value empty';
+        val.textContent = t('noData');
+      } else {
+        val.className = 'info-value';
+        val.textContent = `${item.precioCompra} Bits`;
+      }
+      shopRow.appendChild(lbl);
+      shopRow.appendChild(val);
+      info.appendChild(shopRow);
+    }
+
+    addRow(t('labelLugar'), fmtValue(tStr(item.lugarObtencion)));
+
+    card.appendChild(info);
+
+    // Stats row (hambre / peso / vínculo)
+    const statsRow = document.createElement('div');
+    statsRow.className = 'stats-row';
+
+    // Hambre chip: show 3 evolution stage values (Child ×1, Adult ×0.75, Perfect ×0.5)
+    const hambreChip = document.createElement('div');
+    hambreChip.className = 'stat-chip';
+    const hambreLbl = document.createElement('span');
+    hambreLbl.className = 'stat-label';
+    hambreLbl.textContent = t('labelHambre') + ':';
+    hambreChip.appendChild(hambreLbl);
+
+    const hambreVal = item.hambre;
+    const hambreNum = Number(hambreVal);
+    if (hambreVal !== '' && hambreVal !== null && hambreVal !== undefined && !isNaN(hambreNum)) {
+      const stageMultipliers = [
+        { lbl: currentLang === 'en' ? 'C' : 'C', mult: 1 },
+        { lbl: 'A',  mult: 0.75 },
+        { lbl: 'P',  mult: 0.5 }
+      ];
+      for (const stg of stageMultipliers) {
+        const stageEl = document.createElement('span');
+        stageEl.className = 'stat-stage';
+        const stageLbl = document.createElement('span');
+        stageLbl.className = 'stage-lbl';
+        stageLbl.textContent = stg.lbl;
+        const stageVal = document.createElement('span');
+        const computed = hambreNum * stg.mult;
+        stageVal.textContent = fmtStat(computed);
+        stageEl.appendChild(stageLbl);
+        stageEl.appendChild(stageVal);
+        hambreChip.appendChild(stageEl);
+      }
+    } else {
+      const noVal = document.createElement('span');
+      noVal.textContent = '—';
+      noVal.style.color = '#444';
+      hambreChip.appendChild(noVal);
+    }
+    statsRow.appendChild(hambreChip);
+
+    // Peso chip
+    {
+      const chip = document.createElement('div');
+      chip.className = 'stat-chip';
+      const lbl = document.createElement('span');
+      lbl.className = 'stat-label';
+      lbl.textContent = t('labelPeso') + ':';
+      const val = document.createElement('span');
+      const formatted = fmtStat(item.peso);
+      val.textContent = formatted !== null ? formatted : '—';
+      if (formatted === null) val.style.color = '#444';
+      chip.appendChild(lbl);
+      chip.appendChild(val);
+      statsRow.appendChild(chip);
+    }
+
+    // Vínculo chip (supports conditional bonus or per-type table)
+    {
+      const chip = document.createElement('div');
+      chip.className = 'stat-chip';
+      const lbl = document.createElement('span');
+      lbl.className = 'stat-label';
+      lbl.textContent = t('labelVinculo') + ':';
+      chip.appendChild(lbl);
+
+      if (item.vinculoTabla && item.vinculoTabla.length) {
+        // Show placeholder in chip; full table rendered below statsRow
+        const placeholder = document.createElement('span');
+        placeholder.textContent = currentLang === 'en' ? '(by type ▼)' : '(por tipo ▼)';
+        placeholder.style.cssText = 'color:#4a7070;font-size:0.7rem;font-style:italic;';
+        chip.appendChild(placeholder);
+      } else {
+        const formatted = fmtStat(item.vinculo);
+
+        if (item.vinculoCondicionBase) {
+          const baseStage = document.createElement('span');
+          baseStage.className = 'stat-stage';
+          const baseLbl = document.createElement('span');
+          baseLbl.className = 'stage-lbl';
+          baseLbl.textContent = (currentLang === 'en' && item.vinculoCondicionBaseEN) ? item.vinculoCondicionBaseEN : item.vinculoCondicionBase;
+          const baseV = document.createElement('span');
+          baseV.textContent = formatted !== null ? formatted : '—';
+          baseStage.appendChild(baseLbl);
+          baseStage.appendChild(baseV);
+          chip.appendChild(baseStage);
+        } else {
+          const baseVal = document.createElement('span');
+          baseVal.textContent = formatted !== null ? formatted : '—';
+          if (formatted === null) baseVal.style.color = '#444';
+          chip.appendChild(baseVal);
+        }
+
+        if (item.vinculoBonus !== undefined && item.vinculoCondicion) {
+          const bonusStage = document.createElement('span');
+          bonusStage.className = 'stat-stage';
+          const bonusLbl = document.createElement('span');
+          bonusLbl.className = 'stage-lbl';
+          bonusLbl.textContent = (currentLang === 'en' && item.vinculoCondicionEN) ? item.vinculoCondicionEN : item.vinculoCondicion;
+          const bonusVal = document.createElement('span');
+          bonusVal.textContent = fmtStat(item.vinculoBonus);
+          bonusStage.appendChild(bonusLbl);
+          bonusStage.appendChild(bonusVal);
+          chip.appendChild(bonusStage);
+        }
+      }
+
+      statsRow.appendChild(chip);
+    }
+
+    card.appendChild(statsRow);
+
+    // Vínculo tabla vertical (for items with per-type vínculo)
+    if (item.vinculoTabla && item.vinculoTabla.length) {
+      const vtSection = document.createElement('div');
+      vtSection.className = 'vinculo-tabla-section';
+      const vtHeader = document.createElement('div');
+      vtHeader.className = 'vinculo-tabla-header';
+      vtHeader.textContent = currentLang === 'en' ? 'Bond by type' : 'Vínculo por tipo';
+      vtSection.appendChild(vtHeader);
+      const tbl = document.createElement('table');
+      tbl.className = 'vinculo-tabla';
+      item.vinculoTabla.forEach(row => {
+        const tr = document.createElement('tr');
+        const tdTipo = document.createElement('td');
+        tdTipo.className = 'vt-tipo';
+        tdTipo.textContent = (currentLang === 'en' && row.tipoEN) ? row.tipoEN : row.tipo;
+        const tdVal = document.createElement('td');
+        const v = row.valor;
+        tdVal.textContent = fmtStat(v);
+        tdVal.className = v > 0 ? 'vt-pos' : v < 0 ? 'vt-neg' : '';
+        tr.appendChild(tdTipo);
+        tr.appendChild(tdVal);
+        tbl.appendChild(tr);
+      });
+      vtSection.appendChild(tbl);
+      card.appendChild(vtSection);
+    }
+
+    if (item.plantable) {
+      const plantRow = document.createElement('div');
+      plantRow.className = 'plant-stats-row';
+
+      function makePlantStage(lbl, val) {
+        const stage = document.createElement('span');
+        stage.className = 'plant-stage';
+        if (lbl) {
+          const l = document.createElement('span');
+          l.className = 'plant-stage-lbl';
+          l.textContent = lbl;
+          stage.appendChild(l);
+        }
+        const v = document.createElement('span');
+        v.textContent = val;
+        stage.appendChild(v);
+        return stage;
+      }
+
+      // Resultado chip
+      const resChip = document.createElement('div');
+      resChip.className = 'plant-chip';
+      const resLabel = document.createElement('span');
+      resLabel.className = 'stat-label';
+      resLabel.textContent = t('labelResultadoPlant') + ':';
+      resChip.appendChild(resLabel);
+
+      const resStr = item.resultadoPlantacion || '';
+      const resMatch = resStr.match(/^(\d+)\s+(.+)$/);
+      const resQty = resMatch ? Number(resMatch[1]) : null;
+      const resItemName = resMatch ? resMatch[2] : resStr;
+      const resItemNameEN = (currentLang === 'en' && resMatch && itemData[resItemName]?.nombreEN)
+        ? itemData[resItemName].nombreEN : resItemName;
+
+      resChip.appendChild(makePlantStage(null, resMatch ? `${resQty} ${resItemNameEN}` : resStr));
+
+      if (resMatch) {
+        resChip.appendChild(makePlantStage(t('plantLabelFertB'), `${resQty * 2} ${resItemNameEN}`));
+      }
+      if (item.resultadoPlantacionChamblemon) {
+        resChip.appendChild(makePlantStage(t('plantLabelChamblemon'), item.resultadoPlantacionChamblemon));
+      }
+      if (item.resultadoPlantacionHielo) {
+        resChip.appendChild(makePlantStage(t('plantLabelHielo'), item.resultadoPlantacionHielo));
+      }
+      plantRow.appendChild(resChip);
+
+      // Tiempo chip
+      const timeChip = document.createElement('div');
+      timeChip.className = 'plant-chip';
+      const timeLabel = document.createElement('span');
+      timeLabel.className = 'stat-label';
+      timeLabel.textContent = t('labelTiempoPlant') + ':';
+      timeChip.appendChild(timeLabel);
+
+      const timeBase = item.tiempoPlantacion;
+      timeChip.appendChild(makePlantStage(null, fmtTime(timeBase)));
+      timeChip.appendChild(makePlantStage(t('plantLabelFertA'), fmtTime(timeBase * 0.4)));
+      timeChip.appendChild(makePlantStage(t('plantLabelCaca'), fmtTime(timeBase * 0.9)));
+      plantRow.appendChild(timeChip);
+
+      card.appendChild(plantRow);
+    }
+
+    if (item.añejable) {
+      const ageRow = document.createElement('div');
+      ageRow.className = 'age-stats-row';
+
+      function makeAgeStage(lbl, val) {
+        const stage = document.createElement('span');
+        stage.className = 'age-stage';
+        if (lbl) {
+          const l = document.createElement('span');
+          l.className = 'age-stage-lbl';
+          l.textContent = lbl;
+          stage.appendChild(l);
+        }
+        const v = document.createElement('span');
+        v.textContent = val;
+        stage.appendChild(v);
+        return stage;
+      }
+
+      const ageChip = document.createElement('div');
+      ageChip.className = 'age-chip';
+      const ageLbl = document.createElement('span');
+      ageLbl.className = 'stat-label';
+      ageLbl.textContent = t('labelAñejado') + ':';
+      ageChip.appendChild(ageLbl);
+
+      const ageResStr = item.resultadoAñejado || '';
+      const ageResMatch = ageResStr.match(/^(\d+)\s+(.+)$/);
+      let ageResDisplay = ageResStr;
+      if (ageResMatch && currentLang === 'en') {
+        const ageItemNameEN = itemData[ageResMatch[2]]?.nombreEN || ageResMatch[2];
+        ageResDisplay = `${ageResMatch[1]} ${ageItemNameEN}`;
+      }
+      ageChip.appendChild(makeAgeStage(null, ageResDisplay));
+      ageChip.appendChild(makeAgeStage(t('ageDuracion'), fmtTime(item.duracionAñejado)));
+      ageChip.appendChild(makeAgeStage(t('ageCosto'), `${item.costoAñejamiento} Bits`));
+
+      ageRow.appendChild(ageChip);
+      card.appendChild(ageRow);
+    }
+
+    return card;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('itemGrid');
+    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+    grid.innerHTML = '';
+
+    let count = 0;
+
+    for (const [name, item] of Object.entries(itemData)) {
+      if (activeFilter !== 'all' && item.clasificacion !== activeFilter) continue;
+      if (searchVal && !name.toLowerCase().includes(searchVal)) continue;
+
+      grid.appendChild(buildCard(name, item));
+      count++;
+    }
+
+    if (count === 0) {
+      const msg = document.createElement('div');
+      msg.className = 'no-results';
+      msg.textContent = t('noResults');
+      grid.appendChild(msg);
+    }
+
+    document.getElementById('resultCount').textContent = t('resultCount')(count);
+  }
+
+  function updateUI() {
+    document.title = t('pageTitle');
+    document.getElementById('pageTitle').textContent = t('pageTitle');
+    document.getElementById('pageSubtitle').textContent = t('pageSubtitle');
+    document.getElementById('searchInput').placeholder = t('searchPlaceholder');
+    buildFilterButtons();
+    renderGrid();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('searchInput').addEventListener('input', renderGrid);
+
+    document.getElementById('languageSelector').addEventListener('change', (e) => {
+      currentLang = e.target.value;
+      updateUI();
+    });
+
+    updateUI();
+  });
+</script>
+
+<script>
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeNav();
+});
+</script>
+
+</body>
+</html>

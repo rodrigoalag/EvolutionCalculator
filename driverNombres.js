@@ -77,6 +77,7 @@ const driverNombres = {
   "BO005": { nombre: "Ultimate Draw", color: "Amarillo" },
   "BO006": { nombre: "Royal Symphonia", color: "Rojo" },
   "BO007": { nombre: "Gigantic Injustice", color: "Verde" },
+  "BO008": { nombre: "Crest of Lust", color: "Azul" },
 
   // EX Series
   "EX000": { nombre: "Child EX", color: "Verde" },

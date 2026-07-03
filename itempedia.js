@@ -841,6 +841,7 @@ const itemData = {
     hambre: 0,
     peso: -3,
     vinculo: -5,
+    pool: "Bebida Carbonatada",
     vinculoTabla: [
       { tipo: "Dragon",      tipoEN: "Dragon",    valor: -5  },
       { tipo: "Death",       tipoEN: "Death",     valor: -10 },
@@ -1201,7 +1202,8 @@ const itemData = {
     clasificacion: "Caja",
     hambre: "",
     peso: "",
-    vinculo: ""
+    vinculo: "",
+    pool: "Caja Básica"
   },
   "Caja Lunar": {
     descripcion: "Una extraña caja con un patrón de puntos obtenida de Bacomon. Me pregunto qué hay dentro...",
@@ -1216,7 +1218,8 @@ const itemData = {
     clasificacion: "Caja",
     hambre: "",
     peso: "",
-    vinculo: ""
+    vinculo: "",
+    pool: "Caja Lunar"
   },
   "Caja con Rayas": {
     descripcion: "Una extraña caja con un patrón a rayas obtenida de Bacomon. Me pregunto qué hay dentro...",
@@ -1231,7 +1234,8 @@ const itemData = {
     clasificacion: "Caja",
     hambre: "",
     peso: "",
-    vinculo: ""
+    vinculo: "",
+    pool: "Caja con Rayas"
   },
   "Caja con Listón": {
     descripcion: "Una extraña caja con un elegante listón obtenida de Bacomon. Me pregunto qué hay dentro...",
@@ -1246,7 +1250,8 @@ const itemData = {
     clasificacion: "Caja",
     hambre: "",
     peso: "",
-    vinculo: ""
+    vinculo: "",
+    pool: "Caja con Listón"
   },
   "Caja Navideña": {
     descripcion: "Una extraña caja obtenida de Santa. Me pregunto qué hay dentro...",
@@ -1289,7 +1294,7 @@ const itemData = {
     efectoBatalla: "",
     precioVenta: "",
     precioCompra: null,
-    lugarObtencion: "Misión del Proxy",
+    lugarObtencion: "Misión de Drake",
     clasificacion: "Misceláneo",
     hambre: "",
     peso: "",
@@ -1934,6 +1939,67 @@ const EfectoEntrenamiento = {
     { condicion: "Mushmon / Chamblemon", condicionEN: "Mushmon / Chamblemon", efecto: "Da un 3.33% de stats a ATK/HP/SPD entrenados (10% en total).", efectoEN: "Gives 3.33% stats to trained ATK/HP/SPD (10% total)." },
     { condicion: "Otros",                condicionEN: "Others",               efecto: "Sin efecto de entrenamiento.",                                    efectoEN: "No training effect." }
   ]
+};
+
+// Pools de ítems de cajas y efectos de etapa
+const itemPools = {
+  "Caja Básica": {
+    tipo: "ponderado",
+    pool: [
+      { item: "Carne",           cantidad: 3 },
+      { item: "Carne Grande",    cantidad: 2 },
+      { item: "Bandita",         cantidad: 2 },
+      { item: "Restos de Metal", cantidad: 1 },
+      { item: "Pildora",         cantidad: 2 },
+      { item: "Medicina",        cantidad: 4 },
+      { item: "Hongo Extraño",   cantidad: 1 }
+    ]
+  },
+  "Caja con Rayas": {
+    tipo: "ponderado",
+    pool: [
+      { item: "Bellota",            cantidad: 3 },
+      { item: "Carne Anómala",      cantidad: 3 },
+      { item: "Manzana",            cantidad: 3 },
+      { item: "Fruta del Diablo R", cantidad: 2 },
+      { item: "Restos de Metal",    cantidad: 1 },
+      { item: "Solomillo",          cantidad: 1 },
+      { item: "Hongo Extraño",      cantidad: 1 }
+    ]
+  },
+  "Caja Lunar": {
+    tipo: "ponderado",
+    pool: [
+      { item: "Manzana Verde",      cantidad: 3 },
+      { item: "Champiñón",          cantidad: 4 },
+      { item: "Manzana Azul",       cantidad: 1 },
+      { item: "Fruta del Diablo A", cantidad: 2 },
+      { item: "Restos de Metal",    cantidad: 1 },
+      { item: "Hongo Extraño",      cantidad: 1 }
+    ]
+  },
+  "Caja con Listón": {
+    tipo: "ponderado",
+    pool: [
+      { item: "Verdura",            cantidad: 3 },
+      { item: "Zanahoria",          cantidad: 3 },
+      { item: "Tomate Milagroso",   cantidad: 2 },
+      { item: "Fruta del Diablo V", cantidad: 2 },
+      { item: "Restos de Metal",    cantidad: 1 },
+      { item: "Manzana",            cantidad: 3 },
+      { item: "Hongo Extraño",      cantidad: 1 }
+    ]
+  },
+  "Bebida Carbonatada": {
+    tipo: "por_etapa",
+    subtitulo: "Solo Marioneta",
+    subtituloEN: "Puppet only",
+    etapas: {
+      "Child":   { incompleto: true, pool: ["Bellota", "Manzana", "Caca Dorada", "Carne Grande", "Champiñón Feliz", "Mega Verdura", "Bandita"] },
+      "Adult":   { noTesteado: true, pool: [] },
+      "Perfect": { incompleto: true, pool: ["Hongo Extraño", "Restos de Metal", "Limón Juzgador", "Nuez Mágica", "Manzana Azul", "Solomillo", "Digitrucha"] }
+    }
+  }
 };
 
 // Clasificaciones disponibles (para filtros)

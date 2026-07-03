@@ -652,6 +652,7 @@ main {
       labelEfectoFC: "Efecto Fuera de Combate",
       labelEfectoEnt: "Efecto Entrenamiento y Batalla",
       labelEfectoBat: "Efecto Entrenamiento y Batalla",
+      labelPool: "Pool de Ítems",
       labelDriverResultado: "Driver obtenido",
       labelPrecioVenta: "Precio venta",
       labelPrecioCompra: "Precio tienda",
@@ -698,6 +699,7 @@ main {
       labelEfectoFC: "Out of Battle Effect",
       labelEfectoEnt: "Training and Battle Effect",
       labelEfectoBat: "Training and Battle Effect",
+      labelPool: "Item Pool",
       labelDriverResultado: "Driver obtained",
       labelPrecioVenta: "Sell Price",
       labelPrecioCompra: "Shop Price",
@@ -1019,6 +1021,25 @@ main {
 
     const batVal = tStr(item.efectoBatalla);
     if (batVal) card.appendChild(makeLinkRow('labelEfectoBat', batVal, '#4ecdc4'));
+
+    if (item.pool) {
+      const poolRow = document.createElement('div');
+      poolRow.className = 'info-row';
+      const poolLbl = document.createElement('span');
+      poolLbl.className = 'info-label';
+      poolLbl.textContent = t('labelPool') + ':';
+      const poolVal = document.createElement('span');
+      poolVal.className = 'info-value';
+      const poolA = document.createElement('a');
+      const slug = item.pool.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      poolA.href = 'AlimentosEfectos.html#pool-' + slug;
+      poolA.textContent = currentLang === 'en' ? 'See item pool →' : 'Ver pool de ítems →';
+      poolA.style.cssText = 'color:#ffe082;text-decoration:underline dotted;';
+      poolVal.appendChild(poolA);
+      poolRow.appendChild(poolLbl);
+      poolRow.appendChild(poolVal);
+      card.appendChild(poolRow);
+    }
 
     if (item.driverResultado) {
       const driverCode = item.driverResultado;

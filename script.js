@@ -12,7 +12,7 @@
     'Induced death without Meat X or Death Program (30% Chance)': 'induceddeath',
     'Muerte inducida sin Carne X o Program': 'induceddeath',
     'Induced death without Meat X or Death Program': 'induceddeath',
-    'Vinculo Maximo Alcanzado': 'vinculo',
+    'Vinculo Maximo Alcanzado': 'vinculominimo',
 	'Menos de 15 entrenamientos?': 'entrenos25',
 	'Less than 15 trainings?': 'entrenos25',
     'Vinculo': 'vinculo',
@@ -197,7 +197,7 @@ const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
-const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados", "Death Evo", "Digipuntos", "Clasificacion", "Victorias Minimas", "Errores Minimos", "categorias", "EvoNatural"];
+const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados", "Death Evo", "Digipuntos", "Clasificacion", "Victorias Minimas", "Errores Minimos", "categorias", "EvoNatural", "isProgramEvo"];
 
 
 // Campos a ocultar de evoluciones específicas según el origen seleccionado
@@ -1043,7 +1043,7 @@ function generarFormulario() {
       field === "EntrenamientoHecho" ? "¿Entrenamiento Hecho en Baby 2?" :
       field === "2Ciclos" ? "¿Obtuviste dos perfect en las ultimas dos generaciones/Obtuviste antes a Agumon 06?" :
       field === "Combates Minimos" ? "Batallas":
-      field === "Vinculo Minimo alcanzado" ? "Vinculo Minimo Alcanzado":
+      field === "Vinculo Minimo alcanzado" ? "Vinculo Maximo Alcanzado":
       field === "Vinculo al momento de evolucionar" ? "Vinculo al Evolucionar":
       field === "Bonus Vinculo al momento de evolucionar" ? "Vinculo al momento de evolucionar":
       field === "Xross" ? "Xross/Install":
@@ -1528,6 +1528,19 @@ function validarCampoVinculo(input) {
         }
       }
     }
+
+    // Vínculo Máximo nunca puede ser menor que Vínculo al Evolucionar
+    if (input.id === 'field_Vinculo Minimo alcanzado' || input.id === 'field_Vinculo al momento de evolucionar') {
+      const maxInput  = document.getElementById('field_Vinculo Minimo alcanzado');
+      const evolInput = document.getElementById('field_Vinculo al momento de evolucionar');
+      if (maxInput && evolInput && maxInput.value !== '' && evolInput.value !== '') {
+        const maxNum  = Number(maxInput.value);
+        const evolNum = Number(evolInput.value);
+        if (!isNaN(maxNum) && !isNaN(evolNum) && evolNum > maxNum) {
+          maxInput.value = evolInput.value;
+        }
+      }
+    }
 }
 
 editableFields.addEventListener('input', (e) => {
@@ -1756,7 +1769,7 @@ function _evalCmp(campo, ingresado, esperado) {
   if (typeof esperado === "number") {
     const n = Number(ingresado) || 0;
     if (campo === "Peso") return Math.abs(n - esperado) <= 5;
-    const isLessOrEqual = campo === "Error Maximo" || campo === "Vinculo al momento de evolucionar";
+    const isLessOrEqual = campo === "Error Maximo" || campo === "Errores Minimos" || campo === "Vinculo al momento de evolucionar";
     return isLessOrEqual ? n <= esperado : n >= esperado;
   }
   return (String(ingresado || "")).toLowerCase() === String(esperado).toLowerCase();
@@ -1850,7 +1863,7 @@ function _evalPath(path, inputValues) {
       if (_COND_STRUCT.has(k)) continue;
       campos.add(_normK(k));
       const n = Number(_getInputVal(k, inputValues)) || 0;
-      const fp = (cfg.op === ">=" ? n >= cfg.val : n <= cfg.val) ? 1 : 0;
+      const fp = (cfg.op === ">=" ? n >= cfg.val : n <= cfg.val) ? 1 : (cfg.puntajeNo ?? 0);
       pts += fp;
       porCampo.set(_normK(k), fp);
     }
@@ -1965,7 +1978,7 @@ let hayBonus = false;
 		
 nextDigimons.forEach(([_, info]) => {
   for (const key in info) {
-    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder", "RequisitosCondicionados", "Death Evo", "Clasificacion", "Digipuntos", "categorias", "EvoNatural"].includes(key)) {
+    if (!["ID", "Tama", "Nivel", "Tipo", "Atributo", "Stat Superior 2", "Placeholder", "RequisitosCondicionados", "Death Evo", "Clasificacion", "Digipuntos", "categorias", "EvoNatural", "isProgramEvo"].includes(key)) {
       if (key.includes("Bonus")) {
         hayBonus = true;
       } else {
@@ -2700,6 +2713,8 @@ punto = totalBonus;}
       punto = 0;
     } else if (PesoSet.has(name)) {
 		punto = 0;
+    } else if (digimonReqDict[name]?.categorias?.["No se considera en el puntaje"]?.includes("Peso")) {
+      punto = 0;
 	  } else {
 		const ingNum = Number(ingresado);
 		const minPeso = esperado - 5;
@@ -2712,35 +2727,19 @@ punto = totalBonus;}
 	  }
 	}
 
-	// Error Maximo - Actualizado
+	// Error Maximo
 else if (field === "Error Maximo") {
-	if (["V-Dramon", "V-Dramon (Black)", "Aero V-dramon", "Monzaemon", "Etemon", "Aero V-dramon (Black)", "Insekimon High Tier", "Fantomon", "Digitamamon", "Grademon VICE"].includes(name)) {
-		// Nuevo caso especial: penalización por error (requiere exactamente el valor esperado)
-		const ingNum = Number(ingresado);
+	const ingNum = Number(ingresado);
+	const esObligatorio = digimonReqDict[name]?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
+	if (typeof esperado === "string" && esperado.includes("-")) {
+		const [min, max] = esperado.split("-").map(Number);
+		punto = (!isNaN(ingNum) && ingNum >= min && ingNum <= max) ? 1 : (esObligatorio ? -10 : 0);
+	} else {
 		const espNum = Number(esperado);
-		if (!isNaN(ingNum) && !isNaN(espNum) && ingNum === espNum) {
+		if (!isNaN(ingNum) && ingNum <= espNum) {
 			punto = 1;
 		} else {
-			punto = -10;
-		}
-	} else if (["Agumon", "Yuki Agumon", "Agumon (2006)", "Agumon (Black)", "Kokuwamon", "Pillomon", "Numemon", "Gotsumon", "Starmons", "GreatKingScumon", "Shoutmon", "Shoutmon (Black)"].includes(name)) {
-		punto = 0; 
-	} else {
-		const ingNum = Number(ingresado);
-		const esObligatorio = digimonReqDict[name]?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
-		if (typeof esperado === "string" && esperado.includes("-")) {
-			const [min, max] = esperado.split("-").map(Number);
-			if (!isNaN(ingNum) && ingNum >= min && ingNum <= max) {
-				punto = 1;
-			} else {
-				punto = esObligatorio ? -10 : 0;
-			}
-		} else {
-			if (!isNaN(ingNum) && ingNum <= esperado) {
-				punto = 1;
-			} else {
-				punto = esObligatorio ? -10 : 0;
-			}
+			punto = (espNum === 0 || esObligatorio) ? -10 : 0;
 		}
 	}
 }
@@ -2949,12 +2948,12 @@ else if (field === "Combates Minimos") {
 }
 // CÓDIGO DE EVALUACIÓN MODIFICADO
 else if (field === "Program") {
-    // NUEVO: Caso especial para Mushmon
-    if (["Mushmon"].includes(name)) {
+    // isProgramEvo (incluye Mushmon y Raremon): +3 si coincide, -10 si no
+    if (["Mushmon"].includes(name) || digimonReqDict[name]?.isProgramEvo === true) {
         if (esperado && ingresado.toLowerCase() === esperado.toLowerCase()) {
-            punto = 3;  // +3 si el program es igual
+            punto = 3;
         } else {
-            punto = -10; // -10 si el program es desigual
+            punto = -10;
         }
     }
     // Verificar si hay un programa condicionado por origen en RC
@@ -3512,10 +3511,10 @@ if (nextLevel === 3) {
     });
     
     if (candidatosValidos.length > 0) {
-      // CORRECCIÓN: Programs tienen prioridad absoluta sin importar puntaje
+      // Programs tienen prioridad si tienen puntaje >= 3
       const conProgram = candidatosValidos.filter(d => {
         const req = digimonReqDict[d.name];
-        return req.Program !== undefined;
+        return req.isProgramEvo === true && d.puntaje >= 3;
       });
       
       if (conProgram.length > 0) {
@@ -3650,9 +3649,7 @@ if (nextLevel === 4 || nextLevel === 5) {
            // PRIORIDAD 2: Programs (solo si NO se usó Xross/Driver)
            const conProgram = todosLosCandidatos.filter(d => {
              const req = digimonReqDict[d.name];
-             if (req.Program === undefined) return false;
-             const rcProgram = getFieldFromRC(d.name, selected, "Program");
-             return rcProgram !== "-";
+             return req.isProgramEvo === true && d.puntaje >= 3;
            });
 
            if (conProgram.length > 0) {

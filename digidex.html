@@ -1553,6 +1553,8 @@ main {
   <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/calculator.png" alt="Calculator"> Balance Calc</a>
   <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/agumon.png" alt="Enemigos"> Enemigos de la Red</a>
   <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
+  <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <div class="nav-divider"></div>
   <h3 id="nav-links"><img src="./pageicons/link.png" alt="Links"><span>Links Externos</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -1639,7 +1641,7 @@ main {
       <p>Tama: <span id="info-tama"></span></p>
     </div>
 
-    <div id="scumon-lineage-row" style="display: none; padding: 4px 8px; display: flex; flex-direction: column; gap: 6px;">
+    <div id="scumon-lineage-row" style="display: none; padding: 4px 8px; flex-direction: column; gap: 6px;">
       <div>
         <label style="font-size: 0.75rem; color: #aaa;">Child:</label>
         <select id="scumon-child-select" style="width: 100%; margin-top: 2px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
@@ -1955,73 +1957,6 @@ const specialDigimonConfig = {
       return procesado;
     }
   },
-"DexDorugamon":  {
-  requisitosOrigen: {
-    "Dorumon": {
-      gruposColumnas: {
-        "No se considera en el puntaje": ["Peso"],
-        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"]
-      },
-      valores: {
-        "Peso": "25",
-        "Errores Minimos": "6",
-        "Victorias Minimas": "30",
-        "Vinculo al momento de evolucionar": "-50",
-        "Program": "Death"
-      }
-    },
-    "Dorugamon": {
-      gruposColumnas: {
-        "Requisitos Obligatorios": ["Program"],
-        "Incumplir al menos uno": ["% Entrenamiento", "Errores Minimos", "Combates Minimos", "Vinculo al momento de evolucionar"]
-      },
-      valores: {
-        "Peso": "25",
-        "Program": "Death",
-        "% Entrenamiento": "< 50%",
-        "Errores Minimos": "< 6",
-        "Combates Minimos": "< 30",
-        "Vinculo al momento de evolucionar": "> -50"
-      }
-    }
-  }
-},
-"DexDoruguremon":  {
-  requisitosOrigen: {
-    "Dorugamon": {
-      gruposColumnas: {
-        "No se considera en el puntaje": ["Peso"],
-        "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"]
-      },
-      valores: {
-        "Peso": "36",
-        "Errores Minimos": "6",
-        "Victorias Minimas": "30",
-        "Vinculo al momento de evolucionar": "-50",
-        "Program": "Death"
-      }
-    },
-    "DexDorugamon": {
-      gruposColumnas: {
-        "Quota/Key Points": ["Combates Minimos", "% Entrenamiento", "Peso", "Error Maximo"]
-      },
-      valores: {
-        "Combates Minimos": "30",
-        "% Entrenamiento": "100%",
-        "Peso": "36",
-        "Error Maximo": "0-6"
-      }
-    },
-    "Doruguremon": {
-      gruposColumnas: {
-        "Requisitos Obligatorios": ["Program"]
-      },
-      valores: {
-        "Program": "Death"
-      }
-    }
-  }
-},
 };
 
 // Configuración por defecto (la original)
@@ -2598,7 +2533,7 @@ function formatearPuntajeConColor(puntaje) {
 	  "Muerte inducida sin Carne X o Program (30% de salir)": "Muerte inducida sin Carne X o Program (30% de salir)",
       "% de Entrenamiento": "% Entrenamiento",
       "Digimon Bonus": "Bonus Digimon",
-      "Vinculo Minimo alcanzado": "Vínculo Alcanzado",
+      "Vinculo Minimo alcanzado": "Vínculo Máximo Alcanzado",
 	  "Menos de 15 entrenamientos?": "Menos de 15 entrenamientos?",
       "Win Rate": "Win Rate",
       "Combates Minimos": "Combates Mínimos",
@@ -2714,7 +2649,7 @@ function formatearPuntajeConColor(puntaje) {
 	  "Muerte inducida sin Carne X o Program (30% de salir)": "Induced death without X Meat or Program (30% chance)",
       "% de Entrenamiento": "% Training",
       "Digimon Bonus": "Digimon Bonus",
-      "Vinculo Minimo alcanzado": "Bond Reached",
+      "Vinculo Minimo alcanzado": "Max Bond Achieved",
 	  "Menos de 15 entrenamientos?": "Less than 15 trainings?",
       "Combates Minimos": "Minimum Battles",
 	  "% Entrenamiento": "Training % Range",
@@ -3494,36 +3429,78 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
       tieneRequisitosOrigen[pathName] = { gruposColumnas: _gruposColumnas, valores: _valores };
       return;
     }
-    const _fields = Object.keys(pathData).filter(f => !_metaKeys.has(f) && typeof pathData[f] !== 'object');
-    // Usar categorias del digimon (si existen) para mostrar todos los campos, no solo los del path
-    const _dictCategorias = digimonReqDict[nombre]?.categorias;
+    const pathModo = pathData["Death Evo"] ? "BloqueTotal" : (pathData.modo || "BloqueTotal");
     let _gruposColumnas;
-    if (_rc.categorias) {
-      _gruposColumnas = _rc.categorias;
-    } else if (_dictCategorias) {
-      _gruposColumnas = _dictCategorias;
-    } else {
-      const _noPuntaje = ['Peso', ...(_fields.includes('Error Maximo') ? ['Error Maximo'] : [])];
-      const _obligatorios = _fields.filter(f => f !== 'Error Maximo');
-      _gruposColumnas = { 'No se considera en el puntaje': _noPuntaje, 'Requisitos Obligatorios': _obligatorios };
-    }
-    // Construir valores: el path tiene prioridad, datosOriginales como fallback para campos base
-    const _allFields = [...new Set(Object.values(_gruposColumnas).flat())];
     const _valores = { 'Peso': formatearPeso(_peso) };
-    _allFields.forEach(f => {
-      if (f === 'Peso') return;
-      const v = pathData[f] !== undefined ? pathData[f] : datosOriginales[f];
-      if (v === undefined) return;
-      if (f === 'Error Maximo') _valores[f] = formatearErrorMaximo(v, nombre);
-      else if (f === 'WinRate') _valores[f] = formatearWinRate(v);
-      else if (f === '% Entrenamiento') _valores[f] = formatearPorcentajeEntrenamiento(v, nombre);
-      else _valores[f] = String(v);
-    });
-    tieneRequisitosOrigen[pathName] = {
-      gruposColumnas: _gruposColumnas,
-      valores: _valores
-    };
+
+    if (pathModo === 'SideEvolution') {
+      const obligFields = Object.keys(pathData.Obligatorio || {}).filter(f => pathData.Obligatorio[f] !== '-');
+      const incumplirFields = Object.keys(pathData.Incumplir || {});
+      _gruposColumnas = { 'Requisitos Obligatorios': obligFields, 'Incumplir al menos uno': incumplirFields };
+      obligFields.forEach(f => { _valores[f] = _formatRCValue(f, pathData.Obligatorio[f], nombre); });
+      incumplirFields.forEach(f => {
+        const threshold = pathData.Incumplir[f];
+        if (typeof threshold !== 'number') { _valores[f] = String(threshold); return; }
+        const isLTE = f === 'Error Maximo' || f === 'Errores Minimos' || f === 'Vinculo al momento de evolucionar';
+        _valores[f] = f === '% Entrenamiento' ? `< ${threshold}%` : (isLTE ? `> ${threshold}` : `< ${threshold}`);
+      });
+
+    } else if (pathModo === 'PuntajePorCampo') {
+      const cfgFields = Object.keys(pathData).filter(f => !_metaKeys.has(f) && typeof pathData[f] === 'object' && pathData[f] !== null && 'val' in pathData[f]);
+      _gruposColumnas = { 'Quota/Key Points': cfgFields };
+      cfgFields.forEach(f => { _valores[f] = _resolveRCField(pathData, f, nombre); });
+
+    } else if (pathModo === 'PuntajeDirecto') {
+      const obligFields = Object.keys(pathData.Obligatorio || {}).filter(f => pathData.Obligatorio[f] !== '-');
+      _gruposColumnas = { 'Requisitos Obligatorios': obligFields };
+      obligFields.forEach(f => { _valores[f] = _formatRCValue(f, pathData.Obligatorio[f], nombre); });
+
+    } else { // BloqueTotal (incluyendo Death Evo)
+      const directFields = Object.keys(pathData).filter(f => !_metaKeys.has(f) && typeof pathData[f] !== 'object');
+      const nonPesoFields = directFields.filter(f => f !== 'Peso');
+      _gruposColumnas = nonPesoFields.length > 0
+        ? { 'No se considera en el puntaje': ['Peso'], 'Requisitos Obligatorios': nonPesoFields }
+        : { 'Requisitos Obligatorios': directFields };
+      directFields.forEach(f => { _valores[f] = _resolveRCField(pathData, f, nombre); });
+    }
+
+    tieneRequisitosOrigen[pathName] = { gruposColumnas: _gruposColumnas, valores: _valores };
   });
+}
+
+// Lee el valor de un campo desde el path RC (BloqueTotal, SideEvolution, PuntajePorCampo, PuntajeDirecto)
+function _resolveRCField(pathData, campo, nombreDigimon) {
+  // Directo en pathData (BloqueTotal / Death Evo)
+  if (pathData[campo] !== undefined && typeof pathData[campo] !== 'object') {
+    return _formatRCValue(campo, pathData[campo], nombreDigimon);
+  }
+  // PuntajePorCampo: campo es objeto { op, val }
+  if (pathData[campo] && typeof pathData[campo] === 'object' && 'val' in pathData[campo]) {
+    return _formatRCValue(campo, pathData[campo].val, nombreDigimon);
+  }
+  // Obligatorio (SideEvolution, PuntajeDirecto)
+  const oblig = pathData.Obligatorio || {};
+  if (oblig[campo] !== undefined) {
+    return _formatRCValue(campo, oblig[campo], nombreDigimon);
+  }
+  // Incumplir (SideEvolution) — mostrar la dirección inversa: "< x" o "> x"
+  const incumplir = pathData.Incumplir || {};
+  if (incumplir[campo] !== undefined) {
+    const threshold = incumplir[campo];
+    if (typeof threshold !== 'number') return String(threshold);
+    const isLTE = campo === 'Error Maximo' || campo === 'Vinculo al momento de evolucionar';
+    if (campo === '% Entrenamiento') return `< ${threshold}%`;
+    return isLTE ? `> ${threshold}` : `< ${threshold}`;
+  }
+  return undefined;
+}
+
+function _formatRCValue(campo, raw, nombreDigimon) {
+  if (raw === undefined || raw === null) return undefined;
+  if (campo === 'Error Maximo') return formatearErrorMaximo(raw, nombreDigimon);
+  if (campo === '% Entrenamiento') return formatearPorcentajeEntrenamiento(raw, nombreDigimon) + "%";
+  if (campo === 'WinRate') return formatearWinRate(raw);
+  return String(raw);
 }
 
 // Si tiene requisitosOrigen, generar tabla especial con headers separados por origen
@@ -3624,14 +3601,13 @@ if (tieneRequisitosOrigen) {
         campos.forEach(campo => {
           const td = document.createElement("td");
           let valor = config.valores?.[campo];
-          if (valor === undefined && campo === "% Entrenamiento") {
+          if (valor === undefined) {
             const rc = digimonReqDict[nombre]?.RequisitosCondicionados;
             if (rc?.condicion === "Origen" && rc[origen]) {
-              const raw = rc[origen]["% Entrenamiento"];
-              if (raw !== undefined) {
-                const num = raw != null && typeof raw === "object" ? raw.val : raw;
-                if (num !== undefined) valor = formatearPorcentajeEntrenamiento(num, nombre) + "%";
-              }
+              valor = _resolveRCField(rc[origen], campo, nombre);
+            }
+            if (valor === undefined && campo === "Peso" && datosOriginales?.Peso !== undefined) {
+              valor = String(datosOriginales.Peso);
             }
           }
 
@@ -4358,7 +4334,7 @@ function convertirHoraALocal(valor) {
 
 const programaImagen = {
   "Virus":    "VirusProgram.png",
-  "Frost":    "FroztProgram.png",
+  "Frost":    "FrostProgram.png",
   "Combat":   "CombatProgram.png",
   "Ore":      "Ore Program.png",
   "Trash":    "TrashProgram.png",

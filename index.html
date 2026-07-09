@@ -242,7 +242,7 @@ header p {
 
   <!-- Explanations -->
   <section id="explanation1" class="explanation"></section>
-  <section id="explanation2" class="explanation"></section>
+  <!-- <section id="explanation2" class="explanation"></section> -->
 
   <!-- Credits Section -->
   <section class="explanation credits-section">
@@ -272,8 +272,8 @@ const explanationHTML1 = {
     <ul>
       <li>El puntaje debe ser <strong>mayor a 3</strong> para evolucionar.</li>
       <li>En empate (3 puntos), se muestran <strong>todas las posibles evoluciones</strong>.</li>
-      <li>Con más de 3 puntos, se da <strong>prioridad</strong>.</li>
-      <li>Algunas tienen <strong>prioridad absoluta</strong>, como GeoGreymon.</li>
+      <!-- <li>Con más de 3 puntos, se da <strong>prioridad</strong>.</li> -->
+      <!-- <li>Algunas tienen <strong>prioridad absoluta</strong>, como GeoGreymon.</li> -->
     </ul>
    <img src="img/ExplicaciontablaES.png" alt="Ejemplo de tabla de evolución" style="max-width: 100%; height: auto;">
   `,
@@ -290,14 +290,14 @@ const explanationHTML1 = {
     <ul>
       <li>You need a score <strong>greater than 3</strong> to evolve.</li>
       <li>On tie (3 points), <strong>all evolutions</strong> are shown.</li>
-      <li>Higher score (e.g., <code>4</code>) gives <strong>priority</strong>.</li>
-      <li>Some evolutions have <strong>absolute priority</strong>, like GeoGreymon.</li>
+      <!-- <li>Higher score (e.g., <code>4</code>) gives <strong>priority</strong>.</li> -->
+      <!-- <li>Some evolutions have <strong>absolute priority</strong>, like GeoGreymon.</li> -->
     </ul>
     <img src="img/ExplicaciontablaEN.png" alt="Ejemplo de tabla de evolución" style="max-width: 100%; height: auto;">
   `
 };
 
-const explanationHTML2 = {
+/* const explanationHTML2 = {
   es: `
     <h2>Prioridades de Evolución</h2>
     <p>En caso de empate entre 2 Digimon (ambos con 3 puntos), el juego considera lo siguiente:</p>
@@ -322,7 +322,7 @@ const explanationHTML2 = {
     <p><strong>*</strong> E.g., Agumon (2006) → GeoGreymon or BlackVeedramon → BAeroVeedramon, gets priority even if another has 4 points.</p>
     <p>If 3 or more Digimon tie, the game chooses <strong>randomly</strong>. Only exception to this are Program Digimon or Exclusive evolutions. Those have a higher priority in case of triple tie.</p>
   `
-};
+}; */
 
 const langTexts = {
   es: {
@@ -345,7 +345,7 @@ function updateLanguage(lang) {
   document.getElementById("mainTitle").textContent = text.mainTitle;
   document.getElementById("mainSubtitle").textContent = text.subtitle;
   document.getElementById("explanation1").innerHTML = explanationHTML1[lang];
-  document.getElementById("explanation2").innerHTML = explanationHTML2[lang];
+  // document.getElementById("explanation2").innerHTML = explanationHTML2[lang];
   localStorage.setItem("digilang", lang);
 }
 

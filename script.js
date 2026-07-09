@@ -3428,14 +3428,14 @@ if (programIngresado && programIngresado.toLowerCase() === "death") {
   // Traducciones para los textos a mostrar
 const textTranslations = {
   es: {
-    slideEvolution: "Tu Digimon va a slide evolucionar a: ",
-    normalEvolution: "Tu Digimon va a evolucionar a: ",
-    consultGuide: " Favor, consultar el main hub, en el apartado de Prioridades de evolución"
+    slideEvolution: "Tu Digimon puede slide evolucionar a: ",
+    normalEvolution: "Tu Digimon puede evolucionar a: ",
+    consultGuide: ""
   },
   en: {
-    slideEvolution: "Your Digimon will side evolve to: ",
-    normalEvolution: "Your Digimon will evolve to: ",
-    consultGuide: " Please consult the main hub, in the Evolution Priority section"
+    slideEvolution: "Your Digimon can side evolve to: ",
+    normalEvolution: "Your Digimon can evolve to: ",
+    consultGuide: ""
   }
 };
 
@@ -3448,39 +3448,37 @@ function desempatarPorDigipuntos(digimons, forzarDesempate = false) {
     return digimons;
   }
 
-  // Si hay 3 o más digimon empatados y NO es caso de Program, retornar todos (se elige al azar)
-  if (digimons.length >= 3 && !forzarDesempate) {
-    console.log(`🎲 Triple empate o más (${digimons.length} digimon): ${digimons.join(", ")} - Se elige al azar`);
-    return digimons;
-  }
+  // Empate sin desempate por stats: retornar todos
+  console.log(`🎲 Empate (${digimons.length} digimon): ${digimons.join(", ")} - Se elige al azar`);
+  return digimons;
 
-  console.log(`🎯 Aplicando desempate por Digipuntos para: ${digimons.join(", ")}`);
-
-  // Obtener los Digipuntos de cada digimon
-  const digimonsConPuntos = digimons.map(name => {
-    // Buscar en digimonstattier (asumiendo que está disponible globalmente)
-    const stats = digimonstattier[name];
-    const digipuntos = stats?.Digipuntos || 0;
-
-    console.log(`   ${name}: ${digipuntos} Digipuntos`);
-
-    return {
-      name: name,
-      digipuntos: digipuntos
-    };
-  });
-
-  // Encontrar el máximo de Digipuntos
-  const maxDigipuntos = Math.max(...digimonsConPuntos.map(d => d.digipuntos));
-
-  // Filtrar solo los que tienen el máximo de Digipuntos
-  const mejoresDigimons = digimonsConPuntos
-    .filter(d => d.digipuntos === maxDigipuntos)
-    .map(d => d.name);
-
-  console.log(`   ✅ Resultado del desempate: ${mejoresDigimons.join(", ")} (${maxDigipuntos} Digipuntos)`);
-
-  return mejoresDigimons;
+  // // Si hay 3 o más digimon empatados y NO es caso de Program, retornar todos (se elige al azar)
+  // if (digimons.length >= 3 && !forzarDesempate) {
+  //   console.log(`🎲 Triple empate o más (${digimons.length} digimon): ${digimons.join(", ")} - Se elige al azar`);
+  //   return digimons;
+  // }
+  //
+  // console.log(`🎯 Aplicando desempate por Digipuntos para: ${digimons.join(", ")}`);
+  //
+  // // Obtener los Digipuntos de cada digimon
+  // const digimonsConPuntos = digimons.map(name => {
+  //   const stats = digimonstattier[name];
+  //   const digipuntos = stats?.Digipuntos || 0;
+  //   console.log(`   ${name}: ${digipuntos} Digipuntos`);
+  //   return { name: name, digipuntos: digipuntos };
+  // });
+  //
+  // // Encontrar el máximo de Digipuntos
+  // const maxDigipuntos = Math.max(...digimonsConPuntos.map(d => d.digipuntos));
+  //
+  // // Filtrar solo los que tienen el máximo de Digipuntos
+  // const mejoresDigimons = digimonsConPuntos
+  //   .filter(d => d.digipuntos === maxDigipuntos)
+  //   .map(d => d.name);
+  //
+  // console.log(`   ✅ Resultado del desempate: ${mejoresDigimons.join(", ")} (${maxDigipuntos} Digipuntos)`);
+  //
+  // return mejoresDigimons;
 }
 
 // --- EVALUACIÓN A NIVEL 2 ---
@@ -3511,28 +3509,24 @@ if (nextLevel === 3) {
     });
     
     if (candidatosValidos.length > 0) {
-      // Programs tienen prioridad si tienen puntaje >= 3
-      const conProgram = candidatosValidos.filter(d => {
-        const req = digimonReqDict[d.name];
-        return req.isProgramEvo === true && d.puntaje >= 3;
-      });
-      
-      if (conProgram.length > 0) {
-        // Si hay Programs, elegir solo de esos (el de mayor puntaje entre Programs)
-        // forzarDesempate = true porque Program siempre tiene prioridad
-        const maxPuntajeProgram = Math.max(...conProgram.map(d => d.puntaje));
-        const mejoresProgram = conProgram.filter(d => d.puntaje === maxPuntajeProgram);
-        const candidatos = mejoresProgram.map(d => d.name);
-        mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
-        console.log("🏆 Programs encontrados - Mejor(es) con Program:", mejoresDigimons);
-      } else {
-        // Si no hay Programs, aplicar lógica original por puntaje máximo
+      // // Programs tienen prioridad si tienen puntaje >= 3
+      // const conProgram = candidatosValidos.filter(d => {
+      //   const req = digimonReqDict[d.name];
+      //   return req.isProgramEvo === true && d.puntaje >= 3;
+      // });
+      // if (conProgram.length > 0) {
+      //   const maxPuntajeProgram = Math.max(...conProgram.map(d => d.puntaje));
+      //   const mejoresProgram = conProgram.filter(d => d.puntaje === maxPuntajeProgram);
+      //   const candidatos = mejoresProgram.map(d => d.name);
+      //   mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
+      //   console.log("🏆 Programs encontrados - Mejor(es) con Program:", mejoresDigimons);
+      // } else {
         const maxPuntajeNivel3 = Math.max(...candidatosValidos.map(d => d.puntaje));
         const conMaxPuntaje = candidatosValidos.filter(d => d.puntaje === maxPuntajeNivel3);
         const candidatos = conMaxPuntaje.map(d => d.name);
         mejoresDigimons = desempatarPorDigipuntos(candidatos);
-        console.log("✅ Sin Programs - Mejor(es) por puntaje máximo:", mejoresDigimons);
-      }
+        console.log("✅ Mejor(es) por puntaje máximo:", mejoresDigimons);
+      // }
     } else {
       mejoresDigimons = ["Ninguno"];
       console.log("🚫 No se encontraron evoluciones válidas para Nivel 3.");
@@ -3646,22 +3640,19 @@ if (nextLevel === 4 || nextLevel === 5) {
            mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
            console.log("🏆 Driver/Xross USADOS correctamente - Mejor(es) con Driver/Xross (PRIORIDAD MÁXIMA):", mejoresDigimons);
          } else {
-           // PRIORIDAD 2: Programs (solo si NO se usó Xross/Driver)
-           const conProgram = todosLosCandidatos.filter(d => {
-             const req = digimonReqDict[d.name];
-             return req.isProgramEvo === true && d.puntaje >= 3;
-           });
-
-           if (conProgram.length > 0) {
-             // Si hay Programs/excepciones, elegir solo de esos (el de mayor puntaje entre Programs)
-             // forzarDesempate = true porque Program siempre tiene prioridad y debe desempatar por Digipuntos
-             const maxPuntajeProgram = Math.max(...conProgram.map(d => d.puntaje));
-             const mejoresProgram = conProgram.filter(d => d.puntaje === maxPuntajeProgram);
-             const candidatos = mejoresProgram.map(d => d.name);
-             mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
-             console.log("🏆 Programs/Excepciones encontrados - Mejor(es) con Program/Excepciones:", mejoresDigimons);
-           } else {
-             // Si no hay Driver/Xross, aplicar lógica normal: puntaje máximo
+           // // PRIORIDAD 2: Programs (solo si NO se usó Xross/Driver)
+           // const conProgram = todosLosCandidatos.filter(d => {
+           //   const req = digimonReqDict[d.name];
+           //   return req.isProgramEvo === true && d.puntaje >= 3;
+           // });
+           // if (conProgram.length > 0) {
+           //   const maxPuntajeProgram = Math.max(...conProgram.map(d => d.puntaje));
+           //   const mejoresProgram = conProgram.filter(d => d.puntaje === maxPuntajeProgram);
+           //   const candidatos = mejoresProgram.map(d => d.name);
+           //   mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
+           //   console.log("🏆 Programs/Excepciones encontrados - Mejor(es) con Program/Excepciones:", mejoresDigimons);
+           // } else {
+             // Lógica normal: puntaje máximo
              const maxPuntajeGlobal = Math.max(...todosLosCandidatos.map(d => d.puntaje));
              const conMaxPuntaje = todosLosCandidatos.filter(d => d.puntaje === maxPuntajeGlobal);
 
@@ -3674,7 +3665,7 @@ if (nextLevel === 4 || nextLevel === 5) {
                mejoresDigimons = desempatarPorDigipuntos(candidatos);
                console.log("✅ Sin Programs ni Driver/Xross - Mejor(es) normal(es):", mejoresDigimons);
              }
-           }
+           // }
          }
        } else {
          mejoresDigimons = ["Ninguno"];

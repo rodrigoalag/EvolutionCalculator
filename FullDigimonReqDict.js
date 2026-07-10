@@ -1035,7 +1035,7 @@ const fullDigimonReqDict = {
   },
   "Grademon VICE": {
     "ID": "174", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "Guerrero",
-    "categorias": { "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Vinculo Minimo alcanzado", "Tienes registrado a DexDoruguremon y Doruguremon?"] },
+    "categorias": { "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 36, "Error Maximo": 6, "Vinculo Minimo alcanzado": -50 },
     "Stat Base": { "ATK": 245, "DEF": 125, "HP": 2000, "Vel": 130, "Digipuntos": 70.0 },
     "isProgramEvo": false,

@@ -2169,6 +2169,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     if (nombreDigimon === "Chackmon" && campo === "Xross" && window.currentEvolutionDigimon === "Penmon") {
       return { cumple: 3, noCumple: 0 };
     }
+    // High Tier Adult: Error Maximo siempre 1/-10
+    if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier") {
+      return { cumple: 1, noCumple: -10 };
+    }
   }
 
   // Excepciones en Perfect (nivel 5)
@@ -2234,6 +2238,10 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
           return { cumple: 0, noCumple: -10 };
         }
       }
+    }
+    // High Tier Perfect: Error Maximo siempre 1/-10
+    if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier") {
+      return { cumple: 1, noCumple: -10 };
     }
   }
 

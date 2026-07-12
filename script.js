@@ -2730,7 +2730,12 @@ punto = totalBonus;}
 	// Error Maximo
 else if (field === "Error Maximo") {
 	const ingNum = Number(ingresado);
-	const esObligatorio = digimonReqDict[name]?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
+	const req = digimonReqDict[name];
+	const nivel = req?.Nivel;
+	const esHighTierAdultOPerfect = (nivel === 4 || nivel === 5) && req?.Clasificacion?.nombre === "High Tier";
+	if (esHighTierAdultOPerfect && (esperado === undefined || esperado === null)) esperado = 0;
+	const esObligatorio = esHighTierAdultOPerfect
+		|| req?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
 	if (typeof esperado === "string" && esperado.includes("-")) {
 		const [min, max] = esperado.split("-").map(Number);
 		punto = (!isNaN(ingNum) && ingNum >= min && ingNum <= max) ? 1 : (esObligatorio ? -10 : 0);

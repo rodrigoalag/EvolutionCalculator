@@ -2953,8 +2953,8 @@ else if (field === "Combates Minimos") {
 }
 // CÓDIGO DE EVALUACIÓN MODIFICADO
 else if (field === "Program") {
-    // Solo Mushmon y Raremon dan +3/-10 por Program
-    if (["Mushmon", "Raremon"].includes(name)) {
+    // Mushmon, Raremon, Ghostmon, Geremon y DarkTyranomon dan +3/-10 por Program
+    if (["Mushmon", "Raremon", "Ghostmon", "Geremon", "DarkTyranomon"].includes(name)) {
         if (esperado && ingresado.toLowerCase() === esperado.toLowerCase()) {
             punto = 3;
         } else {

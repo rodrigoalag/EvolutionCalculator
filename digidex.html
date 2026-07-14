@@ -2137,22 +2137,21 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
   // Baby I (nivel 1) y Baby II (nivel 2) no tienen puntajes
   if (nivel === 1 || nivel === 2) return null;
 
-  // Excepciones especiales para ciertos Digimon
-  // Gotsumon, Ghostmon y Mushmon: Program da +3/-10
-  if ((nombreDigimon === "Gotsumon" || nombreDigimon === "Ghostmon" || nombreDigimon === "Mushmon") && campo === "Program") {
+  // Solo Mushmon y Raremon dan +3/-10 por Program
+  if ((nombreDigimon === "Mushmon" || nombreDigimon === "Raremon") && campo === "Program") {
     return { cumple: 3, noCumple: -10 };
   }
 
   // Excepciones en Adult (nivel 4)
   if (nivel === 4) {
     if (nombreDigimon === "DarkTyranomon" && campo === "Program") {
-      return { cumple: 3, noCumple: -10 };
+      return { cumple: 0, noCumple: -10 };
     }
     if (nombreDigimon === "RedVDramon" && campo === "Vinculo Minimo alcanzado") {
       return { cumple: 3, noCumple: -10 };
     }
     if (nombreDigimon === "Geremon" && campo === "Program") {
-      return { cumple: 3, noCumple: -10 };
+      return { cumple: 0, noCumple: -10 };
     }
     if (nombreDigimon === "Nanimon" && campo === "Vinculo al momento de evolucionar") {
       return { cumple: 3, noCumple: -10 };

@@ -2953,8 +2953,8 @@ else if (field === "Combates Minimos") {
 }
 // CÓDIGO DE EVALUACIÓN MODIFICADO
 else if (field === "Program") {
-    // isProgramEvo (incluye Mushmon y Raremon): +3 si coincide, -10 si no
-    if (["Mushmon"].includes(name) || digimonReqDict[name]?.isProgramEvo === true) {
+    // Solo Mushmon y Raremon dan +3/-10 por Program
+    if (["Mushmon", "Raremon"].includes(name)) {
         if (esperado && ingresado.toLowerCase() === esperado.toLowerCase()) {
             punto = 3;
         } else {

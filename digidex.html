@@ -2169,8 +2169,11 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
       return { cumple: 3, noCumple: 0 };
     }
     // High Tier Adult: Error Maximo siempre 1/-10
-    if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier") {
-      return { cumple: 1, noCumple: -10 };
+    {
+      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"];
+      if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
+        return { cumple: 1, noCumple: -10 };
+      }
     }
   }
 
@@ -2239,8 +2242,11 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
       }
     }
     // High Tier Perfect: Error Maximo siempre 1/-10
-    if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier") {
-      return { cumple: 1, noCumple: -10 };
+    {
+      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"];
+      if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
+        return { cumple: 1, noCumple: -10 };
+      }
     }
   }
 
@@ -2841,6 +2847,15 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
     return digimon["Victorias Minimas"];
   }
 
+  // Para High Tier Adult/Perfect, Error Maximo es implícitamente 0 si no está en los datos
+  if (campo === "Error Maximo" && digimon[campo] === undefined) {
+    const _nivel = digimon.Nivel;
+    const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"];
+    if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
+      return 0;
+    }
+  }
+
   // Devolver el valor original del campo
   return digimon[campo];
 }
@@ -3403,8 +3418,33 @@ const camposDisponibles = Object.keys(digimon).filter(campo => {
   return !generales.includes(campo);
 });
 
+// Inyectar "Error Maximo" para High Tier Adult/Perfect si no está en los datos
+// Excepciones: side evos o digimons con reglas propias de errores
+{
+  const nivel = digimon.Nivel;
+  const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"];
+  if ((nivel === 4 || nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !camposDisponibles.includes("Error Maximo") && !_highTierErrorExceptions.includes(nombre)) {
+    camposDisponibles.push("Error Maximo");
+  }
+}
+
 // Obtener la configuración de columnas para este digimon específico
 const gruposColumnas = obtenerGruposColumnas(nombre);
+
+// Inyectar "Error Maximo" en Requisitos Obligatorios para High Tier Adult/Perfect
+// Excepciones: side evos o digimons con reglas propias de errores
+{
+  const _nivel = digimon.Nivel;
+  const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"];
+  if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombre)) {
+    const obligGroup = "Requisitos Obligatorios";
+    if (gruposColumnas[obligGroup] && !gruposColumnas[obligGroup].includes("Error Maximo")) {
+      gruposColumnas[obligGroup] = [...gruposColumnas[obligGroup], "Error Maximo"];
+    } else if (!gruposColumnas[obligGroup]) {
+      gruposColumnas[obligGroup] = ["Error Maximo"];
+    }
+  }
+}
 
 // Detectar si hay casos especiales que requieren múltiples filas
 const evolucionesMultiples = detectarEvolucionesMultiples(nombre);
@@ -3423,17 +3463,25 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
     if (pathData.modo === 'PuntajeIndividual') {
       const obligFields = Object.keys(pathData.Obligatorios || {}).filter(f => pathData.Obligatorios[f] !== '-');
       const puntosFields = Object.keys(pathData.Puntos || {});
+      // Inyectar "Error Maximo" para High Tier Adult/Perfect si no está en los datos
+      {
+        const _nivel = digimon.Nivel;
+        const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"];
+        if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !obligFields.includes("Error Maximo") && !_highTierErrorExceptions.includes(nombre)) {
+          obligFields.push("Error Maximo");
+        }
+      }
       const _gruposColumnas = { 'Quota/Key Points': puntosFields, 'Requisitos Obligatorios': obligFields };
       const _valores = { 'Peso': formatearPeso(_peso) };
       const formatField = (f, v) => {
         if (f === 'Peso') return formatearPeso(v);
-        if (f === 'Error Maximo') return formatearErrorMaximo(v, nombre);
+        if (f === 'Error Maximo') return formatearErrorMaximo(v ?? 0, nombre);
         if (f === 'WinRate') return formatearWinRate(v);
         if (f === '% Entrenamiento') return formatearPorcentajeEntrenamiento(v, nombre);
         return String(v);
       };
       puntosFields.forEach(f => { _valores[f] = formatField(f, pathData.Puntos[f]); });
-      obligFields.forEach(f => { _valores[f] = formatField(f, pathData.Obligatorios[f]); });
+      obligFields.forEach(f => { _valores[f] = formatField(f, pathData.Obligatorios?.[f]); });
       tieneRequisitosOrigen[pathName] = { gruposColumnas: _gruposColumnas, valores: _valores };
       return;
     }
@@ -3621,7 +3669,9 @@ if (tieneRequisitosOrigen) {
 
           let puntajeHTML = "";
           if (mostrarPuntaje) {
-            if (nombreGrupo === "Quota/Key Points") {
+            if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier") {
+              puntajeHTML = formatearPuntajeConColor({ cumple: 1, noCumple: -10 });
+            } else if (nombreGrupo === "Quota/Key Points") {
               puntajeHTML = formatearPuntajeConColor({ cumple: 1, noCumple: 0 });
             } else if (nombreGrupo === "Requisitos Obligatorios") {
               puntajeHTML = formatearPuntajeConColor({ cumple: 0, noCumple: -10 });
@@ -3898,6 +3948,15 @@ if (evolucionesMultiples.length > 0) {
   camposOrdenados.forEach(({ campo, grupo }) => {
     const td = document.createElement("td");
     let valorOriginal = digimon[campo];
+
+    // Para High Tier Adult/Perfect, Error Maximo es implícitamente 0 si no está en los datos
+    if (campo === "Error Maximo" && valorOriginal === undefined) {
+      const _nivel = digimon.Nivel;
+      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"];
+      if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombre)) {
+        valorOriginal = 0;
+      }
+    }
 
     // Formatear Error Maximo como rango
     if (campo === "Error Maximo") {

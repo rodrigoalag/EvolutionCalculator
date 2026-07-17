@@ -226,7 +226,7 @@ const itemData = {
     descripcion: "La carne de las carnes. Su data se ha condensado a niveles imposibles. Tiene una capa externa sólida y dura que hace imposible que Digimon de nivel Child o inferior puedan comerla... Sin embargo, sus beneficios son absolutos.",
     descripcionEN: "The meat of meats, its data has condensed at a never seen before level. It has an extremely hard outer layer, making it imposisible for Child or lower Digimon to eat it... however, its benefits are absolute.",
     nombreEN: "Jurassic Meat",
-    efectoFueraDeCombate: "Recupera hambre. Da Entrenamiento. Añade 5 min extra de vida. Solo puede ser comida por Adultos",
+    efectoFueraDeCombate: "Recupera hambre. Da Entrenamiento. Añade 5 min extra de vida. Solo puede ser comida por Adultos o etapa superior",
     efectoEntrenamiento: "Ver guia de efectos variables",
     efectoBatalla: "",
     precioVenta: 250,

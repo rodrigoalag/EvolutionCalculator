@@ -2202,6 +2202,14 @@ const celdas = Array.from(fieldSet)
   // Alias: "Victorias" ← "Victorias Minimas", "Error Maximo" ← "Errores Minimos"
   if (esperado === undefined && field === "Victorias") esperado = requisitos["Victorias Minimas"];
   if (esperado === undefined && field === "Error Maximo") esperado = requisitos["Errores Minimos"];
+  // Auto-set Error Maximo = 0 for High Tier Adult/Perfect before the esperado !== undefined guard
+  if (field === "Error Maximo" && (esperado === undefined || esperado === null)) {
+    const _req = digimonReqDict[name];
+    const _nivel = _req?.Nivel;
+    if ((_nivel === 4 || _nivel === 5) && _req?.Clasificacion?.nombre === "High Tier") {
+      esperado = 0;
+    }
+  }
   const ingresado = inputValues[field];
   let punto = 0;
 

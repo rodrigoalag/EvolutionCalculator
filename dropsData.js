@@ -66,7 +66,8 @@ const dropsData = [
       "Zanahoria": "2",
       "Verdura": "2",
       "TomateMilagroso": "1-2",
-      "SetadelCaos": "2"
+      "SetadelCaos": "2",
+      "LimonJuzgador": "1"
     }
   },
 

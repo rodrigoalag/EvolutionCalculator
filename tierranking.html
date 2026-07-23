@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tier Ranking</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <style>
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 80px;
+}
+h1, h2, h3 { color: #4ecdc4; }
+a { color: #4ecdc4; }
+
+/* ===== NAV HAMBURGUESA ===== */
+#nav-toggle {
+  position: fixed; top: 15px; left: 15px;
+  width: 45px; height: 45px; border-radius: 10px;
+  background: rgba(30,30,50,0.95);
+  border: 1px solid rgba(78,205,196,0.3);
+  cursor: pointer; z-index: 200;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span { width: 22px; height: 2px; background: #4ecdc4; border-radius: 2px; }
+#nav-menu {
+  position: fixed; top: 0; left: -320px;
+  width: 300px; height: 100vh;
+  background: rgba(20,20,40,0.98);
+  border-right: 1px solid rgba(78,205,196,0.3);
+  z-index: 150; padding: 20px; padding-top: 60px;
+  transition: left 0.3s ease; overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute; top: 15px; right: 15px;
+  width: 35px; height: 35px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78,205,196,0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4; font-size: 0.9rem;
+  margin-bottom: 15px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; gap: 6px;
+}
+#nav-menu h3 img { width: 14px; height: 14px; object-fit: contain; }
+.nav-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 15px; margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px; color: #ccc;
+  text-decoration: none; font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.nav-link img { width: 14px; height: 14px; object-fit: contain; }
+.nav-link:hover { background: rgba(78,205,196,0.2); color: #fff; }
+.nav-link.active { background: rgba(78,205,196,0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits { font-size: 0.8rem; color: #999; line-height: 1.5; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; }
+.nav-credits ul { margin: 10px 0 0 0; padding-left: 20px; }
+.nav-credits li { margin-bottom: 8px; }
+.nav-credits a { color: #4ecdc4; text-decoration: none; }
+#nav-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); z-index: 140; display: none;
+}
+#nav-overlay.active { display: block; }
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+  text-align: center; margin-bottom: 1.5rem; padding-top: 0.5rem;
+}
+.page-header h1 { margin: 0 0 0.25rem 0; font-size: 2rem; }
+.page-header p { color: #888; margin: 0; font-size: 0.9rem; }
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  justify-content: center; margin-bottom: 1rem;
+}
+.filter-btn {
+  padding: 6px 16px; border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #ccc; font-size: 0.83rem; cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: rgba(78,205,196,0.5); color: #fff; }
+.filter-btn.active {
+  background: rgba(78,205,196,0.25);
+  border-color: #4ecdc4; color: #4ecdc4; font-weight: bold;
+}
+
+/* ===== CONTROLS BAR ===== */
+.controls-bar {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  justify-content: center; margin-bottom: 1.25rem;
+}
+.ctrl-btn {
+  padding: 8px 16px; border-radius: 8px;
+  background: rgba(78,205,196,0.15);
+  color: #4ecdc4; border: 1px solid rgba(78,205,196,0.4);
+  font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+}
+.ctrl-btn:hover { background: rgba(78,205,196,0.3); border-color: #4ecdc4; }
+.ctrl-btn.danger { background: rgba(220,50,50,0.15); color: #e06060; border-color: rgba(220,50,50,0.4); }
+.ctrl-btn.danger:hover { background: rgba(220,50,50,0.3); }
+
+/* ===== TIER LIST ===== */
+#tierListCapture {
+  background: #111827;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 1.5rem;
+}
+.tier-row {
+  display: flex; align-items: stretch;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  min-height: 80px; position: relative;
+}
+.tier-row:last-child { border-bottom: none; }
+.tier-label {
+  width: 90px; min-width: 90px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; font-weight: 900;
+  color: #1a1a2e; cursor: pointer;
+  user-select: none; position: relative;
+  flex-shrink: 0;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.2);
+}
+.tier-label:hover .label-edit-hint { opacity: 1; }
+.label-edit-hint {
+  position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  font-size: 0.55rem; color: rgba(0,0,0,0.5); opacity: 0; white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.tier-label input {
+  width: 80px; background: transparent;
+  border: none; border-bottom: 2px solid rgba(0,0,0,0.4);
+  color: #1a1a2e; font-size: 1.2rem; font-weight: 900;
+  text-align: center; outline: none;
+}
+.tier-drop-zone {
+  flex: 1; display: flex; flex-wrap: wrap;
+  align-items: center; gap: 4px; padding: 8px;
+  min-height: 80px;
+  background: rgba(0,0,0,0.2);
+  transition: background 0.15s;
+  position: relative;
+}
+.tier-drop-zone.drag-over {
+  background: rgba(78,205,196,0.12);
+  outline: 2px dashed rgba(78,205,196,0.5);
+  outline-offset: -2px;
+}
+.tier-drop-zone.empty::after {
+  content: attr(data-drag-here);
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255,255,255,0.12); font-size: 0.8rem;
+  pointer-events: none;
+}
+.tier-controls {
+  display: flex; flex-direction: column;
+  justify-content: center; gap: 3px;
+  padding: 6px 4px;
+  background: rgba(0,0,0,0.3);
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+.tier-controls button {
+  width: 26px; height: 26px; padding: 0;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #aaa; border-radius: 5px;
+  font-size: 0.75rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.tier-controls button:hover { background: rgba(78,205,196,0.2); color: #4ecdc4; border-color: #4ecdc4; }
+.tier-controls button.del:hover { background: rgba(220,50,50,0.2); color: #e06060; border-color: #e06060; }
+.tier-controls input[type="color"] {
+  width: 26px; height: 26px; padding: 0; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px; cursor: pointer; background: none;
+}
+
+/* ===== DIGI ICONS ===== */
+.digi-icon-wrap {
+  position: relative; display: inline-flex;
+  cursor: grab; user-select: none;
+  transition: transform 0.1s;
+}
+.digi-icon-wrap:hover { transform: scale(1.1); z-index: 10; }
+.digi-icon-wrap:active { cursor: grabbing; }
+.digi-icon-wrap img {
+  width: 60px; height: 60px;
+  object-fit: contain; image-rendering: pixelated;
+  display: block;
+}
+.digi-icon-wrap .digi-tooltip {
+  position: absolute; bottom: 100%; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10,10,20,0.92);
+  color: #e0e0e0; font-size: 0.7rem;
+  padding: 3px 7px; border-radius: 5px;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity 0.15s;
+  z-index: 20; border: 1px solid rgba(78,205,196,0.3);
+}
+.digi-icon-wrap:hover .digi-tooltip { opacity: 1; }
+.digi-icon-wrap.dragging { opacity: 0.4; }
+
+/* Pool icons smaller */
+#pool-grid .digi-icon-wrap img { width: 52px; height: 52px; }
+#pool-grid .digi-icon-wrap .digi-tooltip { font-size: 0.68rem; }
+
+/* ===== POOL ===== */
+.pool-section {
+  background: rgba(20,20,40,0.6);
+  border: 1px solid rgba(78,205,196,0.15);
+  border-radius: 12px; padding: 1rem;
+}
+.pool-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.pool-header h2 { margin: 0; font-size: 1.1rem; }
+.pool-count { color: #888; font-size: 0.8rem; }
+#pool-grid {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  min-height: 80px;
+}
+#pool-grid.drag-over {
+  background: rgba(78,205,196,0.06);
+  border-radius: 8px;
+  outline: 2px dashed rgba(78,205,196,0.3);
+  outline-offset: -2px;
+}
+
+/* ===== COLOR PICKER POPUP ===== */
+.color-picker-popup {
+  position: fixed; z-index: 300;
+  background: rgba(20,20,40,0.97);
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 10px; padding: 12px;
+  display: none; flex-wrap: wrap;
+  gap: 6px; width: 200px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.color-swatch {
+  width: 28px; height: 28px; border-radius: 5px;
+  cursor: pointer; border: 2px solid transparent;
+  transition: all 0.15s;
+}
+.color-swatch:hover { transform: scale(1.15); border-color: white; }
+
+/* ===== ADD TIER MODAL ===== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 400; display: none;
+  align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: #1a1a2e;
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 12px; padding: 1.5rem;
+  width: 340px; max-width: 90vw;
+}
+.modal-box h3 { margin: 0 0 1rem 0; color: #4ecdc4; }
+.modal-box input[type="text"] {
+  width: 100%; padding: 8px 12px;
+  background: rgba(30,30,50,0.9);
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 8px; color: #e0e0e0;
+  font-size: 1rem; margin-bottom: 0.75rem;
+  outline: none;
+}
+.modal-box input[type="text"]:focus { border-color: #4ecdc4; }
+.modal-color-row {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+.modal-actions button {
+  padding: 8px 18px; border-radius: 8px;
+  cursor: pointer; font-size: 0.9rem; border: 1px solid;
+  transition: all 0.2s;
+}
+.btn-confirm {
+  background: rgba(78,205,196,0.2); color: #4ecdc4;
+  border-color: rgba(78,205,196,0.4);
+}
+.btn-confirm:hover { background: rgba(78,205,196,0.35); }
+.btn-cancel {
+  background: rgba(255,255,255,0.05); color: #aaa;
+  border-color: rgba(255,255,255,0.15);
+}
+.btn-cancel:hover { background: rgba(255,255,255,0.1); }
+
+/* ===== LANG SELECTOR ===== */
+#lang-selector {
+  position: fixed; top: 15px; right: 15px; z-index: 200;
+}
+#lang-selector select {
+  background: rgba(30,30,50,0.9); color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 0.85rem; cursor: pointer;
+}
+#lang-selector select:hover { border-color: #4ecdc4; }
+  </style>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<script src="FullDigimonReqDict.js"></script>
+<body>
+
+<!-- Selector de idioma -->
+<div id="lang-selector">
+  <select id="languageSelector">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</div>
+
+<!-- Nav hamburguesa -->
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span><span></span><span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3><img src="./pageicons/menu.png" alt="">Herramientas</h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt=""> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/calculator.png" alt=""> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/digidex.png" alt=""> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/ranking.png" alt=""> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/digidex.png" alt=""> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/calculator.png" alt=""> Balance Calc</a>
+  <a href="./tierranking.html" class="nav-link active"><img src="./icon/starmon.png" alt=""> Tier Ranking</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/agumon.png" alt=""> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt=""> Drops de la Red</a>
+  <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt=""> Itempedia</a>
+  <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt=""> Efectos de los Objetos</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/link.png" alt="">Links Externos</h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://driverdatabase.neocities.org/Driver%20DB" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://netdriver.miraheze.org/wiki/Main_Page" target="_blank" class="nav-link external">NetDriver Wiki</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="">Créditos</h3>
+  <div class="nav-credits">
+    Agradecimientos a todas las personas que ayudaron a construir la base de datos.
+  </div>
+</nav>
+
+<!-- Color picker popup (global) -->
+<div id="colorPickerPopup" class="color-picker-popup"></div>
+
+<!-- Add Tier Modal -->
+<div id="addTierModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 id="modalTitle">Nueva Fila</h3>
+    <input type="text" id="newTierLabel" placeholder="Nombre (ej: SS, A+, OP...)" maxlength="8">
+    <div class="modal-color-row" id="newTierColors"></div>
+    <div class="modal-actions">
+      <button id="modalCancelBtn" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button id="modalConfirmBtn" class="btn-confirm" onclick="confirmAddTier()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 0.5rem;">
+
+  <div class="page-header">
+    <h1 id="pageTitle">Tier Ranking</h1>
+    <p id="pageSubtitle">Armá tu propio tier list de Digimon arrastrando los iconos</p>
+  </div>
+
+  <!-- Filtro por nivel -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-nivel="all">Todos</button>
+    <button class="filter-btn" data-nivel="1">Baby I</button>
+    <button class="filter-btn" data-nivel="2">Baby II</button>
+    <button class="filter-btn" data-nivel="3">Child</button>
+    <button class="filter-btn" data-nivel="4">Adult</button>
+    <button class="filter-btn" data-nivel="5">Perfect</button>
+    <button class="filter-btn" data-nivel="6">Ultimate</button>
+  </div>
+
+  <!-- Controles -->
+  <div class="controls-bar">
+    <button id="addTierBtn" class="ctrl-btn" onclick="openAddTierModal()">＋ Agregar Fila</button>
+    <button id="screenshotBtn" class="ctrl-btn" onclick="takeScreenshot()">📷 Captura</button>
+    <button id="clearTiersBtn" class="ctrl-btn danger" onclick="clearTiers()">🗑 Limpiar Tiers</button>
+    <button id="resetAllBtn" class="ctrl-btn danger" onclick="resetAll()">↺ Resetear Todo</button>
+  </div>
+
+  <!-- Tier list -->
+  <div id="tierListCapture">
+    <div id="tierList"></div>
+  </div>
+
+  <!-- Pool -->
+  <div class="pool-section">
+    <div class="pool-header">
+      <h2 id="poolTitle">Pool de Digimon</h2>
+      <span class="pool-count" id="poolCount"></span>
+    </div>
+    <div id="pool-grid"></div>
+  </div>
+
+</div>
+
+<script>
+// ===== TRANSLATIONS =====
+let currentLang = 'es';
+
+const TEXTS = {
+  es: {
+    pageTitle:       'Tier Ranking',
+    pageSubtitle:    'Armá tu propio tier list de Digimon arrastrando los iconos',
+    filterAll:       'Todos',
+    addTierBtn:      '＋ Agregar Fila',
+    screenshotBtn:   '📷 Captura',
+    clearTiersBtn:   '🗑 Limpiar Tiers',
+    resetAllBtn:     '↺ Resetear Todo',
+    poolTitle:       'Pool de Digimon',
+    poolAvailable:   'disponibles',
+    poolInTiers:     'en tiers',
+    modalTitle:      'Nueva Fila',
+    modalPlaceholder:'Nombre (ej: SS, A+, OP...)',
+    modalCancel:     'Cancelar',
+    modalConfirm:    'Agregar',
+    dragHere:        'Arrastra aquí',
+    editHint:        '✏ doble clic',
+    btnUp:           'Subir',
+    btnDown:         'Bajar',
+    btnColor:        'Color',
+    btnDel:          'Eliminar fila',
+    customColor:     'Custom:',
+    labelTitle:      'Doble clic para editar nombre',
+    confirmClear:    '¿Limpiar todos los digimon de los tiers? Volverán al pool.',
+    confirmReset:    '¿Resetear todo? Se perderán los tiers y la disposición actual.',
+    toastGenerating: '📷 Generando imagen...',
+    toastDownloaded: '✅ Imagen descargada',
+    toastError:      'Error al generar la captura',
+  },
+  en: {
+    pageTitle:       'Tier Ranking',
+    pageSubtitle:    'Build your own Digimon tier list by dragging the icons',
+    filterAll:       'All',
+    addTierBtn:      '＋ Add Row',
+    screenshotBtn:   '📷 Screenshot',
+    clearTiersBtn:   '🗑 Clear Tiers',
+    resetAllBtn:     '↺ Reset All',
+    poolTitle:       'Digimon Pool',
+    poolAvailable:   'available',
+    poolInTiers:     'in tiers',
+    modalTitle:      'New Row',
+    modalPlaceholder:'Name (e.g. SS, A+, OP...)',
+    modalCancel:     'Cancel',
+    modalConfirm:    'Add',
+    dragHere:        'Drop here',
+    editHint:        '✏ double-click',
+    btnUp:           'Move up',
+    btnDown:         'Move down',
+    btnColor:        'Color',
+    btnDel:          'Delete row',
+    customColor:     'Custom:',
+    labelTitle:      'Double-click to edit name',
+    confirmClear:    'Clear all Digimon from tiers? They will return to the pool.',
+    confirmReset:    'Reset everything? All tiers and placements will be lost.',
+    toastGenerating: '📷 Generating image...',
+    toastDownloaded: '✅ Image downloaded',
+    toastError:      'Error generating screenshot',
+  }
+};
+
+function t(key) { return TEXTS[currentLang][key] || key; }
+
+function updateUI() {
+  document.getElementById('pageTitle').textContent       = t('pageTitle');
+  document.getElementById('pageSubtitle').textContent    = t('pageSubtitle');
+  document.getElementById('addTierBtn').textContent      = t('addTierBtn');
+  document.getElementById('screenshotBtn').textContent   = t('screenshotBtn');
+  document.getElementById('clearTiersBtn').textContent   = t('clearTiersBtn');
+  document.getElementById('resetAllBtn').textContent     = t('resetAllBtn');
+  document.getElementById('poolTitle').textContent       = t('poolTitle');
+  document.getElementById('modalTitle').textContent      = t('modalTitle');
+  document.getElementById('newTierLabel').placeholder    = t('modalPlaceholder');
+  document.getElementById('modalCancelBtn').textContent  = t('modalCancel');
+  document.getElementById('modalConfirmBtn').textContent = t('modalConfirm');
+  document.querySelector('.filter-btn[data-nivel="all"]').textContent = t('filterAll');
+  render();
+}
+
+// ===== NAV =====
+function toggleNav() {
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+function closeNav() {
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+
+// ===== CONSTANTS =====
+const NIVEL_LABELS = { 1: 'Baby I', 2: 'Baby II', 3: 'Child', 4: 'Adult', 5: 'Perfect', 6: 'Ultimate' };
+
+const PRESET_COLORS = [
+  '#ff7f7f','#ff9f6b','#ffbf6b','#ffdf6b','#ffff6b',
+  '#bfff6b','#7fff9f','#7fffff','#7fbfff','#9f7fff',
+  '#ff7fff','#ff7faf','#c0c0c0','#a0a0c0','#ffffff'
+];
+
+const DEFAULT_TIERS = [
+  { id: 'tSS', label: 'SS', color: '#ff7f7f' },
+  { id: 'tS',  label: 'S',  color: '#ffbf6b' },
+  { id: 'tA',  label: 'A',  color: '#ffdf6b' },
+  { id: 'tB',  label: 'B',  color: '#ffff6b' },
+  { id: 'tC',  label: 'C',  color: '#bfff6b' },
+  { id: 'tD',  label: 'D',  color: '#7fbfff' },
+];
+
+// ===== STATE =====
+// "all" y "levels" son contextos independientes de placement
+const tierContexts = {
+  all:    DEFAULT_TIERS.map(t => ({ ...t, digimons: [] })),
+  levels: DEFAULT_TIERS.map(t => ({ ...t, digimons: [] }))
+};
+function activeTiers() {
+  return filterLevels.size === 0 ? tierContexts.all : tierContexts.levels;
+}
+let filterLevels = new Set(); // empty = all mode ("Todos")
+let draggingName = null;
+let draggingFrom = null; // 'pool' or tier id
+let newTierSelectedColor = PRESET_COLORS[0];
+let activeColorTarget = null; // { tierId }
+
+// ===== BUILD DIGIMON LIST FROM DICT =====
+function iconPath(name) {
+  return `icon/${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.png`;
+}
+
+const allDigimons = Object.entries(digimonReqDict)
+  .filter(([, d]) => d.Nivel >= 1 && d.Nivel <= 6)
+  .map(([name, d]) => ({ name, nivel: d.Nivel }))
+  .sort((a, b) => a.nivel - b.nivel || a.name.localeCompare(b.name));
+
+const digimonNivelMap = Object.fromEntries(allDigimons.map(d => [d.name, d.nivel]));
+
+function matchesFilter(nivel) {
+  return filterLevels.size === 0 || filterLevels.has(nivel);
+}
+
+function getPlacedNames() {
+  const placed = new Set();
+  activeTiers().forEach(t => t.digimons.forEach(n => placed.add(n)));
+  return placed;
+}
+
+function getPoolDigimons() {
+  const placed = getPlacedNames();
+  return allDigimons.filter(d => !placed.has(d.name) && matchesFilter(d.nivel));
+}
+
+// ===== RENDER =====
+function render() {
+  renderTiers();
+  renderPool();
+}
+
+function makeIconEl(name, inPool = false) {
+  const wrap = document.createElement('div');
+  wrap.className = 'digi-icon-wrap';
+  wrap.draggable = true;
+  wrap.dataset.name = name;
+
+  const img = document.createElement('img');
+  img.src = iconPath(name);
+  img.alt = name;
+  img.onerror = () => { img.src = 'icon/placeholder.png'; };
+
+  const tooltip = document.createElement('div');
+  tooltip.className = 'digi-tooltip';
+  tooltip.textContent = name;
+
+  wrap.appendChild(img);
+  wrap.appendChild(tooltip);
+
+  wrap.addEventListener('dragstart', e => {
+    draggingName = name;
+    draggingFrom = inPool ? 'pool' : findTierOfDigimon(name);
+    wrap.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', name);
+  });
+  wrap.addEventListener('dragend', () => {
+    wrap.classList.remove('dragging');
+    draggingName = null;
+    draggingFrom = null;
+  });
+
+  return wrap;
+}
+
+function findTierOfDigimon(name) {
+  for (const t of activeTiers()) {
+    if (t.digimons.includes(name)) return t.id;
+  }
+  return 'pool';
+}
+
+function renderTiers() {
+  const list = document.getElementById('tierList');
+  list.innerHTML = '';
+  activeTiers().forEach((tier, idx) => {
+    const row = document.createElement('div');
+    row.className = 'tier-row';
+    row.dataset.tierId = tier.id;
+
+    // Label
+    const label = document.createElement('div');
+    label.className = 'tier-label';
+    label.style.background = tier.color;
+    label.textContent = tier.label;
+    label.title = t('labelTitle');
+    const hint = document.createElement('span');
+    hint.className = 'label-edit-hint';
+    hint.textContent = t('editHint');
+    label.appendChild(hint);
+    label.addEventListener('dblclick', () => startEditLabel(tier.id, label));
+    row.appendChild(label);
+
+    // Drop zone — only render icons whose nivel matches active filter
+    const visibleInTier = tier.digimons.filter(name => matchesFilter(digimonNivelMap[name] ?? 0));
+    const zone = document.createElement('div');
+    zone.className = 'tier-drop-zone' + (visibleInTier.length === 0 ? ' empty' : '');
+    zone.dataset.dragHere = t('dragHere');
+    zone.dataset.tierId = tier.id;
+
+    visibleInTier.forEach(name => {
+      zone.appendChild(makeIconEl(name, false));
+    });
+
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      zone.classList.add('drag-over');
+    });
+    zone.addEventListener('dragleave', e => {
+      if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over');
+    });
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const name = e.dataTransfer.getData('text/plain');
+      if (!name) return;
+      moveDigimon(name, tier.id);
+    });
+    row.appendChild(zone);
+
+    // Controls
+    const ctrl = document.createElement('div');
+    ctrl.className = 'tier-controls';
+
+    const btnUp = document.createElement('button');
+    btnUp.textContent = '▲'; btnUp.title = t('btnUp');
+    btnUp.disabled = idx === 0;
+    btnUp.style.opacity = idx === 0 ? '0.3' : '1';
+    btnUp.addEventListener('click', () => moveTierUp(tier.id));
+
+    const btnDown = document.createElement('button');
+    btnDown.textContent = '▼'; btnDown.title = t('btnDown');
+    btnDown.disabled = idx === activeTiers().length - 1;
+    btnDown.style.opacity = idx === activeTiers().length - 1 ? '0.3' : '1';
+    btnDown.addEventListener('click', () => moveTierDown(tier.id));
+
+    const btnColor = document.createElement('button');
+    btnColor.title = t('btnColor');
+    btnColor.style.background = tier.color;
+    btnColor.style.border = '2px solid rgba(255,255,255,0.3)';
+    btnColor.addEventListener('click', e => openColorPicker(e, tier.id));
+
+    const btnDel = document.createElement('button');
+    btnDel.textContent = '✕'; btnDel.title = t('btnDel');
+    btnDel.classList.add('del');
+    btnDel.addEventListener('click', () => deleteTier(tier.id));
+
+    ctrl.appendChild(btnUp);
+    ctrl.appendChild(btnDown);
+    ctrl.appendChild(btnColor);
+    ctrl.appendChild(btnDel);
+    row.appendChild(ctrl);
+
+    list.appendChild(row);
+  });
+}
+
+function renderPool() {
+  const grid = document.getElementById('pool-grid');
+  grid.innerHTML = '';
+  const poolDigis = getPoolDigimons();
+
+  poolDigis.forEach(d => {
+    grid.appendChild(makeIconEl(d.name, true));
+  });
+
+  // Drop zone para devolver al pool
+  grid.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    grid.classList.add('drag-over');
+  });
+  grid.addEventListener('dragleave', e => {
+    if (!grid.contains(e.relatedTarget)) grid.classList.remove('drag-over');
+  });
+  grid.addEventListener('drop', e => {
+    e.preventDefault();
+    grid.classList.remove('drag-over');
+    const name = e.dataTransfer.getData('text/plain');
+    if (!name) return;
+    moveDigimon(name, 'pool');
+  });
+
+  const placed = getPlacedNames();
+  const placedFiltered = allDigimons.filter(d => matchesFilter(d.nivel) && placed.has(d.name)).length;
+  document.getElementById('poolCount').textContent =
+    `${poolDigis.length} ${t('poolAvailable')}${placedFiltered > 0 ? ` · ${placedFiltered} ${t('poolInTiers')}` : ''}`;
+}
+
+// ===== DRAG LOGIC =====
+function moveDigimon(name, targetTierId) {
+  activeTiers().forEach(t => {
+    t.digimons = t.digimons.filter(n => n !== name);
+  });
+  if (targetTierId !== 'pool') {
+    const tier = activeTiers().find(t => t.id === targetTierId);
+    if (tier) tier.digimons.push(name);
+  }
+  render();
+}
+
+// ===== TIER MANAGEMENT =====
+function moveTierUp(id) {
+  const arr = activeTiers();
+  const idx = arr.findIndex(t => t.id === id);
+  if (idx <= 0) return;
+  [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
+  render();
+}
+function moveTierDown(id) {
+  const arr = activeTiers();
+  const idx = arr.findIndex(t => t.id === id);
+  if (idx < 0 || idx >= arr.length - 1) return;
+  [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
+  render();
+}
+function deleteTier(id) {
+  const key = filterLevels.size === 0 ? 'all' : 'levels';
+  if (!tierContexts[key].find(t => t.id === id)) return;
+  tierContexts[key] = tierContexts[key].filter(t => t.id !== id);
+  render();
+}
+
+let editingLabelId = null;
+function startEditLabel(tierId, labelEl) {
+  if (editingLabelId) return;
+  editingLabelId = tierId;
+  const tier = activeTiers().find(t => t.id === tierId);
+  labelEl.innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = tier.label;
+  input.maxLength = 8;
+  labelEl.appendChild(input);
+  input.focus();
+  input.select();
+
+  const commit = () => {
+    tier.label = input.value.trim() || tier.label;
+    editingLabelId = null;
+    render();
+  };
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') commit();
+    if (e.key === 'Escape') { editingLabelId = null; render(); }
+  });
+}
+
+// ===== COLOR PICKER =====
+function openColorPicker(e, tierId) {
+  e.stopPropagation();
+  activeColorTarget = tierId;
+  const popup = document.getElementById('colorPickerPopup');
+  popup.innerHTML = '';
+  popup.style.display = 'flex';
+  const rect = e.target.getBoundingClientRect();
+  popup.style.left = (rect.right + 8) + 'px';
+  popup.style.top = rect.top + 'px';
+
+  // Custom color input
+  const customRow = document.createElement('div');
+  customRow.style.cssText = 'width:100%;display:flex;align-items:center;gap:6px;margin-bottom:6px;';
+  const customLabel = document.createElement('span');
+  customLabel.textContent = t('customColor'); customLabel.style.fontSize = '0.75rem'; customLabel.style.color = '#aaa';
+  const customInput = document.createElement('input');
+  customInput.type = 'color';
+  customInput.value = activeTiers().find(t => t.id === tierId)?.color || '#ff7f7f';
+  customInput.style.cssText = 'width:36px;height:28px;border:none;background:none;cursor:pointer;';
+  customInput.addEventListener('input', () => applyColor(customInput.value));
+  customRow.appendChild(customLabel);
+  customRow.appendChild(customInput);
+  popup.appendChild(customRow);
+
+  PRESET_COLORS.forEach(c => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch';
+    sw.style.background = c;
+    sw.title = c;
+    sw.addEventListener('click', () => { applyColor(c); closeColorPicker(); });
+    popup.appendChild(sw);
+  });
+
+  // Close on outside click
+  setTimeout(() => {
+    document.addEventListener('click', closeColorPicker, { once: true });
+  }, 0);
+}
+
+function applyColor(color) {
+  if (!activeColorTarget) return;
+  const tier = activeTiers().find(t => t.id === activeColorTarget);
+  if (tier) { tier.color = color; render(); }
+}
+
+function closeColorPicker() {
+  document.getElementById('colorPickerPopup').style.display = 'none';
+  activeColorTarget = null;
+}
+
+// ===== ADD TIER MODAL =====
+function openAddTierModal() {
+  newTierSelectedColor = PRESET_COLORS[0];
+  document.getElementById('newTierLabel').value = '';
+  const colorRow = document.getElementById('newTierColors');
+  colorRow.innerHTML = '';
+  PRESET_COLORS.forEach(c => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch';
+    sw.style.background = c;
+    sw.style.border = c === newTierSelectedColor ? '2px solid white' : '2px solid transparent';
+    sw.addEventListener('click', () => {
+      newTierSelectedColor = c;
+      colorRow.querySelectorAll('.color-swatch').forEach(s => s.style.border = '2px solid transparent');
+      sw.style.border = '2px solid white';
+    });
+    colorRow.appendChild(sw);
+  });
+  document.getElementById('addTierModal').classList.add('active');
+  document.getElementById('newTierLabel').focus();
+}
+function closeModal() {
+  document.getElementById('addTierModal').classList.remove('active');
+}
+document.getElementById('addTierModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('addTierModal')) closeModal();
+});
+function confirmAddTier() {
+  const label = document.getElementById('newTierLabel').value.trim();
+  if (!label) { document.getElementById('newTierLabel').focus(); return; }
+  const id = 't' + Date.now();
+  activeTiers().push({ id, label, color: newTierSelectedColor, digimons: [] });
+  closeModal();
+  render();
+}
+
+// ===== FILTER =====
+function updateFilterButtons() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const n = btn.dataset.nivel;
+    if (n === 'all') {
+      btn.classList.toggle('active', filterLevels.size === 0);
+    } else {
+      btn.classList.toggle('active', filterLevels.has(parseInt(n)));
+    }
+  });
+}
+
+document.getElementById('filterBar').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  const nivel = btn.dataset.nivel;
+
+  const wasAll = filterLevels.size === 0;
+
+  if (nivel === 'all') {
+    filterLevels.clear();
+  } else {
+    const n = parseInt(nivel);
+    if (filterLevels.has(n)) {
+      filterLevels.delete(n);
+    } else {
+      filterLevels.add(n);
+    }
+  }
+
+  const isNowAll = filterLevels.size === 0;
+  // Si cambió de contexto (Todos ↔ filtros de nivel), cancelar edición activa
+  if (wasAll !== isNowAll) {
+    editingLabelId = null;
+    closeColorPicker();
+  }
+
+  updateFilterButtons();
+  render();
+});
+
+// ===== CLEAR / RESET =====
+function clearTiers() {
+  if (!confirm(t('confirmClear'))) return;
+  activeTiers().forEach(t => t.digimons = []);
+  render();
+}
+function resetAll() {
+  if (!confirm(t('confirmReset'))) return;
+  tierContexts.all    = DEFAULT_TIERS.map(t => ({ ...t, digimons: [] }));
+  tierContexts.levels = DEFAULT_TIERS.map(t => ({ ...t, digimons: [] }));
+  filterLevels.clear();
+  editingLabelId = null;
+  updateFilterButtons();
+  render();
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:rgba(78,205,196,0.15);border:1px solid rgba(78,205,196,0.4);
+    color:#4ecdc4;padding:10px 20px;border-radius:8px;font-size:0.9rem;
+    z-index:500;backdrop-filter:blur(4px);
+    animation:fadeIn 0.2s ease;
+  `;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
+
+// ===== SCREENSHOT =====
+async function takeScreenshot() {
+  const el = document.getElementById('tierListCapture');
+  if (!el) return;
+  showToast(t('toastGenerating'));
+  try {
+    const canvas = await html2canvas(el, {
+      backgroundColor: '#111827',
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false
+    });
+    const link = document.createElement('a');
+    link.download = 'tierlist.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast(t('toastDownloaded'));
+  } catch (e) {
+    showToast(t('toastError'));
+  }
+}
+
+// ===== INIT =====
+document.getElementById('languageSelector').addEventListener('change', e => {
+  currentLang = e.target.value;
+  updateUI();
+});
+updateUI();
+</script>
+
+</body>
+</html>

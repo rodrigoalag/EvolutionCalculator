@@ -583,10 +583,40 @@ function getPoolDigimons() {
   return allDigimons.filter(d => !placed.has(d.name) && matchesFilter(d.nivel));
 }
 
+// ===== PERSISTENCE =====
+const STORAGE_KEY = 'digimon-tierlist-v1';
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      all:    tierContexts.all,
+      levels: tierContexts.levels,
+      filter: [...filterLevels],
+      lang:   currentLang
+    }));
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.all)    tierContexts.all    = s.all;
+    if (s.levels) tierContexts.levels = s.levels;
+    if (s.filter) filterLevels = new Set(s.filter);
+    if (s.lang) {
+      currentLang = s.lang;
+      document.getElementById('languageSelector').value = s.lang;
+    }
+  } catch(e) {}
+}
+
 // ===== RENDER =====
 function render() {
   renderTiers();
   renderPool();
+  saveState();
 }
 
 function makeIconEl(name, inPool = false) {
@@ -992,8 +1022,12 @@ async function takeScreenshot() {
 // ===== INIT =====
 document.getElementById('languageSelector').addEventListener('change', e => {
   currentLang = e.target.value;
+  saveState();
   updateUI();
 });
+
+loadState();
+updateFilterButtons();
 updateUI();
 </script>
 

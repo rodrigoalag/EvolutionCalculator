@@ -226,6 +226,13 @@ a { color: #4ecdc4; }
 .digi-icon-wrap:hover .digi-tooltip { opacity: 1; }
 .digi-icon-wrap.dragging { opacity: 0.4; }
 
+/* Insert position indicator */
+.drag-placeholder {
+  width: 3px; align-self: stretch; min-height: 80px;
+  background: rgba(78,205,196,0.85);
+  border-radius: 2px; pointer-events: none; flex-shrink: 0;
+}
+
 /* Pool icons slightly smaller */
 #pool-grid .digi-icon-wrap img { width: 104px; height: 104px; }
 #pool-grid .digi-icon-wrap .digi-tooltip { font-size: 0.68rem; }
@@ -556,6 +563,7 @@ let draggingName = null;
 let draggingFrom = null; // 'pool' or tier id
 let newTierSelectedColor = PRESET_COLORS[0];
 let activeColorTarget = null; // { tierId }
+let currentInsertIndex = -1;
 
 // ===== BUILD DIGIMON LIST FROM DICT =====
 function iconPath(name) {
@@ -667,16 +675,49 @@ function renderTiers() {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
       zone.classList.add('drag-over');
+
+      // Find insert position among visible (non-dragging) icons
+      const icons = [...zone.querySelectorAll('.digi-icon-wrap:not(.dragging)')];
+      let insertIdx = icons.length;
+      for (let i = 0; i < icons.length; i++) {
+        const rect = icons[i].getBoundingClientRect();
+        if (e.clientX < rect.left + rect.width / 2) { insertIdx = i; break; }
+      }
+      currentInsertIndex = insertIdx;
+
+      // Show placeholder at insert position
+      let ph = zone.querySelector('.drag-placeholder');
+      if (!ph) { ph = document.createElement('div'); ph.className = 'drag-placeholder'; }
+      if (insertIdx < icons.length) zone.insertBefore(ph, icons[insertIdx]);
+      else zone.appendChild(ph);
     });
     zone.addEventListener('dragleave', e => {
-      if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over');
+      if (!zone.contains(e.relatedTarget)) {
+        zone.classList.remove('drag-over');
+        zone.querySelector('.drag-placeholder')?.remove();
+        currentInsertIndex = -1;
+      }
     });
     zone.addEventListener('drop', e => {
       e.preventDefault();
       zone.classList.remove('drag-over');
+      zone.querySelector('.drag-placeholder')?.remove();
       const name = e.dataTransfer.getData('text/plain');
       if (!name) return;
-      moveDigimon(name, tier.id);
+
+      // Map visual insert index to actual index in tier.digimons
+      // Exclude the dragged item — DOM also excludes it (.dragging), so indices must match
+      const visibleNames = tier.digimons.filter(n => matchesFilter(digimonNivelMap[n] ?? 0) && n !== name);
+      let actualIndex = -1;
+      if (currentInsertIndex >= 0 && currentInsertIndex < visibleNames.length) {
+        actualIndex = tier.digimons.indexOf(visibleNames[currentInsertIndex]);
+      } else if (visibleNames.length > 0) {
+        actualIndex = tier.digimons.indexOf(visibleNames[visibleNames.length - 1]) + 1;
+      } else {
+        actualIndex = tier.digimons.length;
+      }
+      currentInsertIndex = -1;
+      moveDigimon(name, tier.id, actualIndex);
     });
     row.appendChild(zone);
 
@@ -750,13 +791,21 @@ function renderPool() {
 }
 
 // ===== DRAG LOGIC =====
-function moveDigimon(name, targetTierId) {
-  activeTiers().forEach(t => {
-    t.digimons = t.digimons.filter(n => n !== name);
-  });
+function moveDigimon(name, targetTierId, insertAt = -1) {
+  // Remove from source, tracking original position for same-tier reorder adjustment
+  let fromTierId = null, fromIndex = -1;
+  for (const t of activeTiers()) {
+    const idx = t.digimons.indexOf(name);
+    if (idx !== -1) { fromTierId = t.id; fromIndex = idx; t.digimons.splice(idx, 1); break; }
+  }
   if (targetTierId !== 'pool') {
     const tier = activeTiers().find(t => t.id === targetTierId);
-    if (tier) tier.digimons.push(name);
+    if (tier) {
+      let idx = insertAt >= 0 ? insertAt : tier.digimons.length;
+      // Adjust for the removal shifting indices in same-tier reorder
+      if (fromTierId === targetTierId && fromIndex !== -1 && fromIndex < idx) idx--;
+      tier.digimons.splice(Math.min(Math.max(0, idx), tier.digimons.length), 0, name);
+    }
   }
   render();
 }

@@ -133,7 +133,7 @@ a { color: #4ecdc4; }
 .tier-row {
   display: flex; align-items: stretch;
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  min-height: 80px; position: relative;
+  min-height: 136px; position: relative;
 }
 .tier-row:last-child { border-bottom: none; }
 .tier-label {
@@ -160,7 +160,7 @@ a { color: #4ecdc4; }
 .tier-drop-zone {
   flex: 1; display: flex; flex-wrap: wrap;
   align-items: center; gap: 4px; padding: 8px;
-  min-height: 80px;
+  min-height: 136px;
   background: rgba(0,0,0,0.2);
   transition: background 0.15s;
   position: relative;
@@ -209,7 +209,7 @@ a { color: #4ecdc4; }
 .digi-icon-wrap:hover { transform: scale(1.1); z-index: 10; }
 .digi-icon-wrap:active { cursor: grabbing; }
 .digi-icon-wrap img {
-  width: 60px; height: 60px;
+  width: 120px; height: 120px;
   object-fit: contain; image-rendering: pixelated;
   display: block;
 }
@@ -226,9 +226,10 @@ a { color: #4ecdc4; }
 .digi-icon-wrap:hover .digi-tooltip { opacity: 1; }
 .digi-icon-wrap.dragging { opacity: 0.4; }
 
-/* Pool icons smaller */
-#pool-grid .digi-icon-wrap img { width: 52px; height: 52px; }
+/* Pool icons slightly smaller */
+#pool-grid .digi-icon-wrap img { width: 104px; height: 104px; }
 #pool-grid .digi-icon-wrap .digi-tooltip { font-size: 0.68rem; }
+
 
 /* ===== POOL ===== */
 .pool-section {
@@ -244,7 +245,7 @@ a { color: #4ecdc4; }
 .pool-count { color: #888; font-size: 0.8rem; }
 #pool-grid {
   display: flex; flex-wrap: wrap; gap: 6px;
-  min-height: 80px;
+  min-height: 110px;
 }
 #pool-grid.drag-over {
   background: rgba(78,205,196,0.06);

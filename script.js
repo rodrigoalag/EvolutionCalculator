@@ -1959,6 +1959,7 @@ evolucionesDisponibles.forEach(nombreEvo => {
 console.log("Evoluciones desde digimonstattier (botón):", nextDigimons.map(([name]) => name));
 
 fieldSet = new Set();
+fieldSet.add("Error Maximo");
 let hayBonus = false;
 		console.log("Lista después de filtrar sides por Tama:", nextDigimons.map(([name]) => name));
 	const burpmonNombre = "Burpmon";
@@ -2202,14 +2203,6 @@ const celdas = Array.from(fieldSet)
   // Alias: "Victorias" ← "Victorias Minimas", "Error Maximo" ← "Errores Minimos"
   if (esperado === undefined && field === "Victorias") esperado = requisitos["Victorias Minimas"];
   if (esperado === undefined && field === "Error Maximo") esperado = requisitos["Errores Minimos"];
-  // Auto-set Error Maximo = 0 for High Tier Adult/Perfect before the esperado !== undefined guard
-  if (field === "Error Maximo" && (esperado === undefined || esperado === null)) {
-    const _req = digimonReqDict[name];
-    const _nivel = _req?.Nivel;
-    if ((_nivel === 4 || _nivel === 5) && _req?.Clasificacion?.nombre === "High Tier") {
-      esperado = 0;
-    }
-  }
   const ingresado = inputValues[field];
   let punto = 0;
 
@@ -2685,7 +2678,30 @@ else if (bonusField === "Bonus Batallas") {
 });
 punto = totalBonus;}
 	// Dentro del map, después de "Driver Equipado":
-	if (name === "Pillomon" && (field === "% Entrenamiento" || field === "EntrenamientoHecho") && !pillomonEvaluated) {
+	if (field === "Error Maximo") {
+	const ingNum = Number(ingresado);
+	const req = digimonReqDict[name];
+	const nivel = req?.Nivel;
+	const esHighTierAdultOPerfect = (nivel === 4 || nivel === 5) && req?.Clasificacion?.nombre === "High Tier";
+	let _esperado = esperado;
+	if (esHighTierAdultOPerfect && (_esperado === undefined || _esperado === null)) _esperado = 0;
+	const esObligatorio = esHighTierAdultOPerfect
+		|| req?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
+	if (_esperado !== undefined && _esperado !== null) {
+		if (typeof _esperado === "string" && _esperado.includes("-")) {
+			const [min, max] = _esperado.split("-").map(Number);
+			punto = (!isNaN(ingNum) && ingNum >= min && ingNum <= max) ? 1 : (esObligatorio ? -10 : 0);
+		} else {
+			const espNum = Number(_esperado);
+			if (!isNaN(ingNum) && ingNum <= espNum) {
+				punto = 1;
+			} else {
+				punto = (espNum === 0 || esObligatorio) ? -10 : 0;
+			}
+		}
+	}
+}
+	else if (name === "Pillomon" && (field === "% Entrenamiento" || field === "EntrenamientoHecho") && !pillomonEvaluated) {
 	  // Caso especial para Pillomon: evaluar ambos campos juntos
 	  const porcentajeEntrenamiento = inputValues["% Entrenamiento"];
 	  const entrenamientoHecho = inputValues["EntrenamientoHecho"];
@@ -2734,28 +2750,6 @@ punto = totalBonus;}
 		}
 	  }
 	}
-
-	// Error Maximo
-else if (field === "Error Maximo") {
-	const ingNum = Number(ingresado);
-	const req = digimonReqDict[name];
-	const nivel = req?.Nivel;
-	const esHighTierAdultOPerfect = (nivel === 4 || nivel === 5) && req?.Clasificacion?.nombre === "High Tier";
-	if (esHighTierAdultOPerfect && (esperado === undefined || esperado === null)) esperado = 0;
-	const esObligatorio = esHighTierAdultOPerfect
-		|| req?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
-	if (typeof esperado === "string" && esperado.includes("-")) {
-		const [min, max] = esperado.split("-").map(Number);
-		punto = (!isNaN(ingNum) && ingNum >= min && ingNum <= max) ? 1 : (esObligatorio ? -10 : 0);
-	} else {
-		const espNum = Number(esperado);
-		if (!isNaN(ingNum) && ingNum <= espNum) {
-			punto = 1;
-		} else {
-			punto = (espNum === 0 || esObligatorio) ? -10 : 0;
-		}
-	}
-}
 
 	  else if (field === "EntrenamientoHecho") {
 		if (name.toLowerCase().trim() === "pillomon") {

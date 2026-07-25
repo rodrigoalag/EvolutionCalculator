@@ -1415,16 +1415,6 @@ Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
   const evoluciones = data.Evoluciones  || {};
 
   // Reconstruir formato plano: ID, Tama, Nivel, Atributo, Tipo + Digipuntos + Clasificacion + Requisitos
-  const clasificacion = computeClasificacion(name, data.Nivel, statBase);
-  const isHighTierAdultOrPerfect = (data.Nivel === 4 || data.Nivel === 5) && clasificacion.nombre === "High Tier";
-  let categorias = data.categorias ? JSON.parse(JSON.stringify(data.categorias)) : {};
-  if (isHighTierAdultOrPerfect) {
-    if (!categorias["Requisitos Obligatorios"]) categorias["Requisitos Obligatorios"] = [];
-    if (!categorias["Requisitos Obligatorios"].includes("Error Maximo")) {
-      categorias["Requisitos Obligatorios"].push("Error Maximo");
-    }
-  }
-
   digimonReqDict[name] = {
     "ID":            data.ID,
     "Tama":          data.Tama,
@@ -1432,9 +1422,9 @@ Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
     "Atributo":      data.Atributo,
     "Tipo":          data.Tipo,
     "Digipuntos":    statBase.Digipuntos ?? null,
-    "Clasificacion": clasificacion,
+    "Clasificacion": computeClasificacion(name, data.Nivel, statBase),
     ...(data.EvoNatural ? { EvoNatural: data.EvoNatural } : {}),
-    ...(Object.keys(categorias).length > 0 ? { categorias } : {}),
+    ...(data.categorias ? { categorias: data.categorias } : {}),
     "isProgramEvo": data.isProgramEvo ?? false,
     ...(data.Requisitos || {})
   };

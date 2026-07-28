@@ -215,11 +215,11 @@ header p {
     </a>
     <a href="./Enemigosdelared.html" class="tool-card">
       <div class="tool-card-icon"><img src="./icon/agumon.png" alt="Enemigos"></div>
-      <h3>Enemigos de la Red</h3>
+      <h3 id="card-enemigos">Enemigos de la Red</h3>
     </a>
     <a href="./dropsdelared.html" class="tool-card">
       <div class="tool-card-icon"><img src="./itemimg/Zanahoria.png" alt="Drops"></div>
-      <h3>Drops de la Red</h3>
+      <h3 id="card-drops">Drops de la Red</h3>
     </a>
     <a href="./itempedia.html" class="tool-card">
       <div class="tool-card-icon"><img src="./itemimg/cajabasica.png" alt="Itempedia"></div>
@@ -227,13 +227,13 @@ header p {
     </a>
     <a href="./AlimentosEfectos.html" class="tool-card">
       <div class="tool-card-icon"><img src="./itemimg/gigantea.png" alt="Efectos"></div>
-      <h3>Efectos de los Objetos</h3>
+      <h3 id="card-efectos">Efectos de los Objetos</h3>
     </a>
   </div>
 
   <!-- Links Section -->
   <div class="links-section">
-    <h2><img src="./pageicons/link.png" alt="Links" style="width: 20px; margin-right: 10px; vertical-align: middle;">Links Externos</h2>
+    <h2 id="linksTitle"><img src="./pageicons/link.png" alt="Links" style="width: 20px; margin-right: 10px; vertical-align: middle;">Links Externos</h2>
     <div class="links-grid">
       <a href="https://ndcalcs.github.io/" target="_blank" class="link-card">Carrow Website</a>
       <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="link-card">WhiteRickle - Guides</a>
@@ -250,7 +250,7 @@ header p {
 
   <!-- Credits Section -->
   <section class="explanation credits-section">
-    <h2><img src="./pageicons/audit.png" alt="Créditos" style="width: 24px; margin-right: 10px; vertical-align: middle;">Créditos</h2>
+    <h2 id="creditsTitle"><img src="./pageicons/audit.png" alt="Créditos" style="width: 24px; margin-right: 10px; vertical-align: middle;">Créditos</h2>
     <p>Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:</p>
     <ul>
       <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
@@ -331,11 +331,21 @@ const explanationHTML1 = {
 const langTexts = {
   es: {
     mainTitle: "Main Hub de las diferentes herramientas para Net Driver",
-    subtitle: "Creado por Rodrigoalag"
+    subtitle: "Creado por Rodrigoalag",
+    cardEnemigos: "Enemigos de la Red",
+    cardDrops: "Drops de la Red",
+    cardEfectos: "Efectos de los Objetos",
+    linksTitle: "Links Externos",
+    creditsTitle: "Créditos"
   },
   en: {
     mainTitle: "Main hub for the different Net Driver tools",
-    subtitle: "Created by Rodrigoalag"
+    subtitle: "Created by Rodrigoalag",
+    cardEnemigos: "Network Enemies",
+    cardDrops: "Network Drops",
+    cardEfectos: "Item Effects",
+    linksTitle: "External Links",
+    creditsTitle: "Credits"
   }
 };
 
@@ -351,6 +361,23 @@ function updateLanguage(lang) {
   document.getElementById("explanation1").innerHTML = explanationHTML1[lang];
   // document.getElementById("explanation2").innerHTML = explanationHTML2[lang];
   localStorage.setItem("digilang", lang);
+
+  document.getElementById("card-enemigos").textContent = text.cardEnemigos;
+  document.getElementById("card-drops").textContent = text.cardDrops;
+  document.getElementById("card-efectos").textContent = text.cardEfectos;
+
+  const linksEl = document.getElementById("linksTitle");
+  if (linksEl) {
+    const img = linksEl.querySelector("img");
+    linksEl.textContent = text.linksTitle;
+    if (img) linksEl.prepend(img);
+  }
+  const creditsEl = document.getElementById("creditsTitle");
+  if (creditsEl) {
+    const img = creditsEl.querySelector("img");
+    creditsEl.textContent = text.creditsTitle;
+    if (img) creditsEl.prepend(img);
+  }
 }
 
 const savedLang = localStorage.getItem("digilang") || "es";
@@ -358,6 +385,7 @@ selector.value = savedLang;
 updateLanguage(savedLang);
 selector.addEventListener("change", () => updateLanguage(selector.value));
 </script>
+<script src="nav-translate.js"></script>
 
 </body>
 </html>

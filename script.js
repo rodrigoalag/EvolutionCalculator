@@ -231,6 +231,15 @@ const nivelAEtapa = {
   5: "Perfect",
   6: "Ultimate"
 };
+function resolveCategoriasForOrigin(categorias, selected) {
+  if (!categorias) return undefined;
+  const firstVal = Object.values(categorias)[0];
+  if (firstVal && !Array.isArray(firstVal) && typeof firstVal === 'object') {
+    return categorias[selected] || {};
+  }
+  return categorias;
+}
+
 function getFieldFromRC(name, selected, field) {
     const rc = digimonReqDict[name]?.RequisitosCondicionados;
     if (!rc || rc.condicion !== "Origen") return undefined;
@@ -2686,7 +2695,7 @@ punto = totalBonus;}
 	let _esperado = esperado;
 	if (esHighTierAdultOPerfect && (_esperado === undefined || _esperado === null)) _esperado = 0;
 	const esObligatorio = esHighTierAdultOPerfect
-		|| req?.categorias?.["Requisitos Obligatorios"]?.includes("Error Maximo");
+		|| resolveCategoriasForOrigin(req?.categorias, selected)?.["Requisitos Obligatorios"]?.includes("Error Maximo");
 	if (_esperado !== undefined && _esperado !== null) {
 		if (typeof _esperado === "string" && _esperado.includes("-")) {
 			const [min, max] = _esperado.split("-").map(Number);
@@ -2737,7 +2746,7 @@ punto = totalBonus;}
       punto = 0;
     } else if (PesoSet.has(name)) {
 		punto = 0;
-    } else if (digimonReqDict[name]?.categorias?.["No se considera en el puntaje"]?.includes("Peso")) {
+    } else if (resolveCategoriasForOrigin(digimonReqDict[name]?.categorias, selected)?.["No se considera en el puntaje"]?.includes("Peso")) {
       punto = 0;
 	  } else {
 		const ingNum = Number(ingresado);

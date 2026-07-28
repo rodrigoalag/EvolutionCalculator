@@ -2171,7 +2171,7 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     }
     // High Tier Adult: Error Maximo siempre 1/-10
     {
-      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous"];
+      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous", "RedVDramon"];
       if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
         return { cumple: 1, noCumple: -10 };
       }
@@ -2244,7 +2244,7 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
     }
     // High Tier Perfect: Error Maximo siempre 1/-10
     {
-      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous"];
+      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous", "RedVDramon"];
       if (campo === "Error Maximo" && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
         return { cumple: 1, noCumple: -10 };
       }
@@ -2849,7 +2849,7 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
   // Para High Tier Adult/Perfect, Error Maximo es implícitamente 0 si no está en los datos
   if (campo === "Error Maximo" && digimon[campo] === undefined) {
     const _nivel = digimon.Nivel;
-    const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous"];
+    const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous", "RedVDramon"];
     if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
       return 0;
     }
@@ -3421,7 +3421,7 @@ const camposDisponibles = Object.keys(digimon).filter(campo => {
 // Excepciones: side evos o digimons con reglas propias de errores
 {
   const nivel = digimon.Nivel;
-  const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous"];
+  const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous", "RedVDramon"];
   if ((nivel === 4 || nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !camposDisponibles.includes("Error Maximo") && !_highTierErrorExceptions.includes(nombre)) {
     camposDisponibles.push("Error Maximo");
   }
@@ -3434,7 +3434,7 @@ const gruposColumnas = obtenerGruposColumnas(nombre);
 // Excepciones: side evos o digimons con reglas propias de errores
 {
   const _nivel = digimon.Nivel;
-  const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous"];
+  const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous", "RedVDramon"];
   if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombre)) {
     const obligGroup = "Requisitos Obligatorios";
     if (gruposColumnas[obligGroup] && !gruposColumnas[obligGroup].includes("Error Maximo")) {
@@ -3465,7 +3465,7 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
       // Inyectar "Error Maximo" para High Tier Adult/Perfect si no está en los datos
       {
         const _nivel = digimon.Nivel;
-        const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous"];
+        const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous", "RedVDramon"];
         if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !obligFields.includes("Error Maximo") && !_highTierErrorExceptions.includes(nombre)) {
           obligFields.push("Error Maximo");
         }
@@ -3951,7 +3951,7 @@ if (evolucionesMultiples.length > 0) {
     // Para High Tier Adult/Perfect, Error Maximo es implícitamente 0 si no está en los datos
     if (campo === "Error Maximo" && valorOriginal === undefined) {
       const _nivel = digimon.Nivel;
-      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous"];
+      const _highTierErrorExceptions = ["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon", "MetalGreymon Alterous", "RedVDramon"];
       if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombre)) {
         valorOriginal = 0;
       }

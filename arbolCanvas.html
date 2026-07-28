@@ -1244,16 +1244,28 @@ const digimonVariantesPorPreEvo = {
     },
     preEvos: {
       "Dorugamon": {
+        _categorias: {
+          "No se considera en el puntaje": ["Peso"],
+          "Requisitos Obligatorios": ["% Entrenamiento", "Errores Minimos", "Victorias Minimas", "Vinculo al momento de evolucionar", "Program"]
+        },
         "Peso": "36", "% Entrenamiento": "50%", "Errores Minimos": "6",
         "Victorias Minimas": "30", "Combates Minimos": "-",
         "Vinculo al momento de evolucionar": "-50", "Program": "Death"
       },
       "DexDorugamon": {
-        "Peso": "36", "% Entrenamiento": "100%", "Errores Minimos": "0-6",
-        "Victorias Minimas": "-", "Combates Minimos": "30",
+        _categorias: {
+          "No se considera en el puntaje": ["Peso"],
+          "Quota/Key Points": ["% Entrenamiento", "Error Maximo"],
+          "Requisitos Obligatorios": ["Combates Minimos"]
+        },
+        "Peso": "36", "% Entrenamiento": "100%", "Error Maximo": "0-6",
+        "Combates Minimos": "30",
         "Vinculo al momento de evolucionar": "-", "Program": "-"
       },
       "Doruguremon": {
+        _categorias: {
+          "Requisitos Obligatorios": ["Program"]
+        },
         "Peso": "-", "% Entrenamiento": "-", "Errores Minimos": "-",
         "Victorias Minimas": "-", "Combates Minimos": "-",
         "Vinculo al momento de evolucionar": "-", "Program": "Death"
@@ -2815,9 +2827,20 @@ function showInfo(data, evolutions, preEvolutions) {
         const pathFlatFields = [];
 
         Object.entries(pathData).forEach(([k, v]) => {
-          if (_metaKeys.has(k) || typeof v === 'object') return;
+          if (_metaKeys.has(k)) return;
           let fmtV;
-          if (v === '-' || v === null || v === undefined) {
+          if (typeof v === 'object' && v !== null && 'op' in v && 'val' in v) {
+            const opVal = v.val;
+            if (k === 'WinRate' || k === '% Entrenamiento') {
+              fmtV = opVal + '%';
+            } else if (k === 'Error Maximo') {
+              fmtV = v.op === '<=' ? '0-' + opVal : String(opVal);
+            } else {
+              fmtV = String(opVal);
+            }
+          } else if (typeof v === 'object') {
+            return;
+          } else if (v === '-' || v === null || v === undefined) {
             fmtV = '-';
           } else if (k === 'WinRate' || k === '% Entrenamiento') {
             fmtV = v + '%';
@@ -2888,15 +2911,23 @@ function showInfo(data, evolutions, preEvolutions) {
 
       if (_hasPerPathCategorias || _hasPuntajeIndividual) {
         // Generar _categorias para los paths que no tienen Obligatorio/Incumplir
+        const _topCats = digimonReqDict[data.label]?.categorias;
+        const _firstCatVal = _topCats ? Object.values(_topCats)[0] : null;
+        const _hasPerOriginCats = _firstCatVal && !Array.isArray(_firstCatVal) && typeof _firstCatVal === 'object';
+
         _paths.forEach(([pathName]) => {
           const pvals = _preEvos[pathName];
           if (!pvals._categorias) {
-            const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])].filter(f => pvals[f] !== undefined);
-            const _obligatFields = Object.keys(pvals).filter(k => !_noPuntaje.includes(k));
-            pvals._categorias = {
-              'No se considera en el puntaje': _noPuntaje,
-              'Requisitos Obligatorios': _obligatFields
-            };
+            if (_hasPerOriginCats && _topCats[pathName]) {
+              pvals._categorias = _topCats[pathName];
+            } else {
+              const _noPuntaje = ['Peso', ...(_allFields.has('Error Maximo') ? ['Error Maximo'] : [])].filter(f => pvals[f] !== undefined);
+              const _obligatFields = Object.keys(pvals).filter(k => !_noPuntaje.includes(k));
+              pvals._categorias = {
+                'No se considera en el puntaje': _noPuntaje,
+                'Requisitos Obligatorios': _obligatFields
+              };
+            }
           }
         });
         variantesPorPreEvoConfig = _hasPerPathCategorias
@@ -3042,6 +3073,10 @@ function showInfo(data, evolutions, preEvolutions) {
 
       fields.forEach(field => {
         let value = reqData[field];
+        if (field === 'Error Maximo' && (value === undefined || value === null) &&
+            (nivel === 4 || nivel === 5) && reqData.Clasificacion?.nombre === 'High Tier') {
+          value = 0;
+        }
         const label = fieldLabels[field] || field;
         const isFullWidth = field === 'Digimon Bonus' || field.includes('requisitos');
         const fullWidthClass = isFullWidth ? ' full-width' : '';

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -2777,43 +2777,46 @@ function actualizarTraducciones() {
 // FUNCIONES DE DESCARGA
 // ============================================
 
+function _buildExportData() {
+  const t = traducciones[idiomaActual];
+  const headers = [
+    t.digimon, t.clasificacion, t.atributo, t.tipo,
+    'HP', 'ATK', 'DEF', 'SPD', t.digipuntos
+  ];
+  const rows = datosActuales.map(item => [
+    item.lineaRaw ? [...item.lineaRaw, item.nombre].join(' -> ') : item.nombre,
+    item.clasificacion?.nombre || '-',
+    item.atributo || '-',
+    traducciones[idiomaActual][item.tipo] || item.tipo || '-',
+    item.hp,
+    item.atk,
+    item.def,
+    item.vel,
+    item.digipuntos
+  ]);
+  return [headers, ...rows];
+}
+
 function descargarCSV() {
-  const table = document.getElementById('rankingTable');
-  if (!table || table.style.display === 'none') {
+  if (!datosActuales || datosActuales.length === 0) {
     alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
     return;
   }
 
-  let csv = [];
-  const rows = table.querySelectorAll('tr');
-
-  rows.forEach(row => {
-    const cols = row.querySelectorAll('td, th');
-    const rowData = [];
-
-    cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 5, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Tipo, Imagen)
-      if (index === 5) return;
-
-      let text = col.textContent.trim();
-      // Escapar comillas y envolver en comillas si contiene comas
+  const data = _buildExportData();
+  const csv = data.map(row =>
+    row.map(cell => {
+      let text = String(cell);
       text = text.replace(/"/g, '""');
-      if (text.includes(',') || text.includes('"') || text.includes('\n')) {
-        text = `"${text}"`;
-      }
-      rowData.push(text);
-    });
+      if (text.includes(',') || text.includes('"') || text.includes('\n')) text = `"${text}"`;
+      return text;
+    }).join(',')
+  ).join('\n');
 
-    csv.push(rowData.join(','));
-  });
-
-  const csvContent = csv.join('\n');
-  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
-  const url = URL.createObjectURL(blob);
-
+  link.setAttribute('href', URL.createObjectURL(blob));
   const nivel = document.getElementById('selectNivel').value;
-  link.setAttribute('href', url);
   link.setAttribute('download', `ranking_digimon_nivel_${nivel}.csv`);
   link.style.visibility = 'hidden';
   document.body.appendChild(link);
@@ -2822,38 +2825,18 @@ function descargarCSV() {
 }
 
 function descargarXLSX() {
-  const table = document.getElementById('rankingTable');
-  if (!table || table.style.display === 'none') {
+  if (!datosActuales || datosActuales.length === 0) {
     alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
     return;
   }
 
-  // Crear un array de datos de la tabla
-  const data = [];
-  const rows = table.querySelectorAll('tr');
-
-  rows.forEach(row => {
-    const rowData = [];
-    const cols = row.querySelectorAll('td, th');
-
-    cols.forEach((col, index) => {
-      // Saltar la columna de imagen (índice 5, ya que ahora tenemos: Digimon, Línea Evolutiva, Clasificación, Atributo, Tipo, Imagen)
-      if (index === 5) return;
-      rowData.push(col.textContent.trim());
-    });
-
-    data.push(rowData);
-  });
-
-  // Crear workbook y worksheet
+  const data = _buildExportData();
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(data);
 
-  // Ajustar anchos de columnas
-  const colWidths = [
-    { wch: 20 }, // Digimon
-    { wch: 30 }, // Línea Evolutiva
-    { wch: 15 }, // Clasificación
+  ws['!cols'] = [
+    { wch: 25 }, // Digimon
+    { wch: 20 }, // Clasificacion
     { wch: 12 }, // Atributo
     { wch: 15 }, // Tipo
     { wch: 8 },  // HP
@@ -2862,14 +2845,11 @@ function descargarXLSX() {
     { wch: 8 },  // SPD
     { wch: 12 }  // Digipuntos
   ];
-  ws['!cols'] = colWidths;
 
   XLSX.utils.book_append_sheet(wb, ws, 'Ranking');
-
   const nivel = document.getElementById('selectNivel').value;
   XLSX.writeFile(wb, `ranking_digimon_nivel_${nivel}.xlsx`);
 }
-
 // Inicializar página - ejecutar inmediatamente sin esperar DOMContentLoaded
 function initSearchRanking() {
   const searchInput = document.getElementById('searchDigimon');

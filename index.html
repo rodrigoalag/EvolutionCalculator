@@ -251,13 +251,8 @@ header p {
   <!-- Credits Section -->
   <section class="explanation credits-section">
     <h2 id="creditsTitle"><img src="./pageicons/audit.png" alt="Créditos" style="width: 24px; margin-right: 10px; vertical-align: middle;">Créditos</h2>
-    <p>Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:</p>
-    <ul>
-      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
-      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomé prestado sus ideas para hacer las mejoras</li>
-      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
-      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
-    </ul>
+    <p id="creditsBody"></p>
+    <ul id="creditsList"></ul>
   </section>
 </div>
 
@@ -336,7 +331,14 @@ const langTexts = {
     cardDrops: "Drops de la Red",
     cardEfectos: "Efectos de los Objetos",
     linksTitle: "Links Externos",
-    creditsTitle: "Créditos"
+    creditsTitle: "Créditos",
+    creditsBody: "Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:",
+    creditsItems: [
+      "<strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos",
+      '<strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo, tomé prestado sus ideas para hacer las mejoras',
+      "<strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego",
+      "Y a todos los que han ayudado a mejorar la base de datos con sus tageos"
+    ]
   },
   en: {
     mainTitle: "Main hub for the different Net Driver tools",
@@ -345,7 +347,14 @@ const langTexts = {
     cardDrops: "Network Drops",
     cardEfectos: "Item Effects",
     linksTitle: "External Links",
-    creditsTitle: "Credits"
+    creditsTitle: "Credits",
+    creditsBody: "Special thanks to the following people, without whom many things in these pages wouldn't have been possible:",
+    creditsItems: [
+      "<strong>JorgeTitor</strong> - For having the original idea of keeping a record of all the requirements",
+      '<strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Had the original idea for the evolution tree, I borrowed his ideas to make improvements',
+      "<strong>Panoli</strong> - For giving me all the cropped images from the game",
+      "And to everyone who has helped improve the database with their reports"
+    ]
   }
 };
 
@@ -377,6 +386,14 @@ function updateLanguage(lang) {
     const img = creditsEl.querySelector("img");
     creditsEl.textContent = text.creditsTitle;
     if (img) creditsEl.prepend(img);
+  }
+
+  const creditsBody = document.getElementById("creditsBody");
+  if (creditsBody) creditsBody.textContent = text.creditsBody;
+
+  const creditsList = document.getElementById("creditsList");
+  if (creditsList) {
+    creditsList.innerHTML = text.creditsItems.map(item => `<li>${item}</li>`).join('');
   }
 }
 

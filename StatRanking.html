@@ -304,9 +304,10 @@ h1, h2, h3 { color: #4ecdc4; }
     .digi-cell:hover .digi-cell-name { display: block; }
 
     .linea-evo { display: flex; align-items: center; justify-content: center; gap: 3px; flex-wrap: nowrap; }
-    .linea-evo-tama { width: 28px; height: 28px; object-fit: contain; }
-    .linea-evo-icon { width: 40px; height: 40px; object-fit: contain; }
+    .linea-evo-tama { width: 42px; height: 42px; object-fit: contain; }
+    .linea-evo-icon { width: 60px; height: 60px; object-fit: contain; }
     .linea-evo-sep { color: #666; font-size: 0.75em; line-height: 1; }
+    .linea-evo-icon-self { width: 69px; height: 69px; filter: drop-shadow(0 0 3px rgba(78,205,196,0.5)); }
 
     /* Estilos para clasificaciones */
     .tier-low { background-color: transparent; }
@@ -359,44 +360,37 @@ h1, h2, h3 { color: #4ecdc4; }
         padding-top: 70px;
       }
 
-      /* Forzar ancho completo en el contenedor de la tabla */
-      #rankingContainer {
-        width: 100%;
-      }
+      #rankingContainer { width: 100%; }
 
-      .digimon-img {
-        width: 36px !important;
-        height: 36px !important;
+      /* Selectores superiores en grid 2 columnas */
+      #selectorContainer {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
       }
+      #selectorContainer .selectorItem { width: 100%; }
+      #selectorContainer .selectorItem select { width: 100%; }
 
-      .ranking-table {
-        font-size: 0.72rem;
-      }
+      /* Buscador ancho completo */
+      #search-ranking-container { width: 100%; }
+      #searchDigimon { width: 100%; box-sizing: border-box; }
+      #search-ranking-suggestions { width: 100%; }
 
+      /* Tabla */
+      .ranking-table { font-size: 0.7rem; }
       .ranking-table th {
         white-space: nowrap;
-        padding: 0.35rem 0.25rem;
-        font-size: 0.68rem;
-      }
-
-      .ranking-table td {
-        padding: 0.25rem 0.25rem;
-        font-size: 0.68rem;
-      }
-
-      /* Columna Digimon: ancho fijo pequeño */
-      .ranking-table th:nth-child(1),
-      .ranking-table td:nth-child(1) {
-        max-width: 80px;
-        min-width: 60px;
-        white-space: normal;
-        word-break: break-word;
+        padding: 0.3rem 0.2rem;
         font-size: 0.65rem;
       }
+      .ranking-table td { padding: 0.2rem 0.2rem; }
 
-      /* Línea Evolutiva en móvil: reducir íconos */
-      .linea-evo-tama { width: 20px; height: 20px; }
-      .linea-evo-icon { width: 28px; height: 28px; }
+      /* Íconos reducidos en móvil */
+      .linea-evo-tama { width: 18px !important; height: 18px !important; }
+      .linea-evo-icon { width: 28px !important; height: 28px !important; }
+      .linea-evo-icon-self { width: 34px !important; height: 34px !important; }
+      .linea-evo-sep { font-size: 0.6em; }
+      .linea-evo { gap: 2px; }
     }
 
     /* Wrapper para scroll horizontal en móviles */
@@ -586,18 +580,23 @@ h1, h2, h3 { color: #4ecdc4; }
 
     @media (max-width: 768px) {
       .filters-container {
-        flex-direction: column;
-        align-items: stretch;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        align-items: start;
       }
 
+      .filter-item { width: 100%; }
       .filter-item input,
-      .filter-item select {
-        min-width: 100%;
-      }
+      .filter-item select,
+      .filter-dropdown,
+      .filter-dropdown-button { width: 100%; box-sizing: border-box; }
 
-      .clear-filters-btn {
-        align-self: stretch;
-      }
+      /* Digipuntos y botón limpiar ocupan ancho completo */
+      .filter-item:has(#filterDigipuntosMin),
+      .clear-filters-btn { grid-column: 1 / -1; }
+
+      .clear-filters-btn { align-self: stretch; }
     }
 
     /* Estilos para botones de descarga */
@@ -830,7 +829,6 @@ h1, h2, h3 { color: #4ecdc4; }
             <thead>
               <tr>
                 <th id="headerDigimon">Digimon</th>
-                <th id="headerLineaEvolutiva">Línea Evolutiva</th>
                 <th id="headerClasificacion">Clasificación</th>
                 <th id="headerAtributo" class="sortable-header" data-sort="atributo">Atributo<span class="sort-icon">↓</span></th>
                 <th id="headerTipo" class="sortable-header" data-sort="tipo">Tipo<span class="sort-icon">↓</span></th>
@@ -1200,10 +1198,10 @@ function renderLineaEvolutivaIconos(nombre, lineaRaw) {
   const adult   = lineaRaw?.find((_, i) => niveles[i] === 4) || null;
   const perfect = lineaRaw?.find((_, i) => niveles[i] === 5) || null;
 
-  function digiIcon(digi) {
+  function digiIcon(digi, extraClass = '') {
     const vars = generarVariacionesNombre(digi);
     const fb = vars.slice(1).map(v => `icon/${v}.png`).join('|');
-    return `<div class="digi-cell"><img src="icon/${vars[0]}.png" class="linea-evo-icon" data-fallbacks="${fb}" onerror="cargarFallbackLineaEvo(this)"><span class="digi-cell-name">${digi}</span></div>`;
+    return `<div class="digi-cell"><img src="icon/${vars[0]}.png" class="linea-evo-icon${extraClass ? ' ' + extraClass : ''}" data-fallbacks="${fb}" onerror="cargarFallbackLineaEvo(this)"><span class="digi-cell-name">${digi}</span></div>`;
   }
 
   const sep = '<span class="linea-evo-sep">›</span>';
@@ -1211,8 +1209,15 @@ function renderLineaEvolutivaIconos(nombre, lineaRaw) {
   if (nivel >= 4 && child)   parts.push(digiIcon(child));
   if (nivel >= 5 && adult)   parts.push(digiIcon(adult));
   if (nivel >= 6 && perfect) parts.push(digiIcon(perfect));
+  parts.push(digiIcon(nombre, 'linea-evo-icon-self'));
 
   return `<div class="linea-evo">${parts.join(sep)}</div>`;
+}
+
+function renderDigimonSolo(nombre) {
+  const vars = generarVariacionesNombre(nombre);
+  const fb = vars.slice(1).map(v => `icon/${v}.png`).join('|');
+  return `<div class="linea-evo"><div class="digi-cell"><img src="icon/${vars[0]}.png" class="linea-evo-icon linea-evo-icon-self" data-fallbacks="${fb}" onerror="cargarFallbackLineaEvo(this)"><span class="digi-cell-name">${nombre}</span></div></div>`;
 }
 
 // Función para generar variantes de Scumon y GreatKingScumon
@@ -1616,46 +1621,15 @@ function generarTablaRankingSegura(data, tbody) {
     const fila = document.createElement("tr");
     fila.className = item.clasificacion.clase;
 
-    // Digimon: imagen + nombre en tooltip CSS al hover
-    const tdNombre = document.createElement("td");
-    tdNombre.style.textAlign = "center";
-    const digiCell = document.createElement("div");
-    digiCell.className = "digi-cell";
-    const imgNombre = document.createElement("img");
-    imgNombre.className = "digimon-img";
-    imgNombre.alt = item.nombre;
-    const digiName = document.createElement("span");
-    digiName.className = "digi-cell-name";
-    digiName.textContent = item.nombre;
-    const variacionesNombre = generarVariacionesNombre(item.nombre);
-    const intentarCargarImagenNombre = (indice = 0) => {
-      if (indice >= variacionesNombre.length) {
-        const testPh = new Image();
-        testPh.onload = () => { imgNombre.src = "img/placeholder.png"; };
-        testPh.onerror = () => { imgNombre.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjMwIiB5PSIzNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K"; };
-        testPh.src = "img/placeholder.png";
-        return;
-      }
-      const t = new Image();
-      t.onload = () => { imgNombre.src = `img/${variacionesNombre[indice]}.png`; };
-      t.onerror = () => { intentarCargarImagenNombre(indice + 1); };
-      t.src = `img/${variacionesNombre[indice]}.png`;
-    };
-    intentarCargarImagenNombre();
-    digiCell.appendChild(imgNombre);
-    digiCell.appendChild(digiName);
-    tdNombre.appendChild(digiCell);
-    fila.appendChild(tdNombre);
-
-    // Línea Evolutiva (solo si tiene)
-    const tdLineaEvolutiva = document.createElement("td");
+    // Columna fusionada: cadena evolutiva + ícono del propio digimon
+    const tdDigimon = document.createElement("td");
+    tdDigimon.style.textAlign = "center";
     if (item.lineaRaw) {
-      tdLineaEvolutiva.innerHTML = renderLineaEvolutivaIconos(item.nombre, item.lineaRaw);
+      tdDigimon.innerHTML = renderLineaEvolutivaIconos(item.nombre, item.lineaRaw);
     } else {
-      tdLineaEvolutiva.textContent = item.lineaEvolutiva || "-";
-      tdLineaEvolutiva.style.fontSize = "0.85em";
+      tdDigimon.innerHTML = renderDigimonSolo(item.nombre);
     }
-    fila.appendChild(tdLineaEvolutiva);
+    fila.appendChild(tdDigimon);
 
     // Clasificación
     const tdClasificacion = document.createElement("td");
@@ -2745,14 +2719,12 @@ function actualizarTraducciones() {
 
   // Actualizar headers de la tabla
   const headerDigimon = document.getElementById('headerDigimon');
-  const headerLineaEvolutiva = document.getElementById('headerLineaEvolutiva');
   const headerClasificacion = document.getElementById('headerClasificacion');
   const headerAtributo = document.getElementById('headerAtributo');
   const headerTipo = document.getElementById('headerTipo');
   const headerDigipuntos = document.getElementById('headerDigipuntos');
 
   if (headerDigimon) headerDigimon.textContent = t.digimon;
-  if (headerLineaEvolutiva) headerLineaEvolutiva.textContent = t.lineaEvolutiva;
   if (headerClasificacion) headerClasificacion.textContent = t.clasificacion;
   if (headerAtributo) {
     const sortIcon = headerAtributo.querySelector('.sort-icon');

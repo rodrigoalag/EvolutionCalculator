@@ -368,7 +368,7 @@ const fullDigimonReqDict = {
     "ID": 72, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 20, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Agumon (2006)", "WinRate": 60, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 110, "DEF": 60, "HP": 1000, "Vel": 70, "Digipuntos": 34 },
-    "isProgramEvo": false,
+    "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "RizeGreymon", "Andromon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon (2006)"] }
   },
   "Clockmon": {
@@ -390,7 +390,7 @@ const fullDigimonReqDict = {
     "ID": 81, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Hielo",
     "Requisitos": { "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "Bonus Batallas": "15-20", "WinRate": 60, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 80, "DEF": 80, "HP": 1150, "Vel": 50, "Digipuntos": 32.5 },
-    "isProgramEvo": false,
+    "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Chackmon", "Blizzarmon", "Polarbearmon", "Burpmon"], "Viene": ["Yuki Agumon", "Penmon"] }
   },
   "Numemon": {

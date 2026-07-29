@@ -196,6 +196,7 @@ const editableFieldsHeaders = editableFieldsHeaders1;
 const resultados = document.getElementById('resultados');
 const calcularBtn = document.getElementById('calcularBtn');
 const evolucionTexto = document.getElementById('evolucionTexto');
+const programEvoNota = document.getElementById('programEvoNota');
 const bloqueadosAGreymon = ["Agumon (Black)", "Yuki Agumon"];
 const excludelist = ["ID", "Tama", "Nivel", "Stat Superior 2", "Tipo", "Atributo", "Digimon Bonus", "Bonus Digimon", "Bonus Batallas", "Bonus Errores", "Bonus", "Bonus WinRate", "Bonus Comida", "Bonus Vinculo Alcanzado", "Bonus Victorias", "Bonus Stat Superior", "Placeholder", "RequisitosCondicionados", "Death Evo", "Digipuntos", "Clasificacion", "Victorias Minimas", "Errores Minimos", "categorias", "EvoNatural", "isProgramEvo"];
 
@@ -3446,14 +3447,24 @@ const textTranslations = {
   es: {
     slideEvolution: "Tu Digimon puede slide evolucionar a: ",
     normalEvolution: "Tu Digimon puede evolucionar a: ",
-    consultGuide: ""
+    consultGuide: "",
+    programEvoNota: "* Este es un Digimon de evolución de Program, tiene prioridad frente al resto normalmente."
   },
   en: {
     slideEvolution: "Your Digimon can side evolve to: ",
     normalEvolution: "Your Digimon can evolve to: ",
-    consultGuide: ""
+    consultGuide: "",
+    programEvoNota: "* This is a Program evolution Digimon, it normally takes priority over the rest."
   }
 };
+
+function mostrarNotaProgramEvo(lang) {
+  const hayProgram = mejoresDigimons.some(n => digimonReqDict[n]?.isProgramEvo);
+  if (programEvoNota) {
+    programEvoNota.textContent = hayProgram ? textTranslations[lang].programEvoNota : "";
+    programEvoNota.style.display = hayProgram ? "block" : "none";
+  }
+}
 
 // Funcion nueva de desempate
 // Función de desempate por Digipuntos
@@ -3505,8 +3516,9 @@ if (nextLevel === 2) {
     console.log("👑 Excepción: Burpmon tiene puntaje >= 3, se selecciona directamente.");
   } else {
     // Aplicar desempate por Digipuntos
-    const candidatos = puntajes.filter(d => d.puntaje === maxPuntaje).map(d => d.name);
-    mejoresDigimons = desempatarPorDigipuntos(candidatos);
+    // const candidatos = puntajes.filter(d => d.puntaje === maxPuntaje).map(d => d.name);
+    // mejoresDigimons = desempatarPorDigipuntos(candidatos);
+    mejoresDigimons = puntajes.filter(d => d.puntaje >= 3).map(d => d.name);
   }
   console.log("🧾 Resultado final:", mejoresDigimons);
 }
@@ -3537,11 +3549,12 @@ if (nextLevel === 3) {
       //   mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
       //   console.log("🏆 Programs encontrados - Mejor(es) con Program:", mejoresDigimons);
       // } else {
-        const maxPuntajeNivel3 = Math.max(...candidatosValidos.map(d => d.puntaje));
-        const conMaxPuntaje = candidatosValidos.filter(d => d.puntaje === maxPuntajeNivel3);
-        const candidatos = conMaxPuntaje.map(d => d.name);
-        mejoresDigimons = desempatarPorDigipuntos(candidatos);
-        console.log("✅ Mejor(es) por puntaje máximo:", mejoresDigimons);
+        // const maxPuntajeNivel3 = Math.max(...candidatosValidos.map(d => d.puntaje));
+        // const conMaxPuntaje = candidatosValidos.filter(d => d.puntaje === maxPuntajeNivel3);
+        // const candidatos = conMaxPuntaje.map(d => d.name);
+        // mejoresDigimons = desempatarPorDigipuntos(candidatos);
+        mejoresDigimons = candidatosValidos.filter(d => d.puntaje >= 3).map(d => d.name);
+        console.log("✅ Todas las posibilidades con puntaje > 3:", mejoresDigimons);
       // }
     } else {
       mejoresDigimons = ["Ninguno"];
@@ -3583,10 +3596,11 @@ if (nextLevel === 4 || nextLevel === 5) {
      console.log("🔍 Side Evolutions válidas encontradas:", sideEvosValidas.map(d => `${d.name} (${d.puntaje})`));
      
      if (sideEvosValidas.length > 0) {
-       const maxPuntajeSide = Math.max(...sideEvosValidas.map(d => d.puntaje));
-       const candidatos = sideEvosValidas.filter(d => d.puntaje === maxPuntajeSide).map(d => d.name);
-       mejoresDigimons = desempatarPorDigipuntos(candidatos);
-       console.log("🎯 Mejor(es) Side Evolution (con desempate):", mejoresDigimons);
+       // const maxPuntajeSide = Math.max(...sideEvosValidas.map(d => d.puntaje));
+       // const candidatos = sideEvosValidas.filter(d => d.puntaje === maxPuntajeSide).map(d => d.name);
+       // mejoresDigimons = desempatarPorDigipuntos(candidatos);
+       mejoresDigimons = sideEvosValidas.filter(d => d.puntaje >= 3).map(d => d.name);
+       console.log("🎯 Side Evolutions con puntaje > 3:", mejoresDigimons);
      } else {
        console.log("⛔ No hay Side Evolutions válidas. Buscando evoluciones normales...");
        
@@ -3650,11 +3664,12 @@ if (nextLevel === 4 || nextLevel === 5) {
 
          if (conDriverXrossUsado.length > 0) {
            // Si el usuario usó un Xross/Driver y hay evoluciones que lo aprovechan, SOLO considerar esas (PRIORIDAD MÁXIMA)
-           const maxPuntajeDriverXross = Math.max(...conDriverXrossUsado.map(d => d.puntaje));
-           const mejoresDriverXross = conDriverXrossUsado.filter(d => d.puntaje === maxPuntajeDriverXross);
-           const candidatos = mejoresDriverXross.map(d => d.name);
-           mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
-           console.log("🏆 Driver/Xross USADOS correctamente - Mejor(es) con Driver/Xross (PRIORIDAD MÁXIMA):", mejoresDigimons);
+           // const maxPuntajeDriverXross = Math.max(...conDriverXrossUsado.map(d => d.puntaje));
+           // const mejoresDriverXross = conDriverXrossUsado.filter(d => d.puntaje === maxPuntajeDriverXross);
+           // const candidatos = mejoresDriverXross.map(d => d.name);
+           // mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
+           mejoresDigimons = conDriverXrossUsado.filter(d => d.puntaje >= 3).map(d => d.name);
+           console.log("🏆 Driver/Xross USADOS correctamente - Todas las posibilidades con puntaje > 3:", mejoresDigimons);
          } else {
            // // PRIORIDAD 2: Programs (solo si NO se usó Xross/Driver)
            // const conProgram = todosLosCandidatos.filter(d => {
@@ -3668,19 +3683,21 @@ if (nextLevel === 4 || nextLevel === 5) {
            //   mejoresDigimons = desempatarPorDigipuntos(candidatos, true);
            //   console.log("🏆 Programs/Excepciones encontrados - Mejor(es) con Program/Excepciones:", mejoresDigimons);
            // } else {
-             // Lógica normal: puntaje máximo
-             const maxPuntajeGlobal = Math.max(...todosLosCandidatos.map(d => d.puntaje));
-             const conMaxPuntaje = todosLosCandidatos.filter(d => d.puntaje === maxPuntajeGlobal);
+             // Lógica normal: todas las posibilidades con puntaje > 3
+             // const maxPuntajeGlobal = Math.max(...todosLosCandidatos.map(d => d.puntaje));
+             // const conMaxPuntaje = todosLosCandidatos.filter(d => d.puntaje === maxPuntajeGlobal);
 
-             // Si hay 3+ candidatos empatados, mostrar todos (se elige al azar en el juego)
-             if (conMaxPuntaje.length >= 3) {
-               mejoresDigimons = conMaxPuntaje.map(d => d.name);
-               console.log(`🎲 Triple empate o más (${conMaxPuntaje.length} digimon): ${mejoresDigimons.join(", ")} - Se elige al azar`);
-             } else {
-               const candidatos = conMaxPuntaje.map(d => d.name);
-               mejoresDigimons = desempatarPorDigipuntos(candidatos);
-               console.log("✅ Sin Programs ni Driver/Xross - Mejor(es) normal(es):", mejoresDigimons);
-             }
+             // // Si hay 3+ candidatos empatados, mostrar todos (se elige al azar en el juego)
+             // if (conMaxPuntaje.length >= 3) {
+             //   mejoresDigimons = conMaxPuntaje.map(d => d.name);
+             //   console.log(`🎲 Triple empate o más (${conMaxPuntaje.length} digimon): ${mejoresDigimons.join(", ")} - Se elige al azar`);
+             // } else {
+             //   const candidatos = conMaxPuntaje.map(d => d.name);
+             //   mejoresDigimons = desempatarPorDigipuntos(candidatos);
+             //   console.log("✅ Sin Programs ni Driver/Xross - Mejor(es) normal(es):", mejoresDigimons);
+             // }
+             mejoresDigimons = todosLosCandidatos.filter(d => d.puntaje >= 3).map(d => d.name);
+             console.log("✅ Sin Programs ni Driver/Xross - Todas las posibilidades con puntaje > 3:", mejoresDigimons);
            // }
          }
        } else {
@@ -3713,10 +3730,11 @@ if (data["Nivel"] === 5) {
     });
 
     if (sideEvosValidas5.length > 0) {
-      const maxPuntaje5 = Math.max(...sideEvosValidas5.map(d => d.puntaje));
-      const candidatos = sideEvosValidas5.filter(d => d.puntaje === maxPuntaje5).map(d => d.name);
-      mejoresDigimons = desempatarPorDigipuntos(candidatos);
-      console.log(`🎯 Mejor(es) Digimon(es) (Side Evolution con desempate): ${mejoresDigimons.join(", ")}`);
+      // const maxPuntaje5 = Math.max(...sideEvosValidas5.map(d => d.puntaje));
+      // const candidatos = sideEvosValidas5.filter(d => d.puntaje === maxPuntaje5).map(d => d.name);
+      // mejoresDigimons = desempatarPorDigipuntos(candidatos);
+      mejoresDigimons = sideEvosValidas5.filter(d => d.puntaje >= 3).map(d => d.name);
+      console.log(`🎯 Side Evolutions Nivel 5 con puntaje > 3: ${mejoresDigimons.join(", ")}`);
     } else {
       mejoresDigimons = ["Ninguno"];
       console.log("🚫 No se encontraron Side Evolutions válidas para este nivel.");
@@ -3744,10 +3762,11 @@ if (nextLevel === 6 && sideEvosValidas5.length === 0) {
     console.log("🔍 Digimon válidos Nivel 6 (puntaje >= 2):", digimonNivel6.map(d => `${d.name} (${d.puntaje})`));
 
     if (digimonNivel6.length > 0) {
-      const maxPuntajeNivel6 = Math.max(...digimonNivel6.map(d => d.puntaje));
-      const candidatos = digimonNivel6.filter(d => d.puntaje === maxPuntajeNivel6).map(d => d.name);
-      mejoresDigimons = desempatarPorDigipuntos(candidatos);
-      console.log("🏆 Mejor(es) Digimon Nivel 6 (con desempate):", mejoresDigimons);
+      // const maxPuntajeNivel6 = Math.max(...digimonNivel6.map(d => d.puntaje));
+      // const candidatos = digimonNivel6.filter(d => d.puntaje === maxPuntajeNivel6).map(d => d.name);
+      // mejoresDigimons = desempatarPorDigipuntos(candidatos);
+      mejoresDigimons = digimonNivel6.filter(d => d.puntaje >= 3).map(d => d.name);
+      console.log("🏆 Digimon Nivel 6 con puntaje > 3:", mejoresDigimons);
     } else {
       mejoresDigimons = ["Ninguno"];
       console.log("🚫 No se encontraron evoluciones válidas para Nivel 6 con puntaje >= 2.");
@@ -3775,10 +3794,10 @@ if (!specialCaseHandled) {
   } else {
     // Verificar si hay side evolutions válidas (incluyendo las de nivel 5)
     if (sideEvosValidas.length > 0 || sideEvosValidas5.length > 0) {
-      const nombres = mejoresDigimons.join(", ");
+      const nombres = mejoresDigimons.map(n => digimonReqDict[n]?.isProgramEvo ? n + "*" : n).join(", ");
       texto = textTranslations[currentLanguage]?.slideEvolution + nombres + ".";
     } else {
-      const nombres = mejoresDigimons.join(", ");
+      const nombres = mejoresDigimons.map(n => digimonReqDict[n]?.isProgramEvo ? n + "*" : n).join(", ");
       texto = textTranslations[currentLanguage]?.normalEvolution + nombres + ".";
     }
 
@@ -3787,6 +3806,7 @@ if (!specialCaseHandled) {
     }
 
     evolucionTexto.textContent = texto;
+    mostrarNotaProgramEvo(currentLanguage);
     console.log("✅ Mensaje de evolución asignado:", texto);
   }
 }
@@ -3941,10 +3961,10 @@ if (!specialCaseHandled) {
 
     // Verificar si hay side evolutions válidas (incluyendo las de nivel 5)
     if (sideEvosValidas.length > 0 || sideEvosValidas5.length > 0) {
-      const nombres = mejoresDigimons.join(", ");
+      const nombres = mejoresDigimons.map(n => digimonReqDict[n]?.isProgramEvo ? n + "*" : n).join(", ");
       texto = textTranslations[currentLanguage].slideEvolution + nombres + ".";
     } else {
-      const nombres = mejoresDigimons.join(", ");
+      const nombres = mejoresDigimons.map(n => digimonReqDict[n]?.isProgramEvo ? n + "*" : n).join(", ");
       texto = textTranslations[currentLanguage].normalEvolution + nombres + ".";
     }
 
@@ -3953,6 +3973,7 @@ if (!specialCaseHandled) {
     }
 
     evolucionTexto.textContent = texto;
+    mostrarNotaProgramEvo(currentLanguage);
   }
 
   // Evento para cambiar idioma automáticamente

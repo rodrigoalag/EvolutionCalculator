@@ -1267,7 +1267,7 @@ function generarFormulario() {
 
     // Lógica principal para campos string (mantener exacta pero sin Stat Superior)
     // EXCEPCIÓN: % Entrenamiento, Hora, Vinculo Minimo alcanzado y Nickname siempre deben ser inputs, incluso si el valor esperado es string o undefined
-    if ((typeof sampleValue === "string" || field === "Xross" || field === "Driver Equipado" || field === "Comida") && field !== "% Entrenamiento" && field !== "Hora" && field !== "Vinculo Minimo alcanzado" && field !== "Vinculo al momento de evolucionar" && field !== "Nickname") {
+    if ((typeof sampleValue === "string" || field === "Xross" || field === "Driver Equipado" || field === "Comida" || field === "Program") && field !== "% Entrenamiento" && field !== "Hora" && field !== "Vinculo Minimo alcanzado" && field !== "Vinculo al momento de evolucionar" && field !== "Nickname") {
         let opciones = [];
         if (field === "EntrenamientoHecho") {
             opciones = ["Si", "No"];

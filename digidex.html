@@ -339,6 +339,11 @@ table tr:hover {
 #tablaRequisitos tbody tr.data-row-origen {
   background-color: var(--bg) !important;
 }
+@media (max-width: 600px) {
+  #tablaRequisitos {
+    width: 100%;
+  }
+}
 
 select:disabled {
   opacity: 0.5;
@@ -1461,14 +1466,18 @@ main {
 .xross-wrapper {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 4px;
+  row-gap: 6px;
+  min-width: 160px;
 }
 .xross-entry {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 3px;
   flex-shrink: 0;
+  max-width: 100%;
 }
 .xross-driver-container {
   position: relative;
@@ -1496,7 +1505,8 @@ main {
 .xross-label {
   font-size: 0.78rem;
   color: #e0e0e0;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
 }
 .xross-digi-icon {
   width: 22px;
@@ -2570,7 +2580,8 @@ function formatearPuntajeConColor(puntaje) {
       "Requisitos Obligatorios": "Requisitos Obligatorios",
 	  "No se considera en el puntaje": "No se considera en el puntaje",
 	  "Evolucion por muerte inducida": "Evolucion por muerte inducida",
-	  "Debes cumplir al menos uno": "Debes cumplir al menos uno"
+	  "Debes cumplir al menos uno": "Debes cumplir al menos uno",
+	  "Incumplir al menos uno": "Cumplir al menos uno"
     },
 	  subtitle3: "Stat Base",
 	  subtitle4: "Evoluciones",
@@ -2684,7 +2695,8 @@ function formatearPuntajeConColor(puntaje) {
       "Requisitos Obligatorios": "Mandatory Requirements",
 	  "No se considera en el puntaje": "Not considered in scoring",
 	  "Evolucion por muerte inducida": "Evolution by induced death",
-	  "Debes cumplir al menos uno": "Must have at least one"
+	  "Debes cumplir al menos uno": "Must have at least one",
+	  "Incumplir al menos uno": "Meet at least one"
     },
 	  subtitle3: "Base Stats",
 	  subtitle4: "Evolutions",
@@ -3496,7 +3508,7 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
       incumplirFields.forEach(f => {
         const threshold = pathData.Incumplir[f];
         if (typeof threshold !== 'number') { _valores[f] = String(threshold); return; }
-        const isLTE = f === 'Error Maximo' || f === 'Errores Minimos' || f === 'Vinculo al momento de evolucionar';
+        const isLTE = f === 'Error Maximo' || f === 'Vinculo al momento de evolucionar';
         _valores[f] = f === '% Entrenamiento' ? `< ${threshold}%` : (isLTE ? `> ${threshold}` : `< ${threshold}`);
       });
 

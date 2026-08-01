@@ -646,7 +646,7 @@ const fullDigimonReqDict = {
         "Dorugamon": {
           "modo": "SideEvolution", "puntajeOk": 6, "puntajeNo": -10,
           "Obligatorio": { "Program": "Death" },
-          "Incumplir": { "% Entrenamiento": 50, "Errores Minimos": 6, "Combates Minimos": 30, "Vinculo al momento de evolucionar": -50 }
+          "Incumplir": { "% Entrenamiento": 50, "Errores Minimos": 6, "Victorias Minimas": 30, "Vinculo al momento de evolucionar": -50 }
         }
       }
     },
@@ -1009,8 +1009,7 @@ const fullDigimonReqDict = {
       },
       "DexDorugamon": {
         "No se considera en el puntaje": ["Peso"],
-        "Quota/Key Points": ["% Entrenamiento", "Error Maximo"],
-        "Requisitos Obligatorios": ["Combates Minimos"]
+        "Quota/Key Points": ["% Entrenamiento", "Error Maximo", "Combates Minimos"]
       }
     },
     "Requisitos": {

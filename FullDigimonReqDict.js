@@ -469,7 +469,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 10, "Vinculo al momento de evolucionar": -50 },
     "Stat Base": { "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Digitamamon", "BomberNanimon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
+    "Evoluciones": { "Evoluciona": ["Digitamamon","Darumamon", "BomberNanimon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
   },
   "Raremon": {
     "ID": 194, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
@@ -1106,6 +1106,14 @@ const fullDigimonReqDict = {
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Siesamon"] }
   },
+  "Darumamon": {
+    "ID": 211, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Mutante",
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+    "Requisitos": { "Peso": 15, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25 },
+    "Stat Base": { "ATK": 200, "DEF": 160, "HP": 2000, "Vel": 90 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Nanimon"] }
+  },
 
   // ===== ULTIMATE =====
   "Wargreymon": {
@@ -1472,7 +1480,7 @@ Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
   const clasificacion = computeClasificacion(name, data.Nivel, statBase || {});
   const isHighTierAdultOrPerfect = (data.Nivel === 4 || data.Nivel === 5) && clasificacion.nombre === "High Tier";
   let categorias = data.categorias ? JSON.parse(JSON.stringify(data.categorias)) : {};
-  if (isHighTierAdultOrPerfect && !_highTierErrorExceptions.has(name)) {
+  if (isHighTierAdultOrPerfect && !_highTierErrorExceptions.has(name) && "Error Maximo" in (data.Requisitos || {})) {
     const alreadyHasErrorMaximo = Object.values(categorias).some(v => Array.isArray(v) && v.includes("Error Maximo"));
     if (!alreadyHasErrorMaximo) {
       if (!categorias["Requisitos Obligatorios"]) categorias["Requisitos Obligatorios"] = [];

@@ -2379,7 +2379,8 @@ function formatearPuntajeConColor(puntaje) {
   const tamaIcons = {
     "V0": "botamon", "VS": "chibickmon", "PR": "Dodomon",
     "VL": "fluffymon", "M": "numemon", "D": "Ghostmon",
-    "SP": "chackmon", "P": "mushmon", "BG": "Kekomon"
+    "SP": "chackmon", "P": "mushmon", "BG": "Kekomon",
+    "GE": "paomon"
   };
 
   const tablaGenerales = document.querySelector("#tablaGenerales tbody");
@@ -2470,7 +2471,8 @@ function formatearPuntajeConColor(puntaje) {
     "P": { es: "Plant", en: "Plant" },
     "VL": { es: "Cielos Liberados", en: "Liberated Skies" },
     "PR": { es: "Prototipo Alpha", en: "Alpha Prototype" },
-    "BG": {es: "Beat Gekko", en:"Beat Gekko"}
+    "BG": {es: "Beat Gekko", en:"Beat Gekko"},
+    "GE": { es: "Dios del Este", en: "God of East" }
   };
 
   const getTamaNombre = (codigo) => {
@@ -2531,6 +2533,8 @@ function formatearPuntajeConColor(puntaje) {
 		"Mutante": "Mutante",
     "Marioneta": "Marioneta",
 		"Tierra": "Tierra",
+		"Sagrado": "Sagrado",
+		"Sagrado / Bestia": "Sagrado / Bestia",
 		"5 Caca": "5 Caca",
 		"5 Sardinas": "5 Sardinas",
 		"Chatarra": "Chatarra",
@@ -2646,7 +2650,9 @@ function formatearPuntajeConColor(puntaje) {
 		"Hielo": "Ice",
 		"Mutante": "Mutant",
     "Marioneta":"Puppet",
-		"Tierra": "Earth",		
+		"Tierra": "Earth",
+		"Sagrado": "Holy",
+		"Sagrado / Bestia": "Holy / Beast",		
 		"5 Caca": "5 Poop",
 		"5 Sardinas": "5 DigiSardine",
 		"Chatarra": "Metal Scrap",

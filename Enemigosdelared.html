@@ -441,6 +441,13 @@ header select:hover {
   margin-top: 0.25rem;
 }
 
+.digimon-entreno {
+  font-size: 0.8rem;
+  color: #7dd3fc;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-top: 0.1rem;
+}
+
 .digimon-boss {
   font-size: 0.75rem;
   color: #ff9900;
@@ -460,6 +467,16 @@ header select:hover {
   margin-top: 0.25rem;
   padding: 0.2rem 0.5rem;
   background: rgba(102, 204, 255, 0.2);
+  border-radius: 4px;
+}
+
+.digimon-nota {
+  font-size: 0.75rem;
+  color: #c4b5fd;
+  font-weight: bold;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(196, 181, 253, 0.15);
   border-radius: 4px;
 }
 
@@ -794,8 +811,8 @@ header select:hover {
         <div class="selector-group">
           <label id="entrenamientoLabel" for="entrenamientoSelect">% de Entrenamiento:</label>
           <select id="entrenamientoSelect">
-            <option value="0-39.99">0 - 39.99%</option>
-            <option value="40-59.99">40 - 59.99%</option>
+            <option value="0-39.99">0 - 40%</option>
+            <option value="40-59.99">40 - 60%</option>
             <option value="60-100">60 - 100%</option>
           </select>
         </div>
@@ -1080,18 +1097,18 @@ header select:hover {
     // Opciones de entrenamiento por nivel
     const entrenamientoOpciones = {
       3: [ // Child
-        { value: "0-39.99", label: "0 - 39.99%" },
-        { value: "40-59.99", label: "40 - 59.99%" },
+        { value: "0-39.99", label: "0 - 40%" },
+        { value: "40-59.99", label: "40 - 60%" },
         { value: "60-100", label: "60 - 100%" }
       ],
       4: [ // Adult
-        { value: "0-49.99", label: "0 - 49.99%" },
-        { value: "50-69.99", label: "50 - 69.99%" },
+        { value: "0-49.99", label: "0 - 50%" },
+        { value: "50-69.99", label: "50 - 70%" },
         { value: "70-100", label: "70 - 100%" }
       ],
       5: [ // Perfect/Ultimate
-        { value: "0-49.99", label: "0 - 49.99%" },
-        { value: "50-69.99", label: "50 - 69.99%" },
+        { value: "0-49.99", label: "0 - 50%" },
+        { value: "50-69.99", label: "50 - 70%" },
         { value: "70-100", label: "70 - 100%" }
       ]
     };
@@ -1340,6 +1357,23 @@ header select:hover {
         digimonInfo.appendChild(erroresSpan);
       }
 
+      // % de Entrenamiento
+      {
+        const entrenoSpan = document.createElement('span');
+        entrenoSpan.className = 'digimon-entreno';
+        let entrenoText;
+        if (enemigo.entrenamientos === 'todos') {
+          entrenoText = currentLanguage === 'es' ? 'Todos los %' : 'All %';
+        } else {
+          const rangos = Array.isArray(enemigo.entrenamientos) ? enemigo.entrenamientos : [enemigo.entrenamientos];
+          entrenoText = rangos.map(r => `${r.replace(/(\d+)\.99/g, (_, n) => String(parseInt(n) + 1))}%`).join(', ');
+        }
+        entrenoSpan.textContent = currentLanguage === 'es'
+          ? `% Entrenamiento: ${entrenoText}`
+          : `Training %: ${entrenoText}`;
+        digimonInfo.appendChild(entrenoSpan);
+      }
+
       // Boss - leyenda especial
       if (enemigo.boss) {
         const bossSpan = document.createElement('span');
@@ -1366,6 +1400,14 @@ header select:hover {
         entreno100Span.className = 'digimon-boss';
         entreno100Span.textContent = t('entreno100');
         digimonInfo.appendChild(entreno100Span);
+      }
+
+      // Nota libre - leyenda informativa
+      if (enemigo.nota) {
+        const notaSpan = document.createElement('span');
+        notaSpan.className = 'digimon-nota';
+        notaSpan.textContent = currentLanguage === 'es' ? enemigo.nota.es : enemigo.nota.en;
+        digimonInfo.appendChild(notaSpan);
       }
 
       // Día de semana específico - leyenda especial

@@ -855,10 +855,15 @@ main {
         ef.textContent = efectoText || '';
         if (vinculoVal !== undefined) {
           const vinc = document.createElement('div');
-          vinc.className = 'battle-vinculo ' + (vinculoVal >= 0 ? 'pos' : 'neg');
-          const sign = vinculoVal > 0 ? '+' : '';
           const label = currentLang === 'en' ? 'Bond' : 'Vínculo';
-          vinc.textContent = `${label}: ${sign}${vinculoVal}`;
+          if (vinculoVal === null) {
+            vinc.className = 'battle-vinculo';
+            vinc.textContent = `${label}: -`;
+          } else {
+            vinc.className = 'battle-vinculo ' + (vinculoVal >= 0 ? 'pos' : 'neg');
+            const sign = vinculoVal > 0 ? '+' : '';
+            vinc.textContent = `${label}: ${sign}${vinculoVal}`;
+          }
           ef.appendChild(vinc);
         }
         return ef;

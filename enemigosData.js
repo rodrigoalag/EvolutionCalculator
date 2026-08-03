@@ -706,6 +706,20 @@ const enemigosData = [
 
   // Perfect 50 - 69.99%
   {
+    digimon: "Darumamon",
+    nickName: "Darumamon",
+    niveles: [5],
+    entrenamientos: ["50-69.99"],
+    errores: "0-6",
+    nota: {
+      es: "* Usa efecto de la bebida, stats varían",
+      en: "* Uses drink effect, stats vary"
+    },
+    itemDrop: [
+      { item: "Huevo del Este", cantidad: 1 }
+    ]
+  },
+  {
     digimon: "Triceramon",
     nickName: "Aku",
     niveles: [5],

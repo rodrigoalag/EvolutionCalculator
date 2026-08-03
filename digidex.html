@@ -4430,15 +4430,15 @@ const programaImagen = {
 };
 
 const comidaImagen = {
-  "Bellota Dorada":    "BellotadeOro.png",
-  "Chatarra":          "restosdemetal.png",
-  "Nuez Magica":       "nuezmagica.png",
-  "Carne X":           "carnex.png",
-  "Verdura Congelada":   "Verduracongelada.png",
-  "Champiñon Congelado": "Champiñon congelado.png",
-  "Sardinas":            "digisardina.png",
-  "Caca":                "Caca.png",
-  "Cresta de la Lujuria": "crestadelalujuria.png"
+  // "Bellota Dorada":    "BellotadeOro.png",
+  // "Chatarra":          "restosdemetal.png",
+  // "Nuez Magica":       "nuezmagica.png",
+  // "Carne X":           "carnex.png",
+  // "Verdura Congelada":   "Verduracongelada.png",
+  // "Champiñon Congelado": "Champiñon congelado.png",
+  // "Sardinas":            "digisardina.png",
+  // "Caca":                "Caca.png",
+  // "Cresta de la Lujuria": "crestadelalujuria.png"
 };
 
 function renderProgram(valor) {
@@ -4458,9 +4458,8 @@ function renderComida(valor) {
   const m = str.match(/^(\d+)\s+(.+)$/);
   const cantidad = m ? parseInt(m[1]) : 1;
   const nombre = m ? m[2].trim() : str;
-  const filename = comidaImagen[nombre];
-  if (!filename) return t(nombre);
-  return `<span class="item-icon-wrap"><img class="item-icon" src="itemimg/${filename}" alt="${nombre}" title="${nombre}"><span class="item-qty">x${cantidad}</span></span>`;
+  const filename = comidaImagen[nombre] || (nombre.toLowerCase().replace(/\s+/g, '') + '.png');
+  return `<span class="item-icon-wrap"><img class="item-icon" src="itemimg/${filename}" data-nombre="${nombre}" onerror="this.style.display='none';this.parentElement.querySelector('.item-qty').textContent=this.dataset.nombre" alt="${nombre}" title="${nombre}"><span class="item-qty">x${cantidad}</span></span>`;
 }
 
 function renderDriverXross(xrossStr) {

@@ -1108,8 +1108,8 @@ const fullDigimonReqDict = {
   },
   "Darumamon": {
     "ID": 211, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Mutante",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
-    "Requisitos": { "Peso": 15, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25 },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Comida"] },
+    "Requisitos": { "Peso": 15, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Comida": "1 Huevo del Este" },
     "Stat Base": { "ATK": 200, "DEF": 160, "HP": 2000, "Vel": 90 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Nanimon"] }

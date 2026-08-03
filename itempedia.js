@@ -855,7 +855,8 @@ const itemData = {
       { tipo: "Hielo",       tipoEN: "Ice",       valor: -10 },
       { tipo: "Dinosaurio",  tipoEN: "Dinosaur",  valor: -5  },
       { tipo: "Tierra",      tipoEN: "Earth",     valor: -10 },
-      { tipo: "Marioneta",   tipoEN: "Puppet",    valor: -10 }
+      { tipo: "Marioneta",   tipoEN: "Puppet",    valor: -10 },
+      { tipo: "Sagrado",     tipoEN: "Holy",      valor: null }
     ]
   },
 
@@ -1834,7 +1835,8 @@ const EfectoCombate = {
     { condicion: "Hielo",      condicionEN: "Ice",       efecto: "+15% DEF / +15% HP.",                           efectoEN: "+15% DEF / +15% HP." },
     { condicion: "Dinosaurio", condicionEN: "Dinosaur",  efecto: "+20% ATK.",                                     efectoEN: "+20% ATK." },
     { condicion: "Tierra",     condicionEN: "Earth",     efecto: "+30% DEF.",                                     efectoEN: "+30% DEF." },
-    { condicion: "Marioneta",  condicionEN: "Puppet",    efecto: "Item al azar del pool de tu etapa.",            efectoEN: "Random item from your stage's pool." }
+    { condicion: "Marioneta",  condicionEN: "Puppet",    efecto: "Item al azar del pool de tu etapa.",            efectoEN: "Random item from your stage's pool." },
+    { condicion: "Sagrado",    condicionEN: "Holy",      efecto: "+30% HP.",                                      efectoEN: "+30% HP." }
   ]
 };
 

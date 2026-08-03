@@ -4,37 +4,44 @@ const fullDigimonReqDict = {
   "Botamon": {
     "ID": 0, "Tama": "V0", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 4 },
-    "Stat Base": { "ATK": 6, "DEF": 6, "HP": 50, "Vel": 4, "Digipuntos": 2 },
+    "Stat Base": { "ATK": 6, "DEF": 6, "HP": 50, "Vel": 4 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Chibickmon": {
     "ID": 55, "Tama": "VS", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 5 },
-    "Stat Base": { "ATK": 7, "DEF": 4, "HP": 40, "Vel": 6, "Digipuntos": 2 },
+    "Stat Base": { "ATK": 7, "DEF": 4, "HP": 40, "Vel": 6 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Yolkmon": {
     "ID": 47, "Tama": "VL", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 1 },
-    "Stat Base": { "ATK": 3, "DEF": 1, "HP": 40, "Vel": 13, "Digipuntos": 2.1 },
+    "Stat Base": { "ATK": 3, "DEF": 1, "HP": 40, "Vel": 13 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Kekomon": {
     "ID": 175, "Tama": "BG", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 5 },
-    "Stat Base": { "ATK": 2, "DEF": 2, "HP": 150, "Vel": 2, "Digipuntos": 2.1 },
+    "Stat Base": { "ATK": 2, "DEF": 2, "HP": 150, "Vel": 2 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Dodomon": {
     "ID": "146", "Tama": "PR", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 5 },
-    "Stat Base": { "ATK": 7, "DEF": 4, "HP": 60, "Vel": 4, "Digipuntos": 2.1 },
+    "Stat Base": { "ATK": 7, "DEF": 4, "HP": 60, "Vel": 4 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
+  },
+  "Paomon": {
+    "ID": 205, "Tama": "GE", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno",
+    "Requisitos": { "Peso": 5, "Error Maximo": 6 },
+    "Stat Base": { "ATK": 1, "DEF": 5, "HP": 100, "Vel": 5 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Xiaomon", "Burpmon"], "Viene": [] }
   },
 
   // ===== BABY II =====
@@ -42,37 +49,44 @@ const fullDigimonReqDict = {
   "Koromon": {
     "ID": 1, "Tama": "V0", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 6 },
-    "Stat Base": { "ATK": 9, "DEF": 6, "HP": 90, "Vel": 6, "Digipuntos": 3 },
+    "Stat Base": { "ATK": 9, "DEF": 6, "HP": 90, "Vel": 6 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Pickmon": {
     "ID": 56, "Tama": "VS", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 10 },
-    "Stat Base": { "ATK": 10, "DEF": 5, "HP": 70, "Vel": 8, "Digipuntos": 3 },
+    "Stat Base": { "ATK": 10, "DEF": 5, "HP": 70, "Vel": 8 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Fluffymon": {
     "ID": 48, "Tama": "VL", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 4 },
-    "Stat Base": { "ATK": 3, "DEF": 1, "HP": 50, "Vel": 21, "Digipuntos": 3 },
+    "Stat Base": { "ATK": 3, "DEF": 1, "HP": 50, "Vel": 21 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Kekkomon": {
     "ID": 176, "Tama": "BG", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 10 },
-    "Stat Base": { "ATK": 2, "DEF": 4, "HP": 220, "Vel": 2, "Digipuntos": 3.0 },
+    "Stat Base": { "ATK": 2, "DEF": 4, "HP": 220, "Vel": 2 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
   },
   "Dorimon": {
     "ID": "147", "Tama": "PR", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno",
     "Requisitos": { "Peso": 10 },
-    "Stat Base": { "ATK": 10, "DEF": 5, "HP": 100, "Vel": 5, "Digipuntos": 3.0 },
+    "Stat Base": { "ATK": 10, "DEF": 5, "HP": 100, "Vel": 5 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": [] }
+  },
+  "Xiaomon": {
+    "ID": 206, "Tama": "GE", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno",
+    "Requisitos": { "Peso": 10, "Error Maximo": 6 },
+    "Stat Base": { "ATK": 1, "DEF": 6, "HP": 180, "Vel": 5 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Paomon"] }
   },
 
   // ===== CHILD =====
@@ -81,7 +95,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho"] },
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "EntrenamientoHecho": "Si", "Stat Superior": "Vel", "Stat Superior 2": "ATK" },
-    "Stat Base": { "ATK": 50, "DEF": 25, "HP": 250, "Vel": 50, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 50, "DEF": 25, "HP": 250, "Vel": 50 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -90,7 +104,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Nickname"] },
     "Requisitos": { "Peso": 25, "Error Maximo": 6, "EntrenamientoHecho": "Si", "Stat Superior": "Vel", "Stat Superior 2": "ATK", "Nickname": "HK2006" },
-    "Stat Base": { "ATK": 45, "DEF": 35, "HP": 350, "Vel": 35, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 45, "DEF": 35, "HP": 350, "Vel": 35 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -99,7 +113,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"] },
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "EntrenamientoHecho": "Si", "Stat Superior": "Vel", "Stat Superior 2": "ATK", "Program": "Virus" },
-    "Stat Base": { "ATK": 55, "DEF": 25, "HP": 300, "Vel": 40, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 55, "DEF": 25, "HP": 300, "Vel": 40 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Tyranomon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Tuskmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -108,7 +122,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program", "2Ciclos"] },
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "EntrenamientoHecho": "Si", "Stat Superior": "Vel", "Stat Superior 2": "ATK", "Program": "Combat", "2Ciclos": "Si" },
-    "Stat Base": { "ATK": 55, "DEF": 25, "HP": 250, "Vel": 55, "Digipuntos": 16 },
+    "Stat Base": { "ATK": 55, "DEF": 25, "HP": 250, "Vel": 55 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["GeoGreymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -117,7 +131,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["Stat Superior", "Stat Superior 2"], "Requisitos Obligatorios": ["EntrenamientoHecho", "Program"] },
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "EntrenamientoHecho": "Si", "Stat Superior": "Vel", "Stat Superior 2": "ATK", "Program": "Frost" },
-    "Stat Base": { "ATK": 40, "DEF": 30, "HP": 350, "Vel": 45, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 40, "DEF": 30, "HP": 350, "Vel": 45 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Yukidarumon", "Icemon", "Chackmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -126,7 +140,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Quota/Key Points": ["EntrenamientoHecho", "Stat Superior"] },
     "Requisitos": { "Peso": 20, "Error Maximo": 6, "EntrenamientoHecho": "No", "Stat Superior": "HP" },
-    "Stat Base": { "ATK": 40, "DEF": 40, "HP": 450, "Vel": 25, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 40, "DEF": 40, "HP": 450, "Vel": 25 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -135,7 +149,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "EntrenamientoHecho"] },
     "Requisitos": { "Peso": 5, "EntrenamientoHecho": "No", "% Entrenamiento": 0 },
-    "Stat Base": { "ATK": 25, "DEF": 40, "HP": 500, "Vel": 35, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 25, "DEF": 40, "HP": 500, "Vel": 35 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Numemon", "Scumon", "Bakemon LT", "Nanimon", "Mercuremon", "Burpmon"], "Viene": [] }
   },
@@ -143,7 +157,7 @@ const fullDigimonReqDict = {
     "ID": 84, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "% Entrenamiento": "0-79", "Stat Superior": "HP", "Stat Superior 2": "Vel" },
-    "Stat Base": { "ATK": 40, "DEF": 20, "HP": 300, "Vel": 60, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 40, "DEF": 20, "HP": 300, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Shoutmon + Star Sword", "Shoutmon SH", "ShootingStarmon", "Starmon", "Bakemon LT", "Burpmon", "Nanimon", "Scumon", "Numemon"], "Viene": [] }
   },
@@ -151,7 +165,7 @@ const fullDigimonReqDict = {
     "ID": 85, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Tierra",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "Program": "Ore" },
-    "Stat Base": { "ATK": 35, "DEF": 40, "HP": 400, "Vel": 35, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 35, "DEF": 40, "HP": 400, "Vel": 35 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Icemon", "Burpmon", "Bakemon LT", "Starmon", "Nanimon", "Scumon", "Numemon"], "Viene": [] }
   },
@@ -160,7 +174,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"] },
     "Requisitos": { "Peso": 15, "Hora": "Día (12:00-23:59 UTC-3)", "% Entrenamiento": "80-100", "Stat Superior": "ATK" },
-    "Stat Base": { "ATK": 45, "DEF": 25, "HP": 300, "Vel": 40, "Digipuntos": 14 },
+    "Stat Base": { "ATK": 45, "DEF": 25, "HP": 300, "Vel": 40 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Shoutmon + Star Sword", "Shoutmon SH", "King Shoutmon", "Burpmon", "Numemon", "Nanimon", "Bakemon LT", "Scumon"], "Viene": [] }
   },
@@ -169,7 +183,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Stat Superior", "Hora"] },
     "Requisitos": { "Peso": 15, "Hora": "Noche (0:00-11:59 UTC-3)", "% Entrenamiento": "80-100", "Stat Superior": "ATK" },
-    "Stat Base": { "ATK": 40, "DEF": 25, "HP": 300, "Vel": 45, "Digipuntos": 14 },
+    "Stat Base": { "ATK": 40, "DEF": 25, "HP": 300, "Vel": 45 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Shoutmon + Star Sword", "Shoutmon SH", "King Shoutmon", "Burpmon", "Numemon", "Nanimon", "Bakemon LT", "Scumon"], "Viene": [] }
   },
@@ -180,7 +194,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 13,
       "Xross": { "Shoutmon": "1 VS001 Driver", "Shoutmon (Black)": "1 VS001 Driver", "Starmons": ["1 VS009 Driver", "1 VS010 Driver"] }
     },
-    "Stat Base": { "ATK": 45, "DEF": 25, "HP": 300, "Vel": 60, "Digipuntos": 16 },
+    "Stat Base": { "ATK": 45, "DEF": 25, "HP": 300, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["King Shoutmon", "Burpmon", "Numemon", "Nanimon", "Bakemon LT", "Scumon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Starmons"] }
   },
@@ -191,7 +205,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 17,
       "Xross": { "Shoutmon": "1 VS001 Driver", "Shoutmon (Black)": "1 VS001 Driver", "Starmons": ["1 VS009 Driver", "1 VS010 Driver"] }
     },
-    "Stat Base": { "ATK": 65, "DEF": 25, "HP": 300, "Vel": 40, "Digipuntos": 16 },
+    "Stat Base": { "ATK": 65, "DEF": 25, "HP": 300, "Vel": 40 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["King Shoutmon", "Burpmon", "Numemon", "Nanimon", "Bakemon LT", "Scumon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Starmons"] }
   },
@@ -199,7 +213,7 @@ const fullDigimonReqDict = {
     "ID": 49, "Tama": "VL", "Nivel": 3, "Atributo": "Data", "Tipo": "Viento / Dragon",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 10, "Error Maximo": 6 },
-    "Stat Base": { "ATK": 20, "DEF": 25, "HP": 170, "Vel": 65, "Digipuntos": 12.7 },
+    "Stat Base": { "ATK": 20, "DEF": 25, "HP": 170, "Vel": 65 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon", "Galemon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Kiwimon"], "Viene": [] }
   },
@@ -207,7 +221,7 @@ const fullDigimonReqDict = {
     "ID": 99, "Tama": "D", "Nivel": 3, "Atributo": "Data", "Tipo": "No Muerto",
     "EvoNatural": "Bakemon LT",
     "Requisitos": { "Peso": 10, "Program": "Death" },
-    "Stat Base": { "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65, "Digipuntos": 16 },
+    "Stat Base": { "ATK": 45, "DEF": 25, "HP": 250, "Vel": 65 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Bakemon LT", "Bakemon MT", "Scumon", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -216,7 +230,7 @@ const fullDigimonReqDict = {
     "EvoNatural": "Numemon",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
     "Requisitos": { "Peso": 12, "Program": "Mushroom" },
-    "Stat Base": { "ATK": 30, "DEF": 25, "HP": 550, "Vel": 40, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 30, "DEF": 25, "HP": 550, "Vel": 40 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Chamblemon", "Nanimon", "Scumon", "Numemon", "Bakemon LT", "Burpmon"], "Viene": [] }
   },
@@ -224,7 +238,7 @@ const fullDigimonReqDict = {
     "ID": 179, "Tama": "SP", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Hielo",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 15, "Xross": ["1 SP004 Driver", "1 SP000 Driver + 1 SP001 Driver"] },
-    "Stat Base": { "ATK": 35, "DEF": 25, "HP": 350, "Vel": 55, "Digipuntos": 15.0 },
+    "Stat Base": { "ATK": 35, "DEF": 25, "HP": 350, "Vel": 55 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Yukidarumon", "Icemon", "Chackmon", "Nanimon", "Scumon", "Numemon", "Bakemon LT", "Burpmon"], "Viene": [] }
   },
@@ -232,7 +246,7 @@ const fullDigimonReqDict = {
     "ID": 184, "Tama": "M", "Nivel": 3, "Atributo": "Virus", "Tipo": "Mutante",
     "EvoNatural": "Scumon",
     "Requisitos": { "Peso": 10, "Program": "Trash" },
-    "Stat Base": { "ATK": 30, "DEF": 25, "HP": 600, "Vel": 25, "Digipuntos": 14.0 },
+    "Stat Base": { "ATK": 30, "DEF": 25, "HP": 600, "Vel": 25 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["ScumonTyumon", "ScumonTyumonHigh", "Mercuremon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -240,7 +254,7 @@ const fullDigimonReqDict = {
     "ID": "148", "Tama": "PR", "Nivel": 3, "Atributo": "Data", "Tipo": "Bestia",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 18 },
-    "Stat Base": { "ATK": 55, "DEF": 35, "HP": 400, "Vel": 25, "Digipuntos": 15.5 },
+    "Stat Base": { "ATK": 55, "DEF": 35, "HP": 400, "Vel": 25 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Dorugamon", "DexDorugamon", "Raptordramon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -248,21 +262,21 @@ const fullDigimonReqDict = {
     "ID": 177, "Tama": "BG", "Nivel": 3, "Atributo": "Data", "Tipo": "Dinosaurio",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 18, "Error Maximo": 6, "Stat Superior": "HP" },
-    "Stat Base": { "ATK": 35, "DEF": 35, "HP": 450, "Vel": 35, "Digipuntos": 15.0 },
+    "Stat Base": { "ATK": 35, "DEF": 35, "HP": 450, "Vel": 35 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Armalizamon", "Wolvemon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
   "Chiropmon": {
     "ID": 156, "Tama": "BG", "Nivel": 3, "Atributo": "Virus", "Tipo": "Bestia",
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "Stat Superior": "Vel" },
-    "Stat Base": { "ATK": 35, "DEF": 25, "HP": 300, "Vel": 60, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 35, "DEF": 25, "HP": 300, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Armalizamon", "Wolvemon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
   "Pristimon": {
     "ID": 195, "Tama": "BG", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Marioneta",
     "Requisitos": { "Peso": "", "Error Maximo": 6, "Stat Superior": "ATK" },
-    "Stat Base": { "ATK": 60, "DEF": 25, "HP": 250, "Vel": 40, "Digipuntos": 15 },
+    "Stat Base": { "ATK": 60, "DEF": 25, "HP": 250, "Vel": 40 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Armalizamon", "Wolvemon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
@@ -270,10 +284,18 @@ const fullDigimonReqDict = {
     "ID": 176, "Tama": "P", "Nivel": 3, "Atributo": "Data", "Tipo": "Planta",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": "" },
-    "Stat Base": { "ATK": 35, "DEF": 30, "HP": 550, "Vel": 35, "Digipuntos": 15.0 },
+    "Stat Base": { "ATK": 35, "DEF": 30, "HP": 550, "Vel": 35 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Kiwimon", "Parasaumon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },*/
+  "Labramon": {
+    "ID": 207, "Tama": "GE", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Bestia",
+    "EvoNatural": "Numemon",
+    "Requisitos": { "Peso": 10, "Error Maximo": 6 },
+    "Stat Base": { "ATK": 35, "DEF": 35, "HP": 300, "Vel": 50 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Siesamon", "Burpmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon"], "Viene": ["Xiaomon"] }
+  },
   "Burpmon": {
     "ID": 33, "Tama": "M", "Nivel": 3, "Atributo": "Free", "Tipo": "Mutante",
     "categorias": { "Requisitos Obligatorios": ["Peso"] },
@@ -287,7 +309,7 @@ const fullDigimonReqDict = {
   "Greymon": {
     "ID": 4, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Agumon", "Vinculo Minimo alcanzado": 70, "WinRate": 60, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 100, "DEF": 60, "HP": 1000, "Vel": 65, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 100, "DEF": 60, "HP": 1000, "Vel": 65 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon"] }
   },
@@ -295,14 +317,14 @@ const fullDigimonReqDict = {
     "ID": 5, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Stat Superior", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 40, "Bonus Stat Superior": "Balanceado", "WinRate": 50, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 65, "DEF": 70, "HP": 1150, "Vel": 50, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 65, "DEF": 70, "HP": 1150, "Vel": 50 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Master Tyranomon", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Dark Tyranomon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
   },
   "Dark Tyranomon": {
     "ID": 6, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
     "Requisitos": { "Program": "Virus" },
-    "Stat Base": { "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Tyranomon"] }
   },
@@ -310,28 +332,28 @@ const fullDigimonReqDict = {
     "ID": 7, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dragon",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 25, "% Entrenamiento": 100, "Bonus WinRate": 70, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100 },
-    "Stat Base": { "ATK": 100, "DEF": 55, "HP": 1050, "Vel": 90, "Digipuntos": 35 },
+    "Stat Base": { "ATK": 100, "DEF": 55, "HP": 1050, "Vel": 90 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "RedVDramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Yuki Agumon", "Agumon (2006)"] }
   },
   "Deltamon": {
     "ID": 8, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Compuesto",
     "Requisitos": { "Peso": 30, "Error Maximo": "3-6", "% Entrenamiento": 60, "Bonus Errores": 5, "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "ATK" },
-    "Stat Base": { "ATK": 115, "DEF": 40, "HP": 900, "Vel": 55, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 115, "DEF": 40, "HP": 900, "Vel": 55 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
   },
   "Thunderballmon": {
     "ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
     "Requisitos": { "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 60, "Digimon Bonus": "Kokuwamon", "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "Vel" },
-    "Stat Base": { "ATK": 85, "DEF": 50, "HP": 900, "Vel": 75, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 85, "DEF": 50, "HP": 900, "Vel": 75 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Mametyramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
   },
   "Guardromon": {
     "ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "Peso": 35, "Error Maximo": 2, "% Entrenamiento": 50, "Bonus Batallas": "15-20", "WinRate": 50, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 50, "DEF": 110, "HP": 1100, "Vel": 30, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 50, "DEF": 110, "HP": 1100, "Vel": 30 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "GoldGuardromon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
   },
@@ -346,28 +368,28 @@ const fullDigimonReqDict = {
         "Agumon (Black)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "-" }, "Puntos": { "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25 } }
       }
     },
-    "Stat Base": { "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75, "Digipuntos": 35 },
+    "Stat Base": { "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
   },
   "RedVDramon": {
     "ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dragon",
     "Requisitos": { "Vinculo Minimo alcanzado": -50 },
-    "Stat Base": { "ATK": 110, "DEF": 45, "HP": 950, "Vel": 100, "Digipuntos": 35 },
+    "Stat Base": { "ATK": 110, "DEF": 45, "HP": 950, "Vel": 100 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Aero V-dramon (Black)", "Burpmon"], "Viene": ["V-Dramon"] }
   },
   "GoldGuardromon": {
     "ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Free", "Tipo": "Maquina",
     "Requisitos": { "Comida": "Bellota Dorada" },
-    "Stat Base": { "ATK": 50, "DEF": 120, "HP": 1100, "Vel": 30, "Digipuntos": 31 },
+    "Stat Base": { "ATK": 50, "DEF": 120, "HP": 1100, "Vel": 30 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Guardromon"] }
   },
   "GeoGreymon": {
     "ID": 72, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 20, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Agumon (2006)", "WinRate": 60, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 110, "DEF": 60, "HP": 1000, "Vel": 70, "Digipuntos": 34 },
+    "Stat Base": { "ATK": 110, "DEF": 60, "HP": 1000, "Vel": 70 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "RizeGreymon", "Andromon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon (2006)"] }
   },
@@ -375,21 +397,21 @@ const fullDigimonReqDict = {
     "ID": 79, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Maquina",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Batallas"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 18, "Error Maximo": "1-6", "% Entrenamiento": 50, "WinRate": 50, "Combates Minimos": 15, "Bonus Batallas": 0 },
-    "Stat Base": { "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
   },
   "Tuskmon": {
     "ID": 80, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "Digimon Bonus": "Agumon (Black)", "WinRate": 60, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 105, "DEF": 55, "HP": 1250, "Vel": 40, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 105, "DEF": 55, "HP": 1250, "Vel": 40 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon (Black)"] }
   },
   "Yukidarumon": {
     "ID": 81, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Hielo",
     "Requisitos": { "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "Bonus Batallas": "15-20", "WinRate": 60, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 80, "DEF": 80, "HP": 1150, "Vel": 50, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 80, "DEF": 80, "HP": 1150, "Vel": 50 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Chackmon", "Blizzarmon", "Polarbearmon", "Burpmon"], "Viene": ["Yuki Agumon", "Penmon"] }
   },
@@ -397,7 +419,7 @@ const fullDigimonReqDict = {
     "ID": 11, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"] },
     "Requisitos": { "Peso": 10 },
-    "Stat Base": { "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40, "Digipuntos": 20 },
+    "Stat Base": { "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon"] }
   },
@@ -405,7 +427,7 @@ const fullDigimonReqDict = {
     "ID": 41, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "5 Caca" },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29 },
+    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["GreatKingScumon", "Etemon", "PlatinumScumon", "ScumonTyumon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
   },
@@ -413,7 +435,7 @@ const fullDigimonReqDict = {
     "ID": 40, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "5 Sardinas" },
-    "Stat Base": { "ATK": 50, "DEF": 70, "HP": 800, "Vel": 30, "Digipuntos": 23 },
+    "Stat Base": { "ATK": 50, "DEF": 70, "HP": 800, "Vel": 30 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Monzaemon", "Black King Numemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Numemon"] }
   },
@@ -421,7 +443,7 @@ const fullDigimonReqDict = {
     "ID": 20, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
     "Requisitos": { "Peso": 10, "Program": "Trash" },
-    "Stat Base": { "ATK": 50, "DEF": 40, "HP": 750, "Vel": 45, "Digipuntos": 21 },
+    "Stat Base": { "ATK": 50, "DEF": 40, "HP": 750, "Vel": 45 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Monzaemon", "Black King Numemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Numemon"] }
   },
@@ -429,7 +451,7 @@ const fullDigimonReqDict = {
     "ID": 42, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "Bellota Dorada" },
-    "Stat Base": { "ATK": 50, "DEF": 50, "HP": 750, "Vel": 45, "Digipuntos": 22 },
+    "Stat Base": { "ATK": 50, "DEF": 50, "HP": 750, "Vel": 45 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Monzaemon", "Black King Numemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Numemon"] }
   },
@@ -437,7 +459,7 @@ const fullDigimonReqDict = {
     "ID": 43, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "Chatarra" },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29 },
+    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "PlatinumScumonTyumon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Scumon"] }
   },
@@ -445,7 +467,7 @@ const fullDigimonReqDict = {
     "ID": 110, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Vinculo al momento de evolucionar"] },
     "Requisitos": { "Peso": 10, "Vinculo al momento de evolucionar": -50 },
-    "Stat Base": { "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55, "Digipuntos": 20 },
+    "Stat Base": { "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Digitamamon", "BomberNanimon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
   },
@@ -453,7 +475,7 @@ const fullDigimonReqDict = {
     "ID": 194, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Program"] },
     "Requisitos": { "Peso": 10, "Program": "Mecha" },
-    "Stat Base": { "ATK": 30, "DEF": 100, "HP": 500, "Vel": 20, "Digipuntos": 20 },
+    "Stat Base": { "ATK": 30, "DEF": 100, "HP": 500, "Vel": 20 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["ExTyranomon", "Burpmon"], "Viene": [] }
   },
@@ -461,7 +483,7 @@ const fullDigimonReqDict = {
     "ID": 111, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
     "Requisitos": { "Peso": 15, "Xross": "1 V0019 Driver" },
-    "Stat Base": { "ATK": 70, "DEF": 10, "HP": 400, "Vel": 80, "Digipuntos": 20 },
+    "Stat Base": { "ATK": 70, "DEF": 10, "HP": 400, "Vel": 80 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Digitamamon", "Sephirothmon", "Mercuremon", "Burpmon"], "Viene": ["Nanimon"] }
   },
@@ -470,28 +492,28 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 20,
       "Xross": { "Scumon": "1 M017 Driver", "Tyumon": "1 M005 Driver" }
     },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29 },
+    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "Mercuremon", "Sephirothmon", "Burpmon", "PlatinumScumonTyumon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
   },
   "PlatinumScumonTyumon": {
     "ID": 187, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "Requisitos": { "Peso": 20, "Comida": "Chatarra" },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82, "Digipuntos": 29 },
+    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["ScumonTyumon"] }
   },
   "ScumonTyumonHigh": {
     "ID": 186, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "Requisitos": { "Peso": 20, "% Entrenamiento": 80, "Error Maximo": 2, "WinRate": 50, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 100, "DEF": 40, "HP": 700, "Vel": 30, "Digipuntos": 24.0 },
+    "Stat Base": { "ATK": 100, "DEF": 40, "HP": 700, "Vel": 30 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "Burpmon", "PlatinumScumonTyumonHigh", "Mercuremon", "Sephirothmon"], "Viene": ["Tyumon"] }
   },
   "PlatinumScumonTyumonHigh": {
     "ID": 188, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "Requisitos": { "Peso": 20, "Comida": "Chatarra" },
-    "Stat Base": { "ATK": 75, "DEF": 50, "HP": 850, "Vel": 30, "Digipuntos": 26.0 },
+    "Stat Base": { "ATK": 75, "DEF": 50, "HP": 850, "Vel": 30 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["ScumonTyumonHigh"] }
   },
@@ -499,14 +521,14 @@ const fullDigimonReqDict = {
     "ID": 57, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Xross"] },
     "Requisitos": { "Peso": 30, "Error Maximo": 6, "% Entrenamiento": 80, "WinRate": 65, "Combates Minimos": 20, "Xross": "4 VS000 Driver" },
-    "Stat Base": { "ATK": 120, "DEF": 40, "HP": 900, "Vel": 75, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 120, "DEF": 40, "HP": 900, "Vel": 75 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["SuperStarmon", "DarkSuperStarmon", "Burpmon"], "Viene": ["Starmons"] }
   },
   "Starmon": {
     "ID": 58, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
     "Requisitos": { "Peso": 15, "Error Maximo": 2, "% Entrenamiento": 70, "WinRate": 50, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 70, "DEF": 50, "HP": 1100, "Vel": 70, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 70, "DEF": 50, "HP": 1100, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["SuperStarmon", "DarkSuperStarmon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Starmons", "Gotsumon"] }
   },
@@ -514,7 +536,7 @@ const fullDigimonReqDict = {
     "ID": 162, "Tama": "VS", "Nivel": 4, "Atributo": "Data", "Tipo": "Compuesto",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Program"] },
     "Requisitos": { "Peso": 20, "% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 15, "WinRate": 60, "Program": "Royal", "Bonus Vinculo Alcanzado": 80 },
-    "Stat Base": { "ATK": 95, "DEF": 60, "HP": 900, "Vel": 80, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 95, "DEF": 60, "HP": 900, "Vel": 80 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Omega Shoutmon", "Burpmon"], "Viene": ["Shoutmon", "Shoutmon (Black)", "Shoutmon SH", "Shoutmon + Star Sword"] }
   },
@@ -529,7 +551,7 @@ const fullDigimonReqDict = {
         "Yuki Agumon, Penmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 50, "Combates Minimos": 15, "Program": "Ore" }, "Puntos": { "Peso": 25, "Error Maximo": 2, "% Entrenamiento": 80, "Bonus Comida": ["Verdura Congelada", "Champiñon Congelado"] } }
       }
     },
-    "Stat Base": { "ATK": 60, "DEF": 90, "HP": 1000, "Vel": 50, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 60, "DEF": 90, "HP": 1000, "Vel": 50 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Insekimon Low Tier", "Insekimon Mid Tier Dark", "Insekimon Mid Tier Super", "Insekimon High Tier", "Chackmon", "Blizzarmon", "SuperStarmon", "DarkSuperStarmon", "Burpmon"], "Viene": ["Yuki Agumon", "Gotsumon", "Penmon"] }
   },
@@ -545,7 +567,7 @@ const fullDigimonReqDict = {
         "Penmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Xross": "-" }, "Puntos": { "Peso": 10, "% Entrenamiento": 80, "Error Maximo": 6 } }
       }
     },
-    "Stat Base": { "ATK": 80, "DEF": 80, "HP": 950, "Vel": 70, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 80, "DEF": 80, "HP": 950, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Blizzarmon", "Burpmon"], "Viene": ["Yuki Agumon", "Icemon", "Yukidarumon", "Penmon"] }
   },
@@ -561,21 +583,21 @@ const fullDigimonReqDict = {
         "Thunderballmon, Starmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP013 Driver" }, "Puntos": { "Peso": 15, "% Entrenamiento": 60, "Error Maximo": 2 } }
       }
     },
-    "Stat Base": { "ATK": 90, "DEF": 30, "HP": 800, "Vel": 100, "Digipuntos": 30.0 },
+    "Stat Base": { "ATK": 90, "DEF": 30, "HP": 800, "Vel": 100 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Sephirothmon", "Burpmon"], "Viene": ["Tyumon", "Pillomon", "Numemon", "Scumon", "Nanimon", "BomberNanimon", "ScumonTyumon", "PlatinumScumon", "PlatinumScumonTyumon", "ScumonTyumonHigh", "PlatinumScumonTyumonHigh", "KaratsukiNumemon", "Geremon", "Thunderballmon", "GoldNumemon"] }
   },
   "Galemon": {
     "ID": 50, "Tama": "VL", "Nivel": 4, "Atributo": "Data", "Tipo": "Viento / Dragon",
     "Requisitos": { "Peso": 15, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 95, "DEF": 40, "HP": 650, "Vel": 100, "Digipuntos": 30 },
+    "Stat Base": { "ATK": 95, "DEF": 40, "HP": 650, "Vel": 100 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon", "GrandGalemon","Delumon"], "Viene": ["Pteromon"] }
   },
   "Bakemon LT": {
     "ID": 100, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
     "Requisitos": { "Peso": 10, "Muerte inducida sin Carne X o Program (30% de salir)": "Si", "Comida": "Carne X", "Program": "Death" },
-    "Stat Base": { "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60, "Digipuntos": 20 },
+    "Stat Base": { "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Soulmon LT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
   },
@@ -583,14 +605,14 @@ const fullDigimonReqDict = {
     "ID": 101, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "Nuez Magica" },
-    "Stat Base": { "ATK": 50, "DEF": 40, "HP": 600, "Vel": 70, "Digipuntos": 22 },
+    "Stat Base": { "ATK": 50, "DEF": 40, "HP": 600, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Fantomon", "Burpmon"], "Viene": ["Bakemon LT"] }
   },
   "Bakemon MT": {
     "ID": 100, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
     "Requisitos": { "Peso": 10, "% Entrenamiento": 80, "Error Maximo": 1, "Combates Minimos": 15, "WinRate": 50, "Digimon Bonus": "Ghostmon" },
-    "Stat Base": { "ATK": 50, "DEF": 50, "HP": 700, "Vel": 70, "Digipuntos": 24 },
+    "Stat Base": { "ATK": 50, "DEF": 50, "HP": 700, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Soulmon MT", "Fantomon", "Burpmon"], "Viene": ["Ghostmon"] }
   },
@@ -598,14 +620,14 @@ const fullDigimonReqDict = {
     "ID": 101, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "Nuez Magica" },
-    "Stat Base": { "ATK": 60, "DEF": 50, "HP": 700, "Vel": 80, "Digipuntos": 26 },
+    "Stat Base": { "ATK": 60, "DEF": 50, "HP": 700, "Vel": 80 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Fantomon", "Burpmon"], "Viene": ["Bakemon MT"] }
   },
   "Chamblemon": {
     "ID": 107, "Tama": "P", "Nivel": 4, "Atributo": "Virus", "Tipo": "Planta",
     "Requisitos": { "Peso": 16, "% Entrenamiento": 100, "Error Maximo": 1, "Combates Minimos": 15, "WinRate": 50 },
-    "Stat Base": { "ATK": 50, "DEF": 50, "HP": 1000, "Vel": 70, "Digipuntos": 27 },
+    "Stat Base": { "ATK": 50, "DEF": 50, "HP": 1000, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon", "Entmon"], "Viene": ["Mushmon"] }
   },
@@ -613,22 +635,22 @@ const fullDigimonReqDict = {
     "ID": 176, "Tama": "VL", "Nivel": 4, "Atributo": "Data", "Tipo": "Planta / Viento",
     "categorias": { "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 15, "Error Maximo": "3-6", "% Entrenamiento": 40, "WinRate": 50, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 50, "DEF": 40, "HP": 1100, "Vel": 100, "Digipuntos": 30.0 },
+    "Stat Base": { "ATK": 50, "DEF": 40, "HP": 1100, "Vel": 100 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["GrandGalemon", "Burpmon", "Delumon", "Entmon"], "Viene": ["Pteromon"] }
   },
   /*"Parasaumon": {
     "ID": 176, "Tama": "P", "Nivel": 4, "Atributo": "Virus", "Tipo": "Planta / Dinosaurio",
     "Requisitos": { "Peso": "" },
-    "Stat Base": { "ATK": 65, "DEF": 65, "HP": 1500, "Vel": 45, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 65, "DEF": 65, "HP": 1500, "Vel": 45 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["SkullGreymon", "Burpmon"], "Viene": [] }
   },*/
   "Dorugamon": {
-    "ID": "149", "Tama": "PR", "Nivel": 4, "Atributo": "Data", "Tipo": "Bestia g",
+    "ID": "149", "Tama": "PR", "Nivel": 4, "Atributo": "Data", "Tipo": "Bestia / Dragon",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Vinculo Alcanzado"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 20, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Bonus Vinculo Alcanzado": 80  },
-    "Stat Base": { "ATK": 80, "DEF": 65, "HP": 1250, "Vel": 55, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 80, "DEF": 65, "HP": 1250, "Vel": 55 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["DexDorugamon", "DexDoruguremon", "Doruguremon", "Burpmon"], "Viene": ["Dorumon"] }
   },
@@ -650,7 +672,7 @@ const fullDigimonReqDict = {
         }
       }
     },
-    "Stat Base": { "ATK": 100, "DEF": 50, "HP": 900, "Vel": 60, "Digipuntos": 30.0 },
+    "Stat Base": { "ATK": 100, "DEF": 50, "HP": 900, "Vel": 60 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["DexDoruguremon", "Burpmon"], "Viene": ["Dorumon", "Dorugamon"] }
   },
@@ -658,46 +680,52 @@ const fullDigimonReqDict = {
     "ID": "153", "Tama": "PR", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDorugamon y Dorugamon?"] },
     "Requisitos": { "Peso": 25, "% Entrenamiento": 100, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Tienes registrado a DexDorugamon y Dorugamon?": "Si", "Digimon Bonus": "Dorumon" },
-    "Stat Base": { "ATK": 90, "DEF": 70, "HP": 1300, "Vel": 60, "Digipuntos": 35.0 },
+    "Stat Base": { "ATK": 90, "DEF": 70, "HP": 1300, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Grademon", "Burpmon"], "Viene": ["Dorumon"] }
   },
   "Armalizamon": {
     "ID": 178, "Tama": "BG", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 60, "Combates Minimos": 15, "Digimon Bonus": "Gekkomon" },
-    "Stat Base": { "ATK": 70, "DEF": 100, "HP": 850, "Vel": 70, "Digipuntos": 32.5 },
+    "Stat Base": { "ATK": 70, "DEF": 100, "HP": 850, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["SkullGreymon", "MonarchLizamon", "Burpmon"], "Viene": ["Gekkomon", "Chiropmon", "Pristimon"] }
   },
   "Wolvemon": {
     "ID": 203, "Tama": "BG", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Requisitos": { "Peso": 20, "% Entrenamiento": 60, "Error Maximo": 2, "WinRate": 50, "Combates Minimos": 15 },
-    "Stat Base": { "ATK": 120, "DEF": 50, "HP": 600, "Vel": 70, "Digipuntos": 30.0 },
+    "Stat Base": { "ATK": 120, "DEF": 50, "HP": 600, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon", "MonarchLizamon"], "Viene": ["Gekkomon", "Chiropmon", "Pristimon"] }
   },
-
-
+  "Siesamon": {
+    "ID": 208, "Tama": "GE", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Sagrado / Bestia",
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+    "Requisitos": { "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 15 },
+    "Stat Base": { "ATK": 60, "DEF": 90, "HP": 1000, "Vel": 75 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Caturamon", "Shishimamon", "Burpmon"], "Viene": ["Labramon"] }
+  },
 
   // ===== PERFECT =====
   "Metal Greymon (Virus)": {
     "ID": 12, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "Peso": 65, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 220, "DEF": 110, "HP": 1900, "Vel": 130, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 220, "DEF": 110, "HP": 1900, "Vel": 130 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["BlitzGreymon", "Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon"] }
   },
   "Andromon": {
     "ID": 13, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Requisitos": { "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 60, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No" },
-    "Stat Base": { "ATK": 100, "DEF": 225, "HP": 2250, "Vel": 50, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 100, "DEF": 225, "HP": 2250, "Vel": 50 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Mametyramon": {
     "ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 10, "Error Maximo": 2, "% Entrenamiento": 60, "Bonus Errores": "1-6", "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 V0003 Driver" },
-    "Stat Base": { "ATK": 180, "DEF": 85, "HP": 2200, "Vel": 135, "Digipuntos": 62 },
+    "Stat Base": { "ATK": 180, "DEF": 85, "HP": 2200, "Vel": 135 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Dinomon", "Burpmon"], "Viene": ["Thunderballmon"] }
   },
@@ -705,7 +733,7 @@ const fullDigimonReqDict = {
     "ID": 15, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dragon",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 215, "DEF": 110, "HP": 2250, "Vel": 150, "Digipuntos": 70 },
+    "Stat Base": { "ATK": 215, "DEF": 110, "HP": 2250, "Vel": 150 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "GoldGuardromon", "Clockmon"] }
   },
@@ -713,77 +741,77 @@ const fullDigimonReqDict = {
     "ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dragon",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"] },
     "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon (Black)", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150, "Digipuntos": 70 },
+    "Stat Base": { "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["V-Dramon (Black)", "RedVDramon", "Tuskmon", "Dark Tyranomon"] }
   },
   "Metal Tyranomon": {
     "ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "Peso": 65, "Error Maximo": "3-6", "% Entrenamiento": 60, "Digimon Bonus": "Dark Tyranomon", "WinRate": 60, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 175, "DEF": 125, "HP": 2150, "Vel": 85, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 175, "DEF": 125, "HP": 2150, "Vel": 85 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "MetalMamemon": {
     "ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
     "Requisitos": { "% Entrenamiento": 100, "Program": "Mecha" },
-    "Stat Base": { "ATK": 190, "DEF": 120, "HP": 2000, "Vel": 140, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 190, "DEF": 120, "HP": 2000, "Vel": 140 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Mamemon"] }
   },
   "Metal Greymon": {
     "ID": 23, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Requisitos": { "Peso": 65, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Program": "Vaccine" },
-    "Stat Base": { "ATK": 225, "DEF": 120, "HP": 2000, "Vel": 130, "Digipuntos": 67.5 },
+    "Stat Base": { "ATK": 225, "DEF": 120, "HP": 2000, "Vel": 130 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["MetalGreymon Alterous", "Wargreymon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "MetalGreymon Alterous": {
     "ID": 26, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Requisitos": { "% Entrenamiento": 100, "Victorias": 40, "Program": "Mecha" },
-    "Stat Base": { "ATK": 235, "DEF": 125, "HP": 2050, "Vel": 135, "Digipuntos": 70 },
+    "Stat Base": { "ATK": 235, "DEF": 125, "HP": 2050, "Vel": 135 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon", "Wargreymon"], "Viene": ["Metal Greymon"] }
   },
   "Mamemon": {
     "ID": 24, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
     "Requisitos": { "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 25, "Bonus Errores": "1-6" },
-    "Stat Base": { "ATK": 185, "DEF": 75, "HP": 2000, "Vel": 140, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 185, "DEF": 75, "HP": 2000, "Vel": 140 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["MetalMamemon", "BigMamemon", "PrinceMamemon", "BanchoMamemon", "Sephirothmon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Triceramon": {
     "ID": 37, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 50, "Error Maximo": 2, "% Entrenamiento": 50, "Digimon Bonus": "Tyranomon", "WinRate": 60, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 125, "DEF": 190, "HP": 2100, "Vel": 75, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 125, "DEF": 190, "HP": 2100, "Vel": 75 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Dinomon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Megadramon": {
     "ID": 18, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "Peso": 55, "Error Maximo": "1-2", "% Entrenamiento": 75, "Bonus Batallas": 30, "WinRate": 60, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 210, "DEF": 80, "HP": 1750, "Vel": 135, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 210, "DEF": 80, "HP": 1750, "Vel": 135 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Gigadramon", "Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Gigadramon": {
     "ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "% Entrenamiento": 100, "Program": "Mecha" },
-    "Stat Base": { "ATK": 220, "DEF": 110, "HP": 1800, "Vel": 140, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 220, "DEF": 110, "HP": 1800, "Vel": 140 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Megadramon"] }
   },
   "RizeGreymon": {
     "ID": 73, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Requisitos": { "Peso": 55, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "GeoGreymon", "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 230, "DEF": 110, "HP": 1950, "Vel": 140, "Digipuntos": 67.5 },
+    "Stat Base": { "ATK": 230, "DEF": 110, "HP": 1950, "Vel": 140 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["GeoGreymon"] }
   },
   "Polarbearmon": {
     "ID": 82, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Hielo",
     "Requisitos": { "Peso": 45, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 110, "DEF": 210, "HP": 2300, "Vel": 100, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 110, "DEF": 210, "HP": 2300, "Vel": 100 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Blizzarmon", "Daipenmon", "Burpmon"], "Viene": ["Yukidarumon"] }
   },
@@ -791,14 +819,14 @@ const fullDigimonReqDict = {
     "ID": 83, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Bonus Victorias"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"] },
     "Requisitos": { "Peso": 55, "Error Maximo": 1, "% Entrenamiento": 80, "Program": "Combat", "WinRate": 70, "Combates Minimos": 25, "Bonus Victorias": 20 },
-    "Stat Base": { "ATK": 190, "DEF": 180, "HP": 2100, "Vel": 95, "Digipuntos": 67.5 },
+    "Stat Base": { "ATK": 190, "DEF": 180, "HP": 2100, "Vel": 95 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Dinomon", "Burpmon"], "Viene": ["Tyranomon"] }
   },
   "BigMamemon": {
     "ID": 38, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto",
     "Requisitos": { "Xross": "3 V0019 Driver" },
-    "Stat Base": { "ATK": 165, "DEF": 95, "HP": 2800, "Vel": 70, "Digipuntos": 61 },
+    "Stat Base": { "ATK": 165, "DEF": 95, "HP": 2800, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"] }
   },
@@ -806,7 +834,7 @@ const fullDigimonReqDict = {
     "ID": 19, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Marioneta",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 40, "% Entrenamiento": 100, "Digimon Bonus": "Numemon", "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 235, "DEF": 150, "HP": 2300, "Vel": 135, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 235, "DEF": 150, "HP": 2300, "Vel": 135 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["WaruMonzaemon", "GigaWaruMonzaemon", "Lilithmon", "Burpmon"], "Viene": ["Numemon", "KaratsukiNumemon", "GoldNumemon", "Geremon"] }
   },
@@ -814,7 +842,7 @@ const fullDigimonReqDict = {
     "ID": 201, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Marioneta",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 40, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 120, "DEF": 230, "HP": 2500, "Vel": 150, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 120, "DEF": 230, "HP": 2500, "Vel": 150 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Raremon"] }
   },
@@ -822,7 +850,7 @@ const fullDigimonReqDict = {
     "ID": 46, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"] },
     "Requisitos": { "Peso": 25, "Error Maximo": 1, "% Entrenamiento": 100, "Digimon Bonus": "KaratsukiNumemon", "WinRate": 60, "Combates Minimos": 25, "Program": "Royal" },
-    "Stat Base": { "ATK": 85, "DEF": 200, "HP": 2400, "Vel": 75, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 85, "DEF": 200, "HP": 2400, "Vel": 75 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["PlatinumNumemon", "Sephirothmon", "Burpmon"], "Viene": ["Numemon", "KaratsukiNumemon", "GoldNumemon", "Geremon"] }
   },
@@ -830,21 +858,21 @@ const fullDigimonReqDict = {
     "ID": 44, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Marioneta",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 20, "% Entrenamiento": 100, "Digimon Bonus": "Scumon / ScumonTyumon / ScumonTyumonHigh", "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 240, "DEF": 185, "HP": 2000, "Vel": 125, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 240, "DEF": 185, "HP": 2000, "Vel": 125 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["MetalEtemon", "Burpmon"], "Viene": ["Scumon", "PlatinumScumon", "ScumonTyumon", "PlatinumScumonTyumon", "ScumonTyumonHigh", "PlatinumScumonTyumonHigh"] }
   },
   "WaruMonzaemon": {
     "ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Marioneta",
     "Requisitos": { "Peso": 30, "Vinculo Minimo alcanzado": -50 },
-    "Stat Base": { "ATK": 245, "DEF": 145, "HP": 2150, "Vel": 145, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 245, "DEF": 145, "HP": 2150, "Vel": 145 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["GigaWaruMonzaemon", "Burpmon"], "Viene": ["Monzaemon"] }
   },
   "GigaWaruMonzaemon": {
     "ID": 17, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Compuesto",
     "Requisitos": { "Peso": 40, "Xross": "3 M002 Driver en WaruMonzaemon o 2 M002 Driver y 1 M003 Driver en Monzaemon" },
-    "Stat Base": { "ATK": 255, "DEF": 130, "HP": 2000, "Vel": 165, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 255, "DEF": 130, "HP": 2000, "Vel": 165 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["WaruMonzaemon", "Monzaemon"] }
   },
@@ -852,7 +880,7 @@ const fullDigimonReqDict = {
     "ID": 45, "Tama": "M", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Menos de 15 entrenamientos?"] },
     "Requisitos": { "Peso": 45, "Error Maximo": 6, "% Entrenamiento": 100, "Menos de 15 entrenamientos?": "Si" },
-    "Stat Base": { "ATK": 172, "DEF": 141, "HP": 1449, "Vel": 182, "Digipuntos": 64 },
+    "Stat Base": { "ATK": 172, "DEF": 141, "HP": 1449, "Vel": 182 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon", "Sephirothmon"], "Viene": ["Scumon"] }
   },
@@ -860,42 +888,42 @@ const fullDigimonReqDict = {
     "ID": 108, "Tama": "M", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 10, "% Entrenamiento": 100, "Combates Minimos": 25, "WinRate": 70, "Digimon Bonus": "Nanimon" },
-    "Stat Base": { "ATK": 210, "DEF": 170, "HP": 2700, "Vel": 100, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 210, "DEF": 170, "HP": 2700, "Vel": 100 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon", "Devitamamon", "Sephirothmon"], "Viene": ["Nanimon", "BomberNanimon"] }
   },
   "SuperStarmon": {
     "ID": 59, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Mutante",
     "Requisitos": { "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No" },
-    "Stat Base": { "ATK": 160, "DEF": 90, "HP": 1900, "Vel": 160, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 160, "DEF": 90, "HP": 1900, "Vel": 160 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Sephirothmon", "Burpmon"], "Viene": ["Starmon", "ShootingStarmon", "Icemon"] }
   },
   "DarkSuperStarmon": {
     "ID": 60, "Tama": "VS", "Nivel": 5, "Atributo": "Virus", "Tipo": "Mutante",
     "Requisitos": { "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "Si", "Bonus Vinculo al momento de evolucionar": "< 0" },
-    "Stat Base": { "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Sephirothmon", "Burpmon"], "Viene": ["Starmon", "ShootingStarmon", "Icemon"] }
   },
   "Insekimon Low Tier": {
     "ID": 87, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
     "Requisitos": { "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Driver Equipado": "1 VS003 Driver o 1 VS002 Driver" },
-    "Stat Base": { "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 150, "DEF": 160, "HP": 2000, "Vel": 90 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Icemon"] }
   },
   "Insekimon Mid Tier Dark": {
     "ID": 88, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
     "Requisitos": { "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 VS005 Driver" },
-    "Stat Base": { "ATK": 150, "DEF": 210, "HP": 2000, "Vel": 90, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 150, "DEF": 210, "HP": 2000, "Vel": 90 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Icemon"] }
   },
   "Insekimon Mid Tier Super": {
     "ID": 88, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
     "Requisitos": { "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 VS004 Driver" },
-    "Stat Base": { "ATK": 160, "DEF": 140, "HP": 1900, "Vel": 160, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 160, "DEF": 140, "HP": 1900, "Vel": 160 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Icemon"] }
   },
@@ -903,14 +931,14 @@ const fullDigimonReqDict = {
     "ID": 90, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Tierra",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Driver Equipado"] },
     "Requisitos": { "Peso": 30, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Driver Equipado": "1 VS004 Driver + 1 VS005 Driver" },
-    "Stat Base": { "ATK": 160, "DEF": 200, "HP": 2000, "Vel": 140, "Digipuntos": 70 },
+    "Stat Base": { "ATK": 160, "DEF": 200, "HP": 2000, "Vel": 140 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Icemon"] }
   },
   "Omega Shoutmon": {
     "ID": 163, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto",
     "Requisitos": { "Peso": 35, "% Entrenamiento": 100, "Combates Minimos": 25, "WinRate": 70, "Vinculo Minimo alcanzado": 100 },
-    "Stat Base": { "ATK": 220, "DEF": 140, "HP": 1800, "Vel": 160, "Digipuntos": 70 },
+    "Stat Base": { "ATK": 220, "DEF": 140, "HP": 1800, "Vel": 160 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["King Shoutmon"] }
   },
@@ -926,7 +954,7 @@ const fullDigimonReqDict = {
         "Chackmon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 70, "Combates Minimos": 25, "Xross": "-" }, "Puntos": { "Peso": 30, "% Entrenamiento": 80, "Error Maximo": 2 } }
       }
     },
-    "Stat Base": { "ATK": 160, "DEF": 160, "HP": 2100, "Vel": 120, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 160, "DEF": 160, "HP": 2100, "Vel": 120 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Daipenmon", "Burpmon"], "Viene": ["Icemon", "Yukidarumon", "Polarbearmon", "Chackmon"] }
   },
@@ -942,7 +970,7 @@ const fullDigimonReqDict = {
         "SuperStarmon, DarkSuperStarmon, Mamemon, Digitamamon, Black King Numemon": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": "-", "Combates Minimos": "-", "Xross": "1 SP014 Driver" }, "Puntos": { "Peso": 30, "% Entrenamiento": 60, "Error Maximo": "-" } }
       }
     },
-    "Stat Base": { "ATK": 150, "DEF": 150, "HP": 2500, "Vel": 50, "Digipuntos": 60.0 },
+    "Stat Base": { "ATK": 150, "DEF": 150, "HP": 2500, "Vel": 50 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Mercuremon", "Numemon", "Scumon", "Nanimon", "BomberNanimon", "ScumonTyumon", "PlatinumScumon", "PlatinumScumonTyumon", "ScumonTyumonHigh", "PlatinumScumonTyumonHigh", "KaratsukiNumemon", "Geremon", "Thunderballmon", "GoldNumemon", "Mamemon", "DarkSuperStarmon", "SuperStarmon", "Digitamamon", "Black King Numemon", "GreatKingScumon"] }
   },
@@ -954,7 +982,7 @@ const fullDigimonReqDict = {
       "Program": "Death", "Comida": "Carne X",
       "Death Evo": true
     },
-    "Stat Base": { "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70, "Digipuntos": 60 },
+    "Stat Base": { "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon", "BlackWargreymon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon", "Armalizamon"] }
   },
@@ -962,30 +990,30 @@ const fullDigimonReqDict = {
     "ID": 183, "Tama": "BG", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Errores Minimos", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 55, "% Entrenamiento": 100, "Errores Minimos": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100 },
-    "Stat Base": { "ATK": 150, "DEF": 300, "HP": 2000, "Vel": 50, "Digipuntos": 75.0 },
+    "Stat Base": { "ATK": 150, "DEF": 300, "HP": 2000, "Vel": 50 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Armalizamon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Armalizamon","Wolvemon"] }
   },
   "Fantomon": {
     "ID": 102, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 15, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Digimon Bonus": "Bakemon" },
-    "Stat Base": { "ATK": 250, "DEF": 100, "HP": 2200, "Vel": 180, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 250, "DEF": 100, "HP": 2200, "Vel": 180 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Fantomon", "Burpmon"], "Viene": ["Bakemon LT", "Soulmon LT", "Bakemon MT", "Soulmon MT"] }
   },
   "Metal Fantomon": {
-    "ID": 103, "Tama": "D", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
+    "ID": 103, "Tama": "D", "Nivel": 5, "Atributo": "Data", "Tipo": "No Muerto / Maquina",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Program"] },
     "Requisitos": { "Peso": 35, "% Entrenamiento": 100, "Program": "Mecha" },
-    "Stat Base": { "ATK": 240, "DEF": 140, "HP": 2200, "Vel": 150, "Digipuntos": 75 },
+    "Stat Base": { "ATK": 240, "DEF": 140, "HP": 2200, "Vel": 150 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Fantomon"] }
   },
   "GrandGalemon": {
     "ID": 51, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Viento / Dragon",
     "Requisitos": { "Peso": 25, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 240, "DEF": 110, "HP": 1000, "Vel": 200, "Digipuntos": 65 },
+    "Stat Base": { "ATK": 240, "DEF": 110, "HP": 1000, "Vel": 200 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Galemon", "Kiwimon"] }
   },
@@ -993,7 +1021,7 @@ const fullDigimonReqDict = {
     "ID": "150", "Tama": "PR", "Nivel": 5, "Atributo": "Data", "Tipo": "Bestia / Dragon",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Error Maximo", "WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 36, "% Entrenamiento": 80, "Error Maximo": 1, "WinRate": 70, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 190, "DEF": 135, "HP": 2350, "Vel": 90, "Digipuntos": 65.0 },
+    "Stat Base": { "ATK": 190, "DEF": 135, "HP": 2350, "Vel": 90 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["DexDoruguremon", "Burpmon"], "Viene": ["Dorugamon"] }
   },
@@ -1033,7 +1061,7 @@ const fullDigimonReqDict = {
         }
       }
     },
-    "Stat Base": { "ATK": 250, "DEF": 100, "HP": 1500, "Vel": 100, "Digipuntos": 60.0 },
+    "Stat Base": { "ATK": 250, "DEF": 100, "HP": 1500, "Vel": 100 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Dorugamon", "DexDorugamon", "Doruguremon"] }
   },
@@ -1041,7 +1069,7 @@ const fullDigimonReqDict = {
     "ID": "154", "Tama": "PR", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Guerrero",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 36, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100 },
-    "Stat Base": { "ATK": 210, "DEF": 130, "HP": 2100, "Vel": 150, "Digipuntos": 70.0 },
+    "Stat Base": { "ATK": 210, "DEF": 130, "HP": 2100, "Vel": 150 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Grademon VICE", "Burpmon"], "Viene": ["Raptordramon"] }
   },
@@ -1049,7 +1077,7 @@ const fullDigimonReqDict = {
     "ID": "174", "Tama": "PR", "Nivel": 5, "Atributo": "Virus", "Tipo": "Guerrero",
     "categorias": { "Requisitos Obligatorios": ["Errores Minimos", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 36, "Errores Minimos": 6, "Vinculo Minimo alcanzado": -50 },
-    "Stat Base": { "ATK": 245, "DEF": 125, "HP": 2000, "Vel": 130, "Digipuntos": 70.0 },
+    "Stat Base": { "ATK": 245, "DEF": 125, "HP": 2000, "Vel": 130 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Grademon"] }
   },
@@ -1057,18 +1085,27 @@ const fullDigimonReqDict = {
     "ID": 198, "Tama": "VL", "Nivel": 5, "Atributo": "Data", "Tipo": "Planta / Viento",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
     "Requisitos": { "Peso": 20, "% Entrenamiento": 60, "Error Maximo": "3-6", "Digimon Bonus": "Kiwimon", "WinRate": 60, "Combates Minimos": 25 },
-    "Stat Base": { "ATK": 80, "DEF": 80, "HP": 2600, "Vel": 180, "Digipuntos": 60.0 },
+    "Stat Base": { "ATK": 80, "DEF": 80, "HP": 2600, "Vel": 180 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Kiwimon","Galemon"] }
   },
   /*"Entmon": {
     "ID": 176, "Tama": "D", "Nivel": 5, "Atributo": "Virus", "Tipo": "No Muerto",
     "Requisitos": { "Peso": "" },
-    "Stat Base": { "ATK": 230, "DEF": 40, "HP": 2800, "Vel": 50, "Digipuntos": 60.0 },
+    "Stat Base": { "ATK": 230, "DEF": 40, "HP": 2800, "Vel": 50 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Chamblemon", "Parasaumon", "Kiwimon"] }
   },*/
 
+
+  "Caturamon": {
+    "ID": 210, "Tama": "GE", "Nivel": 5, "Atributo": "Data", "Tipo": "Sagrado / Bestia",
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+    "Requisitos": { "Peso": 30, "Error Maximo": 3, "% Entrenamiento": 60, "WinRate": 60, "Combates Minimos": 25 },
+    "Stat Base": { "ATK": 290, "DEF": 140, "HP": 1200, "Vel": 50 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Siesamon"] }
+  },
 
   // ===== ULTIMATE =====
   "Wargreymon": {
@@ -1082,7 +1119,7 @@ const fullDigimonReqDict = {
         "MetalGreymon Alterous": { "puntajeOk": 0, "puntajeNo": 0, "Victorias": 175, "Combates Minimos": 300 }
       }
     },
-    "Stat Base": { "ATK": 150, "DEF": 90, "HP": 1600, "Vel": 100, "Digipuntos": 50 },
+    "Stat Base": { "ATK": 150, "DEF": 90, "HP": 1600, "Vel": 100 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Metal Greymon", "MetalGreymon Alterous"] }
   },
@@ -1090,7 +1127,7 @@ const fullDigimonReqDict = {
     "ID": 171, "Tama": "D", "Nivel": 6, "Atributo": "Virus", "Tipo": "Dragon",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"] },
     "Requisitos": { "Peso": 30, "% Entrenamiento": 100, "Error Maximo": 6, "Vinculo al momento de evolucionar": -50, "Combates Minimos": 250, "Victorias": 140 },
-    "Stat Base": { "ATK": 175, "DEF": 100, "HP": 1900, "Vel": 85, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 175, "DEF": 100, "HP": 1900, "Vel": 85 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["SkullGreymon"] }
   },
@@ -1107,7 +1144,7 @@ const fullDigimonReqDict = {
         "Andromon":              "1 V0009 Driver + 1 V0013 Driver + 1 V0014 Driver + 1 V0015 Driver"
       }
     },
-    "Stat Base": { "ATK": 140, "DEF": 170, "HP": 1700, "Vel": 70, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 140, "DEF": 170, "HP": 1700, "Vel": 70 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Metal Greymon (Virus)", "MetalMamemon", "Metal Tyranomon", "Megadramon", "Andromon", "Gigadramon"] }
   },
@@ -1122,7 +1159,7 @@ const fullDigimonReqDict = {
         "Con Driver": { "% Entrenamiento": 100, "Error Maximo": 6, "Victorias": 100, "Driver Equipado": "1 EX009 Driver" }
       },
     },
-    "Stat Base": { "ATK": 150, "DEF": 205, "HP": 750, "Vel": 120, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 150, "DEF": 205, "HP": 750, "Vel": 120 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"] }
   },
@@ -1130,7 +1167,7 @@ const fullDigimonReqDict = {
     "ID": 182, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "WinRate", "Combates Minimos", "Program"] },
     "Requisitos": { "Peso": 15, "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Combat" },
-    "Stat Base": { "ATK": 180, "DEF": 90, "HP": 1500, "Vel": 130, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 180, "DEF": 90, "HP": 1500, "Vel": 130 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"] }
   },
@@ -1138,7 +1175,7 @@ const fullDigimonReqDict = {
     "ID": 92, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Marioneta",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Program"] },
     "Requisitos": { "Peso": 40, "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Program": "Mecha" },
-    "Stat Base": { "ATK": 180, "DEF": 150, "HP": 1300, "Vel": 90, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 180, "DEF": 150, "HP": 1300, "Vel": 90 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Etemon"] }
   },
@@ -1146,7 +1183,7 @@ const fullDigimonReqDict = {
     "ID": 91, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"] },
     "Requisitos": { "Peso": 55, "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Xross": "5 M007 Driver" },
-    "Stat Base": { "ATK": 100, "DEF": 190, "HP": 2000, "Vel": 60, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 100, "DEF": 190, "HP": 2000, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Black King Numemon"] }
   },
@@ -1154,7 +1191,7 @@ const fullDigimonReqDict = {
     "ID": 109, "Tama": "M", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso", "Error Maximo"], "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Vinculo al momento de evolucionar"] },
     "Requisitos": { "Peso": 20, "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80, "Vinculo al momento de evolucionar": -50 },
-    "Stat Base": { "ATK": 150, "DEF": 120, "HP": 2200, "Vel": 60, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 150, "DEF": 120, "HP": 2200, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Digitamamon"] }
   },
@@ -1164,7 +1201,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 40, "% Entrenamiento": 100, "Error Maximo": 6, "Combates Minimos": 50, "WinRate": 80,
       "Xross": { "Blizzarmon": ["1 SP000 Driver"], "Polarbearmon": ["1 SP001 Driver + 1 SP000 Driver", "1 SP004 Driver"] }
     },
-    "Stat Base": { "ATK": 160, "DEF": 160, "HP": 1200, "Vel": 110, "Digipuntos": 55 },
+    "Stat Base": { "ATK": 160, "DEF": 160, "HP": 1200, "Vel": 110 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Polarbearmon", "Blizzarmon"] }
   },
@@ -1172,7 +1209,7 @@ const fullDigimonReqDict = {
     "ID": 196, "Tama": "M", "Nivel": 6, "Atributo": "Virus", "Tipo": "Oscuridad",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Errores Minimos", "Victorias", "% Entrenamiento", "Comida"] },
     "Requisitos": { "Peso": 15, "Errores Minimos": 6, "Victorias": 150, "% Entrenamiento": 100, "Comida": "1 Cresta de la Lujuria" },
-    "Stat Base": { "ATK": 170, "DEF": 90, "HP": 700, "Vel": 190, "Digipuntos": 50.0 },
+    "Stat Base": { "ATK": 170, "DEF": 90, "HP": 700, "Vel": 190 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Monzaemon"] }
   },
@@ -1180,7 +1217,7 @@ const fullDigimonReqDict = {
     "ID": 200, "Tama": "V0", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Combates Minimos", "WinRate"] },
     "Requisitos": { "Peso": 35, "% Entrenamiento": 100, "Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80 },
-    "Stat Base": { "ATK": 300, "DEF": 70, "HP": 1300, "Vel": 50, "Digipuntos": 55.0 },
+    "Stat Base": { "ATK": 300, "DEF": 70, "HP": 1300, "Vel": 50 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Master Tyranomon", "Triceramon", "Mametyramon"] }
   },
@@ -1188,7 +1225,7 @@ const fullDigimonReqDict = {
     "ID": 204, "Tama": "V0", "Nivel": 6, "Atributo": "Virus", "Tipo": "Maquina",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["% Entrenamiento", "Error Maximo", "Combates Minimos", "WinRate"] },
     "Requisitos": { "Peso": 35, "% Entrenamiento": 100, "Error Maximo": 0, "Combates Minimos": 50, "WinRate": 80 },
-    "Stat Base": { "ATK": 190, "DEF": 200, "HP": 1000, "Vel": 60, "Digipuntos": 55.0 },
+    "Stat Base": { "ATK": 190, "DEF": 200, "HP": 1000, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Metal Greymon (Virus)"] }
   },
@@ -1349,7 +1386,7 @@ function computeScumonFamilyStats(digimonName, childName, babyIIName, babyIName)
 // Childs con Tama no estándar (M, D, P, SP, …) son "universales" y vienen de todos los Baby II.
 // Agregar un nuevo Child solo requiere el Tama correcto — no editar Viene/Evoluciona manualmente.
 (function _autoLinkBabyChain() {
-  const STANDARD_TAMAS = ["V0", "VS", "VL", "BG", "PR"];
+  const STANDARD_TAMAS = ["V0", "VS", "VL", "BG", "PR", "GE"];
   const babyIByTama  = {};
   const babyIIByTama = {};
 
@@ -1425,10 +1462,14 @@ const digimonstattier = {};
 const _highTierErrorExceptions = new Set(["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"]);
 
 Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
-  const statBase    = data["Stat Base"] || {};
+  const statBase    = data["Stat Base"];
   const evoluciones = data.Evoluciones  || {};
 
-  const clasificacion = computeClasificacion(name, data.Nivel, statBase);
+  const dp = statBase
+    ? parseFloat((((statBase.HP / 10) + statBase.ATK + statBase.DEF + statBase.Vel) / 10).toFixed(1))
+    : null;
+
+  const clasificacion = computeClasificacion(name, data.Nivel, statBase || {});
   const isHighTierAdultOrPerfect = (data.Nivel === 4 || data.Nivel === 5) && clasificacion.nombre === "High Tier";
   let categorias = data.categorias ? JSON.parse(JSON.stringify(data.categorias)) : {};
   if (isHighTierAdultOrPerfect && !_highTierErrorExceptions.has(name)) {
@@ -1446,7 +1487,7 @@ Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
     "Nivel":         data.Nivel,
     "Atributo":      data.Atributo,
     "Tipo":          data.Tipo,
-    "Digipuntos":    statBase.Digipuntos ?? null,
+    "Digipuntos":    dp,
     "Clasificacion": clasificacion,
     ...(data.EvoNatural ? { EvoNatural: data.EvoNatural } : {}),
     ...(Object.keys(categorias).length > 0 ? { categorias } : {}),
@@ -1455,7 +1496,7 @@ Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
   };
 
   // Reconstruir formato de stats + evoluciones
-  digimonstattier[name] = { ...statBase, ...evoluciones };
+  digimonstattier[name] = { ...(statBase || {}), Digipuntos: dp, ...evoluciones };
 });
 
 // Burpmon: Viene se calcula dinámicamente igual que antes

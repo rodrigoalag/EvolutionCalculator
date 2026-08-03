@@ -352,6 +352,14 @@ main {
   word-break: break-word;
 }
 
+.battle-vinculo {
+  font-size: 0.72rem;
+  margin-top: 3px;
+  font-weight: 600;
+}
+.battle-vinculo.neg { color: #f87171; }
+.battle-vinculo.pos { color: #86efac; }
+
 .battle-effects-header {
   font-size: 0.72rem;
   font-weight: 700;
@@ -817,7 +825,7 @@ main {
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  function buildEffectRows(efectos, isBattle) {
+  function buildEffectRows(efectos, isBattle, vinculoMap) {
     const section = document.createElement('div');
     section.className = isBattle ? 'battle-effects' : 'training-effects';
 
@@ -839,22 +847,33 @@ main {
         condText = `${t('labelActivaHora')} ${argTimeToLocal(entry.argentinaHour)}`;
       }
 
-      if (!condText) {
-        row.className = rowClass + ' no-condition';
+      const vinculoVal = (isBattle && vinculoMap) ? vinculoMap[entry.condicion] : undefined;
+
+      const buildEfEl = () => {
         const ef = document.createElement('div');
         ef.className = efClass;
         ef.textContent = efectoText || '';
-        row.appendChild(ef);
+        if (vinculoVal !== undefined) {
+          const vinc = document.createElement('div');
+          vinc.className = 'battle-vinculo ' + (vinculoVal >= 0 ? 'pos' : 'neg');
+          const sign = vinculoVal > 0 ? '+' : '';
+          const label = currentLang === 'en' ? 'Bond' : 'Vínculo';
+          vinc.textContent = `${label}: ${sign}${vinculoVal}`;
+          ef.appendChild(vinc);
+        }
+        return ef;
+      };
+
+      if (!condText) {
+        row.className = rowClass + ' no-condition';
+        row.appendChild(buildEfEl());
       } else {
         row.className = rowClass;
         const cond = document.createElement('div');
         cond.className = condClass;
         cond.textContent = condText;
         row.appendChild(cond);
-        const ef = document.createElement('div');
-        ef.className = efClass;
-        ef.textContent = efectoText || '';
-        row.appendChild(ef);
+        row.appendChild(buildEfEl());
       }
       section.appendChild(row);
     });
@@ -944,7 +963,11 @@ main {
 
     header.appendChild(titleSection);
     card.appendChild(header);
-    card.appendChild(buildEffectRows(efectos, isBattle));
+    const vinculoMap = {};
+    if (isBattle && item.vinculoTabla) {
+      item.vinculoTabla.forEach(v => { vinculoMap[v.tipo] = v.valor; });
+    }
+    card.appendChild(buildEffectRows(efectos, isBattle, Object.keys(vinculoMap).length ? vinculoMap : null));
     return card;
   }
 

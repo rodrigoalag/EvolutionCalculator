@@ -949,6 +949,7 @@
     .node-overlay .xross-driver-container.driver-Verde .driver-bg { width: 52px !important; height: 52px !important; }
     .node-overlay .xross-driver-container.driver-Verde .driver-icon { width: 22px !important; height: 22px !important; }
     .item-icon-wrap { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; }
+    .comida-sep { display: inline; font-size: 0.8rem; color: #4ecdc4; font-weight: bold; margin: 0 6px; }
     .item-icon { width: 28px; height: 28px; object-fit: contain; }
     .preevo-card .item-icon { width: 20px; height: 20px; }
     .node-overlay .item-icon-wrap { display: inline-flex; align-items: center; gap: 3px; }
@@ -2131,7 +2132,7 @@ const comidaImagen = {
   "Nuez Magica":       "nuezmagica.png",
   "Carne X":           "carnex.png",
   "Verdura Congelada":   "Verduracongelada.png",
-  "Champiñon Congelado": "Champiñon congelado.png",
+  "Champiñon Congelado": "champinoncongelado.png",
   "Sardinas":            "digisardina.png",
   "Caca":              "Caca.png",
   "Cresta de la Lujuria": "crestadelalujuria.png"
@@ -2148,12 +2149,12 @@ function renderProgram(valor) {
 function renderComida(valor) {
   if (!valor || valor === "-") return String(valor);
   const str = String(valor).trim();
-  if (str.includes(' o ')) return str.split(' o ').map(renderComida).join(' o ');
+  if (str.includes(' o ')) return str.split(' o ').map(renderComida).join('<span class="comida-sep">o</span>');
   if (str.includes(", ")) return str.split(", ").map(renderComida).join(" ");
   const m = str.match(/^(\d+)\s+(.+)$/);
   const cantidad = m ? parseInt(m[1]) : 1;
   const nombre = m ? m[2].trim() : str;
-  const filename = comidaImagen[nombre] || (nombre.toLowerCase().replace(/\s+/g, '') + '.png');
+  const filename = comidaImagen[nombre] || (nombre.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '') + '.png');
   return `<span class="item-icon-wrap"><img class="item-icon" src="itemimg/${filename}" data-nombre="${nombre}" onerror="this.style.display='none';this.parentElement.querySelector('.item-qty').textContent=this.dataset.nombre" alt="${nombre}" title="${nombre}"><span class="item-qty">x${cantidad}</span></span>`;
 }
 
@@ -2804,9 +2805,14 @@ function showInfo(data, evolutions, preEvolutions) {
             if (v !== '-') { obligatoriosFields.push(k); _allFields.add(k); }
           });
           Object.entries(pathData.Puntos || {}).forEach(([k, v]) => {
-            const vs = String(v);
-            const fmtV = (k === 'WinRate' || k === '% Entrenamiento') ? v + '%' :
-                         k === 'Error Maximo' ? (vs.includes('-') || isNaN(vs) ? vs : '0-' + vs) : vs;
+            let fmtV;
+            if (Array.isArray(v)) {
+              fmtV = v;
+            } else {
+              const vs = String(v);
+              fmtV = (k === 'WinRate' || k === '% Entrenamiento') ? v + '%' :
+                           k === 'Error Maximo' ? (vs.includes('-') || isNaN(vs) ? vs : '0-' + vs) : vs;
+            }
             vals[k] = fmtV;
             puntosFields.push(k);
             _allFields.add(k);
@@ -2863,7 +2869,7 @@ function showInfo(data, evolutions, preEvolutions) {
             if (vals[field] === undefined && _basereq[field] !== undefined) {
               const v = _basereq[field];
               if (Array.isArray(v)) {
-                vals[field] = v.join(' o ');
+                vals[field] = v.join('<span class="comida-sep">o</span>');
               } else if (typeof v !== 'object') {
                 vals[field] = String(v);
               }
@@ -3019,7 +3025,7 @@ function showInfo(data, evolutions, preEvolutions) {
         } else if (campo === 'Program') {
           valorHTML = renderProgram(String(rawValor));
         } else if (campo === 'Comida' || campo === 'Bonus Comida') {
-          valorHTML = renderComida(String(rawValor));
+          valorHTML = Array.isArray(rawValor) ? rawValor.map(v => renderComida(String(v))).join('<span class="comida-sep">o</span>') : renderComida(String(rawValor));
         } else if (campo === 'Xross' || campo === 'Driver Equipado') {
           valorHTML = renderXrossField(String(rawValor), data.label, representativePreEvo);
         } else {
@@ -3159,7 +3165,7 @@ function showInfo(data, evolutions, preEvolutions) {
             : (field === 'Program')
               ? renderProgram(String(formattedValue))
               : (field === 'Comida' || field === 'Bonus Comida')
-                ? renderComida(String(formattedValue))
+                ? (Array.isArray(formattedValue) ? formattedValue.map(v => renderComida(String(v))).join('<span class="comida-sep">o</span>') : renderComida(String(formattedValue)))
                 : formattedValue;
           reqHTML += `<div class="req-item${fullWidthClass}">
             <span class="label">${label}</span>
@@ -3203,7 +3209,7 @@ function showInfo(data, evolutions, preEvolutions) {
             : (field === 'Program')
               ? renderProgram(String(formattedValue))
               : (field === 'Comida' || field === 'Bonus Comida')
-                ? renderComida(String(formattedValue))
+                ? (Array.isArray(formattedValue) ? formattedValue.map(v => renderComida(String(v))).join('<span class="comida-sep">o</span>') : renderComida(String(formattedValue)))
                 : formattedValue;
           categoryHTML += `<div class="req-item${fullWidthClass}">
             <span class="label">${label}</span>

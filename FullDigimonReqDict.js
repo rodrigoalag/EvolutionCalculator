@@ -1123,6 +1123,15 @@ const fullDigimonReqDict = {
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Nanimon"] }
   },
 
+  "Amaterasumon": {
+    "ID": 212, "Tama": "GE", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Sagrado",
+    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "% Entrenamiento", "Error Maximo", "Comida"] },
+    "Requisitos": { "Peso": 15, "Error Maximo": 0, "% Entrenamiento": 100, "WinRate": 80, "Combates Minimos": 50, "Comida": "1 Huevo del Este" },
+    "Stat Base": { "ATK": 230, "DEF": 230, "HP": 400, "Vel": 50 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Shishimamon"] }
+  },
+
   // ===== ULTIMATE =====
   "Wargreymon": {
     "ID": 170, "Tama": "V0", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Dragon",

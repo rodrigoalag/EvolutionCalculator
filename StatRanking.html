@@ -1573,6 +1573,11 @@ function inicializarSelector() {
     opt.textContent = nivelAEtapa[nivel] || `Nivel ${nivel}`;
     selectNivel.appendChild(opt);
   });
+
+  const optCombinado = document.createElement("option");
+  optCombinado.value = "5+6";
+  optCombinado.textContent = "Perfect + Ultimate";
+  selectNivel.appendChild(optCombinado);
 }
 
 // Función para obtener clasificación — lee desde digimonReqDict (computado en FullDigimonReqDict.js)
@@ -2470,7 +2475,8 @@ function actualizarRangoDigipuntos() {
 
 // Función para generar el ranking (reutilizable)
 function generarRanking() {
-  const nivelSeleccionado = parseInt(selectNivel.value);
+  const nivelRaw = selectNivel.value;
+  const nivelSeleccionado = nivelRaw === "5+6" ? "5+6" : parseInt(nivelRaw);
   const downloadButtons = document.getElementById('downloadButtons');
   const explanationText = document.getElementById('explanationText');
   const filtersContainer = document.getElementById('filtersContainer');
@@ -2483,8 +2489,9 @@ function generarRanking() {
   }
 
   // Obtener Digimon del nivel seleccionado
+  const nivelesPermitidos = nivelSeleccionado === "5+6" ? [5, 6] : [nivelSeleccionado];
   const digimonDelNivel = Object.entries(digimonReqDict)
-    .filter(([_, data]) => data.Nivel === nivelSeleccionado)
+    .filter(([_, data]) => nivelesPermitidos.includes(data.Nivel))
     .map(([nombre, _]) => nombre);
 
   // Crear array de ranking con datos
@@ -2587,9 +2594,9 @@ function generarRanking() {
     });
 
   // Agregar variantes de Scumon y GreatKingScumon para niveles 4 (Adult) y 5 (Perfect)
-  if (nivelSeleccionado === 4 || nivelSeleccionado === 5) {
+  if (nivelSeleccionado === 4 || nivelSeleccionado === 5 || nivelSeleccionado === "5+6") {
     const variantes = generarVariantesScumon();
-    const variantesDelNivel = variantes.filter(v => v.nivel === nivelSeleccionado);
+    const variantesDelNivel = variantes.filter(v => nivelesPermitidos.includes(v.nivel));
 
     variantesDelNivel.forEach(variante => {
       datosActuales.push({

@@ -1106,6 +1106,14 @@ const fullDigimonReqDict = {
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Siesamon"] }
   },
+  "Shishimamon": {
+    "ID": 209, "Tama": "GE", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Sagrado / Bestia",
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos"] },
+    "Requisitos": { "Peso": 25, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25 },
+    "Stat Base": { "ATK": 250, "DEF": 150, "HP": 1300, "Vel": 120 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Burpmon", "Amaterasumon"], "Viene": ["Siesamon"] }
+  },
   "Darumamon": {
     "ID": 211, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Mutante",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Error Maximo"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Comida"] },

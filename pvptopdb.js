@@ -5,7 +5,7 @@ const pvpTopDB = {
     jugadores: [
       { nickname: "Estelahq",  discord: "Estela",      ultimoDigimon: "BlackKingNumemon",      puntaje: 6771, puesto: 1 },
       { nickname: "D_resh01",  discord: "D_resh",       ultimoDigimon: "Metalgreymon Alterous", puntaje: 5062, puesto: 2 },
-      { nickname: "Bleokami",  discord: "Blueokami",    ultimoDigimon: "Wargreymon",            puntaje: 4721, puesto: 3 },
+      { nickname: "Blueokami",  discord: "Blueokami",    ultimoDigimon: "Wargreymon",            puntaje: 4721, puesto: 3 },
       { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 4 },
       { nickname: "Yiirux",    discord: "Yiirux",       ultimoDigimon: "BlackKingNumemon",      puntaje: 3987, puesto: 5 },
       { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 6 },

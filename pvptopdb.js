@@ -1,4 +1,95 @@
 const pvpTopDB = {
+  "2024-12-BETA": {
+    label: "Beta - Temporada 1",
+    fechaInicio: "28 Diciembre 2024",
+    fechaFin: "15 Enero 2025",
+    jugadores: [
+      { nickname: "Revlar",       discord: "Revlar",    ultimoDigimon: "Monzaemon",   puntaje: 2462, puesto: 1 },
+      { nickname: "Spookytree",   discord: "Spookytree",ultimoDigimon: "Triceramon",  puntaje: 2393, puesto: 2 },
+      { nickname: "Memorlax",     discord: "Memorlax",  ultimoDigimon: "RizeGreymon", puntaje: 2386, puesto: 3 },
+      { nickname: "Spoolofwool",  discord: "Zororo",    ultimoDigimon: "AeroVDramon", puntaje: 2331, puesto: 4 }
+    ]
+  },
+  "2025-01-BETA": {
+    label: "Beta - Temporada 2",
+    fechaInicio: "16 Enero 2025",
+    fechaFin: "31 Enero 2025",
+    jugadores: [
+      { nickname: "Leonhartbk",  discord: "Leon",       ultimoDigimon: "MetalGreymon Alterous", puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-02-BETA-T0": {
+    label: "Beta - Temporada 3",
+    fechaInicio: "1 Febrero 2025",
+    fechaFin: "15 Febrero 2025",
+    jugadores: [
+      { nickname: "Spookytree",  discord: "Spookytree", ultimoDigimon: "AeroVDramon",           puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-02-BETA-T1": {
+    label: "Beta - Temporada 4",
+    fechaInicio: "16 Febrero 2025",
+    fechaFin: "28 Febrero 2025",
+    jugadores: [
+      { nickname: "Oriond",      discord: "👾 (hacker)",  ultimoDigimon: "AeroVDramon Black",     puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-03-BETA-T0": {
+    label: "Beta - Temporada 5",
+    fechaInicio: "1 Marzo 2025",
+    fechaFin: "15 Marzo 2025",
+    jugadores: [
+      { nickname: "Spoolofwool",      discord: "Zororo",      ultimoDigimon: "Monzaemon",             puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-03-BETA-T1": {
+    label: "Beta - Temporada 6",
+    fechaInicio: "16 Marzo 2025",
+    fechaFin: "31 Marzo 2025",
+    jugadores: [
+      { nickname: "Edson",       discord: "Edson",       ultimoDigimon: "AeroVDramon",           puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-04-BETA-T0": {
+    label: "Beta - Temporada 7",
+    fechaInicio: "1 Abril 2025",
+    fechaFin: "15 Abril 2025",
+    jugadores: [
+      { nickname: "Spookytree",  discord: "Spookytree",  ultimoDigimon: "Monzaemon",             puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-04-BETA-T1": {
+    label: "Beta - Temporada 8",
+    fechaInicio: "16 Abril 2025",
+    fechaFin: "30 Abril 2025",
+    jugadores: [
+      { nickname: "Leonhartbk",  discord: "Leonhartbk",  ultimoDigimon: "MetalGreymon Alterous", puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-05-BETA-T0": {
+    label: "Beta - Temporada 9",
+    fechaInicio: "1 Mayo 2025",
+    fechaFin: "15 Mayo 2025",
+    jugadores: [
+      { nickname: "Memorlax",    discord: "Memorlax",    ultimoDigimon: "Monzaemon",             puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-05-BETA-T1": {
+    label: "Beta - Temporada 10",
+    fechaInicio: "16 Mayo 2025",
+    fechaFin: "31 Mayo 2025",
+    jugadores: [
+      { nickname: "Spoolofwool", discord: "Zororo",      ultimoDigimon: "BlackKingNumemon",      puntaje: null, puesto: 1 }
+    ]
+  },
+  "2025-06-BETA-T0": {
+    label: "Beta - Temporada 11",
+    fechaInicio: "1 Junio 2025",
+    fechaFin: "15 Junio 2025",
+    jugadores: [
+      { nickname: "Alazar",      discord: "Alazar",      ultimoDigimon: "Great King Scumon",     puntaje: null, puesto: 1 }
+    ]
+  },
   "2026-01-T0": {
     fechaInicio: "1 Enero 2026",
     fechaFin: "15 Enero 2026",
@@ -166,8 +257,8 @@ const pvpTopDB = {
       { nickname: "Youngel",     discord: "Youngel",     ultimoDigimon: "Extyranomon",       puntaje: 2993, puesto: 1  },
       { nickname: "Rodrigo",     discord: "Rodrigoalag", ultimoDigimon: "AeroVDramonBlack",  puntaje: 2825, puesto: 2  },
       { nickname: "Thebig88",    discord: "Big",         ultimoDigimon: "Botamon",           puntaje: 2824, puesto: 3  },
-      { nickname: "Sithhus",     discord: "Sithhus",     ultimoDigimon: "Numemon",           puntaje: null, puesto: 4  },
-      { nickname: "Alazar",      discord: "Alazar",      ultimoDigimon: "Dorumon",           puntaje: null, puesto: 5  },
+      { nickname: "Sithhus",     discord: "Sithhus",     ultimoDigimon: "Numemon",           puntaje: 2719, puesto: 4  },
+      { nickname: "Alazar",      discord: "Alazar",      ultimoDigimon: "Dorumon",           puntaje: 2651, puesto: 5  },
       { nickname: "Leonhartbk", discord: "Leon",        ultimoDigimon: "ExTyranomon",        puntaje: 2606, puesto: 6  },
       { nickname: "Spookytree",  discord: "Spookytree",  ultimoDigimon: "AeroVDramon",       puntaje: 2597, puesto: 7  },
       { nickname: "Braian",      discord: "Braian",      ultimoDigimon: "Insekimon High Tier",puntaje: 2575, puesto: 8  },

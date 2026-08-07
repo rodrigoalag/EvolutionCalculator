@@ -389,6 +389,7 @@ const traducciones = {
     resumen:       "Resumen General",
     thNickname:    "Nickname",
     thMejorPos:    "Mejor Posición",
+    thMedallero:   "Medallero",
     thVeces1:      "Veces en #1",
     thMejorPuntaje:"Mejor Puntaje"
   },
@@ -402,6 +403,7 @@ const traducciones = {
     resumen:       "Overall Summary",
     thNickname:    "Nickname",
     thMejorPos:    "Best Position",
+    thMedallero:   "Medal Tally",
     thVeces1:      "Times #1",
     thMejorPuntaje:"Best Score"
   }
@@ -439,7 +441,7 @@ function actualizarHeadersResumen() {
     <th>Nickname</th>
     <th id="thDiscord">${t.discord}</th>
     <th id="thMejorPos">${t.thMejorPos}</th>
-    <th id="thVeces1">${t.thVeces1}</th>
+    <th id="thMedallero">${t.thMedallero}</th>
     <th id="thMejorPuntaje">${t.thMejorPuntaje}</th>
   `;
 }
@@ -486,7 +488,7 @@ function poblarSelector() {
     const s = pvpTopDB[key];
     const opt = document.createElement('option');
     opt.value = key;
-    opt.textContent = `${traducirFecha(s.fechaInicio)} – ${traducirFecha(s.fechaFin)}`;
+    opt.textContent = s.label ? s.label : `${traducirFecha(s.fechaInicio)} – ${traducirFecha(s.fechaFin)}`;
     sel.appendChild(opt);
   });
   if (valorActual && sel.querySelector(`option[value="${valorActual}"]`)) sel.value = valorActual;
@@ -498,15 +500,23 @@ function calcularResumen() {
     temporada.jugadores.forEach(j => {
       if (j.nickname === null) return;
       if (!stats[j.nickname]) {
-        stats[j.nickname] = { nickname: j.nickname, discord: j.discord, mejorPos: j.puesto, veces1: 0, mejorPuntaje: j.puntaje ?? 0 };
+        stats[j.nickname] = { nickname: j.nickname, discord: j.discord, mejorPos: j.puesto, veces1: 0, veces2: 0, veces3: 0, mejorPuntaje: j.puntaje ?? 0 };
       }
       const s = stats[j.nickname];
       if (j.puesto < s.mejorPos) s.mejorPos = j.puesto;
       if (j.puesto === 1) s.veces1++;
+      if (j.puesto === 2) s.veces2++;
+      if (j.puesto === 3) s.veces3++;
       if (j.puntaje != null && j.puntaje > s.mejorPuntaje) s.mejorPuntaje = j.puntaje;
     });
   });
-  return Object.values(stats).sort((a, b) => a.mejorPos - b.mejorPos || b.veces1 - a.veces1 || b.mejorPuntaje - a.mejorPuntaje);
+  return Object.values(stats).sort((a, b) =>
+    a.mejorPos - b.mejorPos ||
+    b.veces1 - a.veces1 ||
+    b.veces2 - a.veces2 ||
+    b.veces3 - a.veces3 ||
+    b.mejorPuntaje - a.mejorPuntaje
+  );
 }
 
 function renderResumen() {
@@ -516,12 +526,13 @@ function renderResumen() {
   calcularResumen().forEach(s => {
     const tr = document.createElement('tr');
     if (s.mejorPos <= 3) tr.classList.add(`rank-${s.mejorPos}`);
+    const medallero = '🥇'.repeat(s.veces1) + '🥈'.repeat(s.veces2) + '🥉'.repeat(s.veces3) || '-';
     tr.innerHTML = `
       <td class="nickname-cell">${s.nickname}</td>
       <td class="discord-cell" style="${s.discord === 'ඞ' ? 'font-size:2.5rem;' : ''}">${s.discord}</td>
       <td>${renderPuesto(s.mejorPos)}</td>
-      <td class="puntaje-cell">${s.veces1 > 0 ? '🏆 ' + s.veces1 : '-'}</td>
-      <td class="puntaje-cell">${s.mejorPuntaje}</td>
+      <td style="font-size:1.4rem;letter-spacing:2px;">${medallero}</td>
+      <td class="puntaje-cell">${s.mejorPuntaje || '-'}</td>
     `;
     tbody.appendChild(tr);
   });

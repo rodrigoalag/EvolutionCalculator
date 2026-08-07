@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>PvP Hall of Fame - Digimon Tools</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <style>
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 70px;
+}
+
+h1, h2, h3 { color: #4ecdc4; }
+
+/* Menú hamburguesa */
+#nav-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.95);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: #4ecdc4;
+  border-radius: 2px;
+}
+
+#nav-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: rgba(20, 20, 40, 0.98);
+  border-right: 1px solid rgba(78, 205, 196, 0.3);
+  z-index: 150;
+  padding: 20px;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78, 205, 196, 0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#nav-menu h3 img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link {
+  display: block;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.nav-link img {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.nav-link:hover { background: rgba(78, 205, 196, 0.2); color: #fff; }
+.nav-link.active { background: rgba(78, 205, 196, 0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.5;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.nav-credits ul { margin: 10px 0 0 0; padding-left: 20px; }
+.nav-credits li { margin-bottom: 8px; }
+.nav-credits a { color: #4ecdc4; text-decoration: none; }
+.nav-credits a:hover { text-decoration: underline; }
+#nav-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
+  display: none;
+}
+#nav-overlay.active { display: block; }
+
+/* Página */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.page-header h1 { margin: 0 0 0.25rem 0; font-size: 3rem; }
+.page-header p { margin: 0; color: #888; font-size: 1.35rem; }
+
+/* Selector de temporada */
+.season-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(30, 30, 50, 0.4);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  border-radius: 8px;
+}
+.season-selector label {
+  font-size: 1.425rem;
+  font-weight: 500;
+  color: #ccc;
+  white-space: nowrap;
+}
+.season-selector select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  border-radius: 6px;
+  background: rgba(40, 40, 60, 0.8);
+  color: white;
+  font-size: 1.35rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 260px;
+}
+.season-selector select:hover { border-color: #4ecdc4; background: rgba(40, 40, 60, 1); }
+.season-selector select:focus { outline: none; border-color: #4ecdc4; box-shadow: 0 0 8px rgba(78, 205, 196, 0.3); }
+
+/* Tabla */
+.hall-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.hall-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(20, 20, 40, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(78, 205, 196, 0.15);
+}
+
+.hall-table th {
+  background: rgba(78, 205, 196, 0.12);
+  color: #4ecdc4;
+  font-size: 1.275rem;
+  font-weight: 600;
+  padding: 0.9rem 1rem;
+  text-align: center;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+.hall-table td {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  vertical-align: middle;
+}
+
+.hall-table tbody tr:last-child td { border-bottom: none; }
+
+.hall-table tbody tr:hover {
+  background: rgba(78, 205, 196, 0.06);
+}
+
+/* Puesto */
+.puesto-cell {
+  font-size: 1.95rem;
+  font-weight: 700;
+  min-width: 60px;
+}
+.puesto-1 { color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+.puesto-2 { color: #C0C0C0; text-shadow: 0 0 8px rgba(192,192,192,0.4); }
+.puesto-3 { color: #CD7F32; text-shadow: 0 0 8px rgba(205,127,50,0.4); }
+.puesto-other { color: #888; font-size: 1.5rem; }
+
+/* Row highlight top 3 */
+.hall-table tbody tr.rank-1 { background: rgba(255, 215, 0, 0.04); }
+.hall-table tbody tr.rank-2 { background: rgba(192, 192, 192, 0.03); }
+.hall-table tbody tr.rank-3 { background: rgba(205, 127, 50, 0.04); }
+
+/* Digimon icon */
+.digi-icon {
+  width: 104px;
+  height: 104px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+.digi-icon-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.digi-name-fallback {
+  font-size: 1.08rem;
+  color: #aaa;
+  max-width: 80px;
+  word-break: break-word;
+}
+
+/* Nickname */
+.nickname-cell {
+  font-weight: 600;
+  font-size: 1.425rem;
+  color: #e0e0e0;
+}
+.discord-cell {
+  font-size: 1.275rem;
+  color: #7289da;
+}
+
+/* Puntaje */
+.puntaje-cell {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #4ecdc4;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 600px) {
+  .hall-table th, .hall-table td { padding: 0.6rem 0.5rem; font-size: 1.23rem; }
+  .digi-icon { width: 80px; height: 80px; }
+  .season-selector select { min-width: 200px; }
+}
+  </style>
+</head>
+<body>
+
+<script src="pvptopdb.js"></script>
+
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span><span></span><span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/calculator.png" alt="Evo Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/digidex.png" alt="Digidex"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./tierranking.html" class="nav-link"><img src="./icon/starmon.png" alt="Tier Ranking"> Tier Ranking</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
+  <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
+  <a href="./pvptop.html" class="nav-link active"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/link.png" alt="Links"><span>Links Externos</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://driverdatabase.neocities.org/Driver%20DB" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <a href="https://netdriver.miraheze.org/wiki/Main_Page" target="_blank" class="nav-link external">NetDriver Wiki</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="Créditos"><span>Créditos</span></h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="page-header">
+      <h1>PvP Hall of Fame</h1>
+      <p>Top jugadores por temporada</p>
+    </div>
+
+    <div class="season-selector">
+      <label for="selectSeason" id="labelSeason">Temporada:</label>
+      <select id="selectSeason"></select>
+      <label for="selectIdioma" id="labelIdioma" style="margin-left:1rem;">Idioma:</label>
+      <select id="selectIdioma">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <div class="hall-table-wrap">
+      <table class="hall-table" id="hallTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nickname</th>
+            <th id="thDiscord">Discord Name</th>
+            <th id="thDigimon">Último Digimon</th>
+            <th id="thPuntaje">Puntaje</th>
+          </tr>
+        </thead>
+        <tbody id="hallTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+
+const traducciones = {
+  es: {
+    subtitle:   "Top jugadores por temporada",
+    season:     "Temporada:",
+    idioma:     "Idioma:",
+    discord:    "Discord Name",
+    digimon:    "Último Digimon",
+    puntaje:    "Puntaje"
+  },
+  en: {
+    subtitle:   "Top players per season",
+    season:     "Season:",
+    idioma:     "Language:",
+    discord:    "Discord Name",
+    digimon:    "Last Digimon",
+    puntaje:    "Score"
+  }
+};
+
+let idiomaActual = 'es';
+
+function aplicarTraducciones() {
+  const t = traducciones[idiomaActual];
+  document.querySelector('.page-header p').textContent = t.subtitle;
+  document.getElementById('labelSeason').textContent = t.season;
+  document.getElementById('labelIdioma').textContent = t.idioma;
+  document.getElementById('thDiscord').textContent = t.discord;
+  document.getElementById('thDigimon').textContent = t.digimon;
+  document.getElementById('thPuntaje').textContent = t.puntaje;
+}
+
+function digiIconFilename(nombre) {
+  return nombre.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '') + '.png';
+}
+
+function renderPuesto(puesto) {
+  if (puesto === 1) return `<span class="puesto-cell puesto-1">🥇</span>`;
+  if (puesto === 2) return `<span class="puesto-cell puesto-2">🥈</span>`;
+  if (puesto === 3) return `<span class="puesto-cell puesto-3">🥉</span>`;
+  return `<span class="puesto-cell puesto-other">${puesto}</span>`;
+}
+
+function renderDigiIcon(nombre) {
+  const filename = digiIconFilename(nombre);
+  return `<div class="digi-icon-wrap">
+    <img class="digi-icon" src="icon/${filename}" alt="${nombre}" title="${nombre}"
+      onerror="this.style.display='none';this.nextElementSibling.textContent=this.dataset.nombre" data-nombre="${nombre}">
+    <span class="digi-name-fallback"></span>
+  </div>`;
+}
+
+const mesesES = { Enero:1, Febrero:2, Marzo:3, Abril:4, Mayo:5, Junio:6, Julio:7, Agosto:8, Septiembre:9, Octubre:10, Noviembre:11, Diciembre:12 };
+const mesesEN = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function traducirFecha(fecha) {
+  if (idiomaActual === 'es') return fecha;
+  return fecha.replace(/Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre/g,
+    m => mesesEN[mesesES[m]]);
+}
+
+function poblarSelector() {
+  const sel = document.getElementById('selectSeason');
+  const valorActual = sel.value;
+  sel.innerHTML = '';
+  Object.keys(pvpTopDB).forEach(key => {
+    const s = pvpTopDB[key];
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = `${traducirFecha(s.fechaInicio)} – ${traducirFecha(s.fechaFin)}`;
+    sel.appendChild(opt);
+  });
+  if (valorActual && sel.querySelector(`option[value="${valorActual}"]`)) sel.value = valorActual;
+}
+
+function renderTabla(key) {
+  const temporada = pvpTopDB[key];
+  if (!temporada) return;
+  const tbody = document.getElementById('hallTableBody');
+  tbody.innerHTML = '';
+  temporada.jugadores.forEach(j => {
+    const tr = document.createElement('tr');
+    if (j.puesto <= 3) tr.classList.add(`rank-${j.puesto}`);
+    tr.innerHTML = `
+      <td>${renderPuesto(j.puesto)}</td>
+      <td class="nickname-cell">${j.nickname}</td>
+      <td class="discord-cell" style="${j.discord === 'ඞ' ? 'font-size:2.5rem;' : ''}">${j.discord}</td>
+      <td>${renderDigiIcon(j.ultimoDigimon)}</td>
+      <td class="puntaje-cell">${j.puntaje}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+poblarSelector();
+const sel = document.getElementById('selectSeason');
+if (sel.options.length > 0) renderTabla(sel.value);
+sel.addEventListener('change', () => renderTabla(sel.value));
+
+aplicarTraducciones();
+document.getElementById('selectIdioma').addEventListener('change', e => {
+  idiomaActual = e.target.value;
+  aplicarTraducciones();
+  poblarSelector();
+});
+</script>
+</body>
+</html>

@@ -2515,11 +2515,12 @@ function generarRanking() {
         // Agrupar líneas por los stats que realmente heredan (excluyendo slides)
         const lineasPorStats = new Map();
 
+        const nivelDigimon = digimonReqDict[nombre]?.Nivel || 0;
         todasLasLineas.forEach(lineaEvolutiva => {
-          // Filtrar solo los predecesores que NO son slides (nivel < nivel actual)
+          // Filtrar solo los predecesores que NO son slides (nivel < nivel actual del digimon)
           const lineaSinSlides = lineaEvolutiva.filter(predecesor => {
             const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
-            return nivelPredecesor < nivelSeleccionado;
+            return nivelPredecesor < nivelDigimon;
           });
 
           // Crear clave basada solo en los predecesores que aportan stats

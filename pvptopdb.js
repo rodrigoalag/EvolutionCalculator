@@ -1,4 +1,20 @@
 const pvpTopDB = {
+  "2026-01-T0": {
+    fechaInicio: "1 Enero 2026",
+    fechaFin: "15 Enero 2026",
+    jugadores: [
+      { nickname: "Estelahq",  discord: "Estela",      ultimoDigimon: "BlackKingNumemon",      puntaje: 6771, puesto: 1 },
+      { nickname: "D_resh01",  discord: "D_resh",       ultimoDigimon: "Metalgreymon Alterous", puntaje: 5062, puesto: 2 },
+      { nickname: "Bleokami",  discord: "Blueokami",    ultimoDigimon: "Wargreymon",            puntaje: 4721, puesto: 3 },
+      { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 4 },
+      { nickname: "Yiirux",    discord: "Yiirux",       ultimoDigimon: "BlackKingNumemon",      puntaje: 3987, puesto: 5 },
+      { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 6 },
+      { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 7 },
+      { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 8 },
+      { nickname: "Rodrigo",   discord: "Rodrigoalag",  ultimoDigimon: "BlackKingNumemon",      puntaje: 3430, puesto: 9 },
+      { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 10}
+    ]
+  },
   "2026-01-T1": {
     fechaInicio: "16 Enero 2026",
     fechaFin: "31 Enero 2026",

@@ -87,7 +87,55 @@ const pvpTopDB = {
     fechaInicio: "1 Junio 2025",
     fechaFin: "15 Junio 2025",
     jugadores: [
-      { nickname: "Alazar",      discord: "Alazar",      ultimoDigimon: "Great King Scumon",     puntaje: null, puesto: 1 }
+      { nickname: "Alazar",      discord: "Alazar",      ultimoDigimon: "GreatKingScumon",  puntaje: 2206, puesto: 1 },
+      { nickname: "Leonhartbk", discord: "Leonhartbk",  ultimoDigimon: "Daipenmon",        puntaje: 2168, puesto: 2 },
+      { nickname: "Twil",       discord: "Aru",          ultimoDigimon: "Mugendramon",      puntaje: 1997, puesto: 3 },
+      { nickname: "Blueokami",  discord: "Blueokami",    ultimoDigimon: "Mugendramon",      puntaje: 1986, puesto: 4 },
+      { nickname: "Spoolofwool",discord: "Zororo",       ultimoDigimon: "WaruMonzaemon",    puntaje: 1956, puesto: 5 }
+    ]
+  },
+  "2025-11-T0": {
+    fechaInicio: "1 Noviembre 2025",
+    fechaFin: "15 Noviembre 2025",
+    jugadores: [
+      { nickname: "Cervas",     discord: "Cervas",     ultimoDigimon: "GreatKingScumon", puntaje: 3092, puesto: 1 },
+      { nickname: "Alazar",     discord: "Alazar",     ultimoDigimon: "MetalTyranomon",  puntaje: 2694, puesto: 2 },
+      { nickname: "Alkahest",   discord: "Alkahest",   ultimoDigimon: "DarkTyranomon",   puntaje: 2463, puesto: 3 }
+    ]
+  },
+  "2025-11-T1": {
+    fechaInicio: "16 Noviembre 2025",
+    fechaFin: "30 Noviembre 2025",
+    jugadores: [
+      { nickname: "Spoolofwool", discord: "Zororo",    ultimoDigimon: "DarkSuperStarmon", puntaje: 3804, puesto: 1 },
+      { nickname: "Cervas",      discord: "Cervas",    ultimoDigimon: "OmegaShoutmon",    puntaje: 3726, puesto: 2 },
+      { nickname: "Mae",         discord: "Mae",       ultimoDigimon: "GoldNumemon",      puntaje: 2514, puesto: 3 }
+    ]
+  },
+  "2025-12-T0": {
+    fechaInicio: "1 Diciembre 2025",
+    fechaFin: "15 Diciembre 2025",
+    jugadores: [
+      { nickname: "Leonhartbk",  discord: "Leon",       ultimoDigimon: "ShoutmonSH",      puntaje: 3798, puesto: 1  },
+      { nickname: "Spookytree",  discord: "Spookytree", ultimoDigimon: "AeroVDramon",     puntaje: 2981, puesto: 2  },
+      { nickname: "Spoolofwool", discord: "Zororo",     ultimoDigimon: "Tyranomon",       puntaje: 2817, puesto: 3  },
+      { nickname: null,          discord: null,         ultimoDigimon: null,              puntaje: null, puesto: 4  },
+      { nickname: "Sithhus",     discord: "Sithhus",    ultimoDigimon: "AeroVDramonBlack",puntaje: 2746, puesto: 5  },
+      { nickname: null,          discord: null,         ultimoDigimon: null,              puntaje: null, puesto: 6  },
+      { nickname: null,          discord: null,         ultimoDigimon: null,              puntaje: null, puesto: 7  },
+      { nickname: null,          discord: null,         ultimoDigimon: null,              puntaje: null, puesto: 8  },
+      { nickname: null,          discord: null,         ultimoDigimon: null,              puntaje: null, puesto: 9  },
+      { nickname: "Alazar",      discord: "Alazar",     ultimoDigimon: "BigMamemon",      puntaje: 2544, puesto: 10 }
+    ]
+  },
+  "2025-12-T1": {
+    fechaInicio: "16 Diciembre 2025",
+    fechaFin: "31 Diciembre 2025",
+    jugadores: [
+      { nickname: "Auraomega",  discord: "Auraomega",  ultimoDigimon: "AeroVDramonBlack",       puntaje: 4725, puesto: 1 },
+      { nickname: "Thebig88",   discord: "Big",        ultimoDigimon: "Metalmamemon",            puntaje: 3716, puesto: 2 },
+      { nickname: "Kuha",       discord: "Kuha",       ultimoDigimon: "GrandGalemon",            puntaje: 3713, puesto: 3 },
+      { nickname: "Memorlax",   discord: "Memorlax",   ultimoDigimon: "Metalgreymon Alterous",   puntaje: null, puesto: 4 }
     ]
   },
   "2026-01-T0": {
@@ -248,6 +296,22 @@ const pvpTopDB = {
       { nickname: "Alazar",           discord: "Alazar",           ultimoDigimon: "Lilithmon",         puntaje: 3753, puesto: 8  },
       { nickname: "Leonhartbk",       discord: "Leon",             ultimoDigimon: "BlackKingNumemon",  puntaje: 3640, puesto: 9  },
       { nickname: "Theidiotwithlag",  discord: "Theidiotwithlag",  ultimoDigimon: "Monarchlizamon",    puntaje: 3311, puesto: 10 }
+    ]
+  },
+  "2026-06-T1": {
+    fechaInicio: "16 Junio 2026",
+    fechaFin: "30 Junio 2026",
+    jugadores: [
+      { nickname: "Spoolofwool",  discord: "Zororo",            ultimoDigimon: "Monarchlizamon",  puntaje: 5522, puesto: 1  },
+      { nickname: "Juanola",      discord: "Detective Juanola",  ultimoDigimon: "Greymon",         puntaje: 4865, puesto: 2  },
+      { nickname: "Omegaarg",     discord: "Omegaarg",           ultimoDigimon: "Agumon",          puntaje: 4756, puesto: 3  },
+      { nickname: "Spookytree",   discord: "Spookytree",         ultimoDigimon: "Raremon",         puntaje: null, puesto: 4  },
+      { nickname: null,           discord: null,                 ultimoDigimon: null,              puntaje: null, puesto: 5  },
+      { nickname: null,           discord: null,                 ultimoDigimon: null,              puntaje: null, puesto: 6  },
+      { nickname: null,           discord: null,                 ultimoDigimon: null,              puntaje: null, puesto: 7  },
+      { nickname: "Braian",       discord: "Braian",             ultimoDigimon: "Wargreymon",      puntaje: 3476, puesto: 8  },
+      { nickname: "Sithhus",      discord: "Sithhus",            ultimoDigimon: "Kokuwamon",       puntaje: 3466, puesto: 9  },
+      { nickname: "Firestorm",    discord: "Firestorm",          ultimoDigimon: "ExTyranomon",     puntaje: 3357, puesto: 10 }
     ]
   },
   "2026-07-T0": {

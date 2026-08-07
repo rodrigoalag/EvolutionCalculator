@@ -488,7 +488,9 @@ function poblarSelector() {
     const s = pvpTopDB[key];
     const opt = document.createElement('option');
     opt.value = key;
-    opt.textContent = s.label ? s.label : `${traducirFecha(s.fechaInicio)} – ${traducirFecha(s.fechaFin)}`;
+    opt.textContent = s.label
+      ? `${s.label} | ${traducirFecha(s.fechaInicio)} – ${traducirFecha(s.fechaFin)}`
+      : `${traducirFecha(s.fechaInicio)} – ${traducirFecha(s.fechaFin)}`;
     sel.appendChild(opt);
   });
   if (valorActual && sel.querySelector(`option[value="${valorActual}"]`)) sel.value = valorActual;

@@ -141,7 +141,7 @@ h1, h2, h3 { color: #4ecdc4; }
 
 /* Página */
 .container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -281,10 +281,14 @@ h1, h2, h3 { color: #4ecdc4; }
   font-variant-numeric: tabular-nums;
 }
 
-@media (max-width: 600px) {
+
+@media (max-width: 700px) {
   .hall-table th, .hall-table td { padding: 0.6rem 0.5rem; font-size: 1.23rem; }
   .digi-icon { width: 80px; height: 80px; }
   .season-selector select { min-width: 200px; }
+  #tablesRow { flex-direction: column; }
+  #masRepetidosSection { min-width: 0 !important; width: 100%; }
+  .hall-table-wrap { -webkit-overflow-scrolling: touch; overflow-x: auto; }
 }
   </style>
 </head>
@@ -349,19 +353,37 @@ h1, h2, h3 { color: #4ecdc4; }
       </select>
     </div>
 
-    <div class="hall-table-wrap">
-      <table class="hall-table" id="hallTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nickname</th>
-            <th id="thDiscord">Discord Name</th>
-            <th id="thDigimon">Último Digimon</th>
-            <th id="thPuntaje">Puntaje</th>
-          </tr>
-        </thead>
-        <tbody id="hallTableBody"></tbody>
-      </table>
+    <div id="tablesRow" style="display:flex; gap:1.5rem; align-items:flex-start; width:100%;">
+      <div class="hall-table-wrap" style="flex:2; min-width:0;">
+        <table class="hall-table" id="hallTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nickname</th>
+              <th id="thDiscord">Discord Name</th>
+              <th id="thDigimon">Último Digimon</th>
+              <th id="thPuntaje">Puntaje</th>
+            </tr>
+          </thead>
+          <tbody id="hallTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="masRepetidosSection" style="display:none; flex:1; min-width:200px;">
+        <table class="hall-table">
+          <thead>
+            <tr>
+              <th colspan="3" id="masRepetidosTitulo"></th>
+            </tr>
+            <tr>
+              <th>#</th>
+              <th id="thMRDigimon">Digimon</th>
+              <th id="thMRVeces">Veces</th>
+            </tr>
+          </thead>
+          <tbody id="masRepetidosBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 </main>
@@ -391,7 +413,9 @@ const traducciones = {
     thMejorPos:    "Mejor Posición",
     thMedallero:   "Medallero",
     thVeces1:      "Veces en #1",
-    thMejorPuntaje:"Mejor Puntaje"
+    thMejorPuntaje:"Mejor Puntaje",
+    masRepetidos:  "Digimon más utilizados a final de temporada",
+    mrVeces:       "Veces"
   },
   en: {
     subtitle:      "Top players per season",
@@ -405,7 +429,9 @@ const traducciones = {
     thMejorPos:    "Best Position",
     thMedallero:   "Medal Tally",
     thVeces1:      "Times #1",
-    thMejorPuntaje:"Best Score"
+    thMejorPuntaje:"Best Score",
+    masRepetidos:  "Most used Digimon at season end",
+    mrVeces:       "Times"
   }
 };
 
@@ -447,7 +473,7 @@ function actualizarHeadersResumen() {
 }
 
 function digiIconFilename(nombre) {
-  return nombre.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '') + '.png';
+  return nombre.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[\s\-()']+/g, '') + '.png';
 }
 
 function renderPuesto(puesto) {
@@ -523,25 +549,67 @@ function calcularResumen() {
 
 function renderResumen() {
   actualizarHeadersResumen();
+  renderMasRepetidos();
   const tbody = document.getElementById('hallTableBody');
   tbody.innerHTML = '';
   calcularResumen().forEach(s => {
     const tr = document.createElement('tr');
     if (s.mejorPos <= 3) tr.classList.add(`rank-${s.mejorPos}`);
-    const medallero = '🥇'.repeat(s.veces1) + '🥈'.repeat(s.veces2) + '🥉'.repeat(s.veces3) || '-';
+    const medalParts = [];
+    if (s.veces1 > 0) medalParts.push(`🥇 ${s.veces1}`);
+    if (s.veces2 > 0) medalParts.push(`🥈 ${s.veces2}`);
+    if (s.veces3 > 0) medalParts.push(`🥉 ${s.veces3}`);
+    const medallero = medalParts.length ? medalParts.join('  ') : '-';
     tr.innerHTML = `
       <td class="nickname-cell">${s.nickname}</td>
       <td class="discord-cell" style="${s.discord === 'ඞ' ? 'font-size:2.5rem;' : ''}">${s.discord}</td>
       <td>${renderPuesto(s.mejorPos)}</td>
-      <td style="font-size:1.4rem;letter-spacing:2px;">${medallero}</td>
+      <td style="font-size:1.25rem; white-space:nowrap;">${medallero}</td>
       <td class="puntaje-cell">${s.mejorPuntaje || '-'}</td>
     `;
     tbody.appendChild(tr);
   });
 }
 
+function renderMasRepetidos() {
+  const conteo = {};
+  Object.values(pvpTopDB).forEach(temporada => {
+    temporada.jugadores.forEach(j => {
+      if (!j.ultimoDigimon) return;
+      conteo[j.ultimoDigimon] = (conteo[j.ultimoDigimon] || 0) + 1;
+    });
+  });
+  const top = Object.entries(conteo).sort((a, b) => b[1] - a[1]).filter(([, v]) => v >= 3);
+
+  const t = traducciones[idiomaActual];
+  document.getElementById('masRepetidosTitulo').textContent = t.masRepetidos;
+  document.getElementById('thMRDigimon').textContent = 'Digimon';
+  document.getElementById('thMRVeces').textContent = t.mrVeces;
+
+  const tbody = document.getElementById('masRepetidosBody');
+  tbody.innerHTML = '';
+  top.forEach(([nombre, veces], i) => {
+    const filename = digiIconFilename(nombre);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="puesto-other" style="font-size:1rem; color:#888;">${i + 1}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <img style="width:40px;height:40px;object-fit:contain;" src="icon/${filename}" alt="${nombre}" title="${nombre}"
+            onerror="this.style.display='none'">
+          <span style="font-size:0.9rem;">${nombre}</span>
+        </div>
+      </td>
+      <td class="puntaje-cell" style="font-size:1rem;">×${veces}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('masRepetidosSection').style.display = 'block';
+}
+
 function renderTabla(key) {
   if (key === 'resumen') { renderResumen(); return; }
+  document.getElementById('masRepetidosSection').style.display = 'none';
   const temporada = pvpTopDB[key];
   if (!temporada) return;
   actualizarHeadersTemporada();

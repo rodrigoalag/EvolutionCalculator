@@ -282,6 +282,31 @@ h1, h2, h3 { color: #4ecdc4; }
 }
 
 
+/* Filtros resumen */
+#resumenFiltros {
+  display: none;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.filtro-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  background: rgba(40, 40, 60, 0.7);
+  color: #aaa;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filtro-btn:hover { border-color: #4ecdc4; color: #fff; }
+.filtro-btn.active {
+  background: rgba(78, 205, 196, 0.2);
+  border-color: #4ecdc4;
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
 @media (max-width: 700px) {
   .hall-table th, .hall-table td { padding: 0.6rem 0.5rem; font-size: 1.23rem; }
   .digi-icon { width: 80px; height: 80px; }
@@ -353,6 +378,13 @@ h1, h2, h3 { color: #4ecdc4; }
       </select>
     </div>
 
+    <div id="resumenFiltros">
+      <button class="filtro-btn active" data-filtro="todas" id="fbTodas"></button>
+      <button class="filtro-btn" data-filtro="cerrada" id="fbCerrada"></button>
+      <button class="filtro-btn" data-filtro="abierta" id="fbAbierta"></button>
+      <button class="filtro-btn" data-filtro="post" id="fbPost"></button>
+    </div>
+
     <div id="tablesRow" style="display:flex; gap:1.5rem; align-items:flex-start; width:100%;">
       <div class="hall-table-wrap" style="flex:2; min-width:0;">
         <table class="hall-table" id="hallTable">
@@ -415,7 +447,11 @@ const traducciones = {
     thVeces1:      "Veces en #1",
     thMejorPuntaje:"Mejor Puntaje",
     masRepetidos:  "Digimon más utilizados a final de temporada",
-    mrVeces:       "Veces"
+    mrVeces:       "Veces",
+    fbTodas:       "Todas las temporadas",
+    fbCerrada:     "Beta Cerrada",
+    fbAbierta:     "Beta Abierta",
+    fbPost:        "Post 1.0"
   },
   en: {
     subtitle:      "Top players per season",
@@ -431,17 +467,34 @@ const traducciones = {
     thVeces1:      "Times #1",
     thMejorPuntaje:"Best Score",
     masRepetidos:  "Most used Digimon at season end",
-    mrVeces:       "Times"
+    mrVeces:       "Times",
+    fbTodas:       "All seasons",
+    fbCerrada:     "Closed Beta",
+    fbAbierta:     "Open Beta",
+    fbPost:        "Post 1.0"
   }
 };
 
 let idiomaActual = 'es';
+let filtroResumen = 'todas';
+
+function filtrarTemporadas() {
+  const entries = Object.entries(pvpTopDB);
+  if (filtroResumen === 'cerrada') return entries.filter(([k]) => k.includes('CLOSED'));
+  if (filtroResumen === 'abierta') return entries.filter(([k]) => k.includes('BETA'));
+  if (filtroResumen === 'post')    return entries.filter(([k]) => !k.includes('CLOSED') && !k.includes('BETA'));
+  return entries;
+}
 
 function aplicarTraducciones() {
   const t = traducciones[idiomaActual];
   document.querySelector('.page-header p').textContent = t.subtitle;
   document.getElementById('labelSeason').textContent = t.season;
   document.getElementById('labelIdioma').textContent = t.idioma;
+  document.getElementById('fbTodas').textContent   = t.fbTodas;
+  document.getElementById('fbCerrada').textContent = t.fbCerrada;
+  document.getElementById('fbAbierta').textContent = t.fbAbierta;
+  document.getElementById('fbPost').textContent    = t.fbPost;
   const sel = document.getElementById('selectSeason');
   if (sel && sel.value === 'resumen') {
     actualizarHeadersResumen();
@@ -524,7 +577,7 @@ function poblarSelector() {
 
 function calcularResumen() {
   const stats = {};
-  Object.values(pvpTopDB).forEach(temporada => {
+  filtrarTemporadas().forEach(([, temporada]) => {
     temporada.jugadores.forEach(j => {
       if (j.nickname === null) return;
       if (!stats[j.nickname]) {
@@ -548,6 +601,7 @@ function calcularResumen() {
 }
 
 function renderResumen() {
+  document.getElementById('resumenFiltros').style.display = 'flex';
   actualizarHeadersResumen();
   renderMasRepetidos();
   const tbody = document.getElementById('hallTableBody');
@@ -573,7 +627,7 @@ function renderResumen() {
 
 function renderMasRepetidos() {
   const conteo = {};
-  Object.values(pvpTopDB).forEach(temporada => {
+  filtrarTemporadas().forEach(([, temporada]) => {
     temporada.jugadores.forEach(j => {
       if (!j.ultimoDigimon) return;
       conteo[j.ultimoDigimon] = (conteo[j.ultimoDigimon] || 0) + 1;
@@ -609,6 +663,7 @@ function renderMasRepetidos() {
 
 function renderTabla(key) {
   if (key === 'resumen') { renderResumen(); return; }
+  document.getElementById('resumenFiltros').style.display = 'none';
   document.getElementById('masRepetidosSection').style.display = 'none';
   const temporada = pvpTopDB[key];
   if (!temporada) return;
@@ -642,6 +697,15 @@ document.getElementById('selectIdioma').addEventListener('change', e => {
   idiomaActual = e.target.value;
   aplicarTraducciones();
   poblarSelector();
+});
+
+document.querySelectorAll('.filtro-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    filtroResumen = btn.dataset.filtro;
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderResumen();
+  });
 });
 </script>
 </body>

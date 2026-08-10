@@ -164,10 +164,10 @@ const pvpTopDB = {
     fechaInicio: "16 Julio 2025",
     fechaFin: "31 Julio 2025",
     jugadores: [
-      { nickname: "Leonhartbk",  discord: "Leon",         ultimoDigimon: "Metalgreymon Alterous", puntaje: 5632, puesto: 1  },
+      { nickname: "Leonhartbk",  discord: "Leon",         ultimoDigimon: "MetalGreymon Alterous", puntaje: 5632, puesto: 1  },
       { nickname: "Sithhus",     discord: "Sithhus",      ultimoDigimon: "AeroVDramonBlack",      puntaje: 5349, puesto: 2  },
       { nickname: "Edonex",      discord: "Edonex",       ultimoDigimon: "Bakemon MT",            puntaje: 4385, puesto: 3  },
-      { nickname: "Spookytree",  discord: "Spookytree",   ultimoDigimon: "Metalfantomon",         puntaje: 3889, puesto: 4  },
+      { nickname: "Spookytree",  discord: "Spookytree",   ultimoDigimon: "MetalFantomon",         puntaje: 3889, puesto: 4  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 5  },
       { nickname: "Auraomega",   discord: "Auraomega",    ultimoDigimon: "Shooting Starmon",      puntaje: 3446, puesto: 6  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 7  },
@@ -185,12 +185,12 @@ const pvpTopDB = {
       { nickname: "Leonhartbk",  discord: "Leon",         ultimoDigimon: "Mugendramon",         puntaje: 6242, puesto: 2  },
       { nickname: "Rune",        discord: "Rune",         ultimoDigimon: "Bakemon MT",          puntaje: 4683, puesto: 3  },
       { nickname: "Spoolofwool", discord: "Zororo",       ultimoDigimon: "Metalgreymon Virus",  puntaje: 4088, puesto: 4  },
-      { nickname: "Whiterickle", discord: "Whiterickle",  ultimoDigimon: "Skullgreymon",        puntaje: 3183, puesto: 5  },
+      { nickname: "Whiterickle", discord: "Whiterickle",  ultimoDigimon: "SkullGreymon",        puntaje: 3183, puesto: 5  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                  puntaje: null, puesto: 6  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                  puntaje: null, puesto: 7  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                  puntaje: null, puesto: 8  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                  puntaje: null, puesto: 9  },
-      { nickname: "Adachi",      discord: "Adachi",       ultimoDigimon: "Metalfantomon",       puntaje: 2601, puesto: 10 }
+      { nickname: "Adachi",      discord: "Adachi",       ultimoDigimon: "MetalFantomon",       puntaje: 2601, puesto: 10 }
     ]
   },
   "2025-08-T1": {
@@ -247,7 +247,7 @@ const pvpTopDB = {
     jugadores: [
       { nickname: "Cervas",     discord: "Cervas",  ultimoDigimon: "SuperStarmon", puntaje: 3780, puesto: 1 },
       { nickname: "Charlie",    discord: "Charlie", ultimoDigimon: "V-Dramon (Black)", puntaje: 3030, puesto: 2 },
-      { nickname: "Leonhartbk", discord: "Leon",    ultimoDigimon: "Skullgreymon", puntaje: 2802, puesto: 3 }
+      { nickname: "Leonhartbk", discord: "Leon",    ultimoDigimon: "SkullGreymon", puntaje: 2802, puesto: 3 }
     ]
   },
   "2025-11-T0": {
@@ -295,7 +295,7 @@ const pvpTopDB = {
       { nickname: "Auraomega",  discord: "Auraomega",  ultimoDigimon: "AeroVDramonBlack",       puntaje: 4725, puesto: 1 },
       { nickname: "Thebig88",   discord: "Big",        ultimoDigimon: "Metalmamemon",            puntaje: 3716, puesto: 2 },
       { nickname: "Kuha",       discord: "Kuha",       ultimoDigimon: "GrandGalemon",            puntaje: 3713, puesto: 3 },
-      { nickname: "Memorlax",   discord: "Memorlax",   ultimoDigimon: "Metalgreymon Alterous",   puntaje: null, puesto: 4 }
+      { nickname: "Memorlax",   discord: "Memorlax",   ultimoDigimon: "MetalGreymon Alterous",   puntaje: null, puesto: 4 }
     ]
   },
   "2026-01-T0": {
@@ -304,7 +304,7 @@ const pvpTopDB = {
     fechaFin: "15 Enero 2026",
     jugadores: [
       { nickname: "Estelahq",  discord: "Estela",      ultimoDigimon: "BlackKingNumemon",      puntaje: 6771, puesto: 1 },
-      { nickname: "D_resh01",  discord: "D_resh",       ultimoDigimon: "Metalgreymon Alterous", puntaje: 5062, puesto: 2 },
+      { nickname: "D_resh01",  discord: "D_resh",       ultimoDigimon: "MetalGreymon Alterous", puntaje: 5062, puesto: 2 },
       { nickname: "Blueokami",  discord: "Blueokami",    ultimoDigimon: "Wargreymon",            puntaje: 4721, puesto: 3 },
       { nickname: null,        discord: null,           ultimoDigimon: null,                    puntaje: null, puesto: 4 },
       { nickname: "Yiirux",    discord: "Yiirux",       ultimoDigimon: "BlackKingNumemon",      puntaje: 3987, puesto: 5 },
@@ -391,7 +391,7 @@ const pvpTopDB = {
       { nickname: "Rodrigo",     discord: "Rodrigoalag",  ultimoDigimon: "BlackKingNumemon",  puntaje: 8217, puesto: 1  },
       { nickname: "Alazar",      discord: "Alazar",       ultimoDigimon: "Daipenmon",         puntaje: 8217, puesto: 1  },
       { nickname: "Adachi",      discord: "Adachi",       ultimoDigimon: "VDramon",           puntaje: 6030, puesto: 3  },
-      { nickname: "Memorlax",    discord: "Memorlax",     ultimoDigimon: "Metalgreymon Alterous", puntaje: null, puesto: 4 },
+      { nickname: "Memorlax",    discord: "Memorlax",     ultimoDigimon: "MetalGreymon Alterous", puntaje: null, puesto: 4 },
       { nickname: null,          discord: null,           ultimoDigimon: null,                puntaje: null, puesto: 5  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                puntaje: null, puesto: 6  },
       { nickname: null,          discord: null,           ultimoDigimon: null,                puntaje: null, puesto: 7  },
@@ -440,14 +440,14 @@ const pvpTopDB = {
     fechaFin: "15 Mayo 2026",
     jugadores: [
       { nickname: "Lomtynymonster",  discord: "Lomtynymonster",  ultimoDigimon: "Insekimon High Tier",         puntaje: 7135, puesto: 1  },
-      { nickname: "Blueokami",       discord: "Blueokami",       ultimoDigimon: "Metalgreymon Alterous",  puntaje: 5847, puesto: 2  },
+      { nickname: "Blueokami",       discord: "Blueokami",       ultimoDigimon: "MetalGreymon Alterous",  puntaje: 5847, puesto: 2  },
       { nickname: "Cola",            discord: "Renamp",          ultimoDigimon: "PlatinumScumonTyumon",   puntaje: 5698, puesto: 3  },
       { nickname: "Sayori",          discord: "ඞ",               ultimoDigimon: "Tyumon",                 puntaje: 4751, puesto: 4  },
       { nickname: "Spoolofwool",     discord: "Zororo",          ultimoDigimon: "Bakemon LT",                puntaje: 4722, puesto: 5  },
-      { nickname: "Yiirux",          discord: "Yiirux",          ultimoDigimon: "Princemamemon",          puntaje: 4471, puesto: 6  },
+      { nickname: "Yiirux",          discord: "Yiirux",          ultimoDigimon: "PrinceMamemon",          puntaje: 4471, puesto: 6  },
       { nickname: "Auraomega",       discord: "Auraomega",       ultimoDigimon: "DexDorugamon",           puntaje: 4445, puesto: 7  },
       { nickname: "Kade",            discord: "Kade",            ultimoDigimon: "Etemon",                 puntaje: 4388, puesto: 8  },
-      { nickname: "Themasterxs",     discord: "Themasterxs",     ultimoDigimon: "Princemamemon",          puntaje: 4347, puesto: 9  },
+      { nickname: "Themasterxs",     discord: "Themasterxs",     ultimoDigimon: "PrinceMamemon",          puntaje: 4347, puesto: 9  },
       { nickname: "Sithhus",         discord: "Sithhus",         ultimoDigimon: "PlatinumScumonTyumon",   puntaje: 4311, puesto: 10 }
     ]
   },
@@ -507,7 +507,7 @@ const pvpTopDB = {
     fechaInicio: "1 Julio 2026",
     fechaFin: "15 Julio 2026",
     jugadores: [
-      { nickname: "Youngel",     discord: "Youngel",     ultimoDigimon: "Extyranomon",       puntaje: 2993, puesto: 1  },
+      { nickname: "Youngel",     discord: "Youngel",     ultimoDigimon: "ExTyranomon",       puntaje: 2993, puesto: 1  },
       { nickname: "Rodrigo",     discord: "Rodrigoalag", ultimoDigimon: "AeroVDramonBlack",  puntaje: 2825, puesto: 2  },
       { nickname: "Thebig88",    discord: "Big",         ultimoDigimon: "Botamon",           puntaje: 2824, puesto: 3  },
       { nickname: "Sithhus",     discord: "Sithhus",     ultimoDigimon: "Numemon",           puntaje: 2719, puesto: 4  },

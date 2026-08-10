@@ -252,6 +252,23 @@ const itemData = {
     peso: 2,
     vinculo: ""
   },
+  "Huevo del Este": {
+    descripcion: "Nutritivo y extraño huevo que contiene data oriental en su interior. ¡A los Digimon les encanta!",
+    descripcionEN: "Nutritious and strange egg containing eastern data inside. Digimon love it!",
+    nombreEN: "Eastern Egg",
+    efectoFueraDeCombate: "Recupera hambre. Permite evolucionar a Darumamon y Amaterasumon. Utilizado para desbloquear el Tama del Dios del Este.",
+    efectoFueraDeCombateEN: "Recovers hunger. Allows evolving to Darumamon and Amaterasumon. Used to unlock the Eastern God Tama.",
+    efectoEntrenamiento: "",
+    efectoBatalla: "",
+    precioVenta: "",
+    precioCompra: null,
+    lugarObtencion: "Dropeo de batalla en la red",
+    lugarObtencionEN: "Battle drop in the network",
+    clasificacion: "Consumible",
+    hambre: 60,
+    peso: 3,
+    vinculo: ""
+  },
 
   // ===== COMIDA — HONGOS =====
   "Champiñón": {
@@ -527,7 +544,8 @@ const itemData = {
     descripcionEN: "This lemon improved its judgment so much that it's capable of giving huge power to those willing to sacrifice their vital strength.",
     nombreEN: "Lemon of Judgement",
     efectoFueraDeCombate: "Recupera Hambre. Tiene un % de matarte dependiendo de la cantidad de errores que tengas ((Cantidad de Errores/6)*100) te da el %). Aumenta 1 año de vida de tu digimon.",
-    efectoEntrenamiento: "Ver guia de efectos variables",
+    efectoEntrenamiento: "Da un 3% de stats a ATK/HP/SPD entrenados (9% en total). Si usas una Fruta del Diablo previamente, aumenta el stat de la fruta en un 9% de stat entrenado.",
+    efectoEntrenamientoEN: "Gives 3% stats to trained ATK/HP/SPD (9% total). If you use a Devil Fruit beforehand, increases the fruit's stat by 9% of trained stat.",
     efectoBatalla: "",
     precioVenta: 400,
     precioCompra: null,
@@ -556,7 +574,7 @@ const itemData = {
     vinculoCondicionEN: "Baby 1 and 2",
     plantable: true,
     resultadoPlantacion: "1 Limón del Juicio",
-    tiempoPlantacion: 1800
+    tiempoPlantacion: 900
   },
   "Melón Encadenado": {
     descripcion: "Un melón extraño que rebosa de energía",
@@ -1880,10 +1898,10 @@ const EfectoEntrenamiento = {
     { condicion: null, condicionEN: null, efecto: "Valor del Entrenamiento x 2 (Solo mutantes que coman caca)", efectoEN: "Training Value x 2 (Only for mutants that eat waste)" }
   ],
   "Carne Añejada": [
-    { condicion: null, condicionEN: null, efecto: "+2 ATK Plano", efectoEN: "+2 flat ATK" }
+    { condicion: null, condicionEN: null, efecto: "+4 ATK Plano", efectoEN: "+4 flat ATK" }
   ],
   "Carne Densa": [
-    { condicion: null, condicionEN: null, efecto: "+2.5 ATK Plano", efectoEN: "+2.5 flat ATK" }
+    { condicion: null, condicionEN: null, efecto: "+4 ATK Plano", efectoEN: "+4 flat ATK" }
   ],
   "Carne Jurásica": [
     { condicion: null, condicionEN: null, efecto: "+2.5 ATK Plano & +2.6% HP", efectoEN: "+2.5 flat ATK & +2.6% HP" }
@@ -1906,7 +1924,7 @@ const EfectoEntrenamiento = {
     { condicion: "Resto del día",       condicionEN: "Rest of the day",                        efecto: "Sin efecto extra de entrenamiento.",                        efectoEN: "No extra training effect." }
   ],
   "Limón del Juicio": [
-    { condicion: null, condicionEN: null, efecto: "Da un 2% de stats a ATK/HP/SPD entrenados (6% en total).", efectoEN: "Gives 2% stats to trained ATK/HP/SPD (6% total)." }
+    { condicion: null, condicionEN: null, efecto: "Da un 3% de stats a ATK/HP/SPD entrenados (9% en total). Si usas una Fruta del Diablo previamente, aumenta el stat de la fruta en un 9% de stat entrenado.", efectoEN: "Gives 3% stats to trained ATK/HP/SPD (9% total). If you use a Devil Fruit beforehand, increases the fruit's stat by 9% of trained stat." }
   ],
   "Limón Juzgador": [
     { condicion: "Child",   condicionEN: "Child",   efecto: "Multiplica x2",    efectoEN: "Multiplies x2" },

@@ -1001,7 +1001,8 @@ main {
     const desc = (currentLang === 'en' && item.descripcionEN) ? item.descripcionEN : item.descripcion;
     addRow(t('labelDesc'), fmtValue(desc));
 
-    addRow(t('labelEfectoFC'), fmtValue(tStr(item.efectoFueraDeCombate)));
+    const efectoFC = (currentLang === 'en' && item.efectoFueraDeCombateEN) ? item.efectoFueraDeCombateEN : tStr(item.efectoFueraDeCombate);
+    addRow(t('labelEfectoFC'), fmtValue(efectoFC));
 
     function makeLinkRow(labelKey, text, color) {
       const row = document.createElement('div');
@@ -1109,7 +1110,8 @@ main {
       info.appendChild(shopRow);
     }
 
-    addRow(t('labelLugar'), fmtValue(tStr(item.lugarObtencion)));
+    const lugar = (currentLang === 'en' && item.lugarObtencionEN) ? item.lugarObtencionEN : tStr(item.lugarObtencion);
+    addRow(t('labelLugar'), fmtValue(lugar));
 
     card.appendChild(info);
 

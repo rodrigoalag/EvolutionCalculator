@@ -238,7 +238,7 @@ const fullDigimonReqDict = {
     "ID": 179, "Tama": "SP", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Hielo",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 15, "Xross": ["1 SP004 Driver", "1 SP000 Driver + 1 SP001 Driver"] },
-    "Stat Base": { "ATK": 35, "DEF": 25, "HP": 350, "Vel": 55 },
+    "Stat Base": { "ATK": 30, "DEF": 40, "HP": 400, "Vel": 40 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Yukidarumon", "Icemon", "Chackmon", "Nanimon", "Scumon", "Numemon", "Bakemon LT", "Burpmon"], "Viene": [] }
   },

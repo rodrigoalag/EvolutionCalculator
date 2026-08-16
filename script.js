@@ -1176,14 +1176,10 @@ function generarFormulario() {
     // Resuelve "N CODE Driver" → "N NombreDriver Driver" usando driverNombres.js
     function resolverNombreDriver(driverStr) {
         if (!driverStr || driverStr === "Ninguno") return driverStr;
-        if (driverStr.includes(" + ")) {
-            return driverStr.split(" + ").map(p => resolverNombreDriver(p.trim())).join(" + ");
-        }
-        const match = driverStr.match(/^(\d+)\s+([A-Z0-9]+)\s+Driver$/);
-        if (match && typeof driverNombres !== "undefined" && driverNombres[match[2]]) {
-            return `${match[1]} ${driverNombres[match[2]].nombre} Driver`;
-        }
-        return driverStr;
+        if (typeof driverNombres === "undefined") return driverStr;
+        return driverStr.replace(/(\d+)\s+([A-Z0-9]+)\s+Driver/g, (match, count, code) => {
+            return driverNombres[code] ? `${count} ${driverNombres[code].nombre} Driver` : match;
+        });
     }
 
     function getDriverEquipadoOptions(selected) {
@@ -3744,8 +3740,7 @@ if (data["Nivel"] === 5) {
 }
 
 // --- EVALUACIÓN NIVEL 6 ---
-// Solo evaluar nivel 6 si no hay side evolutions válidas de nivel 5
-if (nextLevel === 6 && sideEvosValidas5.length === 0) {
+if (nextLevel === 6) {
   console.log(`🧪 Evaluando evoluciones para Nivel ${nextLevel}`);
   console.log("📋 Nivel actual:", data["Nivel"]);
 
@@ -3761,20 +3756,14 @@ if (nextLevel === 6 && sideEvosValidas5.length === 0) {
 
     console.log("🔍 Digimon válidos Nivel 6 (puntaje >= 2):", digimonNivel6.map(d => `${d.name} (${d.puntaje})`));
 
-    if (digimonNivel6.length > 0) {
-      // const maxPuntajeNivel6 = Math.max(...digimonNivel6.map(d => d.puntaje));
-      // const candidatos = digimonNivel6.filter(d => d.puntaje === maxPuntajeNivel6).map(d => d.name);
-      // mejoresDigimons = desempatarPorDigipuntos(candidatos);
-      mejoresDigimons = digimonNivel6.filter(d => d.puntaje >= 3).map(d => d.name);
-      console.log("🏆 Digimon Nivel 6 con puntaje > 3:", mejoresDigimons);
-    } else {
-      mejoresDigimons = ["Ninguno"];
-      console.log("🚫 No se encontraron evoluciones válidas para Nivel 6 con puntaje >= 2.");
-    }
+    const nivel6Validos = digimonNivel6.filter(d => d.puntaje >= 2).map(d => d.name);
+    // Combinar side evolutions del nivel 5 con evoluciones de nivel 6
+    const sideValidos = (mejoresDigimons || []).filter(n => n !== "Ninguno");
+    const combined = [...sideValidos, ...nivel6Validos];
+    mejoresDigimons = combined.length > 0 ? combined : ["Ninguno"];
+    console.log("🏆 Digimon válidos (side evos nivel 5 + Nivel 6):", mejoresDigimons);
   }
   console.log("🧾 Resultado final Nivel 6:", mejoresDigimons);
-} else if (nextLevel === 6 && sideEvosValidas5.length > 0) {
-  console.log("⏭️ Se encontró side evolution válida de nivel 5, saltando evaluación de nivel 6.");
 }
 
 // --- Construcción del texto según idioma y resultado ---

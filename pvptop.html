@@ -481,7 +481,7 @@ let idiomaActual = 'es';
 let filtroResumen = 'todas';
 
 function filtrarTemporadas() {
-  const entries = Object.entries(pvpTopDB);
+  const entries = Object.entries(pvpTopDB).sort(([a], [b]) => a.localeCompare(b));
   if (filtroResumen === 'cerrada') return entries.filter(([k]) => k.includes('CLOSED'));
   if (filtroResumen === 'abierta') return entries.filter(([k]) => k.includes('BETA'));
   if (filtroResumen === 'post')    return entries.filter(([k]) => !k.includes('CLOSED') && !k.includes('BETA'));
@@ -566,7 +566,7 @@ function poblarSelector() {
   optResumen.value = 'resumen';
   optResumen.textContent = `── ${t.resumen} ──`;
   sel.appendChild(optResumen);
-  Object.keys(pvpTopDB).forEach(key => {
+  Object.keys(pvpTopDB).sort().forEach(key => {
     const s = pvpTopDB[key];
     const opt = document.createElement('option');
     opt.value = key;

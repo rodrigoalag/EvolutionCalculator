@@ -535,5 +535,22 @@ const pvpTopDB = {
       { nickname: "Michu450",       discord: "Michu",        ultimoDigimon: "Daipenmon",        puntaje: 3486, puesto: 9  },
       { nickname: "Leonhartbk",     discord: "Leonhartbk",   ultimoDigimon: "Armalizamon",      puntaje: 3476, puesto: 10 }
     ]
+  },
+  "2026-08-T0": {
+    label: "Temporada 27",
+    fechaInicio: "1 Agosto 2026",
+    fechaFin: "15 Agosto 2026",
+    jugadores: [
+      { nickname: "Lomtynymonster",  discord: "Lomtynymonster",  ultimoDigimon: "Amaterasumon",       puntaje: 6183, puesto: 1  },
+      { nickname: "Theidiotwithlag", discord: "Theidiotwithlag", ultimoDigimon: "Amaterasumon",       puntaje: 5544, puesto: 2  },
+      { nickname: "Alazar",          discord: "Alazar",           ultimoDigimon: "Raptordramon",       puntaje: 5318, puesto: 3  },
+      { nickname: "Spoolofwool",     discord: "Zororo",           ultimoDigimon: "Insekimon High Tier",puntaje: 5028, puesto: 4  },
+      { nickname: "Sithhus",         discord: "Sithhus",          ultimoDigimon: "Polarbearmon",       puntaje: 3910, puesto: 5  },
+      { nickname: "Braian",          discord: "Braian",           ultimoDigimon: "Delumon",            puntaje: 3716, puesto: 6  },
+      { nickname: "Elxrude",         discord: "Elxrude",          ultimoDigimon: "Lilithmon",          puntaje: 3696, puesto: 7  },
+      { nickname: "Rodrigo",         discord: "Rodrigoalag",      ultimoDigimon: "Polarbearmon",       puntaje: 3685, puesto: 8  },
+      { nickname: "Firestorm",       discord: "Firestorm",        ultimoDigimon: "Delumon",            puntaje: 3669, puesto: 9  },
+      { nickname: "Auraomega",       discord: "Auraomega",        ultimoDigimon: "Monarchlizamon",     puntaje: 3663, puesto: 10 }
+    ]
   }
 };

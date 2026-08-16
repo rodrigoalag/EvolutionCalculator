@@ -2663,7 +2663,7 @@ function showInfo(data, evolutions, preEvolutions) {
     'No se considera en el puntaje': 'no-score',
     'Quota/Key Points': 'quota',
     'Requisitos Obligatorios': 'required',
-    'Incumplir al menos uno': 'no-score',
+    'Cumplir al menos uno': 'no-score',
     'Varía por origen': 'quota',
     '⚠️ Requisitos desconocidos': 'warning',
     'Evolución especial': 'warning',
@@ -2675,7 +2675,7 @@ function showInfo(data, evolutions, preEvolutions) {
     en: {
       'No se considera en el puntaje': 'Not Counted in Score',
       'Requisitos Obligatorios': 'Mandatory Requirements',
-      'Incumplir al menos uno': 'Fail at Least One',
+      'Cumplir al menos uno': 'Meet at Least One',
       'Quota/Key Points': 'Quota/Key Points',
       'Varía por origen': 'Varies by Origin',
       '⚠️ Requisitos desconocidos': '⚠️ Unknown Requirements',
@@ -2908,7 +2908,7 @@ function showInfo(data, evolutions, preEvolutions) {
               vals[k] = fmtV;
               incumplirFields.push(k);
             });
-            pathCats['Incumplir al menos uno'] = incumplirFields;
+            pathCats['Cumplir al menos uno'] = incumplirFields;
           }
 
           vals._categorias = pathCats;

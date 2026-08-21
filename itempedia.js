@@ -873,7 +873,7 @@ const itemData = {
       { tipo: "Dinosaurio",  tipoEN: "Dinosaur",  valor: -5  },
       { tipo: "Tierra",      tipoEN: "Earth",     valor: -10 },
       { tipo: "Marioneta",   tipoEN: "Puppet",    valor: -10 },
-      { tipo: "Sagrado",     tipoEN: "Holy",      valor: null }
+      { tipo: "Sagrado",     tipoEN: "Holy",      valor: -25 }
     ]
   },
 

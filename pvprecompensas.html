@@ -453,10 +453,11 @@ function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'itemimg') {
   let idx = 0;
   const intentar = () => {
     if (idx >= variaciones.length) { elementoImg.src = `${carpeta}/placeholder.png`; return; }
+    const v = encodeURIComponent(variaciones[idx]);
     const img = new Image();
-    img.onload  = () => { elementoImg.src = `${carpeta}/${variaciones[idx]}.png`; };
+    img.onload  = () => { elementoImg.src = `${carpeta}/${v}.png`; };
     img.onerror = () => { idx++; intentar(); };
-    img.src = `${carpeta}/${variaciones[idx]}.png`;
+    img.src = `${carpeta}/${v}.png`;
   };
   intentar();
 }

@@ -535,6 +535,7 @@ header select:hover {
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -615,10 +616,12 @@ header select:hover {
       }
     };
 
+    /** Returns the translated string for the given key in the current language. */
     function t(key) {
       return traducciones[currentLanguage][key] || key;
     }
 
+    /** Updates all translatable UI text elements to match the current language selection. */
     function actualizarTextosUI() {
       document.getElementById('pageTitle').textContent = t('pageTitle');
       document.getElementById('infoText1').textContent = t('infoText1');
@@ -687,6 +690,7 @@ header select:hover {
     };
 
     // Función para normalizar caracteres especiales (ñ → n, acentos, espacios, etc.)
+    /** Returns a normalized version of the text with accents, ñ, and spaces removed. */
     function normalizarCaracteres(texto) {
       return texto
         .normalize('NFD')
@@ -697,6 +701,7 @@ header select:hover {
     }
 
     // Función para generar múltiples variaciones del nombre de archivo
+    /** Returns an array of filename case and format variations for an item name to improve image lookup. */
     function generarVariacionesNombre(nombre) {
       const nombreNormalizado = normalizarCaracteres(nombre);
       const nombreLimpio = nombreNormalizado.toLowerCase().replace(/[^a-z0-9]/gi, "");
@@ -715,6 +720,7 @@ header select:hover {
     }
 
     // Función para cargar imagen con variaciones de nombre
+    /** Tries each filename variation in sequence and sets the image element src to the first one that loads. */
     function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'itemimg') {
       const variaciones = generarVariacionesNombre(nombre);
       let indiceActual = 0;
@@ -746,11 +752,13 @@ header select:hover {
     }
 
     // Función para obtener nombre del nivel
+    /** Returns the display name string for a given evolution level number. */
     function getNivelNombre(nivel) {
       return nivelNombres[nivel] || `Nivel ${nivel}`;
     }
 
     // Función para renderizar un pool
+    /** Builds and returns the DOM element for a single drop pool card including its item grid. */
     function renderPool(poolData) {
       const poolContainer = document.createElement('div');
       poolContainer.className = 'pool-container';
@@ -797,6 +805,7 @@ header select:hover {
     }
 
     // Cargar y renderizar datos filtrados por nivel
+    /** Filters drop pools by the selected level and renders them into the drops container. */
     function loadDrops(nivelSeleccionado) {
       const container = document.getElementById('dropsContainer');
       container.innerHTML = ''; // Limpiar contenedor
@@ -813,6 +822,7 @@ header select:hover {
     }
 
     // Función para descargar imagen
+    /** Captures the drops container as a PNG image using html2canvas and triggers a browser download. */
     function downloadImage() {
       // Detectar si estamos en file://
       if (window.location.protocol === 'file:') {
@@ -877,12 +887,14 @@ header select:hover {
 
   <!-- Menú hamburguesa funciones -->
   <script>
+/** Toggles the hamburger navigation menu and its overlay open or closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Closes the hamburger navigation menu and hides its overlay. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');

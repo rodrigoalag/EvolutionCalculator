@@ -457,6 +457,7 @@ main {
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -612,6 +613,7 @@ const tamaNombres = {
   "PR": { es: "Prototipo Alpha", en: "Alpha Prototype" }
 };
 
+/** Returns the localized display name for a Tama code, including its series name in the current language. */
 const getTamaNombre = (codigo) => {
   const nombre = tamaNombres[codigo];
   if (nombre) {
@@ -621,6 +623,7 @@ const getTamaNombre = (codigo) => {
 };
 
 // Función para generar variaciones de nombre de imagen
+/** Returns an array of filename variations for a Digimon name to maximize image loading success. */
 function generarVariacionesNombre(nombre) {
   const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
   const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
@@ -638,17 +641,20 @@ function generarVariacionesNombre(nombre) {
 }
 
 // Cargar estado guardado
+/** Loads and returns the saved checklist state from localStorage. */
 function cargarEstado() {
   const saved = localStorage.getItem('digimonChecklist');
   return saved ? JSON.parse(saved) : {};
 }
 
 // Guardar estado
+/** Persists the current checklist state object to localStorage. */
 function guardarEstado(estado) {
   localStorage.setItem('digimonChecklist', JSON.stringify(estado));
 }
 
 // Función para obtener todos los Digimon de un Tama ORDENADOS POR NIVEL
+/** Returns all Digimon belonging to the selected Tama, sorted by evolution level. */
 function obtenerDigimonDelTama(tamaSeleccionado) {
   const digimonDelTama = Object.entries(digimonReqDict)
     .filter(([nombre, data]) => data.Tama === tamaSeleccionado && nombre.toLowerCase() !== "burpmon")
@@ -662,6 +668,7 @@ function obtenerDigimonDelTama(tamaSeleccionado) {
 }
 
 // Función para actualizar estadísticas del tama
+/** Updates the obtained count, total count, and completion percentage displayed in the stats header. */
 function actualizarEstadisticas(digimonDelTama) {
   const obtenidos = digimonDelTama.filter(d => checklistState[d.nombre]).length;
   const total = digimonDelTama.length;
@@ -673,6 +680,7 @@ function actualizarEstadisticas(digimonDelTama) {
 }
 
 // Función para manejar el toggle del checkbox
+/** Toggles the obtained state of a Digimon, saves it, and updates the row highlight and statistics. */
 function toggleDigimon(nombre, tamaSeleccionado) {
   checklistState[nombre] = !checklistState[nombre];
   guardarEstado(checklistState);
@@ -691,6 +699,7 @@ function toggleDigimon(nombre, tamaSeleccionado) {
 }
 
 // Función para generar la tabla
+/** Populates the checklist table body with rows for each Digimon in the selected Tama. */
 function generarTabla(digimonDelTama, tbody, tamaSeleccionado) {
   tbody.innerHTML = "";
   
@@ -769,6 +778,7 @@ function generarTabla(digimonDelTama, tbody, tamaSeleccionado) {
 let selectedTama = '';
 
 // Create Tama icons
+/** Builds and inserts the Tama icon buttons into the selector section. */
 function createTamaIcons() {
   const container = document.getElementById('tama-icons');
   if (!container) return;
@@ -790,6 +800,7 @@ function createTamaIcons() {
 }
 
 // Select Tama from icons
+/** Selects a Tama, highlights its icon button, and loads its Digimon checklist and statistics. */
 function selectTamaIcon(tama) {
   selectedTama = tama;
 
@@ -819,11 +830,13 @@ function selectTamaIcon(tama) {
 }
 
 // Inicializar selector de tamas
+/** Initializes the Tama selector by creating all icon buttons. */
 function inicializarSelector() {
   createTamaIcons();
 }
 
 // Funciones de control
+/** Marks all Digimon of the currently selected Tama as obtained and refreshes the table. */
 function marcarTodosTama() {
   if (!selectedTama) return;
   const tamaSeleccionado = selectedTama;
@@ -841,6 +854,7 @@ function marcarTodosTama() {
   actualizarEstadisticas(digimonDelTama);
 }
 
+/** Unmarks all Digimon of the currently selected Tama and refreshes the table. */
 function desmarcarTodosTama() {
   if (!selectedTama) return;
   const tamaSeleccionado = selectedTama;
@@ -858,6 +872,7 @@ function desmarcarTodosTama() {
   actualizarEstadisticas(digimonDelTama);
 }
 
+/** Exports the current checklist state as a downloadable JSON file. */
 function exportarDatos() {
   const dataStr = JSON.stringify(checklistState, null, 2);
   const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -869,6 +884,7 @@ function exportarDatos() {
   URL.revokeObjectURL(url);
 }
 
+/** Opens a file picker to import a JSON checklist and merges it into the current state. */
 function importarDatos() {
   const input = document.createElement('input');
   input.type = 'file';
@@ -900,6 +916,7 @@ function importarDatos() {
 }
 
 // Función para actualizar traducciones
+/** Applies the current language translations to all UI text elements and table headers. */
 function actualizarTraducciones() {
   const t = traducciones[idiomaActual];
 
@@ -937,6 +954,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Hamburger menu functions
+/** Toggles the hamburger navigation menu and its overlay open or closed. */
 function toggleNav() {
   const navMenu = document.getElementById('nav-menu');
   const navOverlay = document.getElementById('nav-overlay');
@@ -944,6 +962,7 @@ function toggleNav() {
   navOverlay.classList.toggle('active');
 }
 
+/** Closes the hamburger navigation menu and hides its overlay. */
 function closeNav() {
   const navMenu = document.getElementById('nav-menu');
   const navOverlay = document.getElementById('nav-overlay');

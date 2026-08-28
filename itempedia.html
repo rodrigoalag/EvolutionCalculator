@@ -587,6 +587,7 @@ main {
   <a href="./itempedia.html" class="nav-link active"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -827,25 +828,30 @@ main {
     }
   };
 
+  /** Returns the translated string for the given key in the current language. */
   function t(key) {
     return traducciones[currentLang][key] || key;
   }
 
+  /** Returns the translated classification label for the given item category key. */
   function tClasif(clsf) {
     return (traducciones[currentLang].clasificaciones[clsf]) || clsf;
   }
 
+  /** Returns the value as a string, or null if the value is empty/undefined. */
   function fmtValue(val) {
     if (val === null || val === undefined || val === '') return null;
     return String(val);
   }
 
+  /** Formats a shop price value into a display object with text and empty/shop flags. */
   function fmtPrice(val) {
     if (val === null) return { text: t('noTienda'), empty: false, shop: false };
     if (val === '' || val === undefined) return { text: t('noData'), empty: true };
     return { text: `${val} Bits`, empty: false };
   }
 
+  /** Formats a numeric stat value with a leading sign (e.g. +5 or -3), or returns the raw string if non-numeric. */
   function fmtStat(val) {
     if (val === '' || val === undefined || val === null) return null;
     const n = Number(val);
@@ -853,6 +859,7 @@ main {
     return String(val);
   }
 
+  /** Converts a duration in minutes to a human-readable hours/minutes string. */
   function fmtTime(min) {
     const h = Math.floor(min / 60);
     const m = min % 60;
@@ -861,12 +868,14 @@ main {
     return `${h} h ${m} min`;
   }
 
+  /** Looks up a full Spanish string in the English strings map and returns the translation if available. */
   function tStr(str) {
     if (currentLang === 'es' || !str) return str;
     const map = traducciones[currentLang].strings;
     return (map && map[str] !== undefined) ? map[str] : str;
   }
 
+  /** Renders the category filter buttons, highlighting the active selection. */
   function buildFilterButtons() {
     const row = document.getElementById('filterRow');
     row.innerHTML = '';
@@ -888,12 +897,14 @@ main {
     }
   }
 
+  /** Sets the active category filter and re-renders the filter buttons and item grid. */
   function setFilter(filter) {
     activeFilter = filter;
     buildFilterButtons();
     renderGrid();
   }
 
+  /** Strips all diacritics (including ñ) and whitespace from a string for filename normalization. */
   function normalizarCaracteres(texto) {
     return texto
       .normalize('NFD')
@@ -903,6 +914,7 @@ main {
       .replace(/\s+/g, '');
   }
 
+  /** Strips vowel accents but preserves ñ and removes whitespace from a string. */
   function normalizarSinAcentos(texto) {
     // Quita acentos vocálicos pero conserva ñ
     return texto
@@ -912,6 +924,7 @@ main {
       .replace(/\s+/g, '');
   }
 
+  /** Generates an array of filename casing/accent variations for an item name to use when probing image paths. */
   function generarVariacionesNombre(nombre) {
     const norm = normalizarCaracteres(nombre);
     const limpio = norm.replace(/[^a-zA-Z0-9]/gi, '');
@@ -931,6 +944,7 @@ main {
     ])];
   }
 
+  /** Tries successive filename variations until a valid image is found and sets the img element's src accordingly. */
   function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'itemimg') {
     const variaciones = generarVariacionesNombre(nombre);
     let idx = 0;
@@ -947,6 +961,7 @@ main {
     intentar();
   }
 
+  /** Builds and returns a complete item card DOM element with image, badge, stats, and all relevant info rows. */
   function buildCard(name, item) {
     const card = document.createElement('div');
     card.className = 'item-card';
@@ -983,6 +998,7 @@ main {
     const info = document.createElement('div');
     info.className = 'item-info';
 
+    /** Appends a label/value info row to the card's info section, showing a fallback dash when value is absent. */
     function addRow(label, value, isEmptyFallback) {
       const display = value !== null && value !== undefined && value !== '' ? value : null;
       const row = document.createElement('div');
@@ -1004,6 +1020,7 @@ main {
     const efectoFC = (currentLang === 'en' && item.efectoFueraDeCombateEN) ? item.efectoFueraDeCombateEN : tStr(item.efectoFueraDeCombate);
     addRow(t('labelEfectoFC'), fmtValue(efectoFC));
 
+    /** Creates and returns an info row containing a styled anchor link to the AlimentosEfectos page. */
     function makeLinkRow(labelKey, text, color) {
       const row = document.createElement('div');
       row.className = 'info-row';
@@ -1258,6 +1275,7 @@ main {
       const plantRow = document.createElement('div');
       plantRow.className = 'plant-stats-row';
 
+      /** Creates and returns a planting stage span element with an optional label and value. */
       function makePlantStage(lbl, val) {
         const stage = document.createElement('span');
         stage.className = 'plant-stage';
@@ -1322,6 +1340,7 @@ main {
       const ageRow = document.createElement('div');
       ageRow.className = 'age-stats-row';
 
+      /** Creates and returns an aging stage span element with an optional label and value. */
       function makeAgeStage(lbl, val) {
         const stage = document.createElement('span');
         stage.className = 'age-stage';
@@ -1362,6 +1381,7 @@ main {
     return card;
   }
 
+  /** Filters and re-renders the item grid based on the active category filter and search input. */
   function renderGrid() {
     const grid = document.getElementById('itemGrid');
     const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -1387,6 +1407,7 @@ main {
     document.getElementById('resultCount').textContent = t('resultCount')(count);
   }
 
+  /** Updates the page title, subtitle, search placeholder, filter buttons, and item grid for the current language. */
   function updateUI() {
     document.title = t('pageTitle');
     document.getElementById('pageTitle').textContent = t('pageTitle');
@@ -1409,11 +1430,13 @@ main {
 </script>
 
 <script>
+/** Toggles the side navigation menu and overlay open/closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
+/** Closes the side navigation menu and hides the overlay. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');

@@ -78,6 +78,7 @@ const driverNombres = {
   "BO006": { nombre: "Royal Symphonia", color: "Rojo" },
   "BO007": { nombre: "Gigantic Injustice", color: "Verde" },
   "BO008": { nombre: "Crest of Lust", color: "Azul" },
+  "BO010": { nombre: "Idzu no Mitama", color: "Rojo" },
 
   // EX Series
   "EX000": { nombre: "Child EX", color: "Verde" },
@@ -86,7 +87,7 @@ const driverNombres = {
   "EX003": { nombre: "Perfected Training", color: "Blanco" },
   "EX006": { nombre: "More than you see", color: "Blanco" },
   "EX008": { nombre: "Liberator Friend", color: "Verde" },
-  "EX009": { nombre: "Master Bit", color: "Blanco" },
+  "EX009": { nombre: "Mega Bit", color: "Blanco" },
 
   // W0 Series
   "W0000": { nombre: "Humungo Smash", color: "Rojo" },
@@ -127,7 +128,7 @@ const driverNombres = {
   "W0035": { nombre: "Fibonacci", color: "Amarillo" },
   "W0036": { nombre: "Filth", color: "Verde" },
   "W0037": { nombre: "Diavolikal", color: "Rojo" },
-  "W0038": { nombre: "Decompress Data", color: "Verde" },
+  "W0038": { nombre: "Decompressed Data", color: "Verde" },
   "W0039": { nombre: "Forever Red", color: "Rojo" },
   "W0040": { nombre: "Pacifist", color: "Amarillo" },
   "W0041": { nombre: "Silver Bullet", color: "Rojo" },
@@ -154,6 +155,7 @@ const driverNombres = {
   "W0062": { nombre: "Power of Friendship", color: "Verde" },
   "W0063": { nombre: "We Are So Back", color: "Verde" },
   "W0064": { nombre: "Toxic Move", color: "Rojo" },
+  "W0065": { nombre: "Borer", color: "Rojo" },
 
   // V0 Series
   "V0000": { nombre: "Agumon", color: "Verde" },
@@ -217,7 +219,7 @@ const driverNombres = {
   "C005": { nombre: "Sea Stealth Attack", color: "Azul" },
   "C006": { nombre: "Sky-2-High", color: "Rojo" },
   "C007": { nombre: "Groovy Trick", color: "Rojo" },
-  "C008": { nombre: "Vertigo high", color: "Verde" },
+  "C008": { nombre: "Vertigo High", color: "Verde" },
   "C009": { nombre: "Snapped", color: "Rojo" },
   "C010": { nombre: "Sky Grinder", color: "Verde" },
   "C011": { nombre: "G0-tsu", color: "Rojo" },
@@ -227,6 +229,7 @@ const driverNombres = {
   "C015": { nombre: "Black Lotus", color: "Amarillo" },
   "C016": { nombre: "Ancient Recall", color: "Rojo" },
   "C017": { nombre: "Deadman Hand", color: "Verde" },
+  "C018": { nombre: "Snake Eyes", color: "Azul" },
   "C019": { nombre: "Living Fosil", color: "Verde" },
   "C020": { nombre: "Software Upgrade", color: "Verde" },
   "C021": { nombre: "Overcooled", color: "Verde" },
@@ -239,7 +242,9 @@ const driverNombres = {
   "C028": { nombre: "Snake Rain", color: "Amarillo" },
   "C029": { nombre: "Joker", color: "Amarillo" },
   "C030": { nombre: "U.F.O.", color: "Azul" },
+  "C031": { nombre: "Driver of Demise", color: "Amarillo" },
   "C032": { nombre: "Driver of Greed", color: "Amarillo" },
+  "C033": { nombre: "Divine Intervention", color: "Blanco" },
   "C034": { nombre: "Punishment", color: "Verde" },
   "C035": { nombre: "Evolution (Alpha)", color: "Verde" },
   "C036": { nombre: "Evolution (Alpha)", color: "Verde" },
@@ -275,6 +280,8 @@ const driverNombres = {
   "M017": { nombre: "Tyumon", color: "Verde" },
   "M018": { nombre: "ScumonTyumon", color: "Verde" },
   "M019": { nombre: "PlatinumScumonTyumon", color: "Blanco" },
+  "M020": { nombre: "Raremon", color: "Blanco" },
+  "M021": { nombre: "Ex-Tyranomon", color: "Verde" },
 
   // VS Series
   "VS000": { nombre: "Pickmon", color: "Blanco" },
@@ -302,6 +309,11 @@ const driverNombres = {
   "U005": { nombre: "Black Death Cloud", color: "Verde" },
   "U006": { nombre: "Dramon Killers", color: "Verde" },
   "U007": { nombre: "War Blaster", color: "Verde" },
+  "U008": { nombre: "Golden Rush", color: "Verde" },
+  "U009": { nombre: "Nazar Nail", color: "Verde" },
+  "U010": { nombre: "Plasma Stake", color: "Verde" },
+  "U011": { nombre: "Dino Breath", color: "Verde" },
+  "U012": { nombre: "Rikugō Shōtetsusen", color: "Verde" },
 
   // SP Series
   "SP000": { nombre: "Ice Spirit H", color: "Verde" },

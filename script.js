@@ -91,6 +91,7 @@ const selectTranslations = {
 const languageSelector = document.getElementById('languageSelector');
 
 // 3. Función para obtener texto traducido de los selects
+/** Returns the translated UI text for a given select element key in the current language. */
 function getSelectText(key) {
   return selectTranslations[currentLanguage][key] || selectTranslations['es'][key] || key;
 }
@@ -109,6 +110,7 @@ const tamaNombres = {
 };
 
 // 3.6. Función para obtener el nombre formateado del Tama
+/** Returns the formatted display name for a Tama code, including its localized title. */
 const getTamaNombre = (codigo) => {
   const nombre = tamaNombres[codigo];
   if (nombre) {
@@ -118,6 +120,7 @@ const getTamaNombre = (codigo) => {
 };
 
 // 4. Función para actualizar los textos de los selects
+/** Updates all select labels, default options, Tama names, and level options to the current language. */
 function updateSelectTexts() {
   // Actualizar labels
   if (nivelLabel) nivelLabel.textContent = getSelectText('selectLevel');
@@ -134,6 +137,7 @@ function updateSelectTexts() {
 }
 
 // 4.5. Función para actualizar los nombres de Tama según idioma
+/** Updates the Tama selector title text to the current language. */
 function updateTamaOptions() {
   // Los Tamas se muestran como iconos, no hay dropdown de opciones que actualizar
   const tamaTitle = document.getElementById('tamaTitle');
@@ -143,6 +147,7 @@ function updateTamaOptions() {
 }
 
 // 5. Función para actualizar opciones por defecto
+/** Updates the default placeholder option text for the level and digimon selects to the current language. */
 function updateDefaultOptions() {
   // Los Tamas se muestran como iconos, no hay dropdown de opciones
 
@@ -160,6 +165,7 @@ function updateDefaultOptions() {
 }
 
 // 6. Función para actualizar opciones de nivel
+/** Refreshes the level select option labels to match the current language stage names. */
 function updateLevelOptions() {
   const levelOptions = nivelSelect.querySelectorAll('option:not([value=""])');
   levelOptions.forEach(option => {
@@ -232,6 +238,7 @@ const nivelAEtapa = {
   5: "Perfect",
   6: "Ultimate"
 };
+/** Returns the category map for the selected origin from a conditioned-requirements categorias object, or the object itself if it is not origin-keyed. */
 function resolveCategoriasForOrigin(categorias, selected) {
   if (!categorias) return undefined;
   const firstVal = Object.values(categorias)[0];
@@ -241,6 +248,7 @@ function resolveCategoriasForOrigin(categorias, selected) {
   return categorias;
 }
 
+/** Retrieves a specific field value from a Digimon's origin-conditioned requirements block matching the selected origin. */
 function getFieldFromRC(name, selected, field) {
     const rc = digimonReqDict[name]?.RequisitosCondicionados;
     if (!rc || rc.condicion !== "Origen") return undefined;
@@ -264,6 +272,7 @@ function getFieldFromRC(name, selected, field) {
 // #region Selector
 ///// SELECTOR CON ICONOS
 // Crear el selector de Tama con iconos
+/** Renders clickable Tama icon buttons in the tama-icons container, one per unique Tama in the dictionary. */
 function createTamaIcons() {
   const container = document.getElementById('tama-icons');
   if (!container) return;
@@ -289,6 +298,7 @@ function createTamaIcons() {
 
 let currentTama = ''; // Variable global para rastrear el Tama seleccionado
 
+/** Sets the given Tama as active, highlights its icon button, and triggers the Tama-changed handler. */
 function selectTamaIcon(tama) {
   currentTama = tama;
   document.querySelectorAll('.tama-icon-btn').forEach(btn => {
@@ -298,6 +308,7 @@ function selectTamaIcon(tama) {
 }
 
 // Buscador de Digimon
+/** Initialises the Digimon search input with autocomplete suggestions that filter and select Digimon by name. */
 function initSearch() {
   const searchInput = document.getElementById('digi-search');
   const suggestionsContainer = document.getElementById('search-suggestions');
@@ -369,12 +380,14 @@ function initSearch() {
   });
 }
 
+/** Attempts to load a Digimon icon image into the given element by trying several filename variations until one succeeds. */
 function cargarImagenIcono(nombre, elementoImg) {
   const normalized = nombre.toLowerCase().replace(/[^a-z0-9]/g, '');
   const variaciones = [normalized, nombre, nombre.replace(/ /g, ''), nombre.replace(/ /g, '_')];
   const seen = new Set();
   const unique = variaciones.filter(v => seen.has(v) ? false : seen.add(v));
   let i = 0;
+  /** Tries the next filename variation to load the icon, advancing the index on each failure. */
   function intentar() {
     if (i >= unique.length) return;
     const srcTry = `icon/${unique[i]}.png`;
@@ -386,6 +399,7 @@ function cargarImagenIcono(nombre, elementoImg) {
   intentar();
 }
 
+/** Selects a Digimon from the search results by programmatically setting the Tama, level, and Digimon selects in sequence. */
 function selectDigimonFromSearch(name, tama, nivel) {
   selectTamaIcon(tama);
 
@@ -436,6 +450,7 @@ if (tamaSection) {
 }
 
 // Función para manejar cambio en Tama
+/** Resets and repopulates the level select with stages available for the chosen Tama, disabling it if none is provided. */
 function onTamaChanged(tamaElegido) {
   // Limpiar nivel y digimon
   nivelSelect.innerHTML = "";
@@ -643,6 +658,7 @@ function calcularStatSuperiorOLD(datosActuales) {
 */
 
 // WinRate = Victorias / Combates Minimos * 100
+/** Calculates the win-rate percentage as victories divided by minimum battles, returning it as a formatted string. */
 function calcularWinRate(datosActuales) {
   const victorias = parseFloat(datosActuales["Victorias"]);
   const batallas  = parseFloat(datosActuales["Combates Minimos"]);
@@ -652,6 +668,7 @@ function calcularWinRate(datosActuales) {
 }
 
 // Función de cálculo para Stat Superior (NUEVA - basada en %)
+/** Determines the highest trained stat (HP/ATK/SPD) by percentage and whether the training is balanced, returning both as text. */
 function calcularStatSuperior(datosActuales) {
   const hpPct = parseFloat(datosActuales["HP Entrenado"]) || 0;
   const atkPct = parseFloat(datosActuales["ATK Entrenado"]) || 0;
@@ -728,6 +745,7 @@ if (estaBalanceado) {
 }
 
 // Función para validar rangos de inputs numéricos
+/** Validates that a numeric input's value is within the given min/max range, clearing it and showing an alert if out of bounds. */
 function validarRangoInput(input, fieldName, min, max) {
   const valor = parseFloat(input.value);
 
@@ -775,6 +793,7 @@ function validarRangoInput(input, fieldName, min, max) {
 }
 
 // Función para validar que la suma de HP%, ATK% y SPD% no exceda 100%
+/** Validates that the sum of HP%, ATK%, and SPD% training values does not exceed 100, clearing all three and alerting if it does. */
 function validarSumaStats() {
   const hpInput = document.getElementById('field_HP Entrenado');
   const atkInput = document.getElementById('field_ATK Entrenado');
@@ -816,6 +835,7 @@ function validarSumaStats() {
 }
 
 // Función para recalcular campos calculados (ACTUALIZADA)
+/** Re-evaluates all auto-calculated fields (Stat Superior, WinRate, etc.) from current form values and updates their display elements. */
 function recalcularCamposCalculados() {
   const datosActuales = {};
   
@@ -869,6 +889,7 @@ function recalcularCamposCalculados() {
 
 // #region function generar formulario MEJORADA
 // Generar formulario según selección
+/** Builds the editable input form for the selected Digimon, distributing fields across three rows based on their category. */
 function generarFormulario() {
   const selected = digimonSelect.value;
   const data = digimonReqDict[selected];
@@ -947,6 +968,7 @@ function generarFormulario() {
 
     if (info.RequisitosCondicionados) {
       const _FORM_STRUCT = new Set(["condicion","valorCondicion","pathSi","pathNo","modo","puntajeOk","puntajeNo","Obligatorios","AlMenosUno","Obligatorio","Incumplir","puntaje","Death Evo","categorias"]);
+      /** Recursively extracts form field names from a conditioned-requirements object, adding them to the outer fieldSet. */
       function _extraerFormCampos(obj) {
         if (!obj || typeof obj !== "object") return;
         for (const [k, v] of Object.entries(obj)) {
@@ -1025,6 +1047,7 @@ function generarFormulario() {
   console.log("Fila 2 esperada:", fila2Fields);
 
   // Función auxiliar para determinar a qué fila pertenece un campo
+  /** Returns the row number (1, 2, or 3) that a given form field should be placed in based on its predefined category. */
   function getRowForField(field) {
     const row1 = fila1Fields.includes(field);
     const row2 = fila2Fields.includes(field);
@@ -1167,6 +1190,7 @@ function generarFormulario() {
     console.log("SELECTED CHEQUEAR", selected);
 
     // Funciones para obtener opciones (mantener exactas)
+    /** Returns the list of Xross/Install options for the given Digimon, appending "Ninguno" at the end. */
     function getXrossOptions(selected) {
         const opciones = getXrossInstallOptions(selected);
         opciones.push("Ninguno");
@@ -1174,6 +1198,7 @@ function generarFormulario() {
     }
 
     // Resuelve "N CODE Driver" → "N NombreDriver Driver" usando driverNombres.js
+    /** Resolves a driver string's code segment to its full name using the driverNombres lookup table. */
     function resolverNombreDriver(driverStr) {
         if (!driverStr || driverStr === "Ninguno") return driverStr;
         if (typeof driverNombres === "undefined") return driverStr;
@@ -1182,12 +1207,14 @@ function generarFormulario() {
         });
     }
 
+    /** Returns the list of equippable driver options for the given Digimon, appending "Ninguno" at the end. */
     function getDriverEquipadoOptions(selected) {
         const opciones = getDriverEquipadoInstallOptions(selected);
         opciones.push("Ninguno");
         return opciones;
     }
 
+    /** Collects all unique food options from the current evolution candidates' Bonus Comida and Comida fields, appending "Ninguno". */
     function getBonusComidaOptions(selected) {
         let opciones = [];
         nextDigimons.forEach(([name, requisitos]) => {
@@ -1492,6 +1519,7 @@ digimonSelect.addEventListener("change", () => {
 });
 
 // Función auxiliar para validar campos de vínculo
+/** Sanitises and validates a bond (vínculo) input, enforcing -50 to 100 bounds and ensuring the max bond is never less than the bond at evolution. */
 function validarCampoVinculo(input) {
     let val = input.value;
 
@@ -1767,6 +1795,7 @@ editableFields3.addEventListener('blur', (e) => {
 // ===== EVALUACIÓN GENÉRICA DE RequisitosCondicionados =====
 const _COND_STRUCT = new Set(["modo","puntajeOk","puntajeNo","Obligatorios","AlMenosUno","Obligatorio","Incumplir","Puntos","puntaje","Death Evo"]);
 
+/** Compares an entered value against an expected requirement value, applying field-specific comparison rules (range, list, equality). */
 function _evalCmp(campo, ingresado, esperado) {
   if (Array.isArray(esperado)) {
     const ing = (String(ingresado || "")).toLowerCase();
@@ -1781,18 +1810,21 @@ function _evalCmp(campo, ingresado, esperado) {
   return (String(ingresado || "")).toLowerCase() === String(esperado).toLowerCase();
 }
 
+/** Retrieves the user-entered value for a requirement field, aliasing canonical field name variants (e.g. Errores Minimos → Error Maximo). */
 function _getInputVal(campo, inputValues) {
   if (campo === "Errores Minimos") return inputValues["Error Maximo"];
   if (campo === "Victorias Minimas") return inputValues["Victorias"];
   return inputValues[campo];
 }
 
+/** Normalises a requirement key to its canonical form (e.g. Victorias Minimas → Victorias, Errores Minimos → Error Maximo). */
 function _normK(k) {
   if (k === "Victorias Minimas") return "Victorias";
   if (k === "Errores Minimos") return "Error Maximo";
   return k;
 }
 
+/** Evaluates a single requirement path object against the user's input values, returning the score and the set of involved fields. */
 function _evalPath(path, inputValues) {
   const modo = path["Death Evo"] ? "BloqueTotal" : (path.modo || "BloqueTotal");
   const pOk = path.puntajeOk ?? 4, pNo = path.puntajeNo ?? -10;
@@ -1904,6 +1936,7 @@ function _evalPath(path, inputValues) {
   return { puntaje: pts, campos, porCampo: porCampo.size ? porCampo : null };
 }
 
+/** Evaluates a Digimon's conditioned requirements block by selecting the correct path based on the condition type and user inputs, then scoring it. */
 function evaluarCondicionados(condReqs, inputValues, selected) {
   let path;
   if (condReqs.condicion === "Origen") {
@@ -1996,6 +2029,7 @@ nextDigimons.forEach(([_, info]) => {
   if (info.RequisitosCondicionados) {
     const _CALC_STRUCT = new Set(["condicion","valorCondicion","pathSi","pathNo","modo","puntajeOk","puntajeNo","Obligatorios","AlMenosUno","Obligatorio","Incumplir","puntaje","Death Evo","categorias"]);
     const _CALC_EXCL = new Set(["ID","Tama","Nivel","Tipo","Atributo","Stat Superior 2","Placeholder"]);
+    /** Recursively extracts field names from a conditioned-requirements object, adding them to fieldSet and flagging bonus fields. */
     function _extraerCalcCampos(obj) {
       if (!obj || typeof obj !== "object") return;
       for (const [k, v] of Object.entries(obj)) {
@@ -3454,6 +3488,7 @@ const textTranslations = {
   }
 };
 
+/** Shows or hides the Program evolution footnote based on whether any of the best Digimon are Program evolutions. */
 function mostrarNotaProgramEvo(lang) {
   const hayProgram = mejoresDigimons.some(n => digimonReqDict[n]?.isProgramEvo);
   if (programEvoNota) {
@@ -3465,6 +3500,7 @@ function mostrarNotaProgramEvo(lang) {
 // Funcion nueva de desempate
 // Función de desempate por Digipuntos
 // forzarDesempate: si es true, siempre aplica desempate (usado para casos con Program)
+/** Returns the list of tied Digimon as-is (tiebreaking by Digipuntos is currently disabled). */
 function desempatarPorDigipuntos(digimons, forzarDesempate = false) {
   // Si solo hay un digimon, no hay empate
   if (digimons.length <= 1) {
@@ -3561,6 +3597,7 @@ if (nextLevel === 3) {
 }
 
 // --- Función de normalización ---
+/** Normalises a string to lowercase ASCII by removing diacritical marks for case-insensitive comparisons. */
 function normalizar(txt = "") {
   return String(txt)
     .toLowerCase()
@@ -3801,6 +3838,7 @@ if (!specialCaseHandled) {
 }
 
  // Función para actualizar el texto de evolución
+  /** Builds and displays the evolution result message, handling all special cases (SkullGreymon, Dex evolutions, death, etc.) before falling back to the generic result. */
   function actualizarTextoEvolucion() {
     let texto;
 

@@ -895,6 +895,7 @@ button:active {
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -1018,7 +1019,7 @@ const helpImages = {
   hpbase: 'img/explicacionentrenamientobaseen.png' // ← Ruta de la imagen actualizada
 };
 
-// Función para mostrar el popup
+/** Displays the help popup and loads the image associated with the given help key. */
 function showHelpPopup(helpKey) {
   const overlay = document.getElementById('helpPopupOverlay');
   const image = document.getElementById('helpPopupImage');
@@ -1039,7 +1040,7 @@ function showHelpPopup(helpKey) {
   }
 }
 
-// Función para cerrar el popup
+/** Closes the help popup when clicking the overlay or close button, and restores body scroll. */
 function closeHelpPopup(event) {
   const overlay = document.getElementById('helpPopupOverlay');
   
@@ -1102,7 +1103,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// ✅ FUNCIÓN PARA AGREGAR EL HELP ICON AL HP BASE CUANDO SE CREE LA TABLA
+/** Scans all editable field header rows and injects a help icon next to the HP Base column header. */
 function addHelpIconToHPBase() {
   // Esperar un poco y buscar el header de HP Base en todas las tablas
   setTimeout(() => {
@@ -1317,7 +1318,7 @@ const translations = {
 // Variable para idioma actual
 let currentLanguage = 'es';
 
-// ✅ NUEVA FUNCIÓN: Detectar idioma automáticamente
+/** Detects the active language from the HTML lang attribute, browser setting, or defaults to Spanish. */
 function detectLanguage() {
   // Logger 1: Ver el valor del atributo lang del HTML
   const htmlLangElement = document.getElementById('htmlLang');
@@ -1351,12 +1352,12 @@ function detectLanguage() {
   return 'es';
 }
 
-// Función para traducir texto
+/** Returns the translation string for the given key in the specified (or current) language. */
 function translate(key, lang = currentLanguage) {
   return translations[lang] && translations[lang][key] ? translations[lang][key] : key;
 }
 
-// Función para actualizar interfaz cuando cambie idioma
+/** Re-translates all static and dynamic UI elements (title, disclaimer, headers, selects) to the current language. */
 function updateInterfaceLanguage() {
   // Actualizar título de página
   document.title = translate('title');
@@ -1417,6 +1418,7 @@ function updateInterfaceLanguage() {
   }
 }
 
+/** Translates all data-translate header cells in the auto-fields and results tables. */
 function updateTableHeaders() {
   // Headers de la tabla de autoFields
   const autoHeaders = document.querySelectorAll('#autoFieldsTable th[data-translate]');
@@ -1433,6 +1435,7 @@ function updateTableHeaders() {
   });
 }
 
+/** Translates the column headers of all three editable fields tables using a text-to-key mapping. */
 function updateEditableFieldsHeaders() {
   const headersRows = [
     document.getElementById('editableFieldsHeaders1'),
@@ -1528,6 +1531,7 @@ function updateEditableFieldsHeaders() {
   }
 }
 
+/** Translates the text of each option in a select element to the current language using a text-to-key lookup. */
 function translateSelectOptions(select) {
   if (!select) return;
 
@@ -1590,6 +1594,7 @@ function translateSelectOptions(select) {
 }
 
 
+/** Translates the text content of all cells in the auto-fields table body to the current language. */
 function translateAutoFieldsContent() {
   const autoFields = document.getElementById('autoFields');
   if (!autoFields) return;
@@ -1605,6 +1610,7 @@ function translateAutoFieldsContent() {
   });
 }
 
+/** Translates the header cells of the results table to the current language. */
 function translateresultadosContent() {
   const resultados = document.getElementById('resultados');
   if (!resultados) return;
@@ -1620,7 +1626,7 @@ function translateresultadosContent() {
   });
 }
 
-// Función para reorganizar campos con dropdowns a la derecha
+/** Wraps populateEditableFields to apply translations and re-inject the HP Base help icon after each call. */
 function reorganizeFields() {
   // script.js ya se carga en el HTML al final
   const retryInterval = setInterval(() => {
@@ -1651,16 +1657,19 @@ function reorganizeFields() {
   }, 50);
 }
 
+/** No-op placeholder — column layout is now handled statically via script.js and CSS. */
 function reorganizeTableColumns() {
   // Esta función ya no se usa, la distribución en 3 tablas se maneja en script.js
   return;
 }
 
+/** No-op placeholder — column styles are now handled via static CSS. */
 function updateColumnStyles() {
   // Esta función ya no se usa, los estilos se manejan con CSS estático
   return;
 }
 
+/** Attaches MutationObservers to all three editable field rows to auto-translate any newly added select elements. */
 function observarSelectsDinamicos() {
   const targets = [
     document.getElementById('editableFields1'),
@@ -1723,12 +1732,12 @@ document.addEventListener('DOMContentLoaded', function() {
   observarSelectsDinamicos();
 });
 
-// ✅ NUEVO: Función para forzar actualización de traducciones cuando sea necesario
+/** Forces a full re-translation of all interface elements; exposed globally for use by external scripts. */
 window.forceTranslationUpdate = function() {
   updateInterfaceLanguage();
 };
 
-// ✅ NUEVO: Función específica para traducir elementos dinámicos sin bucles
+/** Translates all data-translate elements and select options within a given container; exposed globally. */
 window.translateNewElements = function(container) {
   if (!container) return;
   
@@ -1746,12 +1755,14 @@ window.translateNewElements = function(container) {
 
   <!-- Menú hamburguesa funciones -->
   <script>
+/** Toggles the side navigation menu and overlay open/closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Closes the side navigation menu and hides the overlay. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');

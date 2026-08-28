@@ -675,6 +675,7 @@ h1, h2, h3 { color: #4ecdc4; }
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-links"><img src="./pageicons/link.png" alt="Links"><span>Links Externos</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -859,6 +860,7 @@ let procesandoClick = false;
 let tipoStatsActual = 'base'; // 'base' o 'heredados'
 
 // Función para calcular stats heredados (40% con redondeo)
+/** Computes the inherited stats for a Child by summing 40% of Baby I and Baby II stats onto the Child base. */
 function calcularStatsHeredados(babyIStats, babyIIStats, childBaseStats) {
   const heredadoBabyI = {
     atk: Math.round(babyIStats.ATK * 0.4),
@@ -885,6 +887,7 @@ function calcularStatsHeredados(babyIStats, babyIIStats, childBaseStats) {
 }
 
 // Función para calcular stats con herencia completa para cualquier Digimon
+/** Returns the fully inherited stats for a Digimon by accumulating 40% contributions from each predecessor in its evolution line. */
 function calcularStatsConHerencia(nombreDigimon, lineaEvolutiva) {
   const statsBase = digimonstattier[nombreDigimon];
   if (!statsBase) return null;
@@ -1032,6 +1035,7 @@ function calcularStatsConHerencia(nombreDigimon, lineaEvolutiva) {
 }
 
 // Función para obtener TODAS las líneas evolutivas posibles de un Digimon
+/** Returns all possible predecessor chains (evolution lines) leading up to a given Digimon. */
 function obtenerTodasLasLineasEvolutivas(nombreDigimon) {
   const statsDigimon = digimonstattier[nombreDigimon];
 
@@ -1040,6 +1044,7 @@ function obtenerTodasLasLineasEvolutivas(nombreDigimon) {
   }
 
   // Función recursiva para obtener todas las combinaciones
+  /** Recursively builds all ancestor chain combinations for a Digimon, skipping slide evolutions of the same level. */
   function obtenerCombinaciones(digimonActual, nivelActual) {
     const stats = digimonstattier[digimonActual];
 
@@ -1122,6 +1127,7 @@ function obtenerTodasLasLineasEvolutivas(nombreDigimon) {
 }
 
 // Función para formatear la línea evolutiva según el nivel
+/** Returns a formatted text string representing the evolution line of a Digimon based on its level. */
 function formatearLineaEvolutiva(nombreDigimon, lineaEvolutiva) {
   const nivel = digimonReqDict[nombreDigimon]?.Nivel || 0;
 
@@ -1181,6 +1187,7 @@ function formatearLineaEvolutiva(nombreDigimon, lineaEvolutiva) {
   return tama;
 }
 
+/** Attempts the next fallback image URL for an evolution-line icon when the current src fails to load. */
 function cargarFallbackLineaEvo(img) {
   const fallbacks = (img.dataset.fallbacks || '').split('|').filter(Boolean);
   if (fallbacks.length === 0) { img.src = 'icon/placeholder.png'; img.onerror = null; return; }
@@ -1188,6 +1195,7 @@ function cargarFallbackLineaEvo(img) {
   img.src = fallbacks[0];
 }
 
+/** Renders the evolution line for a Digimon as an HTML string of icon images with tooltips. */
 function renderLineaEvolutivaIconos(nombre, lineaRaw) {
   const nivel = digimonReqDict[nombre]?.Nivel || 0;
   const babyI = lineaRaw?.[0] || null;
@@ -1199,6 +1207,7 @@ function renderLineaEvolutivaIconos(nombre, lineaRaw) {
   const adult   = lineaRaw?.find((_, i) => niveles[i] === 4) || null;
   const perfect = lineaRaw?.find((_, i) => niveles[i] === 5) || null;
 
+  /** Builds an HTML string for a Digimon icon cell with name tooltip and fallback image support. */
   function digiIcon(digi, extraClass = '') {
     const vars = generarVariacionesNombre(digi);
     const fb = vars.slice(1).map(v => `icon/${v}.png`).join('|');
@@ -1215,6 +1224,7 @@ function renderLineaEvolutivaIconos(nombre, lineaRaw) {
   return `<div class="linea-evo">${parts.join(sep)}</div>`;
 }
 
+/** Renders a standalone Digimon icon with a name tooltip, used when no evolution line is available. */
 function renderDigimonSolo(nombre) {
   const vars = generarVariacionesNombre(nombre);
   const fb = vars.slice(1).map(v => `icon/${v}.png`).join('|');
@@ -1222,6 +1232,7 @@ function renderDigimonSolo(nombre) {
 }
 
 // Función para generar variantes de Scumon y GreatKingScumon
+/** Generates all stat variants for Scumon, PlatinumScumon, and GreatKingScumon based on each possible Child predecessor. */
 function generarVariantesScumon() {
   const variantes = [];
   const variantesUnicas = new Map(); // Para evitar duplicados
@@ -1531,6 +1542,7 @@ const rankingTable = document.getElementById("rankingTable");
 const rankingTableBody = document.querySelector("#rankingTable tbody");
 
 // Función para configurar delegación de eventos
+/** Attaches a delegated click listener to the ranking table container to handle sortable column header clicks. */
 function configurarDelegacionEventos() {
   const tablaContainer = document.getElementById('rankingContainer');
   
@@ -1565,6 +1577,7 @@ function configurarDelegacionEventos() {
 }
 
 // Inicializar selector de niveles
+/** Populates the level selector dropdown with all available Digimon levels plus a combined Perfect+Ultimate option. */
 function inicializarSelector() {
   const niveles = [...new Set(Object.values(digimonReqDict).map(d => d.Nivel))].sort((a, b) => a - b);
   
@@ -1582,11 +1595,13 @@ function inicializarSelector() {
 }
 
 // Función para obtener clasificación — lee desde digimonReqDict (computado en FullDigimonReqDict.js)
+/** Returns the tier classification object (name and CSS class) for a Digimon from the precomputed dictionary. */
 function obtenerClasificacion(nivel, nombre) {
   return digimonReqDict[nombre]?.Clasificacion || { nombre: "Unknown", clase: "tier-low" };
 }
 
 // Función para cargar imagen
+/** Returns an array of normalized filename variants for a Digimon name to use as image path fallbacks. */
 function generarVariacionesNombre(nombre) {
   const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
   const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
@@ -1604,6 +1619,7 @@ function generarVariacionesNombre(nombre) {
 }
 
 // Función para ordenar datos
+/** Returns a sorted copy of the data array by the specified field, supporting both numeric and alphabetic ordering. */
 function ordenarDatos(datos, campo, descendente = true) {
   // Campos que son strings (ordenamiento alfabético)
   const camposTexto = ['atributo', 'tipo'];
@@ -1624,6 +1640,7 @@ function ordenarDatos(datos, campo, descendente = true) {
 }
 
 // Función para actualizar headers activos
+/** Updates the visual state of sortable table headers to reflect the current sort field and direction. */
 function actualizarHeadersActivos() {
   document.querySelectorAll('.sortable-header').forEach(header => {
     header.classList.remove('active');
@@ -1643,6 +1660,7 @@ function actualizarHeadersActivos() {
   }
 }
 
+/** Clears and repopulates the ranking table body with a row for each Digimon in the provided data array. */
 function generarTablaRankingSegura(data, tbody) {
   tbody.innerHTML = "";
 
@@ -1706,6 +1724,7 @@ function generarTablaRankingSegura(data, tbody) {
 }
 
 // Función para obtener la evolución anterior (un nivel atrás)
+/** Returns the name of the direct predecessor (one level below) of a Digimon, using its evolution line or the stat dictionary. */
 function obtenerEvolucionAnterior(nombreDigimon, lineaEvolutiva) {
   const nivelActual = digimonReqDict[nombreDigimon]?.Nivel || 0;
 
@@ -1742,6 +1761,7 @@ function obtenerEvolucionAnterior(nombreDigimon, lineaEvolutiva) {
 }
 
 // Función para obtener TODAS las evoluciones anteriores de un Digimon (un nivel atrás)
+/** Returns an array of all direct predecessors (one level below) for a Digimon, used to populate the filter options. */
 function obtenerTodasLasEvolucionesAnteriores(nombreDigimon) {
   const nivelActual = digimonReqDict[nombreDigimon]?.Nivel || 0;
 
@@ -1770,6 +1790,7 @@ function obtenerTodasLasEvolucionesAnteriores(nombreDigimon) {
 // ============================================
 
 // Función para actualizar el texto del botón del dropdown
+/** Updates the visible label of a dropdown filter button to reflect how many items are currently selected. */
 function actualizarTextoDropdown(containerId, buttonTextId, todosText) {
   const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`);
   const seleccionados = Array.from(checkboxes)
@@ -1787,6 +1808,7 @@ function actualizarTextoDropdown(containerId, buttonTextId, todosText) {
 }
 
 // Función para toggle de dropdown
+/** Toggles the visibility of a filter dropdown panel, closing all other open dropdowns first. */
 function toggleDropdown(buttonId, containerId) {
   const button = document.getElementById(buttonId);
   const container = document.getElementById(containerId);
@@ -1821,6 +1843,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
+/** Reads all active filter selections and re-renders the ranking table with only the matching Digimon. */
 function aplicarFiltros() {
   const rangeValueSpan = document.getElementById('digipuntosRangeValue');
   const t = traducciones[idiomaActual];
@@ -1942,6 +1965,7 @@ function aplicarFiltros() {
   actualizarHeadersActivos();
 }
 
+/** Filters the dataset by the current search query and rebuilds all dropdown options before applying active filters. */
 function aplicarBusqueda() {
   const query = (document.getElementById('searchDigimon')?.value || '').trim().toLowerCase();
   datosBusqueda = query
@@ -1958,6 +1982,7 @@ function aplicarBusqueda() {
   aplicarFiltros();
 }
 
+/** Resets all filter checkboxes, the search input, and the Digipoints range, then re-renders the full unfiltered table. */
 function limpiarFiltros() {
   const t = traducciones[idiomaActual];
 
@@ -2011,6 +2036,7 @@ function limpiarFiltros() {
   actualizarHeadersActivos();
 }
 
+/** Rebuilds the Digimon name filter dropdown with checkboxes for all unique Digimon in the current search results. */
 function actualizarOpcionesDigimon() {
   const container = document.getElementById('filterDigimonContainer');
   const t = traducciones[idiomaActual];
@@ -2075,6 +2101,7 @@ function actualizarOpcionesDigimon() {
   actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
 }
 
+/** Rebuilds the previous-evolution filter dropdown with all unique predecessor Digimon from the full unfiltered dataset. */
 function actualizarOpcionesEvolucionAnterior() {
   const container = document.getElementById('filterEvolucionAnteriorContainer');
   const t = traducciones[idiomaActual];
@@ -2136,6 +2163,7 @@ function actualizarOpcionesEvolucionAnterior() {
   });
 }
 
+/** Dynamically rebuilds the previous-evolution filter to show only predecessors valid for the currently selected Digimon. */
 function actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados) {
   const container = document.getElementById('filterEvolucionAnteriorContainer');
   const t = traducciones[idiomaActual];
@@ -2256,6 +2284,7 @@ function actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados) {
   actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
 }
 
+/** Rebuilds the classification filter dropdown with checkboxes for all unique tier classifications in the current dataset. */
 function actualizarOpcionesClasificacion() {
   const container = document.getElementById('filterClasificacionContainer');
   const t = traducciones[idiomaActual];
@@ -2314,6 +2343,7 @@ function actualizarOpcionesClasificacion() {
   });
 }
 
+/** Rebuilds the attribute filter dropdown with checkboxes for all unique attributes in the current search results. */
 function actualizarOpcionesAtributo() {
   const container = document.getElementById('filterAtributoContainer');
   const t = traducciones[idiomaActual];
@@ -2376,6 +2406,7 @@ function actualizarOpcionesAtributo() {
   actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
 }
 
+/** Rebuilds the type filter dropdown with checkboxes for all unique Digimon types in the current search results. */
 function actualizarOpcionesTipo() {
   const container = document.getElementById('filterTipoContainer');
   const t = traducciones[idiomaActual];
@@ -2438,6 +2469,7 @@ function actualizarOpcionesTipo() {
   actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
 }
 
+/** Recalculates and sets the min/max bounds of the Digipoints numeric range inputs based on the current data. */
 function actualizarRangoDigipuntos() {
   const inputMin = document.getElementById('filterDigipuntosMin');
   const inputMax = document.getElementById('filterDigipuntosMax');
@@ -2475,6 +2507,7 @@ function actualizarRangoDigipuntos() {
 // ============================================
 
 // Función para generar el ranking (reutilizable)
+/** Builds the full Digimon ranking dataset for the selected level and stat type, then renders the table with filters applied. */
 function generarRanking() {
   const nivelRaw = selectNivel.value;
   const nivelSeleccionado = nivelRaw === "5+6" ? "5+6" : parseInt(nivelRaw);
@@ -2681,6 +2714,7 @@ selectTipoStats.addEventListener("change", () => {
 });
 
 // Función para actualizar traducciones
+/** Updates all visible text elements in the UI to match the currently selected language. */
 function actualizarTraducciones() {
   const t = traducciones[idiomaActual];
 
@@ -2788,6 +2822,7 @@ function actualizarTraducciones() {
 // FUNCIONES DE DESCARGA
 // ============================================
 
+/** Assembles the export-ready data array (headers + rows) from the current ranking dataset for CSV and XLSX downloads. */
 function _buildExportData() {
   const t = traducciones[idiomaActual];
   const headers = [
@@ -2808,6 +2843,7 @@ function _buildExportData() {
   return [headers, ...rows];
 }
 
+/** Exports the current ranking data as a UTF-8 CSV file and triggers a browser download. */
 function descargarCSV() {
   if (!datosActuales || datosActuales.length === 0) {
     alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
@@ -2835,6 +2871,7 @@ function descargarCSV() {
   document.body.removeChild(link);
 }
 
+/** Exports the current ranking data as an XLSX spreadsheet and triggers a browser download. */
 function descargarXLSX() {
   if (!datosActuales || datosActuales.length === 0) {
     alert(idiomaActual === 'es' ? 'Por favor selecciona un nivel primero' : 'Please select a level first');
@@ -2862,11 +2899,13 @@ function descargarXLSX() {
   XLSX.writeFile(wb, `ranking_digimon_nivel_${nivel}.xlsx`);
 }
 // Inicializar página - ejecutar inmediatamente sin esperar DOMContentLoaded
+/** Initializes the Digimon search bar with autocomplete suggestions and wires up its selection and keyboard events. */
 function initSearchRanking() {
   const searchInput = document.getElementById('searchDigimon');
   const suggestionsEl = document.getElementById('search-ranking-suggestions');
   if (!searchInput || !suggestionsEl) return;
 
+  /** Returns up to 10 Digimon entries whose names contain the given query string, sorted alphabetically. */
   function getSuggestions(query) {
     if (!query) return [];
     const q = query.toLowerCase();
@@ -2881,6 +2920,7 @@ function initSearchRanking() {
     return results.sort((a, b) => a.name.localeCompare(b.name)).slice(0, 10);
   }
 
+  /** Loads the best available icon for a Digimon suggestion item, trying each filename variant in order. */
   function cargarIconoSugerencia(nombre, img) {
     const vars = generarVariacionesNombre(nombre);
     let i = 0;
@@ -2894,6 +2934,7 @@ function initSearchRanking() {
     intentar();
   }
 
+  /** Renders the autocomplete suggestion dropdown for the given search query, or hides it if no matches are found. */
   function showSuggestions(query) {
     const matches = getSuggestions(query);
     if (matches.length === 0) { suggestionsEl.classList.remove('active'); return; }
@@ -2918,6 +2959,7 @@ function initSearchRanking() {
     aplicarBusqueda();
   });
 
+  /** Selects a suggestion item, populates the search field, and triggers a ranking refresh for the chosen Digimon's level. */
   function selectSuggestion(item) {
     const name = item.dataset.name;
     const nivel = item.dataset.nivel;
@@ -2955,6 +2997,7 @@ function initSearchRanking() {
   });
 }
 
+/** Initializes all page controls, event listeners, selectors, and translations immediately upon script execution. */
 function inicializarPaginaInmediatamente() {
   const selectIdioma = document.getElementById("selectIdioma");
   const downloadCSVBtn = document.getElementById('downloadCSV');
@@ -3067,12 +3110,14 @@ if (document.readyState === 'loading') {
   </script>
 
 <script>
+/** Toggles the hamburger navigation menu open or closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Closes the hamburger navigation menu. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');
@@ -3086,6 +3131,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+/** Triggers translation of the navigation menu to the currently active language. */
 function updateNavMenuLanguage() {
   if (typeof translateNavMenu === 'function') translateNavMenu(idiomaActual);
 }

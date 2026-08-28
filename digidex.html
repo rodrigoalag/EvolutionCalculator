@@ -1567,6 +1567,7 @@ main {
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-links"><img src="./pageicons/link.png" alt="Links"><span>Links Externos</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -1762,6 +1763,7 @@ main {
 // FUNCIONES PARA SECCIONES DESPLEGABLES
 // ============================================
 
+/** Toggles a collapsible section open or closed when its header button is clicked. */
 function toggleCollapsible(button) {
   const content = button.nextElementSibling;
   const toggle = button.querySelector('.collapsible-toggle');
@@ -1774,6 +1776,7 @@ function toggleCollapsible(button) {
 // FUNCIONES PARA MODAL DE ZOOM DE IMAGEN
 // ============================================
 
+/** Opens the image zoom modal showing the currently displayed Digimon image. */
 function openImgModal() {
   const digimonImg = document.getElementById('digimonImage');
   const modal = document.getElementById('img-modal');
@@ -1785,6 +1788,7 @@ function openImgModal() {
   }
 }
 
+/** Closes the image zoom modal. */
 function closeImgModal() {
   const modal = document.getElementById('img-modal');
   modal.classList.remove('active');
@@ -1802,12 +1806,14 @@ document.addEventListener('keydown', (e) => {
 // FUNCIONES PARA MENÚ DE NAVEGACIÓN
 // ============================================
 
+/** Toggles the hamburger navigation menu open or closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Closes the hamburger navigation menu. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');
@@ -1818,12 +1824,7 @@ function closeNav() {
 // FUNCIONES PARA FORMATEAR LISTAS DE EVOLUCIONES
 // ============================================
 
-/**
- * Divide una lista en columnas cuando tiene más de 'maxItems' elementos
- * @param {Array} items - Array de nombres de digimon
- * @param {number} maxItems - Número máximo de items antes de dividir en columnas (default: 5)
- * @returns {string} HTML con la lista formateada en columnas
- */
+/** Returns an HTML string with the evolution list formatted in columns when it exceeds maxItems entries. */
 function formatEvolutionList(items, maxItems = 5) {
   if (!items || items.length === 0) return "-";
 
@@ -1867,7 +1868,7 @@ const warningMessages = {
   }
 };
 
-// Función para mostrar el popup de advertencia
+/** Shows the warning popup for the given key using the current language. */
 function showWarningPopup(warningKey) {
   const overlay = document.getElementById('warningPopupOverlay');
   const text = document.getElementById('warningText');
@@ -1887,7 +1888,7 @@ function showWarningPopup(warningKey) {
   }
 }
 
-// Función para cerrar el popup de advertencia
+/** Closes the warning popup when clicking the overlay or close button. */
 function closeWarningPopup(event) {
   const overlay = document.getElementById('warningPopupOverlay');
 
@@ -1978,6 +1979,7 @@ const gruposColumnasDefault = {
   "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Vinculo al momento de evolucionar","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname"]
 };
 
+/** Flattens a RequisitosCondicionados path object into a single key-value map. */
 function flattenRCPath(path) {
     if (!path || typeof path !== 'object') return path;
     if (path.modo === 'PuntajeIndividual') return { ...path.Obligatorios, ...path.Puntos };
@@ -1985,6 +1987,7 @@ function flattenRCPath(path) {
 }
 
 // Xross per-preevo data es leído de digimonReqDict[nombre].Xross (objeto) en FullDigimonReqDict.js
+/** Returns the value of a specific field from RequisitosCondicionados for the given pre-evolution. */
 function getFieldFromRC(name, selected, field) {
     const rc = digimonReqDict[name]?.RequisitosCondicionados;
     if (!rc || rc.condicion !== "Origen") return undefined;
@@ -2139,7 +2142,7 @@ const puntajesPorNivel = {
   }
 };
 
-// Función para determinar el puntaje de un campo
+/** Returns the score configuration (cumple/noCumple) for a requirement field given the Digimon and group context. */
 function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
   const digimon = dict[nombreDigimon];
   if (!digimon) return { cumple: 0, noCumple: 0 };
@@ -2327,7 +2330,7 @@ function obtenerPuntaje(campo, nombreDigimon, nombreGrupo) {
   return { cumple: 1, noCumple: 0 };
 }
 
-// Función para formatear el puntaje con color
+/** Formats a score object as an HTML string with colored +/- indicators. */
 function formatearPuntajeConColor(puntaje) {
   // Si el puntaje es null (Baby I), no mostrar nada
   if (puntaje === null) return "";
@@ -2398,11 +2401,13 @@ function formatearPuntajeConColor(puntaje) {
   let nombreDigimonActual = '';
 
   // Función para detectar imágenes adicionales (nombre2.png, nombre3.png, etc.)
+  /** Probes for additional numbered image files (nombre2.png, nombre3.png…) and returns all found paths via callback. */
   function detectarImagenesAdicionales(nombreBase, rutaBase, callback) {
     const imagenes = [rutaBase]; // La imagen principal ya encontrada
     let numeroActual = 2;
     const maxImagenes = 10; // Límite de búsqueda
 
+    /** Recursively probes the next numbered image path and accumulates found URLs. */
     const buscarSiguiente = () => {
       if (numeroActual > maxImagenes) {
         callback(imagenes);
@@ -2430,6 +2435,7 @@ function formatearPuntajeConColor(puntaje) {
   }
 
   // Función para navegar entre imágenes
+  /** Advances the image gallery by the given direction (+1 or -1) with wraparound. */
   function navegarImagen(direccion) {
     if (imagenesDisponibles.length <= 1) return;
 
@@ -2446,6 +2452,7 @@ function formatearPuntajeConColor(puntaje) {
   }
 
   // Función para actualizar visibilidad de botones de navegación
+  /** Shows or hides the prev/next navigation buttons depending on available gallery images. */
   function actualizarBotonesNavegacion() {
     if (!imgPrevBtn || !imgNextBtn) return; // Botones no existen en nuevo layout
     if (imagenesDisponibles.length > 1) {
@@ -2460,6 +2467,7 @@ function formatearPuntajeConColor(puntaje) {
   // Hacer navegarImagen global para onclick
   window.navegarImagen = navegarImagen;
 
+  /** Returns a deduplicated version of the given array. */
   const uniqueValues = (array) => [...new Set(array)];
 
   // Diccionario de nombres de Tama
@@ -2476,6 +2484,7 @@ function formatearPuntajeConColor(puntaje) {
     "GE": { es: "Dios del Este", en: "God of East" }
   };
 
+  /** Returns the display name for a Tama code, including its localized subtitle. */
   const getTamaNombre = (codigo) => {
     const nombre = tamaNombres[codigo];
     if (nombre) {
@@ -2724,11 +2733,13 @@ function formatearPuntajeConColor(puntaje) {
 
 let currentLanguage = "es";
 
+/** Returns the translated string for the given key in the current language. */
 function t(key) {
   return traducciones[currentLanguage][key] || key;
 }
 
 // Función para detectar si un Digimon tiene múltiples evoluciones
+/** Returns an array of pre-evolution names that require separate requirement rows for the given Digimon. */
 function detectarEvolucionesMultiples(nombreDigimon) {
   const evoluciones = new Set();
 
@@ -2778,6 +2789,7 @@ function detectarEvolucionesMultiples(nombreDigimon) {
 }
 
 // Función para obtener el valor específico de un campo para una evolución
+/** Returns the requirement field value for a specific pre-evolution, applying special-case overrides. */
 function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigimon) {
   // Verificar si este campo debe estar vacío para esta evolución específica
   if (camposVaciosPorEvolucion[nombreDigimon]?.[evolucionDigimon]?.includes(campo)) {
@@ -2879,6 +2891,7 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
 }
 
 // Función para obtener la configuración de columnas para un digimon específico
+/** Returns the column-group configuration for a Digimon, falling back to the default layout. */
 function obtenerGruposColumnas(nombreDigimon) {
   if (digimonReqDict[nombreDigimon]?.categorias) {
     return digimonReqDict[nombreDigimon].categorias;
@@ -2890,6 +2903,7 @@ function obtenerGruposColumnas(nombreDigimon) {
 }
 
 // Función para procesar los datos del digimon si tiene configuración especial
+/** Applies any special-case field transformations to a Digimon's data object. */
 function procesarDatosDigimon(nombreDigimon, datosOriginales) {
   if (specialDigimonConfig[nombreDigimon] && specialDigimonConfig[nombreDigimon].procesarCampos) {
     return specialDigimonConfig[nombreDigimon].procesarCampos(datosOriginales);
@@ -2898,6 +2912,7 @@ function procesarDatosDigimon(nombreDigimon, datosOriginales) {
 }
 
 // Función para generar múltiples variaciones del nombre de archivo
+/** Generates a deduplicated list of filename variations (lowercase, no symbols, etc.) for a Digimon name. */
 function generarVariacionesNombre(nombre) {
   const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
   const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
@@ -2919,6 +2934,7 @@ function generarVariacionesNombre(nombre) {
 }
 
 // Función para intentar cargar imagen con múltiples variaciones
+/** Tries each filename variation in order to load the Digimon image, falling back to placeholder.png. */
 function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   const variaciones = generarVariacionesNombre(nombre);
   
@@ -2927,6 +2943,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   
   let indiceActual = 0;
   
+  /** Tries each image filename variation in sequence, falling back to placeholder on exhaustion. */
   const intentarSiguiente = () => {
     if (indiceActual >= variaciones.length) {
       // Si fallan todas las variaciones, intentar con placeholder.png
@@ -2985,6 +3002,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 }
 
   // Crear iconos de Tama
+  /** Builds and renders the clickable Tama icon buttons in the selector panel. */
   function createTamaIcons() {
     const container = document.getElementById('tama-icons');
     console.log('Container tama-icons:', container);
@@ -3009,6 +3027,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   }
 
   // Seleccionar Tama por icono
+  /** Selects a Tama, updates the active icon highlight, and repopulates the level selector. */
   function selectTamaIcon(tama) {
     currentTama = tama;
 
@@ -3044,6 +3063,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   }
 
   // Buscador de Digimon
+  /** Initializes the live search input with autocomplete suggestions and keyboard/click handling. */
   function initSearch() {
     const searchInput = document.getElementById('digi-search');
     const suggestionsContainer = document.getElementById('search-suggestions');
@@ -3117,9 +3137,11 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   }
 
   // Cargar imagen pequeña para iconos
+  /** Loads a small icon image for a Digimon from the icon/ folder, trying name variations. */
   function cargarImagenIcono(nombre, elementoImg) {
     const variaciones = generarVariacionesNombre(nombre);
     let i = 0;
+    /** Tries the next icon filename variation until one loads successfully. */
     function intentar() {
       if (i >= variaciones.length) return;
       const srcTry = `icon/${variaciones[i]}.png`;
@@ -3132,6 +3154,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   }
 
   // Seleccionar Digimon desde el buscador
+  /** Selects a Digimon by programmatically setting the Tama, level, and Digimon selectors. */
   function selectDigimonFromSearch(name, tama, nivel) {
     // Seleccionar Tama
     selectTamaIcon(tama);
@@ -3245,6 +3268,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     const tamaRow    = document.getElementById('scumon-tama-row');
     const tamaSelect = document.getElementById('scumon-tama-select');
 
+    /** Computes and displays the base stats for the currently selected Scumon family lineage. */
     function applyScumonStats() {
       const child    = childSelect.value;
       const tamaOpt  = tamaSelect.value ? JSON.parse(tamaSelect.value) : null;
@@ -3258,6 +3282,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       document.getElementById('stat-clasificacion').textContent = computed.Clasificacion?.nombre ?? '-';
     }
 
+    /** Repopulates the Tama sub-selector for a Scumon child and refreshes stats. */
     function updateTamaSelector(childName) {
       const lineages = getScumonLineageOptions(childName);
       if (lineages.length > 1) {
@@ -3491,6 +3516,7 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
       }
       const _gruposColumnas = { 'Quota/Key Points': puntosFields, 'Requisitos Obligatorios': obligFields };
       const _valores = { 'Peso': formatearPeso(_peso) };
+      /** Formats a single RC field value using the appropriate formatter for its type. */
       const formatField = (f, v) => {
         if (f === 'Peso') return formatearPeso(v);
         if (f === 'Error Maximo') return formatearErrorMaximo(v ?? 0, nombre);
@@ -3543,6 +3569,7 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
 }
 
 // Lee el valor de un campo desde el path RC (BloqueTotal, SideEvolution, PuntajePorCampo, PuntajeDirecto)
+/** Resolves and formats a field's value from a RequisitosCondicionados path object. */
 function _resolveRCField(pathData, campo, nombreDigimon) {
   // Directo en pathData (BloqueTotal / Death Evo)
   if (pathData[campo] !== undefined && typeof pathData[campo] !== 'object') {
@@ -3569,6 +3596,7 @@ function _resolveRCField(pathData, campo, nombreDigimon) {
   return undefined;
 }
 
+/** Converts a raw RC field value into its display string using field-specific formatters. */
 function _formatRCValue(campo, raw, nombreDigimon) {
   if (raw === undefined || raw === null) return undefined;
   if (campo === 'Error Maximo') return formatearErrorMaximo(raw, nombreDigimon);
@@ -4022,6 +4050,7 @@ if (evolucionesMultiples.length > 0) {
 }
   });
 
+/** Updates all translatable UI text, labels, headers, and navigation elements to the current language. */
 function actualizarTextosUI() {
   // Actualizar títulos principales (con null checks)
   const titleMain = document.getElementById("titleMain");
@@ -4221,6 +4250,7 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarTextosUI();
 });
 
+/** Returns the localized display name for a requirement field, with per-Digimon exceptions. */
 function traducirCampo(campo, nombreDigimon = null) {
   // Excepción: Grademon VICE usa "Errores Requeridos" en vez de "Rango de Errores de Cuido"
   if (nombreDigimon === "Grademon VICE" && campo === "Error Maximo") {
@@ -4231,6 +4261,7 @@ function traducirCampo(campo, nombreDigimon = null) {
 
 // Función para formatear el valor de Error Maximo como rango
 // Excepciones: Grademon VICE requiere exactamente 6 errores (no rango)
+/** Formats the Error Maximo value as a "0-x" range string, with exceptions for specific Digimon. */
 function formatearErrorMaximo(valor, nombreDigimon = null) {
   if (valor === undefined || valor === null || valor === "-") {
     return valor;
@@ -4258,6 +4289,7 @@ function formatearErrorMaximo(valor, nombreDigimon = null) {
 }
 
 // Función para formatear el valor de WinRate agregando %
+/** Appends a "%" suffix to the WinRate value if not already present. */
 function formatearWinRate(valor) {
   if (valor === undefined || valor === null || valor === "-" || valor === "") {
     return valor;
@@ -4280,6 +4312,7 @@ function formatearWinRate(valor) {
 }
 
 // Función para formatear el valor de Peso como rango (± 5)
+/** Formats a Peso value as a "(valor-5)-(valor+5)" acceptable range string. */
 function formatearPeso(valor) {
   if (valor === undefined || valor === null || valor === "-") {
     return valor;
@@ -4299,6 +4332,7 @@ function formatearPeso(valor) {
 }
 
 // Función para formatear % Entrenamiento como rango
+/** Formats a training percentage as a "valor-100" range string, with Pillomon exception. */
 function formatearPorcentajeEntrenamiento(valor, nombreDigimon = null) {
   if (valor === undefined || valor === null || valor === "-") {
     return valor;
@@ -4326,6 +4360,7 @@ function formatearPorcentajeEntrenamiento(valor, nombreDigimon = null) {
 }
 
 // Función para convertir hora UTC-3 a hora local del navegador
+/** Converts a UTC-3 time range string to the browser's local timezone. */
 function convertirHoraALocal(valor) {
   if (valor === undefined || valor === null || valor === "-") {
     return valor;
@@ -4443,6 +4478,7 @@ const comidaImagen = {
   "Cresta de la Lujuria": "crestadelalujuria.png"
 };
 
+/** Renders a Program value as an icon image HTML element. */
 function renderProgram(valor) {
   if (!valor || valor === "-") return String(valor);
   const str = String(valor).trim();
@@ -4451,6 +4487,7 @@ function renderProgram(valor) {
   return `<span class="item-icon-wrap"><img class="item-icon" src="itemimg/${filename}" alt="${str}" title="${str}"></span>`;
 }
 
+/** Renders a food/item value as an icon image with quantity label. */
 function renderComida(valor) {
   if (!valor || valor === "-") return String(valor);
   const str = String(valor).trim();
@@ -4464,9 +4501,11 @@ function renderComida(valor) {
   return `<span class="item-icon-wrap"><img class="item-icon" src="itemimg/${filename}" data-nombre="${nombre}" onerror="this.style.display='none';this.parentElement.querySelector('.item-qty').textContent=this.dataset.nombre" alt="${nombre}" title="${nombre}"><span class="item-qty">x${cantidad}</span></span>`;
 }
 
+/** Parses a Xross/Driver install string and returns the full HTML with driver icons and labels. */
 function renderDriverXross(xrossStr) {
   const prefijos2chars = ['ST', 'BO', 'EX', 'W0', 'V0', 'VL', 'PR', 'VS', 'SP'];
 
+  /** Builds the driver icon HTML for a single driver code and quantity. */
   function driverHTML(codigo, cantidad) {
     const p2 = codigo.substring(0, 2);
     const carpeta = prefijos2chars.includes(p2) ? p2 : codigo.substring(0, 1);
@@ -4479,6 +4518,7 @@ function renderDriverXross(xrossStr) {
     </div><span class="xross-label">${nombre} Driver x${cantidad}</span>`;
   }
 
+  /** Returns an img element for a Digimon icon used in Xross install display. */
   function digiIconHTML(nombre) {
     return `<img class="xross-digi-icon" src="icon/${nombre.toLowerCase()}.png" alt="${nombre}" title="${nombre}">`;
   }
@@ -4533,6 +4573,7 @@ function renderDriverXross(xrossStr) {
   return `<span class="xross-label">${xrossStr}</span>`;
 }
 
+/** Returns the localized or rendered HTML representation of a field value. */
 function traducirValor(campo, valor, nombreDigimon = null) {
   if (campo === "Nivel" && nivelAEtapa[currentLanguage][valor]) {
     return nivelAEtapa[currentLanguage][valor];
@@ -4661,10 +4702,12 @@ if (campo === "Bonus Comida") {
 // FUNCIONES PARA DESCARGA DE IMAGEN
 // ============================================
 
+/** Returns the translated string for the given key, using optional chaining for safety. */
 function t(key) {
   return traducciones[currentLanguage]?.[key] || key;
 }
 
+/** Captures the info panel as a PNG and triggers a download using html2canvas. */
 function downloadDigimonImage() {
   if (window.location.protocol === 'file:') {
     alert(t('downloadLocalError'));

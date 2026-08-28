@@ -367,6 +367,7 @@ h1, h2, h3 { color: #4ecdc4; }
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-links"><img src="./pageicons/link.png" alt="Links"><span>Links Externos</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -467,12 +468,14 @@ const translations = {
 
 let currentLanguage = localStorage.getItem('digilang') || 'es';
 
+/** Updates the stored language preference and refreshes all page texts. */
 function changeLanguage() {
   currentLanguage = document.getElementById('languageSelector').value;
   localStorage.setItem('digilang', currentLanguage);
   updateTexts();
 }
 
+/** Applies the current language translations to all text elements on the page. */
 function updateTexts() {
   const t = translations[currentLanguage];
   document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
@@ -490,12 +493,14 @@ function updateTexts() {
   document.getElementById('credit4').textContent = t.credit4;
 }
 
+/** Toggles the hamburger navigation menu open or closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Closes the hamburger navigation menu. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');
@@ -514,6 +519,7 @@ document.getElementById('languageSelector').value = currentLanguage;
 updateTexts();
 
 // Actualizar menú hamburguesa
+/** Updates the nav menu section headings to match the current language. */
 function updateNavMenuLanguage() {
   const lang = typeof currentLanguage !== 'undefined' ? currentLanguage : (localStorage.getItem('digilang') || 'es');
   const navHerramientas = document.getElementById("nav-herramientas");

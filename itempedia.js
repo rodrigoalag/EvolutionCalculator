@@ -1780,7 +1780,7 @@ const EfectoCombate = {
     { condicion: "Otros",        condicionEN: "Others",       efecto: "Sin efecto en combate.", efectoEN: "No combat effect." }
   ],
   "Manzana del Caos": [
-    { condicion: null, condicionEN: null, efecto: "+15% Omnibuffo. Si haces un combate activo te provoca una herida o enfermedad.", efectoEN: "+15% Omnibuff. Causes a wound or illness if engaging in active combat." }
+    { condicion: null, condicionEN: null, efecto: "+15% Omnibuffo. Si haces un combate (Activo o AFK) te provoca una herida o enfermedad.", efectoEN: "+15% Omnibuff. Causes a wound or illness if engaging in combat (Active or AFK)." }
   ],
   "Cepax Alpha 10": [
     { condicion: null, condicionEN: null, efecto: "+30% ATK.", efectoEN: "+30% ATK." }

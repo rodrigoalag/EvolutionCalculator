@@ -233,6 +233,10 @@ header p {
       <div class="tool-card-icon"><img src="./pageicons/ranking.png" alt="PvP"></div>
       <h3>PvP Hall of Fame</h3>
     </a>
+    <a href="./pvprecompensas.html" class="tool-card">
+      <div class="tool-card-icon"><img src="./itemimg/cajanavideña.png" alt="Recompensas"></div>
+      <h3>PvP Recompensas</h3>
+    </a>
   </div>
 
   <!-- Links Section -->
@@ -363,10 +367,12 @@ const langTexts = {
 };
 
 const selector = document.getElementById("languageSelector");
+/** Reads the selector value and delegates to updateLanguage. */
 function changeLanguage() {
   updateLanguage(selector.value);
 }
 
+/** Applies the given language to all translatable UI elements and persists it. */
 function updateLanguage(lang) {
   const text = langTexts[lang];
   document.getElementById("mainTitle").textContent = text.mainTitle;

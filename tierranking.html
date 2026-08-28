@@ -367,6 +367,7 @@ a { color: #4ecdc4; }
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt=""> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt=""> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3><img src="./pageicons/link.png" alt="">Links Externos</h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -504,8 +505,10 @@ const TEXTS = {
   }
 };
 
+/** Returns the localized string for a given UI text key based on the current language. */
 function t(key) { return TEXTS[currentLang][key] || key; }
 
+/** Updates all translatable UI text elements and re-renders the tier list and pool to reflect the current language. */
 function updateUI() {
   document.getElementById('pageTitle').textContent       = t('pageTitle');
   document.getElementById('pageSubtitle').textContent    = t('pageSubtitle');
@@ -523,10 +526,12 @@ function updateUI() {
 }
 
 // ===== NAV =====
+/** Toggles the hamburger navigation menu open or closed. */
 function toggleNav() {
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
+/** Closes the hamburger navigation menu. */
 function closeNav() {
   document.getElementById('nav-menu').classList.remove('active');
   document.getElementById('nav-overlay').classList.remove('active');
@@ -556,6 +561,7 @@ const tierContexts = {
   all:    DEFAULT_TIERS.map(t => ({ ...t, digimons: [] })),
   levels: DEFAULT_TIERS.map(t => ({ ...t, digimons: [] }))
 };
+/** Returns the active tier array for the current filter context (all Digimon or level-filtered). */
 function activeTiers() {
   return filterLevels.size === 0 ? tierContexts.all : tierContexts.levels;
 }
@@ -567,6 +573,7 @@ let activeColorTarget = null; // { tierId }
 let currentInsertIndex = -1;
 
 // ===== BUILD DIGIMON LIST FROM DICT =====
+/** Returns the icon image path for a Digimon name, normalizing it to lowercase alphanumeric characters. */
 function iconPath(name) {
   return `icon/${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.png`;
 }
@@ -578,16 +585,19 @@ const allDigimons = Object.entries(digimonReqDict)
 
 const digimonNivelMap = Object.fromEntries(allDigimons.map(d => [d.name, d.nivel]));
 
+/** Returns true if the given Digimon level passes the current active level filter. */
 function matchesFilter(nivel) {
   return filterLevels.size === 0 || filterLevels.has(nivel);
 }
 
+/** Returns a Set of all Digimon names currently placed in any tier in the active context. */
 function getPlacedNames() {
   const placed = new Set();
   activeTiers().forEach(t => t.digimons.forEach(n => placed.add(n)));
   return placed;
 }
 
+/** Returns the list of Digimon not yet placed in any tier that match the current level filter. */
 function getPoolDigimons() {
   const placed = getPlacedNames();
   return allDigimons.filter(d => !placed.has(d.name) && matchesFilter(d.nivel));
@@ -596,6 +606,7 @@ function getPoolDigimons() {
 // ===== PERSISTENCE =====
 const STORAGE_KEY = 'digimon-tierlist-v1';
 
+/** Persists the current tier placements, filter state, and language to localStorage. */
 function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -607,6 +618,7 @@ function saveState() {
   } catch(e) {}
 }
 
+/** Restores tier placements, filter state, and language from localStorage if a saved state exists. */
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -623,12 +635,14 @@ function loadState() {
 }
 
 // ===== RENDER =====
+/** Re-renders both the tier list and the pool grid, then saves state to localStorage. */
 function render() {
   renderTiers();
   renderPool();
   saveState();
 }
 
+/** Creates and returns a draggable Digimon icon element with tooltip, for use in either a tier or the pool. */
 function makeIconEl(name, inPool = false) {
   const wrap = document.createElement('div');
   wrap.className = 'digi-icon-wrap';
@@ -663,6 +677,7 @@ function makeIconEl(name, inPool = false) {
   return wrap;
 }
 
+/** Returns the tier ID containing the given Digimon, or 'pool' if it is not placed in any tier. */
 function findTierOfDigimon(name) {
   for (const t of activeTiers()) {
     if (t.digimons.includes(name)) return t.id;
@@ -670,6 +685,7 @@ function findTierOfDigimon(name) {
   return 'pool';
 }
 
+/** Rebuilds the entire tier list DOM including labels, drop zones, drag-and-drop logic, and control buttons. */
 function renderTiers() {
   const list = document.getElementById('tierList');
   list.innerHTML = '';
@@ -789,6 +805,7 @@ function renderTiers() {
   });
 }
 
+/** Rebuilds the pool grid with all unplaced Digimon icons and wires up the drop zone to return icons to the pool. */
 function renderPool() {
   const grid = document.getElementById('pool-grid');
   grid.innerHTML = '';
@@ -822,6 +839,7 @@ function renderPool() {
 }
 
 // ===== DRAG LOGIC =====
+/** Moves a Digimon from its current location to a target tier at a given insertion index, or returns it to the pool. */
 function moveDigimon(name, targetTierId, insertAt = -1) {
   // Remove from source, tracking original position for same-tier reorder adjustment
   let fromTierId = null, fromIndex = -1;
@@ -842,6 +860,7 @@ function moveDigimon(name, targetTierId, insertAt = -1) {
 }
 
 // ===== TIER MANAGEMENT =====
+/** Moves the specified tier one position up in the active tier list. */
 function moveTierUp(id) {
   const arr = activeTiers();
   const idx = arr.findIndex(t => t.id === id);
@@ -849,6 +868,7 @@ function moveTierUp(id) {
   [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
   render();
 }
+/** Moves the specified tier one position down in the active tier list. */
 function moveTierDown(id) {
   const arr = activeTiers();
   const idx = arr.findIndex(t => t.id === id);
@@ -856,6 +876,7 @@ function moveTierDown(id) {
   [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
   render();
 }
+/** Removes the specified tier from the active context, returning its Digimon to the pool. */
 function deleteTier(id) {
   const key = filterLevels.size === 0 ? 'all' : 'levels';
   if (!tierContexts[key].find(t => t.id === id)) return;
@@ -864,6 +885,7 @@ function deleteTier(id) {
 }
 
 let editingLabelId = null;
+/** Activates inline editing for a tier label, replacing its text with an input field on double-click. */
 function startEditLabel(tierId, labelEl) {
   if (editingLabelId) return;
   editingLabelId = tierId;
@@ -890,6 +912,7 @@ function startEditLabel(tierId, labelEl) {
 }
 
 // ===== COLOR PICKER =====
+/** Opens the color picker popup next to the clicked color button, populated with preset swatches and a custom color input. */
 function openColorPicker(e, tierId) {
   e.stopPropagation();
   activeColorTarget = tierId;
@@ -929,18 +952,21 @@ function openColorPicker(e, tierId) {
   }, 0);
 }
 
+/** Applies the given color to the currently targeted tier and re-renders the list. */
 function applyColor(color) {
   if (!activeColorTarget) return;
   const tier = activeTiers().find(t => t.id === activeColorTarget);
   if (tier) { tier.color = color; render(); }
 }
 
+/** Hides the color picker popup and clears the active color target. */
 function closeColorPicker() {
   document.getElementById('colorPickerPopup').style.display = 'none';
   activeColorTarget = null;
 }
 
 // ===== ADD TIER MODAL =====
+/** Opens the Add Tier modal, resets its inputs, and populates the color swatch picker. */
 function openAddTierModal() {
   newTierSelectedColor = PRESET_COLORS[0];
   document.getElementById('newTierLabel').value = '';
@@ -961,12 +987,14 @@ function openAddTierModal() {
   document.getElementById('addTierModal').classList.add('active');
   document.getElementById('newTierLabel').focus();
 }
+/** Closes the Add Tier modal. */
 function closeModal() {
   document.getElementById('addTierModal').classList.remove('active');
 }
 document.getElementById('addTierModal').addEventListener('click', e => {
   if (e.target === document.getElementById('addTierModal')) closeModal();
 });
+/** Validates the modal input and appends a new tier with the chosen label and color to the active tier context. */
 function confirmAddTier() {
   const label = document.getElementById('newTierLabel').value.trim();
   if (!label) { document.getElementById('newTierLabel').focus(); return; }
@@ -977,6 +1005,7 @@ function confirmAddTier() {
 }
 
 // ===== FILTER =====
+/** Syncs the active/inactive visual state of all level filter buttons to the current filterLevels set. */
 function updateFilterButtons() {
   document.querySelectorAll('.filter-btn').forEach(btn => {
     const n = btn.dataset.nivel;
@@ -1018,11 +1047,13 @@ document.getElementById('filterBar').addEventListener('click', e => {
 });
 
 // ===== CLEAR / RESET =====
+/** Removes all Digimon from every tier in the active context after user confirmation, returning them to the pool. */
 function clearTiers() {
   if (!confirm(t('confirmClear'))) return;
   activeTiers().forEach(t => t.digimons = []);
   render();
 }
+/** Resets all tiers and placements in both contexts to their defaults after user confirmation. */
 function resetAll() {
   if (!confirm(t('confirmReset'))) return;
   tierContexts.all    = DEFAULT_TIERS.map(t => ({ ...t, digimons: [] }));
@@ -1033,6 +1064,7 @@ function resetAll() {
   render();
 }
 
+/** Displays a temporary toast notification at the bottom of the screen with the given message. */
 function showToast(msg) {
   const t = document.createElement('div');
   t.textContent = msg;
@@ -1048,6 +1080,7 @@ function showToast(msg) {
 }
 
 // ===== SCREENSHOT =====
+/** Captures the tier list as a PNG image using html2canvas and triggers a browser download. */
 async function takeScreenshot() {
   const el = document.getElementById('tierListCapture');
   if (!el) return;

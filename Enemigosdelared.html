@@ -757,6 +757,7 @@ header select:hover {
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -832,12 +833,14 @@ header select:hover {
     let currentLanguage = 'es';
 
     // Funciones para el modal Build&Stats
+    /** Returns the error range string formatted for use as part of a filename (e.g. "0-6" → "06"). */
     function formatearErroresParaArchivo(errores) {
       // Convierte "0-6" a "06", "3-6" a "36", "6" a "6"
       if (!errores) return '';
       return errores.replace(/-/g, '').replace(/\./g, '');
     }
 
+    /** Returns the training range string formatted for use as part of a filename (e.g. "0-39.99" → "03999"). */
     function formatearEntrenamientoParaArchivo(entrenamiento) {
       // Convierte "0-39.99" a "03999", "40-59.99" a "405999", etc.
       if (!entrenamiento) return '';
@@ -851,6 +854,7 @@ header select:hover {
       5: 'Perfect'
     };
 
+    /** Returns an ordered array of candidate NPC image filenames for the given Digimon, level, errors, and training range. */
     function buscarImagenNPC(digimon, nivel, errores, entrenamiento) {
       // Normalizar nombre del digimon para el archivo
       const nombreNormalizado = normalizarCaracteres(digimon).replace(/\s+/g, '');
@@ -890,6 +894,7 @@ header select:hover {
       return variaciones;
     }
 
+    /** Opens the Build & Stats modal and loads the matching NPC image for the specified Digimon and context. */
     function abrirBuildModal(digimon, nivel, errores, entrenamiento) {
       const modal = document.getElementById('buildModal');
       const img = document.getElementById('buildModalImg');
@@ -924,12 +929,14 @@ header select:hover {
       intentarCargar();
     }
 
+    /** Closes the Build & Stats modal overlay. */
     function cerrarBuildModal() {
       const modal = document.getElementById('buildModal');
       modal.classList.remove('active');
     }
 
     // Verificar si existe imagen de NPC (callback con true/false)
+    /** Checks whether a Build & Stats NPC image exists for the given Digimon context and invokes the callback with true or false. */
     function verificarImagenNPC(digimon, nivel, errores, entrenamiento, callback) {
       const variaciones = buscarImagenNPC(digimon, nivel, errores, entrenamiento);
       let indice = 0;
@@ -1085,6 +1092,7 @@ header select:hover {
     }
 
     // Función para traducir nombre de item (normalizado)
+    /** Returns the English translation of an item name when the current language is English, or the original name otherwise. */
     function translateItem(itemName) {
       if (currentLanguage === 'en') {
         const normalizedKey = itemName.toLowerCase();
@@ -1114,10 +1122,12 @@ header select:hover {
       ]
     };
 
+    /** Returns the translated string for the given key in the current language. */
     function t(key) {
       return traducciones[currentLanguage][key] || key;
     }
 
+    /** Updates all translatable UI text elements to match the current language selection. */
     function actualizarTextosUI() {
       document.getElementById('pageTitle').textContent = t('pageTitle');
       document.getElementById('infoText1').textContent = t('infoText1');
@@ -1208,6 +1218,7 @@ header select:hover {
     };
 
     // Función para normalizar nombre de item para búsqueda
+    /** Returns a lowercase alphanumeric-only version of an item name for use as a lookup key. */
     function normalizarItemParaBusqueda(nombre) {
       return nombre
         .toLowerCase()
@@ -1218,6 +1229,7 @@ header select:hover {
     }
 
     // Función para obtener imagen de item
+    /** Returns the mapped image filename for an item name, or null if no mapping exists. */
     function obtenerImagenItem(itemName) {
       const normalizado = normalizarItemParaBusqueda(itemName);
       return itemImageMapBase[normalizado] || null;
@@ -1231,6 +1243,7 @@ header select:hover {
     };
 
     // Función para normalizar caracteres especiales (ñ → n, acentos, espacios, etc.)
+    /** Returns a normalized version of the text with accents, ñ, and spaces removed. */
     function normalizarCaracteres(texto) {
       return texto
         .normalize('NFD')
@@ -1241,6 +1254,7 @@ header select:hover {
     }
 
     // Función para generar múltiples variaciones del nombre de archivo
+    /** Returns an array of filename case and format variations for a Digimon name to maximize image loading success. */
     function generarVariacionesNombre(nombre) {
       const nombrenormal = nombre
       const nombreNormalizado = normalizarCaracteres(nombre);
@@ -1276,6 +1290,7 @@ header select:hover {
     }
 
     // Función para cargar imagen con variaciones de nombre
+    /** Tries each filename variation in sequence and sets the image element src to the first one that loads. */
     function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'img') {
       const variaciones = generarVariacionesNombre(nombre);
       let indiceActual = 0;
@@ -1308,6 +1323,7 @@ header select:hover {
     }
 
     // Actualizar opciones de entrenamiento según el nivel
+    /** Repopulates the training percentage dropdown with the correct options for the selected evolution level. */
     function actualizarEntrenamientoOpciones(nivel) {
       const entrenamientoSelect = document.getElementById('entrenamientoSelect');
       const opciones = entrenamientoOpciones[nivel] || entrenamientoOpciones[3];
@@ -1322,6 +1338,7 @@ header select:hover {
     }
 
     // Función para renderizar un enemigo
+    /** Builds and returns the DOM element for a single enemy card including its Digimon info, labels, and drop list. */
     function renderEnemigo(enemigo, nivelSeleccionado) {
       const enemyContainer = document.createElement('div');
       enemyContainer.className = 'enemy-container';
@@ -1590,6 +1607,7 @@ header select:hover {
     }
 
     // Función para verificar si un enemigo aparece en el nivel/entrenamiento seleccionado
+    /** Returns true if the enemy matches both the selected evolution level and training percentage range. */
     function enemigoAparece(enemigo, nivelSeleccionado, entrenamientoSeleccionado) {
       // Verificar nivel
       const nivelOk = enemigo.niveles === "todos" ||
@@ -1603,6 +1621,7 @@ header select:hover {
     }
 
     // Cargar y renderizar datos filtrados
+    /** Filters enemies by level and training range and renders their cards into the enemies container. */
     function loadEnemigos(nivelSeleccionado, entrenamientoSeleccionado) {
       const container = document.getElementById('enemigosContainer');
       container.innerHTML = '';
@@ -1630,6 +1649,7 @@ header select:hover {
     }
 
     // Función para descargar imagen
+    /** Captures the enemies container as a PNG image using html2canvas and triggers a browser download. */
     function downloadImage() {
       if (window.location.protocol === 'file:') {
         alert(t('localError'));
@@ -1725,12 +1745,14 @@ header select:hover {
 
   <!-- Menú hamburguesa funciones -->
   <script>
+/** Toggles the hamburger navigation menu and its overlay open or closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Closes the hamburger navigation menu and hides its overlay. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>PvP Recompensas - Digimon Tools</title>
+  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <style>
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 70px;
+}
+
+h1, h2, h3 { color: #4ecdc4; }
+
+/* Nav */
+#nav-toggle {
+  position: fixed; top: 15px; left: 15px;
+  width: 45px; height: 45px;
+  border-radius: 10px;
+  background: rgba(30, 30, 50, 0.95);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  cursor: pointer; z-index: 200;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span { width: 22px; height: 2px; background: #4ecdc4; border-radius: 2px; }
+#nav-menu {
+  position: fixed; top: 0; left: -320px;
+  width: 300px; height: 100vh;
+  background: rgba(20, 20, 40, 0.98);
+  border-right: 1px solid rgba(78, 205, 196, 0.3);
+  z-index: 150; padding: 20px; padding-top: 60px;
+  transition: left 0.3s ease; overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute; top: 15px; right: 15px;
+  width: 35px; height: 35px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78, 205, 196, 0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4; font-size: 0.9rem;
+  margin-bottom: 15px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#nav-menu h3 img { width: 14px; height: 14px; margin-right: 6px; vertical-align: middle; object-fit: contain; }
+.nav-link {
+  display: block; padding: 12px 15px; margin-bottom: 5px;
+  background: rgba(255,255,255,0.05); border-radius: 8px;
+  color: #ccc; text-decoration: none; font-size: 0.85rem; transition: all 0.2s;
+}
+.nav-link img { width: 14px; height: 14px; margin-right: 6px; vertical-align: middle; object-fit: contain; }
+.nav-link:hover { background: rgba(78, 205, 196, 0.2); color: #fff; }
+.nav-link.active { background: rgba(78, 205, 196, 0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits {
+  font-size: 0.8rem; color: #999; line-height: 1.5;
+  padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;
+}
+.nav-credits ul { margin: 10px 0 0 0; padding-left: 20px; }
+.nav-credits li { margin-bottom: 8px; }
+.nav-credits a { color: #4ecdc4; text-decoration: none; }
+.nav-credits a:hover { text-decoration: underline; }
+#nav-overlay {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); z-index: 140; display: none;
+}
+#nav-overlay.active { display: block; }
+
+/* Layout */
+.container {
+  width: min(97vw, 1100px);
+  margin: 0 auto;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 2rem;
+}
+.page-header { text-align: center; margin-bottom: 0.5rem; }
+.page-header h1 { margin: 0 0 0.25rem 0; font-size: 2.5rem; }
+.page-header p { margin: 0; color: #888; font-size: 1.1rem; }
+
+/* Language selector */
+.lang-selector {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(30, 30, 50, 0.4);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  border-radius: 8px;
+}
+.lang-selector label { font-size: 1rem; color: #ccc; }
+.lang-selector select {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  border-radius: 6px;
+  background: rgba(40, 40, 60, 0.8);
+  color: white; font-size: 1rem; cursor: pointer;
+}
+.lang-selector select:focus { outline: none; border-color: #4ecdc4; }
+
+/* Sections */
+.sections-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.section-card {
+  width: 100%;
+  background: rgba(20, 20, 40, 0.5);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.section-card h2 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.4rem;
+  border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+  padding-bottom: 0.75rem;
+}
+
+/* Placeholder */
+.placeholder-msg {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #666;
+  font-size: 1.05rem;
+}
+.placeholder-msg .icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+/* Milestone list */
+.milestone-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.milestone-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  transition: background 0.15s;
+  position: relative;
+}
+.milestone-row:hover { background: rgba(78, 205, 196, 0.06); }
+.milestone-row:not(:last-child) {
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.milestone-elo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4ecdc4;
+  min-width: 60px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.milestone-sep {
+  color: #555;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.milestone-imgs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.milestone-imgs img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.milestone-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.milestone-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+.milestone-qty {
+  font-size: 0.9rem;
+  color: #ffd700;
+  font-weight: 600;
+}
+
+@media (min-width: 700px) {
+  .milestone-list { grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
+  .milestone-row { border-bottom: none; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; }
+}
+@media (max-width: 600px) {
+  .milestone-elo { min-width: 50px; font-size: 1rem; }
+  .milestone-imgs img { width: 64px; height: 64px; }
+  .milestone-name { font-size: 0.95rem; }
+}
+
+/* Placement list */
+.placement-list { display: flex; flex-direction: column; gap: 0.85rem; }
+.pl-row {
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+.pl-tier-badge {
+  display: inline-block;
+  font-size: 0.8rem; font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.03em;
+  border: 1px solid;
+}
+.pl-items {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.pl-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+}
+.pl-item img {
+  width: 96px; height: 96px;
+  object-fit: contain; image-rendering: pixelated;
+}
+.pl-item-noimg {
+  width: 96px; height: 96px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  border: 1px dashed rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+.pl-item-qty { color: #ffd700; font-weight: 700; font-size: 0.82rem; }
+.pl-includes {
+  font-size: 0.78rem; color: #888;
+  margin-top: 0.55rem; font-style: italic;
+}
+
+/* Monthly logro */
+.pl-item-monthly { cursor: pointer; flex-direction: column; align-items: flex-start; }
+.pl-item-monthly .pl-item-top { display: flex; align-items: center; gap: 0.4rem; }
+.pl-item-monthly:hover { background: rgba(78,205,196,0.15); }
+.pl-monthly-note { font-size: 0.7rem; color: #4ecdc4; margin-top: 0.15rem; }
+
+/* Olimpo modal */
+#olympoOverlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6); z-index: 300; display: none;
+}
+#olympoOverlay.active { display: block; }
+#olympoModal {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 480px); max-height: 80vh; overflow-y: auto;
+  background: rgba(18,18,36,0.99);
+  border: 1px solid rgba(78,205,196,0.4);
+  border-radius: 14px; padding: 1.4rem 1.4rem 1.2rem;
+  z-index: 301; display: none;
+}
+#olympoModal.active { display: block; }
+#olympoModal h3 { margin: 0 0 0.2rem 0; color: #4ecdc4; font-size: 1.15rem; }
+.olympo-subtitle { font-size: 0.82rem; color: #888; margin: 0 0 1rem 0; }
+.olympo-list {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
+}
+.olympo-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid transparent;
+  border-radius: 8px; padding: 0.4rem 0.6rem;
+}
+.olympo-item.current-month {
+  border-color: rgba(78,205,196,0.5);
+  background: rgba(78,205,196,0.1);
+}
+.olympo-item img, .olympo-item-noimg {
+  width: 30px; height: 30px; flex-shrink: 0;
+  object-fit: contain; image-rendering: pixelated;
+}
+.olympo-item-noimg {
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px; border: 1px dashed rgba(255,255,255,0.2);
+}
+.olympo-mes { font-size: 0.7rem; color: #888; }
+.olympo-nombre { font-size: 0.9rem; font-weight: 600; }
+#olympoClose {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; border-radius: 50%; width: 28px; height: 28px;
+  cursor: pointer; font-size: 0.95rem;
+  display: flex; align-items: center; justify-content: center;
+}
+#olympoClose:hover { background: rgba(78,205,196,0.3); border-color: #4ecdc4; }
+  </style>
+</head>
+<body>
+
+<button id="nav-toggle" onclick="toggleNav()">
+  <span></span><span></span><span></span>
+</button>
+<div id="nav-overlay" onclick="toggleNav()"></div>
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="./index.html" class="nav-link"><img src="./pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href="./calculadora.html" class="nav-link"><img src="./pageicons/calculator.png" alt="Evo Calculator"> Evo Calculator</a>
+  <a href="./digimonreqs.html?v=2" class="nav-link"><img src="./pageicons/digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href="./StatRanking.html" class="nav-link"><img src="./pageicons/ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href="./digidexprogress.html" class="nav-link"><img src="./pageicons/digidex.png" alt="Digidex"> Digidex Progress</a>
+  <a href="./BalanceCalculator.html" class="nav-link"><img src="./pageicons/calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href="./tierranking.html" class="nav-link"><img src="./icon/starmon.png" alt="Tier Ranking"> Tier Ranking</a>
+  <a href="./Enemigosdelared.html" class="nav-link"><img src="./icon/agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href="./dropsdelared.html" class="nav-link"><img src="./itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
+  <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
+  <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link active"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/link.png" alt="Links"><span>Links Externos</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://driverdatabase.neocities.org/Driver%20DB" target="_blank" class="nav-link external">Driver Install Guide</a>
+  <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
+  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <a href="https://netdriver.miraheze.org/wiki/Main_Page" target="_blank" class="nav-link external">NetDriver Wiki</a>
+  <div class="nav-divider"></div>
+  <h3><img src="./pageicons/audit.png" alt="Créditos"><span>Créditos</span></h3>
+  <div class="nav-credits">
+    Agradecimientos totales a las siguientes personas, que sin su ayuda no habría podido hacer varias cosas en las páginas:
+    <ul>
+      <li><strong>JorgeTitor</strong> - Por ser el de la idea original de llevar un registro de todos los requisitos</li>
+      <li><strong><a href="https://github.com/Angelomon" target="_blank">Ruben (Angelomon)</a></strong> - Tuvo la idea original del árbol evolutivo</li>
+      <li><strong>Panoli</strong> - Por darme todas las imágenes recortadas del juego</li>
+      <li>Y a todos los que han ayudado a mejorar la base de datos con sus tageos</li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+
+    <div class="page-header">
+      <h1 id="pageTitle">PvP Recompensas</h1>
+      <p id="pageSubtitle">Recompensas de la temporada de PvP</p>
+    </div>
+
+    <div class="lang-selector">
+      <label for="selectIdioma" id="labelIdioma">Idioma:</label>
+      <select id="selectIdioma" onchange="cambiarIdioma(this.value)">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <div class="sections-wrapper">
+      <!-- Sección por Puesto -->
+      <div class="section-card">
+        <h2 id="titlePuesto">Recompensas por Puesto</h2>
+        <div class="placement-list" id="placementList"></div>
+      </div>
+
+      <!-- Sección por ELO/Puntos -->
+      <div class="section-card">
+        <h2 id="titleElo">Recompensas por ELO / Puntos</h2>
+
+        <div class="milestone-list" id="milestoneList"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Modal Logros del Olimpo -->
+<div id="olympoOverlay" onclick="cerrarOlimpo()"></div>
+<div id="olympoModal" style="position:fixed;">
+  <button id="olympoClose" onclick="cerrarOlimpo()">✕</button>
+  <h3 id="olympoTitle">Logros mensuales</h3>
+  <div class="olympo-list" id="olympoList"></div>
+</div>
+
+<script>
+/** Abre/cierra el menú de navegación lateral. */
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+/** Cierra el menú de navegación lateral. */
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+
+// --- Image normalization (same logic as itempedia.html / dropsdelared.html) ---
+/** Elimina acentos y reemplaza ñ/Ñ por n/N para normalizar texto a ASCII. */
+function normalizarCaracteres(texto) {
+  return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ñ/g, 'n').replace(/Ñ/g, 'N').replace(/\s+/g, '');
+}
+/** Elimina acentos vocálicos pero conserva ñ. */
+function normalizarSinAcentos(texto) {
+  return texto.normalize('NFD').replace(/[̀-̂̄-ͯ]/g, '').normalize('NFC').replace(/\s+/g, '');
+}
+/** Genera un array de variaciones de nombre (mayúsculas, minúsculas, sin espacios, etc.) para buscar imágenes por filename. */
+function generarVariacionesNombre(nombre) {
+  const norm     = normalizarCaracteres(nombre);
+  const limpio   = norm.replace(/[^a-zA-Z0-9]/gi, '');
+  const conNyeni = normalizarSinAcentos(nombre);
+  const limpioNyeni = conNyeni.replace(/[^a-zA-ZñÑ0-9]/gi, '');
+  return [...new Set([
+    limpio.toLowerCase(),
+    limpio.toUpperCase(),
+    limpio,
+    limpio.charAt(0) + limpio.slice(1).toLowerCase(),
+    limpioNyeni,
+    limpioNyeni.charAt(0) + limpioNyeni.slice(1).toLowerCase(),
+    limpioNyeni.toLowerCase(),
+    nombre.replace(/\s+/g, ''),
+    nombre.toLowerCase().replace(/\s+/g, ''),
+    nombre
+  ])];
+}
+/** Intenta cargar una imagen probando múltiples variaciones del nombre; cae en placeholder si ninguna existe. */
+function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'itemimg') {
+  const variaciones = generarVariacionesNombre(nombre);
+  let idx = 0;
+  const intentar = () => {
+    if (idx >= variaciones.length) { elementoImg.src = `${carpeta}/placeholder.png`; return; }
+    const img = new Image();
+    img.onload  = () => { elementoImg.src = `${carpeta}/${variaciones[idx]}.png`; };
+    img.onerror = () => { idx++; intentar(); };
+    img.src = `${carpeta}/${variaciones[idx]}.png`;
+  };
+  intentar();
+}
+/** Carga imágenes en todos los `img[data-imgname]` dentro de un contenedor usando cargarImagenConVariaciones. */
+function resolverImagenes(container) {
+  container.querySelectorAll('img[data-imgname]').forEach(img =>
+    cargarImagenConVariaciones(img.dataset.imgname, img)
+  );
+}
+
+// imgName: nombre de búsqueda para cargarImagenConVariaciones; null = sin imagen
+const PLACEMENTS = [
+  {
+    tier: 'Top 10',
+    color: '#ffd700', bg: 'rgba(255,215,0,0.1)', border: 'rgba(255,215,0,0.35)',
+    items: [
+      { imgName: 'Clave Prototipo',  es: 'Clave Prototipo',    en: 'Clave Prototipo',          qty: 'x1' },
+    ],
+    includes: null
+  },
+  {
+    tier: 'Top 5%',
+    color: '#ff6b6b', bg: 'rgba(255,107,107,0.08)', border: 'rgba(255,107,107,0.3)',
+    items: [
+      { imgName: 'Inhibidor',        es: 'Inhibidor',          en: 'Inhibitor',                qty: 'x1' },
+      { imgName: 'Sobrecarga',       es: 'Sobrecarga',         en: 'Overload',                 qty: 'x1' },
+      { imgName: 'Melón Encadenado', es: 'Melón Encadenado',   en: 'Chain Melon',              qty: 'x1' },
+      { imgName: 'top5%',            es: 'Logro Exclusivo 5%', en: 'Exclusive Achievement 5%', qty: null },
+      { imgName: 'Logro Mensual',    es: 'Logro Mensual',      en: 'Monthly Achievement',      qty: null, isMonthly: true },
+    ],
+    includes: { es: '+ Incluye recompensas de Top 10% y Top 15%', en: '+ Includes Top 10% and Top 15% rewards' }
+  },
+  {
+    tier: 'Top 10%',
+    color: '#4ecdc4', bg: 'rgba(78,205,196,0.08)', border: 'rgba(78,205,196,0.25)',
+    items: [
+      { imgName: 'Inhibidor',        es: 'Inhibidor',        en: 'Inhibitor',   qty: 'x2' },
+      { imgName: 'carga',            es: 'Carga',            en: 'Carga',       qty: 'x2' },
+      { imgName: 'Melón Encadenado', es: 'Melón Encadenado', en: 'Chain Melon', qty: 'x1' },
+    ],
+    includes: { es: '+ Incluye recompensas de Top 15%', en: '+ Includes Top 15% rewards' }
+  },
+  {
+    tier: 'Top 15%',
+    color: '#45b7d1', bg: 'rgba(69,183,209,0.07)', border: 'rgba(69,183,209,0.2)',
+    items: [
+      { imgName: 'Inhibidor',  es: 'Inhibidor',          en: 'Inhibitor',         qty: 'x1' },
+      { imgName: 'carga',      es: 'Carga',              en: 'Carga',             qty: 'x1' },
+      { imgName: 'saco',       es: 'Skin Saco de Boxeo', en: 'Punching Bag Skin', qty: null },
+    ],
+    includes: null
+  },
+];
+
+// imgNames: array de nombres de búsqueda para cada imagen de la fila
+const MILESTONES = [
+  { elo: 250,  imgNames: ['Mega Verdura'],   es: 'Mega Verdura',                   en: 'Mega Vegetable',        qty: 'x5'  },
+  { elo: 500,  imgNames: ['Bandita'],        es: 'Bandita',                        en: 'Bandage',               qty: 'x2'  },
+  { elo: 750,  imgNames: ['Medicina'],       es: 'Medicina',                       en: 'Medicine',              qty: 'x1'  },
+  { elo: 1000, imgNames: ['Fruta del Diablo R', 'Fruta del Diablo V', 'Fruta del Diablo A'],
+                                             es: 'Fruta del Diablo (x1 de cada una)', en: 'Devil Fruit (One of each)', qty: null },
+  { elo: 1500, imgNames: ['boosterc(p)'],   es: 'Booster C [P]',                  en: 'Booster C [P]',         qty: 'x3'  },
+  { elo: 2000, imgNames: ['Inhibidor'],      es: 'Inhibidor',                      en: 'Inhibitor',             qty: 'x2'  },
+  { elo: 2500, imgNames: ['Tomate Milagroso'], es: 'Tomate Milagroso',             en: 'Miraculous Tomato',     qty: 'x5'  },
+  { elo: 3000, imgNames: ['Digitrucha Negra'], es: 'Digitrucha Negra',             en: 'Black Digitrout',       qty: 'x2'  },
+  { elo: 3500, imgNames: ['Caja Navideña'],  es: 'Caja Navideña',                  en: 'Christmas Box',         qty: 'x1'  },
+  { elo: 4000, imgNames: ['Sobrecarga'],      es: 'Sobrecarga',                     en: 'Overload',              qty: 'x1'  },
+  { elo: 4500, imgNames: ['Melón Encadenado'], es: 'Melón Encadenado',             en: 'Chain Melon',           qty: 'x1'  },
+  { elo: 5000, imgNames: ['Hongo Magnífico'], es: 'Hongo Magnífico',               en: 'Magnificent Mushroom',  qty: 'x1'  },
+];
+
+const traducciones = {
+  es: { pageSubtitle: 'Recompensas de la temporada de PvP', labelIdioma: 'Idioma:',   titlePuesto: 'Recompensas por Puesto', titleElo: 'Recompensas por ELO / Puntos', mensualNota: 'cambia cada mes — ver lista', tituloOlimpo: 'Logros mensuales' },
+  en: { pageSubtitle: 'PvP Season Rewards',                 labelIdioma: 'Language:', titlePuesto: 'Placement Rewards',      titleElo: 'ELO / Points Rewards',         mensualNota: 'changes every month — see list', tituloOlimpo: 'Monthly Achievements' },
+};
+
+let idiomaActual = 'es';
+
+const LOGROS_OLIMPO = [
+  { mes: 'Enero',      nombre: 'Vulcanus'  },
+  { mes: 'Febrero',    nombre: 'Bacchus'   },
+  { mes: 'Marzo',      nombre: 'Neptune'   },
+  { mes: 'Abril',      nombre: 'Mars'      },
+  { mes: 'Mayo',       nombre: 'Mercury'   },
+  { mes: 'Junio',      nombre: 'Juno'      },
+  { mes: 'Julio',      nombre: 'Diana'     },
+  { mes: 'Agosto',     nombre: 'Apollo'    },
+  { mes: 'Setiembre',  nombre: 'Minerva'   },
+  { mes: 'Octubre',    nombre: 'Venus'     },
+  { mes: 'Noviembre',  nombre: 'Ceres'     },
+  { mes: 'Diciembre',  nombre: 'Jupiter'   },
+];
+
+/** Abre el modal de logros mensuales del Olimpo, resaltando el mes actual. */
+function abrirOlimpo() {
+  const mesActual = new Date().getMonth();
+  const olympoList = document.getElementById('olympoList');
+  olympoList.innerHTML = LOGROS_OLIMPO.map((l, i) => `
+    <div class="olympo-item${i === mesActual ? ' current-month' : ''}">
+      <img data-imgname="${l.nombre}" alt="${l.nombre}">
+      <div>
+        <div class="olympo-mes">${l.mes}</div>
+        <div class="olympo-nombre">${l.nombre}</div>
+      </div>
+    </div>`).join('');
+  resolverImagenes(olympoList);
+  document.getElementById('olympoOverlay').classList.add('active');
+  document.getElementById('olympoModal').classList.add('active');
+}
+
+/** Cierra el modal de logros del Olimpo. */
+function cerrarOlimpo() {
+  document.getElementById('olympoOverlay').classList.remove('active');
+  document.getElementById('olympoModal').classList.remove('active');
+}
+
+/** Renderiza la lista de recompensas por puesto usando los datos de PLACEMENTS. */
+function renderPlacements() {
+  const list = document.getElementById('placementList');
+  list.innerHTML = PLACEMENTS.map(p => {
+    const itemsHtml = p.items.map(item => {
+      const imgHtml = item.imgName !== null
+        ? `<img data-imgname="${item.imgName}" alt="${item[idiomaActual]}">`
+        : `<div class="pl-item-noimg"></div>`;
+      const qtyHtml = item.qty ? `<span class="pl-item-qty">${item.qty}</span>` : '';
+      if (item.isMonthly) {
+        const logroMes = LOGROS_OLIMPO[new Date().getMonth()];
+        return `<div class="pl-item pl-item-monthly" onclick="abrirOlimpo()" title="Ver logros del Olimpo">
+          <div class="pl-item-top"><img data-imgname="${logroMes.nombre}" alt="${logroMes.nombre}"><span>${logroMes.nombre}</span>${qtyHtml}</div>
+          <div class="pl-monthly-note">${traducciones[idiomaActual].mensualNota}</div>
+        </div>`;
+      }
+      return `<div class="pl-item">${imgHtml}<span>${item[idiomaActual]}</span>${qtyHtml}</div>`;
+    }).join('');
+    const includesHtml = p.includes ? `<div class="pl-includes">${p.includes[idiomaActual]}</div>` : '';
+    return `
+      <div class="pl-row" style="background:${p.bg};border:1px solid ${p.border};">
+        <div class="pl-tier-badge" style="color:${p.color};background:${p.bg};border-color:${p.border};">${p.tier}</div>
+        <div class="pl-items">${itemsHtml}</div>
+        ${includesHtml}
+      </div>`;
+  }).join('');
+  resolverImagenes(list);
+}
+
+/** Renderiza la lista de recompensas por ELO/puntos usando los datos de MILESTONES. */
+function renderMilestones() {
+  const list = document.getElementById('milestoneList');
+  list.innerHTML = MILESTONES.map(m => {
+    const imgsHtml = m.imgNames.map(name =>
+      `<img data-imgname="${name}" alt="${m[idiomaActual]}" title="${m[idiomaActual]}">`
+    ).join('');
+    const qtyHtml = m.qty ? `<span class="milestone-qty">${m.qty}</span>` : '';
+    return `
+      <div class="milestone-row">
+        <div class="milestone-elo">${m.elo}</div>
+        <div class="milestone-sep">—</div>
+        <div class="milestone-imgs">${imgsHtml}</div>
+        <div class="milestone-info">
+          <span class="milestone-name">${m[idiomaActual]}</span>
+          ${qtyHtml}
+        </div>
+      </div>`;
+  }).join('');
+  resolverImagenes(list);
+}
+
+/** Actualiza todos los textos estáticos de la página según el idioma actual. */
+function aplicarTraducciones() {
+  const t = traducciones[idiomaActual];
+  document.getElementById('pageSubtitle').textContent = t.pageSubtitle;
+  document.getElementById('labelIdioma').textContent  = t.labelIdioma;
+  document.getElementById('titlePuesto').innerHTML    = t.titlePuesto;
+  document.getElementById('titleElo').innerHTML       = t.titleElo;
+  document.getElementById('olympoTitle').textContent  = t.tituloOlimpo;
+}
+
+/** Cambia el idioma activo y re-renderiza toda la página. */
+function cambiarIdioma(lang) {
+  idiomaActual = lang;
+  aplicarTraducciones();
+  renderPlacements();
+  renderMilestones();
+}
+
+renderPlacements();
+renderMilestones();
+</script>
+</body>
+</html>

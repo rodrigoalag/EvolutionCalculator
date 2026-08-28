@@ -987,6 +987,7 @@
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3><img src="./pageicons/link.png" alt="Links"> Links Externos</h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -1290,6 +1291,7 @@ const tamaIcons = {
 };
 
 // Genera variaciones del nombre para buscar imágenes
+/** Genera variaciones normalizadas del nombre de un Digimon para buscar su imagen. */
 function generarVariacionesNombre(nombre) {
   const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
   const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
@@ -1307,16 +1309,19 @@ function generarVariacionesNombre(nombre) {
 }
 
 // Para Cytoscape: usa la primera variación (más común)
+/** Devuelve la ruta de imagen más probable para un Digimon (usada por Cytoscape). */
 function getImagePath(nombre) {
   const variaciones = generarVariacionesNombre(nombre);
   return `./icon/${variaciones[0]}.png`;
 }
 
 // Para elementos IMG del panel: prueba múltiples variaciones
+/** Prueba múltiples variaciones de nombre hasta encontrar una imagen válida para el elemento IMG dado. */
 function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'icon') {
   const variaciones = generarVariacionesNombre(nombre);
   let i = 0;
 
+  /** Intenta cargar la siguiente variación de imagen, cayendo al placeholder si se agotan. */
   function intentar() {
     if (i >= variaciones.length) {
       elementoImg.src = `${carpeta}/placeholder.png`;
@@ -1332,6 +1337,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'icon') {
 }
 
 // Modal de zoom para imagen
+/** Abre el modal de zoom con la imagen del Digimon seleccionado en el panel. */
 function openImgModal() {
   const mainImg = document.getElementById('info-img');
   const modal = document.getElementById('img-modal');
@@ -1340,6 +1346,7 @@ function openImgModal() {
   modal.classList.add('active');
 }
 
+/** Cierra el modal de zoom de imagen. */
 function closeImgModal() {
   document.getElementById('img-modal').classList.remove('active');
 }
@@ -1354,12 +1361,14 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Toggle navegación
+/** Alterna la visibilidad del menú de navegación lateral. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Cierra el menú de navegación lateral. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');
@@ -1403,6 +1412,7 @@ const uiTranslations = {
 let currentLanguage = localStorage.getItem('digilang') || 'es';
 let lastShowInfoArgs = null;
 
+/** Cambia el idioma de la UI y recarga los textos y el panel de info si hay uno activo. */
 function changeLanguage() {
   currentLanguage = document.getElementById('languageSelector').value;
   localStorage.setItem('digilang', currentLanguage);
@@ -1410,6 +1420,7 @@ function changeLanguage() {
   if (lastShowInfoArgs) showInfo(...lastShowInfoArgs);
 }
 
+/** Actualiza todos los textos de la interfaz al idioma actualmente seleccionado. */
 function updateUITexts() {
   const t = uiTranslations[currentLanguage];
 
@@ -1449,6 +1460,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Toggle panel lateral en móvil
+/** Muestra u oculta el panel lateral de información en modo móvil. */
 function togglePanel() {
   const panel = document.getElementById('side-panel');
   const closeBtn = document.getElementById('close-panel');
@@ -1467,6 +1479,7 @@ function togglePanel() {
   }
 }
 
+/** Cierra el panel lateral de información en modo móvil y restaura los overlays. */
 function closePanelMobile() {
   const panel = document.getElementById('side-panel');
   const closeBtn = document.getElementById('close-panel');
@@ -1482,6 +1495,7 @@ function closePanelMobile() {
 }
 
 // Marcar que hay un Digimon seleccionado (para el botón flotante)
+/** Actualiza el estado visual del botón flotante según si hay un Digimon seleccionado. */
 function updatePanelToggleState(hasSelection) {
   const btn = document.getElementById('panel-toggle');
   if (hasSelection) {
@@ -1494,6 +1508,7 @@ function updatePanelToggleState(hasSelection) {
 }
 
 // Buscador de Digimon
+/** Inicializa el buscador de Digimon con autocompletado y navegación por teclado. */
 function initSearch() {
   const searchInput = document.getElementById('digi-search');
   const suggestionsContainer = document.getElementById('search-suggestions');
@@ -1572,6 +1587,7 @@ function initSearch() {
   });
 }
 
+/** Selecciona un Digimon por nombre, cambiando al Tama correspondiente si es necesario. */
 function selectDigimonByName(name, tama) {
   // Cambiar al Tama correcto si es necesario
   if (tama && tama !== currentTama) {
@@ -1592,6 +1608,7 @@ function selectDigimonByName(name, tama) {
   }
 }
 
+/** Centra la vista en el nodo con el nombre dado y simula un tap para seleccionarlo. */
 function selectNodeByName(name) {
   if (!cy) return;
 
@@ -1613,12 +1630,14 @@ let currentTama = null;
 let selectedNode = null;
 let originalPositions = new Map(); // Guardar posiciones originales para restaurar
 
+/** Devuelve la lista ordenada de Tamas únicos presentes en el diccionario de Digimons. */
 function getTamas() {
   const tamas = new Set();
   Object.values(digimonReqDict).forEach(d => { if (d.Tama) tamas.add(d.Tama); });
   return Array.from(tamas).sort();
 }
 
+/** Crea y renderiza los iconos de selección de Tama en la barra lateral superior. */
 function createTamaSelectors() {
   const container = document.getElementById('tama-selector');
   container.innerHTML = '';
@@ -1639,6 +1658,7 @@ function createTamaSelectors() {
   });
 }
 
+/** Selecciona un Tama, oculta la info del panel y reconstruye el grafo de Cytoscape. */
 function selectTama(tama) {
   currentTama = tama;
   selectedNode = null;
@@ -1649,6 +1669,7 @@ function selectTama(tama) {
   initCytoscape(tama);
 }
 
+/** Devuelve la lista de evoluciones válidas de un Digimon (excluyendo Burpmon y no registrados). */
 function getEvolutions(nombre) {
   const stats = digimonstattier[nombre];
   if (!stats || !stats.Evoluciona) return [];
@@ -1656,12 +1677,14 @@ function getEvolutions(nombre) {
   return evols.filter(e => e !== "Burpmon" && digimonReqDict[e]);
 }
 
+/** Devuelve la lista de pre-evoluciones registradas de un Digimon. */
 function getPreEvolutions(nombre) {
   const stats = digimonstattier[nombre];
   if (!stats || !stats.Viene) return [];
   return stats.Viene.filter(e => digimonReqDict[e]);
 }
 
+/** Construye los nodos y aristas del grafo de Cytoscape para el Tama dado. */
 function buildGraphData(tamaFilter) {
   const nodes = [], edges = [], addedNodes = new Set();
   const niveles = {}; // Agrupar por nivel
@@ -1727,6 +1750,7 @@ function buildGraphData(tamaFilter) {
   return { nodes, edges };
 }
 
+/** Inicializa (o reinicializa) la instancia de Cytoscape con el grafo del Tama indicado. */
 function initCytoscape(tamaFilter) {
   const placeholder = document.getElementById('cy-placeholder');
   if (!tamaFilter) {
@@ -1838,6 +1862,7 @@ function initCytoscape(tamaFilter) {
   cy.on('pan zoom', updateNodeOverlays);
 }
 
+/** Selecciona un nodo del grafo, resalta sus relaciones y muestra su info en el panel. */
 function selectDigimon(node) {
   const nodeId = node.id();
 
@@ -2088,6 +2113,7 @@ function selectDigimon(node) {
   }, 350);
 }
 
+/** Limpia la selección actual, restaura posiciones originales y oculta el panel de info. */
 function resetSelection() {
   if (!cy) return;
   selectedNode = null;
@@ -2139,6 +2165,7 @@ const comidaImagen = {
   "Cresta de la Lujuria": "crestadelalujuria.png"
 };
 
+/** Devuelve el HTML con el icono del Program indicado, o el texto si no tiene imagen. */
 function renderProgram(valor) {
   if (!valor || valor === "-") return String(valor);
   const str = String(valor).trim();
@@ -2147,6 +2174,7 @@ function renderProgram(valor) {
   return `<span class="item-icon-wrap"><img class="item-icon" src="itemimg/${filename}" alt="${str}" title="${str}"></span>`;
 }
 
+/** Devuelve el HTML con el icono y cantidad de la comida/item indicado. */
 function renderComida(valor) {
   if (!valor || valor === "-") return String(valor);
   const str = String(valor).trim();
@@ -2161,6 +2189,7 @@ function renderComida(valor) {
 
 // Driver icon renderer (shared)
 const _driverPrefijos2 = ['ST', 'BO', 'EX', 'W0', 'V0', 'VL', 'PR', 'VS', 'SP'];
+/** Genera el HTML del contenedor de un driver (fondo + icono) dado su código. */
 function driverHTMLInner(codigo) {
   const p2 = codigo.substring(0, 2);
   const carpeta = _driverPrefijos2.includes(p2) ? p2 : codigo.substring(0, 1);
@@ -2174,6 +2203,7 @@ function driverHTMLInner(codigo) {
 }
 
 // Versión compacta de renderDriverXross para overlays (sin etiquetas de texto)
+/** Genera el HTML compacto de drivers Xross para overlays de nodo (sin etiquetas). */
 function renderNodeXross(xrossStr) {
   const simple = xrossStr.match(/^(\d+)\s+([A-Z0-9]+)\s+Driver$/);
   if (simple) return `<div class="xross-wrapper"><div class="xross-entry">${driverHTMLInner(simple[2])}</div></div>`;
@@ -2188,6 +2218,7 @@ function renderNodeXross(xrossStr) {
 }
 
 // Devuelve el HTML compacto del requisito especial de un nodo (Xross / Driver Equipado / Program / Comida)
+/** Devuelve el HTML del requisito especial (Xross, Driver, Program o Comida) para el overlay del nodo. */
 function renderNodeItem(name) {
   const reqData = digimonReqDict[name];
   if (!reqData) return '';
@@ -2246,6 +2277,7 @@ function renderNodeItem(name) {
 }
 
 // Muestra el overlay solo para el nodo seleccionado (se llama tras click y en pan/zoom)
+/** Recalcula y renderiza los overlays de requisitos sobre los nodos seleccionados y sus evoluciones. */
 function updateNodeOverlays() {
   const container = document.getElementById('node-overlays');
   if (!container) return;
@@ -2275,6 +2307,7 @@ function updateNodeOverlays() {
 }
 // ===== FIN ITEM RENDER =====
 
+/** Abre el panel lateral de información y oculta los overlays de nodo en móvil. */
 function openInfoPanel() {
   document.getElementById('side-panel').classList.add('active');
   document.getElementById('close-panel').style.display = 'block';
@@ -2287,6 +2320,7 @@ function openInfoPanel() {
   }
 }
 
+/** Muestra en el panel lateral la información, stats, evoluciones y requisitos del Digimon seleccionado. */
 function showInfo(data, evolutions, preEvolutions) {
   lastShowInfoArgs = [data, evolutions, preEvolutions];
   document.getElementById('panel-placeholder').style.display = 'none';
@@ -2318,6 +2352,7 @@ function showInfo(data, evolutions, preEvolutions) {
   const tamaRow    = document.getElementById('scumon-tama-row');
   const tamaSelect = document.getElementById('scumon-tama-select');
 
+  /** Aplica al panel los stats calculados para la combinación de Child/Tama seleccionada de la familia Scumon. */
   function applyScumonStats() {
     const child   = childSelect.value;
     const tamaOpt = tamaSelect.value ? JSON.parse(tamaSelect.value) : null;
@@ -2331,6 +2366,7 @@ function showInfo(data, evolutions, preEvolutions) {
     document.getElementById('stat-clasificacion').textContent = computed.Clasificacion?.nombre ?? '-';
   }
 
+  /** Actualiza el selector de Tama según el Child elegido y recalcula los stats de Scumon. */
   function updateTamaSelector(childName) {
     const lineages = getScumonLineageOptions(childName);
     if (lineages.length > 1) {
@@ -2411,15 +2447,17 @@ function showInfo(data, evolutions, preEvolutions) {
   // Requisitos de digimonReqDict
   const reqData = digimonReqDict[data.label] || {};
   const reqGrid = document.getElementById('req-grid');
-  const specialConfig = digimonReqDict[data.label]?.categorias || specialDigimonConfig[data.label];
+  let specialConfig = digimonReqDict[data.label]?.categorias || specialDigimonConfig[data.label];
 
   // Campos que usan porcentaje
   const percentFields = ['% Entrenamiento', 'WinRate', 'Bonus WinRate'];
 
   // Renderiza Xross con imágenes de driver
+  /** Convierte una cadena de Xross en HTML con iconos de driver para el panel de requisitos. */
   function renderDriverXross(xrossStr) {
     const prefijos2chars = ['ST', 'BO', 'EX', 'W0', 'V0', 'VL', 'PR', 'VS', 'SP'];
 
+    /** Genera el HTML de un driver con su fondo, ícono y etiqueta de cantidad. */
     function driverHTML(codigo, cantidad) {
       const p2 = codigo.substring(0, 2);
       const carpeta = prefijos2chars.includes(p2) ? p2 : codigo.substring(0, 1);
@@ -2432,6 +2470,7 @@ function showInfo(data, evolutions, preEvolutions) {
       </div><span class="xross-label">${nombre} Driver x${cantidad}</span>`;
     }
 
+    /** Devuelve el HTML del ícono de un Digimon para usar en la descripción de Xross. */
     function digiIconHTML(nombre) {
       return `<img class="xross-digi-icon" src="icon/${nombre.toLowerCase()}.png" alt="${nombre}" title="${nombre}">`;
     }
@@ -2477,6 +2516,7 @@ function showInfo(data, evolutions, preEvolutions) {
   }
 
   // Renderiza campo Xross en el panel: igual que digidex.html (lista por digi con ícono)
+  /** Renderiza el campo Xross del panel de requisitos, soportando objetos, arrays y strings. */
   function renderXrossField(value, digimonName, preEvoName) {
     const xrossObj = digimonReqDict[digimonName]?.Xross;
     const hasXrossObj = xrossObj && typeof xrossObj === "object";
@@ -2514,6 +2554,7 @@ function showInfo(data, evolutions, preEvolutions) {
   }
 
   // Función para formatear valor
+  /** Formatea el valor de un campo de requisito (rangos, porcentajes, Error Maximo, etc.). */
   function formatValue(key, value) {
     if (value === undefined || value === null || value === '') return null;
 
@@ -2601,6 +2642,7 @@ function showInfo(data, evolutions, preEvolutions) {
   };
 
   // Función para obtener puntaje según nivel, categoría y campo (copiado de digimonreqs.html)
+  /** Devuelve los puntos de cumplimiento/incumplimiento de un campo según su categoría y nivel. */
   function getPuntaje(category, field, nivel) {
     // Baby I (nivel 1) y Baby II (nivel 2) no tienen puntajes
     if (nivel === 1 || nivel === 2) return null;
@@ -2636,6 +2678,7 @@ function showInfo(data, evolutions, preEvolutions) {
   }
 
   // Función para formatear puntaje con color
+  /** Devuelve el HTML con los puntajes de cumplir/no cumplir coloreados para un campo. */
   function formatearPuntajeConColor(puntaje) {
     // Si el puntaje es null (Baby I/II), no mostrar nada
     if (puntaje === null) return '';
@@ -2683,6 +2726,7 @@ function showInfo(data, evolutions, preEvolutions) {
       'Evolucion por muerte inducida': 'Death-Induced Evolution'
     }
   };
+  /** Traduce una categoría de requisitos al idioma actualmente seleccionado. */
   const translateCategory = (cat) => categoryTranslationsMap[currentLanguage]?.[cat] ?? cat;
 
   // Etiquetas legibles para campos
@@ -2709,7 +2753,7 @@ function showInfo(data, evolutions, preEvolutions) {
     'Driver Equipado': 'Driver Equipado',
     'Digimon Bonus': 'Digimon Bonus',
     'Program': 'Program',
-    '2Ciclos': '2 Ciclos',
+    '2Ciclos': 'Anteriores 2 Gens. con Perfect / Haber Conseguido a Agumon 06',
     'Nickname': 'Nickname',
     'Comida': 'Comida/Item',
     'Xross': 'Xross',
@@ -2774,6 +2818,7 @@ function showInfo(data, evolutions, preEvolutions) {
 
   // Verificar si tiene variantes por pre-evolución (como Mugendramon)
   // o RequisitosCondicionados en digimonReqDict
+  /** Aplana un path de RequisitosCondicionados en modo PuntajeIndividual a un objeto simple. */
   function flattenRCPath(path) {
     if (!path || typeof path !== 'object') return path;
     if (path.modo === 'PuntajeIndividual') return { ...path.Obligatorios, ...path.Puntos };
@@ -2957,6 +3002,28 @@ function showInfo(data, evolutions, preEvolutions) {
       }
     }
   }
+  // Para High Tier (Nivel 4/5): inyectar Error Maximo en _categorias de cada variante si falta
+  if (variantesPorPreEvoConfig?.preEvos && (nivel === 4 || nivel === 5) && reqData.Clasificacion?.nombre === 'High Tier') {
+    const _excHTVar = new Set(["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"]);
+    if (!_excHTVar.has(data.label)) {
+      const _errV = reqData['Error Maximo'];
+      Object.values(variantesPorPreEvoConfig.preEvos).forEach(vals => {
+        const cats = vals._categorias;
+        if (cats) {
+          const hasErr = Object.values(cats).some(arr => Array.isArray(arr) && arr.includes('Error Maximo'));
+          if (!hasErr) {
+            if (!cats['Requisitos Obligatorios']) cats['Requisitos Obligatorios'] = [];
+            cats['Requisitos Obligatorios'].push('Error Maximo');
+          }
+        }
+        if (vals['Error Maximo'] === undefined) {
+          const vs = _errV !== undefined ? String(_errV) : '0';
+          vals['Error Maximo'] = vs.includes('-') || isNaN(vs) ? vs : '0-' + vs;
+        }
+      });
+    }
+  }
+
   if (variantesPorPreEvoConfig) {
     const { categorias, preEvos } = variantesPorPreEvoConfig;
 
@@ -2967,6 +3034,7 @@ function showInfo(data, evolutions, preEvolutions) {
       levelGroupingConfig.digis.has(data.label);
 
     // Obtener el nivel de un preEvo (con fallback para variantes como "Chackmon (Sin Install)")
+    /** Obtiene el nivel de una pre-evolución, con fallback al nombre base si tiene sufijo entre paréntesis. */
     function getNivelForPreEvo(preEvoName) {
       if (digimonReqDict[preEvoName]) return digimonReqDict[preEvoName].Nivel;
       const base = preEvoName.replace(/\s*\([^)]*\)\s*$/, '').trim();
@@ -2997,6 +3065,7 @@ function showInfo(data, evolutions, preEvolutions) {
     }
 
     // Helper para renderizar campos de una tarjeta preevo
+    /** Genera el HTML de una tarjeta de requisitos para un grupo de pre-evoluciones. */
     function renderPreEvoCard(preEvoNames, valores, campos, representativePreEvo, perCategorias) {
       const isGrouped = preEvoNames.length > 1;
       let headerContent;
@@ -3017,6 +3086,7 @@ function showInfo(data, evolutions, preEvolutions) {
         <div class="preevo-card-header">${headerContent}</div>
         <div class="preevo-card-content">`;
 
+      /** Genera el HTML de una fila de campo dentro de una tarjeta de pre-evolución. */
       function renderFieldRow(campo) {
         const label = fieldLabels[campo] || campo;
         const rawValor = valores[campo];
@@ -3069,6 +3139,17 @@ function showInfo(data, evolutions, preEvolutions) {
       cargarImagenConVariaciones(img.dataset.digimon, img);
     });
     return;
+  }
+
+  // Para High Tier (Nivel 4/5): inyectar Error Maximo en Requisitos Obligatorios si falta
+  const _highTierExcArbol = new Set(["Grademon VICE", "GigaWaruMonzaemon", "WaruMonzaemon", "Metal Fantomon"]);
+  if (specialConfig && (nivel === 4 || nivel === 5) && reqData.Clasificacion?.nombre === 'High Tier' && !_highTierExcArbol.has(data.label)) {
+    const yaHasError = Object.values(specialConfig).some(f => Array.isArray(f) && f.includes('Error Maximo'));
+    if (!yaHasError) {
+      specialConfig = JSON.parse(JSON.stringify(specialConfig));
+      if (!specialConfig['Requisitos Obligatorios']) specialConfig['Requisitos Obligatorios'] = [];
+      specialConfig['Requisitos Obligatorios'].push('Error Maximo');
+    }
   }
 
   if (specialConfig) {
@@ -3235,6 +3316,7 @@ function showInfo(data, evolutions, preEvolutions) {
   reqGrid.innerHTML = reqHTML;
 }
 
+/** Navega al nodo del grafo correspondiente al Digimon clickeado en la lista de evoluciones. */
 function clickEvoItem(name) {
   const node = cy.getElementById(name);
   if (node && node.length > 0) {
@@ -3242,6 +3324,7 @@ function clickEvoItem(name) {
   }
 }
 
+/** Oculta el panel de información y restaura el estado vacío del panel lateral. */
 function hideInfo() {
   document.getElementById('panel-placeholder').style.display = 'flex';
   document.getElementById('digi-info').classList.remove('active');

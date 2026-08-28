@@ -676,6 +676,7 @@ main {
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link active"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -811,21 +812,25 @@ main {
     }
   };
 
+  /** Returns the translated string for the given key in the current language. */
   function t(key) {
     return traducciones[currentLang][key] ?? traducciones['es'][key] ?? key;
   }
 
+  /** Returns the translated classification label for the given item category key. */
   function tClasif(cl) {
     return (traducciones[currentLang].clasificaciones || {})[cl] || cl;
   }
 
   // Argentina is UTC-3 year-round (no DST)
+  /** Converts an Argentina hour (UTC-3) to the user's local time as a formatted string. */
   function argTimeToLocal(argHour) {
     const d = new Date();
     d.setUTCHours((argHour + 3) % 24, 0, 0, 0);
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
+  /** Builds and returns a DOM element containing all effect rows for a given item, including bond values. */
   function buildEffectRows(efectos, isBattle, vinculoMap) {
     const section = document.createElement('div');
     section.className = isBattle ? 'battle-effects' : 'training-effects';
@@ -886,6 +891,7 @@ main {
     return section;
   }
 
+  /** Strips all diacritics (including ñ) and whitespace from a string for filename normalization. */
   function normalizarCaracteres(texto) {
     return texto
       .normalize('NFD')
@@ -895,6 +901,7 @@ main {
       .replace(/\s+/g, '');
   }
 
+  /** Strips vowel accents but preserves ñ and removes whitespace from a string. */
   function normalizarSinAcentos(texto) {
     // Quita acentos vocálicos pero conserva ñ
     return texto
@@ -904,6 +911,7 @@ main {
       .replace(/\s+/g, '');
   }
 
+  /** Generates an array of filename casing/accent variations for an item name to use when probing image paths. */
   function generarVariacionesNombre(nombre) {
     const norm = normalizarCaracteres(nombre);
     const limpio = norm.replace(/[^a-zA-Z0-9]/gi, '');
@@ -923,6 +931,7 @@ main {
     ])];
   }
 
+  /** Tries successive filename variations until a valid image is found and sets the img element's src accordingly. */
   function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'itemimg') {
     const variaciones = generarVariacionesNombre(nombre);
     let idx = 0;
@@ -939,6 +948,7 @@ main {
     intentar();
   }
 
+  /** Builds and returns a complete item card DOM element with image, badge, and effect rows. */
   function buildCard(name, item, efectos, isBattle) {
     const card = document.createElement('div');
     card.className = 'item-card';
@@ -977,14 +987,17 @@ main {
     return card;
   }
 
+  /** Returns all battle-effect entries as an array of { name, efectos } objects. */
   function getAllBattleEntries() {
     return Object.entries(EfectoCombate).map(([name, efectos]) => ({ name, efectos }));
   }
 
+  /** Returns all training-effect entries as an array of { name, efectos } objects. */
   function getAllTrainingEntries() {
     return Object.entries(EfectoEntrenamiento).map(([name, efectos]) => ({ name, efectos }));
   }
 
+  /** Returns the unique set of item classification categories present in the current battle/training data. */
   function getCategoriasPresentes() {
     const cats = new Set();
     for (const { name } of [...getAllBattleEntries(), ...getAllTrainingEntries()]) {
@@ -994,6 +1007,7 @@ main {
     return [...cats];
   }
 
+  /** Rebuilds the category filter button row, highlighting the currently active filter. */
   function renderFilters() {
     const row = document.getElementById('filterRow');
     row.innerHTML = '';
@@ -1015,6 +1029,7 @@ main {
     });
   }
 
+  /** Renders filtered item cards into the specified grid element and returns the visible item count. */
   function renderSection(entries, gridId, isBattle) {
     const grid = document.getElementById(gridId);
     grid.innerHTML = '';
@@ -1044,6 +1059,7 @@ main {
     return count;
   }
 
+  /** Renders both battle and training grids and updates the visible item count display. */
   function renderGrid() {
     const battleCount = renderSection(getAllBattleEntries(), 'battleGrid', true);
     const trainingCount = renderSection(getAllTrainingEntries(), 'trainingGrid', false);
@@ -1051,6 +1067,7 @@ main {
     document.getElementById('resultCount').textContent = t('resultCount')(total);
   }
 
+  /** Renders all item pool cards (weighted and stage-based) into the pool grid section. */
   function renderPools() {
     const grid = document.getElementById('poolGrid');
     if (!grid || typeof itemPools === 'undefined') return;
@@ -1207,6 +1224,7 @@ main {
     });
   }
 
+  /** Updates all page text, filters, and grids to reflect the currently selected language. */
   function applyLang() {
     document.getElementById('pageTitle').textContent = t('pageTitle');
     document.getElementById('pageSubtitle').textContent = t('pageSubtitle');
@@ -1219,10 +1237,12 @@ main {
     renderPools();
   }
 
+  /** Toggles the side navigation menu and overlay open/closed. */
   function toggleNav() {
     document.getElementById('nav-menu').classList.toggle('active');
     document.getElementById('nav-overlay').classList.toggle('active');
   }
+  /** Closes the side navigation menu and hides the overlay. */
   function closeNav() {
     document.getElementById('nav-menu').classList.remove('active');
     document.getElementById('nav-overlay').classList.remove('active');

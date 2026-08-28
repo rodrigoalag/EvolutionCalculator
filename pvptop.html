@@ -340,6 +340,7 @@ h1, h2, h3 { color: #4ecdc4; }
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link active"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3><img src="./pageicons/link.png" alt="Links"><span>Links Externos</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -421,11 +422,13 @@ h1, h2, h3 { color: #4ecdc4; }
 </main>
 
 <script>
+/** Abre/cierra el menú de navegación lateral. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
+/** Cierra el menú de navegación lateral. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');
@@ -480,6 +483,7 @@ const traducciones = {
 let idiomaActual = 'es';
 let filtroResumen = 'todas';
 
+/** Filtra y retorna las temporadas de pvpTopDB según el filtro de resumen activo (todas/cerrada/abierta/post). */
 function filtrarTemporadas() {
   const entries = Object.entries(pvpTopDB).sort(([a], [b]) => a.localeCompare(b));
   if (filtroResumen === 'cerrada') return entries.filter(([k]) => k.includes('CLOSED'));
@@ -488,6 +492,7 @@ function filtrarTemporadas() {
   return entries;
 }
 
+/** Actualiza todos los textos de la UI (headers, botones, labels) según el idioma actual. */
 function aplicarTraducciones() {
   const t = traducciones[idiomaActual];
   document.querySelector('.page-header p').textContent = t.subtitle;
@@ -505,6 +510,7 @@ function aplicarTraducciones() {
   }
 }
 
+/** Actualiza las cabeceras de la tabla para la vista de una temporada individual. */
 function actualizarHeadersTemporada() {
   const t = traducciones[idiomaActual];
   document.querySelector('#hallTable thead tr').innerHTML = `
@@ -516,6 +522,7 @@ function actualizarHeadersTemporada() {
   `;
 }
 
+/** Actualiza las cabeceras de la tabla para la vista de resumen general de todos los jugadores. */
 function actualizarHeadersResumen() {
   const t = traducciones[idiomaActual];
   document.querySelector('#hallTable thead tr').innerHTML = `
@@ -528,10 +535,12 @@ function actualizarHeadersResumen() {
   `;
 }
 
+/** Genera el nombre de archivo de ícono (.png) para un Digimon dado su nombre. */
 function digiIconFilename(nombre) {
   return nombre.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[\s\-()']+/g, '') + '.png';
 }
 
+/** Retorna el HTML del badge de posición (medalla para top 3, número para el resto). */
 function renderPuesto(puesto) {
   if (puesto === 1) return `<span class="puesto-cell puesto-1">🥇</span>`;
   if (puesto === 2) return `<span class="puesto-cell puesto-2">🥈</span>`;
@@ -539,6 +548,7 @@ function renderPuesto(puesto) {
   return `<span class="puesto-cell puesto-other">${puesto}</span>`;
 }
 
+/** Retorna el HTML del ícono de Digimon con fallback a texto si la imagen no existe. */
 function renderDigiIcon(nombre) {
   const filename = digiIconFilename(nombre);
   return `<div class="digi-icon-wrap">
@@ -551,12 +561,14 @@ function renderDigiIcon(nombre) {
 const mesesES = { Enero:1, Febrero:2, Marzo:3, Abril:4, Mayo:5, Junio:6, Julio:7, Agosto:8, Septiembre:9, Octubre:10, Noviembre:11, Diciembre:12 };
 const mesesEN = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
 
+/** Traduce los nombres de meses en español dentro de una fecha al idioma actual. */
 function traducirFecha(fecha) {
   if (idiomaActual === 'es') return fecha;
   return fecha.replace(/Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre/g,
     m => mesesEN[mesesES[m]]);
 }
 
+/** Llena el selector de temporadas con todas las opciones disponibles en pvpTopDB. */
 function poblarSelector() {
   const sel = document.getElementById('selectSeason');
   const valorActual = sel.value;
@@ -578,6 +590,7 @@ function poblarSelector() {
   if (valorActual && sel.querySelector(`option[value="${valorActual}"]`)) sel.value = valorActual;
 }
 
+/** Calcula estadísticas agregadas (mejor posición, medallero, digimon más usado) de todos los jugadores a través de temporadas. */
 function calcularResumen() {
   const stats = {};
   filtrarTemporadas().forEach(([, temporada]) => {
@@ -610,6 +623,7 @@ function calcularResumen() {
   );
 }
 
+/** Renderiza la vista de resumen general con estadísticas de todos los jugadores. */
 function renderResumen() {
   document.getElementById('resumenFiltros').style.display = 'flex';
   actualizarHeadersResumen();
@@ -643,6 +657,7 @@ function renderResumen() {
   });
 }
 
+/** Renderiza la tabla de Digimon más utilizados al final de temporada (mínimo 3 apariciones). */
 function renderMasRepetidos() {
   const conteo = {};
   filtrarTemporadas().forEach(([, temporada]) => {
@@ -676,6 +691,7 @@ function renderMasRepetidos() {
   document.getElementById('masRepetidosSection').style.display = 'block';
 }
 
+/** Renderiza la tabla principal según la temporada seleccionada, o el resumen general si key es 'resumen'. */
 function renderTabla(key) {
   if (key === 'resumen') { renderResumen(); return; }
   document.getElementById('resumenFiltros').style.display = 'none';

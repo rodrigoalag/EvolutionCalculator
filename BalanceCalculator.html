@@ -516,6 +516,7 @@ nav a:hover {
   <a href="./itempedia.html" class="nav-link"><img src="./itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
   <a href="./AlimentosEfectos.html" class="nav-link"><img src="./itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
   <a href="./pvptop.html" class="nav-link"><img src="./pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href="./pvprecompensas.html" class="nav-link"><img src="./itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
   <h3 id="nav-herramientas"><img src="./pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
@@ -614,11 +615,13 @@ nav a:hover {
     let currentLanguage = 'es';
 
     // Función de traducción
+    /** Returns the localized string for a given translation key in the current language. */
     function translate(key) {
       return translations[currentLanguage][key] || key;
     }
 
     // Actualizar textos de la UI
+    /** Updates all visible UI text elements to match the currently selected language. */
     function updateTexts() {
       document.getElementById('mainTitle').textContent = translate('mainTitle');
       document.getElementById('mainSubtitle').textContent = translate('mainSubtitle');
@@ -640,6 +643,7 @@ nav a:hover {
     });
 
     // FUNCIÓN COPIADA EXACTAMENTE DE script.js (líneas 629-692)
+    /** Determines the highest stat and whether the three training percentages are balanced (max − min ≤ 20). */
     function calcularStatSuperior(datosActuales) {
       const hpPct = parseFloat(datosActuales["HP Entrenado"]) || 0;
       const atkPct = parseFloat(datosActuales["ATK Entrenado"]) || 0;
@@ -714,6 +718,7 @@ nav a:hover {
     }
 
     // Función principal de cálculo
+    /** Reads the HP, ATK, and SPD inputs, validates them, and displays the balance result and superior stat. */
     function calcular() {
       const hp = parseInt(document.getElementById('hpInput').value) || 0;
       const atk = parseInt(document.getElementById('atkInput').value) || 0;
@@ -788,12 +793,14 @@ nav a:hover {
 
   <!-- Menú hamburguesa funciones -->
   <script>
+/** Toggles the hamburger navigation menu open or closed. */
 function toggleNav() {
   document.getElementById('nav-toggle').classList.toggle('active');
   document.getElementById('nav-menu').classList.toggle('active');
   document.getElementById('nav-overlay').classList.toggle('active');
 }
 
+/** Closes the hamburger navigation menu. */
 function closeNav() {
   document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');

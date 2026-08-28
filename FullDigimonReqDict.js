@@ -739,7 +739,7 @@ const fullDigimonReqDict = {
   },
   "Aero V-dramon (Black)": {
     "ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dragon",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"] },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
     "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon (Black)", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150 },
     "isProgramEvo": true,
@@ -937,6 +937,7 @@ const fullDigimonReqDict = {
   },
   "Omega Shoutmon": {
     "ID": 163, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto",
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Error Maximo"] },
     "Requisitos": { "Peso": 35, "% Entrenamiento": 100, "Combates Minimos": 25, "WinRate": 70, "Vinculo Minimo alcanzado": 100 },
     "Stat Base": { "ATK": 220, "DEF": 140, "HP": 1800, "Vel": 160 },
     "isProgramEvo": false,
@@ -1497,7 +1498,7 @@ Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
   const clasificacion = computeClasificacion(name, data.Nivel, statBase || {});
   const isHighTierAdultOrPerfect = (data.Nivel === 4 || data.Nivel === 5) && clasificacion.nombre === "High Tier";
   let categorias = data.categorias ? JSON.parse(JSON.stringify(data.categorias)) : {};
-  if (isHighTierAdultOrPerfect && !_highTierErrorExceptions.has(name) && "Error Maximo" in (data.Requisitos || {})) {
+  if (isHighTierAdultOrPerfect && !_highTierErrorExceptions.has(name) && Object.keys(categorias).length > 0) {
     const alreadyHasErrorMaximo = Object.values(categorias).some(v => Array.isArray(v) && v.includes("Error Maximo"));
     if (!alreadyHasErrorMaximo) {
       if (!categorias["Requisitos Obligatorios"]) categorias["Requisitos Obligatorios"] = [];

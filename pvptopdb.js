@@ -552,5 +552,22 @@ const pvpTopDB = {
       { nickname: "Firestorm",       discord: "Firestorm",        ultimoDigimon: "Delumon",            puntaje: 3669, puesto: 9  },
       { nickname: "Auraomega",       discord: "Auraomega",        ultimoDigimon: "Monarchlizamon",     puntaje: 3663, puesto: 10 }
     ]
+  },
+  "2026-08-T1": {
+    label: "Temporada 28",
+    fechaInicio: "16 Agosto 2026",
+    fechaFin: "31 Agosto 2026",
+    jugadores: [
+      { nickname: "Sithhus",         discord: "Sithhus",         ultimoDigimon: "Amaterasumon", puntaje: 11020, puesto: 1  },
+      { nickname: "Youngel",         discord: "Youngel",         ultimoDigimon: "Darumamon",    puntaje: 11001, puesto: 2  },
+      { nickname: "Leonhartbk",      discord: "Leon",            ultimoDigimon: "Gekkomon",     puntaje: 5784,  puesto: 3  },
+      { nickname: "Thebig88",        discord: "Big",             ultimoDigimon: "Etemon",       puntaje: 5441,  puesto: 4  },
+      { nickname: "Redlizard",       discord: "Gekkolizard",     ultimoDigimon: "MetalEtemon",  puntaje: 5048,  puesto: 5  },
+      { nickname: "Spoolofwool",     discord: "Zororo",          ultimoDigimon: "Dinomon",      puntaje: 4999,  puesto: 6  },
+      { nickname: "Adachi",          discord: "Adachi",          ultimoDigimon: "Nanimon",      puntaje: 4960,  puesto: 7  },
+      { nickname: "Spookytree",      discord: "Spookytree",      ultimoDigimon: "AeroVDramon",  puntaje: 4558,  puesto: 8  },
+      { nickname: "Theidiotwithlag", discord: "Theidiotwithlag", ultimoDigimon: "Dorumon",      puntaje: 4545,  puesto: 9  },
+      { nickname: "Jophsiel",        discord: "Jophsiel",        ultimoDigimon: "Polarbearmon", puntaje: 4539,  puesto: 10 }
+    ]
   }
 };

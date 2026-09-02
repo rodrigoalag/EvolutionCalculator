@@ -33,9 +33,8 @@ function initAuth(onLogin, onLogout) {
           </div>
 
           <div class="auth-tab-content" id="auth-tab-register" style="display:none">
-            <input class="auth-input" id="auth-reg-email"    type="email"    placeholder="Correo electrónico">
-            <input class="auth-input" id="auth-reg-username" type="text"     placeholder="Nombre de usuario">
-            <input class="auth-input" id="auth-reg-pass"     type="password" placeholder="Contraseña">
+            <input class="auth-input" id="auth-reg-email" type="email"    placeholder="Correo electrónico">
+            <input class="auth-input" id="auth-reg-pass"  type="password" placeholder="Contraseña">
             <div class="auth-msg" id="auth-reg-msg"></div>
             <button class="auth-submit-btn" id="auth-reg-submit">Crear cuenta</button>
             <div class="auth-divider"><span>o</span></div>
@@ -104,15 +103,10 @@ function initAuth(onLogin, onLogout) {
   });
 
   document.getElementById('auth-reg-submit').addEventListener('click', async () => {
-    const email    = document.getElementById('auth-reg-email').value.trim();
-    const username = document.getElementById('auth-reg-username').value.trim();
-    const pass     = document.getElementById('auth-reg-pass').value;
-    if (!email || !username || !pass) return showMsg('auth-reg-msg', 'Completa todos los campos.');
-    if (username.length < 3) return showMsg('auth-reg-msg', 'El usuario debe tener al menos 3 caracteres.');
-    const { error } = await supabaseClient.auth.signUp({
-      email, password: pass,
-      options: { data: { username, full_name: username } }
-    });
+    const email = document.getElementById('auth-reg-email').value.trim();
+    const pass  = document.getElementById('auth-reg-pass').value;
+    if (!email || !pass) return showMsg('auth-reg-msg', 'Completa todos los campos.');
+    const { error } = await supabaseClient.auth.signUp({ email, password: pass });
     if (error) showMsg('auth-reg-msg', error.message);
     else toggleAuthModal(false);
   });

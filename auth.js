@@ -34,6 +34,7 @@ function initAuth(onLogin, onLogout) {
 
           <div class="auth-tab-content" id="auth-tab-register" style="display:none">
             <input class="auth-input" id="auth-reg-email" type="email"    placeholder="Correo electrónico">
+            <input class="auth-input" id="auth-reg-name"  type="text"     placeholder="Nombre para mostrar">
             <input class="auth-input" id="auth-reg-pass"  type="password" placeholder="Contraseña">
             <div class="auth-msg" id="auth-reg-msg"></div>
             <button class="auth-submit-btn" id="auth-reg-submit">Crear cuenta</button>
@@ -104,9 +105,13 @@ function initAuth(onLogin, onLogout) {
 
   document.getElementById('auth-reg-submit').addEventListener('click', async () => {
     const email = document.getElementById('auth-reg-email').value.trim();
+    const name  = document.getElementById('auth-reg-name').value.trim();
     const pass  = document.getElementById('auth-reg-pass').value;
-    if (!email || !pass) return showMsg('auth-reg-msg', 'Completa todos los campos.');
-    const { error } = await supabaseClient.auth.signUp({ email, password: pass });
+    if (!email || !name || !pass) return showMsg('auth-reg-msg', 'Completa todos los campos.');
+    const { error } = await supabaseClient.auth.signUp({
+      email, password: pass,
+      options: { data: { full_name: name } }
+    });
     if (error) showMsg('auth-reg-msg', error.message);
     else toggleAuthModal(false);
   });

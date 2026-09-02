@@ -25,7 +25,7 @@
     const logoutBtn = document.getElementById('logout-btn');
 
     async function checkSession() {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (session) {
         const user = session.user;
         statusEl.innerHTML = `✅ Logged in como <strong>${user.user_metadata.full_name || user.email}</strong>`;
@@ -39,18 +39,18 @@
     }
 
     loginBtn.addEventListener('click', () => {
-      supabase.auth.signInWithOAuth({
+      supabaseClient.auth.signInWithOAuth({
         provider: 'discord',
         options: { redirectTo: window.location.href }
       });
     });
 
     logoutBtn.addEventListener('click', async () => {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       checkSession();
     });
 
-    supabase.auth.onAuthStateChange(() => checkSession());
+    supabaseClient.auth.onAuthStateChange(() => checkSession());
     checkSession();
   </script>
 </body>

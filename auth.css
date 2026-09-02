@@ -82,3 +82,10 @@
   font-size: 0.75rem; cursor: pointer; margin-left: 0.25rem; transition: all 0.2s;
 }
 .auth-logout-btn:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+.auth-forgot-btn {
+  background: none; border: none; color: rgba(255,255,255,0.35);
+  font-size: 0.8rem; cursor: pointer; text-align: left; padding: 0;
+  transition: color 0.2s;
+}
+.auth-forgot-btn:hover { color: rgba(255,255,255,0.7); }

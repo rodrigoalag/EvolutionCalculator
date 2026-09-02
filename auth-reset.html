@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Restablecer contraseña</title>
+  <link rel="stylesheet" href="auth.css">
+  <style>
+    body { font-family: sans-serif; background: #1a1a2e; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .reset-box { background: #16213e; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 2rem; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 0.75rem; }
+    h2 { margin: 0 0 0.5rem; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <div class="reset-box">
+    <h2>Nueva contraseña</h2>
+    <input class="auth-input" id="new-pass"     type="password" placeholder="Nueva contraseña">
+    <input class="auth-input" id="confirm-pass" type="password" placeholder="Confirmar contraseña">
+    <div class="auth-msg" id="reset-msg"></div>
+    <button class="auth-submit-btn" id="reset-submit">Guardar contraseña</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    function showMsg(text, isError = true) {
+      const el = document.getElementById('reset-msg');
+      el.textContent = text;
+      el.style.color = isError ? '#ff6b6b' : '#4ecdc4';
+    }
+
+    document.getElementById('reset-submit').addEventListener('click', async () => {
+      const pass    = document.getElementById('new-pass').value;
+      const confirm = document.getElementById('confirm-pass').value;
+      if (!pass || !confirm) return showMsg('Completa ambos campos.');
+      if (pass !== confirm)  return showMsg('Las contraseñas no coinciden.');
+      if (pass.length < 6)   return showMsg('La contraseña debe tener al menos 6 caracteres.');
+      const { error } = await supabaseClient.auth.updateUser({ password: pass });
+      if (error) showMsg(error.message);
+      else {
+        showMsg('Contraseña actualizada. Redirigiendo...', false);
+        setTimeout(() => window.location.href = 'index.html', 2000);
+      }
+    });
+  </script>
+</body>
+</html>

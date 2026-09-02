@@ -103,7 +103,7 @@ function initAuth(onLogin, onLogout) {
       options: { data: { username, full_name: username } }
     });
     if (error) showMsg('auth-reg-msg', error.message);
-    else showMsg('auth-reg-msg', 'Revisa tu correo para confirmar la cuenta.', false);
+    else toggleAuthModal(false);
   });
 
   /** Renders the widget button based on current session state. */

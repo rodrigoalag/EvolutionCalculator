@@ -190,6 +190,7 @@ h1, h2, h3 { color: #4ecdc4; }
 .hall-table-wrap {
   width: 100%;
   overflow-x: auto;
+  position: relative;
 }
 
 .hall-table {
@@ -314,6 +315,18 @@ h1, h2, h3 { color: #4ecdc4; }
   #tablesRow { flex-direction: column; }
   #masRepetidosSection { min-width: 0 !important; width: 100%; }
   .hall-table-wrap { -webkit-overflow-scrolling: touch; overflow-x: auto; }
+  .hall-table { width: auto; min-width: 100%; }
+  .hall-table-wrap::-webkit-scrollbar { height: 4px; }
+  .hall-table-wrap::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); border-radius: 2px; }
+  .hall-table-wrap::-webkit-scrollbar-thumb { background: rgba(78,205,196,0.5); border-radius: 2px; }
+  .hall-table-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 36px;
+    background: linear-gradient(to left, rgba(22,33,62,0.9), transparent);
+    pointer-events: none;
+  }
 }
   </style>
 </head>

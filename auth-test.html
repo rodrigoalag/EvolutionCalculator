@@ -41,7 +41,7 @@
     loginBtn.addEventListener('click', () => {
       supabaseClient.auth.signInWithOAuth({
         provider: 'discord',
-        options: { redirectTo: window.location.href }
+        options: { redirectTo: window.location.href, scopes: 'identify' }
       });
     });
 

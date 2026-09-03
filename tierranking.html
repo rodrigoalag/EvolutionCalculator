@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tier Ranking</title>
   <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <link rel="stylesheet" href="auth.css">
   <style>
 * { box-sizing: border-box; }
 body {
@@ -322,29 +323,31 @@ a { color: #4ecdc4; }
 }
 .btn-cancel:hover { background: rgba(255,255,255,0.1); }
 
-/* ===== LANG SELECTOR ===== */
-#lang-selector {
+/* ===== TOP RIGHT BAR ===== */
+#top-right-bar {
   position: fixed; top: 15px; right: 15px; z-index: 200;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
 }
-#lang-selector select {
+#top-right-bar select {
   background: rgba(30,30,50,0.9); color: white;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 8px; padding: 8px 12px;
   font-size: 0.85rem; cursor: pointer;
 }
-#lang-selector select:hover { border-color: #4ecdc4; }
+#top-right-bar select:hover { border-color: #4ecdc4; }
   </style>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <script src="FullDigimonReqDict.js"></script>
 <body>
 
-<!-- Selector de idioma -->
-<div id="lang-selector">
+<!-- Selector de idioma + Auth widget -->
+<div id="top-right-bar">
   <select id="languageSelector">
     <option value="es">Español</option>
     <option value="en">English</option>
   </select>
+  <div id="auth-widget"></div>
 </div>
 
 <!-- Nav hamburguesa -->
@@ -420,6 +423,8 @@ a { color: #4ecdc4; }
   <div class="controls-bar">
     <button id="addTierBtn" class="ctrl-btn" onclick="openAddTierModal()">＋ Agregar Fila</button>
     <button id="screenshotBtn" class="ctrl-btn" onclick="takeScreenshot()">📷 Captura</button>
+    <button id="saveCloudBtn" class="ctrl-btn" style="display:none" onclick="saveToCloud()">☁ Guardar</button>
+    <button id="loadCloudBtn" class="ctrl-btn" style="display:none" onclick="loadFromCloud()">☁ Cargar</button>
     <button id="clearTiersBtn" class="ctrl-btn danger" onclick="clearTiers()">🗑 Limpiar Tiers</button>
     <button id="resetAllBtn" class="ctrl-btn danger" onclick="resetAll()">↺ Resetear Todo</button>
   </div>
@@ -470,9 +475,15 @@ const TEXTS = {
     labelTitle:      'Doble clic para editar nombre',
     confirmClear:    '¿Limpiar todos los digimon de los tiers? Volverán al pool.',
     confirmReset:    '¿Resetear todo? Se perderán los tiers y la disposición actual.',
-    toastGenerating: '📷 Generando imagen...',
-    toastDownloaded: '✅ Imagen descargada',
-    toastError:      'Error al generar la captura',
+    toastGenerating:  '📷 Generando imagen...',
+    toastDownloaded:  '✅ Imagen descargada',
+    toastError:       'Error al generar la captura',
+    saveCloudBtn:     '☁ Guardar',
+    loadCloudBtn:     '☁ Cargar',
+    toastCloudSaved:  '☁ Guardado en la nube',
+    toastCloudLoaded: '☁ Cargado desde la nube',
+    toastCloudError:  '❌ Error al guardar en la nube',
+    toastCloudEmpty:  '☁ Sin datos guardados',
   },
   en: {
     pageTitle:       'Tier Ranking',
@@ -499,9 +510,15 @@ const TEXTS = {
     labelTitle:      'Double-click to edit name',
     confirmClear:    'Clear all Digimon from tiers? They will return to the pool.',
     confirmReset:    'Reset everything? All tiers and placements will be lost.',
-    toastGenerating: '📷 Generating image...',
-    toastDownloaded: '✅ Image downloaded',
-    toastError:      'Error generating screenshot',
+    toastGenerating:  '📷 Generating image...',
+    toastDownloaded:  '✅ Image downloaded',
+    toastError:       'Error generating screenshot',
+    saveCloudBtn:     '☁ Save',
+    loadCloudBtn:     '☁ Load',
+    toastCloudSaved:  '☁ Saved to cloud',
+    toastCloudLoaded: '☁ Loaded from cloud',
+    toastCloudError:  '❌ Error saving to cloud',
+    toastCloudEmpty:  '☁ No cloud data found',
   }
 };
 
@@ -514,6 +531,8 @@ function updateUI() {
   document.getElementById('pageSubtitle').textContent    = t('pageSubtitle');
   document.getElementById('addTierBtn').textContent      = t('addTierBtn');
   document.getElementById('screenshotBtn').textContent   = t('screenshotBtn');
+  document.getElementById('saveCloudBtn').textContent    = t('saveCloudBtn');
+  document.getElementById('loadCloudBtn').textContent    = t('loadCloudBtn');
   document.getElementById('clearTiersBtn').textContent   = t('clearTiersBtn');
   document.getElementById('resetAllBtn').textContent     = t('resetAllBtn');
   document.getElementById('poolTitle').textContent       = t('poolTitle');
@@ -1103,6 +1122,54 @@ async function takeScreenshot() {
   }
 }
 
+// ===== CLOUD SAVE =====
+let currentUser = null;
+
+function onLogin(session) {
+  currentUser = session.user;
+  document.getElementById('saveCloudBtn').style.display = '';
+  document.getElementById('loadCloudBtn').style.display = '';
+}
+
+function onLogout() {
+  currentUser = null;
+  document.getElementById('saveCloudBtn').style.display = 'none';
+  document.getElementById('loadCloudBtn').style.display = 'none';
+}
+
+async function saveToCloud() {
+  if (!currentUser) return;
+  const { error } = await supabaseClient
+    .from('tierlist_saves')
+    .upsert({
+      user_id: currentUser.id,
+      data: { all: tierContexts.all, levels: tierContexts.levels, filter: [...filterLevels], lang: currentLang },
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' });
+  showToast(error ? t('toastCloudError') : t('toastCloudSaved'));
+}
+
+async function loadFromCloud() {
+  if (!currentUser) return;
+  const { data: row, error } = await supabaseClient
+    .from('tierlist_saves')
+    .select('data')
+    .eq('user_id', currentUser.id)
+    .maybeSingle();
+  if (error || !row) { showToast(t('toastCloudEmpty')); return; }
+  const s = row.data;
+  if (s.all)    tierContexts.all    = s.all;
+  if (s.levels) tierContexts.levels = s.levels;
+  if (s.filter) filterLevels = new Set(s.filter);
+  if (s.lang) {
+    currentLang = s.lang;
+    document.getElementById('languageSelector').value = s.lang;
+  }
+  updateFilterButtons();
+  updateUI();
+  showToast(t('toastCloudLoaded'));
+}
+
 // ===== INIT =====
 document.getElementById('languageSelector').addEventListener('change', e => {
   currentLang = e.target.value;
@@ -1115,6 +1182,10 @@ updateFilterButtons();
 updateUI();
 </script>
 <script src="nav-translate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="auth.js"></script>
+<script>initAuth(onLogin, onLogout);</script>
 
 </body>
 </html>

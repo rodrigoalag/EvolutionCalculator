@@ -423,9 +423,7 @@ a { color: #4ecdc4; }
   <div class="controls-bar">
     <button id="addTierBtn" class="ctrl-btn" onclick="openAddTierModal()">＋ Agregar Fila</button>
     <button id="screenshotBtn" class="ctrl-btn" onclick="takeScreenshot()">📷 Captura</button>
-    <button id="saveCloudBtn" class="ctrl-btn" style="display:none" onclick="saveToCloud()">☁ Guardar</button>
-    <button id="loadCloudBtn" class="ctrl-btn" style="display:none" onclick="loadFromCloud()">☁ Cargar</button>
-    <button id="clearTiersBtn" class="ctrl-btn danger" onclick="clearTiers()">🗑 Limpiar Tiers</button>
+<button id="clearTiersBtn" class="ctrl-btn danger" onclick="clearTiers()">🗑 Limpiar Tiers</button>
     <button id="resetAllBtn" class="ctrl-btn danger" onclick="resetAll()">↺ Resetear Todo</button>
   </div>
 
@@ -531,9 +529,7 @@ function updateUI() {
   document.getElementById('pageSubtitle').textContent    = t('pageSubtitle');
   document.getElementById('addTierBtn').textContent      = t('addTierBtn');
   document.getElementById('screenshotBtn').textContent   = t('screenshotBtn');
-  document.getElementById('saveCloudBtn').textContent    = t('saveCloudBtn');
-  document.getElementById('loadCloudBtn').textContent    = t('loadCloudBtn');
-  document.getElementById('clearTiersBtn').textContent   = t('clearTiersBtn');
+document.getElementById('clearTiersBtn').textContent   = t('clearTiersBtn');
   document.getElementById('resetAllBtn').textContent     = t('resetAllBtn');
   document.getElementById('poolTitle').textContent       = t('poolTitle');
   document.getElementById('modalTitle').textContent      = t('modalTitle');
@@ -654,11 +650,16 @@ function loadState() {
 }
 
 // ===== RENDER =====
-/** Re-renders both the tier list and the pool grid, then saves state to localStorage. */
+let _cloudSaveTimer = null;
+/** Re-renders both the tier list and the pool grid, then saves state to localStorage and schedules a cloud save. */
 function render() {
   renderTiers();
   renderPool();
   saveState();
+  if (currentUser) {
+    clearTimeout(_cloudSaveTimer);
+    _cloudSaveTimer = setTimeout(saveToCloud, 2000);
+  }
 }
 
 /** Creates and returns a draggable Digimon icon element with tooltip, for use in either a tier or the pool. */
@@ -1125,16 +1126,14 @@ async function takeScreenshot() {
 // ===== CLOUD SAVE =====
 let currentUser = null;
 
-function onLogin(session) {
+async function onLogin(session) {
   currentUser = session.user;
-  document.getElementById('saveCloudBtn').style.display = '';
-  document.getElementById('loadCloudBtn').style.display = '';
+  await loadFromCloud();
 }
 
 function onLogout() {
   currentUser = null;
-  document.getElementById('saveCloudBtn').style.display = 'none';
-  document.getElementById('loadCloudBtn').style.display = 'none';
+  clearTimeout(_cloudSaveTimer);
 }
 
 async function saveToCloud() {

@@ -341,13 +341,12 @@ a { color: #4ecdc4; }
 <script src="FullDigimonReqDict.js"></script>
 <body>
 
-<!-- Selector de idioma + Auth widget -->
+<!-- Selector de idioma -->
 <div id="top-right-bar">
   <select id="languageSelector">
     <option value="es">Español</option>
     <option value="en">English</option>
   </select>
-  <div id="auth-widget"></div>
 </div>
 
 <!-- Nav hamburguesa -->
@@ -421,6 +420,7 @@ a { color: #4ecdc4; }
 
   <!-- Controles -->
   <div class="controls-bar">
+    <div id="auth-widget"></div>
     <button id="addTierBtn" class="ctrl-btn" onclick="openAddTierModal()">＋ Agregar Fila</button>
     <button id="screenshotBtn" class="ctrl-btn" onclick="takeScreenshot()">📷 Captura</button>
 <button id="clearTiersBtn" class="ctrl-btn danger" onclick="clearTiers()">🗑 Limpiar Tiers</button>

@@ -770,16 +770,6 @@ const enemigosData = [
     ]
   },
   {
-    digimon: "Cardmon Perfect",
-    nickName: "Chuzy",
-    niveles: [5],
-    entrenamientos: ["50-69.99"],
-    errores: "0-6",
-    itemDrop: [
-      { item: "Booster C (P)", cantidad: 1 }
-    ]
-  },
-  {
     digimon: "SkullGreymon",
     nickName: "King Underbite",
     niveles: [5],

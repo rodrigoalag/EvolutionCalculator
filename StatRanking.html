@@ -2825,12 +2825,14 @@ function actualizarTraducciones() {
 /** Assembles the export-ready data array (headers + rows) from the current ranking dataset for CSV and XLSX downloads. */
 function _buildExportData() {
   const t = traducciones[idiomaActual];
+  const NIVEL_NOMBRES = { 1: 'Baby I', 2: 'Baby II', 3: 'Child', 4: 'Adult', 5: 'Perfect', 6: 'Ultimate' };
   const headers = [
-    t.digimon, t.clasificacion, t.atributo, t.tipo,
+    t.digimon, 'Nivel', t.clasificacion, t.atributo, t.tipo,
     'HP', 'ATK', 'DEF', 'SPD', t.digipuntos
   ];
   const rows = datosActuales.map(item => [
     item.lineaRaw ? [...item.lineaRaw, item.nombre].join(' -> ') : item.nombre,
+    NIVEL_NOMBRES[digimonReqDict[item.nombre]?.Nivel] || '-',
     item.clasificacion?.nombre || '-',
     item.atributo || '-',
     traducciones[idiomaActual][item.tipo] || item.tipo || '-',

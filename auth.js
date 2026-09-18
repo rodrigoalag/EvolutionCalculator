@@ -1,7 +1,102 @@
+// ===== AUTH TRANSLATIONS =====
+const AUTH_TEXTS = {
+  es: {
+    tabLogin:        'Ingresar',
+    tabRegister:     'Registrarse',
+    emailPlaceholder:'Correo electrónico',
+    passPlaceholder: 'Contraseña',
+    namePlaceholder: 'Nombre para mostrar',
+    loginBtn:        'Ingresar',
+    registerBtn:     'Crear cuenta',
+    forgotBtn:       '¿Olvidaste tu contraseña?',
+    dividerOr:       'o',
+    discordBtn:      'Continuar con Discord',
+    openBtn:         'Iniciar sesión',
+    logoutBtn:       'Salir',
+    defaultUser:     'Usuario',
+    msgEmailFirst:   'Ingresa tu correo primero.',
+    msgFillAll:      'Completa todos los campos.',
+    msgResetSent:    'Te enviamos un link para restablecer tu contraseña.'
+  },
+  en: {
+    tabLogin:        'Log in',
+    tabRegister:     'Sign up',
+    emailPlaceholder:'Email',
+    passPlaceholder: 'Password',
+    namePlaceholder: 'Display name',
+    loginBtn:        'Log in',
+    registerBtn:     'Create account',
+    forgotBtn:       'Forgot your password?',
+    dividerOr:       'or',
+    discordBtn:      'Continue with Discord',
+    openBtn:         'Log in',
+    logoutBtn:       'Log out',
+    defaultUser:     'User',
+    msgEmailFirst:   'Enter your email first.',
+    msgFillAll:      'Please fill all fields.',
+    msgResetSent:    'We sent you a link to reset your password.'
+  }
+};
+
+/** Gets the current language from global currentLang or defaults to 'es'. */
+function getAuthLang() {
+  return (typeof currentLang !== 'undefined' && currentLang) || 'es';
+}
+
+/** Returns the localized auth string for a given key. */
+function at(key) {
+  const lang = getAuthLang();
+  return (AUTH_TEXTS[lang] && AUTH_TEXTS[lang][key]) || AUTH_TEXTS.es[key] || key;
+}
+
 /** Opens or closes the auth modal. */
 function toggleAuthModal(show) {
   const modal = document.getElementById('auth-modal');
   if (modal) modal.style.display = show ? 'flex' : 'none';
+}
+
+/** Updates all auth UI text to current language. Call this when language changes. */
+function updateAuthLang() {
+  // Modal elements
+  const tabLogin = document.querySelector('.auth-tab[data-tab="login"]');
+  const tabReg   = document.querySelector('.auth-tab[data-tab="register"]');
+  if (tabLogin) tabLogin.textContent = at('tabLogin');
+  if (tabReg)   tabReg.textContent   = at('tabRegister');
+
+  const loginEmail = document.getElementById('auth-login-email');
+  const loginPass  = document.getElementById('auth-login-pass');
+  const regEmail   = document.getElementById('auth-reg-email');
+  const regName    = document.getElementById('auth-reg-name');
+  const regPass    = document.getElementById('auth-reg-pass');
+  if (loginEmail) loginEmail.placeholder = at('emailPlaceholder');
+  if (loginPass)  loginPass.placeholder  = at('passPlaceholder');
+  if (regEmail)   regEmail.placeholder   = at('emailPlaceholder');
+  if (regName)    regName.placeholder    = at('namePlaceholder');
+  if (regPass)    regPass.placeholder    = at('passPlaceholder');
+
+  const loginSubmit = document.getElementById('auth-login-submit');
+  const regSubmit   = document.getElementById('auth-reg-submit');
+  if (loginSubmit) loginSubmit.textContent = at('loginBtn');
+  if (regSubmit)   regSubmit.textContent   = at('registerBtn');
+
+  const forgot = document.getElementById('auth-forgot');
+  if (forgot) forgot.textContent = at('forgotBtn');
+
+  document.querySelectorAll('.auth-divider span').forEach(el => {
+    el.textContent = at('dividerOr');
+  });
+
+  const discordLogin = document.getElementById('auth-discord-login');
+  const discordReg   = document.getElementById('auth-discord-register');
+  const discordSvg   = '<svg width="16" height="16" viewBox="0 0 71 55" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.5.4a40.7 40.7 0 0 0-1.8 3.7 54 54 0 0 0-16.3 0A39 39 0 0 0 25.6.4 58.4 58.4 0 0 0 11 5C1.6 19.1-1 32.8.3 46.4a58.9 58.9 0 0 0 18 9.1 42.6 42.6 0 0 0 3.7-6 38.4 38.4 0 0 1-5.8-2.8l1.4-1.1a42 42 0 0 0 35.8 0l1.4 1.1a38.3 38.3 0 0 1-5.8 2.8 42.4 42.4 0 0 0 3.7 6 58.7 58.7 0 0 0 18-9.1C72.2 30.6 68.2 17 60.1 4.9ZM23.7 38.2c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2Z"/></svg>';
+  if (discordLogin) discordLogin.innerHTML = discordSvg + ' ' + at('discordBtn');
+  if (discordReg)   discordReg.innerHTML   = discordSvg + ' ' + at('discordBtn');
+
+  // Widget buttons
+  const openBtn   = document.getElementById('auth-open');
+  const logoutBtn = document.getElementById('auth-logout');
+  if (openBtn)   openBtn.textContent   = at('openBtn');
+  if (logoutBtn) logoutBtn.textContent = at('logoutBtn');
 }
 
 /** Renders the auth widget button and modal, wires up all auth events. */
@@ -15,33 +110,33 @@ function initAuth(onLogin, onLogout) {
         <div class="auth-modal-box">
           <button class="auth-modal-close" id="auth-modal-close">✕</button>
           <div class="auth-tabs">
-            <button class="auth-tab active" data-tab="login">Ingresar</button>
-            <button class="auth-tab" data-tab="register">Registrarse</button>
+            <button class="auth-tab active" data-tab="login">${at('tabLogin')}</button>
+            <button class="auth-tab" data-tab="register">${at('tabRegister')}</button>
           </div>
 
           <div class="auth-tab-content" id="auth-tab-login">
-            <input class="auth-input" id="auth-login-email" type="email" placeholder="Correo electrónico">
-            <input class="auth-input" id="auth-login-pass"  type="password" placeholder="Contraseña">
+            <input class="auth-input" id="auth-login-email" type="email" placeholder="${at('emailPlaceholder')}">
+            <input class="auth-input" id="auth-login-pass"  type="password" placeholder="${at('passPlaceholder')}">
             <div class="auth-msg" id="auth-login-msg"></div>
-            <button class="auth-submit-btn" id="auth-login-submit">Ingresar</button>
-            <button class="auth-forgot-btn" id="auth-forgot">¿Olvidaste tu contraseña?</button>
-            <div class="auth-divider"><span>o</span></div>
+            <button class="auth-submit-btn" id="auth-login-submit">${at('loginBtn')}</button>
+            <button class="auth-forgot-btn" id="auth-forgot">${at('forgotBtn')}</button>
+            <div class="auth-divider"><span>${at('dividerOr')}</span></div>
             <button class="auth-discord-btn" id="auth-discord-login">
               <svg width="16" height="16" viewBox="0 0 71 55" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.5.4a40.7 40.7 0 0 0-1.8 3.7 54 54 0 0 0-16.3 0A39 39 0 0 0 25.6.4 58.4 58.4 0 0 0 11 5C1.6 19.1-1 32.8.3 46.4a58.9 58.9 0 0 0 18 9.1 42.6 42.6 0 0 0 3.7-6 38.4 38.4 0 0 1-5.8-2.8l1.4-1.1a42 42 0 0 0 35.8 0l1.4 1.1a38.3 38.3 0 0 1-5.8 2.8 42.4 42.4 0 0 0 3.7 6 58.7 58.7 0 0 0 18-9.1C72.2 30.6 68.2 17 60.1 4.9ZM23.7 38.2c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2Z"/></svg>
-              Continuar con Discord
+              ${at('discordBtn')}
             </button>
           </div>
 
           <div class="auth-tab-content" id="auth-tab-register" style="display:none">
-            <input class="auth-input" id="auth-reg-email" type="email"    placeholder="Correo electrónico">
-            <input class="auth-input" id="auth-reg-name"  type="text"     placeholder="Nombre para mostrar">
-            <input class="auth-input" id="auth-reg-pass"  type="password" placeholder="Contraseña">
+            <input class="auth-input" id="auth-reg-email" type="email"    placeholder="${at('emailPlaceholder')}">
+            <input class="auth-input" id="auth-reg-name"  type="text"     placeholder="${at('namePlaceholder')}">
+            <input class="auth-input" id="auth-reg-pass"  type="password" placeholder="${at('passPlaceholder')}">
             <div class="auth-msg" id="auth-reg-msg"></div>
-            <button class="auth-submit-btn" id="auth-reg-submit">Crear cuenta</button>
-            <div class="auth-divider"><span>o</span></div>
+            <button class="auth-submit-btn" id="auth-reg-submit">${at('registerBtn')}</button>
+            <div class="auth-divider"><span>${at('dividerOr')}</span></div>
             <button class="auth-discord-btn" id="auth-discord-register">
               <svg width="16" height="16" viewBox="0 0 71 55" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.5.4a40.7 40.7 0 0 0-1.8 3.7 54 54 0 0 0-16.3 0A39 39 0 0 0 25.6.4 58.4 58.4 0 0 0 11 5C1.6 19.1-1 32.8.3 46.4a58.9 58.9 0 0 0 18 9.1 42.6 42.6 0 0 0 3.7-6 38.4 38.4 0 0 1-5.8-2.8l1.4-1.1a42 42 0 0 0 35.8 0l1.4 1.1a38.3 38.3 0 0 1-5.8 2.8 42.4 42.4 0 0 0 3.7 6 58.7 58.7 0 0 0 18-9.1C72.2 30.6 68.2 17 60.1 4.9ZM23.7 38.2c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2Z"/></svg>
-              Continuar con Discord
+              ${at('discordBtn')}
             </button>
           </div>
         </div>
@@ -83,12 +178,12 @@ function initAuth(onLogin, onLogout) {
 
   document.getElementById('auth-forgot').addEventListener('click', async () => {
     const email = document.getElementById('auth-login-email').value.trim();
-    if (!email) return showMsg('auth-login-msg', 'Ingresa tu correo primero.');
+    if (!email) return showMsg('auth-login-msg', at('msgEmailFirst'));
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin + '/auth-reset.html'
     });
     if (error) showMsg('auth-login-msg', error.message);
-    else showMsg('auth-login-msg', 'Te enviamos un link para restablecer tu contraseña.', false);
+    else showMsg('auth-login-msg', at('msgResetSent'), false);
   });
 
   document.getElementById('auth-discord-login').addEventListener('click', discordLogin);
@@ -97,7 +192,7 @@ function initAuth(onLogin, onLogout) {
   document.getElementById('auth-login-submit').addEventListener('click', async () => {
     const email = document.getElementById('auth-login-email').value.trim();
     const pass  = document.getElementById('auth-login-pass').value;
-    if (!email || !pass) return showMsg('auth-login-msg', 'Completa todos los campos.');
+    if (!email || !pass) return showMsg('auth-login-msg', at('msgFillAll'));
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
     if (error) showMsg('auth-login-msg', error.message);
     else toggleAuthModal(false);
@@ -107,7 +202,7 @@ function initAuth(onLogin, onLogout) {
     const email = document.getElementById('auth-reg-email').value.trim();
     const name  = document.getElementById('auth-reg-name').value.trim();
     const pass  = document.getElementById('auth-reg-pass').value;
-    if (!email || !name || !pass) return showMsg('auth-reg-msg', 'Completa todos los campos.');
+    if (!email || !name || !pass) return showMsg('auth-reg-msg', at('msgFillAll'));
     const { error } = await supabaseClient.auth.signUp({
       email, password: pass,
       options: { data: { full_name: name } }
@@ -121,20 +216,20 @@ function initAuth(onLogin, onLogout) {
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
       const meta   = session.user.user_metadata;
-      const name   = meta.username || meta.full_name || meta.name || meta.user_name || 'Usuario';
+      const name   = meta.username || meta.full_name || meta.name || meta.user_name || at('defaultUser');
       const avatar = meta.avatar_url || '';
       widget.innerHTML = `
         <div class="auth-user">
           ${avatar ? `<img src="${avatar}" alt="${name}" class="auth-avatar">` : ''}
           <span class="auth-name">${name}</span>
-          <button class="auth-logout-btn" id="auth-logout">Salir</button>
+          <button class="auth-logout-btn" id="auth-logout">${at('logoutBtn')}</button>
         </div>`;
       document.getElementById('auth-logout').addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
       });
       if (onLogin) onLogin(session);
     } else {
-      widget.innerHTML = `<button class="auth-open-btn" id="auth-open">Iniciar sesión</button>`;
+      widget.innerHTML = `<button class="auth-open-btn" id="auth-open">${at('openBtn')}</button>`;
       document.getElementById('auth-open').addEventListener('click', () => toggleAuthModal(true));
       if (onLogout) onLogout();
     }

@@ -1166,6 +1166,7 @@ async function loadFromCloud() {
   }
   updateFilterButtons();
   updateUI();
+  if (typeof updateAuthLang === 'function') updateAuthLang();
   showToast(t('toastCloudLoaded'));
 }
 
@@ -1174,6 +1175,7 @@ document.getElementById('languageSelector').addEventListener('change', e => {
   currentLang = e.target.value;
   saveState();
   updateUI();
+  if (typeof updateAuthLang === 'function') updateAuthLang();
 });
 
 loadState();

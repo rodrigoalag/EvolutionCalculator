@@ -163,7 +163,7 @@ function initAuth(onLogin, onLogout) {
   function discordLogin() {
     supabaseClient.auth.signInWithOAuth({
       provider: 'discord',
-      options: { redirectTo: window.location.href, scopes: 'identify' }
+      options: { redirectTo: window.location.origin + window.location.pathname, scopes: 'identify' }
     });
   }
 

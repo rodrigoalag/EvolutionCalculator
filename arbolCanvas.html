@@ -1325,10 +1325,10 @@ function cargarImagenConVariaciones(nombre, elementoImg, carpeta = 'icon') {
   /** Intenta cargar la siguiente variación de imagen, cayendo al placeholder si se agotan. */
   function intentar() {
     if (i >= variaciones.length) {
-      elementoImg.src = `${carpeta}/placeholder.png`;
+      elementoImg.src = imgUrl(carpeta + '/placeholder.png');
       return;
     }
-    const srcTry = `${carpeta}/${variaciones[i]}.png`;
+    const srcTry = imgUrl(carpeta + '/' + variaciones[i] + '.png');
     const testImg = new Image();
     testImg.onload = () => { elementoImg.src = srcTry; };
     testImg.onerror = () => { i++; intentar(); };
@@ -1648,8 +1648,8 @@ function createTamaSelectors() {
     div.dataset.tama = tama;
     div.title = tama;
     const img = document.createElement('img');
-    img.src = `Tama/${tama}.png`;
-    img.onerror = function() { this.src = 'icon/placeholder.png'; };
+    img.src = imgUrl('Tama/' + tama + '.png');
+    img.onerror = function() { this.src = imgUrl('icon/placeholder.png'); };
     div.appendChild(img);
     const label = document.createElement('span');
     label.textContent = tama;

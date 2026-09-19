@@ -730,12 +730,12 @@ header select:hover {
         if (indiceActual >= variaciones.length) {
           // Si fallan todas las variaciones, intentar con placeholder
           console.log(`❌ No se encontró imagen para ${nombre}`);
-          elementoImg.src = `${carpeta}/placeholder.png`;
+          elementoImg.src = imgUrl(carpeta + '/placeholder.png');
           return;
         }
 
         const variacionActual = variaciones[indiceActual];
-        const ruta = `${carpeta}/${variacionActual}.png`;
+        const ruta = imgUrl(carpeta + '/' + variacionActual + '.png');
 
         const imgTest = new Image();
         imgTest.onload = function() {
@@ -787,7 +787,7 @@ header select:hover {
 
         // Para items, primero verificar el mapeo, si no existe usar normalización
         if (itemImageMap[itemName]) {
-          img.src = `itemimg/${itemImageMap[itemName]}`;
+          img.src = imgUrl('itemimg/' + itemImageMap[itemName]);
         } else {
           cargarImagenConVariaciones(itemName, img, 'itemimg');
         }

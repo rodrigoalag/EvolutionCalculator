@@ -1191,7 +1191,7 @@ function formatearLineaEvolutiva(nombreDigimon, lineaEvolutiva) {
 /** Attempts the next fallback image URL for an evolution-line icon when the current src fails to load. */
 function cargarFallbackLineaEvo(img) {
   const fallbacks = (img.dataset.fallbacks || '').split('|').filter(Boolean);
-  if (fallbacks.length === 0) { img.src = 'icon/placeholder.png'; img.onerror = null; return; }
+  if (fallbacks.length === 0) { img.src = imgUrl('icon/placeholder.png'); img.onerror = null; return; }
   img.dataset.fallbacks = fallbacks.slice(1).join('|');
   img.src = fallbacks[0];
 }
@@ -2928,11 +2928,12 @@ function initSearchRanking() {
     const vars = generarVariacionesNombre(nombre);
     let i = 0;
     function intentar() {
-      if (i >= vars.length) { img.src = 'icon/placeholder.png'; return; }
+      if (i >= vars.length) { img.src = imgUrl('icon/placeholder.png'); return; }
+      const srcTry = imgUrl('icon/' + vars[i] + '.png');
       const t = new Image();
-      t.onload = () => { img.src = `icon/${vars[i]}.png`; };
+      t.onload = () => { img.src = srcTry; };
       t.onerror = () => { i++; intentar(); };
-      t.src = `icon/${vars[i]}.png`;
+      t.src = srcTry;
     }
     intentar();
   }

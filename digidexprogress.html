@@ -748,23 +748,24 @@ function generarTabla(digimonDelTama, tbody, tamaSeleccionado) {
       if (indice >= variaciones.length) {
         const testPlaceholder = new Image();
         testPlaceholder.onload = () => {
-          img.src = "img/placeholder.png";
+          img.src = imgUrl("img/placeholder.png");
         };
         testPlaceholder.onerror = () => {
           img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
         };
-        testPlaceholder.src = "img/placeholder.png";
+        testPlaceholder.src = imgUrl("img/placeholder.png");
         return;
       }
-      
+
+      const srcTry = imgUrl('img/' + variaciones[indice] + '.png');
       const testImg = new Image();
       testImg.onload = () => {
-        img.src = `img/${variaciones[indice]}.png`;
+        img.src = srcTry;
       };
       testImg.onerror = () => {
         intentarCargarImagen(indice + 1);
       };
-      testImg.src = `img/${variaciones[indice]}.png`;
+      testImg.src = srcTry;
     };
     
     intentarCargarImagen();

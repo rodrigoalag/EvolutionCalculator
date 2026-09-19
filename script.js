@@ -338,7 +338,7 @@ function initSearch() {
 
     suggestionsContainer.innerHTML = matches.map(d => `
       <div class="suggestion-item" data-name="${d.name}" data-tama="${d.tama}" data-nivel="${d.nivel}">
-        <img src="icon/placeholder.png" data-digimon="${d.name}" alt="">
+        <img src="${imgUrl('icon/placeholder.png')}" data-digimon="${d.name}" alt="">
         <div>
           <div class="name">${d.name}</div>
           <div class="tama-level">${d.tama} • ${nivelAEtapa[d.nivel] || ''}</div>

@@ -591,7 +591,7 @@ let currentInsertIndex = -1;
 // ===== BUILD DIGIMON LIST FROM DICT =====
 /** Returns the icon image path for a Digimon name, normalizing it to lowercase alphanumeric characters. */
 function iconPath(name) {
-  return `icon/${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.png`;
+  return imgUrl('icon/' + name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png');
 }
 
 const allDigimons = Object.entries(digimonReqDict)
@@ -673,7 +673,7 @@ function makeIconEl(name, inPool = false) {
   const img = document.createElement('img');
   img.src = iconPath(name);
   img.alt = name;
-  img.onerror = () => { img.src = 'icon/placeholder.png'; };
+  img.onerror = () => { img.src = imgUrl('icon/placeholder.png'); };
 
   const tooltip = document.createElement('div');
   tooltip.className = 'digi-tooltip';

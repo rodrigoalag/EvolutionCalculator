@@ -2417,7 +2417,7 @@ function formatearPuntajeConColor(puntaje) {
 
       // Extraer el nombre sin extensión y carpeta
       const nombreSinExt = rutaBase.replace('.png', '').replace('img/', '');
-      const rutaAdicional = `img/${nombreSinExt}${numeroActual}.png`;
+      const rutaAdicional = imgUrl('img/' + nombreSinExt + numeroActual + '.png');
 
       const imgTest = new Image();
       imgTest.onload = function() {
@@ -2953,10 +2953,10 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       const imgPlaceholder = new Image();
       imgPlaceholder.onload = function() {
         console.log(`✅ Usando placeholder.png para ${nombre}`);
-        elementoImg.src = 'img/placeholder.png';
+        elementoImg.src = imgUrl('img/placeholder.png');
         elementoImg.style.display = 'block';
         // imagePlaceholder removido - usar panel-placeholder = 'none';
-        if (callback) callback(true, 'img/placeholder.png');
+        if (callback) callback(true, imgUrl('img/placeholder.png'));
       };
       imgPlaceholder.onerror = function() {
         console.log(`❌ No se encontró placeholder.png. Usando placeholder de texto.`);
@@ -2964,15 +2964,15 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
         // imagePlaceholder removido - usar panel-placeholder = 'flex';
         if (callback) callback(false);
       };
-      imgPlaceholder.src = 'img/placeholder.png';
+      imgPlaceholder.src = imgUrl('img/placeholder.png');
       return;
     }
-    
+
     const variacionActual = variaciones[indiceActual];
-    const ruta = `img/${variacionActual}.png`;
-    
+    const ruta = imgUrl('img/' + variacionActual + '.png');
+
     console.log(`Probando: ${ruta}`);
-    
+
     const imgTest = new Image();
     imgTest.onload = function() {
       console.log(`✅ Imagen encontrada: ${ruta}`);
@@ -3145,7 +3145,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
     /** Tries the next icon filename variation until one loads successfully. */
     function intentar() {
       if (i >= variaciones.length) return;
-      const srcTry = `icon/${variaciones[i]}.png`;
+      const srcTry = imgUrl('icon/' + variaciones[i] + '.png');
       const testImg = new Image();
       testImg.onload = () => { elementoImg.src = srcTry; };
       testImg.onerror = () => { i++; intentar(); };

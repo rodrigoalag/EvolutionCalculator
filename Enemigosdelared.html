@@ -1300,11 +1300,11 @@ header select:hover {
         if (indiceActual >= variaciones.length) {
           // Si fallan todas las variaciones, intentar con placeholder
           console.log(`❌ No se encontró imagen para ${nombre}`);
-          elementoImg.src = `${carpeta}/placeholder.png`;
+          elementoImg.src = imgUrl(carpeta + '/placeholder.png');
           return;
         }
         const variacionActual = variaciones[indiceActual];
-        const ruta = `${carpeta}/${variacionActual}.png`;
+        const ruta = imgUrl(carpeta + '/' + variacionActual + '.png');
         console.log(`Nombre actual: ${variacionActual}`);
         console.log(`Nombre actual: ${ruta}`);
 
@@ -1522,13 +1522,13 @@ header select:hover {
           // Imagen de fondo (color del driver)
           const driverBg = document.createElement('img');
           driverBg.className = 'driver-bg';
-          driverBg.src = `itemimg/driver${driverColor.toLowerCase()}.png`;
+          driverBg.src = imgUrl('itemimg/driver' + driverColor.toLowerCase() + '.png');
           driverBg.alt = `Driver ${driverColor}`;
 
           // Imagen del driver específico
           const driverIcon = document.createElement('img');
           driverIcon.className = 'driver-icon';
-          driverIcon.src = `driverlist/${carpetaDriver}/${driverCode}.png`;
+          driverIcon.src = imgUrl('driverlist/' + carpetaDriver + '/' + driverCode + '.png');
           driverIcon.alt = driverCode;
 
           driverContainer.appendChild(driverBg);
@@ -1585,7 +1585,7 @@ header select:hover {
           // Buscar imagen usando normalización automática
           const imagenEncontrada = obtenerImagenItem(itemName);
           if (imagenEncontrada) {
-            itemImg.src = `itemimg/${imagenEncontrada}`;
+            itemImg.src = imgUrl('itemimg/' + imagenEncontrada);
           } else {
             // Fallback: intentar variaciones del nombre
             cargarImagenConVariaciones(itemName, itemImg, 'itemimg');

@@ -285,7 +285,7 @@ function createTamaIcons() {
     btn.dataset.tama = tama;
     btn.type = 'button';
     btn.innerHTML = `
-      <img src="Tama/${tama}.png" alt="${tama}" onerror="this.src='icon/placeholder.png'">
+      <img src="${imgUrl('Tama/' + tama + '.png')}" alt="${tama}" onerror="this.src='${imgUrl('icon/placeholder.png')}'">
       <span>${tama}</span>
     `;
     btn.addEventListener('click', (e) => {
@@ -338,7 +338,7 @@ function initSearch() {
 
     suggestionsContainer.innerHTML = matches.map(d => `
       <div class="suggestion-item" data-name="${d.name}" data-tama="${d.tama}" data-nivel="${d.nivel}">
-        <img src="icon/placeholder.png" data-digimon="${d.name}" alt="">
+        <img src="${imgUrl('icon/placeholder.png')}" data-digimon="${d.name}" alt="">
         <div>
           <div class="name">${d.name}</div>
           <div class="tama-level">${d.tama} • ${nivelAEtapa[d.nivel] || ''}</div>
@@ -390,7 +390,7 @@ function cargarImagenIcono(nombre, elementoImg) {
   /** Tries the next filename variation to load the icon, advancing the index on each failure. */
   function intentar() {
     if (i >= unique.length) return;
-    const srcTry = `icon/${unique[i]}.png`;
+    const srcTry = imgUrl('icon/' + unique[i] + '.png');
     const testImg = new Image();
     testImg.onload = () => { elementoImg.src = srcTry; };
     testImg.onerror = () => { i++; intentar(); };

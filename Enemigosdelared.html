@@ -911,7 +911,7 @@ header select:hover {
         }
 
         const nombreArchivo = variaciones[indice];
-        const ruta = `NPCS/${nombreArchivo}.png`;
+        const ruta = imgUrl('NPCS/' + nombreArchivo + '.png');
 
         const imgTest = new Image();
         imgTest.onload = function() {
@@ -949,7 +949,7 @@ header select:hover {
         }
 
         const nombreArchivo = variaciones[indice];
-        const ruta = `NPCS/${nombreArchivo}.png`;
+        const ruta = imgUrl('NPCS/' + nombreArchivo + '.png');
 
         const imgTest = new Image();
         imgTest.onload = function() {

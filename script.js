@@ -390,7 +390,7 @@ function cargarImagenIcono(nombre, elementoImg) {
   /** Tries the next filename variation to load the icon, advancing the index on each failure. */
   function intentar() {
     if (i >= unique.length) return;
-    const srcTry = `icon/${unique[i]}.png`;
+    const srcTry = imgUrl('icon/' + unique[i] + '.png');
     const testImg = new Image();
     testImg.onload = () => { elementoImg.src = srcTry; };
     testImg.onerror = () => { i++; intentar(); };

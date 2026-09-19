@@ -592,7 +592,7 @@ const pvpTopDB = {
 // Digimon favorito por jugador (usa nickname como clave, puede ser string o array)
 const pvpDigiFavorito = {
   "Leonhartbk": "BlackWargreymon",
-  "Rodrigo": "AeroVDramonBlack",
+  "Rodrigo": ["AeroVDramonBlack", "BlackKingNumemon"],
   "Spoolofwool": "Mugendramon",
   "Spookytree": "AeroVDramon",
   "Auraomega": ["Scumon", "DexDoruguremon", "DarkSuperStarmon"],

@@ -588,3 +588,9 @@ const pvpTopDB = {
     ]
   }
 };
+
+// Digimon favorito por jugador (usa nickname como clave)
+const pvpDigiFavorito = {
+  "Leonhartbk": "BlackWargreymon",
+  "Rodrigo": "AeroVDramonBlack"
+};

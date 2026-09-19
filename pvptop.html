@@ -662,8 +662,10 @@ function renderResumen() {
         }).join('') + `</div>`
       : '-';
     const digiFav = pvpDigiFavorito[s.nickname];
-    const digiFavCell = digiFav
-      ? `<img style="width:48px;height:48px;object-fit:contain;" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/${digiIconFilename(digiFav)}" alt="${digiFav}" title="${digiFav}" onerror="this.style.display='none'">`
+    const digiFavArr = digiFav ? (Array.isArray(digiFav) ? digiFav : [digiFav]) : [];
+    const digiFavCell = digiFavArr.length
+      ? `<div style="display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:3px;">` +
+        digiFavArr.map(d => `<img style="width:48px;height:48px;object-fit:contain;flex-shrink:0;" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/${digiIconFilename(d)}" alt="${d}" title="${d}" onerror="this.style.display='none'">`).join('') + `</div>`
       : '-';
     const discordDisplay = s.discord === 'ඞ' ? `<span style="font-size:1.5rem;">${s.discord}</span>` : s.discord;
     tr.innerHTML = `
@@ -727,8 +729,10 @@ function renderTabla(key) {
     if (j.puesto <= 3 && j.nickname) tr.classList.add(`rank-${j.puesto}`);
     const sinData = j.nickname === null;
     const digiFav = !sinData ? pvpDigiFavorito[j.nickname] : null;
-    const digiFavCell = digiFav
-      ? `<img style="width:48px;height:48px;object-fit:contain;" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/${digiIconFilename(digiFav)}" alt="${digiFav}" title="${digiFav}" onerror="this.style.display='none'">`
+    const digiFavArr = digiFav ? (Array.isArray(digiFav) ? digiFav : [digiFav]) : [];
+    const digiFavCell = digiFavArr.length
+      ? `<div style="display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:3px;">` +
+        digiFavArr.map(d => `<img style="width:48px;height:48px;object-fit:contain;flex-shrink:0;" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/${digiIconFilename(d)}" alt="${d}" title="${d}" onerror="this.style.display='none'">`).join('') + `</div>`
       : '-';
     const discordDisplay = j.discord === 'ඞ' ? `<span style="font-size:1.5rem;">${j.discord}</span>` : j.discord;
     tr.innerHTML = sinData

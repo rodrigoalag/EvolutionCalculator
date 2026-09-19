@@ -27,9 +27,9 @@
   };
 
   var navHeaderTexts = {
-    'nav-herramientas': { icon: './pageicons/menu.png',  es: 'Herramientas',   en: 'Tools' },
-    'nav-links':        { icon: './pageicons/link.png',  es: 'Links Externos', en: 'External Links' },
-    'nav-creditos':     { icon: './pageicons/audit.png', es: 'Créditos',       en: 'Credits' }
+    'nav-herramientas': { icon: 'pageicons/menu.png',  es: 'Herramientas',   en: 'Tools' },
+    'nav-links':        { icon: 'pageicons/link.png',  es: 'Links Externos', en: 'External Links' },
+    'nav-creditos':     { icon: 'pageicons/audit.png', es: 'Créditos',       en: 'Credits' }
   };
 
   function translateNavMenu(lang) {
@@ -39,7 +39,8 @@
       var info = navHeaderTexts[id];
       var el = document.getElementById(id);
       if (el) {
-        el.innerHTML = '<img src="' + info.icon + '" alt="' + info[lang] + '"><span>' + info[lang] + '</span>';
+        var iconSrc = typeof imgUrl === 'function' ? imgUrl(info.icon) : info.icon;
+        el.innerHTML = '<img src="' + iconSrc + '" alt="' + info[lang] + '"><span>' + info[lang] + '</span>';
       }
     });
 

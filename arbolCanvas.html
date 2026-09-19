@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Árbol Evolutivo - Digimon</title>
-  <link rel="icon" type="image/png" href="icon/digitamafivicon.png"/>
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/digitamafivicon.png"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
   <script src="FullDigimonReqDict.js"></script>
   <script src="driverNombres.js"></script>
@@ -1313,7 +1313,7 @@ function generarVariacionesNombre(nombre) {
 /** Devuelve la ruta de imagen más probable para un Digimon (usada por Cytoscape). */
 function getImagePath(nombre) {
   const variaciones = generarVariacionesNombre(nombre);
-  return `./icon/${variaciones[0]}.png`;
+  return imgUrl('icon/' + variaciones[0] + '.png');
 }
 
 // Para elementos IMG del panel: prueba múltiples variaciones

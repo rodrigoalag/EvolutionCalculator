@@ -841,11 +841,18 @@ header select:hover {
       return errores.replace(/-/g, '').replace(/\./g, '');
     }
 
-    /** Returns the training range string formatted for use as part of a filename (e.g. "0-39.99" → "03999"). */
+    /** Returns the training range string formatted for use as part of a filename (e.g. "0-39.99" → "040"). */
     function formatearEntrenamientoParaArchivo(entrenamiento) {
-      // Convierte "0-39.99" a "03999", "40-59.99" a "405999", etc.
+      // Convierte "0-39.99" a "040", "40-59.99" a "4060", etc.
       if (!entrenamiento) return '';
-      return entrenamiento.replace(/-/g, '').replace(/\./g, '');
+      const mapeo = {
+        '0-39.99': '040',
+        '40-59.99': '4060',
+        '60-79.99': '6080',
+        '80-99.99': '80100',
+        '100': '100'
+      };
+      return mapeo[entrenamiento] || entrenamiento.replace(/-/g, '').replace(/\./g, '');
     }
 
     // Mapeo de número de nivel a nombre para archivos

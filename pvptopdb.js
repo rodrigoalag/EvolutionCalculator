@@ -569,5 +569,22 @@ const pvpTopDB = {
       { nickname: "Theidiotwithlag", discord: "Theidiotwithlag", ultimoDigimon: "Dorumon",      puntaje: 4545,  puesto: 9  },
       { nickname: "Jophsiel",        discord: "Jophsiel",        ultimoDigimon: "Polarbearmon", puntaje: 4539,  puesto: 10 }
     ]
+  },
+  "2026-09-T0": {
+    label: "Temporada 29",
+    fechaInicio: "1 Setiembre 2026",
+    fechaFin: "15 Setiembre 2026",
+    jugadores: [
+      { nickname: "Braian",       discord: "Braian",       ultimoDigimon: "Extyranomon",    puntaje: 8241, puesto: 1  },
+      { nickname: "Thebig88",     discord: "Big",          ultimoDigimon: "Amaterasumon",   puntaje: 6315, puesto: 2  },
+      { nickname: "Spoolofwool",  discord: "Zororo",       ultimoDigimon: "AeroVdramon",    puntaje: 6256, puesto: 3  },
+      { nickname: "Spookytree",   discord: "Spookytree",   ultimoDigimon: "PolarBearmon",   puntaje: 5734, puesto: 4  },
+      { nickname: "Sithhus",      discord: "Sithhus",      ultimoDigimon: "AeroVDramon",    puntaje: 5618, puesto: 5  },
+      { nickname: "Elxrude",      discord: "Elxrude",      ultimoDigimon: "DexDorugamon",   puntaje: 5607, puesto: 6  },
+      { nickname: "Auraomega",    discord: "Auraomega",    ultimoDigimon: "VDramon",        puntaje: 5506, puesto: 7  },
+      { nickname: "Youngel",      discord: "Youngel",      ultimoDigimon: "GoldGuardromon", puntaje: 5477, puesto: 8  },
+      { nickname: "Rodrigo",      discord: "Rodrigoalag",  ultimoDigimon: "Kokuwamon",      puntaje: 5416, puesto: 9  },
+      { nickname: "Sebastianarm", discord: "Sebastian",    ultimoDigimon: "Mamemon",        puntaje: 5370, puesto: 10 }
+    ]
   }
 };

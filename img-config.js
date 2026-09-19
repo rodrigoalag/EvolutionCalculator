@@ -1,6 +1,6 @@
 // ===== IMAGE CDN CONFIGURATION =====
 // Images are served from jsDelivr CDN pointing to the 'dev' branch
-const IMG_BASE = 'https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/EvolutionCalculator';
+const IMG_BASE = 'https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev';
 
 /** Converts a relative image path to the CDN URL */
 function imgUrl(path) {

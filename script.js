@@ -285,7 +285,7 @@ function createTamaIcons() {
     btn.dataset.tama = tama;
     btn.type = 'button';
     btn.innerHTML = `
-      <img src="Tama/${tama}.png" alt="${tama}" onerror="this.src='icon/placeholder.png'">
+      <img src="${imgUrl('Tama/' + tama + '.png')}" alt="${tama}" onerror="this.src='${imgUrl('icon/placeholder.png')}'">
       <span>${tama}</span>
     `;
     btn.addEventListener('click', (e) => {

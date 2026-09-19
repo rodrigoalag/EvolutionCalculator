@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
+  <script src="img-config.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Digimon Collection Checklist</title>
@@ -791,7 +792,7 @@ function createTamaIcons() {
     btn.className = 'tama-icon-btn';
     btn.dataset.tama = tama;
     btn.innerHTML = `
-      <img src="Tama/${tama}.png" alt="${tama}" onerror="this.src='icon/placeholder.png'">
+      <img src="${imgUrl('Tama/' + tama + '.png')}" alt="${tama}" onerror="this.src='${imgUrl('icon/placeholder.png')}'">
       <span>${tama}</span>
     `;
     btn.addEventListener('click', () => selectTamaIcon(tama));

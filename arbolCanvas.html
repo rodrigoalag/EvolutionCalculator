@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
+  <script src="img-config.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Árbol Evolutivo - Digimon</title>
@@ -2197,8 +2198,8 @@ function driverHTMLInner(codigo) {
   const color = info ? info.color : 'Azul';
   const nombre = info ? info.nombre : codigo;
   return `<div class="xross-driver-container driver-${color}" title="${nombre}">
-    <img class="driver-bg" src="itemimg/driver${color.toLowerCase()}.png" alt="${color}">
-    <img class="driver-icon" src="driverlist/${carpeta}/${codigo}.png" alt="${codigo}">
+    <img class="driver-bg" src="${imgUrl('itemimg/driver' + color.toLowerCase() + '.png')}" alt="${color}">
+    <img class="driver-icon" src="${imgUrl('driverlist/' + carpeta + '/' + codigo + '.png')}" alt="${codigo}">
   </div>`;
 }
 
@@ -2465,14 +2466,14 @@ function showInfo(data, evolutions, preEvolutions) {
       const color = info ? info.color : 'Azul';
       const nombre = info ? info.nombre : codigo;
       return `<div class="xross-driver-container driver-${color}" title="${nombre}">
-        <img class="driver-bg" src="itemimg/driver${color.toLowerCase()}.png" alt="${color}">
-        <img class="driver-icon" src="driverlist/${carpeta}/${codigo}.png" alt="${codigo}">
+        <img class="driver-bg" src="${imgUrl('itemimg/driver' + color.toLowerCase() + '.png')}" alt="${color}">
+        <img class="driver-icon" src="${imgUrl('driverlist/' + carpeta + '/' + codigo + '.png')}" alt="${codigo}">
       </div><span class="xross-label">${nombre} Driver x${cantidad}</span>`;
     }
 
     /** Devuelve el HTML del ícono de un Digimon para usar en la descripción de Xross. */
     function digiIconHTML(nombre) {
-      return `<img class="xross-digi-icon" src="icon/${nombre.toLowerCase()}.png" alt="${nombre}" title="${nombre}">`;
+      return `<img class="xross-digi-icon" src="${imgUrl('icon/' + nombre.toLowerCase() + '.png')}" alt="${nombre}" title="${nombre}">`;
     }
 
     const simple = xrossStr.match(/^(\d+)\s+([A-Z0-9]+)\s+Driver$/);

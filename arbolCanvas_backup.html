@@ -498,7 +498,7 @@
   <!-- Columna 1: Evoluciones -->
   <div class="panel-column digi-info" id="digi-info">
     <div class="header">
-      <img id="info-img" src="img/placeholder.png" onerror="this.src='img/placeholder.png'" alt="" onclick="openImgModal()">
+      <img id="info-img" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/img/placeholder.png" onerror="this.src='https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/img/placeholder.png'" alt="" onclick="openImgModal()">
       <h2 id="info-name"></h2>
       <span class="badge" id="info-badge"></span>
     </div>
@@ -1364,7 +1364,7 @@ function showInfo(data, evolutions, preEvolutions) {
     listFrom.innerHTML = preEvolutions.map(name => {
       const d = digimonReqDict[name] || {};
       return `<div class="evo-item" onclick="clickEvoItem('${name}')">
-        <img data-digimon="${name}" src="icon/placeholder.png" alt="">
+        <img data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
         <span class="name">${name}</span>
         <span class="level">${nivelAEtapa[d.Nivel] || ''}</span>
       </div>`;
@@ -1384,7 +1384,7 @@ function showInfo(data, evolutions, preEvolutions) {
     listTo.innerHTML = evolutions.map(name => {
       const d = digimonReqDict[name] || {};
       return `<div class="evo-item" onclick="clickEvoItem('${name}')">
-        <img data-digimon="${name}" src="icon/placeholder.png" alt="">
+        <img data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
         <span class="name">${name}</span>
         <span class="level">${nivelAEtapa[d.Nivel] || ''}</span>
       </div>`;
@@ -1644,7 +1644,7 @@ function showInfo(data, evolutions, preEvolutions) {
       Object.entries(preEvos).forEach(([preEvoName, valores]) => {
         reqHTML += `<div class="preevo-card">
           <div class="preevo-card-header">
-            <img data-digimon="${preEvoName}" src="icon/placeholder.png" alt="">
+            <img data-digimon="${preEvoName}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
             <span>${preEvoName}</span>
           </div>
           <div class="preevo-card-content">`;

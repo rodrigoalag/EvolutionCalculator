@@ -258,6 +258,15 @@ const fullDigimonReqDict = {
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Dorugamon", "DexDorugamon", "Raptordramon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
+  "Kunemon": {
+    "ID": "222", "Tama": "V4", "Nivel": 3, "Atributo": "Virus", "Tipo": "Insecto",
+    "EvoNatural": "Numemon",
+    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
+    "Requisitos": { "Peso": 10, "Xross": "Driver TBD" },
+    "Stat Base": { "ATK": 40, "DEF": 40, "HP": 500, "Vel": 20 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon", "Fluffymon", "Kekkomon", "Dorimon", "Xiaomon"] }
+  },
   "Gekkomon": {
     "ID": 177, "Tama": "BG", "Nivel": 3, "Atributo": "Data", "Tipo": "Dinosaurio",
     "EvoNatural": "Numemon",

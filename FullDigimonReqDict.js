@@ -1443,7 +1443,7 @@ function computeScumonFamilyStats(digimonName, childName, babyIIName, babyIName)
 // Childs con Tama no estándar (M, D, P, SP, …) son "universales" y vienen de todos los Baby II.
 // Agregar un nuevo Child solo requiere el Tama correcto — no editar Viene/Evoluciona manualmente.
 (function _autoLinkBabyChain() {
-  const STANDARD_TAMAS = ["V0", "VS", "VL", "BG", "PR", "GE"];
+  const STANDARD_TAMAS = ["V0", "VS", "VL", "BG", "PR", "GE", "BT"];
   const babyIByTama  = {};
   const babyIIByTama = {};
 

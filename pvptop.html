@@ -361,7 +361,7 @@ h1, h2, h3 { color: #4ecdc4; }
   <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
   <a href="https://driverdatabase.neocities.org/Driver%20DB" target="_blank" class="nav-link external">Driver Install Guide</a>
   <a href="https://nd-lifespan-calculator-42a5ee.gitlab.io/" target="_blank" class="nav-link external">LifeSpan Calculator</a>
-  <a href="https://nd-deck-builder-5188c6.gitlab.io/" target="_blank" class="nav-link external">Deck Builder</a>
+  <a href="https://deck-builder-v2-gilt.vercel.app/" target="_blank" class="nav-link external">Deck Builder</a>
   <a href="https://netdriver.miraheze.org/wiki/Main_Page" target="_blank" class="nav-link external">NetDriver Wiki</a>
   <div class="nav-divider"></div>
   <h3><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/audit.png" alt="Créditos"><span>Créditos</span></h3>
@@ -406,8 +406,8 @@ h1, h2, h3 { color: #4ecdc4; }
           <thead>
             <tr>
               <th>#</th>
-              <th>Nickname</th>
-              <th id="thDiscord">Discord Name</th>
+              <th id="thJugador">Jugador</th>
+              <th id="thDigiFavorito">Digimon Favorito</th>
               <th id="thDigimon">Último Digimon</th>
               <th id="thPuntaje">Puntaje</th>
             </tr>
@@ -454,7 +454,8 @@ const traducciones = {
     subtitle:      "Top jugadores por temporada",
     season:        "Temporada:",
     idioma:        "Idioma:",
-    discord:       "Discord Name",
+    jugador:       "Jugador",
+    digiFavorito:  "Digimon Favorito",
     digimon:       "Último Digimon",
     puntaje:       "Puntaje",
     resumen:       "Resumen General",
@@ -475,7 +476,8 @@ const traducciones = {
     subtitle:      "Top players per season",
     season:        "Season:",
     idioma:        "Language:",
-    discord:       "Discord Name",
+    jugador:       "Player",
+    digiFavorito:  "Favorite Digimon",
     digimon:       "Last Digimon",
     puntaje:       "Score",
     resumen:       "Overall Summary",
@@ -529,8 +531,8 @@ function actualizarHeadersTemporada() {
   const t = traducciones[idiomaActual];
   document.querySelector('#hallTable thead tr').innerHTML = `
     <th>#</th>
-    <th>Nickname</th>
-    <th id="thDiscord">${t.discord}</th>
+    <th id="thJugador">${t.jugador}</th>
+    <th id="thDigiFavorito">${t.digiFavorito}</th>
     <th id="thDigimon">${t.digimon}</th>
     <th id="thPuntaje">${t.puntaje}</th>
   `;
@@ -540,8 +542,8 @@ function actualizarHeadersTemporada() {
 function actualizarHeadersResumen() {
   const t = traducciones[idiomaActual];
   document.querySelector('#hallTable thead tr').innerHTML = `
-    <th>Nickname</th>
-    <th id="thDiscord">${t.discord}</th>
+    <th id="thJugador">${t.jugador}</th>
+    <th id="thDigiFavorito">${t.digiFavorito}</th>
     <th id="thDigiMasUsado">${t.thDigiMasUsado}</th>
     <th id="thMejorPos">${t.thMejorPos}</th>
     <th id="thMedallero">${t.thMedallero}</th>
@@ -659,9 +661,16 @@ function renderResumen() {
           return `<img style="width:48px;height:48px;object-fit:contain;flex-shrink:0;" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/${fn}" alt="${d}" title="${d}" onerror="this.style.display='none'">`;
         }).join('') + `</div>`
       : '-';
+    const digiFav = pvpDigiFavorito[s.nickname];
+    const digiFavArr = digiFav ? (Array.isArray(digiFav) ? digiFav : [digiFav]) : [];
+    const digiFavCell = digiFavArr.length
+      ? `<div style="display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:3px;">` +
+        digiFavArr.map(d => `<img style="width:48px;height:48px;object-fit:contain;flex-shrink:0;" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/${digiIconFilename(d)}" alt="${d}" title="${d}" onerror="this.style.display='none'">`).join('') + `</div>`
+      : '-';
+    const discordDisplay = s.discord === 'ඞ' ? `<span style="font-size:1.5rem;">${s.discord}</span>` : s.discord;
     tr.innerHTML = `
-      <td class="nickname-cell">${s.nickname}</td>
-      <td class="discord-cell" style="${s.discord === 'ඞ' ? 'font-size:2.5rem;' : ''}">${s.discord}</td>
+      <td class="nickname-cell">${s.nickname} <span style="color:#888;font-size:0.85em;">(${discordDisplay})</span></td>
+      <td>${digiFavCell}</td>
       <td style="text-align:left;">${digiCell}</td>
       <td>${renderPuesto(s.mejorPos)}</td>
       <td style="font-size:1.25rem; white-space:nowrap;">${medallero}</td>
@@ -719,12 +728,19 @@ function renderTabla(key) {
     const tr = document.createElement('tr');
     if (j.puesto <= 3 && j.nickname) tr.classList.add(`rank-${j.puesto}`);
     const sinData = j.nickname === null;
+    const digiFav = !sinData ? pvpDigiFavorito[j.nickname] : null;
+    const digiFavArr = digiFav ? (Array.isArray(digiFav) ? digiFav : [digiFav]) : [];
+    const digiFavCell = digiFavArr.length
+      ? `<div style="display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:3px;">` +
+        digiFavArr.map(d => `<img style="width:48px;height:48px;object-fit:contain;flex-shrink:0;" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/${digiIconFilename(d)}" alt="${d}" title="${d}" onerror="this.style.display='none'">`).join('') + `</div>`
+      : '-';
+    const discordDisplay = j.discord === 'ඞ' ? `<span style="font-size:1.5rem;">${j.discord}</span>` : j.discord;
     tr.innerHTML = sinData
       ? `<td>${renderPuesto(j.puesto)}</td><td class="puntaje-cell" colspan="4" style="color:#555;font-size:1rem;">-</td>`
       : `
         <td>${renderPuesto(j.puesto)}</td>
-        <td class="nickname-cell">${j.nickname}</td>
-        <td class="discord-cell" style="${j.discord === 'ඞ' ? 'font-size:2.5rem;' : ''}">${j.discord}</td>
+        <td class="nickname-cell">${j.nickname} <span style="color:#888;font-size:0.85em;">(${discordDisplay})</span></td>
+        <td>${digiFavCell}</td>
         <td>${renderDigiIcon(j.ultimoDigimon)}</td>
         <td class="puntaje-cell">${j.puntaje ?? '-'}</td>
       `;

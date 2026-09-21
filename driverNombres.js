@@ -326,4 +326,7 @@ const driverNombres = {
   "SP014": { nombre: "Steel Spirit B", color: "Verde" },
   "SP015": { nombre: "Mercuremon", color: "Verde" },
   "SP016": { nombre: "Sephirothmon", color: "Verde" },
+
+  // V4 Series
+  "V4000": { nombre: "Kunemon", color: "Verde" },
 };

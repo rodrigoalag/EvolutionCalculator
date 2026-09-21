@@ -43,6 +43,13 @@ const fullDigimonReqDict = {
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Xiaomon", "Burpmon"], "Viene": [] }
   },
+  "Ketomon": {
+    "ID": 226, "Tama": "BT", "Nivel": 1, "Atributo": "Free", "Tipo": "Ninguno",
+    "Requisitos": { "Peso": 5 },
+    "Stat Base": { "ATK": 13, "DEF": 3, "HP": 40, "Vel": 1 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Hopmon", "Burpmon"], "Viene": [] }
+  },
 
   // ===== BABY II =====
   // Viene y Evoluciona hacia Childs son auto-generados por _autoLinkBabyChain()
@@ -87,6 +94,13 @@ const fullDigimonReqDict = {
     "Stat Base": { "ATK": 1, "DEF": 6, "HP": 180, "Vel": 5 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Paomon"] }
+  },
+  "Hopmon": {
+    "ID": 227, "Tama": "BT", "Nivel": 2, "Atributo": "Free", "Tipo": "Ninguno",
+    "Requisitos": { "Peso": 10 },
+    "Stat Base": { "ATK": 20, "DEF": 3, "HP": 60, "Vel": 1 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Monodramon", "Burpmon"], "Viene": ["Ketomon"] }
   },
 
   // ===== CHILD =====
@@ -258,6 +272,23 @@ const fullDigimonReqDict = {
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Dorugamon", "DexDorugamon", "Raptordramon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": [] }
   },
+  "Kunemon": {
+    "ID": "222", "Tama": "V4", "Nivel": 3, "Atributo": "Virus", "Tipo": "Insecto",
+    "EvoNatural": "Numemon",
+    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Xross"] },
+    "Requisitos": { "Peso": 10, "Xross": "1 V4000 Driver" },
+    "Stat Base": { "ATK": 40, "DEF": 40, "HP": 500, "Vel": 20 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon", "Pickmon", "Fluffymon", "Kekkomon", "Dorimon", "Xiaomon"] }
+  },
+  "Monodramon": {
+    "ID": 228, "Tama": "BT", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Dragon",
+    "EvoNatural": "Numemon",
+    "Requisitos": { "Peso": 15 },
+    "Stat Base": { "ATK": 70, "DEF": 30, "HP": 300, "Vel": 20 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Deltamon", "Raremon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Hopmon"] }
+  },
   "Gekkomon": {
     "ID": 177, "Tama": "BG", "Nivel": 3, "Atributo": "Data", "Tipo": "Dinosaurio",
     "EvoNatural": "Numemon",
@@ -341,7 +372,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 30, "Error Maximo": "3-6", "% Entrenamiento": 60, "Bonus Errores": 5, "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "ATK" },
     "Stat Base": { "ATK": 115, "DEF": 40, "HP": 900, "Vel": 55 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Monodramon"] }
   },
   "Thunderballmon": {
     "ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
@@ -828,7 +859,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Xross": "3 V0019 Driver" },
     "Stat Base": { "ATK": 165, "DEF": 95, "HP": 2800, "Vel": 70 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon","PrinceMamemon"], "Viene": ["Mamemon"] }
   },
   "Monzaemon": {
     "ID": 19, "Tama": "M", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Marioneta",
@@ -1187,7 +1218,7 @@ const fullDigimonReqDict = {
     },
     "Stat Base": { "ATK": 150, "DEF": 205, "HP": 750, "Vel": 120 },
     "isProgramEvo": true,
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Mamemon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Mamemon","BigMamemon"] }
   },
   "BanchoMamemon": {
     "ID": 182, "Tama": "V0", "Nivel": 6, "Atributo": "Data", "Tipo": "Mutante",
@@ -1412,7 +1443,7 @@ function computeScumonFamilyStats(digimonName, childName, babyIIName, babyIName)
 // Childs con Tama no estándar (M, D, P, SP, …) son "universales" y vienen de todos los Baby II.
 // Agregar un nuevo Child solo requiere el Tama correcto — no editar Viene/Evoluciona manualmente.
 (function _autoLinkBabyChain() {
-  const STANDARD_TAMAS = ["V0", "VS", "VL", "BG", "PR", "GE"];
+  const STANDARD_TAMAS = ["V0", "VS", "VL", "BG", "PR", "GE", "BT"];
   const babyIByTama  = {};
   const babyIIByTama = {};
 

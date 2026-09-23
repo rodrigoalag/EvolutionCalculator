@@ -19,6 +19,484 @@
       height: 100vh;
     }
 
+    /* ============================================
+       NUEVO DISEÑO DE PANEL - ESTILO MODERNO
+       ============================================ */
+
+    /* --- Variables de colores del nuevo diseño --- */
+    :root {
+      --panel-bg: #141b2d;
+      --card-bg: #1a2233;
+      --border-color: #232d45;
+      --text-primary: #e8ecf5;
+      --text-secondary: #6b7794;
+      --accent-cyan: #4ecdc4;
+      --accent-orange: #ffa94d;
+      --accent-green: #69db7c;
+      --tab-active-bg: #2a3550;
+    }
+
+    /* --- Header del Panel (imagen + nombre + badge) --- */
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .detail-header img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .detail-header img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(78, 205, 196, 0.4);
+    }
+    .detail-header-info {
+      min-width: 0;
+      flex-grow: 1;
+    }
+    .detail-header-info h2 {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin: 0 0 4px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .detail-header-info .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    /* --- Meta info (Atributo, Tipo, Tama) --- */
+    .detail-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+    .detail-meta span span {
+      color: var(--text-primary);
+      margin-left: 4px;
+    }
+
+    /* --- Sistema de Tabs --- */
+    .detail-tabs {
+      display: flex;
+      gap: 4px;
+      background: #0f1521;
+      border-radius: 10px;
+      padding: 4px;
+      margin: 14px 0;
+    }
+    .detail-tab {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 0;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+    .detail-tab:hover {
+      color: var(--text-primary);
+    }
+    .detail-tab.active {
+      background: var(--tab-active-bg);
+      color: var(--text-primary);
+    }
+
+    /* --- Contenido de Tabs --- */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Grid de Stats (3 columnas) --- */
+    .stats-grid-modern {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-card .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .stat-card .stat-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* --- Selectores especiales (Scumon family) --- */
+    .special-selectors {
+      padding: 10px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .special-selectors label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .special-selectors select {
+      width: 100%;
+      background: #0f1521;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+
+    /* --- Secciones de Evolución (chips/pills) --- */
+    .evo-section-modern {
+      margin-bottom: 16px;
+    }
+    .evo-section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .evo-section-title.from {
+      color: var(--accent-orange);
+    }
+    .evo-section-title.to {
+      color: var(--accent-green);
+    }
+    .evo-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .evo-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px 5px 6px;
+      border-radius: 999px;
+      background: var(--card-bg);
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid var(--border-color);
+    }
+    .evo-chip-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .evo-chip:hover {
+      background: rgba(78, 205, 196, 0.15);
+      border-color: var(--accent-cyan);
+    }
+    .evo-chip.from {
+      border-color: rgba(255, 169, 77, 0.3);
+    }
+    .evo-chip.from:hover {
+      border-color: var(--accent-orange);
+      background: rgba(255, 169, 77, 0.15);
+    }
+    .evo-chip.to {
+      border-color: rgba(105, 219, 124, 0.3);
+    }
+    .evo-chip.to:hover {
+      border-color: var(--accent-green);
+      background: rgba(105, 219, 124, 0.15);
+    }
+    .evo-more-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: transparent;
+      border: 1px dashed var(--border-color);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .evo-more-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    /* --- Acordeones de Requisitos --- */
+    .req-accordions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .req-accordion {
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .req-accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: transparent;
+    }
+    .req-accordion-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .req-accordion-title img {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border-color);
+      margin-left: -8px;
+    }
+    .req-accordion-title img:first-child {
+      margin-left: 0;
+    }
+    .req-accordion-title span {
+      color: var(--text-primary);
+      margin-left: 4px;
+    }
+    .req-accordion-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .req-accordion-stage {
+      font-size: 0.65rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #26305a;
+      color: #93a5f0;
+    }
+    .req-accordion-content {
+      display: grid;
+      padding: 14px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 0.75rem;
+      background: #0f1521;
+      border-top: 1px solid rgba(78, 205, 196, 0.1);
+    }
+    .req-accordion-content .req-field {
+      background: #1a2233;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--accent-cyan);
+      border: 1px solid rgba(78, 205, 196, 0.15);
+      border-left: 3px solid var(--accent-cyan);
+    }
+    .req-accordion-content .req-field-label {
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      display: block;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .req-accordion-content .req-field-value {
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    /* Puntajes dentro de requisitos - asegurar colores */
+    .req-accordion-content .puntaje-positivo,
+    .req-grid-modern .puntaje-positivo,
+    .req-section-modern .puntaje-positivo {
+      color: #22c55e !important;
+    }
+    .req-accordion-content .puntaje-negativo,
+    .req-grid-modern .puntaje-negativo,
+    .req-section-modern .puntaje-negativo {
+      color: #ef4444 !important;
+    }
+    .req-accordion-content .puntaje-neutro,
+    .req-grid-modern .puntaje-neutro,
+    .req-section-modern .puntaje-neutro {
+      color: #eab308 !important;
+    }
+    .req-grid-modern {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 0.75rem;
+    }
+    .req-grid-modern .req-field {
+      background: rgba(26, 34, 51, 0.5);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border-left: 2px solid var(--border-color);
+    }
+    .req-grid-modern .req-field-label {
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .req-grid-modern .req-field-value {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .req-grid-modern .req-field.full-width,
+    .req-accordions .req-field.full-width,
+    .req-accordion-content .req-field.full-width {
+      grid-column: span 2;
+    }
+
+    /* Campos de requisitos individuales */
+    .req-field {
+      background: var(--card-bg);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border-left: 2px solid var(--border-color);
+    }
+    .req-field-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+    .req-field-value {
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* Sección de requisitos moderna (para digimons sin per-preevo) */
+    .req-section-modern {
+      margin-bottom: 16px;
+    }
+    .req-section-modern .req-section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: var(--card-bg);
+    }
+    .req-section-modern .req-section-title.required {
+      border-left: 3px solid var(--accent-orange);
+      color: var(--accent-orange);
+    }
+    .req-section-modern .req-section-title.quota {
+      border-left: 3px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+    .req-section-modern .req-section-title.no-score {
+      border-left: 3px solid var(--text-secondary);
+      color: var(--text-secondary);
+    }
+    .req-section-modern .req-section-title.warning {
+      border-left: 3px solid #f59e0b;
+      color: #f59e0b;
+    }
+
+    /* --- Placeholder del Panel --- */
+    .panel-placeholder-modern {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      color: var(--text-secondary);
+      gap: 8px;
+    }
+    .panel-placeholder-modern .icon {
+      font-size: 2.5rem;
+      opacity: 0.5;
+    }
+    .panel-placeholder-modern p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* --- Handle para Bottom Sheet (móvil) --- */
+    .sheet-handle {
+      display: none;
+      width: 40px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--border-color);
+      margin: 0 auto 14px;
+    }
+
+    /* --- Overlay para móvil --- */
+    .panel-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 125;
+    }
+    .panel-overlay.active {
+      display: block;
+    }
+
+    /* --- Scroll en contenido del panel --- */
+    .panel-scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .panel-scroll-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    .panel-scroll-content::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 2px;
+    }
+
+    /* ============================================
+       FIN NUEVO DISEÑO DE PANEL
+       ============================================ */
+
     /* Selector de Tamas */
     #tama-selector {
       position: fixed;
@@ -789,28 +1267,51 @@
     }
 
     @media (max-width: 768px) {
-      /* Canvas full width */
+      /* ============================================
+         DISEÑO MÓVIL - BOTTOM SHEET
+         ============================================ */
+
+      /* Canvas ocupa toda la pantalla */
       #cy {
         width: 100vw;
         height: 100vh;
       }
 
-      /* Ocultar panel por defecto */
+      /* --- Bottom Sheet (panel desde abajo) --- */
       #side-panel {
         position: fixed;
-        top: 0;
-        right: -100%;
-        width: 85%;
-        max-width: 400px;
-        height: 100vh;
-        transition: right 0.3s ease;
+        top: auto;
+        bottom: -100%;           /* Oculto por defecto */
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 85vh;        /* Máximo 85% de la pantalla */
+        height: auto;
+        border-radius: 20px 20px 0 0;
+        transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 130;
         flex-direction: column;
+        padding-top: 10px;
+        box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.4);
       }
-      #side-panel.active { right: 0; }
 
-      /* Mostrar botón de panel */
-      #panel-toggle { display: flex; justify-content: center; align-items: center; }
+      /* Cuando el panel está activo, sube desde abajo */
+      #side-panel.active {
+        bottom: 0;
+      }
+
+      /* Mostrar handle de arrastre en móvil */
+      .sheet-handle {
+        display: block;
+      }
+
+      /* Mostrar overlay en móvil */
+      .panel-overlay {
+        z-index: 125;
+      }
+
+      /* Ocultar botón toggle tradicional, usamos el overlay para cerrar */
+      #panel-toggle { display: none; }
 
       /* Selector de Tamas scrollable */
       #tama-selector {
@@ -856,52 +1357,78 @@
         left: 15px;
         right: 15px;
       }
-      #digi-search {
-        width: 100%;
-      }
-      #search-suggestions {
-        width: 100%;
-      }
+      #digi-search { width: 100%; }
+      #search-suggestions { width: 100%; }
 
       /* Instrucciones ocultas en móvil */
       #instructions { display: none; }
 
-      /* Panel columns stack */
-      #side-panel .panel-column {
-        flex: none;
-        width: 100%;
-      }
-
-      /* Botón cerrar panel */
+      /* Botón cerrar panel (X) - esquina superior derecha del sheet */
       #close-panel {
         display: block;
         position: absolute;
-        top: 60px;
-        right: 10px;
-        width: 35px;
-        height: 35px;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.08);
         border: none;
-        color: #fff;
-        font-size: 1.2rem;
+        color: var(--text-secondary);
+        font-size: 1rem;
         cursor: pointer;
+        z-index: 5;
+      }
+      #close-panel:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--text-primary);
       }
 
-      /* Botón info panel - posición en móvil */
-      #info-panel-btn {
-        position: fixed;
-        top: 110px;
-        right: 10px;
+      /* Ocultar botón info en móvil (ahora usamos el sheet) */
+      #info-panel-btn { display: none !important; }
+
+      /* Ajustar tabs para móvil */
+      .detail-tabs {
+        margin: 10px 0;
+      }
+      .detail-tab {
+        padding: 8px 0;
+        font-size: 0.75rem;
+      }
+
+      /* Stats grid 2 columnas en móvil */
+      .stats-grid-modern {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* Scroll content más compacto */
+      .panel-scroll-content {
+        max-height: calc(85vh - 200px);
       }
     }
 
     @media (max-width: 480px) {
-      #side-panel { width: 100%; max-width: none; }
+      /* Pantallas muy pequeñas */
+      #side-panel {
+        max-height: 90vh;
+        padding: 8px 12px 20px;
+      }
       .tama-icon { width: 40px; height: 52px; }
       .tama-icon img { width: 28px; height: 28px; }
       #controls button { padding: 6px 10px; font-size: 0.7rem; }
-      .preevo-cards { grid-template-columns: 1fr; }
+
+      /* Stats en una columna para pantallas muy pequeñas */
+      .stats-grid-modern {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* Requisitos grid a una columna */
+      .req-grid-modern {
+        grid-template-columns: 1fr;
+      }
+      .req-grid-modern .req-field.full-width {
+        grid-column: span 1;
+      }
     }
 
     /* ===== DRIVER XROSS ===== */
@@ -1041,71 +1568,103 @@
   </div>
 </div>
 
-<div id="side-panel">
-  <button id="close-panel" onclick="togglePanel()" style="display:none;">✕</button>
-  <button id="info-panel-btn" onclick="openInfoPanel()" style="display:none;" title="Ver información">
-    <img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digidex.png" alt="Info Panel">
-  </button>
+<!-- Overlay para cerrar el panel en móvil -->
+<div id="panel-overlay" class="panel-overlay" onclick="closePanel()"></div>
+
+<div id="side-panel" class="detail-panel">
+  <!-- Handle para drag en móvil -->
+  <div class="sheet-handle" id="sheet-handle"></div>
+
+  <!-- Botón cerrar panel -->
+  <button id="close-panel" onclick="closePanel()" style="display:none;">✕</button>
+
+  <!-- Placeholder cuando no hay Digimon seleccionado -->
   <div class="placeholder" id="panel-placeholder" style="flex:1; text-align:center; align-self:center;">
     <p>👆</p>
     <p>Click en un Digimon<br>para ver su información</p>
   </div>
 
-  <!-- Columna 1: Evoluciones -->
+  <!-- Contenido principal del panel (oculto hasta seleccionar Digimon) -->
   <div class="panel-column digi-info" id="digi-info">
-    <div class="header">
+
+    <!-- Header: Imagen, nombre y badge -->
+    <div class="detail-header">
       <img id="info-img" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/img/placeholder.png" onerror="this.src='https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/img/placeholder.png'" alt="" onclick="openImgModal()">
-      <h2 id="info-name"></h2>
-      <span class="badge" id="info-badge"></span>
+      <div class="detail-header-info">
+        <h2 id="info-name"></h2>
+        <span class="badge" id="info-badge"></span>
+      </div>
     </div>
 
-    <div class="stats">
-      <p>Atributo: <span id="info-attr"></span></p>
-      <p>Tipo: <span id="info-type"></span></p>
-      <p>Tama: <span id="info-tama"></span></p>
+    <!-- Meta: Atributo, Tipo, Tama -->
+    <div class="detail-meta">
+      <span>Atributo <span id="info-attr"></span></span>
+      <span>Tipo <span id="info-type"></span></span>
+      <span>Tama <span id="info-tama"></span></span>
     </div>
 
+    <!-- Selector especial para Scumon/variantes -->
     <div id="scumon-lineage-row" style="display: none; padding: 4px 8px; flex-direction: column; gap: 6px;">
       <div>
-        <label style="font-size: 0.75rem; color: #aaa;">Child:</label>
-        <select id="scumon-child-select" style="width: 100%; margin-top: 2px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
+        <label style="font-size: 0.75rem; color: var(--text-secondary);">Child:</label>
+        <select id="scumon-child-select" style="width: 100%; margin-top: 2px; background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
       </div>
       <div id="scumon-tama-row" style="display: none;">
-        <label style="font-size: 0.75rem; color: #aaa;">Tama:</label>
-        <select id="scumon-tama-select" style="width: 100%; margin-top: 2px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
+        <label style="font-size: 0.75rem; color: var(--text-secondary);">Tama:</label>
+        <select id="scumon-tama-select" style="width: 100%; margin-top: 2px; background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 4px; font-size: 0.8rem;"></select>
       </div>
     </div>
 
-    <div class="base-stats" id="base-stats">
-      <div class="stat-row"><span class="stat-label">HP</span><span class="stat-value" id="stat-hp">-</span></div>
-      <div class="stat-row"><span class="stat-label">ATK</span><span class="stat-value" id="stat-atk">-</span></div>
-      <div class="stat-row"><span class="stat-label">DEF</span><span class="stat-value" id="stat-def">-</span></div>
-      <div class="stat-row"><span class="stat-label">Vel</span><span class="stat-value" id="stat-vel">-</span></div>
-      <div class="stat-row" style="grid-column: 1 / -1; justify-content: space-between;">
+    <!-- Stats Base (siempre visible, debajo del meta) -->
+    <div class="stats-grid-modern" id="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">HP</span>
+        <span class="stat-value" id="stat-hp">-</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">ATK</span>
+        <span class="stat-value" id="stat-atk">-</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">DEF</span>
+        <span class="stat-value" id="stat-def">-</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">VEL</span>
+        <span class="stat-value" id="stat-vel">-</span>
+      </div>
+      <div class="stat-card">
         <span class="stat-label">Digipuntos</span>
         <span class="stat-value" id="stat-digipuntos">-</span>
       </div>
-      <div class="stat-row" style="grid-column: 1 / -1; justify-content: space-between;">
+      <div class="stat-card">
         <span class="stat-label">Clasificación</span>
-        <span class="stat-value" id="stat-clasificacion" style="font-size: 0.6rem;">-</span>
+        <span class="stat-value" id="stat-clasificacion">-</span>
       </div>
     </div>
 
-    <div class="evo-section" id="section-from">
-      <h4 class="from">⬅ Viene de</h4>
-      <div class="evo-list" id="list-from"></div>
+    <!-- Tabs de navegación (Evolución y Requisitos) -->
+    <div class="detail-tabs">
+      <button class="detail-tab active" data-tab="evolucion" onclick="switchTab('evolucion')">Evolución</button>
+      <button class="detail-tab" data-tab="requisitos" onclick="switchTab('requisitos')">Requisitos</button>
     </div>
 
-    <div class="evo-section" id="section-to">
-      <h4 class="to">➡ Evoluciona a</h4>
-      <div class="evo-list" id="list-to"></div>
+    <!-- Tab: Evolución (chips de evolución) -->
+    <div class="tab-content" id="tab-evolucion">
+      <div class="evo-section-modern" id="section-from">
+        <h4 class="evo-section-title from">Viene de (<span id="count-from">0</span>)</h4>
+        <div class="evo-chips" id="list-from"></div>
+      </div>
+      <div class="evo-section-modern" id="section-to">
+        <h4 class="evo-section-title to">Evoluciona a (<span id="count-to">0</span>)</h4>
+        <div class="evo-chips" id="list-to"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- Columna 2: Requisitos -->
-  <div class="panel-column digi-info" id="digi-reqs" style="display:none;">
-    <h3>📋 Requisitos de Evolución</h3>
-    <div class="req-grid" id="req-grid"></div>
+    <!-- Tab: Requisitos (acordeones colapsables) -->
+    <div class="tab-content" id="tab-requisitos" style="display: none;">
+      <div class="req-accordions" id="req-accordions"></div>
+    </div>
   </div>
 </div>
 
@@ -1276,6 +1835,24 @@ const digimonVariantesPorPreEvo = {
       }
     }
   },
+  "Daipenmon": {
+    categorias: {
+      "No se considera en el puntaje": ["Peso", "Error Maximo"],
+      "Requisitos Obligatorios": ["% Entrenamiento", "Combates Minimos", "WinRate", "Xross"]
+    },
+    preEvos: {
+      "Blizzarmon": {
+        "Peso": "35-45", "Error Maximo": "0-6", "% Entrenamiento": "100%",
+        "Combates Minimos": "50", "WinRate": "80%",
+        "Xross": "lookup"
+      },
+      "Polarbearmon": {
+        "Peso": "35-45", "Error Maximo": "0-6", "% Entrenamiento": "100%",
+        "Combates Minimos": "50", "WinRate": "80%",
+        "Xross": "lookup"
+      }
+    }
+  },
 };
 
 // Configuración por defecto para Digimons sin configuración especial
@@ -1435,12 +2012,20 @@ function updateUITexts() {
     placeholder.innerHTML = `<p>${t.panelPlaceholderIcon}</p><p>${t.panelPlaceholder.replace('\n', '<br>')}</p>`;
   }
 
-  // Títulos de secciones
+  // Títulos de secciones de evolución (preservar el span de conteo)
   const fromTitle = document.querySelector('#section-from h4');
-  if (fromTitle) fromTitle.textContent = t.vieneTitle;
+  const countFromSpan = document.getElementById('count-from');
+  if (fromTitle && countFromSpan) {
+    const count = countFromSpan.textContent;
+    fromTitle.innerHTML = `${t.vieneTitle} (<span id="count-from">${count}</span>)`;
+  }
 
   const toTitle = document.querySelector('#section-to h4');
-  if (toTitle) toTitle.textContent = t.evolucionaTitle;
+  const countToSpan = document.getElementById('count-to');
+  if (toTitle && countToSpan) {
+    const count = countToSpan.textContent;
+    toTitle.innerHTML = `${t.evolucionaTitle} (<span id="count-to">${count}</span>)`;
+  }
 
   // Instrucciones
   const instructions = document.getElementById('instructions');
@@ -1460,39 +2045,77 @@ document.addEventListener('DOMContentLoaded', () => {
   updateUITexts();
 });
 
-// Toggle panel lateral en móvil
-/** Muestra u oculta el panel lateral de información en modo móvil. */
+/** Alterna la visibilidad del panel lateral de información */
 function togglePanel() {
   const panel = document.getElementById('side-panel');
   const closeBtn = document.getElementById('close-panel');
-  const infoPanelBtn = document.getElementById('info-panel-btn');
+  const overlay = document.getElementById('panel-overlay');
   const container = document.getElementById('node-overlays');
   const isActive = panel.classList.toggle('active');
   closeBtn.style.display = isActive ? 'block' : 'none';
 
-  // En móvil, mostrar/ocultar drivers y botón de info
+  // Mostrar/ocultar overlay en móvil
   if (window.innerWidth <= 768) {
-    if (!isActive) {
-      // Panel cerrado: mostrar drivers y botón de info
-      if (container) container.style.display = '';
-      if (infoPanelBtn) infoPanelBtn.style.display = 'block';
+    overlay.classList.toggle('active', isActive);
+    if (!isActive && container) {
+      container.style.display = '';
     }
+  }
+}
+
+/** Cierra el panel lateral de información (usado por overlay y botón cerrar) */
+function closePanel() {
+  const panel = document.getElementById('side-panel');
+  const closeBtn = document.getElementById('close-panel');
+  const overlay = document.getElementById('panel-overlay');
+  const container = document.getElementById('node-overlays');
+
+  panel.classList.remove('active');
+  overlay.classList.remove('active');
+  closeBtn.style.display = 'none';
+
+  // Restaurar overlays de drivers en móvil
+  if (window.innerWidth <= 768 && container) {
+    container.style.display = '';
+  }
+}
+
+/** Abre el panel lateral mostrando la información del Digimon seleccionado */
+function openPanel() {
+  const panel = document.getElementById('side-panel');
+  const closeBtn = document.getElementById('close-panel');
+  const overlay = document.getElementById('panel-overlay');
+  const container = document.getElementById('node-overlays');
+
+  panel.classList.add('active');
+  closeBtn.style.display = 'block';
+
+  // En móvil, mostrar overlay y ocultar drivers
+  if (window.innerWidth <= 768) {
+    overlay.classList.add('active');
+    if (container) container.style.display = 'none';
   }
 }
 
 /** Cierra el panel lateral de información en modo móvil y restaura los overlays. */
 function closePanelMobile() {
-  const panel = document.getElementById('side-panel');
-  const closeBtn = document.getElementById('close-panel');
-  const infoPanelBtn = document.getElementById('info-panel-btn');
-  const container = document.getElementById('node-overlays');
-  if (window.innerWidth <= 768) {
-    panel.classList.remove('active');
-    closeBtn.style.display = 'none';
-    // Mostrar drivers y botón de info nuevamente
-    if (container) container.style.display = '';
-    if (infoPanelBtn) infoPanelBtn.style.display = 'block';
-  }
+  closePanel();
+}
+
+/**
+ * Cambia la pestaña activa del panel de información
+ * @param {string} tabName - Nombre de la pestaña: 'evolucion' o 'requisitos'
+ */
+function switchTab(tabName) {
+  // Actualizar estado visual de los botones de tab
+  document.querySelectorAll('.detail-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.tab === tabName);
+  });
+
+  // Mostrar/ocultar contenido de tabs
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.style.display = content.id === `tab-${tabName}` ? 'block' : 'none';
+  });
 }
 
 // Marcar que hay un Digimon seleccionado (para el botón flotante)
@@ -2308,34 +2931,28 @@ function updateNodeOverlays() {
 }
 // ===== FIN ITEM RENDER =====
 
-/** Abre el panel lateral de información y oculta los overlays de nodo en móvil. */
+/**
+ * Abre el panel lateral de información y oculta los overlays de nodo en móvil.
+ * Wrapper para compatibilidad con código existente.
+ */
 function openInfoPanel() {
-  document.getElementById('side-panel').classList.add('active');
-  document.getElementById('close-panel').style.display = 'block';
-  document.getElementById('info-panel-btn').style.display = 'none';
-
-  // Ocultar drivers e icons
-  const container = document.getElementById('node-overlays');
-  if (container) {
-    container.style.display = 'none';
-  }
+  openPanel();
 }
 
-/** Muestra en el panel lateral la información, stats, evoluciones y requisitos del Digimon seleccionado. */
+/**
+ * Muestra en el panel lateral la información, stats, evoluciones y requisitos del Digimon seleccionado.
+ * En móvil muestra el bottom sheet, en desktop el panel lateral.
+ */
 function showInfo(data, evolutions, preEvolutions) {
   lastShowInfoArgs = [data, evolutions, preEvolutions];
   document.getElementById('panel-placeholder').style.display = 'none';
   document.getElementById('digi-info').classList.add('active');
-  document.getElementById('digi-reqs').style.display = 'block';
 
-  // En móvil, mostrar botón de info en lugar de abrir automáticamente
-  if (window.innerWidth <= 768) {
-    document.getElementById('info-panel-btn').style.display = 'block';
-  } else {
-    // En desktop, abrir panel automáticamente
-    document.getElementById('side-panel').classList.add('active');
-    document.getElementById('close-panel').style.display = 'block';
-  }
+  // Resetear a tab "Evolución" cuando se muestra un nuevo Digimon
+  switchTab('evolucion');
+
+  // Abrir panel (funciona tanto en desktop como móvil con bottom sheet)
+  openPanel();
   updatePanelToggleState(true);
 
   cargarImagenConVariaciones(data.label, document.getElementById('info-img'), 'img');
@@ -2405,19 +3022,21 @@ function showInfo(data, evolutions, preEvolutions) {
   badge.style.background = data.color;
   badge.style.color = data.nivel > 3 ? '#1a1a2e' : '#fff';
 
-  // Pre-evolutions
+  // Pre-evolutions (chips style con iconos)
+  const t = uiTranslations[currentLanguage] || uiTranslations.es;
   const sectionFrom = document.getElementById('section-from');
   const listFrom = document.getElementById('list-from');
+  const fromTitle = document.querySelector('#section-from h4');
   if (preEvolutions.length > 0) {
     sectionFrom.style.display = 'block';
+    fromTitle.innerHTML = `${t.vieneTitle} (<span id="count-from">${preEvolutions.length}</span>)`;
     listFrom.innerHTML = preEvolutions.map(name => {
-      const d = digimonReqDict[name] || {};
-      return `<div class="evo-item" onclick="clickEvoItem('${name}')">
-        <img data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
-        <span class="name">${name}</span>
-        <span class="level">${nivelAEtapa[d.Nivel] || ''}</span>
+      return `<div class="evo-chip from" onclick="clickEvoItem('${name}')">
+        <img class="evo-chip-icon" data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
+        <span>${name}</span>
       </div>`;
     }).join('');
+    // Cargar iconos con variaciones de nombre
     listFrom.querySelectorAll('img[data-digimon]').forEach(img => {
       cargarImagenConVariaciones(img.dataset.digimon, img);
     });
@@ -2425,19 +3044,20 @@ function showInfo(data, evolutions, preEvolutions) {
     sectionFrom.style.display = 'none';
   }
 
-  // Evolutions
+  // Evolutions (chips style con iconos)
   const sectionTo = document.getElementById('section-to');
   const listTo = document.getElementById('list-to');
+  const toTitle = document.querySelector('#section-to h4');
   if (evolutions.length > 0) {
     sectionTo.style.display = 'block';
+    toTitle.innerHTML = `${t.evolucionaTitle} (<span id="count-to">${evolutions.length}</span>)`;
     listTo.innerHTML = evolutions.map(name => {
-      const d = digimonReqDict[name] || {};
-      return `<div class="evo-item" onclick="clickEvoItem('${name}')">
-        <img data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
-        <span class="name">${name}</span>
-        <span class="level">${nivelAEtapa[d.Nivel] || ''}</span>
+      return `<div class="evo-chip to" onclick="clickEvoItem('${name}')">
+        <img class="evo-chip-icon" data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
+        <span>${name}</span>
       </div>`;
     }).join('');
+    // Cargar iconos con variaciones de nombre
     listTo.querySelectorAll('img[data-digimon]').forEach(img => {
       cargarImagenConVariaciones(img.dataset.digimon, img);
     });
@@ -2445,9 +3065,9 @@ function showInfo(data, evolutions, preEvolutions) {
     sectionTo.style.display = 'none';
   }
 
-  // Requisitos de digimonReqDict
+  // Requisitos de digimonReqDict - usando nuevo contenedor de acordeones
   const reqData = digimonReqDict[data.label] || {};
-  const reqGrid = document.getElementById('req-grid');
+  const reqAccordions = document.getElementById('req-accordions');
   let specialConfig = digimonReqDict[data.label]?.categorias || specialDigimonConfig[data.label];
 
   // Campos que usan porcentaje
@@ -2778,42 +3398,71 @@ function showInfo(data, evolutions, preEvolutions) {
   // Verificar si tiene variantes completas (como Clockmon)
   const variantesConfig = digimonVariantes[data.label];
   if (variantesConfig) {
-    // Renderizar tabla con columnas para cada variante
+    // Renderizar como acordeones (igual que variantesPorPreEvo)
     const { columnas, categorias, valores } = variantesConfig;
 
-    Object.entries(categorias).forEach(([category, campos]) => {
-      const categoryClass = categoryClasses[category] || '';
-      reqHTML += `<div class="req-section">
-        <div class="req-section-title ${categoryClass}">${translateCategory(category)}</div>
-        <table class="variantes-full-table">
-          <thead>
-            <tr>
-              <th class="campo-header">Campo</th>
-              ${columnas.map(col => `<th class="variante-header">${col.replace(/2$/, '')}</th>`).join('')}
-            </tr>
-          </thead>
-          <tbody>`;
+    // Combinar todos los campos de todas las categorías
+    const allCampos = Object.values(categorias).flat();
 
-      campos.forEach(campo => {
+    // Crear un acordeón por cada columna (Sin Bonus, Con Bonus, etc.)
+    columnas.forEach(col => {
+      const displayName = col.replace(/2$/, ''); // Quitar sufijo "2" si existe
+
+      reqHTML += `<div class="req-accordion open">
+        <div class="req-accordion-header">
+          <span class="req-accordion-title">
+            <img data-digimon="${data.label}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
+            <span>${displayName}</span>
+          </span>
+          <span class="req-accordion-stage">Variante</span>
+        </div>
+        <div class="req-accordion-content">`;
+
+      // Renderizar cada campo con sus valores para esta columna (omitir campos con valor "-")
+      allCampos.forEach(campo => {
+        const rawValor = valores[col][campo];
+
+        // Omitir campos con valor "-" o sin valor
+        if (rawValor === undefined || rawValor === null || rawValor === '-') {
+          return;
+        }
+
         const label = fieldLabels[campo] || campo;
-        const puntaje = getPuntaje(category, campo, nivel);
-        const puntajeHTML = formatearPuntajeConColor(puntaje);
+        let valorHTML;
 
-        reqHTML += `<tr>
-          <td class="campo-cell">${label}${puntajeHTML}</td>`;
+        if (campo === 'Program') {
+          valorHTML = renderProgram(String(rawValor));
+        } else if (campo === 'Comida' || campo === 'Bonus Comida') {
+          valorHTML = Array.isArray(rawValor) ? rawValor.map(v => renderComida(String(v))).join('<span class="comida-sep">o</span>') : renderComida(String(rawValor));
+        } else if (campo === 'Xross' || campo === 'Driver Equipado') {
+          valorHTML = renderXrossField(String(rawValor), data.label, null);
+        } else {
+          valorHTML = String(rawValor);
+        }
 
-        columnas.forEach(col => {
-          const valor = valores[col][campo] || '-';
-          reqHTML += `<td class="valor-cell">${valor}</td>`;
-        });
+        // Obtener puntaje para el campo (usar la categoría correcta)
+        let puntajeHTML = '';
+        for (const [category, camposInCat] of Object.entries(categorias)) {
+          if (camposInCat.includes(campo)) {
+            const puntaje = getPuntaje(category, campo, nivel);
+            puntajeHTML = formatearPuntajeConColor(puntaje);
+            break;
+          }
+        }
 
-        reqHTML += `</tr>`;
+        reqHTML += `<div class="req-field">
+          <span class="req-field-label">${label}</span>
+          <span class="req-field-value">${valorHTML}${puntajeHTML}</span>
+        </div>`;
       });
 
-      reqHTML += `</tbody></table></div>`;
+      reqHTML += `</div></div>`;
     });
 
-    reqGrid.innerHTML = reqHTML;
+    reqAccordions.innerHTML = reqHTML;
+    reqAccordions.querySelectorAll('img[data-digimon]').forEach(img => {
+      cargarImagenConVariaciones(img.dataset.digimon, img);
+    });
     return;
   }
 
@@ -3067,27 +3716,36 @@ function showInfo(data, evolutions, preEvolutions) {
 
     // Helper para renderizar campos de una tarjeta preevo
     /** Genera el HTML de una tarjeta de requisitos para un grupo de pre-evoluciones. */
+    /**
+     * Renderiza un acordeón de requisitos para una pre-evolución
+     * @param {string[]} preEvoNames - Nombres de las pre-evoluciones
+     * @param {Object} valores - Valores de los campos de requisitos
+     * @param {string[]} campos - Lista de campos a mostrar
+     * @param {string} representativePreEvo - Nombre representativo de la pre-evolución
+     * @param {Object} perCategorias - Categorías con sus campos
+     */
     function renderPreEvoCard(preEvoNames, valores, campos, representativePreEvo, perCategorias) {
       const isGrouped = preEvoNames.length > 1;
-      let headerContent;
-      if (!variantesPorPreEvoConfig.noImage) {
-        if (isGrouped) {
-          headerContent = preEvoNames.map(name => {
-            return `<img data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt=""><span>${name}</span>`;
-          }).join('');
-        } else {
-          headerContent = `<img data-digimon="${preEvoNames[0]}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt=""><span>${preEvoNames[0]}</span>`;
-        }
-      } else {
-        const label = isGrouped ? preEvoNames.join(', ') : preEvoNames[0];
-        headerContent = `<span>${label}</span>`;
-      }
 
-      let cardHTML = `<div class="preevo-card">
-        <div class="preevo-card-header">${headerContent}</div>
-        <div class="preevo-card-content">`;
+      // Generar iconos para todos los pre-evos
+      const iconsHTML = preEvoNames.map(name =>
+        `<img data-digimon="${name}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="" title="${name}">`
+      ).join('');
 
-      /** Genera el HTML de una fila de campo dentro de una tarjeta de pre-evolución. */
+      // Obtener nivel/etapa del primer pre-evo
+      const preEvoData = digimonReqDict[preEvoNames[0]] || {};
+      const stage = nivelAEtapa[preEvoData.Nivel] || '';
+
+      let cardHTML = `<div class="req-accordion open">
+        <div class="req-accordion-header">
+          <span class="req-accordion-title">
+            ${iconsHTML}
+          </span>
+          <span class="req-accordion-stage">${stage}</span>
+        </div>
+        <div class="req-accordion-content">`;
+
+      /** Genera el HTML de una fila de campo dentro del acordeón */
       function renderFieldRow(campo) {
         const label = fieldLabels[campo] || campo;
         const rawValor = valores[campo];
@@ -3099,21 +3757,20 @@ function showInfo(data, evolutions, preEvolutions) {
         } else if (campo === 'Comida' || campo === 'Bonus Comida') {
           valorHTML = Array.isArray(rawValor) ? rawValor.map(v => renderComida(String(v))).join('<span class="comida-sep">o</span>') : renderComida(String(rawValor));
         } else if (campo === 'Xross' || campo === 'Driver Equipado') {
-          valorHTML = renderXrossField(String(rawValor), data.label, representativePreEvo);
+          // Si es "lookup", usar los datos del digimonReqDict
+          valorHTML = renderXrossField(rawValor === 'lookup' ? null : String(rawValor), data.label, representativePreEvo);
         } else {
           valorHTML = String(rawValor);
         }
-        return `<div class="preevo-field">
-          <span class="preevo-field-label">${label}</span>
-          <span class="preevo-field-value">${valorHTML}</span>
+        return `<div class="req-field">
+          <span class="req-field-label">${label}</span>
+          <span class="req-field-value">${valorHTML}</span>
         </div>`;
       }
 
       if (perCategorias) {
         Object.entries(perCategorias).forEach(([catName, catCampos]) => {
           if (!catCampos || catCampos.length === 0) return;
-          const catClass = categoryClasses[catName] || '';
-          cardHTML += `<div class="preevo-section-title ${catClass}">${translateCategory(catName)}</div>`;
           catCampos.forEach(campo => { cardHTML += renderFieldRow(campo); });
         });
       } else {
@@ -3124,8 +3781,7 @@ function showInfo(data, evolutions, preEvolutions) {
       return cardHTML;
     }
 
-    // Una tarjeta por digimon con todos sus campos combinados
-    reqHTML += `<div class="preevo-cards">`;
+    // Acordeones por digimon con todos sus campos combinados
     preEvoGroups.forEach(({ preEvoNames, valores }) => {
       const perCats = valores._categorias || null;
       const campos = perCats
@@ -3133,10 +3789,9 @@ function showInfo(data, evolutions, preEvolutions) {
         : Object.values(categorias || {}).flat();
       reqHTML += renderPreEvoCard(preEvoNames, valores, campos, preEvoNames[0], perCats);
     });
-    reqHTML += `</div>`;
 
-    reqGrid.innerHTML = reqHTML;
-    reqGrid.querySelectorAll('img[data-digimon]').forEach(img => {
+    reqAccordions.innerHTML = reqHTML;
+    reqAccordions.querySelectorAll('img[data-digimon]').forEach(img => {
       cargarImagenConVariaciones(img.dataset.digimon, img);
     });
     return;
@@ -3154,12 +3809,18 @@ function showInfo(data, evolutions, preEvolutions) {
   }
 
   if (specialConfig) {
-    // Usar configuración especial agrupada
+    // Usar configuración especial agrupada - envolver en acordeón para uniformidad
+    reqHTML += `<div class="req-accordion open">
+      <div class="req-accordion-header">
+        <span class="req-accordion-title">
+          <img data-digimon="${data.label}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
+          <span>${data.label}</span>
+        </span>
+        <span class="req-accordion-stage">${nivelAEtapa[nivel] || ''}</span>
+      </div>
+      <div class="req-accordion-content">`;
+
     Object.entries(specialConfig).forEach(([category, fields]) => {
-      const categoryClass = categoryClasses[category] || '';
-      reqHTML += `<div class="req-section">
-        <div class="req-section-title ${categoryClass}">${translateCategory(category)}</div>
-        <div class="req-grid">`;
 
       fields.forEach(field => {
         let value = reqData[field];
@@ -3173,9 +3834,9 @@ function showInfo(data, evolutions, preEvolutions) {
 
         // Campos especiales de muerte inducida (Bakemon LT)
         if (field === 'Muerte inducida sin Carne X o Program (30% de salir)') {
-          reqHTML += `<div class="req-item full-width">
-            <span class="label">${label}</span>
-            <span class="value">Si</span>
+          reqHTML += `<div class="req-field full-width">
+            <span class="req-field-label">${label}</span>
+            <span class="req-field-value">Si</span>
           </div>`;
           return;
         }
@@ -3183,9 +3844,9 @@ function showInfo(data, evolutions, preEvolutions) {
         if (field === 'Program / Comida (Asegura evolucion)') {
           const combinedValue = (reqData.Program && reqData.Comida) ? `${renderProgram(reqData.Program)} / ${renderComida(reqData.Comida)}` : '-';
           const puntajeHTML = formatearPuntajeConColor({ cumple: 3, noCumple: -10 });
-          reqHTML += `<div class="req-item">
-            <span class="label">${label}</span>
-            <span class="value">${combinedValue}${puntajeHTML}</span>
+          reqHTML += `<div class="req-field">
+            <span class="req-field-label">${label}</span>
+            <span class="req-field-value">${combinedValue}${puntajeHTML}</span>
           </div>`;
           return;
         }
@@ -3194,9 +3855,9 @@ function showInfo(data, evolutions, preEvolutions) {
         if (field === 'Program o Comida') {
           const combinedValue = (reqData.Program && reqData.Comida) ? `${renderProgram(reqData.Program)} o ${renderComida(reqData.Comida)}` : '-';
           const puntajeHTML = formatearPuntajeConColor(getPuntaje(category, field, nivel));
-          reqHTML += `<div class="req-item">
-            <span class="label">${label}</span>
-            <span class="value">${combinedValue}${puntajeHTML}</span>
+          reqHTML += `<div class="req-field">
+            <span class="req-field-label">${label}</span>
+            <span class="req-field-value">${combinedValue}${puntajeHTML}</span>
           </div>`;
           return;
         }
@@ -3222,9 +3883,9 @@ function showInfo(data, evolutions, preEvolutions) {
               });
             }
             variantesHTML += '</div>';
-            reqHTML += `<div class="req-item full-width">
-              <span class="label">${label}${puntajeHTML}</span>
-              <span class="value">${variantesHTML}</span>
+            reqHTML += `<div class="req-field full-width">
+              <span class="req-field-label">${label}${puntajeHTML}</span>
+              <span class="req-field-value">${variantesHTML}</span>
             </div>`;
             return;
           }
@@ -3232,8 +3893,8 @@ function showInfo(data, evolutions, preEvolutions) {
 
         // Para campos con "Los requisitos han cambiado"
         if (field.includes('requisitos')) {
-          reqHTML += `<div class="req-item full-width">
-            <span class="value neutral">${field}</span>
+          reqHTML += `<div class="req-field full-width">
+            <span class="req-field-value neutral">${field}</span>
           </div>`;
           return;
         }
@@ -3250,37 +3911,34 @@ function showInfo(data, evolutions, preEvolutions) {
               : (field === 'Comida' || field === 'Bonus Comida')
                 ? (Array.isArray(formattedValue) ? formattedValue.map(v => renderComida(String(v))).join('<span class="comida-sep">o</span>') : renderComida(String(formattedValue)))
                 : formattedValue;
-          reqHTML += `<div class="req-item${fullWidthClass}">
-            <span class="label">${label}</span>
-            <span class="value">${displayValue}${puntajeHTML}</span>
+          reqHTML += `<div class="req-field${fullWidthClass}">
+            <span class="req-field-label">${label}</span>
+            <span class="req-field-value">${displayValue}${puntajeHTML}</span>
           </div>`;
         } else if (category === 'Requisitos Obligatorios') {
-          reqHTML += `<div class="req-item${fullWidthClass}">
-            <span class="label">${label}</span>
-            <span class="value">Requerido${puntajeHTML}</span>
+          reqHTML += `<div class="req-field${fullWidthClass}">
+            <span class="req-field-label">${label}</span>
+            <span class="req-field-value">Requerido${puntajeHTML}</span>
           </div>`;
         } else {
-          reqHTML += `<div class="req-item${fullWidthClass}">
-            <span class="label">${label}</span>
-            <span class="value">-</span>
+          reqHTML += `<div class="req-field${fullWidthClass}">
+            <span class="req-field-label">${label}</span>
+            <span class="req-field-value">-</span>
           </div>`;
         }
       });
-
-      reqHTML += `</div></div>`;
     });
-  } else {
-    // Sin configuración especial: usar gruposColumnasDefault
-    Object.entries(gruposColumnasDefault).forEach(([category, fields]) => {
-      const categoryClass = categoryClasses[category] || '';
-      let categoryHasFields = false;
-      let categoryHTML = '';
 
+    // Cerrar el acordeón
+    reqHTML += `</div></div>`;
+  } else {
+    // Sin configuración especial: usar gruposColumnasDefault - envolver en acordeón para uniformidad
+    let fieldsHTML = '';
+    Object.entries(gruposColumnasDefault).forEach(([category, fields]) => {
       fields.forEach(field => {
         const value = reqData[field];
         const formattedValue = formatValue(field, value);
         if (formattedValue !== null) {
-          categoryHasFields = true;
           const label = fieldLabels[field] || field;
           const isFullWidth = field === 'Digimon Bonus';
           const fullWidthClass = isFullWidth ? ' full-width' : '';
@@ -3294,27 +3952,35 @@ function showInfo(data, evolutions, preEvolutions) {
               : (field === 'Comida' || field === 'Bonus Comida')
                 ? (Array.isArray(formattedValue) ? formattedValue.map(v => renderComida(String(v))).join('<span class="comida-sep">o</span>') : renderComida(String(formattedValue)))
                 : formattedValue;
-          categoryHTML += `<div class="req-item${fullWidthClass}">
-            <span class="label">${label}</span>
-            <span class="value">${displayValue}${puntajeHTML}</span>
+          fieldsHTML += `<div class="req-field${fullWidthClass}">
+            <span class="req-field-label">${label}</span>
+            <span class="req-field-value">${displayValue}${puntajeHTML}</span>
           </div>`;
         }
       });
-
-      if (categoryHasFields) {
-        reqHTML += `<div class="req-section">
-          <div class="req-section-title ${categoryClass}">${translateCategory(category)}</div>
-          <div class="req-grid">${categoryHTML}</div>
-        </div>`;
-      }
     });
 
-    if (reqHTML === '') {
-      reqHTML = '<div class="req-item full-width"><span class="label">Sin requisitos específicos</span></div>';
+    if (fieldsHTML === '') {
+      fieldsHTML = '<div class="req-field full-width"><span class="req-field-label">Sin requisitos específicos</span></div>';
     }
+
+    // Envolver en acordeón para uniformidad
+    reqHTML = `<div class="req-accordion open">
+      <div class="req-accordion-header">
+        <span class="req-accordion-title">
+          <img data-digimon="${data.label}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
+          <span>${data.label}</span>
+        </span>
+        <span class="req-accordion-stage">${nivelAEtapa[nivel] || ''}</span>
+      </div>
+      <div class="req-accordion-content">${fieldsHTML}</div>
+    </div>`;
   }
 
-  reqGrid.innerHTML = reqHTML;
+  reqAccordions.innerHTML = reqHTML;
+  reqAccordions.querySelectorAll('img[data-digimon]').forEach(img => {
+    cargarImagenConVariaciones(img.dataset.digimon, img);
+  });
 }
 
 /** Navega al nodo del grafo correspondiente al Digimon clickeado en la lista de evoluciones. */
@@ -3325,17 +3991,14 @@ function clickEvoItem(name) {
   }
 }
 
-/** Oculta el panel de información y restaura el estado vacío del panel lateral. */
+/**
+ * Oculta el panel de información y restaura el estado vacío del panel lateral.
+ * Cierra el bottom sheet en móvil y el panel lateral en desktop.
+ */
 function hideInfo() {
   document.getElementById('panel-placeholder').style.display = 'flex';
   document.getElementById('digi-info').classList.remove('active');
-  document.getElementById('digi-reqs').style.display = 'none';
-  document.getElementById('info-panel-btn').style.display = 'none';
-  document.getElementById('close-panel').style.display = 'none';
-
-  // Mostrar drivers nuevamente
-  const container = document.getElementById('node-overlays');
-  if (container) container.style.display = '';
+  closePanel();
 }
 
 document.getElementById('btnReset').addEventListener('click', () => {

@@ -401,17 +401,32 @@ h1, h2, h3 { color: #4ecdc4; }
       width: 100%;
     }
 
+    /* Separador y labels de sección unificada */
+    .unified-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(78, 205, 196, 0.2);
+      margin: 1rem 0;
+    }
+
+    .unified-section-label {
+      width: 100%;
+      text-align: center;
+      color: #4ecdc4;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
     /* Estilos para filtros */
     .filters-container {
       display: flex;
-      gap: 1rem;
+      gap: 1rem 2rem;
       flex-wrap: wrap;
       justify-content: center;
       align-items: flex-end;
-      margin: 1.5rem 0;
-      padding: 1rem;
-      background-color: rgba(0, 0, 0, 0.02);
-      border-radius: 8px;
+      width: 100%;
     }
 
     .filter-item {
@@ -421,17 +436,25 @@ h1, h2, h3 { color: #4ecdc4; }
     }
 
     .filter-item label {
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #ccc;
     }
 
     .filter-item input,
     .filter-item select {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 6px;
+      background: rgba(40, 40, 60, 0.8);
+      color: white;
       font-size: 0.9rem;
       min-width: 150px;
+    }
+
+    .filter-item input:hover,
+    .filter-item select:hover {
+      border-color: #4ecdc4;
     }
 
     .filter-item input[type="number"] {
@@ -468,10 +491,10 @@ h1, h2, h3 { color: #4ecdc4; }
     }
 
     .filter-dropdown-button {
-      padding: 0.5rem;
-      border: 1px solid #444;
-      border-radius: 4px;
-      background-color: #2b2b2b;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 6px;
+      background: rgba(40, 40, 60, 0.8);
       color: white;
       cursor: pointer;
       display: flex;
@@ -483,13 +506,12 @@ h1, h2, h3 { color: #4ecdc4; }
     }
 
     .filter-dropdown-button:hover {
-      background-color: #3a3a3a;
-      border-color: #555;
+      border-color: #4ecdc4;
     }
 
     .filter-dropdown-button.active {
-      border-color: #2196F3;
-      border-width: 2px;
+      border-color: #4ecdc4;
+      box-shadow: 0 0 5px rgba(78, 205, 196, 0.3);
     }
 
     .filter-dropdown-arrow {
@@ -509,11 +531,11 @@ h1, h2, h3 { color: #4ecdc4; }
       right: 0;
       max-height: 250px;
       overflow-y: auto;
-      border: 1px solid #444;
-      border-radius: 4px;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 6px;
       padding: 0.5rem;
-      background-color: #2b2b2b;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      background: rgba(30, 30, 50, 0.98);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       z-index: 1000;
       display: none;
       margin-top: 4px;
@@ -533,7 +555,35 @@ h1, h2, h3 { color: #4ecdc4; }
     }
 
     .checkbox-item:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(78, 205, 196, 0.15);
+    }
+
+    /* Contenedor de filtros evolutivos por nivel */
+    .evo-filters-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .evo-level-filter {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .evo-level-label {
+      color: #888;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    .evo-level-filter .filter-dropdown {
+      min-width: 120px;
+    }
+
+    .evo-level-filter .filter-dropdown-button {
+      padding: 0.3rem 0.5rem;
+      font-size: 0.8rem;
     }
 
     .checkbox-item input[type="checkbox"] {
@@ -563,20 +613,21 @@ h1, h2, h3 { color: #4ecdc4; }
     }
 
     .clear-filters-btn {
-      padding: 0.5rem 1rem;
-      background-color: #f44336;
+      padding: 0.6rem 1.2rem;
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 0.9rem;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
+      font-weight: 500;
+      transition: all 0.2s ease;
       align-self: flex-end;
     }
 
     .clear-filters-btn:hover {
-      background-color: #d32f2f;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
     }
 
     @media (max-width: 768px) {
@@ -701,26 +752,87 @@ h1, h2, h3 { color: #4ecdc4; }
   <main>
     <section>
       <div id="selectorContainer">
+        <div class="unified-section-label" id="labelConfiguracion">Configuración</div>
         <div class="selectorItem">
           <label for="selectNivel">Seleccionar Nivel:</label>
           <select id="selectNivel">
             <option value="">-- Elige un Nivel --</option>
           </select>
         </div>
-		<div class="selectorItem">
-		  <label for="selectTipoStats" id="labelTipoStats">Tipo de Stats:</label>
-		  <select id="selectTipoStats">
-			<option value="base">Stats Base</option>
-			<option value="heredados">Stats Heredados</option>
-		  </select>
-		</div>
-		<div class="selectorItem">
-		  <label for="selectIdioma" id="labelIdioma">Idioma:</label>
-		  <select id="selectIdioma">
-			<option value="es">Español</option>
-			<option value="en">English</option>
-		  </select>
-		</div>
+        <div class="selectorItem">
+          <label for="selectTipoStats" id="labelTipoStats">Tipo de Stats:</label>
+          <select id="selectTipoStats">
+            <option value="base">Stats Base</option>
+            <option value="heredados">Stats Heredados</option>
+          </select>
+        </div>
+        <div class="selectorItem">
+          <label for="selectIdioma" id="labelIdioma">Idioma:</label>
+          <select id="selectIdioma">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div class="unified-divider"></div>
+
+        <div class="unified-section-label" id="labelFiltros">Filtros</div>
+        <div id="filtersContainerInner" class="filters-container">
+          <div class="filter-item" id="filterEvolucionAnteriorItem">
+            <label id="labelFilterEvolucionAnterior">Línea Evolutiva:</label>
+            <div class="evo-filters-wrapper" id="evoFiltersWrapper">
+              <!-- Se generan dinámicamente según el nivel seleccionado -->
+            </div>
+          </div>
+          <div class="filter-item">
+            <label id="labelFilterClasificacion">Filtrar por Clasificación:</label>
+            <div class="filter-dropdown">
+              <button type="button" class="filter-dropdown-button" id="filterClasificacionButton">
+                <span id="filterClasificacionText">Todas</span>
+                <span class="filter-dropdown-arrow">▼</span>
+              </button>
+              <div class="checkbox-container" id="filterClasificacionContainer">
+              </div>
+            </div>
+          </div>
+          <div class="filter-item">
+            <label id="labelFilterAtributo">Filtrar por Atributo:</label>
+            <div class="filter-dropdown">
+              <button type="button" class="filter-dropdown-button" id="filterAtributoButton">
+                <span id="filterAtributoText">Todos</span>
+                <span class="filter-dropdown-arrow">▼</span>
+              </button>
+              <div class="checkbox-container" id="filterAtributoContainer">
+              </div>
+            </div>
+          </div>
+          <div class="filter-item">
+            <label id="labelFilterTipo">Filtrar por Tipo:</label>
+            <div class="filter-dropdown">
+              <button type="button" class="filter-dropdown-button" id="filterTipoButton">
+                <span id="filterTipoText">Todos</span>
+                <span class="filter-dropdown-arrow">▼</span>
+              </button>
+              <div class="checkbox-container" id="filterTipoContainer">
+              </div>
+            </div>
+          </div>
+          <div class="filter-item" style="min-width: 250px;">
+            <label id="labelFilterDigipuntos">
+              Digipuntos: <span id="digipuntosRangeValue">Todos</span>
+            </label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="number" id="filterDigipuntosMin" min="0" max="100" step="0.1" value="0" style="width: 80px; padding: 0.5rem;">
+              <span style="color: #666;">-</span>
+              <input type="number" id="filterDigipuntosMax" min="0" max="100" step="0.1" value="100" style="width: 80px; padding: 0.5rem;">
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #666; margin-top: 0.3rem;">
+              <span>Min: <span id="digipuntosMinDisplay">0</span></span>
+              <span>Max: <span id="digipuntosMaxDisplay">100</span></span>
+            </div>
+          </div>
+          <button class="clear-filters-btn" id="clearFiltersBtn">Limpiar Filtros</button>
+        </div>
       </div>
     </section>
 
@@ -742,88 +854,9 @@ h1, h2, h3 { color: #4ecdc4; }
     </section>
 
     <section class="container">
-      <!-- Filtros -->
       <div id="search-ranking-container">
         <input type="text" id="searchDigimon" placeholder="🔍 Buscar Digimon..." autocomplete="off">
         <div id="search-ranking-suggestions"></div>
-      </div>
-
-      <div id="filtersContainer" class="filters-container" style="display: flex;">
-        <div class="filter-item">
-          <label id="labelFilterDigimon">Filtrar por Digimon:</label>
-          <div class="filter-dropdown">
-            <button type="button" class="filter-dropdown-button" id="filterDigimonButton">
-              <span id="filterDigimonText">Todos</span>
-              <span class="filter-dropdown-arrow">▼</span>
-            </button>
-            <div class="checkbox-container" id="filterDigimonContainer">
-              <!-- Se generarán dinámicamente -->
-            </div>
-          </div>
-        </div>
-        <div class="filter-item" id="filterEvolucionAnteriorItem">
-          <label id="labelFilterEvolucionAnterior">Evolución Anterior:</label>
-          <div class="filter-dropdown">
-            <button type="button" class="filter-dropdown-button" id="filterEvolucionAnteriorButton">
-              <span id="filterEvolucionAnteriorText">Todas</span>
-              <span class="filter-dropdown-arrow">▼</span>
-            </button>
-            <div class="checkbox-container" id="filterEvolucionAnteriorContainer">
-              <!-- Se generarán dinámicamente -->
-            </div>
-          </div>
-        </div>
-        <div class="filter-item">
-          <label id="labelFilterClasificacion">Filtrar por Clasificación:</label>
-          <div class="filter-dropdown">
-            <button type="button" class="filter-dropdown-button" id="filterClasificacionButton">
-              <span id="filterClasificacionText">Todas</span>
-              <span class="filter-dropdown-arrow">▼</span>
-            </button>
-            <div class="checkbox-container" id="filterClasificacionContainer">
-              <!-- Se generarán dinámicamente -->
-            </div>
-          </div>
-        </div>
-        <div class="filter-item">
-          <label id="labelFilterAtributo">Filtrar por Atributo:</label>
-          <div class="filter-dropdown">
-            <button type="button" class="filter-dropdown-button" id="filterAtributoButton">
-              <span id="filterAtributoText">Todos</span>
-              <span class="filter-dropdown-arrow">▼</span>
-            </button>
-            <div class="checkbox-container" id="filterAtributoContainer">
-              <!-- Se generarán dinámicamente -->
-            </div>
-          </div>
-        </div>
-        <div class="filter-item">
-          <label id="labelFilterTipo">Filtrar por Tipo:</label>
-          <div class="filter-dropdown">
-            <button type="button" class="filter-dropdown-button" id="filterTipoButton">
-              <span id="filterTipoText">Todos</span>
-              <span class="filter-dropdown-arrow">▼</span>
-            </button>
-            <div class="checkbox-container" id="filterTipoContainer">
-              <!-- Se generarán dinámicamente -->
-            </div>
-          </div>
-        </div>
-        <div class="filter-item" style="min-width: 250px;">
-          <label id="labelFilterDigipuntos">
-            Digipuntos: <span id="digipuntosRangeValue">Todos</span>
-          </label>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <input type="number" id="filterDigipuntosMin" min="0" max="100" step="0.1" value="0" style="width: 80px; padding: 0.3rem;">
-            <span style="color: #666;">-</span>
-            <input type="number" id="filterDigipuntosMax" min="0" max="100" step="0.1" value="100" style="width: 80px; padding: 0.3rem;">
-          </div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #666; margin-top: 0.3rem;">
-            <span>Min: <span id="digipuntosMinDisplay">0</span></span>
-            <span>Max: <span id="digipuntosMaxDisplay">100</span></span>
-          </div>
-        </div>
-        <button class="clear-filters-btn" id="clearFiltersBtn">Limpiar Filtros</button>
       </div>
 
       <div id="rankingContainer">
@@ -859,6 +892,7 @@ let datosSinFiltrar = [];
 let datosBusqueda = []; // Subconjunto de datosSinFiltrar filtrado por el buscador
 let procesandoClick = false;
 let tipoStatsActual = 'base'; // 'base' o 'heredados'
+let evoLevelFilters = { 3: [], 4: [], 5: [] }; // Selecciones por nivel: Child(3), Adult(4), Perfect(5)
 
 // Función para calcular stats heredados (40% con redondeo)
 /** Computes the inherited stats for a Child by summing 40% of Baby I and Baby II stats onto the Child base. */
@@ -1455,7 +1489,7 @@ const traducciones = {
 	subtitle: "Creado por Rodrigoalag",
     explanation: "",
     filtrarDigimon: "Filtrar por Digimon:",
-    filtrarEvolucionAnterior: "Evolución Anterior:",
+    filtrarEvolucionAnterior: "Línea Evolutiva:",
     filtrarClasificacion: "Filtrar por Clasificación:",
     filtrarAtributo: "Filtrar por Atributo:",
     filtrarTipo: "Filtrar por Tipo:",
@@ -1467,6 +1501,12 @@ const traducciones = {
     todasEvoluciones: "Todas",
     todosDigipuntos: "Todos",
     limpiarFiltros: "Limpiar Filtros",
+    configuracion: "Configuración",
+    filtros: "Filtros",
+    evoTabAll: "Todos",
+    evoTabChild: "Child",
+    evoTabAdult: "Adult",
+    evoTabPerfect: "Perfect",
  },
   en: {
     titulo: "Digimon Ranking by Digipoints",
@@ -1490,7 +1530,7 @@ const traducciones = {
 	subtitle: "Created by Rodrigoalag",
     explanation: "",
     filtrarDigimon: "Filter by Digimon:",
-    filtrarEvolucionAnterior: "Previous Evolution:",
+    filtrarEvolucionAnterior: "Evolution Line:",
     filtrarClasificacion: "Filter by Classification:",
     filtrarAtributo: "Filter by Attribute:",
     filtrarTipo: "Filter by Type:",
@@ -1502,6 +1542,12 @@ const traducciones = {
     todasEvoluciones: "All",
     todosDigipuntos: "All",
     limpiarFiltros: "Clear Filters",
+    configuracion: "Settings",
+    filtros: "Filters",
+    evoTabAll: "All",
+    evoTabChild: "Child",
+    evoTabAdult: "Adult",
+    evoTabPerfect: "Perfect",
     "Ninguno": "None",
     "Dinosaurio": "Dinosaur",
     "Hielo": "Ice",
@@ -1761,29 +1807,41 @@ function obtenerEvolucionAnterior(nombreDigimon, lineaEvolutiva) {
   return null;
 }
 
-// Función para obtener TODAS las evoluciones anteriores de un Digimon (un nivel atrás)
-/** Returns an array of all direct predecessors (one level below) for a Digimon, used to populate the filter options. */
-function obtenerTodasLasEvolucionesAnteriores(nombreDigimon) {
+// Función para obtener TODA la línea evolutiva de un Digimon (recursiva hacia atrás)
+/** Returns an array of all predecessors in the evolution chain for a Digimon, used to populate the filter options. */
+function obtenerTodasLasEvolucionesAnteriores(nombreDigimon, visitados = new Set()) {
   const nivelActual = digimonReqDict[nombreDigimon]?.Nivel || 0;
 
   // Baby I no tiene evolución anterior
   if (nivelActual <= 1) return [];
+
+  // Evitar ciclos infinitos
+  if (visitados.has(nombreDigimon)) return [];
+  visitados.add(nombreDigimon);
 
   const statsDigimon = digimonstattier[nombreDigimon];
   if (!statsDigimon || !statsDigimon.Viene || statsDigimon.Viene.length === 0) {
     return [];
   }
 
-  // Obtener TODOS los predecesores que sean del nivel anterior
+  // Obtener TODOS los predecesores que sean de niveles anteriores (no slides)
   const evolucionesAnteriores = [];
   for (const predecesor of statsDigimon.Viene) {
+    // Ignorar Burpmon y otros Digimon problemáticos
+    if (predecesor === 'Burpmon') continue;
+
     const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
-    if (nivelPredecesor === nivelActual - 1) {
+    // Solo incluir si es de un nivel menor (no slides del mismo nivel)
+    if (nivelPredecesor < nivelActual && nivelPredecesor >= 2) {
       evolucionesAnteriores.push(predecesor);
+      // Recursivamente obtener los predecesores del predecesor
+      const predecesoresDelPredecesor = obtenerTodasLasEvolucionesAnteriores(predecesor, visitados);
+      evolucionesAnteriores.push(...predecesoresDelPredecesor);
     }
   }
 
-  return evolucionesAnteriores;
+  // Eliminar duplicados y retornar
+  return [...new Set(evolucionesAnteriores)];
 }
 
 // ============================================
@@ -1851,42 +1909,35 @@ function aplicarFiltros() {
 
   let datosFiltrados = [...datosBusqueda];
 
-  // Obtener Digimon seleccionados (checkboxes marcados, excluyendo "Todos")
-  const digimonsSeleccionados = Array.from(
-    document.querySelectorAll('#filterDigimonContainer input[type="checkbox"]:checked')
-  )
-    .map(cb => cb.value)
-    .filter(val => val !== '');
+  // Filtrar por línea evolutiva (usando los nuevos filtros por nivel)
+  // Para cada nivel con selecciones, el Digimon debe tener esa evolución en su cadena
+  const nivelesConSeleccion = Object.entries(evoLevelFilters)
+    .filter(([_, seleccionados]) => seleccionados.length > 0);
 
-  // Filtrar por nombre de Digimon (si hay alguno seleccionado)
-  if (digimonsSeleccionados.length > 0) {
-    datosFiltrados = datosFiltrados.filter(item =>
-      digimonsSeleccionados.includes(item.nombre)
-    );
-  }
-
-  // Actualizar opciones de evolución anterior basado en Digimon seleccionados
-  actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados.length > 0 ? digimonsSeleccionados : null);
-
-  // Obtener evoluciones anteriores seleccionadas (checkboxes marcados, excluyendo "Todas")
-  const evolucionesSeleccionadas = Array.from(
-    document.querySelectorAll('#filterEvolucionAnteriorContainer input[type="checkbox"]:checked:not(:disabled)')
-  )
-    .map(cb => cb.value)
-    .filter(val => val !== '');
-
-  // Filtrar por evolución anterior (si hay alguna seleccionada)
-  if (evolucionesSeleccionadas.length > 0) {
+  if (nivelesConSeleccion.length > 0) {
     datosFiltrados = datosFiltrados.filter(item => {
-      // Si tiene el campo todasLasEvolucionesAnteriores (Stats Base), verificar contra ese array
-      if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
-        return item.todasLasEvolucionesAnteriores.some(evo => evolucionesSeleccionadas.includes(evo));
-      }
-      // Si no, verificar contra evolucionAnterior (Stats Heredados)
-      if (item.evolucionAnterior) {
-        return evolucionesSeleccionadas.includes(item.evolucionAnterior);
-      }
-      return false;
+      // Obtener toda la línea evolutiva del Digimon
+      const lineaEvolutiva = item.todasLasEvolucionesAnteriores || [];
+
+      // Para cada nivel con filtro, verificar que al menos uno de los seleccionados
+      // esté en la línea evolutiva del Digimon
+      return nivelesConSeleccion.every(([nivel, seleccionados]) => {
+        // Si el nivel seleccionado es el mismo nivel del Digimon actual,
+        // verificar si el Digimon está en la selección
+        const nivelNum = parseInt(nivel);
+        const nivelDigimon = digimonReqDict[item.nombre]?.Nivel || 0;
+
+        if (nivelNum === nivelDigimon) {
+          return seleccionados.includes(item.nombre);
+        }
+
+        // Si el nivel es inferior, verificar en la línea evolutiva
+        if (nivelNum < nivelDigimon) {
+          return seleccionados.some(sel => lineaEvolutiva.includes(sel));
+        }
+
+        return true; // Niveles superiores no aplican
+      });
     });
   }
 
@@ -1953,8 +2004,6 @@ function aplicarFiltros() {
   datosActuales = datosFiltrados;
 
   // Actualizar texto de los botones dropdown
-  actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
-  actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
   actualizarTextoDropdown('filterClasificacionContainer', 'filterClasificacionText', t.todasClasificaciones);
   actualizarTextoDropdown('filterAtributoContainer', 'filterAtributoText', t.todosAtributos);
   actualizarTextoDropdown('filterTipoContainer', 'filterTipoText', t.todosTipos);
@@ -1974,8 +2023,6 @@ function aplicarBusqueda() {
     : [...datosSinFiltrar];
 
   // Reconstruir todos los dropdowns con el subconjunto filtrado
-  actualizarOpcionesDigimon();
-  actualizarOpcionesEvolucionAnterior();
   actualizarOpcionesClasificacion();
   actualizarOpcionesAtributo();
   actualizarOpcionesTipo();
@@ -1987,17 +2034,15 @@ function aplicarBusqueda() {
 function limpiarFiltros() {
   const t = traducciones[idiomaActual];
 
-  // Desmarcar todos los checkboxes excepto "Todos"
-  document.querySelectorAll('#filterDigimonContainer input[type="checkbox"]').forEach(cb => {
-    cb.checked = cb.value === '';
-  });
+  // Resetear filtros evolutivos
+  evoLevelFilters = { 3: [], 4: [], 5: [], 6: [] };
+  const nivelRaw = document.getElementById('selectNivel')?.value;
+  if (nivelRaw) {
+    const nivelSeleccionado = nivelRaw === "5+6" ? "5+6" : parseInt(nivelRaw);
+    actualizarFiltrosEvolutivos(nivelSeleccionado);
+  }
 
-  document.querySelectorAll('#filterEvolucionAnteriorContainer input[type="checkbox"]').forEach(cb => {
-    cb.checked = cb.value === '';
-    cb.disabled = false;
-    cb.closest('.checkbox-item').classList.remove('disabled');
-  });
-
+  // Desmarcar todos los checkboxes de clasificación excepto "Todas"
   document.querySelectorAll('#filterClasificacionContainer input[type="checkbox"]').forEach(cb => {
     cb.checked = cb.value === '';
   });
@@ -2019,8 +2064,6 @@ function limpiarFiltros() {
   document.getElementById('digipuntosRangeValue').textContent = t.todosDigipuntos;
 
   // Actualizar texto de botones
-  document.getElementById('filterDigimonText').textContent = t.todosDigimon;
-  document.getElementById('filterEvolucionAnteriorText').textContent = t.todasEvoluciones;
   document.getElementById('filterClasificacionText').textContent = t.todasClasificaciones;
   document.getElementById('filterAtributoText').textContent = t.todosAtributos;
   document.getElementById('filterTipoText').textContent = t.todosTipos;
@@ -2035,254 +2078,6 @@ function limpiarFiltros() {
   const tbody = document.querySelector('#rankingTable tbody');
   generarTablaRankingSegura(datosOrdenados, tbody);
   actualizarHeadersActivos();
-}
-
-/** Rebuilds the Digimon name filter dropdown with checkboxes for all unique Digimon in the current search results. */
-function actualizarOpcionesDigimon() {
-  const container = document.getElementById('filterDigimonContainer');
-  const t = traducciones[idiomaActual];
-
-  // Obtener nombres únicos de Digimon ordenados alfabéticamente
-  const digimonsUnicos = [...new Set(datosBusqueda.map(item => item.nombre))].sort();
-
-  // Limpiar opciones previas
-  container.innerHTML = '';
-
-  // Agregar checkbox "Todos"
-  const todosDiv = document.createElement('div');
-  todosDiv.className = 'checkbox-item';
-  todosDiv.innerHTML = `
-    <input type="checkbox" id="digimon-todos" value="" checked>
-    <label for="digimon-todos">${t.todosDigimon}</label>
-  `;
-  container.appendChild(todosDiv);
-
-  // Agregar checkbox para cada Digimon
-  digimonsUnicos.forEach(nombre => {
-    const div = document.createElement('div');
-    div.className = 'checkbox-item';
-    const id = `digimon-${nombre.replace(/\s+/g, '-')}`;
-    div.innerHTML = `
-      <input type="checkbox" id="${id}" value="${nombre}">
-      <label for="${id}">${nombre}</label>
-    `;
-    container.appendChild(div);
-  });
-
-  // Event listener para "Todos"
-  document.getElementById('digimon-todos').addEventListener('change', function() {
-    if (this.checked) {
-      // Si se marca "Todos", desmarcar todos los demás
-      container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)').forEach(cb => {
-        cb.checked = false;
-      });
-    }
-    aplicarFiltros();
-  });
-
-  // Event listeners para cada checkbox individual
-  container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)').forEach(cb => {
-    cb.addEventListener('change', function() {
-      if (this.checked) {
-        // Si se marca uno individual, desmarcar "Todos"
-        document.getElementById('digimon-todos').checked = false;
-      } else {
-        // Si todos están desmarcados, marcar "Todos"
-        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#digimon-todos)')).some(c => c.checked);
-        if (!algunoMarcado) {
-          document.getElementById('digimon-todos').checked = true;
-        }
-      }
-      actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
-      aplicarFiltros();
-    });
-  });
-
-  // Actualizar texto del botón
-  actualizarTextoDropdown('filterDigimonContainer', 'filterDigimonText', t.todosDigimon);
-}
-
-/** Rebuilds the previous-evolution filter dropdown with all unique predecessor Digimon from the full unfiltered dataset. */
-function actualizarOpcionesEvolucionAnterior() {
-  const container = document.getElementById('filterEvolucionAnteriorContainer');
-  const t = traducciones[idiomaActual];
-
-  // Obtener evoluciones anteriores únicas (filtrar los que tienen evolucionAnterior)
-  const evolucionesAnteriores = [...new Set(
-    datosSinFiltrar
-      .filter(item => item.evolucionAnterior)
-      .map(item => item.evolucionAnterior)
-  )].sort();
-
-  // Limpiar opciones previas
-  container.innerHTML = '';
-
-  // Agregar checkbox "Todas"
-  const todasDiv = document.createElement('div');
-  todasDiv.className = 'checkbox-item';
-  todasDiv.innerHTML = `
-    <input type="checkbox" id="evolucion-todas" value="" checked>
-    <label for="evolucion-todas">${t.todasEvoluciones}</label>
-  `;
-  container.appendChild(todasDiv);
-
-  // Agregar checkbox para cada evolución
-  evolucionesAnteriores.forEach(evolucion => {
-    const div = document.createElement('div');
-    div.className = 'checkbox-item';
-    const id = `evolucion-${evolucion.replace(/\s+/g, '-')}`;
-    div.innerHTML = `
-      <input type="checkbox" id="${id}" value="${evolucion}">
-      <label for="${id}">${evolucion}</label>
-    `;
-    container.appendChild(div);
-  });
-
-  // Event listener para "Todas"
-  document.getElementById('evolucion-todas').addEventListener('change', function() {
-    if (this.checked) {
-      container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
-        if (!cb.disabled) cb.checked = false;
-      });
-    }
-    aplicarFiltros();
-  });
-
-  // Event listeners para cada checkbox individual
-  container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
-    cb.addEventListener('change', function() {
-      if (this.checked) {
-        document.getElementById('evolucion-todas').checked = false;
-      } else {
-        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas):not(:disabled)')).some(c => c.checked);
-        if (!algunoMarcado) {
-          document.getElementById('evolucion-todas').checked = true;
-        }
-      }
-      aplicarFiltros();
-    });
-  });
-}
-
-/** Dynamically rebuilds the previous-evolution filter to show only predecessors valid for the currently selected Digimon. */
-function actualizarOpcionesEvolucionAnteriorDinamico(digimonsSeleccionados) {
-  const container = document.getElementById('filterEvolucionAnteriorContainer');
-  const t = traducciones[idiomaActual];
-
-  // Guardar el estado actual de los checkboxes antes de regenerar
-  const estadoCheckboxes = {};
-  container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-    estadoCheckboxes[cb.value] = cb.checked;
-  });
-
-  // Obtener evoluciones válidas basadas en los Digimon seleccionados
-  let evolucionesValidas;
-
-  if (!digimonsSeleccionados || digimonsSeleccionados.length === 0) {
-    // Si no hay Digimon seleccionados, mostrar todas las evoluciones únicas
-    const evolucionesSet = new Set();
-    datosBusqueda.forEach(item => {
-      // Añadir evoluciones del campo todasLasEvolucionesAnteriores (Stats Base)
-      if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
-        item.todasLasEvolucionesAnteriores.forEach(evo => evolucionesSet.add(evo));
-      }
-      // Añadir evolución del campo evolucionAnterior (Stats Heredados)
-      if (item.evolucionAnterior) {
-        evolucionesSet.add(item.evolucionAnterior);
-      }
-    });
-    evolucionesValidas = [...evolucionesSet].sort();
-  } else {
-    // Si hay Digimon seleccionados, mostrar solo sus evoluciones anteriores
-    const evolucionesSet = new Set();
-    datosSinFiltrar
-      .filter(item => digimonsSeleccionados.includes(item.nombre))
-      .forEach(item => {
-        // Añadir evoluciones del campo todasLasEvolucionesAnteriores (Stats Base)
-        if (item.todasLasEvolucionesAnteriores && item.todasLasEvolucionesAnteriores.length > 0) {
-          item.todasLasEvolucionesAnteriores.forEach(evo => evolucionesSet.add(evo));
-        }
-        // Añadir evolución del campo evolucionAnterior (Stats Heredados)
-        if (item.evolucionAnterior) {
-          evolucionesSet.add(item.evolucionAnterior);
-        }
-      });
-
-    evolucionesValidas = [...evolucionesSet].sort();
-
-    console.log('Digimon seleccionados:', digimonsSeleccionados);
-    console.log('Evoluciones válidas únicas:', evolucionesValidas);
-  }
-
-  // Limpiar y regenerar el contenedor
-  container.innerHTML = '';
-
-  console.log('Regenerando container con', evolucionesValidas.length, 'opciones');
-
-  // Agregar checkbox "Todas"
-  const todasDiv = document.createElement('div');
-  todasDiv.className = 'checkbox-item';
-  const todasChecked = estadoCheckboxes[''] !== undefined ? estadoCheckboxes[''] : true;
-  todasDiv.innerHTML = `
-    <input type="checkbox" id="evolucion-todas" value="" ${todasChecked ? 'checked' : ''}>
-    <label for="evolucion-todas">${t.todasEvoluciones}</label>
-  `;
-  container.appendChild(todasDiv);
-
-  // Agregar solo las evoluciones válidas
-  evolucionesValidas.forEach(evolucion => {
-    const div = document.createElement('div');
-    div.className = 'checkbox-item';
-    const isChecked = estadoCheckboxes[evolucion] || false;
-    div.innerHTML = `
-      <input type="checkbox" id="evolucion-${evolucion.replace(/\s+/g, '-')}" value="${evolucion}" ${isChecked ? 'checked' : ''}>
-      <label for="evolucion-${evolucion.replace(/\s+/g, '-')}">${evolucion}</label>
-    `;
-    container.appendChild(div);
-  });
-
-  console.log('Checkboxes de evolución creados:', evolucionesValidas.length);
-
-  // Event listener para "Todas"
-  const todasCheckbox = document.getElementById('evolucion-todas');
-  if (todasCheckbox) {
-    todasCheckbox.addEventListener('change', function() {
-      console.log('Checkbox "Todas" changed:', this.checked);
-      if (this.checked) {
-        // Si se marca "Todas", desmarcar todos los demás
-        container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)').forEach(cb => {
-          cb.checked = false;
-        });
-      }
-      actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
-      aplicarFiltros();
-    });
-  }
-
-  // Event listeners para cada checkbox individual
-  const checkboxesIndividuales = container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)');
-  console.log('Agregando listeners a', checkboxesIndividuales.length, 'checkboxes individuales');
-
-  checkboxesIndividuales.forEach((cb, index) => {
-    cb.addEventListener('change', function() {
-      console.log('Checkbox individual changed:', this.value, 'checked:', this.checked);
-      if (this.checked) {
-        // Si se marca uno individual, desmarcar "Todas"
-        document.getElementById('evolucion-todas').checked = false;
-      } else {
-        // Si todos están desmarcados, marcar "Todas"
-        const algunoMarcado = Array.from(container.querySelectorAll('input[type="checkbox"]:not(#evolucion-todas)')).some(c => c.checked);
-        if (!algunoMarcado) {
-          document.getElementById('evolucion-todas').checked = true;
-        }
-      }
-      actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
-      aplicarFiltros();
-    });
-  });
-
-  // Actualizar el texto del botón
-  actualizarTextoDropdown('filterEvolucionAnteriorContainer', 'filterEvolucionAnteriorText', t.todasEvoluciones);
 }
 
 /** Rebuilds the classification filter dropdown with checkboxes for all unique tier classifications in the current dataset. */
@@ -2507,6 +2302,299 @@ function actualizarRangoDigipuntos() {
 // FIN FUNCIONES DE FILTRADO
 // ============================================
 
+// Función para crear dropdowns de línea evolutiva por nivel
+function actualizarFiltrosEvolutivos(nivelSeleccionado) {
+  const wrapper = document.getElementById('evoFiltersWrapper');
+  if (!wrapper) return;
+
+  const t = traducciones[idiomaActual];
+  wrapper.innerHTML = '';
+
+  // Resetear filtros
+  evoLevelFilters = { 3: [], 4: [], 5: [], 6: [] };
+
+  // Determinar qué niveles mostrar según el nivel actual
+  const niveles = [];
+  if (nivelSeleccionado === "5+6") {
+    niveles.push({ level: 3, label: 'Child', id: 'Child' });
+    niveles.push({ level: 4, label: 'Adult', id: 'Adult' });
+    niveles.push({ level: 5, label: 'Perfect', id: 'Perfect' });
+    niveles.push({ level: 6, label: 'Ultimate', id: 'Ultimate' });
+  } else {
+    const nivel = parseInt(nivelSeleccionado);
+    if (nivel >= 3) niveles.push({ level: 3, label: 'Child', id: 'Child' });
+    if (nivel >= 4) niveles.push({ level: 4, label: 'Adult', id: 'Adult' });
+    if (nivel >= 5) niveles.push({ level: 5, label: 'Perfect', id: 'Perfect' });
+    if (nivel >= 6) niveles.push({ level: 6, label: 'Ultimate', id: 'Ultimate' });
+  }
+
+  if (niveles.length === 0) {
+    wrapper.style.display = 'none';
+    return;
+  }
+  wrapper.style.display = 'flex';
+
+  // Crear un dropdown por cada nivel
+  niveles.forEach((n) => {
+    const filterDiv = document.createElement('div');
+    filterDiv.className = 'evo-level-filter';
+    filterDiv.dataset.level = n.level;
+
+    const label = document.createElement('span');
+    label.className = 'evo-level-label';
+    label.textContent = n.label + ':';
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'filter-dropdown';
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'filter-dropdown-button';
+    button.id = `filterEvo${n.id}Button`;
+    button.innerHTML = `<span id="filterEvo${n.id}Text">${t.todos || 'Todos'}</span><span class="filter-dropdown-arrow">▼</span>`;
+
+    const container = document.createElement('div');
+    container.className = 'checkbox-container';
+    container.id = `filterEvo${n.id}Container`;
+
+    dropdown.appendChild(button);
+    dropdown.appendChild(container);
+    filterDiv.appendChild(label);
+    filterDiv.appendChild(dropdown);
+    wrapper.appendChild(filterDiv);
+
+    // Event listener para toggle del dropdown
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleDropdown(button.id, container.id);
+    });
+  });
+
+  // Llenar opciones iniciales de cada dropdown
+  actualizarOpcionesEvolutivas(nivelSeleccionado);
+}
+
+// Digimons a ignorar en los filtros evolutivos
+const DIGIMONS_IGNORADOS = ['Burpmon'];
+
+// Obtener todos los Digimon de un nivel específico
+function obtenerDigimonsPorNivel(nivel) {
+  const digimons = [];
+  for (const [nombre, data] of Object.entries(digimonReqDict)) {
+    if (data.Nivel === nivel && !DIGIMONS_IGNORADOS.includes(nombre)) {
+      digimons.push(nombre);
+    }
+  }
+  return digimons.sort();
+}
+
+// Obtener predecesores de un Digimon (de quién viene - campo Viene en digimonstattier)
+function obtenerPredecesores(nombreDigimon) {
+  const data = digimonstattier[nombreDigimon];
+  const predecesores = data?.Viene || [];
+  return predecesores.filter(p => !DIGIMONS_IGNORADOS.includes(p));
+}
+
+// Obtener sucesores de un Digimon (a quién puede evolucionar - quién lo tiene en su Viene)
+function obtenerSucesores(nombreDigimon) {
+  const sucesores = [];
+  for (const [nombre, data] of Object.entries(digimonstattier)) {
+    if (data.Viene && data.Viene.includes(nombreDigimon) && !DIGIMONS_IGNORADOS.includes(nombre)) {
+      sucesores.push(nombre);
+    }
+  }
+  return sucesores;
+}
+
+// Actualizar opciones de todos los dropdowns evolutivos de forma reactiva
+function actualizarOpcionesEvolutivas(nivelSeleccionado) {
+  const niveles = [];
+  if (nivelSeleccionado === "5+6") {
+    niveles.push({ level: 3, id: 'Child' });
+    niveles.push({ level: 4, id: 'Adult' });
+    niveles.push({ level: 5, id: 'Perfect' });
+    niveles.push({ level: 6, id: 'Ultimate' });
+  } else {
+    const nivel = parseInt(nivelSeleccionado);
+    if (nivel >= 3) niveles.push({ level: 3, id: 'Child' });
+    if (nivel >= 4) niveles.push({ level: 4, id: 'Adult' });
+    if (nivel >= 5) niveles.push({ level: 5, id: 'Perfect' });
+    if (nivel >= 6) niveles.push({ level: 6, id: 'Ultimate' });
+  }
+
+  const t = traducciones[idiomaActual];
+
+  niveles.forEach((n) => {
+    const container = document.getElementById(`filterEvo${n.id}Container`);
+    if (!container) return;
+
+    // Guardar estado actual
+    const estadoActual = {};
+    container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      estadoActual[cb.value] = cb.checked;
+    });
+
+    // Obtener digimons válidos para este nivel basado en selecciones de otros niveles
+    let digimonsValidos = obtenerDigimonsPorNivel(n.level);
+
+    // Filtrar basado en selecciones de niveles adyacentes
+    niveles.forEach((otroNivel) => {
+      if (otroNivel.level === n.level) return;
+      const seleccionados = evoLevelFilters[otroNivel.level] || [];
+      if (seleccionados.length === 0) return;
+
+      if (otroNivel.level < n.level) {
+        // Filtrar por sucesores de los niveles inferiores seleccionados
+        const sucesoresValidos = new Set();
+        seleccionados.forEach(sel => {
+          obtenerSucesores(sel).forEach(suc => {
+            const nivelSuc = digimonReqDict[suc]?.Nivel || 0;
+            if (nivelSuc === n.level) {
+              sucesoresValidos.add(suc);
+            } else if (nivelSuc < n.level) {
+              // Seguir la cadena
+              const sucesoresIndirectos = obtenerSucesoresPorNivel(suc, n.level);
+              sucesoresIndirectos.forEach(s => sucesoresValidos.add(s));
+            }
+          });
+        });
+        digimonsValidos = digimonsValidos.filter(d => sucesoresValidos.has(d));
+      } else {
+        // Filtrar por predecesores de los niveles superiores seleccionados
+        const predecesoresValidos = new Set();
+        seleccionados.forEach(sel => {
+          const preds = obtenerPredecesoresPorNivel(sel, n.level);
+          preds.forEach(p => predecesoresValidos.add(p));
+        });
+        digimonsValidos = digimonsValidos.filter(d => predecesoresValidos.has(d));
+      }
+    });
+
+    // Regenerar opciones
+    container.innerHTML = '';
+
+    // Checkbox "Todos"
+    const todasDiv = document.createElement('div');
+    todasDiv.className = 'checkbox-item';
+    const todasChecked = evoLevelFilters[n.level].length === 0;
+    todasDiv.innerHTML = `
+      <input type="checkbox" id="evo${n.id}-todas" value="" ${todasChecked ? 'checked' : ''}>
+      <label for="evo${n.id}-todas">${t.todos || 'Todos'}</label>
+    `;
+    container.appendChild(todasDiv);
+
+    // Opciones de digimons
+    digimonsValidos.forEach(digimon => {
+      const div = document.createElement('div');
+      div.className = 'checkbox-item';
+      const isChecked = evoLevelFilters[n.level].includes(digimon);
+      const safeId = digimon.replace(/\s+/g, '-').replace(/[()]/g, '');
+      div.innerHTML = `
+        <input type="checkbox" id="evo${n.id}-${safeId}" value="${digimon}" ${isChecked ? 'checked' : ''}>
+        <label for="evo${n.id}-${safeId}">${digimon}</label>
+      `;
+      container.appendChild(div);
+    });
+
+    // Event listeners
+    const todasCheckbox = container.querySelector('input[value=""]');
+    const otrosCheckboxes = container.querySelectorAll('input[type="checkbox"]:not([value=""])');
+
+    if (todasCheckbox) {
+      todasCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          otrosCheckboxes.forEach(cb => cb.checked = false);
+          evoLevelFilters[n.level] = [];
+          actualizarTextoDropdownEvo(n.id, t.todos || 'Todos');
+          actualizarOpcionesEvolutivas(nivelSeleccionado);
+          aplicarFiltros();
+        }
+      });
+    }
+
+    otrosCheckboxes.forEach(cb => {
+      cb.addEventListener('change', function() {
+        if (this.checked) {
+          todasCheckbox.checked = false;
+          if (!evoLevelFilters[n.level].includes(this.value)) {
+            evoLevelFilters[n.level].push(this.value);
+          }
+        } else {
+          evoLevelFilters[n.level] = evoLevelFilters[n.level].filter(v => v !== this.value);
+          if (evoLevelFilters[n.level].length === 0) {
+            todasCheckbox.checked = true;
+          }
+        }
+        actualizarTextoDropdownEvo(n.id, evoLevelFilters[n.level].length > 0 ?
+          evoLevelFilters[n.level].join(', ') : (t.todos || 'Todos'));
+        actualizarOpcionesEvolutivas(nivelSeleccionado);
+        aplicarFiltros();
+      });
+    });
+
+    // Actualizar texto del botón
+    actualizarTextoDropdownEvo(n.id, evoLevelFilters[n.level].length > 0 ?
+      evoLevelFilters[n.level].join(', ') : (t.todos || 'Todos'));
+  });
+}
+
+// Obtener sucesores en un nivel específico (recursivo)
+function obtenerSucesoresPorNivel(nombreDigimon, nivelObjetivo) {
+  const resultado = new Set();
+  const visitados = new Set();
+
+  function buscar(nombre) {
+    if (visitados.has(nombre)) return;
+    visitados.add(nombre);
+
+    const sucesores = obtenerSucesores(nombre);
+    sucesores.forEach(suc => {
+      const nivel = digimonReqDict[suc]?.Nivel || 0;
+      if (nivel === nivelObjetivo) {
+        resultado.add(suc);
+      } else if (nivel < nivelObjetivo) {
+        buscar(suc);
+      }
+    });
+  }
+
+  buscar(nombreDigimon);
+  return [...resultado];
+}
+
+// Obtener predecesores en un nivel específico (recursivo)
+function obtenerPredecesoresPorNivel(nombreDigimon, nivelObjetivo) {
+  const resultado = new Set();
+  const visitados = new Set();
+
+  function buscar(nombre) {
+    if (visitados.has(nombre)) return;
+    visitados.add(nombre);
+
+    const predecesores = obtenerPredecesores(nombre);
+    predecesores.forEach(pred => {
+      const nivel = digimonReqDict[pred]?.Nivel || 0;
+      if (nivel === nivelObjetivo) {
+        resultado.add(pred);
+      } else if (nivel > nivelObjetivo) {
+        buscar(pred);
+      }
+    });
+  }
+
+  buscar(nombreDigimon);
+  return [...resultado];
+}
+
+// Actualizar texto del dropdown evolutivo
+function actualizarTextoDropdownEvo(id, texto) {
+  const span = document.getElementById(`filterEvo${id}Text`);
+  if (span) {
+    span.textContent = texto.length > 20 ? texto.substring(0, 17) + '...' : texto;
+    span.title = texto;
+  }
+}
+
 // Función para generar el ranking (reutilizable)
 /** Builds the full Digimon ranking dataset for the selected level and stat type, then renders the table with filters applied. */
 function generarRanking() {
@@ -2514,7 +2602,7 @@ function generarRanking() {
   const nivelSeleccionado = nivelRaw === "5+6" ? "5+6" : parseInt(nivelRaw);
   const downloadButtons = document.getElementById('downloadButtons');
   const explanationText = document.getElementById('explanationText');
-  const filtersContainer = document.getElementById('filtersContainer');
+  const filtersContainer = document.getElementById('filtersContainerInner');
 
   if (!nivelSeleccionado) {
     // Todo permanece visible pero la tabla vacía
@@ -2522,6 +2610,9 @@ function generarRanking() {
     if (tbody) tbody.innerHTML = '';
     return;
   }
+
+  // Actualizar filtros evolutivos por nivel
+  actualizarFiltrosEvolutivos(nivelSeleccionado);
 
   // Obtener Digimon del nivel seleccionado
   const nivelesPermitidos = nivelSeleccionado === "5+6" ? [5, 6] : [nivelSeleccionado];
@@ -2587,6 +2678,7 @@ function generarRanking() {
             lineaEvolutiva: lineaEvo,
             lineaRaw: lineaEvolutiva,
             evolucionAnterior: evolucionAnterior,
+            todasLasEvolucionesAnteriores: lineaEvolutiva.filter(d => d !== nombre), // Toda la línea excepto el digimon actual
             atributo: digimonReqDict[nombre]?.Atributo || "-",
             tipo: digimonReqDict[nombre]?.Tipo || "-",
             atk: stats.atk,
@@ -2662,8 +2754,6 @@ function generarRanking() {
     : [...datosSinFiltrar];
 
   // Actualizar opciones de filtros disponibles (esto también los resetea)
-  actualizarOpcionesDigimon();
-  actualizarOpcionesEvolucionAnterior();
   actualizarOpcionesClasificacion();
   actualizarOpcionesAtributo();
   actualizarOpcionesTipo();
@@ -2702,14 +2792,7 @@ selectTipoStats.addEventListener("change", () => {
   tipoStatsActual = selectTipoStats.value;
 
   // Mostrar/ocultar filtro de Evolución Anterior según el tipo de stats
-  const filterEvolucionAnteriorItem = document.getElementById('filterEvolucionAnteriorItem');
-  if (filterEvolucionAnteriorItem) {
-    if (tipoStatsActual === 'heredados') {
-      filterEvolucionAnteriorItem.style.display = 'flex';
-    } else {
-      filterEvolucionAnteriorItem.style.display = 'none';
-    }
-  }
+  // Línea Evolutiva siempre visible (funciona para ambos tipos de stats)
 
   generarRanking();
 });
@@ -2743,8 +2826,20 @@ function actualizarTraducciones() {
     explanationText.textContent = t.explanation;
   }
 
+  // Actualizar labels de secciones unificadas
+  const labelConfiguracion = document.getElementById('labelConfiguracion');
+  const labelFiltros = document.getElementById('labelFiltros');
+  if (labelConfiguracion) labelConfiguracion.textContent = t.configuracion;
+  if (labelFiltros) labelFiltros.textContent = t.filtros;
+
+  // Actualizar filtros evolutivos (regenerar con el nivel actual)
+  const nivelActual = selectNivel.value;
+  if (nivelActual) {
+    const nivelSeleccionado = nivelActual === "5+6" ? "5+6" : parseInt(nivelActual);
+    actualizarFiltrosEvolutivos(nivelSeleccionado);
+  }
+
   // Actualizar labels de filtros
-  const labelFilterDigimon = document.getElementById('labelFilterDigimon');
   const labelFilterEvolucionAnterior = document.getElementById('labelFilterEvolucionAnterior');
   const labelFilterClasificacion = document.getElementById('labelFilterClasificacion');
   const labelFilterAtributo = document.getElementById('labelFilterAtributo');
@@ -2753,7 +2848,6 @@ function actualizarTraducciones() {
   const clearFiltersBtn = document.getElementById('clearFiltersBtn');
   const digipuntosRangeValue = document.getElementById('digipuntosRangeValue');
 
-  if (labelFilterDigimon) labelFilterDigimon.textContent = t.filtrarDigimon;
   if (labelFilterEvolucionAnterior) labelFilterEvolucionAnterior.textContent = t.filtrarEvolucionAnterior;
   if (labelFilterClasificacion) labelFilterClasificacion.textContent = t.filtrarClasificacion;
   if (labelFilterAtributo) labelFilterAtributo.textContent = t.filtrarAtributo;
@@ -2768,8 +2862,6 @@ function actualizarTraducciones() {
 
   // Actualizar opciones de filtros (para que se traduzcan)
   if (datosSinFiltrar.length > 0) {
-    actualizarOpcionesDigimon();
-    actualizarOpcionesEvolucionAnterior();
     actualizarOpcionesClasificacion();
     actualizarOpcionesAtributo();
     actualizarOpcionesTipo();
@@ -3007,11 +3099,7 @@ function inicializarPaginaInmediatamente() {
   const downloadCSVBtn = document.getElementById('downloadCSV');
   const downloadXLSXBtn = document.getElementById('downloadXLSX');
 
-  // Ocultar filtro de Evolución Anterior por defecto (Stats Base)
-  const filterEvolucionAnteriorItem = document.getElementById('filterEvolucionAnteriorItem');
-  if (filterEvolucionAnteriorItem) {
-    filterEvolucionAnteriorItem.style.display = 'none';
-  }
+  // Línea Evolutiva siempre visible
 
   selectIdioma.addEventListener("change", () => {
     idiomaActual = selectIdioma.value;
@@ -3057,25 +3145,9 @@ function inicializarPaginaInmediatamente() {
   initSearchRanking();
 
   // Event listeners para botones dropdown
-  const filterDigimonButton = document.getElementById('filterDigimonButton');
-  const filterEvolucionAnteriorButton = document.getElementById('filterEvolucionAnteriorButton');
   const filterClasificacionButton = document.getElementById('filterClasificacionButton');
   const filterAtributoButton = document.getElementById('filterAtributoButton');
   const filterTipoButton = document.getElementById('filterTipoButton');
-
-  if (filterDigimonButton) {
-    filterDigimonButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleDropdown('filterDigimonButton', 'filterDigimonContainer');
-    });
-  }
-
-  if (filterEvolucionAnteriorButton) {
-    filterEvolucionAnteriorButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleDropdown('filterEvolucionAnteriorButton', 'filterEvolucionAnteriorContainer');
-    });
-  }
 
   if (filterClasificacionButton) {
     filterClasificacionButton.addEventListener('click', (e) => {
@@ -3097,6 +3169,8 @@ function inicializarPaginaInmediatamente() {
       toggleDropdown('filterTipoButton', 'filterTipoContainer');
     });
   }
+
+  // Los filtros evolutivos se crean dinámicamente en actualizarFiltrosEvolutivos()
 
   inicializarSelector();
   actualizarTraducciones();

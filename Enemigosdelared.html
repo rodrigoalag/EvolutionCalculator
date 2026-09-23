@@ -866,6 +866,7 @@ header select:hover {
     function buscarImagenNPC(digimon, nivel, errores, entrenamiento) {
       // Normalizar nombre del digimon para el archivo
       const nombreNormalizado = normalizarCaracteres(digimon).replace(/\s+/g, '');
+      const nombreMinusculas = nombreNormalizado.toLowerCase();
       const nivelNombre = nivelNombreArchivo[nivel] || '';
       const erroresFormateados = formatearErroresParaArchivo(errores);
       const entrenamientoFormateado = formatearEntrenamientoParaArchivo(entrenamiento);
@@ -878,26 +879,32 @@ header select:hover {
         // 1. Nombre + Nivel + errores + entrenamiento
         if (erroresFormateados && entrenamientoFormateado) {
           variaciones.push(`${nombreNormalizado}${nivelNombre}${erroresFormateados}${entrenamientoFormateado}`);
+          variaciones.push(`${nombreMinusculas}${nivelNombre.toLowerCase()}${erroresFormateados}${entrenamientoFormateado}`);
         }
         // 2. Nombre + Nivel + errores
         if (erroresFormateados) {
           variaciones.push(`${nombreNormalizado}${nivelNombre}${erroresFormateados}`);
+          variaciones.push(`${nombreMinusculas}${nivelNombre.toLowerCase()}${erroresFormateados}`);
         }
         // 3. Nombre + Nivel
         variaciones.push(`${nombreNormalizado}${nivelNombre}`);
+        variaciones.push(`${nombreMinusculas}${nivelNombre.toLowerCase()}`);
       }
 
       // Sin nivel (genérico, aplica para todos los niveles)
       // 4. Nombre + errores + entrenamiento
       if (erroresFormateados && entrenamientoFormateado) {
         variaciones.push(`${nombreNormalizado}${erroresFormateados}${entrenamientoFormateado}`);
+        variaciones.push(`${nombreMinusculas}${erroresFormateados}${entrenamientoFormateado}`);
       }
       // 5. Nombre + errores
       if (erroresFormateados) {
         variaciones.push(`${nombreNormalizado}${erroresFormateados}`);
+        variaciones.push(`${nombreMinusculas}${erroresFormateados}`);
       }
       // 6. Solo nombre (aplica para todos)
       variaciones.push(nombreNormalizado);
+      variaciones.push(nombreMinusculas);
 
       return variaciones;
     }
@@ -1614,6 +1621,20 @@ header select:hover {
       return enemyContainer;
     }
 
+    // Parsea un rango como "60-100" y devuelve {min, max}
+    function parseRango(rango) {
+      const [min, max] = rango.split('-').map(s => parseFloat(s));
+      return { min, max };
+    }
+
+    // Verifica si dos rangos se solapan
+    function rangosOverlap(rangoEnemigo, rangoSeleccionado) {
+      const enemy = parseRango(rangoEnemigo);
+      const selected = parseRango(rangoSeleccionado);
+      // Se solapan si el rango del enemigo está dentro o intersecta con el seleccionado
+      return enemy.min <= selected.max && enemy.max >= selected.min;
+    }
+
     // Función para verificar si un enemigo aparece en el nivel/entrenamiento seleccionado
     /** Returns true if the enemy matches both the selected evolution level and training percentage range. */
     function enemigoAparece(enemigo, nivelSeleccionado, entrenamientoSeleccionado) {
@@ -1621,9 +1642,11 @@ header select:hover {
       const nivelOk = enemigo.niveles === "todos" ||
         (Array.isArray(enemigo.niveles) && enemigo.niveles.includes(nivelSeleccionado));
 
-      // Verificar entrenamiento
-      const entrenamientoOk = enemigo.entrenamientos === "todos" ||
-        (Array.isArray(enemigo.entrenamientos) && enemigo.entrenamientos.includes(entrenamientoSeleccionado));
+      // Verificar entrenamiento - ahora con soporte para rangos que se solapan
+      let entrenamientoOk = enemigo.entrenamientos === "todos";
+      if (!entrenamientoOk && Array.isArray(enemigo.entrenamientos)) {
+        entrenamientoOk = enemigo.entrenamientos.some(rango => rangosOverlap(rango, entrenamientoSeleccionado));
+      }
 
       return nivelOk && entrenamientoOk;
     }

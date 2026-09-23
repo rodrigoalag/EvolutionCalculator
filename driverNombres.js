@@ -60,7 +60,7 @@ const driverNombres = {
   "ST055": { nombre: "Optimal α", color: "Amarillo" },
   "ST056": { nombre: "Optimal β", color: "Amarillo" },
   "ST057": { nombre: "Low Profile", color: "Amarillo" },
-  "ST058": { nombre: "Ground Wire", color: "Amarillo" },
+  "ST058": { nombre: "Petit Yellow", color: "Amarillo" },
   "ST059": { nombre: "Preemption", color: "Blanco" },
   "ST060": { nombre: "Searcher", color: "Blanco" },
   "ST061": { nombre: "Explorer", color: "Blanco" },
@@ -79,6 +79,8 @@ const driverNombres = {
   "BO007": { nombre: "Gigantic Injustice", color: "Verde" },
   "BO008": { nombre: "Crest of Lust", color: "Azul" },
   "BO010": { nombre: "Idzu no Mitama", color: "Rojo" },
+  "BO011": { nombre: "Ground Wire", color: "Amarillo" },
+  "BO013": { nombre: "Dark Rage", color: "Amarillo" },
 
   // EX Series
   "EX000": { nombre: "Child EX", color: "Verde" },

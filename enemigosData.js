@@ -613,6 +613,7 @@ const enemigosData = [
     entrenamientos: ["70-100"],
     errores: "0-6",
     boss: true,
+    diaSemana: "miercoles",
     itemDrop: [
       { tipo: "driver", driver: "BO001", cantidad: 1 }
     ]
@@ -878,6 +879,29 @@ const enemigosData = [
     errores: "0-6",
     itemDrop: [
       { item: "Booster C (P)", cantidad: 1 }
+    ]
+  },
+  {
+    digimon: "Starmons",
+    nickName: "Simon",
+    niveles: [3],
+    entrenamientos: ["80-100"],
+    errores: "0-6",
+    boss: true,
+    diaSemana: "lunes",
+    itemDrop: [
+      { tipo: "driver", driver: "BO011", cantidad: 1 }
+    ]
+  },
+  {
+    digimon: "Doruguremon",
+    nickName: "Popolo",
+    niveles: [5],
+    entrenamientos: ["80-100"],
+    errores: "0-6",
+    boss: true,
+    itemDrop: [
+      { tipo: "driver", driver: "BO013", cantidad: 1 }
     ]
   }
 ];

@@ -1434,7 +1434,8 @@ function computeScumonFamilyStats(digimonName, childName, babyIIName, babyIName)
 
   const dp = parseFloat((((stats.HP / 10) + stats.ATK + stats.DEF + stats.Vel) / 10).toFixed(1));
   stats.Digipuntos    = dp;
-  stats.Clasificacion = _computeTierFromStats(nivel, dp);
+  // Usar computeClasificacion para aplicar excepciones (SCUMON_FAMILY siempre es Mutant Tier)
+  stats.Clasificacion = computeClasificacion(digimonName, nivel, stats);
   return stats;
 }
 

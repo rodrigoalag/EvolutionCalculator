@@ -2749,12 +2749,12 @@ function detectarEvolucionesMultiples(nombreDigimon) {
     Object.keys(specialEntrenamientoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
   }
 
-  // Revisar RC con Program por origen
-  const _rcProgram = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
-  if (_rcProgram?.condicion === "Origen") {
-    Object.entries(_rcProgram).forEach(([key, val]) => {
+  // Revisar RequisitosCondicionados con condición "Origen" (TODOS los paths, no solo Program)
+  const _rc = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
+  if (_rc?.condicion === "Origen") {
+    Object.entries(_rc).forEach(([key, val]) => {
       if (key === "condicion" || key === "categorias") return;
-      if (typeof val === "object" && val !== null && "Program" in flattenRCPath(val)) {
+      if (typeof val === "object" && val !== null) {
         key.split(",").map(k => k.trim()).forEach(evo => evoluciones.add(evo));
       }
     });
@@ -2885,6 +2885,13 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
     if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
       return 0;
     }
+  }
+
+  // Fallback genérico: leer desde RequisitosCondicionados si existe
+  const rc = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
+  if (rc?.condicion === "Origen") {
+    const valorRC = getFieldFromRC(nombreDigimon, evolucionDigimon, campo);
+    if (valorRC !== undefined) return valorRC;
   }
 
   // Devolver el valor original del campo

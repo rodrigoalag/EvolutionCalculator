@@ -2749,12 +2749,12 @@ function detectarEvolucionesMultiples(nombreDigimon) {
     Object.keys(specialEntrenamientoCases[nombreDigimon]).forEach(evo => evoluciones.add(evo));
   }
 
-  // Revisar RC con Program por origen
-  const _rcProgram = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
-  if (_rcProgram?.condicion === "Origen") {
-    Object.entries(_rcProgram).forEach(([key, val]) => {
+  // Revisar RequisitosCondicionados con condición "Origen" (TODOS los paths, no solo Program)
+  const _rc = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
+  if (_rc?.condicion === "Origen") {
+    Object.entries(_rc).forEach(([key, val]) => {
       if (key === "condicion" || key === "categorias") return;
-      if (typeof val === "object" && val !== null && "Program" in flattenRCPath(val)) {
+      if (typeof val === "object" && val !== null) {
         key.split(",").map(k => k.trim()).forEach(evo => evoluciones.add(evo));
       }
     });
@@ -2885,6 +2885,13 @@ function obtenerValorParaEvolucion(digimon, campo, nombreDigimon, evolucionDigim
     if ((_nivel === 4 || _nivel === 5) && digimon.Clasificacion?.nombre === "High Tier" && !_highTierErrorExceptions.includes(nombreDigimon)) {
       return 0;
     }
+  }
+
+  // Fallback genérico: leer desde RequisitosCondicionados si existe
+  const rc = digimonReqDict[nombreDigimon]?.RequisitosCondicionados;
+  if (rc?.condicion === "Origen") {
+    const valorRC = getFieldFromRC(nombreDigimon, evolucionDigimon, campo);
+    if (valorRC !== undefined) return valorRC;
   }
 
   // Devolver el valor original del campo
@@ -3563,6 +3570,20 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
         ? { 'No se considera en el puntaje': ['Peso'], 'Requisitos Obligatorios': nonPesoFields }
         : { 'Requisitos Obligatorios': directFields };
       directFields.forEach(f => { _valores[f] = _resolveRCField(pathData, f, nombre); });
+
+      // Agregar campos comunes de la raíz de Requisitos que no estén en el path
+      if (digimon.categorias) {
+        Object.entries(digimon.categorias).forEach(([grupo, campos]) => {
+          campos.forEach(campo => {
+            if (!directFields.includes(campo) && campo !== 'Peso') {
+              if (!_gruposColumnas[grupo]) _gruposColumnas[grupo] = [];
+              if (!_gruposColumnas[grupo].includes(campo)) {
+                _gruposColumnas[grupo].push(campo);
+              }
+            }
+          });
+        });
+      }
     }
 
     tieneRequisitosOrigen[pathName] = { gruposColumnas: _gruposColumnas, valores: _valores };
@@ -3711,6 +3732,10 @@ if (tieneRequisitosOrigen) {
             }
             if (valor === undefined && campo === "Peso" && datosOriginales?.Peso !== undefined) {
               valor = String(datosOriginales.Peso);
+            }
+            // Fallback: buscar en datosOriginales o digimon para campos base
+            if (valor === undefined) {
+              valor = datosOriginales?.[campo] ?? digimon[campo];
             }
           }
 

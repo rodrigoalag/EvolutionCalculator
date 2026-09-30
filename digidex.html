@@ -3570,6 +3570,20 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
         ? { 'No se considera en el puntaje': ['Peso'], 'Requisitos Obligatorios': nonPesoFields }
         : { 'Requisitos Obligatorios': directFields };
       directFields.forEach(f => { _valores[f] = _resolveRCField(pathData, f, nombre); });
+
+      // Agregar campos comunes de la raíz de Requisitos que no estén en el path
+      if (digimon.categorias) {
+        Object.entries(digimon.categorias).forEach(([grupo, campos]) => {
+          campos.forEach(campo => {
+            if (!directFields.includes(campo) && campo !== 'Peso') {
+              if (!_gruposColumnas[grupo]) _gruposColumnas[grupo] = [];
+              if (!_gruposColumnas[grupo].includes(campo)) {
+                _gruposColumnas[grupo].push(campo);
+              }
+            }
+          });
+        });
+      }
     }
 
     tieneRequisitosOrigen[pathName] = { gruposColumnas: _gruposColumnas, valores: _valores };
@@ -3718,6 +3732,10 @@ if (tieneRequisitosOrigen) {
             }
             if (valor === undefined && campo === "Peso" && datosOriginales?.Peso !== undefined) {
               valor = String(datosOriginales.Peso);
+            }
+            // Fallback: buscar en datosOriginales o digimon para campos base
+            if (valor === undefined) {
+              valor = datosOriginales?.[campo] ?? digimon[campo];
             }
           }
 

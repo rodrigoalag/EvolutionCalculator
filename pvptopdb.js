@@ -586,6 +586,23 @@ const pvpTopDB = {
       { nickname: "Rodrigo",      discord: "Rodrigoalag",  ultimoDigimon: "Kokuwamon",      puntaje: 5416, puesto: 9  },
       { nickname: "Sebastianarm", discord: "Sebastian",    ultimoDigimon: "Mamemon",        puntaje: 5370, puesto: 10 }
     ]
+  },
+  "2026-09-T1": {
+    label: "Temporada 30",
+    fechaInicio: "16 Setiembre 2026",
+    fechaFin: "30 Setiembre 2026",
+    jugadores: [
+      { nickname: "Spookytree",       discord: "Spookytree",       ultimoDigimon: "Amaterasumon",      puntaje: 8012, puesto: 1  },
+      { nickname: "Thebig88",         discord: "Big",              ultimoDigimon: "AeroVDramon",       puntaje: 6434, puesto: 2  },
+      { nickname: "Galox36",          discord: "Galox36",          ultimoDigimon: "Mercuremon",        puntaje: 5818, puesto: 3  },
+      { nickname: "Sithhus",          discord: "Sithhus",          ultimoDigimon: "BlackKingNumemon",  puntaje: 5529, puesto: 4  },
+      { nickname: "Alazar",           discord: "Alazar",           ultimoDigimon: "Burpmon",           puntaje: 4984, puesto: 5  },
+      { nickname: "Ignan0",           discord: "Ignan0",           ultimoDigimon: "Ghostmon",          puntaje: 4932, puesto: 6  },
+      { nickname: "Blueokami",        discord: "Blueokami",        ultimoDigimon: "MetalEtemon",       puntaje: 4715, puesto: 7  },
+      { nickname: "Firestorm",        discord: "Firestorm",        ultimoDigimon: "Devitamamon",       puntaje: 4627, puesto: 8  },
+      { nickname: "Theidiotwithlag",  discord: "Theidiotwithlag",  ultimoDigimon: "BlackKingNumemon",  puntaje: 4283, puesto: 9  },
+      { nickname: "Kevin",            discord: "Kevin",            ultimoDigimon: "Mamemon",           puntaje: 4031, puesto: 10 }
+    ]
   }
 };
 

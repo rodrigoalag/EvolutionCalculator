@@ -516,7 +516,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 15, "Xross": "1 V0019 Driver" },
     "Stat Base": { "ATK": 70, "DEF": 10, "HP": 400, "Vel": 80 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Digitamamon", "Sephirothmon", "Mercuremon", "Burpmon"], "Viene": ["Nanimon"] }
+    "Evoluciones": { "Evoluciona": ["Digitamamon", "Darumamon", "Sephirothmon", "Mercuremon", "Burpmon"], "Viene": ["Nanimon"] }
   },
   "ScumonTyumon": {
     "ID": 185, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
@@ -1152,7 +1152,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 15, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Comida": "1 Huevo del Este" },
     "Stat Base": { "ATK": 200, "DEF": 160, "HP": 2000, "Vel": 90 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Nanimon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Nanimon", "BomberNanimon"] }
   },
 
   "Amaterasumon": {

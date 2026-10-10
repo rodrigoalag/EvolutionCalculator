@@ -3541,10 +3541,22 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
     let _gruposColumnas;
     const _valores = { 'Peso': formatearPeso(_peso) };
 
+    // Detectar si categorias tiene estructura anidada por origen (keys son nombres de paths)
+    const _pathCategorias = digimon.categorias?.[pathName];
+    const _usarCategoriasPath = _pathCategorias && typeof _pathCategorias === 'object' && !Array.isArray(_pathCategorias);
+
     if (pathModo === 'SideEvolution') {
       const obligFields = Object.keys(pathData.Obligatorio || {}).filter(f => pathData.Obligatorio[f] !== '-');
       const incumplirFields = Object.keys(pathData.Incumplir || {});
-      _gruposColumnas = { 'Requisitos Obligatorios': obligFields, 'Incumplir al menos uno': incumplirFields };
+      // Usar categorías específicas del path si existen
+      if (_usarCategoriasPath) {
+        _gruposColumnas = {};
+        Object.entries(_pathCategorias).forEach(([grupo, campos]) => {
+          _gruposColumnas[grupo] = [...campos];
+        });
+      } else {
+        _gruposColumnas = { 'Requisitos Obligatorios': obligFields, 'Incumplir al menos uno': incumplirFields };
+      }
       obligFields.forEach(f => { _valores[f] = _formatRCValue(f, pathData.Obligatorio[f], nombre); });
       incumplirFields.forEach(f => {
         const threshold = pathData.Incumplir[f];
@@ -3555,33 +3567,60 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
 
     } else if (pathModo === 'PuntajePorCampo') {
       const cfgFields = Object.keys(pathData).filter(f => !_metaKeys.has(f) && typeof pathData[f] === 'object' && pathData[f] !== null && 'val' in pathData[f]);
-      _gruposColumnas = { 'Quota/Key Points': cfgFields };
+      // Usar categorías específicas del path si existen
+      if (_usarCategoriasPath) {
+        _gruposColumnas = {};
+        Object.entries(_pathCategorias).forEach(([grupo, campos]) => {
+          _gruposColumnas[grupo] = [...campos];
+        });
+      } else {
+        _gruposColumnas = { 'Quota/Key Points': cfgFields };
+      }
       cfgFields.forEach(f => { _valores[f] = _resolveRCField(pathData, f, nombre); });
 
     } else if (pathModo === 'PuntajeDirecto') {
       const obligFields = Object.keys(pathData.Obligatorio || {}).filter(f => pathData.Obligatorio[f] !== '-');
-      _gruposColumnas = { 'Requisitos Obligatorios': obligFields };
+      // Usar categorías específicas del path si existen
+      if (_usarCategoriasPath) {
+        _gruposColumnas = {};
+        Object.entries(_pathCategorias).forEach(([grupo, campos]) => {
+          _gruposColumnas[grupo] = [...campos];
+        });
+      } else {
+        _gruposColumnas = { 'Requisitos Obligatorios': obligFields };
+      }
       obligFields.forEach(f => { _valores[f] = _formatRCValue(f, pathData.Obligatorio[f], nombre); });
 
     } else { // BloqueTotal (incluyendo Death Evo)
       const directFields = Object.keys(pathData).filter(f => !_metaKeys.has(f) && typeof pathData[f] !== 'object');
       const nonPesoFields = directFields.filter(f => f !== 'Peso');
-      _gruposColumnas = nonPesoFields.length > 0
-        ? { 'No se considera en el puntaje': ['Peso'], 'Requisitos Obligatorios': nonPesoFields }
-        : { 'Requisitos Obligatorios': directFields };
+
+      // Usar categorías específicas del path si existen
+      if (_usarCategoriasPath) {
+        _gruposColumnas = {};
+        Object.entries(_pathCategorias).forEach(([grupo, campos]) => {
+          _gruposColumnas[grupo] = [...campos];
+        });
+      } else {
+        _gruposColumnas = nonPesoFields.length > 0
+          ? { 'No se considera en el puntaje': ['Peso'], 'Requisitos Obligatorios': nonPesoFields }
+          : { 'Requisitos Obligatorios': directFields };
+      }
       directFields.forEach(f => { _valores[f] = _resolveRCField(pathData, f, nombre); });
 
-      // Agregar campos comunes de la raíz de Requisitos que no estén en el path
-      if (digimon.categorias) {
+      // Agregar campos comunes de la raíz de Requisitos que no estén en el path (solo si categorías es plana)
+      if (digimon.categorias && !_usarCategoriasPath) {
         Object.entries(digimon.categorias).forEach(([grupo, campos]) => {
-          campos.forEach(campo => {
-            if (!directFields.includes(campo) && campo !== 'Peso') {
-              if (!_gruposColumnas[grupo]) _gruposColumnas[grupo] = [];
-              if (!_gruposColumnas[grupo].includes(campo)) {
-                _gruposColumnas[grupo].push(campo);
+          if (Array.isArray(campos)) {
+            campos.forEach(campo => {
+              if (!directFields.includes(campo) && campo !== 'Peso') {
+                if (!_gruposColumnas[grupo]) _gruposColumnas[grupo] = [];
+                if (!_gruposColumnas[grupo].includes(campo)) {
+                  _gruposColumnas[grupo].push(campo);
+                }
               }
-            }
-          });
+            });
+          }
         });
       }
     }

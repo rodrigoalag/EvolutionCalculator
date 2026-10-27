@@ -574,6 +574,68 @@ a { color: #4ecdc4; }
 .points-remaining .value.error { color: #ff6b6b; }
 .points-remaining .max { color: #666; font-size: 0.8rem; }
 
+/* Training Cap Slider */
+.training-cap-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  background: rgba(20,20,40,0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(78,205,196,0.2);
+}
+.training-cap-row label {
+  color: #888;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.training-cap-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #4ecdc4 0%, #4ecdc4 var(--cap-percent, 100%), #333 var(--cap-percent, 100%), #333 100%);
+  outline: none;
+}
+.training-cap-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4ecdc4;
+  cursor: pointer;
+  border: 2px solid #1a1a2e;
+}
+.training-cap-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4ecdc4;
+  cursor: pointer;
+  border: 2px solid #1a1a2e;
+}
+.training-cap-input {
+  width: 70px;
+  padding: 6px 8px;
+  background: rgba(30,30,50,0.8);
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 6px;
+  color: #4ecdc4;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+.training-cap-input:focus {
+  outline: none;
+  border-color: #4ecdc4;
+}
+.training-cap-percent {
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
 .dual-inputs-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -903,6 +965,12 @@ a { color: #4ecdc4; }
           <div class="locked-overlay" id="stats-locked-overlay">
             <span>Completa la línea evolutiva primero</span>
           </div>
+          <div class="training-cap-row">
+            <label id="training-cap-label">% Entrenamiento Máximo:</label>
+            <input type="range" id="training-cap-slider" class="training-cap-slider" min="0" max="100" step="0.1" value="100">
+            <input type="number" id="training-cap-input" class="training-cap-input" min="0" max="100" step="0.1" value="100.0">
+            <span class="training-cap-percent">%</span>
+          </div>
           <div class="points-remaining">
             <span class="label">Puntos restantes</span>
             <div class="value" id="points-remaining">700</div>
@@ -989,16 +1057,24 @@ const LEVEL_CAPS = {
   6: 700    // Ultimate
 };
 
-function getMaxPoints() {
-  if (!currentDigimon) return 700;
-  const data = fullDigimonReqDict[currentDigimon];
-  return data ? (LEVEL_CAPS[data.Nivel] || 700) : 700;
-}
-
 // ===== ESTADO =====
 let currentTama = null;
 let currentDigimon = null;
 let currentDistribution = { hpNominal: 0, atkNominal: 0, spdNominal: 0 };
+let trainingCapPercent = 100; // Porcentaje del cap de entrenamiento (0-100)
+
+function getMaxPoints() {
+  if (!currentDigimon) return 700;
+  const data = fullDigimonReqDict[currentDigimon];
+  const levelCap = data ? (LEVEL_CAPS[data.Nivel] || 700) : 700;
+  return Math.round(levelCap * (trainingCapPercent / 100));
+}
+
+function getLevelCap() {
+  if (!currentDigimon) return 700;
+  const data = fullDigimonReqDict[currentDigimon];
+  return data ? (LEVEL_CAPS[data.Nivel] || 700) : 700;
+}
 let savedLineageDistribution = null;
 let currentUser = null;
 
@@ -1023,6 +1099,7 @@ const translations = {
     statsDistribution: "Distribución de Stats",
     completeEvoFirst: "Completa la línea evolutiva primero",
     pointsRemaining: "Puntos restantes",
+    trainingCap: "% Entrenamiento Máximo:",
     trained: "Entrenado",
     trainedShort: "Entren.",
     total: "Total",
@@ -1067,6 +1144,7 @@ const translations = {
     statsDistribution: "Stats Distribution",
     completeEvoFirst: "Complete the evolution line first",
     pointsRemaining: "Points remaining",
+    trainingCap: "Max Training %:",
     trained: "Trained",
     trainedShort: "Train.",
     total: "Total",
@@ -1206,6 +1284,10 @@ function updateInterfaceLanguage() {
   // Locked overlay
   const lockedOverlay = document.querySelector('.locked-overlay span');
   if (lockedOverlay) lockedOverlay.textContent = t('completeEvoFirst');
+
+  // Training cap label
+  const trainingCapLabel = document.getElementById('training-cap-label');
+  if (trainingCapLabel) trainingCapLabel.textContent = t('trainingCap');
 
   // Points remaining
   const pointsLabel = document.querySelector('.points-remaining .label');
@@ -2536,6 +2618,7 @@ async function saveSlot() {
     tama: currentTama,
     distribution: { ...currentDistribution },
     evolutionLine: { ...plannedEvolutionLine },
+    trainingCap: trainingCapPercent,
     date: date.toISOString()
   };
 
@@ -2591,6 +2674,15 @@ function loadSlot(key) {
       plannedEvolutionLine = { ...slot.evolutionLine };
       renderEvolutionLine(slot.digimon);
       updateEvoLineMini();
+    }
+
+    // Restaurar training cap si existe
+    if (slot.trainingCap !== undefined) {
+      trainingCapPercent = slot.trainingCap;
+      const capSlider = document.getElementById('training-cap-slider');
+      capSlider.value = trainingCapPercent;
+      document.getElementById('training-cap-input').value = trainingCapPercent.toFixed(1);
+      capSlider.style.setProperty('--cap-percent', trainingCapPercent + '%');
     }
 
     // Desbloquear stats y aplicar distribución
@@ -2735,6 +2827,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load slot selector
   document.getElementById('load-slot-select').addEventListener('change', (e) => {
     loadSlot(e.target.value);
+  });
+
+  // Training cap slider & input
+  const capSlider = document.getElementById('training-cap-slider');
+  const capInput = document.getElementById('training-cap-input');
+
+  function updateTrainingCap(value) {
+    // Limitar a 1 decimal y rango 0-100
+    value = Math.max(0, Math.min(100, parseFloat(value) || 0));
+    value = Math.round(value * 10) / 10; // 1 decimal
+    trainingCapPercent = value;
+    capSlider.value = value;
+    capInput.value = value.toFixed(1); // Mostrar siempre con 1 decimal (ej: 100.0)
+    capSlider.style.setProperty('--cap-percent', value + '%');
+    updateUI();
+  }
+
+  capSlider.addEventListener('input', (e) => updateTrainingCap(e.target.value));
+  capInput.addEventListener('blur', (e) => {
+    // Formatear al perder foco
+    updateTrainingCap(e.target.value);
   });
 });
 </script>

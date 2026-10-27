@@ -1505,17 +1505,17 @@ function getValidAdultsForLine() {
     return [currentDigimon];
   }
 
-  // Si hay Perfect seleccionado en la línea, filtrar por él
+  // Si hay Perfect seleccionado en la línea, buscar Adults que llegan a él
+  // Usa getPredecessorsAtLevel para manejar Perfect sides (ej: GigaWaruMonzaemon → Monzaemon → Adults)
   const selectedPerfect = plannedEvolutionLine[5];
   if (selectedPerfect) {
-    const viene = digimonstattier[selectedPerfect]?.Viene || [];
-    return viene.filter(p => fullDigimonReqDict[p]?.Nivel === 4).sort();
+    return getPredecessorsAtLevel(selectedPerfect, 4).sort();
   }
 
-  // Si el Digimon principal es Perfect, usar su Viene
+  // Si el Digimon principal es Perfect, buscar Adults
+  // Usa getPredecessorsAtLevel para manejar Perfect sides
   if (mainLevel === 5) {
-    const viene = digimonstattier[currentDigimon]?.Viene || [];
-    return viene.filter(p => fullDigimonReqDict[p]?.Nivel === 4).sort();
+    return getPredecessorsAtLevel(currentDigimon, 4).sort();
   }
 
   // Si el Digimon principal es Ultimate, ver Perfect seleccionado
@@ -1546,10 +1546,10 @@ function getValidPerfectsForLine() {
     return [currentDigimon];
   }
 
-  // Si el Digimon principal es Ultimate, usar su Viene
+  // Si el Digimon principal es Ultimate, buscar Perfects
+  // Usa getPredecessorsAtLevel para manejar Ultimate sides (si existen)
   if (mainLevel === 6) {
-    const viene = digimonstattier[currentDigimon]?.Viene || [];
-    return viene.filter(p => fullDigimonReqDict[p]?.Nivel === 5).sort();
+    return getPredecessorsAtLevel(currentDigimon, 5).sort();
   }
 
   return [];
@@ -1600,25 +1600,9 @@ function getValidBabyIIForLine() {
     return [];
   }
 
-  const babyII = new Set();
-
-  // Método 1: Leer Viene del Child
-  const vieneChild = digimonstattier[selectedChild]?.Viene || [];
-  vieneChild.forEach(p => {
-    const predData = fullDigimonReqDict[p];
-    if (predData && predData.Nivel === 2) {
-      babyII.add(p);
-    }
-  });
-
-  // Método 2: Búsqueda inversa
-  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
-    if (data.Nivel === 2 && digimonstattier[name]?.Evoluciona?.includes(selectedChild)) {
-      babyII.add(name);
-    }
-  }
-
-  return [...babyII].sort();
+  // Usa getPredecessorsAtLevel para manejar Child sides
+  // (ej: Shoutmon + Star Sword → Shoutmon → Baby II)
+  return getPredecessorsAtLevel(selectedChild, 2).sort();
 }
 
 /**
@@ -1636,25 +1620,8 @@ function getValidBabyIForLine() {
     return [];
   }
 
-  const babyI = new Set();
-
-  // Método 1: Leer Viene del Baby II
-  const vieneBabyII = digimonstattier[selectedBabyII]?.Viene || [];
-  vieneBabyII.forEach(p => {
-    const predData = fullDigimonReqDict[p];
-    if (predData && predData.Nivel === 1) {
-      babyI.add(p);
-    }
-  });
-
-  // Método 2: Búsqueda inversa
-  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
-    if (data.Nivel === 1 && digimonstattier[name]?.Evoluciona?.includes(selectedBabyII)) {
-      babyI.add(name);
-    }
-  }
-
-  return [...babyI].sort();
+  // Usa getPredecessorsAtLevel para manejar Baby II sides (si existen)
+  return getPredecessorsAtLevel(selectedBabyII, 1).sort();
 }
 
 /**

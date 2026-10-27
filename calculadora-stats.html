@@ -906,7 +906,7 @@ a { color: #4ecdc4; }
           <div class="points-remaining">
             <span class="label">Puntos restantes</span>
             <div class="value" id="points-remaining">700</div>
-            <span class="max">/ 700</span>
+            <span class="max">/ <span id="max-points-display">700</span></span>
           </div>
           <div class="dual-inputs-grid">
             <!-- HP -->
@@ -977,8 +977,23 @@ a { color: #4ecdc4; }
 <script src="nav-translate.js"></script>
 <script>
 // ===== CONSTANTES =====
-const MAX_POINTS = 700;
 const HP_DIVISOR = 77;
+
+// Caps de entrenamiento por nivel (x2 porque son 2 entrenamientos)
+const LEVEL_CAPS = {
+  1: 25,    // Baby I
+  2: 62,    // Baby II
+  3: 175,   // Child
+  4: 325,   // Adult
+  5: 700,   // Perfect
+  6: 700    // Ultimate
+};
+
+function getMaxPoints() {
+  if (!currentDigimon) return 700;
+  const data = fullDigimonReqDict[currentDigimon];
+  return data ? (LEVEL_CAPS[data.Nivel] || 700) : 700;
+}
 
 // ===== ESTADO =====
 let currentTama = null;
@@ -2189,11 +2204,11 @@ function calcHPNominal(hpBaseTotal, hpEntrenado) {
 }
 
 function nominalToPercent(nominal) {
-  return Math.round((nominal / MAX_POINTS) * 100);
+  return Math.round((nominal / getMaxPoints()) * 100);
 }
 
 function percentToNominal(percent) {
-  return Math.round((percent / 100) * MAX_POINTS);
+  return Math.round((percent / 100) * getMaxPoints());
 }
 
 function getTotalPoints() {
@@ -2201,7 +2216,7 @@ function getTotalPoints() {
 }
 
 function getRemainingPoints() {
-  return MAX_POINTS - getTotalPoints();
+  return getMaxPoints() - getTotalPoints();
 }
 
 // ===== UPDATE UI =====
@@ -2259,9 +2274,9 @@ function updateStatDisplay() {
   document.getElementById('def-total').textContent = defBase + heredados.DEF;
 
   // Actualizar % (porcentaje de los 700 puntos)
-  const hpPercent = Math.round((currentDistribution.hpNominal / MAX_POINTS) * 100);
-  const atkPercent = Math.round((currentDistribution.atkNominal / MAX_POINTS) * 100);
-  const spdPercent = Math.round((currentDistribution.spdNominal / MAX_POINTS) * 100);
+  const hpPercent = Math.round((currentDistribution.hpNominal / getMaxPoints()) * 100);
+  const atkPercent = Math.round((currentDistribution.atkNominal / getMaxPoints()) * 100);
+  const spdPercent = Math.round((currentDistribution.spdNominal / getMaxPoints()) * 100);
   document.getElementById('hp-percent-display').textContent = `${hpPercent}%`;
   document.getElementById('atk-percent-display').textContent = `${atkPercent}%`;
   document.getElementById('spd-percent-display').textContent = `${spdPercent}%`;
@@ -2304,9 +2319,15 @@ function updateEvoLineMini() {
 }
 
 function updateEquivDisplay() {
-  document.getElementById('hp-equiv').textContent = `${currentDistribution.hpNominal} / 700`;
-  document.getElementById('atk-equiv').textContent = `${currentDistribution.atkNominal} / 700`;
-  document.getElementById('spd-equiv').textContent = `${currentDistribution.spdNominal} / 700`;
+  const max = getMaxPoints();
+  document.getElementById('hp-equiv').textContent = `${currentDistribution.hpNominal} / ${max}`;
+  document.getElementById('atk-equiv').textContent = `${currentDistribution.atkNominal} / ${max}`;
+  document.getElementById('spd-equiv').textContent = `${currentDistribution.spdNominal} / ${max}`;
+  document.getElementById('max-points-display').textContent = max;
+
+  // Actualizar max de los inputs
+  document.getElementById('atk-nominal').max = max;
+  document.getElementById('spd-nominal').max = max;
 }
 
 function updateInputsFromDistribution() {
@@ -2347,7 +2368,7 @@ function setupInputHandlers() {
 
     // Check limit
     const otherTotal = currentDistribution.atkNominal + currentDistribution.spdNominal;
-    const maxAllowed = MAX_POINTS - otherTotal;
+    const maxAllowed = getMaxPoints() - otherTotal;
 
     if (hpNominal > maxAllowed) {
       hpNominal = maxAllowed;
@@ -2368,7 +2389,7 @@ function setupInputHandlers() {
     let hpNominal = percentToNominal(percent);
 
     const otherTotal = currentDistribution.atkNominal + currentDistribution.spdNominal;
-    const maxAllowed = MAX_POINTS - otherTotal;
+    const maxAllowed = getMaxPoints() - otherTotal;
 
     if (hpNominal > maxAllowed) {
       hpNominal = maxAllowed;
@@ -2399,7 +2420,7 @@ function setupInputHandlers() {
 
       const otherStat = stat === 'atk' ? 'spd' : 'atk';
       const otherTotal = currentDistribution.hpNominal + currentDistribution[`${otherStat}Nominal`];
-      const maxAllowed = MAX_POINTS - otherTotal;
+      const maxAllowed = getMaxPoints() - otherTotal;
 
       if (value > maxAllowed) {
         value = maxAllowed;
@@ -2420,7 +2441,7 @@ function setupInputHandlers() {
 
       const otherStat = stat === 'atk' ? 'spd' : 'atk';
       const otherTotal = currentDistribution.hpNominal + currentDistribution[`${otherStat}Nominal`];
-      const maxAllowed = MAX_POINTS - otherTotal;
+      const maxAllowed = getMaxPoints() - otherTotal;
 
       if (nominal > maxAllowed) {
         nominal = maxAllowed;
@@ -2505,7 +2526,7 @@ async function saveSlot() {
   }
 
   const total = getTotalPoints();
-  const percent = Math.round((total / MAX_POINTS) * 100);
+  const percent = Math.round((total / getMaxPoints()) * 100);
   const date = new Date();
   const dateStr = `${date.getDate()}/${date.getMonth() + 1}`;
   const key = `${currentDigimon}_${percent}%_${dateStr}`;
@@ -2688,7 +2709,7 @@ SPD: Digi ${spdDigi} + Entren ${currentDistribution.spdNominal} = ${spdDigi + cu
 DEF: ${defDigi}
 ================================
 Distribución: HP ${currentDistribution.hpNominal} | ATK ${currentDistribution.atkNominal} | SPD ${currentDistribution.spdNominal}
-Total: ${getTotalPoints()} / 700`;
+Total: ${getTotalPoints()} / ${getMaxPoints()}`;
 
   const blob = new Blob([text], { type: 'text/plain' });
   const link = document.createElement('a');

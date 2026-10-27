@@ -997,6 +997,225 @@ let currentDistribution = { hpNominal: 0, atkNominal: 0, spdNominal: 0 };
 let savedLineageDistribution = null;
 let currentUser = null;
 
+// ===== TRADUCCIONES =====
+const translations = {
+  es: {
+    pageTitle: "Calculadora de Stats",
+    pageSubtitle: "Calcula tu distribución de stats",
+    searchPlaceholder: "Buscar Digimon...",
+    selectManually: "o selecciona manualmente",
+    selectTama: "Selecciona tu Tama",
+    level: "Nivel",
+    digimon: "Digimon",
+    selectLevel: "--Selecciona Nivel--",
+    selectDigimon: "--Selecciona Digimon--",
+    selectOne: "Selecciona un Digimon",
+    attribute: "Atributo",
+    type: "Tipo",
+    tama: "Tama",
+    download: "Descargar",
+    evolutionLine: "Línea Evolutiva",
+    selectToSeeEvo: "Selecciona un Digimon para ver su línea evolutiva",
+    statsDistribution: "Distribución de Stats",
+    completeEvoFirst: "Completa la línea evolutiva primero",
+    pointsRemaining: "Puntos restantes",
+    trained: "Entrenado",
+    trainedShort: "Entren.",
+    total: "Total",
+    copy: "Copiar",
+    save: "Guardar",
+    loadSlot: "Cargar slot...",
+    savedCloud: "Guardado en nube",
+    savedLocal: "Guardado local",
+    noSavedSlots: "Sin slots guardados",
+    confirmDelete: "¿Eliminar este slot?",
+    // Stats
+    digi: "Digi",
+    // Toast messages
+    selectDigimonFirst: "Selecciona un Digimon primero",
+    distributionSaved: "Distribución guardada",
+    noDistributionSaved: "No hay distribución guardada",
+    distributionApplied: "Distribución aplicada",
+    cloudSaveError: "Error al guardar en la nube",
+    savedToCloud: "Guardado:",
+    savedLocally: "Guardado:",
+    loaded: "Cargado:",
+    imageDownloaded: "Imagen descargada",
+    textDownloaded: "Archivo de texto descargado",
+    connectedCloud: "Conectado - slots en la nube"
+  },
+  en: {
+    pageTitle: "Stats Calculator",
+    pageSubtitle: "Calculate your stats distribution",
+    searchPlaceholder: "Search Digimon...",
+    selectManually: "or select manually",
+    selectTama: "Select your Tama",
+    level: "Level",
+    digimon: "Digimon",
+    selectLevel: "--Select Level--",
+    selectDigimon: "--Select Digimon--",
+    selectOne: "Select a Digimon",
+    attribute: "Attribute",
+    type: "Type",
+    tama: "Tama",
+    download: "Download",
+    evolutionLine: "Evolution Line",
+    selectToSeeEvo: "Select a Digimon to see its evolution line",
+    statsDistribution: "Stats Distribution",
+    completeEvoFirst: "Complete the evolution line first",
+    pointsRemaining: "Points remaining",
+    trained: "Trained",
+    trainedShort: "Train.",
+    total: "Total",
+    copy: "Copy",
+    save: "Save",
+    loadSlot: "Load slot...",
+    savedCloud: "Saved to cloud",
+    savedLocal: "Saved locally",
+    noSavedSlots: "No saved slots",
+    confirmDelete: "Delete this slot?",
+    // Stats
+    digi: "Digi",
+    // Toast messages
+    selectDigimonFirst: "Select a Digimon first",
+    distributionSaved: "Distribution saved",
+    noDistributionSaved: "No saved distribution",
+    distributionApplied: "Distribution applied",
+    cloudSaveError: "Error saving to cloud",
+    savedToCloud: "Saved:",
+    savedLocally: "Saved:",
+    loaded: "Loaded:",
+    imageDownloaded: "Image downloaded",
+    textDownloaded: "Text file downloaded",
+    connectedCloud: "Connected - cloud slots"
+  }
+};
+
+let currentLanguage = 'es';
+
+function detectLanguage() {
+  const savedLang = localStorage.getItem('digilang');
+  if (savedLang && translations[savedLang]) return savedLang;
+
+  const browserLang = (navigator.language || navigator.userLanguage).split('-')[0].toLowerCase();
+  if (translations[browserLang]) return browserLang;
+
+  return 'es';
+}
+
+function t(key) {
+  return translations[currentLanguage]?.[key] || translations['es']?.[key] || key;
+}
+
+function updateInterfaceLanguage() {
+  // Título y subtítulo
+  const title = document.querySelector('.page-header h1');
+  const subtitle = document.querySelector('.page-header p');
+  if (title) title.textContent = t('pageTitle');
+  if (subtitle) subtitle.textContent = t('pageSubtitle');
+
+  // Search
+  const searchInput = document.getElementById('digi-search');
+  if (searchInput) searchInput.placeholder = t('searchPlaceholder');
+
+  // Selector divider
+  const divider = document.querySelector('.selector-divider');
+  if (divider) divider.textContent = t('selectManually');
+
+  // Tama title
+  const tamaTitle = document.getElementById('tamaTitle');
+  if (tamaTitle) tamaTitle.textContent = t('selectTama');
+
+  // Labels
+  const levelLabel = document.querySelector('.select-group:first-child label');
+  const digiLabel = document.querySelector('.select-group:last-child label');
+  if (levelLabel) levelLabel.textContent = t('level') + ':';
+  if (digiLabel) digiLabel.textContent = t('digimon') + ':';
+
+  // Selects default options
+  const nivelSelect = document.getElementById('nivelSelect');
+  const digimonSelect = document.getElementById('digimonSelect');
+  if (nivelSelect?.options[0]) nivelSelect.options[0].textContent = t('selectLevel');
+  if (digimonSelect?.options[0]) digimonSelect.options[0].textContent = t('selectDigimon');
+
+  // Portrait placeholder
+  const placeholder = document.querySelector('.portrait-placeholder');
+  if (placeholder) placeholder.textContent = t('selectOne');
+
+  // Download button
+  const downloadBtn = document.getElementById('download-card-btn');
+  if (downloadBtn) downloadBtn.textContent = t('download');
+
+  // Section titles
+  const sectionTitles = document.querySelectorAll('.section-title');
+  sectionTitles.forEach(el => {
+    if (el.textContent.includes('Línea') || el.textContent.includes('Evolution')) {
+      el.textContent = t('evolutionLine');
+    } else if (el.textContent.includes('Distribución') || el.textContent.includes('Stats Dist')) {
+      el.textContent = t('statsDistribution');
+    }
+  });
+
+  // Evolution line placeholder
+  const evoPlaceholder = document.querySelector('#evo-line > span');
+  if (evoPlaceholder && evoPlaceholder.style.color) {
+    evoPlaceholder.textContent = t('selectToSeeEvo');
+  }
+
+  // Locked overlay
+  const lockedOverlay = document.querySelector('.locked-overlay span');
+  if (lockedOverlay) lockedOverlay.textContent = t('completeEvoFirst');
+
+  // Points remaining
+  const pointsLabel = document.querySelector('.points-remaining .label');
+  if (pointsLabel) pointsLabel.textContent = t('pointsRemaining');
+
+  // Stat box headers
+  const trainedHeader = document.querySelector('.stat-box .header .trained small');
+  const totalHeader = document.querySelector('.stat-box .header .total small');
+  const digiHeader = document.querySelector('.stat-box .header .digi small');
+  if (trainedHeader) trainedHeader.textContent = t('trainedShort');
+  if (totalHeader) totalHeader.textContent = t('total');
+  if (digiHeader) digiHeader.textContent = t('digi');
+
+  // Input labels
+  document.querySelectorAll('.input-label').forEach(el => {
+    if (el.textContent.includes('Entrenado') || el.textContent.includes('Trained')) {
+      el.textContent = t('trained') + ':';
+    }
+  });
+
+  // Buttons
+  const copyBtn = document.getElementById('save-lineage-btn');
+  const saveBtn = document.getElementById('save-slot-btn');
+  if (copyBtn) copyBtn.innerHTML = '📋 ' + t('copy');
+  if (saveBtn) saveBtn.innerHTML = '💾 ' + t('save');
+
+  // Load slot select
+  const loadSelect = document.getElementById('load-slot-select');
+  if (loadSelect?.options[0]) loadSelect.options[0].textContent = t('loadSlot');
+
+  // Update selector
+  const langSelector = document.getElementById('languageSelector');
+  if (langSelector) langSelector.value = currentLanguage;
+}
+
+function initLanguage() {
+  currentLanguage = detectLanguage();
+
+  const langSelector = document.getElementById('languageSelector');
+  if (langSelector) {
+    langSelector.value = currentLanguage;
+    langSelector.addEventListener('change', function() {
+      currentLanguage = this.value;
+      localStorage.setItem('digilang', currentLanguage);
+      updateInterfaceLanguage();
+    });
+  }
+
+  updateInterfaceLanguage();
+}
+
 // Mapeo de nivel a etapa
 const nivelAEtapa = {
   1: "Baby I",
@@ -2180,27 +2399,27 @@ function setupInputHandlers() {
 // ===== LINEAGE =====
 document.getElementById('save-lineage-btn').addEventListener('click', () => {
   if (!currentDigimon) {
-    showToast('Selecciona un Digimon primero', 'error');
+    showToast(t('selectDigimonFirst'), 'error');
     return;
   }
   savedLineageDistribution = { ...currentDistribution };
   updateLineageUI();
-  showToast('Distribución guardada', 'success');
+  showToast(t('distributionSaved'), 'success');
 });
 
 document.getElementById('apply-lineage-btn').addEventListener('click', () => {
   if (!savedLineageDistribution) {
-    showToast('No hay distribución guardada', 'error');
+    showToast(t('noDistributionSaved'), 'error');
     return;
   }
   if (!currentDigimon) {
-    showToast('Selecciona un Digimon primero', 'error');
+    showToast(t('selectDigimonFirst'), 'error');
     return;
   }
   currentDistribution = { ...savedLineageDistribution };
   updateInputsFromDistribution();
   updateUI();
-  showToast('Distribución aplicada', 'success');
+  showToast(t('distributionApplied'), 'success');
 });
 
 function updateLineageUI() {
@@ -2240,7 +2459,7 @@ function getSavedSlots() {
  */
 async function saveSlot() {
   if (!currentDigimon) {
-    showToast('Selecciona un Digimon primero', 'error');
+    showToast(t('selectDigimonFirst'), 'error');
     return;
   }
 
@@ -2270,18 +2489,18 @@ async function saveSlot() {
       }, { onConflict: 'user_id,slot_key' });
 
     if (error) {
-      showToast('Error al guardar en la nube', 'error');
+      showToast(t('cloudSaveError'), 'error');
       console.error(error);
       return;
     }
     cloudSlots[key] = slotData;
-    showToast(`☁️ Guardado: ${key}`, 'success');
+    showToast(`☁️ ${t('savedToCloud')} ${key}`, 'success');
   } else {
     // Guardar en localStorage
     const slots = getLocalSlots();
     slots[key] = slotData;
     localStorage.setItem('statsCalcSlots', JSON.stringify(slots));
-    showToast(`💾 Guardado: ${key}`, 'success');
+    showToast(`💾 ${t('savedLocally')} ${key}`, 'success');
   }
 
   populateSlotsSelect();
@@ -2317,7 +2536,7 @@ function loadSlot(key) {
     currentDistribution = { ...slot.distribution };
     updateInputsFromDistribution();
     updateUI();
-    showToast(`Cargado: ${slot.digimon}`, 'success');
+    showToast(`${t('loaded')} ${slot.digimon}`, 'success');
   }
 
   // Reset selector
@@ -2360,10 +2579,10 @@ function populateSlotsSelect() {
   });
 
   const prefix = currentUser ? '☁️ ' : '💾 ';
-  select.innerHTML = `<option value="">${prefix}Cargar slot...</option>`;
+  select.innerHTML = `<option value="">${prefix}${t('loadSlot')}</option>`;
 
   if (keys.length === 0) {
-    select.innerHTML += '<option value="" disabled>Sin slots guardados</option>';
+    select.innerHTML += `<option value="" disabled>${t('noSavedSlots')}</option>`;
     return;
   }
 
@@ -2377,7 +2596,7 @@ function populateSlotsSelect() {
 // ===== DOWNLOAD CARD =====
 function downloadCard() {
   if (!currentDigimon) {
-    showToast('Selecciona un Digimon primero', 'error');
+    showToast(t('selectDigimonFirst'), 'error');
     return;
   }
 
@@ -2396,7 +2615,7 @@ function downloadCard() {
       link.download = `${currentDigimon}_stats.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      showToast('Imagen descargada', 'success');
+      showToast(t('imageDownloaded'), 'success');
     }).catch(() => {
       downloadCardFallback();
     });
@@ -2435,11 +2654,12 @@ Total: ${getTotalPoints()} / 700`;
   link.download = `${currentDigimon}_stats.txt`;
   link.href = URL.createObjectURL(blob);
   link.click();
-  showToast('Archivo de texto descargado', 'success');
+  showToast(t('textDownloaded'), 'success');
 }
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
+  initLanguage(); // Inicializar sistema de idioma
   createTamaIcons();
   initSearch();
   setupInputHandlers();
@@ -2466,7 +2686,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function onLogin(session) {
   currentUser = session.user;
   await loadCloudSlots();
-  showToast('☁️ Conectado - slots en la nube', 'success');
+  showToast(`☁️ ${t('connectedCloud')}`, 'success');
 }
 function onLogout() {
   currentUser = null;

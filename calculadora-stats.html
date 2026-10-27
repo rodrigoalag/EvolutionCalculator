@@ -110,7 +110,6 @@ a { color: #4ecdc4; }
   text-align: center; margin-bottom: 1.5rem; padding-top: 0.5rem;
 }
 .page-header h1 { margin: 0 0 0.25rem 0; font-size: 2rem; }
-.page-header p { color: #888; margin: 0; font-size: 0.9rem; }
 
 /* ===== SEARCH ===== */
 #search-container {
@@ -157,13 +156,6 @@ a { color: #4ecdc4; }
 .search-item-info { flex: 1; }
 .search-item-name { font-weight: 600; color: #e0e0e0; }
 .search-item-meta { font-size: 0.75rem; color: #888; }
-
-.selector-divider {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #666;
-  margin: 1rem 0;
-}
 
 /* ===== TAMA SELECTOR ===== */
 .tama-selector-section {
@@ -807,7 +799,6 @@ a { color: #4ecdc4; }
   <!-- Header -->
   <div class="page-header">
     <h1>Calculadora de Stats</h1>
-    <p>Calcula tu distribución de stats</p>
   </div>
 
   <!-- Search -->
@@ -815,7 +806,6 @@ a { color: #4ecdc4; }
     <input type="text" id="digi-search" placeholder="Buscar Digimon..." autocomplete="off">
     <div id="search-suggestions"></div>
   </div>
-  <div class="selector-divider">o selecciona manualmente</div>
 
   <!-- Tama Selector -->
   <div class="tama-selector-section">
@@ -1001,9 +991,7 @@ let currentUser = null;
 const translations = {
   es: {
     pageTitle: "Calculadora de Stats",
-    pageSubtitle: "Calcula tu distribución de stats",
     searchPlaceholder: "Buscar Digimon...",
-    selectManually: "o selecciona manualmente",
     selectTama: "Selecciona tu Tama",
     level: "Nivel",
     digimon: "Digimon",
@@ -1013,6 +1001,7 @@ const translations = {
     attribute: "Atributo",
     type: "Tipo",
     tama: "Tama",
+    noImage: "Sin imagen",
     download: "Descargar",
     evolutionLine: "Línea Evolutiva",
     selectToSeeEvo: "Selecciona un Digimon para ver su línea evolutiva",
@@ -1046,9 +1035,7 @@ const translations = {
   },
   en: {
     pageTitle: "Stats Calculator",
-    pageSubtitle: "Calculate your stats distribution",
     searchPlaceholder: "Search Digimon...",
-    selectManually: "or select manually",
     selectTama: "Select your Tama",
     level: "Level",
     digimon: "Digimon",
@@ -1058,6 +1045,7 @@ const translations = {
     attribute: "Attribute",
     type: "Type",
     tama: "Tama",
+    noImage: "No image",
     download: "Download",
     evolutionLine: "Evolution Line",
     selectToSeeEvo: "Select a Digimon to see its evolution line",
@@ -1108,19 +1096,13 @@ function t(key) {
 }
 
 function updateInterfaceLanguage() {
-  // Título y subtítulo
+  // Título
   const title = document.querySelector('.page-header h1');
-  const subtitle = document.querySelector('.page-header p');
   if (title) title.textContent = t('pageTitle');
-  if (subtitle) subtitle.textContent = t('pageSubtitle');
 
   // Search
   const searchInput = document.getElementById('digi-search');
   if (searchInput) searchInput.placeholder = t('searchPlaceholder');
-
-  // Selector divider
-  const divider = document.querySelector('.selector-divider');
-  if (divider) divider.textContent = t('selectManually');
 
   // Tama title
   const tamaTitle = document.getElementById('tamaTitle');
@@ -1202,14 +1184,18 @@ function updateInterfaceLanguage() {
 
 function initLanguage() {
   currentLanguage = detectLanguage();
+  window.currentLang = currentLanguage; // Para auth.js
 
   const langSelector = document.getElementById('languageSelector');
   if (langSelector) {
     langSelector.value = currentLanguage;
     langSelector.addEventListener('change', function() {
       currentLanguage = this.value;
+      window.currentLang = currentLanguage; // Para auth.js
       localStorage.setItem('digilang', currentLanguage);
       updateInterfaceLanguage();
+      // Actualizar textos de auth si está cargado
+      if (typeof updateAuthLang === 'function') updateAuthLang();
     });
   }
 
@@ -1446,8 +1432,9 @@ function updateDigimonCard(name, data) {
 
   // Portrait
   const portrait = document.getElementById('portrait');
+  const noImageText = t('noImage');
   portrait.innerHTML = `<img src="${imgUrl('icon/' + name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
-                             onerror="this.outerHTML='<span class=portrait-placeholder>Sin imagen</span>'" alt="${name}">`;
+                             onerror="this.outerHTML='<span class=portrait-placeholder>${noImageText}</span>'" alt="${name}">`;
 
   // Name & Badge
   document.getElementById('digi-name').textContent = name;
@@ -1455,9 +1442,9 @@ function updateDigimonCard(name, data) {
 
   // Meta
   document.getElementById('digi-meta').innerHTML = `
-    Atributo: <b>${data.Atributo || '---'}</b><br>
-    Tipo: <b>${data.Tipo || '---'}</b><br>
-    Tama: <b>${data.Tama || '---'}</b>
+    ${t('attribute')}: <b>${data.Atributo || '---'}</b><br>
+    ${t('type')}: <b>${data.Tipo || '---'}</b><br>
+    ${t('tama')}: <b>${data.Tama || '---'}</b>
   `;
 
   // Inicializar línea evolutiva mini

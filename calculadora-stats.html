@@ -1079,6 +1079,50 @@ const translations = {
   }
 };
 
+// Traducciones de tipos (solo EN, ES es el valor original)
+const tipoEN = {
+  "Ninguno": "None",
+  "Dinosaurio": "Dinosaur",
+  "Hielo": "Ice",
+  "Maquina": "Machine",
+  "Mutante": "Mutant",
+  "Compuesto": "Composite",
+  "Tierra": "Earth",
+  "Bestia": "Beast",
+  "Dragon": "Dragon",
+  "Bestia / Dragon": "Beast / Dragon",
+  "Viento / Dragon": "Wind / Dragon",
+  "No Muerto": "Undead",
+  "No Muerto / Maquina": "Undead / Machine",
+  "Planta": "Plant",
+  "Planta / Dinosaurio": "Plant / Dinosaur",
+  "Planta / Viento": "Plant / Wind",
+  "Insecto": "Insect",
+  "Marioneta": "Puppet",
+  "Guerrero": "Warrior",
+  "Sagrado": "Holy",
+  "Sagrado / Bestia": "Holy / Beast",
+  "Oscuridad": "Dark"
+};
+
+// Traducciones de atributos (solo EN)
+const atributoEN = {
+  "Vacuna": "Vaccine",
+  "Virus": "Virus",
+  "Data": "Data",
+  "Free": "Free"
+};
+
+function translateTipo(tipo) {
+  if (currentLanguage === 'en' && tipoEN[tipo]) return tipoEN[tipo];
+  return tipo;
+}
+
+function translateAtributo(attr) {
+  if (currentLanguage === 'en' && atributoEN[attr]) return atributoEN[attr];
+  return attr;
+}
+
 let currentLanguage = 'es';
 
 function detectLanguage() {
@@ -1180,6 +1224,16 @@ function updateInterfaceLanguage() {
   // Update selector
   const langSelector = document.getElementById('languageSelector');
   if (langSelector) langSelector.value = currentLanguage;
+
+  // Actualizar tarjeta de Digimon si hay uno seleccionado
+  if (currentDigimon && fullDigimonReqDict[currentDigimon]) {
+    const data = fullDigimonReqDict[currentDigimon];
+    document.getElementById('digi-meta').innerHTML = `
+      ${t('attribute')}: <b>${translateAtributo(data.Atributo) || '---'}</b><br>
+      ${t('type')}: <b>${translateTipo(data.Tipo) || '---'}</b><br>
+      ${t('tama')}: <b>${data.Tama || '---'}</b>
+    `;
+  }
 }
 
 function initLanguage() {
@@ -1442,8 +1496,8 @@ function updateDigimonCard(name, data) {
 
   // Meta
   document.getElementById('digi-meta').innerHTML = `
-    ${t('attribute')}: <b>${data.Atributo || '---'}</b><br>
-    ${t('type')}: <b>${data.Tipo || '---'}</b><br>
+    ${t('attribute')}: <b>${translateAtributo(data.Atributo) || '---'}</b><br>
+    ${t('type')}: <b>${translateTipo(data.Tipo) || '---'}</b><br>
     ${t('tama')}: <b>${data.Tama || '---'}</b>
   `;
 

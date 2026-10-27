@@ -603,6 +603,23 @@ const pvpTopDB = {
       { nickname: "Theidiotwithlag",  discord: "Theidiotwithlag",  ultimoDigimon: "BlackKingNumemon",  puntaje: 4283, puesto: 9  },
       { nickname: "Kevin",            discord: "Kevin",            ultimoDigimon: "Mamemon",           puntaje: 4031, puesto: 10 }
     ]
+  },
+  "2026-10-T0": {
+    label: "Temporada 31",
+    fechaInicio: "1 Octubre 2026",
+    fechaFin: "15 Octubre 2026",
+    jugadores: [
+      { nickname: "Alazar",           discord: "Alazar",           ultimoDigimon: "MetalGreymon Virus",  puntaje: 5547, puesto: 1  },
+      { nickname: "Ancientdrago",     discord: "Ancientdrago",     ultimoDigimon: "Doruguremon",         puntaje: 4658, puesto: 2  },
+      { nickname: "Sebastianarm",     discord: "Sebastian",        ultimoDigimon: "Soulmon LT",          puntaje: 3964, puesto: 3  },
+      { nickname: "Redsengoku",       discord: "Redsengoku",       ultimoDigimon: "Etemon",              puntaje: 3868, puesto: 4  },
+      { nickname: "Megumi",           discord: "Megumi",           ultimoDigimon: "BlackAeroVdramon",    puntaje: 3736, puesto: 5  },
+      { nickname: "Sithhus",          discord: "Sithhus",          ultimoDigimon: "Devitamamon",         puntaje: 3688, puesto: 6  },
+      { nickname: "Fayloz_789",       discord: "Fayloz",           ultimoDigimon: "BlackAeroVdramon",    puntaje: 3677, puesto: 7  },
+      { nickname: "Theidiotwithlag",  discord: "Theidiotwithlag",  ultimoDigimon: "Mugendramon",         puntaje: 3586, puesto: 8  },
+      { nickname: "Rodrigo",          discord: "Rodrigoalag",      ultimoDigimon: "BlackKingNumemon",    puntaje: 3583, puesto: 9  },
+      { nickname: "Mijumaru",         discord: "Mijumaru",         ultimoDigimon: "Grademon",            puntaje: 3571, puesto: 10 }
+    ]
   }
 };
 

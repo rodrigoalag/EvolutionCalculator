@@ -327,13 +327,38 @@ a { color: #4ecdc4; }
   border-radius: 12px;
   padding: 12px;
 }
+.evo-line-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.evo-line-mini .evo-mini-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid rgba(78,205,196,0.3);
+}
+.evo-line-mini .evo-mini-icon.current {
+  border: 2px solid #4ecdc4;
+  box-shadow: 0 0 6px rgba(78,205,196,0.5);
+}
+.evo-line-mini .evo-mini-arrow {
+  color: #4ecdc4;
+  font-size: 0.7rem;
+}
 .stat-row {
   display: grid;
-  grid-template-columns: 35px 1fr 1fr 1fr 1fr 40px;
+  grid-template-columns: 35px 1fr 1fr 1fr 40px;
   gap: 4px;
   padding: 6px 0;
   border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   align-items: center;
 }
 .stat-row:last-child { border-bottom: none; }
@@ -347,20 +372,24 @@ a { color: #4ecdc4; }
 }
 .stat-row .stat-col small {
   display: block;
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   color: #666;
   margin-bottom: 2px;
 }
 .stat-row .stat-col span {
-  color: #e0e0e0;
   font-weight: 600;
 }
-.stat-row .stat-col.heredado span { color: #74c0fc; }
-.stat-row .stat-col.trained span { color: #ffa94d; }
-.stat-row .stat-col.total span { color: #69db7c; }
-.stat-row .stat-col.percent span { color: #ffd43b; font-weight: 700; }
-.stat-row.def .stat-col.trained span { color: #666; }
-.stat-row.def .stat-col.percent span { color: #666; }
+/* Colores por stat (fila) */
+#stat-hp .stat-col span { color: #69db7c; }
+#stat-hp .stat-label { color: #69db7c; }
+#stat-atk .stat-col span { color: #ff6b6b; }
+#stat-atk .stat-label { color: #ff6b6b; }
+#stat-spd .stat-col span { color: #74c0fc; }
+#stat-spd .stat-label { color: #74c0fc; }
+#stat-def .stat-col span { color: #e0e0e0; }
+#stat-def .stat-label { color: #e0e0e0; }
+#stat-def .stat-col.trained span { color: #666; }
+#stat-def .stat-col.percent span { color: #666; }
 
 /* Download button in card */
 .card-actions {
@@ -511,6 +540,27 @@ a { color: #4ecdc4; }
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
+}
+.stats-input-section.locked .locked-overlay {
+  display: flex;
+}
+.stats-input-section.locked > *:not(.locked-overlay) {
+  opacity: 0.3;
+  pointer-events: none;
+}
+.locked-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.7);
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: #ff6b6b;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 .points-remaining {
   display: inline-flex;
@@ -721,31 +771,24 @@ a { color: #4ecdc4; }
 
 <!-- Nav Menu -->
 <nav id="nav-menu">
-  <button id="nav-close" aria-label="Cerrar menú">&times;</button>
-  <h3><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Calculadoras"> Calculadoras</h3>
-  <a href="./calculadora.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Calc"> Calculadora de Evolución</a>
-  <a href="./calculadora-stats.html" class="nav-link active"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Stats"> Calculadora de Stats</a>
-  <a href="./BalanceCalculator.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Balance"> Calculadora de Balance</a>
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3>🔧 Herramientas</h3>
+  <a href=".\index.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href=".\calculadora.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Calculator"> Evo Calculator</a>
+  <a href=".\calculadora-stats.html" class="nav-link active"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Stats"> Calculadora Stats</a>
+  <a href=".\digimonreqs.html?v=2" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href=".\StatRanking.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href=".\digidexprogress.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digidex.png" alt="Progress"> Digidex Progress</a>
+  <a href=".\BalanceCalculator.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href=".\tierranking.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/starmon.png" alt="Tier Ranking"> Tier Ranking</a>
+  <a href=".\Enemigosdelared.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href=".\dropsdelared.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <a href=".\itempedia.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
+  <a href=".\AlimentosEfectos.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
+  <a href=".\pvptop.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href=".\pvprecompensas.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
   <div class="nav-divider"></div>
-  <h3><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/analytics.png" alt="Info"> Información</h3>
-  <a href="./digidex.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digivice.png" alt="Digidex"> Digidex</a>
-  <a href="./arbolCanvas.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/evo.png" alt="Arbol"> Árbol de Evolución</a>
-  <a href="./digimonreqs.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/list.png" alt="Reqs"> Digimon + Requisitos</a>
-  <a href="./Enemigosdelared.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/battle.png" alt="Enemigos"> Enemigos de la Red</a>
-  <a href="./dropsdelared.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/drop.png" alt="Drops"> Drops de la Red</a>
-  <a href="./itempedia.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/item.png" alt="Items"> Itempedia</a>
-  <a href="./AlimentosEfectos.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/item.png" alt="Food"> Alimentos y Efectos</a>
-  <div class="nav-divider"></div>
-  <h3><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/trophy.png" alt="Rankings"> Rankings</h3>
-  <a href="./StatRanking.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="Stats"> Ranking de Stats</a>
-  <a href="./tierranking.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="Tier"> Tier Ranking</a>
-  <a href="./pvptop.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="PVP"> PVP Top</a>
-  <a href="./pvprecompensas.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="PVP Rewards"> PVP Recompensas</a>
-  <div class="nav-divider"></div>
-  <h3><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/settings.png" alt="Progress"> Progreso</h3>
-  <a href="./digidexprogress.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/progress.png" alt="Progress"> Mi Digidex Progress</a>
-  <div class="nav-divider"></div>
-  <h3><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/menu.png" alt="Herramientas"> Herramientas</h3>
+  <h3 id="nav-herramientas"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
   <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
   <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
   <a href="https://driverdatabase.neocities.org/Driver%20DB" target="_blank" class="nav-link external">Driver Install Guide</a>
@@ -810,43 +853,39 @@ a { color: #4ecdc4; }
         Tipo: <b>---</b><br>
         Tama: <b>---</b>
       </div>
+      <div class="evo-line-mini" id="evo-line-mini">---</div>
       <div class="stat-box" id="stat-box">
         <div class="stat-row header">
           <span class="stat-label"></span>
-          <span class="stat-col"><small>Base</small></span>
-          <span class="stat-col heredado"><small>Hered.</small></span>
+          <span class="stat-col digi"><small>Digi</small></span>
           <span class="stat-col trained"><small>Entren.</small></span>
           <span class="stat-col total"><small>Total</small></span>
           <span class="stat-col percent"><small>%</small></span>
         </div>
         <div class="stat-row" id="stat-hp">
           <span class="stat-label">HP</span>
-          <span class="stat-col"><span id="hp-base">---</span></span>
-          <span class="stat-col heredado"><span id="hp-heredado">---</span></span>
+          <span class="stat-col digi"><span id="hp-digi">---</span></span>
           <span class="stat-col trained"><span id="hp-trained">---</span></span>
           <span class="stat-col total"><span id="hp-total">---</span></span>
           <span class="stat-col percent"><span id="hp-percent-display">0%</span></span>
         </div>
         <div class="stat-row" id="stat-atk">
           <span class="stat-label">ATK</span>
-          <span class="stat-col"><span id="atk-base">---</span></span>
-          <span class="stat-col heredado"><span id="atk-heredado">---</span></span>
+          <span class="stat-col digi"><span id="atk-digi">---</span></span>
           <span class="stat-col trained"><span id="atk-trained">---</span></span>
           <span class="stat-col total"><span id="atk-total">---</span></span>
           <span class="stat-col percent"><span id="atk-percent-display">0%</span></span>
         </div>
         <div class="stat-row" id="stat-spd">
           <span class="stat-label">SPD</span>
-          <span class="stat-col"><span id="spd-base">---</span></span>
-          <span class="stat-col heredado"><span id="spd-heredado">---</span></span>
+          <span class="stat-col digi"><span id="spd-digi">---</span></span>
           <span class="stat-col trained"><span id="spd-trained">---</span></span>
           <span class="stat-col total"><span id="spd-total">---</span></span>
           <span class="stat-col percent"><span id="spd-percent-display">0%</span></span>
         </div>
         <div class="stat-row def" id="stat-def">
           <span class="stat-label">DEF</span>
-          <span class="stat-col"><span id="def-base">---</span></span>
-          <span class="stat-col heredado"><span id="def-heredado">---</span></span>
+          <span class="stat-col digi"><span id="def-digi">---</span></span>
           <span class="stat-col trained"><span>---</span></span>
           <span class="stat-col total"><span id="def-total">---</span></span>
           <span class="stat-col percent"><span>---</span></span>
@@ -870,7 +909,10 @@ a { color: #4ecdc4; }
       <!-- Stats Input -->
       <section class="card">
         <h3 class="section-title">Distribución de Stats</h3>
-        <div class="stats-input-section">
+        <div class="stats-input-section" id="stats-input-section">
+          <div class="locked-overlay" id="stats-locked-overlay">
+            <span>Completa la línea evolutiva primero</span>
+          </div>
           <div class="points-remaining">
             <span class="label">Puntos restantes</span>
             <div class="value" id="points-remaining">700</div>
@@ -975,16 +1017,21 @@ function getAvailableTamas() {
 }
 
 // ===== NAVEGACIÓN =====
-document.getElementById('nav-toggle').addEventListener('click', () => {
-  document.getElementById('nav-menu').classList.add('active');
-  document.getElementById('nav-overlay').classList.add('active');
-});
-document.getElementById('nav-close').addEventListener('click', closeNav);
-document.getElementById('nav-overlay').addEventListener('click', closeNav);
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
 function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
   document.getElementById('nav-menu').classList.remove('active');
   document.getElementById('nav-overlay').classList.remove('active');
 }
+document.getElementById('nav-toggle').addEventListener('click', toggleNav);
+document.getElementById('nav-overlay').addEventListener('click', closeNav);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeNav();
+});
 
 // ===== TOAST =====
 function showToast(message, type = '') {
@@ -1165,6 +1212,8 @@ function selectDigimon(name) {
   // Reset y render evolution line
   resetEvolutionLine();
   renderEvolutionLine(name);
+  updateEvoLineMini();
+  updateStatsLock();
 
   // Reset distribution
   currentDistribution = { hpNominal: 0, atkNominal: 0, spdNominal: 0 };
@@ -1192,12 +1241,8 @@ function updateDigimonCard(name, data) {
     Tama: <b>${data.Tama || '---'}</b>
   `;
 
-  // Stats base
-  document.getElementById('hp-base').textContent = stats.HP || '---';
-  document.getElementById('atk-base').textContent = stats.ATK || '---';
-  document.getElementById('spd-base').textContent = stats.Vel || '---';
-  document.getElementById('def-base').textContent = stats.DEF || '---';
-  document.getElementById('def-total').textContent = stats.DEF || '---';
+  // Inicializar línea evolutiva mini
+  document.getElementById('evo-line-mini').textContent = '---';
 
   // Initial trained/total
   updateStatDisplay();
@@ -1784,6 +1829,8 @@ function renderEvolutionLine(digimonName) {
 
       // Actualizar los stats heredados en la tarjeta
       updateStatDisplay();
+      updateEvoLineMini();
+      updateStatsLock();
     });
   });
 
@@ -1806,6 +1853,45 @@ function renderEvolutionLine(digimonName) {
  */
 function resetEvolutionLine() {
   plannedEvolutionLine = {};
+}
+
+/**
+ * Verifica si la línea evolutiva está completa.
+ * Una línea está completa cuando todos los niveles desde Baby I/II hasta el nivel actual tienen un Digimon seleccionado.
+ */
+function isEvolutionLineComplete() {
+  if (!currentDigimon) return false;
+
+  const mainData = fullDigimonReqDict[currentDigimon];
+  if (!mainData) return false;
+
+  const currentLevel = mainData.Nivel;
+
+  // Si es Baby I (nivel 1), siempre está completo
+  if (currentLevel === 1) return true;
+
+  // Verificar que todos los niveles desde 1 hasta currentLevel estén definidos
+  for (let nivel = 1; nivel <= currentLevel; nivel++) {
+    if (!plannedEvolutionLine[nivel]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Actualiza el estado de bloqueo de la sección de distribución de stats.
+ */
+function updateStatsLock() {
+  const section = document.getElementById('stats-input-section');
+  if (!section) return;
+
+  if (isEvolutionLineComplete()) {
+    section.classList.remove('locked');
+  } else {
+    section.classList.add('locked');
+  }
 }
 
 // ===== STATS CALCULATION =====
@@ -1928,17 +2014,11 @@ function updateStatDisplay() {
   const atkTrained = currentDistribution.atkNominal;
   const spdTrained = currentDistribution.spdNominal;
 
-  // Actualizar Base
-  document.getElementById('hp-base').textContent = hpBase;
-  document.getElementById('atk-base').textContent = atkBase;
-  document.getElementById('spd-base').textContent = spdBase;
-  document.getElementById('def-base').textContent = defBase;
-
-  // Actualizar Heredados
-  document.getElementById('hp-heredado').textContent = heredados.HP;
-  document.getElementById('atk-heredado').textContent = heredados.ATK;
-  document.getElementById('spd-heredado').textContent = heredados.Vel;
-  document.getElementById('def-heredado').textContent = heredados.DEF;
+  // Actualizar Stats Digi (Base + Heredado)
+  document.getElementById('hp-digi').textContent = hpBase + heredados.HP;
+  document.getElementById('atk-digi').textContent = atkBase + heredados.ATK;
+  document.getElementById('spd-digi').textContent = spdBase + heredados.Vel;
+  document.getElementById('def-digi').textContent = defBase + heredados.DEF;
 
   // Actualizar Entrenado
   document.getElementById('hp-trained').textContent = hpTrained;
@@ -1958,6 +2038,42 @@ function updateStatDisplay() {
   document.getElementById('hp-percent-display').textContent = `${hpPercent}%`;
   document.getElementById('atk-percent-display').textContent = `${atkPercent}%`;
   document.getElementById('spd-percent-display').textContent = `${spdPercent}%`;
+}
+
+/**
+ * Actualiza la línea evolutiva mini en la tarjeta con iconos
+ */
+function updateEvoLineMini() {
+  const container = document.getElementById('evo-line-mini');
+  if (!currentDigimon) {
+    container.innerHTML = '<span style="color:#666">---</span>';
+    return;
+  }
+
+  const mainData = fullDigimonReqDict[currentDigimon];
+  if (!mainData) {
+    container.innerHTML = '<span style="color:#666">---</span>';
+    return;
+  }
+
+  const currentLevel = mainData.Nivel;
+  const elements = [];
+
+  // Recorrer niveles de menor a mayor
+  for (let nivel = 1; nivel <= currentLevel; nivel++) {
+    const name = plannedEvolutionLine[nivel];
+    if (name) {
+      const iconName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const isCurrent = (name === currentDigimon) ? 'current' : '';
+      elements.push(`<img class="evo-mini-icon ${isCurrent}" src="${imgUrl('icon/' + iconName + '.png')}" alt="${name}" title="${name}" onerror="this.style.display='none'">`);
+    }
+  }
+
+  if (elements.length > 0) {
+    container.innerHTML = elements.join('<span class="evo-mini-arrow">→</span>');
+  } else {
+    container.innerHTML = '<span style="color:#666">---</span>';
+  }
 }
 
 function updateEquivDisplay() {
@@ -2122,21 +2238,21 @@ document.getElementById('apply-lineage-btn').addEventListener('click', () => {
 
 function updateLineageUI() {
   const btn = document.getElementById('apply-lineage-btn');
-  const info = document.getElementById('lineage-info');
+  if (!btn) return;
 
   if (savedLineageDistribution) {
     btn.disabled = false;
-    info.classList.add('has-data');
-    info.innerHTML = `Guardado: <b>HP ${savedLineageDistribution.hpNominal}</b> | <b>ATK ${savedLineageDistribution.atkNominal}</b> | <b>SPD ${savedLineageDistribution.spdNominal}</b>`;
+    btn.title = `HP ${savedLineageDistribution.hpNominal} | ATK ${savedLineageDistribution.atkNominal} | SPD ${savedLineageDistribution.spdNominal}`;
   } else {
     btn.disabled = true;
-    info.classList.remove('has-data');
-    info.textContent = 'Sin datos guardados';
+    btn.title = 'Sin datos guardados';
   }
 }
 
-// ===== SAVE SLOTS (LOCAL STORAGE) =====
-function getSavedSlots() {
+// ===== SAVE SLOTS (LOCAL + CLOUD) =====
+let cloudSlots = {}; // Cache de slots en la nube
+
+function getLocalSlots() {
   try {
     return JSON.parse(localStorage.getItem('statsCalcSlots') || '{}');
   } catch {
@@ -2144,10 +2260,18 @@ function getSavedSlots() {
   }
 }
 
+function getSavedSlots() {
+  // Si está logueado, usar slots de la nube
+  if (currentUser) {
+    return cloudSlots;
+  }
+  return getLocalSlots();
+}
+
 /**
  * Guarda la distribución actual con nombre automático: DigimonDist%Fecha
  */
-function saveSlot() {
+async function saveSlot() {
   if (!currentDigimon) {
     showToast('Selecciona un Digimon primero', 'error');
     return;
@@ -2159,17 +2283,41 @@ function saveSlot() {
   const dateStr = `${date.getDate()}/${date.getMonth() + 1}`;
   const key = `${currentDigimon}_${percent}%_${dateStr}`;
 
-  const slots = getSavedSlots();
-  slots[key] = {
+  const slotData = {
     digimon: currentDigimon,
     tama: currentTama,
     distribution: { ...currentDistribution },
+    evolutionLine: { ...plannedEvolutionLine },
     date: date.toISOString()
   };
 
-  localStorage.setItem('statsCalcSlots', JSON.stringify(slots));
+  if (currentUser) {
+    // Guardar en Supabase
+    const { error } = await supabaseClient
+      .from('stat_calculator_saves')
+      .upsert({
+        user_id: currentUser.id,
+        slot_key: key,
+        data: slotData,
+        updated_at: date.toISOString()
+      }, { onConflict: 'user_id,slot_key' });
+
+    if (error) {
+      showToast('Error al guardar en la nube', 'error');
+      console.error(error);
+      return;
+    }
+    cloudSlots[key] = slotData;
+    showToast(`☁️ Guardado: ${key}`, 'success');
+  } else {
+    // Guardar en localStorage
+    const slots = getLocalSlots();
+    slots[key] = slotData;
+    localStorage.setItem('statsCalcSlots', JSON.stringify(slots));
+    showToast(`💾 Guardado: ${key}`, 'success');
+  }
+
   populateSlotsSelect();
-  showToast(`Guardado: ${key}`, 'success');
 }
 
 /**
@@ -2190,7 +2338,15 @@ function loadSlot(key) {
     document.getElementById('digimonSelect').value = slot.digimon;
     selectDigimon(slot.digimon);
 
-    // Aplicar distribución
+    // Restaurar línea evolutiva si existe
+    if (slot.evolutionLine) {
+      plannedEvolutionLine = { ...slot.evolutionLine };
+      renderEvolutionLine(slot.digimon);
+      updateEvoLineMini();
+    }
+
+    // Desbloquear stats y aplicar distribución
+    updateStatsLock();
     currentDistribution = { ...slot.distribution };
     updateInputsFromDistribution();
     updateUI();
@@ -2199,6 +2355,31 @@ function loadSlot(key) {
 
   // Reset selector
   document.getElementById('load-slot-select').value = '';
+}
+
+/**
+ * Carga slots desde Supabase
+ */
+async function loadCloudSlots() {
+  if (!currentUser) return;
+
+  const { data, error } = await supabaseClient
+    .from('stat_calculator_saves')
+    .select('slot_key, data')
+    .eq('user_id', currentUser.id);
+
+  if (error) {
+    console.error('Error loading cloud slots:', error);
+    return;
+  }
+
+  cloudSlots = {};
+  if (data) {
+    data.forEach(row => {
+      cloudSlots[row.slot_key] = row.data;
+    });
+  }
+  populateSlotsSelect();
 }
 
 /**
@@ -2211,7 +2392,8 @@ function populateSlotsSelect() {
     return new Date(slots[b].date) - new Date(slots[a].date);
   });
 
-  select.innerHTML = '<option value="">Cargar slot...</option>';
+  const prefix = currentUser ? '☁️ ' : '💾 ';
+  select.innerHTML = `<option value="">${prefix}Cargar slot...</option>`;
 
   if (keys.length === 0) {
     select.innerHTML += '<option value="" disabled>Sin slots guardados</option>';
@@ -2238,7 +2420,10 @@ function downloadCard() {
   if (typeof html2canvas !== 'undefined') {
     html2canvas(card, {
       backgroundColor: '#1a1a2e',
-      scale: 2
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false
     }).then(canvas => {
       const link = document.createElement('a');
       link.download = `${currentDigimon}_stats.png`;
@@ -2262,15 +2447,20 @@ function downloadCardFallback() {
   const hpBaseTotal = hpBase + heredados.HP;
   const hpTrained = calcHPEntrenado(hpBaseTotal, currentDistribution.hpNominal);
 
+  const hpDigi = hpBase + heredados.HP;
+  const atkDigi = (stats.ATK || 0) + heredados.ATK;
+  const spdDigi = (stats.Vel || 0) + heredados.Vel;
+  const defDigi = (stats.DEF || 0) + heredados.DEF;
+
   const text = `${currentDigimon} (${data.Tama})
 Nivel: ${nivelAEtapa[data.Nivel]}
 ================================
-HP:  Base ${stats.HP} + Heredado ${heredados.HP} + Entrenado ${hpTrained} = ${hpBase + heredados.HP + hpTrained}
-ATK: Base ${stats.ATK} + Heredado ${heredados.ATK} + Entrenado ${currentDistribution.atkNominal} = ${(stats.ATK || 0) + heredados.ATK + currentDistribution.atkNominal}
-SPD: Base ${stats.Vel} + Heredado ${heredados.Vel} + Entrenado ${currentDistribution.spdNominal} = ${(stats.Vel || 0) + heredados.Vel + currentDistribution.spdNominal}
-DEF: Base ${stats.DEF} + Heredado ${heredados.DEF} = ${(stats.DEF || 0) + heredados.DEF}
+HP:  Digi ${hpDigi} + Entren ${hpTrained} = ${hpDigi + hpTrained}
+ATK: Digi ${atkDigi} + Entren ${currentDistribution.atkNominal} = ${atkDigi + currentDistribution.atkNominal}
+SPD: Digi ${spdDigi} + Entren ${currentDistribution.spdNominal} = ${spdDigi + currentDistribution.spdNominal}
+DEF: ${defDigi}
 ================================
-Distribución (Nominal): HP ${currentDistribution.hpNominal} | ATK ${currentDistribution.atkNominal} | SPD ${currentDistribution.spdNominal}
+Distribución: HP ${currentDistribution.hpNominal} | ATK ${currentDistribution.atkNominal} | SPD ${currentDistribution.spdNominal}
 Total: ${getTotalPoints()} / 700`;
 
   const blob = new Blob([text], { type: 'text/plain' });
@@ -2288,6 +2478,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupInputHandlers();
   populateSlotsSelect();
   updateLineageUI();
+  updateStatsLock(); // Iniciar bloqueado hasta que se complete la línea evolutiva
 
   // Save slot button
   document.getElementById('save-slot-btn').addEventListener('click', saveSlot);
@@ -2304,13 +2495,16 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="supabase-client.js"></script>
 <script src="auth.js"></script>
 <script>
-// Auth integration (for future cloud save slots)
-function onLogin(session) {
+// Auth integration for cloud save slots
+async function onLogin(session) {
   currentUser = session.user;
-  // TODO: Load cloud slots
+  await loadCloudSlots();
+  showToast('☁️ Conectado - slots en la nube', 'success');
 }
 function onLogout() {
   currentUser = null;
+  cloudSlots = {};
+  populateSlotsSelect(); // Volver a mostrar slots locales
 }
 if (typeof initAuth === 'function') {
   initAuth(onLogin, onLogout);

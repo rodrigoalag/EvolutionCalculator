@@ -179,7 +179,7 @@ const fullDigimonReqDict = {
     "ID": 85, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Tierra",
     "EvoNatural": "Numemon",
     "Requisitos": { "Peso": 15, "Error Maximo": 6, "Program": "Ore" },
-    "Stat Base": { "ATK": 35, "DEF": 40, "HP": 400, "Vel": 35 },
+    "Stat Base": { "ATK": 50, "DEF": 40, "HP": 400, "Vel": 20 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Icemon", "Burpmon", "Bakemon LT", "Starmon", "Nanimon", "Scumon", "Numemon"], "Viene": [] }
   },

@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <script src="img-config.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Stats - ND</title>
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/digitamafivicon.png"/>
+  <link rel="stylesheet" href="auth.css">
+  <style>
+/* ===== RESET & BASE ===== */
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  padding-top: 70px;
+}
+h1, h2, h3 { color: #4ecdc4; }
+a { color: #4ecdc4; }
+
+/* ===== NAV HAMBURGUESA ===== */
+#nav-toggle {
+  position: fixed; top: 15px; left: 15px;
+  width: 45px; height: 45px; border-radius: 10px;
+  background: rgba(30,30,50,0.95);
+  border: 1px solid rgba(78,205,196,0.3);
+  cursor: pointer; z-index: 200;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; gap: 5px;
+  transition: all 0.3s;
+}
+#nav-toggle:hover { border-color: #4ecdc4; }
+#nav-toggle span { width: 22px; height: 2px; background: #4ecdc4; border-radius: 2px; }
+#nav-menu {
+  position: fixed; top: 0; left: -320px;
+  width: 300px; height: 100vh;
+  background: rgba(20,20,40,0.98);
+  border-right: 1px solid rgba(78,205,196,0.3);
+  z-index: 150; padding: 20px; padding-top: 60px;
+  transition: left 0.3s ease; overflow-y: auto;
+}
+#nav-menu.active { left: 0; }
+#nav-close {
+  position: absolute; top: 15px; right: 15px;
+  width: 35px; height: 35px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+#nav-close:hover { background: rgba(78,205,196,0.3); border-color: #4ecdc4; }
+#nav-menu h3 {
+  color: #4ecdc4; font-size: 0.9rem;
+  margin-bottom: 15px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; gap: 6px;
+}
+#nav-menu h3 img { width: 14px; height: 14px; object-fit: contain; }
+.nav-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 15px; margin-bottom: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px; color: #ccc;
+  text-decoration: none; font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.nav-link img { width: 14px; height: 14px; object-fit: contain; }
+.nav-link:hover { background: rgba(78,205,196,0.2); color: #fff; }
+.nav-link.active { background: rgba(78,205,196,0.3); color: #4ecdc4; }
+.nav-link.external { color: #888; font-size: 0.8rem; }
+.nav-link.external::after { content: ' ↗'; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+.nav-credits { font-size: 0.8rem; color: #999; line-height: 1.5; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; }
+.nav-credits ul { margin: 10px 0 0 0; padding-left: 20px; }
+.nav-credits li { margin-bottom: 8px; }
+.nav-credits a { color: #4ecdc4; text-decoration: none; }
+#nav-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); z-index: 140; display: none;
+}
+#nav-overlay.active { display: block; }
+
+/* ===== TOP BAR (Lang + Auth) ===== */
+.top-bar {
+  position: fixed; top: 12px; right: 15px; z-index: 200;
+  display: flex; align-items: center; gap: 10px;
+}
+.top-bar select {
+  background: rgba(30, 30, 50, 0.9);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.top-bar select:hover { border-color: #4ecdc4; }
+#auth-widget { display: flex; align-items: center; }
+
+/* ===== CONTAINER ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 16px 60px; }
+
+/* ===== HEADER ===== */
+.page-header {
+  text-align: center; margin-bottom: 1.5rem; padding-top: 0.5rem;
+}
+.page-header h1 { margin: 0 0 0.25rem 0; font-size: 2rem; }
+.page-header p { color: #888; margin: 0; font-size: 0.9rem; }
+
+/* ===== SEARCH ===== */
+#search-container {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto 1rem;
+}
+#digi-search {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border-radius: 10px;
+  background: rgba(30,30,50,0.8) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%234ecdc4' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='M11 11l4 4'/%3E%3C/svg%3E") 14px center no-repeat;
+  border: 1px solid rgba(78,205,196,0.3);
+  color: #e0e0e0;
+  font-size: 1rem;
+}
+#digi-search::placeholder { color: #888; }
+#digi-search:focus { outline: none; border-color: #4ecdc4; }
+#search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(30,30,50,0.98);
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 8px;
+  margin-top: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+}
+#search-suggestions.show { display: block; }
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.search-item:hover { background: rgba(78,205,196,0.15); }
+.search-item img { width: 32px; height: 32px; border-radius: 50%; }
+.search-item-info { flex: 1; }
+.search-item-name { font-weight: 600; color: #e0e0e0; }
+.search-item-meta { font-size: 0.75rem; color: #888; }
+
+.selector-divider {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #666;
+  margin: 1rem 0;
+}
+
+/* ===== TAMA SELECTOR ===== */
+.tama-selector-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.tama-selector-section h3 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+#tama-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.tama-icon-btn {
+  width: 50px;
+  height: 60px;
+  border-radius: 10px;
+  background: rgba(30,30,50,0.8);
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+.tama-icon-btn:hover {
+  border-color: rgba(78,205,196,0.5);
+  transform: translateY(-2px);
+}
+.tama-icon-btn.active {
+  border-color: #4ecdc4;
+  box-shadow: 0 0 12px rgba(78,205,196,0.4);
+  background: rgba(78,205,196,0.1);
+}
+.tama-icon-btn img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+.tama-icon-btn span {
+  font-size: 0.65rem;
+  color: #888;
+}
+.tama-icon-btn.active span { color: #4ecdc4; }
+
+/* ===== LEVEL/DIGIMON SELECTS ===== */
+.select-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.select-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.select-group label {
+  color: #4ecdc4;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.select-group select {
+  background: rgba(30,30,50,0.9);
+  color: #e0e0e0;
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  min-width: 160px;
+  cursor: pointer;
+}
+.select-group select:hover { border-color: #4ecdc4; }
+.select-group select:focus { outline: none; border-color: #4ecdc4; }
+
+/* ===== LAYOUT ===== */
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== CARD ===== */
+.card {
+  background: rgba(30,30,50,0.6);
+  border: 1px solid rgba(78,205,196,0.2);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* ===== DIGIMON CARD (LEFT) ===== */
+.digi-card {
+  text-align: center;
+  position: sticky;
+  top: 80px;
+}
+.portrait {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  border: 3px solid #4ecdc4;
+  box-shadow: 0 0 20px rgba(78,205,196,0.3);
+  background: rgba(20,20,40,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.portrait img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+.portrait-placeholder {
+  font-size: 0.75rem;
+  color: #666;
+}
+.digi-name {
+  color: #4ecdc4;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.badge {
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: 20px;
+  background: rgba(78,205,196,0.2);
+  border: 1px solid #4ecdc4;
+  color: #4ecdc4;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+}
+.meta {
+  text-align: left;
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.meta b { color: #e0e0e0; }
+
+/* ===== STAT BOX (in card) ===== */
+.stat-box {
+  background: rgba(20,20,40,0.6);
+  border: 1px solid rgba(78,205,196,0.15);
+  border-radius: 12px;
+  padding: 12px;
+}
+.evo-line-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.evo-line-mini .evo-mini-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid rgba(78,205,196,0.3);
+}
+.evo-line-mini .evo-mini-icon.current {
+  border: 2px solid #4ecdc4;
+  box-shadow: 0 0 6px rgba(78,205,196,0.5);
+}
+.evo-line-mini .evo-mini-arrow {
+  color: #4ecdc4;
+  font-size: 0.7rem;
+}
+.stat-row {
+  display: grid;
+  grid-template-columns: 35px 1fr 1fr 1fr 40px;
+  gap: 4px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.75rem;
+  align-items: center;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-row .stat-label {
+  color: #4ecdc4;
+  font-weight: 700;
+  text-align: left;
+}
+.stat-row .stat-col {
+  text-align: center;
+}
+.stat-row .stat-col small {
+  display: block;
+  font-size: 0.6rem;
+  color: #666;
+  margin-bottom: 2px;
+}
+.stat-row .stat-col span {
+  font-weight: 600;
+}
+/* Colores por stat (fila) */
+#stat-hp .stat-col span { color: #69db7c; }
+#stat-hp .stat-label { color: #69db7c; }
+#stat-atk .stat-col span { color: #ff6b6b; }
+#stat-atk .stat-label { color: #ff6b6b; }
+#stat-spd .stat-col span { color: #74c0fc; }
+#stat-spd .stat-label { color: #74c0fc; }
+#stat-def .stat-col span { color: #e0e0e0; }
+#stat-def .stat-label { color: #e0e0e0; }
+#stat-def .stat-col.trained span { color: #666; }
+#stat-def .stat-col.percent span { color: #666; }
+
+/* Download button in card */
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+.card-actions .btn {
+  padding: 6px 14px;
+  font-size: 0.75rem;
+}
+
+/* ===== MAIN COL ===== */
+.main-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.section-title {
+  color: #4ecdc4;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title .tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #888;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ===== EVOLUTION LINE ===== */
+.evo-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(20,20,40,0.4);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.evo-line-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30,30,50,0.8);
+  padding: 8px 14px 8px 8px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.evo-line-item:hover {
+  border-color: rgba(78,205,196,0.5);
+  background: rgba(78,205,196,0.1);
+}
+.evo-line-item.current {
+  border-color: #4ecdc4;
+  background: rgba(78,205,196,0.15);
+}
+.evo-line-item img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(78,205,196,0.3);
+}
+.evo-line-item .name { color: #e0e0e0; font-size: 0.85rem; }
+.evo-line-item .stage { color: #666; font-size: 0.7rem; margin-left: 4px; }
+.evo-arrow { color: #4ecdc4; font-size: 1.2rem; }
+
+/* Level selector dropdown */
+.evo-level-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.evo-level-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: rgba(30,30,50,0.98);
+  border: 1px solid rgba(78,205,196,0.4);
+  border-radius: 10px;
+  z-index: 100;
+  display: none;
+  margin-top: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.evo-level-dropdown.show { display: block; }
+.evo-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.15s;
+}
+.evo-dropdown-item:last-child { border-bottom: none; }
+.evo-dropdown-item:hover { background: rgba(78,205,196,0.15); }
+.evo-dropdown-item.selected { background: rgba(78,205,196,0.2); }
+.evo-dropdown-item img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(78,205,196,0.3);
+}
+.evo-dropdown-item .dname { color: #e0e0e0; font-size: 0.85rem; }
+.evo-line-item .expand-icon {
+  font-size: 0.65rem;
+  color: #4ecdc4;
+  margin-left: 4px;
+  opacity: 0.7;
+}
+.evo-line-item.empty {
+  background: rgba(30,30,50,0.4);
+  border-style: dashed;
+  border-color: rgba(78,205,196,0.3);
+  padding: 8px 16px;
+  gap: 6px;
+  cursor: pointer;
+}
+.evo-line-item.empty.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  border-color: rgba(100,100,100,0.3);
+}
+.evo-line-item.empty .stage {
+  color: #888;
+  font-size: 0.8rem;
+}
+.evo-line-item.empty .expand-icon {
+  font-size: 0.9rem;
+  opacity: 1;
+}
+
+/* ===== STATS INPUT SECTION ===== */
+.stats-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+.stats-input-section.locked .locked-overlay {
+  display: flex;
+}
+.stats-input-section.locked > *:not(.locked-overlay) {
+  opacity: 0.3;
+  pointer-events: none;
+}
+.locked-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.7);
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: #ff6b6b;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.points-remaining {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(20,20,40,0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(78,205,196,0.2);
+  margin-bottom: 12px;
+}
+.points-remaining .label { color: #888; font-size: 0.8rem; }
+.points-remaining .value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4ecdc4;
+}
+.points-remaining .value.warning { color: #ffa94d; }
+.points-remaining .value.error { color: #ff6b6b; }
+.points-remaining .max { color: #666; font-size: 0.8rem; }
+
+.dual-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 600px) {
+  .dual-inputs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.dual-input-group {
+  background: rgba(20,20,40,0.5);
+  border: 1px solid rgba(78,205,196,0.15);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.dual-input-group.error {
+  border-color: rgba(255,107,107,0.5);
+  background: rgba(255,107,107,0.05);
+}
+.dual-input-group label {
+  display: block;
+  color: #4ecdc4;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+.dual-input-group .input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.dual-input-group .input-row:last-child { margin-bottom: 0; }
+.dual-input-group .input-label {
+  width: 70px;
+  text-align: right;
+  font-size: 0.75rem;
+  color: #888;
+}
+.dual-input-group input {
+  flex: 1;
+  background: rgba(30,30,50,0.9);
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #e0e0e0;
+  font-size: 1rem;
+  text-align: center;
+}
+.dual-input-group input:focus {
+  outline: none;
+  border-color: #4ecdc4;
+}
+.dual-input-group input.error {
+  border-color: #ff6b6b;
+}
+.dual-input-group .equiv {
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+/* Colores por stat */
+#hp-group label { color: #69db7c; }
+#hp-group .equiv { color: #69db7c; }
+#hp-group input:focus { border-color: #69db7c; }
+#atk-group label { color: #ff6b6b; }
+#atk-group .equiv { color: #ff6b6b; }
+#atk-group input:focus { border-color: #ff6b6b; }
+#spd-group label { color: #74c0fc; }
+#spd-group .equiv { color: #74c0fc; }
+#spd-group input:focus { border-color: #74c0fc; }
+
+/* ===== ACTIONS ROW (Lineage + Save) ===== */
+.actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.lineage-buttons, .save-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.slot-select {
+  background: rgba(20,20,40,0.8);
+  border: 1px solid rgba(78,205,196,0.3);
+  border-radius: 8px;
+  color: #e0e0e0;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  min-width: 180px;
+  cursor: pointer;
+}
+.slot-select:hover { border-color: rgba(78,205,196,0.5); }
+.slot-select:focus { outline: none; border-color: #4ecdc4; }
+.slot-select option {
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  background: rgba(78,205,196,0.15);
+  color: #4ecdc4;
+  border: 1px solid rgba(78,205,196,0.5);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  background: rgba(78,205,196,0.3);
+  border-color: #4ecdc4;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn.secondary {
+  background: transparent;
+  border-color: rgba(255,255,255,0.2);
+  color: #888;
+}
+.btn.secondary:hover {
+  background: rgba(255,255,255,0.05);
+  color: #e0e0e0;
+}
+.btn.danger {
+  background: transparent;
+  border-color: rgba(255,107,107,0.5);
+  color: #ff6b6b;
+}
+.btn.danger:hover {
+  background: rgba(255,107,107,0.1);
+}
+.btn.sm { padding: 6px 12px; font-size: 0.8rem; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(30,30,50,0.95);
+  border: 1px solid rgba(78,205,196,0.5);
+  color: #e0e0e0;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  z-index: 1000;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.toast.success { border-color: #69db7c; }
+.toast.error { border-color: #ff6b6b; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  body { padding-top: 60px; }
+  #nav-toggle { top: 10px; left: 10px; width: 38px; height: 38px; }
+  #nav-toggle span { width: 18px; }
+  #lang-selector { top: 10px; right: 10px; }
+  #lang-selector select { padding: 5px 8px; font-size: 0.75rem; }
+  .page-header h1 { font-size: 1.5rem; }
+  .digi-card { position: static; }
+}
+  </style>
+</head>
+<body>
+
+<!-- Nav Toggle -->
+<button id="nav-toggle" aria-label="Abrir menú">
+  <span></span><span></span><span></span>
+</button>
+<div id="nav-overlay"></div>
+
+<!-- Nav Menu -->
+<nav id="nav-menu">
+  <button id="nav-close" onclick="closeNav()">✕</button>
+  <h3>🔧 Herramientas</h3>
+  <a href=".\index.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digivice.png" alt="Main Hub"> Main Hub</a>
+  <a href=".\calculadora.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Calculator"> Evo Calculator</a>
+  <a href=".\calculadora-stats.html" class="nav-link active"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Stats"> Calculadora Stats</a>
+  <a href=".\digimonreqs.html?v=2" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digidex.png" alt="DigiDex"> DigiDex Selector</a>
+  <a href=".\StatRanking.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="Ranking"> Stat Ranking</a>
+  <a href=".\digidexprogress.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/digidex.png" alt="Progress"> Digidex Progress</a>
+  <a href=".\BalanceCalculator.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/calculator.png" alt="Calculator"> Balance Calc</a>
+  <a href=".\tierranking.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/starmon.png" alt="Tier Ranking"> Tier Ranking</a>
+  <a href=".\Enemigosdelared.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/agumon.png" alt="Enemigos"> Enemigos de la Red</a>
+  <a href=".\dropsdelared.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/Zanahoria.png" alt="Drops"> Drops de la Red</a>
+  <a href=".\itempedia.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/cajabasica.png" alt="Itempedia"> Itempedia</a>
+  <a href=".\AlimentosEfectos.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/gigantea.png" alt="Efectos"> Efectos de los Objetos</a>
+  <a href=".\pvptop.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/ranking.png" alt="PvP"> PvP Hall of Fame</a>
+  <a href=".\pvprecompensas.html" class="nav-link"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/itemimg/cajanavideña.png" alt="Recompensas"> PvP Recompensas</a>
+  <div class="nav-divider"></div>
+  <h3 id="nav-herramientas"><img src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/pageicons/menu.png" alt="Herramientas"><span>Herramientas</span></h3>
+  <a href="https://ndcalcs.github.io/" target="_blank" class="nav-link external">Carrow Website</a>
+  <a href="https://whiterickle.neocities.org/Road%20To%20Perfect" target="_blank" class="nav-link external">WhiteRickle - Guides</a>
+  <a href="https://driverdatabase.neocities.org/Driver%20DB" target="_blank" class="nav-link external">Driver Install Guide</a>
+</nav>
+
+<!-- Top Bar (Lang + Auth) -->
+<div class="top-bar">
+  <select id="languageSelector">
+    <option value="es">ES</option>
+    <option value="en">EN</option>
+  </select>
+  <div id="auth-widget"></div>
+</div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="page-header">
+    <h1>Calculadora de Stats</h1>
+    <p>Calcula tu distribución de stats</p>
+  </div>
+
+  <!-- Search -->
+  <div id="search-container">
+    <input type="text" id="digi-search" placeholder="Buscar Digimon..." autocomplete="off">
+    <div id="search-suggestions"></div>
+  </div>
+  <div class="selector-divider">o selecciona manualmente</div>
+
+  <!-- Tama Selector -->
+  <div class="tama-selector-section">
+    <h3 id="tamaTitle">Selecciona tu Tama</h3>
+    <div id="tama-icons"></div>
+  </div>
+
+  <!-- Level/Digimon Selects -->
+  <div class="select-row">
+    <div class="select-group">
+      <label>Nivel:</label>
+      <select id="nivelSelect">
+        <option value="">--Selecciona Nivel--</option>
+      </select>
+    </div>
+    <div class="select-group">
+      <label>Digimon:</label>
+      <select id="digimonSelect">
+        <option value="">--Selecciona Digimon--</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="layout">
+    <!-- Left: Digimon Card -->
+    <aside class="card digi-card" id="digi-card">
+      <div class="portrait" id="portrait">
+        <span class="portrait-placeholder">Selecciona un Digimon</span>
+      </div>
+      <h2 class="digi-name" id="digi-name">---</h2>
+      <span class="badge" id="digi-badge">---</span>
+      <div class="meta" id="digi-meta">
+        Atributo: <b>---</b><br>
+        Tipo: <b>---</b><br>
+        Tama: <b>---</b>
+      </div>
+      <div class="evo-line-mini" id="evo-line-mini">---</div>
+      <div class="stat-box" id="stat-box">
+        <div class="stat-row header">
+          <span class="stat-label"></span>
+          <span class="stat-col digi"><small>Digi</small></span>
+          <span class="stat-col trained"><small>Entren.</small></span>
+          <span class="stat-col total"><small>Total</small></span>
+          <span class="stat-col percent"><small>%</small></span>
+        </div>
+        <div class="stat-row" id="stat-hp">
+          <span class="stat-label">HP</span>
+          <span class="stat-col digi"><span id="hp-digi">---</span></span>
+          <span class="stat-col trained"><span id="hp-trained">---</span></span>
+          <span class="stat-col total"><span id="hp-total">---</span></span>
+          <span class="stat-col percent"><span id="hp-percent-display">0%</span></span>
+        </div>
+        <div class="stat-row" id="stat-atk">
+          <span class="stat-label">ATK</span>
+          <span class="stat-col digi"><span id="atk-digi">---</span></span>
+          <span class="stat-col trained"><span id="atk-trained">---</span></span>
+          <span class="stat-col total"><span id="atk-total">---</span></span>
+          <span class="stat-col percent"><span id="atk-percent-display">0%</span></span>
+        </div>
+        <div class="stat-row" id="stat-spd">
+          <span class="stat-label">SPD</span>
+          <span class="stat-col digi"><span id="spd-digi">---</span></span>
+          <span class="stat-col trained"><span id="spd-trained">---</span></span>
+          <span class="stat-col total"><span id="spd-total">---</span></span>
+          <span class="stat-col percent"><span id="spd-percent-display">0%</span></span>
+        </div>
+        <div class="stat-row def" id="stat-def">
+          <span class="stat-label">DEF</span>
+          <span class="stat-col digi"><span id="def-digi">---</span></span>
+          <span class="stat-col trained"><span>---</span></span>
+          <span class="stat-col total"><span id="def-total">---</span></span>
+          <span class="stat-col percent"><span>---</span></span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn sm" id="download-card-btn" onclick="downloadCard()">Descargar</button>
+      </div>
+    </aside>
+
+    <!-- Right: Main Content -->
+    <div class="main-col">
+      <!-- Evolution Line -->
+      <section class="card">
+        <h3 class="section-title">Línea Evolutiva</h3>
+        <div class="evo-line" id="evo-line">
+          <span style="color: #666; font-size: 0.9rem;">Selecciona un Digimon para ver su línea evolutiva</span>
+        </div>
+      </section>
+
+      <!-- Stats Input -->
+      <section class="card">
+        <h3 class="section-title">Distribución de Stats</h3>
+        <div class="stats-input-section" id="stats-input-section">
+          <div class="locked-overlay" id="stats-locked-overlay">
+            <span>Completa la línea evolutiva primero</span>
+          </div>
+          <div class="points-remaining">
+            <span class="label">Puntos restantes</span>
+            <div class="value" id="points-remaining">700</div>
+            <span class="max">/ 700</span>
+          </div>
+          <div class="dual-inputs-grid">
+            <!-- HP -->
+            <div class="dual-input-group" id="hp-group">
+              <label>HP</label>
+              <div class="input-row">
+                <span class="input-label">Entrenado:</span>
+                <input type="number" id="hp-trained-input" min="0" value="0" placeholder="HP Entrenado">
+              </div>
+              <div class="input-row">
+                <span class="input-label">%:</span>
+                <input type="number" id="hp-percent" min="0" max="100" value="0" placeholder="0%">
+              </div>
+              <div class="equiv" id="hp-equiv">0 / 700</div>
+            </div>
+            <!-- ATK -->
+            <div class="dual-input-group" id="atk-group">
+              <label>ATK</label>
+              <div class="input-row">
+                <span class="input-label">Entrenado:</span>
+                <input type="number" id="atk-nominal" min="0" max="700" value="0" placeholder="0">
+              </div>
+              <div class="input-row">
+                <span class="input-label">%:</span>
+                <input type="number" id="atk-percent" min="0" max="100" value="0" placeholder="0%">
+              </div>
+              <div class="equiv" id="atk-equiv">0 / 700</div>
+            </div>
+            <!-- SPD -->
+            <div class="dual-input-group" id="spd-group">
+              <label>SPD</label>
+              <div class="input-row">
+                <span class="input-label">Entrenado:</span>
+                <input type="number" id="spd-nominal" min="0" max="700" value="0" placeholder="0">
+              </div>
+              <div class="input-row">
+                <span class="input-label">%:</span>
+                <input type="number" id="spd-percent" min="0" max="100" value="0" placeholder="0%">
+              </div>
+              <div class="equiv" id="spd-equiv">0 / 700</div>
+            </div>
+          </div>
+          <!-- Lineage + Save (inline) -->
+          <div class="actions-row">
+            <div class="lineage-buttons">
+              <button class="btn sm" id="save-lineage-btn" title="Guardar distribución en memoria">📋 Copiar</button>
+              <button class="btn sm secondary" id="apply-lineage-btn" disabled title="Aplicar distribución guardada">📥 Pegar</button>
+            </div>
+            <div class="save-buttons">
+              <button class="btn sm" id="save-slot-btn" title="Guardar slot">💾 Guardar</button>
+              <select id="load-slot-select" class="slot-select">
+                <option value="">Cargar slot...</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="FullDigimonReqDict.js"></script>
+<script src="nav-translate.js"></script>
+<script>
+// ===== CONSTANTES =====
+const MAX_POINTS = 700;
+const HP_DIVISOR = 77;
+
+// ===== ESTADO =====
+let currentTama = null;
+let currentDigimon = null;
+let currentDistribution = { hpNominal: 0, atkNominal: 0, spdNominal: 0 };
+let savedLineageDistribution = null;
+let currentUser = null;
+
+// Mapeo de nivel a etapa
+const nivelAEtapa = {
+  1: "Baby I",
+  2: "Baby II",
+  3: "Child",
+  4: "Adult",
+  5: "Perfect",
+  6: "Ultimate"
+};
+
+// Obtener Tamas disponibles
+function getAvailableTamas() {
+  const tamas = new Set();
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    if (data.Tama) tamas.add(data.Tama);
+  }
+  return Array.from(tamas).sort();
+}
+
+// ===== NAVEGACIÓN =====
+function toggleNav() {
+  document.getElementById('nav-toggle').classList.toggle('active');
+  document.getElementById('nav-menu').classList.toggle('active');
+  document.getElementById('nav-overlay').classList.toggle('active');
+}
+function closeNav() {
+  document.getElementById('nav-toggle').classList.remove('active');
+  document.getElementById('nav-menu').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('active');
+}
+document.getElementById('nav-toggle').addEventListener('click', toggleNav);
+document.getElementById('nav-overlay').addEventListener('click', closeNav);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeNav();
+});
+
+// ===== TOAST =====
+function showToast(message, type = '') {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast show ' + type;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ===== TAMA ICONS =====
+function createTamaIcons() {
+  const container = document.getElementById('tama-icons');
+  container.innerHTML = '';
+  const tamas = getAvailableTamas();
+
+  tamas.forEach(tama => {
+    const btn = document.createElement('button');
+    btn.className = 'tama-icon-btn';
+    btn.innerHTML = `
+      <img src="${imgUrl('Tama/' + tama + '.png')}" alt="${tama}" onerror="this.style.display='none'">
+      <span>${tama}</span>
+    `;
+    btn.addEventListener('click', () => selectTama(tama));
+    container.appendChild(btn);
+  });
+}
+
+function selectTama(tama) {
+  currentTama = tama;
+
+  // Update UI
+  document.querySelectorAll('.tama-icon-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.querySelector('span').textContent === tama);
+  });
+
+  // Populate levels
+  populateNivelSelect();
+}
+
+// ===== NIVEL SELECT =====
+function populateNivelSelect() {
+  const select = document.getElementById('nivelSelect');
+  select.innerHTML = '<option value="">--Selecciona Nivel--</option>';
+
+  if (!currentTama) return;
+
+  const levels = new Set();
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    if (data.Tama === currentTama && data.Nivel) {
+      levels.add(data.Nivel);
+    }
+  }
+
+  Array.from(levels).sort((a, b) => a - b).forEach(level => {
+    const option = document.createElement('option');
+    option.value = level;
+    option.textContent = nivelAEtapa[level] || `Nivel ${level}`;
+    select.appendChild(option);
+  });
+
+  // Clear digimon select
+  document.getElementById('digimonSelect').innerHTML = '<option value="">--Selecciona Digimon--</option>';
+}
+
+document.getElementById('nivelSelect').addEventListener('change', (e) => {
+  const nivel = parseInt(e.target.value);
+  if (nivel) populateDigimonSelect(nivel);
+});
+
+// ===== DIGIMON SELECT =====
+function populateDigimonSelect(nivel) {
+  const select = document.getElementById('digimonSelect');
+  select.innerHTML = '<option value="">--Selecciona Digimon--</option>';
+
+  if (!currentTama || !nivel) return;
+
+  const digimons = [];
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    if (data.Tama === currentTama && data.Nivel === nivel) {
+      digimons.push(name);
+    }
+  }
+
+  digimons.sort().forEach(name => {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    select.appendChild(option);
+  });
+}
+
+document.getElementById('digimonSelect').addEventListener('change', (e) => {
+  const name = e.target.value;
+  if (name) selectDigimon(name);
+});
+
+// ===== SEARCH =====
+function initSearch() {
+  const input = document.getElementById('digi-search');
+  const suggestions = document.getElementById('search-suggestions');
+
+  input.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    if (query.length < 2) {
+      suggestions.classList.remove('show');
+      return;
+    }
+
+    const matches = [];
+    for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+      if (name.toLowerCase().includes(query)) {
+        matches.push({ name, data });
+        if (matches.length >= 8) break;
+      }
+    }
+
+    if (matches.length === 0) {
+      suggestions.classList.remove('show');
+      return;
+    }
+
+    suggestions.innerHTML = matches.map(m => `
+      <div class="search-item" data-name="${m.name}">
+        <img src="${imgUrl('icon/' + m.name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
+             onerror="this.style.display='none'" alt="">
+        <div class="search-item-info">
+          <div class="search-item-name">${m.name}</div>
+          <div class="search-item-meta">${m.data.Tama} • ${nivelAEtapa[m.data.Nivel]}</div>
+        </div>
+      </div>
+    `).join('');
+
+    suggestions.classList.add('show');
+
+    suggestions.querySelectorAll('.search-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const name = item.dataset.name;
+        const data = fullDigimonReqDict[name];
+
+        // Set Tama
+        selectTama(data.Tama);
+
+        // Set Level
+        setTimeout(() => {
+          document.getElementById('nivelSelect').value = data.Nivel;
+          populateDigimonSelect(data.Nivel);
+
+          setTimeout(() => {
+            document.getElementById('digimonSelect').value = name;
+            selectDigimon(name);
+          }, 50);
+        }, 50);
+
+        input.value = '';
+        suggestions.classList.remove('show');
+      });
+    });
+  });
+
+  // Close on click outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#search-container')) {
+      suggestions.classList.remove('show');
+    }
+  });
+}
+
+// ===== SELECT DIGIMON =====
+function selectDigimon(name) {
+  const data = fullDigimonReqDict[name];
+  if (!data) return;
+
+  currentDigimon = name;
+
+  // Update card
+  updateDigimonCard(name, data);
+
+  // Reset y render evolution line
+  resetEvolutionLine();
+  renderEvolutionLine(name);
+  updateEvoLineMini();
+  updateStatsLock();
+
+  // Reset distribution
+  currentDistribution = { hpNominal: 0, atkNominal: 0, spdNominal: 0 };
+  updateInputsFromDistribution();
+  updateUI();
+}
+
+// ===== UPDATE DIGIMON CARD =====
+function updateDigimonCard(name, data) {
+  const stats = data["Stat Base"] || {};
+
+  // Portrait
+  const portrait = document.getElementById('portrait');
+  portrait.innerHTML = `<img src="${imgUrl('icon/' + name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
+                             onerror="this.outerHTML='<span class=portrait-placeholder>Sin imagen</span>'" alt="${name}">`;
+
+  // Name & Badge
+  document.getElementById('digi-name').textContent = name;
+  document.getElementById('digi-badge').textContent = nivelAEtapa[data.Nivel] || '---';
+
+  // Meta
+  document.getElementById('digi-meta').innerHTML = `
+    Atributo: <b>${data.Atributo || '---'}</b><br>
+    Tipo: <b>${data.Tipo || '---'}</b><br>
+    Tama: <b>${data.Tama || '---'}</b>
+  `;
+
+  // Inicializar línea evolutiva mini
+  document.getElementById('evo-line-mini').textContent = '---';
+
+  // Initial trained/total
+  updateStatDisplay();
+}
+
+// ===== EVOLUTION LINE (Manual Planning Tool) =====
+//
+// Sistema de planificación de línea evolutiva que permite al usuario construir
+// manualmente la cadena evolutiva de un Digimon desde Baby I hasta su nivel actual.
+//
+// IMPORTANTE: Este sistema usa `digimonstattier` para las consultas de Viene/Evoluciona
+// porque la función `buildUniversalSinks()` en FullDigimonReqDict.js actualiza dinámicamente
+// los arrays de evolución para "universal sinks" (Numemon, Scumon, Nanimon, etc.)
+// que pueden recibir CUALQUIER Child como predecesor.
+//
+// Estructura de datos:
+// - fullDigimonReqDict: Datos estáticos del Digimon (Nivel, Tama, Stats, etc.)
+// - digimonstattier: Datos dinámicos de evolución (.Viene, .Evoluciona)
+// ================================================================================
+
+/**
+ * Estado de la línea evolutiva planificada.
+ * Almacena el Digimon seleccionado para cada nivel de evolución.
+ * Separado del Digimon principal (currentDigimon) para permitir planificación
+ * sin cambiar la selección actual.
+ *
+ * @type {Object.<number, string>} - Mapa de nivel (1-6) a nombre de Digimon
+ * @example { 1: "Botamon", 2: "Koromon", 3: "Agumon", 4: "Greymon" }
+ */
+let plannedEvolutionLine = {};
+
+/**
+ * Obtiene todos los Digimon disponibles en un nivel específico para el Tama actual.
+ *
+ * @param {number} nivel - Nivel evolutivo (1=Baby I, 2=Baby II, 3=Child, 4=Adult, 5=Perfect, 6=Ultimate)
+ * @returns {string[]} - Array ordenado alfabéticamente con nombres de Digimon del nivel especificado
+ *
+ * @example
+ * // Con currentTama = "V0"
+ * getDigimonsAtLevel(3) // ["Agumon", "Agumon (Black)", "Betamon", ...]
+ */
+function getDigimonsAtLevel(nivel) {
+  if (!currentTama) return [];
+  const digimons = [];
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    if (data.Tama === currentTama && data.Nivel === nivel) {
+      digimons.push(name);
+    }
+  }
+  return digimons.sort();
+}
+
+/**
+ * Obtiene TODOS los Digimon de un nivel específico, SIN filtrar por Tama.
+ *
+ * Esta función se usa para la línea evolutiva donde queremos mostrar
+ * todas las rutas posibles, independientemente del Tama del Digimon actual.
+ *
+ * @param {number} nivel - Nivel evolutivo (1=Baby I, 2=Baby II, 3=Child, 4=Adult, 5=Perfect, 6=Ultimate)
+ * @returns {string[]} - Array ordenado alfabéticamente con nombres de Digimon del nivel especificado
+ */
+function getAllDigimonsAtLevel(nivel) {
+  const digimons = [];
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    if (data.Nivel === nivel) {
+      digimons.push(name);
+    }
+  }
+  return digimons.sort();
+}
+
+/**
+ * Obtiene todos los Digimon que pueden evolucionar AL Digimon especificado (predecesores directos).
+ *
+ * Utiliza dos métodos complementarios para garantizar cobertura completa:
+ * 1. Lee el campo "Viene" del Digimon objetivo (quiénes pueden evolucionar a él)
+ * 2. Búsqueda inversa: encuentra quién tiene este Digimon en su array "Evoluciona"
+ *
+ * NOTA: Usa `digimonstattier` en lugar de `fullDigimonReqDict` porque buildUniversalSinks()
+ * actualiza dinámicamente los arrays de evolución para universal sinks.
+ *
+ * @param {string} digimonName - Nombre del Digimon objetivo
+ * @returns {string[]} - Array con nombres de predecesores directos (sin Burpmon)
+ *
+ * @example
+ * getPredecessors("Greymon") // ["Agumon", "Agumon (Black)", ...]
+ * getPredecessors("Numemon") // [todos los Children del Tama] (es universal sink)
+ */
+function getPredecessors(digimonName) {
+  const result = new Set();
+
+  // Método 1: Leer campo "Viene" directo desde digimonstattier
+  // Este array contiene los Digimon que pueden evolucionar al objetivo
+  const viene = digimonstattier[digimonName]?.Viene || [];
+  viene.forEach(p => {
+    // Excluir Burpmon (evolución especial de "muerte")
+    if (p !== 'Burpmon' && fullDigimonReqDict[p]) {
+      result.add(p);
+    }
+  });
+
+  // Método 2: Búsqueda inversa en el campo "Evoluciona" de todos los Digimon
+  // Necesario porque algunos Digimon (como universal sinks) no tienen todos
+  // sus predecesores listados en su campo "Viene"
+  for (const [name, digiData] of Object.entries(fullDigimonReqDict)) {
+    if (name === 'Burpmon') continue;
+    if (digimonstattier[name]?.Evoluciona?.includes(digimonName)) {
+      result.add(name);
+    }
+  }
+
+  return [...result];
+}
+
+/**
+ * Obtiene predecesores de un nivel específico, trazando hacia atrás a través de side evolutions.
+ *
+ * Las "side evolutions" son evoluciones entre Digimon del mismo nivel (Adult → Adult).
+ * Por ejemplo: KaratsukiNumemon viene de Numemon (ambos Adults).
+ * Esta función traza hacia atrás para encontrar los predecesores del nivel deseado.
+ *
+ * Algoritmo recursivo con detección de ciclos:
+ * 1. Obtiene predecesores directos del Digimon
+ * 2. Si el predecesor es del nivel objetivo, lo añade al resultado
+ * 3. Si el predecesor es de nivel superior (side evolution), continúa trazando
+ * 4. Si el predecesor es de nivel inferior, lo ignora (ya pasamos ese nivel)
+ *
+ * @param {string} digimonName - Nombre del Digimon inicial
+ * @param {number} targetLevel - Nivel evolutivo objetivo (1-6)
+ * @param {Set<string>} [visited=new Set()] - Set de Digimon ya visitados (para evitar ciclos)
+ * @returns {string[]} - Array con nombres de predecesores del nivel especificado
+ *
+ * @example
+ * // KaratsukiNumemon (Adult) → Numemon (Adult) → Children
+ * getPredecessorsAtLevel("KaratsukiNumemon", 3) // Todos los Children que pueden llegar a Numemon
+ */
+function getPredecessorsAtLevel(digimonName, targetLevel, visited = new Set()) {
+  // Detección de ciclos para evitar recursión infinita
+  if (visited.has(digimonName)) return [];
+  visited.add(digimonName);
+
+  const predecessors = getPredecessors(digimonName);
+  const result = [];
+
+  for (const pred of predecessors) {
+    const predData = fullDigimonReqDict[pred];
+    if (!predData) continue;
+
+    if (predData.Nivel === targetLevel) {
+      // Caso base: encontramos un predecesor del nivel objetivo
+      result.push(pred);
+    } else if (predData.Nivel > targetLevel) {
+      // Caso recursivo: es una side evolution, seguir trazando hacia atrás
+      const deeper = getPredecessorsAtLevel(pred, targetLevel, visited);
+      result.push(...deeper);
+    }
+    // Si predData.Nivel < targetLevel, ignoramos (ya pasamos el nivel objetivo)
+  }
+
+  // Eliminar duplicados antes de retornar
+  return [...new Set(result)];
+}
+
+/**
+ * Encuentra todos los Adults "raíz" de un Adult dado, trazando a través de side evolutions.
+ *
+ * Un "Adult raíz" es un Adult que NO viene de otro Adult (viene directamente de Children).
+ * Los Adults que son side evolutions (como KaratsukiNumemon que viene de Numemon)
+ * deben trazar hacia atrás para encontrar el Adult raíz original.
+ *
+ * Esto es importante porque los Children evolucionan al Adult raíz, no a la side evolution.
+ * Por ejemplo: Agumon → Numemon (no Agumon → KaratsukiNumemon directamente)
+ *
+ * @param {string} adultName - Nombre del Adult a analizar
+ * @param {Set<string>} [visited=new Set()] - Set de Adults ya visitados (para evitar ciclos)
+ * @returns {string[]} - Array con nombres de Adults raíz
+ *
+ * @example
+ * getRootAdults("Greymon")           // ["Greymon"] - es Adult raíz
+ * getRootAdults("KaratsukiNumemon")  // ["Numemon"] - side evolution, Numemon es el raíz
+ * getRootAdults("GoldNumemon")       // ["Numemon"] - viene de Numemon
+ */
+function getRootAdults(adultName, visited = new Set()) {
+  // Detección de ciclos
+  if (visited.has(adultName)) return [];
+  visited.add(adultName);
+
+  const data = fullDigimonReqDict[adultName];
+  // Si no existe o no es Adult, retornar el nombre tal cual
+  if (!data || data.Nivel !== 4) return [adultName];
+
+  // Usar digimonstattier para obtener Viene (datos dinámicos de buildUniversalSinks)
+  const viene = digimonstattier[adultName]?.Viene || [];
+
+  // Filtrar solo predecesores que también son Adults (side evolutions)
+  const adultPredecessors = viene.filter(p => {
+    const predData = fullDigimonReqDict[p];
+    return predData && predData.Nivel === 4;
+  });
+
+  if (adultPredecessors.length === 0) {
+    // Caso base: no tiene predecesores Adult, ES un Adult raíz
+    return [adultName];
+  }
+
+  // Caso recursivo: tiene predecesores Adult (es side evolution), seguir trazando
+  const roots = [];
+  for (const pred of adultPredecessors) {
+    roots.push(...getRootAdults(pred, visited));
+  }
+  return [...new Set(roots)];
+}
+
+/**
+ * Obtiene todos los Children que pueden evolucionar a un Adult específico.
+ *
+ * IMPORTANTE: Usa `digimonstattier` para consultar el array `Evoluciona` porque
+ * la función `buildUniversalSinks()` en FullDigimonReqDict.js actualiza dinámicamente
+ * este array para "universal sinks" (Numemon, Scumon, Nanimon, Bakemon LT, Raremon).
+ *
+ * Los universal sinks pueden recibir CUALQUIER Child como predecesor, pero esto
+ * no está hardcodeado en fullDigimonReqDict sino que se calcula dinámicamente.
+ *
+ * @param {string} adultName - Nombre del Adult
+ * @returns {string[]} - Array con nombres de Children que pueden evolucionar al Adult
+ *
+ * @example
+ * getChildrenForAdult("Greymon")  // ["Agumon", "Agumon (Black)", ...]
+ * getChildrenForAdult("Numemon")  // [TODOS los Children] (es universal sink)
+ */
+function getChildrenForAdult(adultName) {
+  const children = [];
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    // Verificar nivel 3 (Child) y que tenga al Adult en su Evoluciona
+    // CRÍTICO: usar digimonstattier.Evoluciona, NO fullDigimonReqDict.Evoluciones.Evoluciona
+    if (data.Nivel === 3 && digimonstattier[name]?.Evoluciona?.includes(adultName)) {
+      children.push(name);
+    }
+  }
+  return children;
+}
+
+/**
+ * Obtiene los Adults válidos para la línea evolutiva.
+ *
+ * Filtrado TOP-DOWN: Los Adults se filtran según el nivel SUPERIOR (Perfect o Ultimate).
+ * Si el Digimon principal es Perfect, muestra Adults de su "Viene".
+ * Si el Digimon principal es Adult, está bloqueado a ese Adult.
+ *
+ * @returns {string[]} - Array ordenado con nombres de Adults válidos
+ */
+function getValidAdultsForLine() {
+  const mainData = fullDigimonReqDict[currentDigimon];
+  if (!mainData) return [];
+
+  const mainLevel = mainData.Nivel;
+
+  // Si el Digimon principal es Adult, está bloqueado
+  if (mainLevel === 4) {
+    return [currentDigimon];
+  }
+
+  // Si hay Perfect seleccionado en la línea, filtrar por él
+  const selectedPerfect = plannedEvolutionLine[5];
+  if (selectedPerfect) {
+    const viene = digimonstattier[selectedPerfect]?.Viene || [];
+    return viene.filter(p => fullDigimonReqDict[p]?.Nivel === 4).sort();
+  }
+
+  // Si el Digimon principal es Perfect, usar su Viene
+  if (mainLevel === 5) {
+    const viene = digimonstattier[currentDigimon]?.Viene || [];
+    return viene.filter(p => fullDigimonReqDict[p]?.Nivel === 4).sort();
+  }
+
+  // Si el Digimon principal es Ultimate, ver Perfect seleccionado
+  if (mainLevel === 6) {
+    // Sin Perfect seleccionado, no podemos determinar Adults
+    return [];
+  }
+
+  return [];
+}
+
+/**
+ * Obtiene los Perfects válidos para la línea evolutiva.
+ *
+ * Si el Digimon principal es Ultimate, muestra Perfects de su "Viene".
+ * Si el Digimon principal es Perfect, está bloqueado.
+ *
+ * @returns {string[]} - Array ordenado con nombres de Perfects válidos
+ */
+function getValidPerfectsForLine() {
+  const mainData = fullDigimonReqDict[currentDigimon];
+  if (!mainData) return [];
+
+  const mainLevel = mainData.Nivel;
+
+  // Si el Digimon principal es Perfect, está bloqueado
+  if (mainLevel === 5) {
+    return [currentDigimon];
+  }
+
+  // Si el Digimon principal es Ultimate, usar su Viene
+  if (mainLevel === 6) {
+    const viene = digimonstattier[currentDigimon]?.Viene || [];
+    return viene.filter(p => fullDigimonReqDict[p]?.Nivel === 5).sort();
+  }
+
+  return [];
+}
+
+/**
+ * Obtiene los Children válidos basándose en el Adult seleccionado.
+ *
+ * Si hay Adult seleccionado, busca Children que pueden evolucionar a él.
+ * Para side evolutions (KaratsukiNumemon), traza al Adult raíz (Numemon).
+ * Si no hay Adult seleccionado, retorna vacío.
+ *
+ * @returns {string[]} - Array ordenado con nombres de Children válidos
+ */
+function getValidChildrenForLine() {
+  const selectedAdult = plannedEvolutionLine[4];
+
+  if (!selectedAdult) {
+    // Sin Adult seleccionado: no hay Children disponibles
+    return [];
+  }
+
+  // Obtener Adults raíz (para side evolutions)
+  const rootAdults = getRootAdults(selectedAdult);
+
+  // Buscar todos los Children que pueden evolucionar a estos Adults raíz
+  const allChildren = new Set();
+  for (const rootAdult of rootAdults) {
+    const children = getChildrenForAdult(rootAdult);
+    children.forEach(c => allChildren.add(c));
+  }
+
+  return [...allChildren].sort();
+}
+
+/**
+ * Obtiene los Baby II válidos basándose en el Child seleccionado.
+ *
+ * Si no hay Child seleccionado, retorna vacío.
+ *
+ * @returns {string[]} - Array ordenado con nombres de Baby II válidos
+ */
+function getValidBabyIIForLine() {
+  const selectedChild = plannedEvolutionLine[3];
+
+  if (!selectedChild) {
+    // Sin Child seleccionado: no hay Baby II disponibles
+    return [];
+  }
+
+  const babyII = new Set();
+
+  // Método 1: Leer Viene del Child
+  const vieneChild = digimonstattier[selectedChild]?.Viene || [];
+  vieneChild.forEach(p => {
+    const predData = fullDigimonReqDict[p];
+    if (predData && predData.Nivel === 2) {
+      babyII.add(p);
+    }
+  });
+
+  // Método 2: Búsqueda inversa
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    if (data.Nivel === 2 && digimonstattier[name]?.Evoluciona?.includes(selectedChild)) {
+      babyII.add(name);
+    }
+  }
+
+  return [...babyII].sort();
+}
+
+/**
+ * Obtiene los Baby I válidos basándose en el Baby II seleccionado.
+ *
+ * Si no hay Baby II seleccionado, retorna vacío.
+ *
+ * @returns {string[]} - Array ordenado con nombres de Baby I válidos
+ */
+function getValidBabyIForLine() {
+  const selectedBabyII = plannedEvolutionLine[2];
+
+  if (!selectedBabyII) {
+    // Sin Baby II seleccionado: no hay Baby I disponibles
+    return [];
+  }
+
+  const babyI = new Set();
+
+  // Método 1: Leer Viene del Baby II
+  const vieneBabyII = digimonstattier[selectedBabyII]?.Viene || [];
+  vieneBabyII.forEach(p => {
+    const predData = fullDigimonReqDict[p];
+    if (predData && predData.Nivel === 1) {
+      babyI.add(p);
+    }
+  });
+
+  // Método 2: Búsqueda inversa
+  for (const [name, data] of Object.entries(fullDigimonReqDict)) {
+    if (data.Nivel === 1 && digimonstattier[name]?.Evoluciona?.includes(selectedBabyII)) {
+      babyI.add(name);
+    }
+  }
+
+  return [...babyI].sort();
+}
+
+/**
+ * Dispatcher que obtiene las opciones disponibles para un nivel evolutivo específico.
+ *
+ * Filtrado TOP-DOWN:
+ * - Nivel 6 (Ultimate): Bloqueado al Digimon principal si es Ultimate
+ * - Nivel 5 (Perfect): Filtrado por Ultimate, o bloqueado si es Perfect
+ * - Nivel 4 (Adult): Filtrado por Perfect seleccionado
+ * - Nivel 3 (Child): Filtrado por Adult seleccionado (+ side evos)
+ * - Nivel 2 (Baby II): Filtrado por Child seleccionado
+ * - Nivel 1 (Baby I): Filtrado por Baby II seleccionado
+ *
+ * @param {number} nivel - Nivel evolutivo (1-6)
+ * @returns {string[]} - Array ordenado con nombres de Digimon disponibles para ese nivel
+ */
+function getOptionsForLevel(nivel) {
+  switch(nivel) {
+    case 1: return getValidBabyIForLine();
+    case 2: return getValidBabyIIForLine();
+    case 3: return getValidChildrenForLine();
+    case 4: return getValidAdultsForLine();
+    case 5: return getValidPerfectsForLine();
+    case 6: return [currentDigimon]; // Ultimate siempre es el principal
+    default: return [];
+  }
+}
+
+/**
+ * Renderiza la interfaz visual de la línea evolutiva en el contenedor #evo-line.
+ *
+ * Genera una cadena visual de evolución desde Baby I hasta el nivel del Digimon actual,
+ * con dropdowns interactivos para seleccionar alternativas en cada nivel.
+ *
+ * Estructura generada:
+ * [Baby I] → [Baby II] → [Child] → [Adult*]
+ *                                      ↑ nivel actual marcado
+ *
+ * Comportamiento de dropdowns:
+ * - Click en item: muestra/oculta dropdown con opciones alternativas
+ * - Click en opción: actualiza plannedEvolutionLine y re-renderiza
+ * - Al cambiar nivel superior: limpia niveles inferiores (recalcula opciones)
+ *
+ * IMPORTANTE: Esta función NO cambia currentDigimon, solo actualiza plannedEvolutionLine.
+ *
+ * @param {string} digimonName - Nombre del Digimon (usado para referencia, usa currentDigimon internamente)
+ */
+function renderEvolutionLine(digimonName) {
+  const container = document.getElementById('evo-line');
+
+  // Validación: necesitamos un Digimon y Tama seleccionados
+  if (!currentDigimon || !currentTama) {
+    container.innerHTML = '<span style="color: #666; font-size: 0.9rem;">Selecciona un Digimon para planificar su línea evolutiva</span>';
+    return;
+  }
+
+  const currentData = fullDigimonReqDict[currentDigimon];
+  const currentLevel = currentData.Nivel;
+
+  // Determinar qué niveles mostrar (desde Baby I hasta el nivel actual)
+  // Ejemplo: Adult (nivel 4) muestra niveles [1, 2, 3, 4]
+  const levelsToShow = [];
+  for (let i = 1; i <= currentLevel; i++) {
+    levelsToShow.push(i);
+  }
+
+  // Inicializar línea con el Digimon actual si está vacía
+  if (Object.keys(plannedEvolutionLine).length === 0) {
+    plannedEvolutionLine[currentLevel] = currentDigimon;
+  }
+
+  container.innerHTML = levelsToShow.map((nivel, i) => {
+    const selectedName = plannedEvolutionLine[nivel];
+    const options = getOptionsForLevel(nivel);
+    const hasOptions = options.length > 0;
+    const isCurrentLevel = nivel === currentLevel;
+
+    if (selectedName) {
+      const data = fullDigimonReqDict[selectedName];
+      return `
+        ${i > 0 ? '<span class="evo-arrow">→</span>' : ''}
+        <div class="evo-level-wrapper">
+          <div class="evo-line-item ${isCurrentLevel ? 'current' : ''}" data-nivel="${nivel}">
+            <img src="${imgUrl('icon/' + selectedName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
+                 onerror="this.style.display='none'" alt="${selectedName}">
+            <span class="name">${selectedName}</span>
+            <span class="stage">${nivelAEtapa[nivel]}</span>
+            ${hasOptions && options.length > 1 ? '<span class="expand-icon">▼</span>' : ''}
+          </div>
+          ${hasOptions && options.length > 1 ? `
+            <div class="evo-level-dropdown" data-nivel="${nivel}">
+              ${options.map(altName => `
+                <div class="evo-dropdown-item ${altName === selectedName ? 'selected' : ''}" data-name="${altName}" data-nivel="${nivel}">
+                  <img src="${imgUrl('icon/' + altName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
+                       onerror="this.style.display='none'" alt="${altName}">
+                  <span class="dname">${altName}</span>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      // Slot vacío - mostrar placeholder
+      // Si no hay opciones, mostrar deshabilitado (falta seleccionar nivel superior)
+      return `
+        ${i > 0 ? '<span class="evo-arrow">→</span>' : ''}
+        <div class="evo-level-wrapper">
+          <div class="evo-line-item empty ${!hasOptions ? 'disabled' : ''}" data-nivel="${nivel}">
+            <span class="stage">${nivelAEtapa[nivel]}</span>
+            ${hasOptions ? '<span class="expand-icon">▼</span>' : '<span class="expand-icon" style="opacity:0.3">—</span>'}
+          </div>
+          ${hasOptions ? `
+            <div class="evo-level-dropdown" data-nivel="${nivel}">
+              ${options.map(altName => `
+                <div class="evo-dropdown-item" data-name="${altName}" data-nivel="${nivel}">
+                  <img src="${imgUrl('icon/' + altName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
+                       onerror="this.style.display='none'" alt="${altName}">
+                  <span class="dname">${altName}</span>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+  }).join('');
+
+  // Click handlers para toggle dropdown
+  container.querySelectorAll('.evo-line-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      // Ignorar clicks en items deshabilitados
+      if (item.classList.contains('disabled')) return;
+
+      const wrapper = item.closest('.evo-level-wrapper');
+      const dropdown = wrapper.querySelector('.evo-level-dropdown');
+
+      // Cerrar otros dropdowns
+      container.querySelectorAll('.evo-level-dropdown.show').forEach(d => {
+        if (d !== dropdown) d.classList.remove('show');
+      });
+
+      if (dropdown) {
+        dropdown.classList.toggle('show');
+      }
+    });
+  });
+
+  // Click handlers para items del dropdown
+  container.querySelectorAll('.evo-dropdown-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = item.dataset.name;
+      const nivel = parseInt(item.dataset.nivel);
+
+      // Cerrar dropdown
+      item.closest('.evo-level-dropdown').classList.remove('show');
+
+      // Actualizar la línea planificada (NO cambiar el Digimon principal)
+      plannedEvolutionLine[nivel] = name;
+
+      // Limpiar niveles anteriores si cambiamos un nivel superior
+      // (porque las opciones de niveles inferiores dependen del superior)
+      for (let i = 1; i < nivel; i++) {
+        delete plannedEvolutionLine[i];
+      }
+
+      // Re-renderizar la línea
+      renderEvolutionLine(currentDigimon);
+
+      // Actualizar los stats heredados en la tarjeta
+      updateStatDisplay();
+      updateEvoLineMini();
+      updateStatsLock();
+    });
+  });
+
+  // Cerrar dropdowns al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.evo-level-wrapper')) {
+      container.querySelectorAll('.evo-level-dropdown.show').forEach(d => {
+        d.classList.remove('show');
+      });
+    }
+  });
+}
+
+/**
+ * Resetea el estado de la línea evolutiva planificada.
+ *
+ * Se llama cuando se cambia de Digimon principal (selectDigimon) para
+ * iniciar una planificación nueva desde cero. El render posterior
+ * inicializará la línea con el nuevo Digimon en su nivel correspondiente.
+ */
+function resetEvolutionLine() {
+  plannedEvolutionLine = {};
+}
+
+/**
+ * Verifica si la línea evolutiva está completa.
+ * Una línea está completa cuando todos los niveles desde Baby I/II hasta el nivel actual tienen un Digimon seleccionado.
+ */
+function isEvolutionLineComplete() {
+  if (!currentDigimon) return false;
+
+  const mainData = fullDigimonReqDict[currentDigimon];
+  if (!mainData) return false;
+
+  const currentLevel = mainData.Nivel;
+
+  // Si es Baby I (nivel 1), siempre está completo
+  if (currentLevel === 1) return true;
+
+  // Verificar que todos los niveles desde 1 hasta currentLevel estén definidos
+  for (let nivel = 1; nivel <= currentLevel; nivel++) {
+    if (!plannedEvolutionLine[nivel]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Actualiza el estado de bloqueo de la sección de distribución de stats.
+ */
+function updateStatsLock() {
+  const section = document.getElementById('stats-input-section');
+  if (!section) return;
+
+  if (isEvolutionLineComplete()) {
+    section.classList.remove('locked');
+  } else {
+    section.classList.add('locked');
+  }
+}
+
+// ===== STATS CALCULATION =====
+
+/**
+ * Calcula los stats heredados basándose en la línea evolutiva planificada.
+ * Cada predecesor aporta 40% de sus stats base (redondeado).
+ * Los slides (evoluciones del mismo nivel) NO aportan heredados.
+ *
+ * @returns {Object} - { HP, ATK, DEF, Vel } con los stats heredados totales
+ */
+function calcularStatsHeredados() {
+  if (!currentDigimon) return { HP: 0, ATK: 0, DEF: 0, Vel: 0 };
+
+  const mainData = fullDigimonReqDict[currentDigimon];
+  if (!mainData) return { HP: 0, ATK: 0, DEF: 0, Vel: 0 };
+
+  const nivelActual = mainData.Nivel;
+  let heredado = { HP: 0, ATK: 0, DEF: 0, Vel: 0 };
+
+  // Recorrer cada nivel de la línea evolutiva planificada
+  for (let nivel = 1; nivel < nivelActual; nivel++) {
+    const predecesor = plannedEvolutionLine[nivel];
+    if (!predecesor) continue;
+
+    const predData = fullDigimonReqDict[predecesor];
+    if (!predData) continue;
+
+    // Solo sumar si el predecesor es de un nivel INFERIOR (no slides)
+    if (predData.Nivel < nivelActual) {
+      const statBase = predData["Stat Base"] || {};
+      heredado.HP  += Math.round((statBase.HP  || 0) * 0.4);
+      heredado.ATK += Math.round((statBase.ATK || 0) * 0.4);
+      heredado.DEF += Math.round((statBase.DEF || 0) * 0.4);
+      heredado.Vel += Math.round((statBase.Vel || 0) * 0.4);
+    }
+  }
+
+  return heredado;
+}
+
+function getHPBase() {
+  if (!currentDigimon) return 0;
+  const data = fullDigimonReqDict[currentDigimon];
+  return data?.["Stat Base"]?.HP || 0;
+}
+
+/**
+ * Calcula el HP Entrenado a partir de los puntos nominales.
+ * Fórmula: HP Entrenado = ((HP Base + Heredado) / 77) * HP Nominal
+ * @param {number} hpBaseTotal - HP Base + HP Heredado
+ * @param {number} hpNominal - Puntos nominales asignados (de 700)
+ */
+function calcHPEntrenado(hpBaseTotal, hpNominal) {
+  if (hpBaseTotal === 0) return 0;
+  return Math.round((hpBaseTotal / HP_DIVISOR) * hpNominal);
+}
+
+/**
+ * Calcula los puntos nominales de HP a partir del HP Entrenado.
+ * Fórmula inversa: HP Nominal = (HP Entrenado * 77) / (HP Base + Heredado)
+ * @param {number} hpBaseTotal - HP Base + HP Heredado
+ * @param {number} hpEntrenado - HP Entrenado real
+ */
+function calcHPNominal(hpBaseTotal, hpEntrenado) {
+  if (hpBaseTotal === 0) return 0;
+  return Math.round((hpEntrenado * HP_DIVISOR) / hpBaseTotal);
+}
+
+function nominalToPercent(nominal) {
+  return Math.round((nominal / MAX_POINTS) * 100);
+}
+
+function percentToNominal(percent) {
+  return Math.round((percent / 100) * MAX_POINTS);
+}
+
+function getTotalPoints() {
+  return currentDistribution.hpNominal + currentDistribution.atkNominal + currentDistribution.spdNominal;
+}
+
+function getRemainingPoints() {
+  return MAX_POINTS - getTotalPoints();
+}
+
+// ===== UPDATE UI =====
+function updateUI() {
+  updatePointsRemaining();
+  updateStatDisplay();
+  updateEquivDisplay();
+}
+
+function updatePointsRemaining() {
+  const remaining = getRemainingPoints();
+  const el = document.getElementById('points-remaining');
+  el.textContent = remaining;
+  el.classList.remove('warning', 'error');
+  if (remaining < 0) el.classList.add('error');
+  else if (remaining < 100) el.classList.add('warning');
+}
+
+function updateStatDisplay() {
+  if (!currentDigimon) return;
+  const data = fullDigimonReqDict[currentDigimon];
+  const stats = data?.["Stat Base"] || {};
+
+  // Stats base del Digimon actual
+  const hpBase = stats.HP || 0;
+  const atkBase = stats.ATK || 0;
+  const spdBase = stats.Vel || 0;
+  const defBase = stats.DEF || 0;
+
+  // Stats heredados de la línea evolutiva (40% de cada predecesor)
+  const heredados = calcularStatsHeredados();
+
+  // Stats entrenados (input del usuario)
+  // Fórmula: HP Entrenado = ((HP Base + Heredado) / 77) * HP Nominal
+  const hpBaseTotal = hpBase + heredados.HP;
+  const hpTrained = calcHPEntrenado(hpBaseTotal, currentDistribution.hpNominal);
+  const atkTrained = currentDistribution.atkNominal;
+  const spdTrained = currentDistribution.spdNominal;
+
+  // Actualizar Stats Digi (Base + Heredado)
+  document.getElementById('hp-digi').textContent = hpBase + heredados.HP;
+  document.getElementById('atk-digi').textContent = atkBase + heredados.ATK;
+  document.getElementById('spd-digi').textContent = spdBase + heredados.Vel;
+  document.getElementById('def-digi').textContent = defBase + heredados.DEF;
+
+  // Actualizar Entrenado
+  document.getElementById('hp-trained').textContent = hpTrained;
+  document.getElementById('atk-trained').textContent = atkTrained;
+  document.getElementById('spd-trained').textContent = spdTrained;
+
+  // Actualizar Total = Base + Heredados + Entrenado
+  document.getElementById('hp-total').textContent = hpBase + heredados.HP + hpTrained;
+  document.getElementById('atk-total').textContent = atkBase + heredados.ATK + atkTrained;
+  document.getElementById('spd-total').textContent = spdBase + heredados.Vel + spdTrained;
+  document.getElementById('def-total').textContent = defBase + heredados.DEF;
+
+  // Actualizar % (porcentaje de los 700 puntos)
+  const hpPercent = Math.round((currentDistribution.hpNominal / MAX_POINTS) * 100);
+  const atkPercent = Math.round((currentDistribution.atkNominal / MAX_POINTS) * 100);
+  const spdPercent = Math.round((currentDistribution.spdNominal / MAX_POINTS) * 100);
+  document.getElementById('hp-percent-display').textContent = `${hpPercent}%`;
+  document.getElementById('atk-percent-display').textContent = `${atkPercent}%`;
+  document.getElementById('spd-percent-display').textContent = `${spdPercent}%`;
+}
+
+/**
+ * Actualiza la línea evolutiva mini en la tarjeta con iconos
+ */
+function updateEvoLineMini() {
+  const container = document.getElementById('evo-line-mini');
+  if (!currentDigimon) {
+    container.innerHTML = '<span style="color:#666">---</span>';
+    return;
+  }
+
+  const mainData = fullDigimonReqDict[currentDigimon];
+  if (!mainData) {
+    container.innerHTML = '<span style="color:#666">---</span>';
+    return;
+  }
+
+  const currentLevel = mainData.Nivel;
+  const elements = [];
+
+  // Recorrer niveles de menor a mayor
+  for (let nivel = 1; nivel <= currentLevel; nivel++) {
+    const name = plannedEvolutionLine[nivel];
+    if (name) {
+      const iconName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const isCurrent = (name === currentDigimon) ? 'current' : '';
+      elements.push(`<img class="evo-mini-icon ${isCurrent}" src="${imgUrl('icon/' + iconName + '.png')}" alt="${name}" title="${name}" onerror="this.style.display='none'">`);
+    }
+  }
+
+  if (elements.length > 0) {
+    container.innerHTML = elements.join('<span class="evo-mini-arrow">→</span>');
+  } else {
+    container.innerHTML = '<span style="color:#666">---</span>';
+  }
+}
+
+function updateEquivDisplay() {
+  document.getElementById('hp-equiv').textContent = `${currentDistribution.hpNominal} / 700`;
+  document.getElementById('atk-equiv').textContent = `${currentDistribution.atkNominal} / 700`;
+  document.getElementById('spd-equiv').textContent = `${currentDistribution.spdNominal} / 700`;
+}
+
+function updateInputsFromDistribution() {
+  const hpBase = getHPBase();
+  const heredados = calcularStatsHeredados();
+  const hpBaseTotal = hpBase + heredados.HP;
+
+  // HP: mostrar el Entrenado calculado desde los puntos nominales
+  const hpTrained = calcHPEntrenado(hpBaseTotal, currentDistribution.hpNominal);
+  document.getElementById('hp-trained-input').value = hpTrained;
+  document.getElementById('hp-percent').value = nominalToPercent(currentDistribution.hpNominal);
+
+  document.getElementById('atk-nominal').value = currentDistribution.atkNominal;
+  document.getElementById('atk-percent').value = nominalToPercent(currentDistribution.atkNominal);
+
+  document.getElementById('spd-nominal').value = currentDistribution.spdNominal;
+  document.getElementById('spd-percent').value = nominalToPercent(currentDistribution.spdNominal);
+}
+
+// ===== INPUT HANDLERS =====
+function setupInputHandlers() {
+  // HP - el usuario ingresa el HP Entrenado directamente
+  const hpTrainedInput = document.getElementById('hp-trained-input');
+  const hpPercentInput = document.getElementById('hp-percent');
+  const hpGroup = document.getElementById('hp-group');
+
+  hpTrainedInput.addEventListener('input', (e) => {
+    const hpBase = getHPBase();
+    if (hpBase === 0) return;
+
+    const heredados = calcularStatsHeredados();
+    const hpBaseTotal = hpBase + heredados.HP;
+    let hpTrained = parseInt(e.target.value) || 0;
+    hpTrained = Math.max(0, hpTrained);
+
+    // Calcular HP Nominal desde HP Entrenado
+    let hpNominal = calcHPNominal(hpBaseTotal, hpTrained);
+
+    // Check limit
+    const otherTotal = currentDistribution.atkNominal + currentDistribution.spdNominal;
+    const maxAllowed = MAX_POINTS - otherTotal;
+
+    if (hpNominal > maxAllowed) {
+      hpNominal = maxAllowed;
+      const maxHpTrained = calcHPEntrenado(hpBaseTotal, hpNominal);
+      e.target.value = maxHpTrained;
+      hpGroup.classList.add('error');
+      setTimeout(() => hpGroup.classList.remove('error'), 500);
+    }
+
+    currentDistribution.hpNominal = hpNominal;
+    hpPercentInput.value = nominalToPercent(hpNominal);
+    updateUI();
+  });
+
+  hpPercentInput.addEventListener('input', (e) => {
+    let percent = parseInt(e.target.value) || 0;
+    percent = Math.max(0, Math.min(100, percent));
+    let hpNominal = percentToNominal(percent);
+
+    const otherTotal = currentDistribution.atkNominal + currentDistribution.spdNominal;
+    const maxAllowed = MAX_POINTS - otherTotal;
+
+    if (hpNominal > maxAllowed) {
+      hpNominal = maxAllowed;
+      percent = nominalToPercent(hpNominal);
+      e.target.value = percent;
+      hpGroup.classList.add('error');
+      setTimeout(() => hpGroup.classList.remove('error'), 500);
+    }
+
+    currentDistribution.hpNominal = hpNominal;
+    const hpBase = getHPBase();
+    const heredados = calcularStatsHeredados();
+    const hpBaseTotal = hpBase + heredados.HP;
+    const hpTrained = calcHPEntrenado(hpBaseTotal, hpNominal);
+    hpTrainedInput.value = hpTrained;
+    updateUI();
+  });
+
+  // ATK and SPD - use Nominal/Trained input directly
+  ['atk', 'spd'].forEach(stat => {
+    const nominalInput = document.getElementById(`${stat}-nominal`);
+    const percentInput = document.getElementById(`${stat}-percent`);
+    const group = document.getElementById(`${stat}-group`);
+
+    nominalInput.addEventListener('input', (e) => {
+      let value = parseInt(e.target.value) || 0;
+      value = Math.max(0, value);
+
+      const otherStat = stat === 'atk' ? 'spd' : 'atk';
+      const otherTotal = currentDistribution.hpNominal + currentDistribution[`${otherStat}Nominal`];
+      const maxAllowed = MAX_POINTS - otherTotal;
+
+      if (value > maxAllowed) {
+        value = maxAllowed;
+        e.target.value = value;
+        group.classList.add('error');
+        setTimeout(() => group.classList.remove('error'), 500);
+      }
+
+      currentDistribution[`${stat}Nominal`] = value;
+      percentInput.value = nominalToPercent(value);
+      updateUI();
+    });
+
+    percentInput.addEventListener('input', (e) => {
+      let percent = parseInt(e.target.value) || 0;
+      percent = Math.max(0, Math.min(100, percent));
+      let nominal = percentToNominal(percent);
+
+      const otherStat = stat === 'atk' ? 'spd' : 'atk';
+      const otherTotal = currentDistribution.hpNominal + currentDistribution[`${otherStat}Nominal`];
+      const maxAllowed = MAX_POINTS - otherTotal;
+
+      if (nominal > maxAllowed) {
+        nominal = maxAllowed;
+        percent = nominalToPercent(nominal);
+        e.target.value = percent;
+        group.classList.add('error');
+        setTimeout(() => group.classList.remove('error'), 500);
+      }
+
+      currentDistribution[`${stat}Nominal`] = nominal;
+      nominalInput.value = nominal;
+      updateUI();
+    });
+  });
+}
+
+// ===== LINEAGE =====
+document.getElementById('save-lineage-btn').addEventListener('click', () => {
+  if (!currentDigimon) {
+    showToast('Selecciona un Digimon primero', 'error');
+    return;
+  }
+  savedLineageDistribution = { ...currentDistribution };
+  updateLineageUI();
+  showToast('Distribución guardada', 'success');
+});
+
+document.getElementById('apply-lineage-btn').addEventListener('click', () => {
+  if (!savedLineageDistribution) {
+    showToast('No hay distribución guardada', 'error');
+    return;
+  }
+  if (!currentDigimon) {
+    showToast('Selecciona un Digimon primero', 'error');
+    return;
+  }
+  currentDistribution = { ...savedLineageDistribution };
+  updateInputsFromDistribution();
+  updateUI();
+  showToast('Distribución aplicada', 'success');
+});
+
+function updateLineageUI() {
+  const btn = document.getElementById('apply-lineage-btn');
+  if (!btn) return;
+
+  if (savedLineageDistribution) {
+    btn.disabled = false;
+    btn.title = `HP ${savedLineageDistribution.hpNominal} | ATK ${savedLineageDistribution.atkNominal} | SPD ${savedLineageDistribution.spdNominal}`;
+  } else {
+    btn.disabled = true;
+    btn.title = 'Sin datos guardados';
+  }
+}
+
+// ===== SAVE SLOTS (LOCAL + CLOUD) =====
+let cloudSlots = {}; // Cache de slots en la nube
+
+function getLocalSlots() {
+  try {
+    return JSON.parse(localStorage.getItem('statsCalcSlots') || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function getSavedSlots() {
+  // Si está logueado, usar slots de la nube
+  if (currentUser) {
+    return cloudSlots;
+  }
+  return getLocalSlots();
+}
+
+/**
+ * Guarda la distribución actual con nombre automático: DigimonDist%Fecha
+ */
+async function saveSlot() {
+  if (!currentDigimon) {
+    showToast('Selecciona un Digimon primero', 'error');
+    return;
+  }
+
+  const total = getTotalPoints();
+  const percent = Math.round((total / MAX_POINTS) * 100);
+  const date = new Date();
+  const dateStr = `${date.getDate()}/${date.getMonth() + 1}`;
+  const key = `${currentDigimon}_${percent}%_${dateStr}`;
+
+  const slotData = {
+    digimon: currentDigimon,
+    tama: currentTama,
+    distribution: { ...currentDistribution },
+    evolutionLine: { ...plannedEvolutionLine },
+    date: date.toISOString()
+  };
+
+  if (currentUser) {
+    // Guardar en Supabase
+    const { error } = await supabaseClient
+      .from('stat_calculator_saves')
+      .upsert({
+        user_id: currentUser.id,
+        slot_key: key,
+        data: slotData,
+        updated_at: date.toISOString()
+      }, { onConflict: 'user_id,slot_key' });
+
+    if (error) {
+      showToast('Error al guardar en la nube', 'error');
+      console.error(error);
+      return;
+    }
+    cloudSlots[key] = slotData;
+    showToast(`☁️ Guardado: ${key}`, 'success');
+  } else {
+    // Guardar en localStorage
+    const slots = getLocalSlots();
+    slots[key] = slotData;
+    localStorage.setItem('statsCalcSlots', JSON.stringify(slots));
+    showToast(`💾 Guardado: ${key}`, 'success');
+  }
+
+  populateSlotsSelect();
+}
+
+/**
+ * Carga un slot desde el selector
+ */
+function loadSlot(key) {
+  if (!key) return;
+
+  const slots = getSavedSlots();
+  const slot = slots[key];
+  if (!slot) return;
+
+  // Seleccionar digimon
+  const data = fullDigimonReqDict[slot.digimon];
+  if (data) {
+    document.getElementById('nivelSelect').value = data.Nivel;
+    populateDigimonSelect(data.Nivel);
+    document.getElementById('digimonSelect').value = slot.digimon;
+    selectDigimon(slot.digimon);
+
+    // Restaurar línea evolutiva si existe
+    if (slot.evolutionLine) {
+      plannedEvolutionLine = { ...slot.evolutionLine };
+      renderEvolutionLine(slot.digimon);
+      updateEvoLineMini();
+    }
+
+    // Desbloquear stats y aplicar distribución
+    updateStatsLock();
+    currentDistribution = { ...slot.distribution };
+    updateInputsFromDistribution();
+    updateUI();
+    showToast(`Cargado: ${slot.digimon}`, 'success');
+  }
+
+  // Reset selector
+  document.getElementById('load-slot-select').value = '';
+}
+
+/**
+ * Carga slots desde Supabase
+ */
+async function loadCloudSlots() {
+  if (!currentUser) return;
+
+  const { data, error } = await supabaseClient
+    .from('stat_calculator_saves')
+    .select('slot_key, data')
+    .eq('user_id', currentUser.id);
+
+  if (error) {
+    console.error('Error loading cloud slots:', error);
+    return;
+  }
+
+  cloudSlots = {};
+  if (data) {
+    data.forEach(row => {
+      cloudSlots[row.slot_key] = row.data;
+    });
+  }
+  populateSlotsSelect();
+}
+
+/**
+ * Llena el selector de slots
+ */
+function populateSlotsSelect() {
+  const select = document.getElementById('load-slot-select');
+  const slots = getSavedSlots();
+  const keys = Object.keys(slots).sort((a, b) => {
+    return new Date(slots[b].date) - new Date(slots[a].date);
+  });
+
+  const prefix = currentUser ? '☁️ ' : '💾 ';
+  select.innerHTML = `<option value="">${prefix}Cargar slot...</option>`;
+
+  if (keys.length === 0) {
+    select.innerHTML += '<option value="" disabled>Sin slots guardados</option>';
+    return;
+  }
+
+  keys.forEach(key => {
+    const slot = slots[key];
+    const dist = slot.distribution;
+    select.innerHTML += `<option value="${key}">${key} (${dist.hpNominal}/${dist.atkNominal}/${dist.spdNominal})</option>`;
+  });
+}
+
+// ===== DOWNLOAD CARD =====
+function downloadCard() {
+  if (!currentDigimon) {
+    showToast('Selecciona un Digimon primero', 'error');
+    return;
+  }
+
+  const card = document.getElementById('digi-card');
+
+  // Use html2canvas if available, otherwise fallback to simple method
+  if (typeof html2canvas !== 'undefined') {
+    html2canvas(card, {
+      backgroundColor: '#1a1a2e',
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = `${currentDigimon}_stats.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('Imagen descargada', 'success');
+    }).catch(() => {
+      downloadCardFallback();
+    });
+  } else {
+    downloadCardFallback();
+  }
+}
+
+function downloadCardFallback() {
+  // Fallback: create text summary
+  const data = fullDigimonReqDict[currentDigimon];
+  const stats = data?.["Stat Base"] || {};
+  const hpBase = stats.HP || 0;
+  const heredados = calcularStatsHeredados();
+  const hpBaseTotal = hpBase + heredados.HP;
+  const hpTrained = calcHPEntrenado(hpBaseTotal, currentDistribution.hpNominal);
+
+  const hpDigi = hpBase + heredados.HP;
+  const atkDigi = (stats.ATK || 0) + heredados.ATK;
+  const spdDigi = (stats.Vel || 0) + heredados.Vel;
+  const defDigi = (stats.DEF || 0) + heredados.DEF;
+
+  const text = `${currentDigimon} (${data.Tama})
+Nivel: ${nivelAEtapa[data.Nivel]}
+================================
+HP:  Digi ${hpDigi} + Entren ${hpTrained} = ${hpDigi + hpTrained}
+ATK: Digi ${atkDigi} + Entren ${currentDistribution.atkNominal} = ${atkDigi + currentDistribution.atkNominal}
+SPD: Digi ${spdDigi} + Entren ${currentDistribution.spdNominal} = ${spdDigi + currentDistribution.spdNominal}
+DEF: ${defDigi}
+================================
+Distribución: HP ${currentDistribution.hpNominal} | ATK ${currentDistribution.atkNominal} | SPD ${currentDistribution.spdNominal}
+Total: ${getTotalPoints()} / 700`;
+
+  const blob = new Blob([text], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.download = `${currentDigimon}_stats.txt`;
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  showToast('Archivo de texto descargado', 'success');
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  createTamaIcons();
+  initSearch();
+  setupInputHandlers();
+  populateSlotsSelect();
+  updateLineageUI();
+  updateStatsLock(); // Iniciar bloqueado hasta que se complete la línea evolutiva
+
+  // Save slot button
+  document.getElementById('save-slot-btn').addEventListener('click', saveSlot);
+
+  // Load slot selector
+  document.getElementById('load-slot-select').addEventListener('change', (e) => {
+    loadSlot(e.target.value);
+  });
+});
+</script>
+
+<!-- Supabase (for future cloud save) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="auth.js"></script>
+<script>
+// Auth integration for cloud save slots
+async function onLogin(session) {
+  currentUser = session.user;
+  await loadCloudSlots();
+  showToast('☁️ Conectado - slots en la nube', 'success');
+}
+function onLogout() {
+  currentUser = null;
+  cloudSlots = {};
+  populateSlotsSelect(); // Volver a mostrar slots locales
+}
+if (typeof initAuth === 'function') {
+  initAuth(onLogin, onLogout);
+}
+</script>
+
+</body>
+</html>

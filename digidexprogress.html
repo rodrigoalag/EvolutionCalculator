@@ -752,6 +752,7 @@ dialog::backdrop { background: rgba(6,8,20,.78); }
 <div class="wrap">
   <div style="text-align: center; padding: 1rem 0 0.5rem;">
     <h1 style="font-size: 2rem; margin-bottom: 0.25rem;" data-t="pageTitle">Digidex Progress</h1>
+    <div id="totalProgress" style="font-size: 0.95rem; color: var(--muted); margin-top: 0.5rem;"></div>
   </div>
 </div>
 
@@ -824,6 +825,7 @@ const LEVELS = ["Baby I", "Baby II", "Child", "Adult", "Perfect", "Ultimate"];
 const I18N = {
   es: {
     pageTitle: "Digidex Progress",
+    totalProgress: "Progreso Total",
     pickTama: "Selecciona tu Tama",
     progress: "Progreso",
     obtained: "obtenidos",
@@ -856,6 +858,7 @@ const I18N = {
   },
   en: {
     pageTitle: "Digidex Progress",
+    totalProgress: "Total Progress",
     pickTama: "Select your Tama",
     progress: "Progress",
     obtained: "obtained",
@@ -1016,6 +1019,27 @@ function renderFilters() {
   ).join("");
 }
 
+function renderTotalProgress() {
+  // Calcular todos los Digimon únicos del juego
+  const allUniqueDigimon = new Set();
+  Object.values(roster).forEach(digimonList => {
+    digimonList.forEach(d => allUniqueDigimon.add(d.name));
+  });
+
+  // Calcular cuántos únicos ha obtenido el usuario
+  const obtainedUnique = new Set();
+  [...allTamas].forEach(t => {
+    const gotSet = state.got[t] || new Set();
+    gotSet.forEach(name => obtainedUnique.add(name));
+  });
+
+  const total = allUniqueDigimon.size;
+  const obtained = obtainedUnique.size;
+  const percentage = total > 0 ? (obtained / total * 100).toFixed(1) : 0;
+
+  $("totalProgress").innerHTML = `${T().totalProgress}: <b style="color: var(--accent);">${obtained} / ${total}</b> ${T().obtained} · <b style="color: var(--accent);">${percentage}%</b>`;
+}
+
 function renderSummary() {
   const list = cur();
   const n = list.filter(d => got().has(d.name)).length;
@@ -1064,6 +1088,7 @@ async function renderAll() {
   renderText();
   renderEggs();
   renderFilters();
+  renderTotalProgress();
   renderSummary();
   await renderLevels();
 }
@@ -1137,6 +1162,7 @@ async function loadFromCloud() {
           state.got[t] = new Set(data.progress[t]);
         }
       });
+      renderTotalProgress();
       renderSummary();
       renderLevels();
       console.log('Progress loaded from cloud');
@@ -1153,6 +1179,7 @@ $("eggs").addEventListener("click", e => {
   state.tama = b.dataset.id;
   state.winner = null;
   renderEggs();
+  renderTotalProgress();
   renderSummary();
   renderLevels();
 });
@@ -1182,6 +1209,7 @@ $("levels").addEventListener("click", e => {
   // Save to cloud if logged in
   saveToCloud();
 
+  renderTotalProgress();
   renderSummary();
   if (state.filter === "all") {
     b.setAttribute("aria-pressed", s.has(name));
@@ -1211,12 +1239,14 @@ function bulk(fill, msg) {
   // Save to cloud
   saveToCloud();
 
+  renderTotalProgress();
   renderSummary();
   renderLevels();
   toast(msg, () => {
     state.got[id] = before;
     localStorage.setItem('digimonChecklist', JSON.stringify(state.got));
     saveToCloud();
+    renderTotalProgress();
     renderSummary();
     renderLevels();
   });
@@ -1229,6 +1259,7 @@ $("lang").onchange = e => {
   state.lang = e.target.value;
   window.currentLang = state.lang; // Para auth.js
   localStorage.setItem('digidexLang', state.lang);
+  renderTotalProgress();
   renderAll();
   if ($("dlg").open) renderWheelUI();
   // Actualizar textos de auth si está cargado

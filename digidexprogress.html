@@ -3,27 +3,47 @@
 <head>
   <script src="img-config.js"></script>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Digimon Collection Checklist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Digidex Progress</title>
   <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/digitamafivicon.png"/>
+  <link rel="stylesheet" href="auth.css">
   <style>
+:root {
+  color-scheme: dark;
+  --bg: #1a1a2e;
+  --bg-deep: #16213e;
+  --panel: #1e2540;
+  --slot: #232b50;
+  --slot-hover: #2d3763;
+  --line: #333d6b;
+  --fg: #e0e0e0;
+  --muted: #a3acd4;
+  --accent: #4ecdc4;
+  --accent-ink: #0c1024;
+  --lv0: #ff93b8;
+  --lv1: #ffb25c;
+  --lv2: #a4e05a;
+  --lv3: #41d9c6;
+  --lv4: #6fb4ff;
+  --lv5: #c79bff;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
 * { box-sizing: border-box; }
 body {
+  margin: 0;
+  padding: 0;
+  padding-top: 70px;
   font-family: system-ui, -apple-system, sans-serif;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
-  color: #e0e0e0;
-  min-height: 100vh;
-  margin: 0;
-  padding: 1rem;
-  padding-top: 70px;
+  background-attachment: fixed;
+  color: var(--fg);
 }
-h1, h2, h3 { color: #4ecdc4 !important; }
-header h1 { color: #4ecdc4 !important; }
-
-/* Ocultar menú viejo */
-header { display: none !important; }
-header nav { display: none !important; }
-#nav-menu { display: block !important; }
+h1, h2, h3 { margin: 0; font-weight: 600; color: var(--accent); }
+button, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* Menú hamburguesa */
 #nav-toggle {
@@ -155,283 +175,519 @@ header nav { display: none !important; }
 }
 #nav-overlay.active { display: block; }
 
-main {
-  max-width: 1200px;
+.wrap {
+  max-width: 1320px;
   margin: 0 auto;
-  text-align: center;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
-/* Tama Icon Selector */
-.tama-selector-section {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.tama-selector-section h3 {
-  margin-bottom: 0.8rem;
-  color: #4ecdc4;
-  font-size: 1rem;
-}
-
-#tama-icons {
+/* Top bar */
+.top-bar {
+  position: fixed;
+  top: 12px;
+  right: 15px;
+  z-index: 200;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-.tama-icon-btn {
-  width: 50px;
-  height: 60px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(78,205,196,0.3);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 4px;
-  transition: all 0.2s;
+  gap: 10px;
 }
-
-.tama-icon-btn:hover {
-  border-color: #4ecdc4;
-  transform: scale(1.05);
-  background: rgba(78, 205, 196, 0.15);
-}
-
-.tama-icon-btn.active {
-  border-color: #4ecdc4;
-  box-shadow: 0 0 12px rgba(78, 205, 196, 0.5);
-  background: rgba(78, 205, 196, 0.2);
-}
-
-.tama-icon-btn img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-
-.tama-icon-btn span {
-  display: block;
-  font-size: 9px;
-  text-align: center;
-  margin-top: 2px;
-  color: #888;
-}
-
-.tama-icon-btn.active span {
-  color: #4ecdc4;
-}
-
-/* Selector de idioma */
-#selectorContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 2rem auto;
-}
-
-.selectorItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.selectorItem label {
-  color: #4ecdc4;
-  font-weight: bold;
-  font-size: 0.95rem;
-}
-
-#selectIdioma {
+.top-bar select {
   background: rgba(30, 30, 50, 0.9);
   color: white;
-  border: 1px solid rgba(78, 205, 196, 0.3);
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
   cursor: pointer;
-  font-size: 0.85rem;
+}
+.top-bar select:hover { border-color: #4ecdc4; }
+#auth-widget { display: flex; align-items: center; }
+
+/* Tama selector */
+.selector { padding-block: 18px 6px; }
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: .04em;
+}
+.eggs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 4px 10px;
+  margin-inline: -4px;
+}
+.egg {
+  flex: 0 0 auto;
+  width: 56px;
+  padding: 8px 0 5px;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+.egg img {
+  width: 28px;
+  height: 32px;
+  display: block;
+  object-fit: contain;
+}
+.egg:hover { background: var(--slot); }
+.egg[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(78,205,196,.45);
+}
+
+/* Summary bar */
+.summary {
+  position: sticky;
+  top: 70px;
+  z-index: 5;
+  background: var(--bg);
+  border-block: 1px solid var(--line);
+}
+.summary .wrap {
+  display: grid;
+  gap: 10px;
+  padding-block: 12px;
+}
+.sum-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+}
+.sum-title {
+  font-size: 20px;
+  margin-right: 2px;
+}
+.count {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.count b {
+  color: var(--fg);
+  font-size: 18px;
+}
+.sum-actions {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.seg {
+  display: inline-flex;
+  background: var(--bg-deep);
+  border-radius: 7px;
+  padding: 2px;
+}
+.seg button {
+  background: none;
+  border: 0;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.seg button[aria-pressed="true"] {
+  background: var(--slot-hover);
+  color: var(--fg);
+}
+.btn {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 11px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.btn:hover { background: var(--slot); }
+.btn-spin {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 0;
+  border-radius: 7px;
+  padding: 8px 16px;
+  font: 700 14px/1.1 var(--display);
+  box-shadow: 0 3px 0 #2a8f81;
+}
+.btn-spin:hover { filter: brightness(1.08); }
+.btn-spin:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #2a8f81;
+}
+.btn-spin:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.bar {
+  display: flex;
+  gap: 3px;
+  height: 9px;
+}
+.bar span {
+  display: block;
+  min-width: 8px;
+  background: var(--bg-deep);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar i {
+  display: block;
+  height: 100%;
+  background: var(--c);
+  transition: width .25s;
+}
+
+/* Level panels */
+.levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-block: 16px 20px;
+  align-items: flex-start;
+}
+.level {
+  min-width: min(100%, 124px);
+  max-width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.level-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 10px;
+  background: var(--bg-deep);
+  border-radius: 7px 7px 0 0;
+  border-bottom: 2px solid var(--c);
+}
+.level-head h2 {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--c);
+  white-space: nowrap;
+}
+.level-head span {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.level.done .level-head span {
+  color: var(--c);
+  font-weight: 700;
+}
+.cells {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 4px;
+  padding: 6px;
+}
+
+/* Dex cell */
+.cell {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 7px 3px 5px;
+  background: var(--slot);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.2;
+  transition: background .15s;
+}
+.cell img {
+  width: 66px;
+  height: 66px;
+  image-rendering: pixelated;
+  display: block;
+  filter: grayscale(1) brightness(.55);
+  opacity: .75;
+  transition: filter .2s, opacity .2s, transform .15s;
+}
+.cell:hover { background: var(--slot-hover); }
+.cell:hover img {
+  filter: grayscale(.55) brightness(.8);
+  opacity: 1;
+  transform: translateY(-2px);
+}
+.cell .name {
+  min-height: 2.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  word-break: break-word;
+  hyphens: auto;
+  padding: 0 2px;
+  width: 100%;
+}
+.cell[aria-pressed="true"] {
+  color: var(--fg);
+  background: var(--slot);
+  border-color: color-mix(in srgb, var(--c) 55%, transparent);
+}
+.cell[aria-pressed="true"] img {
+  filter: none;
+  opacity: 1;
+  animation: pop .22s ease-out;
+}
+.cell .tick {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  display: none;
+  place-items: center;
+  background: var(--c);
+  color: var(--bg-deep);
+}
+.cell[aria-pressed="true"] .tick { display: grid; }
+.tick svg { width: 11px; height: 11px; }
+@keyframes pop { 40% { transform: scale(1.18); } }
+.empty {
+  width: 100%;
+  padding: 36px 16px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Roulette dialog */
+dialog {
+  width: min(1020px, calc(100vw - 20px));
+  max-width: none;
+  max-height: calc(100dvh - 20px);
+  padding: 0;
+  overflow: auto;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+dialog::backdrop { background: rgba(6,8,20,.78); }
+.dlg-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--line);
+}
+.dlg-head h2 {
+  font-size: 20px;
+  color: var(--accent);
+  margin-right: auto;
+}
+.dlg-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+}
+.stage {
+  padding: 18px 16px;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  align-content: start;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.wheel-box {
+  position: relative;
+  width: min(100%, 400px);
+  aspect-ratio: 1;
+}
+#wheel {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.pointer {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  z-index: 1;
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-top: 24px solid var(--fg);
+  filter: drop-shadow(0 2px 0 var(--bg-deep));
+}
+.result {
+  width: 100%;
+  max-width: 400px;
+  min-height: 104px;
+  display: grid;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.result .hint {
+  color: var(--muted);
+  text-align: center;
+}
+.won {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  animation: pop .3s ease-out;
+}
+.won img {
+  width: 72px;
+  height: 72px;
+  image-rendering: pixelated;
+  flex: none;
+}
+.won > div {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+.won small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.won strong {
+  font: 700 16px/1.15 var(--display);
+}
+.picker {
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  min-width: 0;
+}
+.picker h3 {
+  font-size: 14px;
+  font-weight: 400;
+}
+.picker p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 13px;
+  font-weight: 600;
   transition: all 0.2s;
 }
-
-#selectIdioma:hover {
-  border-color: #4ecdc4;
-  background: rgba(30, 30, 50, 0.95);
+.chip:hover { background: var(--slot); }
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+.chip.lv {
+  border-color: var(--c);
+  color: var(--c);
+}
+.chip.lv[aria-pressed="true"] {
+  background: var(--c);
+  color: var(--bg-deep);
+}
+.pool {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap: 4px;
+  max-height: 330px;
+  overflow-y: auto;
+  padding: 2px;
+}
+.pool button {
+  background: var(--slot);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 3px;
+  display: grid;
+}
+.pool img {
+  width: 100%;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  filter: grayscale(1) brightness(.5);
+  opacity: .6;
+}
+.pool button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--slot-hover);
+}
+.pool button[aria-pressed="true"] img {
+  filter: none;
+  opacity: 1;
 }
 
-#selectIdioma:focus {
-  outline: none;
-  border-color: #4ecdc4;
-  box-shadow: 0 0 8px rgba(78, 205, 196, 0.3);
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  background: var(--bg-deep);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 14px;
+}
+.toast[hidden] { display: none; }
+.toast button {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  font-weight: 700;
+  padding: 0;
+  text-decoration: underline;
 }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    #selectorContainer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-      margin: 2rem auto;
-    }
-
-    .selectorItem {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    /* Estilos para la tabla de checklist */
-    .checklist-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 2rem;
-      overflow-x: auto;
-    }
-
-    .checklist-table th,
-    .checklist-table td {
-      padding: 0.75rem;
-      text-align: center;
-      border: 1px solid #ddd;
-      vertical-align: middle;
-    }
-
-    .checklist-table th {
-      background-color: transparent;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-    }
-
-    /* Estilos para las imágenes en la tabla */
-    .digimon-img {
-      width: 80px !important;
-      height: 80px !important;
-      object-fit: contain;
-      border-radius: 8px;
-      background-color: transparent;
-    }
-
-    /* Estilos para filas obtenidas */
-    .row-obtained {
-      background-color: rgba(76, 175, 80, 0.1);
-    }
-
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .checkbox-container input[type="checkbox"] {
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-    }
-
-    .stats-header {
-      background-color: transparent;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .stats-header h2 {
-      margin: 0 0 0.5rem 0;
-    }
-
-    .total-stats {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      font-size: 1.1rem;
-    }
-
-    .controls {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .controls button {
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-
-    /* Responsividad */
-    @media (max-width: 768px) {
-      .container {
-        max-width: 100%;
-        overflow-x: auto;
-      }
-      
-      .digimon-img {
-        width: 60px !important;
-        height: 60px !important;
-      }
-      
-      .checklist-table {
-        font-size: 0.8rem;
-      }
-      
-      .checklist-table th,
-      .checklist-table td {
-        padding: 0.5rem;
-        font-size: 0.85rem;
-      }
-
-      .tama-selector-section h3 {
-        margin-bottom: 0.5rem;
-      }
-
-      .tama-icon-btn {
-        width: 42px;
-        height: 50px;
-        padding: 3px;
-      }
-
-      .tama-icon-btn img {
-        width: 26px;
-        height: 26px;
-      }
-
-      .tama-icon-btn span {
-        font-size: 8px;
-      }
-
-      #tama-icons {
-        gap: 5px;
-      }
-    }
-
-    /* Wrapper para scroll horizontal en móviles */
-    .table-wrapper {
-      overflow-x: auto;
-      width: 100%;
-    }
+@media (max-width: 800px) {
+  .dlg-grid { grid-template-columns: minmax(0, 1fr); }
+  .stage { border-right: 0; border-bottom: 1px solid var(--line); }
+  .pool { max-height: none; }
+  .sum-actions { margin-left: 0; }
+  .cells { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
+  .cell { font-size: 10px; }
+  .cell img { width: 56px; height: 56px; }
+  .brand { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation: none !important; transition: none !important; }
+}
   </style>
 </head>
 
@@ -480,158 +736,215 @@ main {
   </div>
 </nav>
 
-  <script src="FullDigimonReqDict.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="FullDigimonReqDict.js"></script>
 
-  <header>
-    <h1>Digimon Collection Checklist</h1>
-    <p>Creado por Rodrigoalag</p>
-    <nav>
-      <a href="./index.html">Main Hub</a>
-      <a href="./calculadora.html">Digimon Evo Calc</a>
-      <a href="./digimonreqs.html">Digimon Reqs</a>
-      <a href="./StatRanking.html">Digimon Stat Ranking</a>
-      <a href="./arbolevolutivo.html">Digimon Evolutive Tree</a>
-	  <a href="./digidexprogress.html">Digidex Progress Checklist</a>
-	  <a href="./BalanceCalculator.html">Balance Calculator</a>
-      <a href="./Enemigosdelared.html">Enemigos de la Red</a>
-      <a href="./dropsdelared.html">Drops de la Red</a>
-      <a target="_blank" href="https://ndcalcs.github.io/">Carrow Website - General Info</a>
-      <a target="_blank" href="https://whiterickle.neocities.org/Road%20To%20Perfect">WhiteRickle Website - Road To Perfect - Guides and Calculator</a>
-      <a target="_blank" href="https://driverdatabase.neocities.org/Driver%20DB">Driver Installation Guide</a>
-      <a target="_blank" href="https://nd-lifespan-calculator-42a5ee.gitlab.io/">LifeSpan Calculator</a>
-      <a target="_blank" href="https://deck-builder-v2-gilt.vercel.app/">Deck Builder</a>
-    </nav>
-  </header>
+<!-- Top bar con idioma y auth -->
+<div class="top-bar">
+  <select id="lang" aria-label="Idioma">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+  <div id="auth-widget"></div>
+</div>
 
-  <main>
-    <section>
-      <div id="selectorContainer">
-        <div class="tama-selector-section">
-          <h3 id="tamaTitle">Selecciona tu Tama</h3>
-          <div id="tama-icons"></div>
-        </div>
-        <div class="selectorItem">
-          <label for="selectIdioma">Idioma:</label>
-          <select id="selectIdioma">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-          </select>
-        </div>
+<div class="wrap">
+  <div style="text-align: center; padding: 1rem 0 0.5rem;">
+    <h1 style="font-size: 2rem; margin-bottom: 0.25rem;" data-t="pageTitle">Digidex Progress</h1>
+  </div>
+</div>
+
+<section class="selector wrap">
+  <div class="eyebrow" data-t="pickTama"></div>
+  <div class="eggs" id="eggs"></div>
+</section>
+
+<section class="summary">
+  <div class="wrap">
+    <div class="sum-row">
+      <h2 class="sum-title" id="sumTitle"></h2>
+      <div class="count" id="sumCount" aria-live="polite"></div>
+      <div class="sum-actions">
+        <div class="seg" id="filters" role="group"></div>
+        <button class="btn" id="markAll" type="button" data-t="markAll"></button>
+        <button class="btn" id="clearAll" type="button" data-t="clearAll"></button>
+        <button class="btn-spin" id="openWheel" type="button" data-t="wheel"></button>
       </div>
-    </section>
+    </div>
+    <div class="bar" id="bar" aria-hidden="true"></div>
+  </div>
+</section>
 
-    <section class="container">
-      <div class="stats-header" id="statsHeader" style="display: none;">
-        <h2>Progreso del Tama</h2>
-        <div class="total-stats">
-          <div class="stat-item">
-            <span id="labelObtenidos">Obtenidos:</span> <strong id="levelObtained">0</strong> / <strong id="levelTotal">0</strong>
-          </div>
-          <div class="stat-item">
-            <span id="labelPorcentaje">Porcentaje:</span> <strong id="levelPercentage">0%</strong>
-          </div>
-        </div>
+<main class="wrap">
+  <div class="levels" id="levels"></div>
+</main>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="dlg-head">
+    <h2 id="dlgTitle" data-t="wheel"></h2>
+    <button class="btn" id="closeDlg" type="button" data-t="close"></button>
+  </div>
+  <div class="dlg-grid">
+    <div class="stage">
+      <div class="wheel-box">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="800" height="800"></canvas>
       </div>
-
-      <div class="controls" id="controls" style="display: none;">
-        <button onclick="marcarTodosTama()">Marcar Todos</button>
-        <button onclick="desmarcarTodosTama()">Desmarcar Todos</button>
-        <button onclick="exportarDatos()">Exportar Datos</button>
-        <button onclick="importarDatos()">Importar Datos</button>
+      <button class="btn-spin" id="spin" type="button" data-t="spin"></button>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+    <div class="picker">
+      <h3 data-t="whoEnters"></h3>
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px;" data-t="selectTamas"></label>
+        <div class="chips" id="wheelTamas"></div>
       </div>
-
-      <div id="checklistContainer">
-        <div class="table-wrapper">
-          <table id="checklistTable" class="checklist-table" style="display: none;">
-            <thead>
-              <tr>
-                <th>Obtenido</th>
-                <th>Digimon</th>
-                <th>Nivel</th>
-                <th>Imagen</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px;" data-t="filterLevels"></label>
+        <div class="chips" id="wheelLevels"></div>
       </div>
-    </section>
-  </main>
+      <div class="chips">
+        <button class="chip" id="poolMissing" type="button" data-t="poolMissing"></button>
+        <button class="chip" id="poolAll" type="button" data-t="poolAll"></button>
+        <button class="chip" id="poolNone" type="button" data-t="poolNone"></button>
+      </div>
+      <p data-t="poolHelp"></p>
+      <div class="pool" id="pool"></div>
+    </div>
+  </div>
+</dialog>
 
-  <script>
-// Variables globales
-let idiomaActual = 'es';
-let checklistState = {};
+<div class="toast" id="toast" role="status" hidden></div>
 
-// Mapeo de niveles
-const nivelAEtapa = {
-  1: "Baby I",
-  2: "Baby II", 
-  3: "Child",
-  4: "Adult",
-  5: "Perfect",
-  6: "Ultimate"
-};
+<script src="auth.js"></script>
+<script>
+const LEVELS = ["Baby I", "Baby II", "Child", "Adult", "Perfect", "Ultimate"];
 
-// Traducciones
-const traducciones = {
+const I18N = {
   es: {
-    titulo: "Digimon Collection Checklist",
-    seleccionarTama: "Seleccionar Tama:",
-    eligeTama: "-- Elige un Tama --",
-    idioma: "Idioma:",
-    obtenido: "Obtenido",
-    digimon: "Digimon",
-    nivel: "Nivel",
-    imagen: "Imagen",
-    progresoTama: "Progreso del Tama",
-    obtenidos: "Obtenidos:",
-    porcentaje: "Porcentaje:",
+    pageTitle: "Digidex Progress",
+    pickTama: "Selecciona tu Tama",
+    progress: "Progreso",
+    obtained: "obtenidos",
+    all: "Todos",
+    have: "Obtenidos",
+    missing: "Faltantes",
+    markAll: "Marcar todos",
+    clearAll: "Desmarcar todos",
+    wheel: "Ruleta",
+    close: "Cerrar",
+    spin: "Girar",
+    whoEnters: "¿Quién entra en la ruleta?",
+    selectTamas: "Selecciona Tamas:",
+    filterLevels: "Filtrar por niveles:",
+    poolMissing: "Los que me faltan",
+    poolAll: "Todo seleccionado",
+    poolNone: "Vaciar",
+    poolHelp: "Toca un Digimon para sacarlo o meterlo.",
+    inWheel: n => `${n} en la ruleta. Pulsa Girar.`,
+    needTwo: "Elige al menos 2 Digimon para girar.",
+    nextGoal: "Tu próxima ruta",
+    undo: "Deshacer",
+    markedAll: "Todos marcados.",
+    clearedAll: "Todos desmarcados.",
+    noneHave: "Todavía no hay Digimon obtenidos en este tama.",
+    noneMissing: "No te falta ninguno en este tama.",
+    saved: "Progreso guardado en la nube.",
+    saveFail: "No se pudo guardar en la nube. Intenta más tarde.",
+    loaded: "Progreso cargado desde la nube."
   },
   en: {
-    titulo: "Digimon Collection Checklist",
-    seleccionarTama: "Select Tama:",
-    eligeTama: "-- Choose a Tama --",
-    idioma: "Language:",
-    obtenido: "Obtained",
-    digimon: "Digimon",
-    nivel: "Level",
-    imagen: "Image",
-    progresoTama: "Tama Progress",
-    obtenidos: "Obtained:",
-    porcentaje: "Percentage:",
+    pageTitle: "Digidex Progress",
+    pickTama: "Select your Tama",
+    progress: "Progress",
+    obtained: "obtained",
+    all: "All",
+    have: "Obtained",
+    missing: "Missing",
+    markAll: "Mark all",
+    clearAll: "Unmark all",
+    wheel: "Roulette",
+    close: "Close",
+    spin: "Spin",
+    whoEnters: "Who goes on the wheel?",
+    selectTamas: "Select Tamas:",
+    filterLevels: "Filter by levels:",
+    poolMissing: "The ones I'm missing",
+    poolAll: "All selected",
+    poolNone: "Clear",
+    poolHelp: "Tap a Digimon to add or remove it.",
+    inWheel: n => `${n} on the wheel. Press Spin.`,
+    needTwo: "Pick at least 2 Digimon to spin.",
+    nextGoal: "Your next route",
+    undo: "Undo",
+    markedAll: "All marked.",
+    clearedAll: "All unmarked.",
+    noneHave: "No Digimon obtained in this tama yet.",
+    noneMissing: "Nothing missing in this tama.",
+    saved: "Progress saved to cloud.",
+    saveFail: "Could not save to cloud. Try again later.",
+    loaded: "Progress loaded from cloud."
   }
 };
 
-// Diccionario de nombres de Tama
-const tamaNombres = {
-  "V0": { es: "Cachivaches y Dragones", en: "Devices and Dragons" },
-  "M": { es: "Mutantes", en: "Mutant" },
-  "VS": { es: "Meteoros Xruzados", en: "Xrossing Meteors" },
-  "SP": { es: "Spirits", en: "Spirits" },
-  "D": { es: "Death", en: "Death" },
-  "P": { es: "Plant", en: "Plant" },
-  "VL": { es: "Cielos Liberados", en: "Liberated Skies" },
-  "PR": { es: "Prototipo Alpha", en: "Alpha Prototype" }
+const $ = id => document.getElementById(id);
+const lvColor = i => `var(--lv${i})`;
+
+// Build roster from FullDigimonReqDict
+const roster = {};
+const allTamas = new Set();
+Object.entries(digimonReqDict).forEach(([name, data]) => {
+  if (name.toLowerCase() === "burpmon") return;
+  const tama = data.Tama;
+  const lv = data.Nivel - 1; // Nivel 1 = Baby I (index 0)
+  allTamas.add(tama);
+  if (!roster[tama]) roster[tama] = [];
+  roster[tama].push({ name, lv });
+});
+
+// Sort by level
+Object.keys(roster).forEach(tama => {
+  roster[tama].sort((a, b) => a.lv - b.lv);
+});
+
+const state = {
+  lang: 'es',
+  tama: [...allTamas][0] || 'V0',
+  filter: 'all',
+  userId: null,
+  got: {},
+  pool: {},
+  spinning: false,
+  rotation: 0,
+  winner: null,
+  selectedWheelTamas: new Set([...allTamas][0] ? [[...allTamas][0]] : []),
+  selectedWheelLevels: new Set([2, 3, 4, 5]) // Child, Adult, Perfect, Ultimate
 };
 
-/** Returns the localized display name for a Tama code, including its series name in the current language. */
-const getTamaNombre = (codigo) => {
-  const nombre = tamaNombres[codigo];
-  if (nombre) {
-    return `${codigo} - ${nombre[idiomaActual] || nombre.es}`;
-  }
-  return codigo;
-};
+// Initialize empty sets for all tamas
+[...allTamas].forEach(t => {
+  state.got[t] = new Set();
+});
 
-// Función para generar variaciones de nombre de imagen
-/** Returns an array of filename variations for a Digimon name to maximize image loading success. */
+const T = () => I18N[state.lang];
+const cur = () => roster[state.tama] || [];
+const got = () => state.got[state.tama] || new Set();
+function missingNames() {
+  return cur().filter(d => !got().has(d.name)).map(d => d.name);
+}
+function pool() {
+  if (!state.pool[state.tama]) state.pool[state.tama] = new Set(missingNames());
+  return state.pool[state.tama];
+}
+
+// Image loading with fallback
 function generarVariacionesNombre(nombre) {
   const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/gi, "");
   const nombreEspacios = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "");
   const nombreGuiones = nombre.toLowerCase().replace(/[^a-z0-9\s]/gi, "").replace(/\s+/g, "-");
   const nombreOriginal = nombre.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/\s+/g, "");
-  
+
   return [...new Set([
     nombreLimpio,
     nombreEspacios,
@@ -642,322 +955,601 @@ function generarVariacionesNombre(nombre) {
   ])];
 }
 
-// Cargar estado guardado
-/** Loads and returns the saved checklist state from localStorage. */
-function cargarEstado() {
-  const saved = localStorage.getItem('digimonChecklist');
-  return saved ? JSON.parse(saved) : {};
-}
+const imageCache = {};
+function getDigimonImage(name) {
+  if (imageCache[name]) return Promise.resolve(imageCache[name]);
 
-// Guardar estado
-/** Persists the current checklist state object to localStorage. */
-function guardarEstado(estado) {
-  localStorage.setItem('digimonChecklist', JSON.stringify(estado));
-}
+  return new Promise(resolve => {
+    const variaciones = generarVariacionesNombre(name);
+    let indice = 0;
 
-// Función para obtener todos los Digimon de un Tama ORDENADOS POR NIVEL
-/** Returns all Digimon belonging to the selected Tama, sorted by evolution level. */
-function obtenerDigimonDelTama(tamaSeleccionado) {
-  const digimonDelTama = Object.entries(digimonReqDict)
-    .filter(([nombre, data]) => data.Tama === tamaSeleccionado && nombre.toLowerCase() !== "burpmon")
-    .map(([nombre, data]) => ({
-      nombre: nombre,
-      nivel: data.Nivel
-    }))
-    .sort((a, b) => a.nivel - b.nivel); // Ordenar por nivel
-  
-  return digimonDelTama;
-}
-
-// Función para actualizar estadísticas del tama
-/** Updates the obtained count, total count, and completion percentage displayed in the stats header. */
-function actualizarEstadisticas(digimonDelTama) {
-  const obtenidos = digimonDelTama.filter(d => checklistState[d.nombre]).length;
-  const total = digimonDelTama.length;
-  const porcentaje = total > 0 ? ((obtenidos / total) * 100).toFixed(1) : 0;
-  
-  document.getElementById('levelObtained').textContent = obtenidos;
-  document.getElementById('levelTotal').textContent = total;
-  document.getElementById('levelPercentage').textContent = `${porcentaje}%`;
-}
-
-// Función para manejar el toggle del checkbox
-/** Toggles the obtained state of a Digimon, saves it, and updates the row highlight and statistics. */
-function toggleDigimon(nombre, tamaSeleccionado) {
-  checklistState[nombre] = !checklistState[nombre];
-  guardarEstado(checklistState);
-  
-  const row = document.getElementById(`row-${nombre}`);
-  if (row) {
-    if (checklistState[nombre]) {
-      row.classList.add('row-obtained');
-    } else {
-      row.classList.remove('row-obtained');
-    }
-  }
-  
-  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
-  actualizarEstadisticas(digimonDelTama);
-}
-
-// Función para generar la tabla
-/** Populates the checklist table body with rows for each Digimon in the selected Tama. */
-function generarTabla(digimonDelTama, tbody, tamaSeleccionado) {
-  tbody.innerHTML = "";
-  
-  digimonDelTama.forEach(digimon => {
-    const nombre = digimon.nombre;
-    const nivel = digimon.nivel;
-    
-    const fila = document.createElement("tr");
-    fila.id = `row-${nombre}`;
-    if (checklistState[nombre]) {
-      fila.classList.add('row-obtained');
-    }
-    
-    // Checkbox
-    const tdCheckbox = document.createElement("td");
-    const checkboxContainer = document.createElement("div");
-    checkboxContainer.className = "checkbox-container";
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.id = `check-${nombre}`;
-    checkbox.checked = checklistState[nombre] || false;
-    checkbox.addEventListener('change', () => toggleDigimon(nombre, tamaSeleccionado));
-    checkboxContainer.appendChild(checkbox);
-    tdCheckbox.appendChild(checkboxContainer);
-    fila.appendChild(tdCheckbox);
-    
-    // Nombre del Digimon
-    const tdNombre = document.createElement("td");
-    tdNombre.textContent = nombre;
-    fila.appendChild(tdNombre);
-    
-    // Nivel del Digimon
-    const tdNivel = document.createElement("td");
-    tdNivel.textContent = nivelAEtapa[nivel] || nivel;
-    fila.appendChild(tdNivel);
-    
-    // Imagen
-    const tdImagen = document.createElement("td");
-    const img = document.createElement("img");
-    img.className = "digimon-img";
-    img.alt = nombre;
-    
-    const variaciones = generarVariacionesNombre(nombre);
-    const intentarCargarImagen = (indice = 0) => {
+    function intentarCargar() {
       if (indice >= variaciones.length) {
-        const testPlaceholder = new Image();
-        testPlaceholder.onload = () => {
-          img.src = imgUrl("img/placeholder.png");
-        };
-        testPlaceholder.onerror = () => {
-          img.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSI+Tm8gSW1nPC90ZXh0Pgo8L3N2Zz4K";
-        };
-        testPlaceholder.src = imgUrl("img/placeholder.png");
+        // Fallback to placeholder
+        const url = imgUrl('icon/placeholder.png');
+        imageCache[name] = url;
+        resolve(url);
         return;
       }
 
-      const srcTry = imgUrl('img/' + variaciones[indice] + '.png');
+      const srcTry = imgUrl('icon/' + variaciones[indice] + '.png');
       const testImg = new Image();
       testImg.onload = () => {
-        img.src = srcTry;
+        imageCache[name] = srcTry;
+        resolve(srcTry);
       };
       testImg.onerror = () => {
-        intentarCargarImagen(indice + 1);
+        indice++;
+        intentarCargar();
       };
       testImg.src = srcTry;
+    }
+
+    intentarCargar();
+  });
+}
+
+/* Render */
+function renderText() {
+  document.documentElement.lang = state.lang;
+  document.querySelectorAll("[data-t]").forEach(el => {
+    const key = el.dataset.t;
+    const val = T()[key];
+    if (typeof val === 'function') return;
+    el.textContent = val;
+  });
+}
+
+function renderEggs() {
+  const sorted = [...allTamas].sort();
+  $("eggs").innerHTML = sorted.map(t => `
+    <button class="egg" type="button" data-id="${t}" aria-pressed="${t === state.tama}" aria-label="Tama ${t}">
+      <img src="${imgUrl('Tama/' + t + '.png')}" alt="${t}" onerror="this.style.opacity='0.3'">
+      ${t}
+    </button>
+  `).join("");
+}
+
+function renderFilters() {
+  $("filters").innerHTML = ["all", "have", "missing"].map(f =>
+    `<button type="button" data-f="${f}" aria-pressed="${state.filter === f}">${T()[f]}</button>`
+  ).join("");
+}
+
+function renderSummary() {
+  const list = cur();
+  const n = list.filter(d => got().has(d.name)).length;
+  $("sumTitle").textContent = `${T().progress} ${state.tama}`;
+  $("sumCount").innerHTML = `<b>${n} / ${list.length}</b> ${T().obtained} · <b>${(n / list.length * 100).toFixed(1)}%</b>`;
+  $("bar").innerHTML = LEVELS.map((_, lv) => {
+    const all = list.filter(d => d.lv === lv);
+    const have = all.filter(d => got().has(d.name)).length;
+    return `<span style="flex:${all.length} 1 0;--c:${lvColor(lv)}"><i style="width:${have / all.length * 100}%"></i></span>`;
+  }).join("");
+}
+
+const TICK = `<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.500 5 9.500 10 3" fill="none" stroke="currentColor" stroke-width="2.200"/></svg>`;
+
+async function renderLevels() {
+  const html = await Promise.all(LEVELS.map(async (label, lv) => {
+    const all = cur().filter(d => d.lv === lv);
+    const shown = all.filter(d => state.filter === "all" || (state.filter === "have") === got().has(d.name));
+    if (!shown.length) return "";
+    const have = all.filter(d => got().has(d.name)).length;
+    const basis = Math.min(shown.length, 8) * 97 + 14;
+
+    const cells = await Promise.all(shown.map(async d => {
+      const imgSrc = await getDigimonImage(d.name);
+      return `<button class="cell" type="button" data-name="${d.name}" aria-pressed="${got().has(d.name)}" style="--c:${lvColor(lv)}">
+        <span class="tick">${TICK}</span>
+        <img src="${imgSrc}" alt="">
+        <span class="name">${d.name}</span>
+      </button>`;
+    }));
+
+    return `<section class="level ${have === all.length ? "done" : ""}" style="--c:${lvColor(lv)};flex:${shown.length} 1 min(100%, ${basis}px)">
+      <div class="level-head">
+        <h2>${label}</h2>
+        <span>${have}/${all.length}</span>
+      </div>
+      <div class="cells">${cells.join("")}</div>
+    </section>`;
+  }));
+
+  const content = html.filter(h => h).join("");
+  $("levels").innerHTML = content || `<div class="empty">${state.filter === "have" ? T().noneHave : T().noneMissing}</div>`;
+}
+
+async function renderAll() {
+  renderText();
+  renderEggs();
+  renderFilters();
+  renderSummary();
+  await renderLevels();
+}
+
+/* Toast */
+let toastTimer;
+function toast(msg, undo) {
+  const el = $("toast");
+  el.innerHTML = `<span></span>`;
+  el.firstChild.textContent = msg;
+  if (undo) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = T().undo;
+    b.onclick = () => {
+      undo();
+      el.hidden = true;
     };
-    
-    intentarCargarImagen();
-    tdImagen.appendChild(img);
-    fila.appendChild(tdImagen);
-    
-    tbody.appendChild(fila);
-  });
-}
-
-// Global variable for selected tama
-let selectedTama = '';
-
-// Create Tama icons
-/** Builds and inserts the Tama icon buttons into the selector section. */
-function createTamaIcons() {
-  const container = document.getElementById('tama-icons');
-  if (!container) return;
-
-  container.innerHTML = '';
-  const allTamas = [...new Set(Object.values(digimonReqDict).map(d => d.Tama))];
-
-  allTamas.forEach(tama => {
-    const btn = document.createElement('button');
-    btn.className = 'tama-icon-btn';
-    btn.dataset.tama = tama;
-    btn.innerHTML = `
-      <img src="${imgUrl('Tama/' + tama + '.png')}" alt="${tama}" onerror="this.src='${imgUrl('icon/placeholder.png')}'">
-      <span>${tama}</span>
-    `;
-    btn.addEventListener('click', () => selectTamaIcon(tama));
-    container.appendChild(btn);
-  });
-}
-
-// Select Tama from icons
-/** Selects a Tama, highlights its icon button, and loads its Digimon checklist and statistics. */
-function selectTamaIcon(tama) {
-  selectedTama = tama;
-
-  // Update visual state
-  document.querySelectorAll('.tama-icon-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tama === tama);
-  });
-
-  // Load Digimon for selected Tama
-  const digimonDelTama = obtenerDigimonDelTama(tama);
-  const tbody = document.querySelector('#checklistTable tbody');
-  if (tbody) {
-    generarTabla(digimonDelTama, tbody, tama);
+    el.append(b);
   }
-  actualizarEstadisticas(digimonDelTama);
+  ($("dlg").open ? $("dlg") : document.body).append(el);
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, undo ? 6000 : 3000);
+}
 
-  // Update progress title
-  const statsHeader = document.querySelector('.stats-header h2');
-  if (statsHeader) {
-    statsHeader.textContent = `${traducciones[idiomaActual].progresoTama} - ${tama}`;
+/* Supabase save/load */
+async function saveToCloud() {
+  if (!state.userId) return;
+
+  try {
+    const data = {};
+    [...allTamas].forEach(t => {
+      data[t] = [...state.got[t]];
+    });
+
+    const { error } = await supabaseClient
+      .from('digidex_progress')
+      .upsert({
+        user_id: state.userId,
+        progress: data,
+        updated_at: new Date().toISOString()
+      });
+
+    if (error) throw error;
+    console.log('Progress saved to cloud');
+  } catch (err) {
+    console.error('Save error:', err);
+    toast(T().saveFail);
   }
-
-  // Show table and controls
-  document.getElementById("checklistTable").style.display = "table";
-  document.getElementById("statsHeader").style.display = "block";
-  document.getElementById("controls").style.display = "flex";
 }
 
-// Inicializar selector de tamas
-/** Initializes the Tama selector by creating all icon buttons. */
-function inicializarSelector() {
-  createTamaIcons();
-}
+async function loadFromCloud() {
+  if (!state.userId) return;
 
-// Funciones de control
-/** Marks all Digimon of the currently selected Tama as obtained and refreshes the table. */
-function marcarTodosTama() {
-  if (!selectedTama) return;
-  const tamaSeleccionado = selectedTama;
-  
-  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
-  
-  digimonDelTama.forEach(digimon => {
-    checklistState[digimon.nombre] = true;
-  });
-  
-  guardarEstado(checklistState);
-  
-  const tbody = document.querySelector('#checklistTable tbody');
-  generarTabla(digimonDelTama, tbody, tamaSeleccionado);
-  actualizarEstadisticas(digimonDelTama);
-}
+  try {
+    const { data, error } = await supabaseClient
+      .from('digidex_progress')
+      .select('progress')
+      .eq('user_id', state.userId)
+      .single();
 
-/** Unmarks all Digimon of the currently selected Tama and refreshes the table. */
-function desmarcarTodosTama() {
-  if (!selectedTama) return;
-  const tamaSeleccionado = selectedTama;
-  
-  const digimonDelTama = obtenerDigimonDelTama(tamaSeleccionado);
-  
-  digimonDelTama.forEach(digimon => {
-    checklistState[digimon.nombre] = false;
-  });
-  
-  guardarEstado(checklistState);
-  
-  const tbody = document.querySelector('#checklistTable tbody');
-  generarTabla(digimonDelTama, tbody, tamaSeleccionado);
-  actualizarEstadisticas(digimonDelTama);
-}
+    if (error) {
+      if (error.code === 'PGRST116') return; // No data yet
+      throw error;
+    }
 
-/** Exports the current checklist state as a downloadable JSON file. */
-function exportarDatos() {
-  const dataStr = JSON.stringify(checklistState, null, 2);
-  const dataBlob = new Blob([dataStr], { type: 'application/json' });
-  const url = URL.createObjectURL(dataBlob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'digimon-checklist.json';
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-/** Opens a file picker to import a JSON checklist and merges it into the current state. */
-function importarDatos() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
-  input.onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const importedData = JSON.parse(event.target.result);
-        checklistState = importedData;
-        guardarEstado(checklistState);
-        
-        const selectTama = document.getElementById("selectTama");
-        if (selectTama.value) {
-          selectTama.dispatchEvent(new Event('change'));
+    if (data && data.progress) {
+      [...allTamas].forEach(t => {
+        if (Array.isArray(data.progress[t])) {
+          state.got[t] = new Set(data.progress[t]);
         }
-        
-        alert('Datos importados correctamente!');
-      } catch (error) {
-        alert('Error al importar datos. Verifica que el archivo sea válido.');
-      }
-    };
-    reader.readAsText(file);
-  };
-  input.click();
-}
-
-// Función para actualizar traducciones
-/** Applies the current language translations to all UI text elements and table headers. */
-function actualizarTraducciones() {
-  const t = traducciones[idiomaActual];
-
-  document.querySelector('h1').textContent = t.titulo;
-  document.querySelector('#tamaTitle').textContent = t.seleccionarTama;
-  document.querySelector('label[for="selectIdioma"]').textContent = t.idioma;
-
-  const headers = document.querySelectorAll('#checklistTable thead th');
-  if (headers.length > 0) {
-    headers[0].textContent = t.obtenido;
-    headers[1].textContent = t.digimon;
-    headers[2].textContent = t.nivel;
-    headers[3].textContent = t.imagen;
-  }
-  
-  const statsHeader = document.querySelector('.stats-header h2');
-  if (statsHeader) {
-    statsHeader.textContent = t.progresoTama;
+      });
+      renderSummary();
+      renderLevels();
+      console.log('Progress loaded from cloud');
+    }
+  } catch (err) {
+    console.error('Load error:', err);
   }
 }
 
-
-// Inicializar
-document.addEventListener("DOMContentLoaded", () => {
-  checklistState = cargarEstado();
-  
-  const selectIdioma = document.getElementById("selectIdioma");
-  selectIdioma.addEventListener("change", () => {
-    idiomaActual = selectIdioma.value;
-    actualizarTraducciones();
-  });
-  
-  inicializarSelector();
-  actualizarTraducciones();
+/* Main page events */
+$("eggs").addEventListener("click", e => {
+  const b = e.target.closest(".egg");
+  if (!b) return;
+  state.tama = b.dataset.id;
+  state.winner = null;
+  renderEggs();
+  renderSummary();
+  renderLevels();
 });
 
-// Hamburger menu functions
-/** Toggles the hamburger navigation menu and its overlay open or closed. */
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  state.filter = b.dataset.f;
+  renderFilters();
+  renderLevels();
+});
+
+$("levels").addEventListener("click", e => {
+  const b = e.target.closest(".cell");
+  if (!b) return;
+  const name = b.dataset.name;
+  const s = got();
+  s.has(name) ? s.delete(name) : s.add(name);
+
+  // Save to localStorage
+  const localData = {};
+  [...allTamas].forEach(t => {
+    localData[t] = [...state.got[t]];
+  });
+  localStorage.setItem('digimonChecklist', JSON.stringify(localData));
+
+  // Save to cloud if logged in
+  saveToCloud();
+
+  renderSummary();
+  if (state.filter === "all") {
+    b.setAttribute("aria-pressed", s.has(name));
+    const sec = b.closest(".level");
+    const lv = cur().find(d => d.name === name).lv;
+    const all = cur().filter(d => d.lv === lv);
+    const have = all.filter(d => s.has(d.name)).length;
+    sec.querySelector(".level-head span").textContent = `${have}/${all.length}`;
+    sec.classList.toggle("done", have === all.length);
+  } else {
+    renderLevels();
+  }
+});
+
+function bulk(fill, msg) {
+  const id = state.tama;
+  const before = new Set(state.got[id]);
+  state.got[id] = new Set(fill ? cur().map(d => d.name) : []);
+
+  // Save to localStorage
+  const localData = {};
+  [...allTamas].forEach(t => {
+    localData[t] = [...state.got[t]];
+  });
+  localStorage.setItem('digimonChecklist', JSON.stringify(localData));
+
+  // Save to cloud
+  saveToCloud();
+
+  renderSummary();
+  renderLevels();
+  toast(msg, () => {
+    state.got[id] = before;
+    localStorage.setItem('digimonChecklist', JSON.stringify(state.got));
+    saveToCloud();
+    renderSummary();
+    renderLevels();
+  });
+}
+
+$("markAll").onclick = () => bulk(true, T().markedAll);
+$("clearAll").onclick = () => bulk(false, T().clearedAll);
+
+$("lang").onchange = e => {
+  state.lang = e.target.value;
+  window.currentLang = state.lang; // Para auth.js
+  localStorage.setItem('digidexLang', state.lang);
+  renderAll();
+  if ($("dlg").open) renderWheelUI();
+  // Actualizar textos de auth si está cargado
+  if (typeof updateAuthLang === 'function') updateAuthLang();
+};
+
+/* Roulette */
+const WC = $("wheel");
+const wctx = WC.getContext("2d");
+
+function wheelRoster() {
+  // Retorna todos los digimon de los tamas seleccionados y niveles seleccionados
+  const digimon = [];
+  state.selectedWheelTamas.forEach(tama => {
+    if (roster[tama]) {
+      roster[tama].forEach(d => {
+        if (state.selectedWheelLevels.has(d.lv)) {
+          digimon.push({ ...d, tama });
+        }
+      });
+    }
+  });
+  return digimon;
+}
+
+function poolList() {
+  const allDigimon = wheelRoster();
+  return allDigimon.filter(d => {
+    const poolKey = `${d.tama}:${d.name}`;
+    const poolSet = state.pool[state.tama] || new Set();
+    return poolSet.has(poolKey);
+  });
+}
+
+function trimLabel(s, max) {
+  return s.length > max ? s.slice(0, max - 1) + "…" : s;
+}
+
+async function drawWheel() {
+  const list = poolList();
+  const n = list.length;
+  const S = WC.width;
+  const C = S / 2;
+  const R = C - 8;
+  const style = getComputedStyle(document.documentElement);
+
+  wctx.clearRect(0, 0, S, S);
+
+  if (!n) {
+    wctx.beginPath();
+    wctx.arc(C, C, R, 0, Math.PI * 2);
+    wctx.fillStyle = style.getPropertyValue("--panel");
+    wctx.fill();
+    wctx.lineWidth = 6;
+    wctx.strokeStyle = style.getPropertyValue("--line");
+    wctx.stroke();
+    return;
+  }
+
+  const a = Math.PI * 2 / n;
+  const ink = style.getPropertyValue("--bg-deep");
+  wctx.imageSmoothingEnabled = false;
+
+  // Pre-load all images
+  const images = await Promise.all(list.map(async d => {
+    const url = await getDigimonImage(d.name);
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve({ d, img });
+      img.onerror = () => resolve({ d, img: null });
+      img.src = url;
+    });
+  }));
+
+  images.forEach(({ d, img }, i) => {
+    const s = -Math.PI / 2 + i * a;
+    wctx.beginPath();
+    wctx.moveTo(C, C);
+    wctx.arc(C, C, R, s, s + a);
+    wctx.closePath();
+    wctx.fillStyle = style.getPropertyValue(`--lv${d.lv}`);
+    wctx.fill();
+    if (i % 2) {
+      wctx.fillStyle = "rgba(10,13,30,.2)";
+      wctx.fill();
+    }
+    wctx.lineWidth = 3;
+    wctx.strokeStyle = ink;
+    wctx.stroke();
+
+    wctx.save();
+    wctx.translate(C, C);
+    wctx.rotate(s + a / 2);
+    const size = Math.min(92, Math.max(26, a * R * .78));
+    wctx.save();
+    wctx.translate(R - size / 2 - 8, 0);
+    wctx.rotate(Math.PI / 2);
+
+    if (img) {
+      wctx.drawImage(img, -size / 2, -size / 2, size, size);
+    }
+    wctx.restore();
+
+    if (n <= 18) {
+      const fs = n <= 10 ? 28 : 22;
+      wctx.font = `600 ${fs}px "Chakra Petch", sans-serif`;
+      wctx.textAlign = "right";
+      wctx.textBaseline = "middle";
+      wctx.fillStyle = ink;
+      wctx.fillText(trimLabel(d.name, n <= 10 ? 14 : 13), R - size - 16, 0);
+    }
+    wctx.restore();
+  });
+
+  wctx.beginPath();
+  wctx.arc(C, C, 34, 0, Math.PI * 2);
+  wctx.fillStyle = ink;
+  wctx.fill();
+  wctx.lineWidth = 6;
+  wctx.strokeStyle = style.getPropertyValue("--fg");
+  wctx.stroke();
+  wctx.beginPath();
+  wctx.arc(C, C, R, 0, Math.PI * 2);
+  wctx.lineWidth = 8;
+  wctx.strokeStyle = ink;
+  wctx.stroke();
+}
+
+async function renderWheelTamas() {
+  const sorted = [...allTamas].sort();
+  $("wheelTamas").innerHTML = sorted.map(t => {
+    const isSelected = state.selectedWheelTamas.has(t);
+    return `<button class="chip" type="button" data-tama="${t}" aria-pressed="${isSelected}">${t}</button>`;
+  }).join("");
+}
+
+function renderWheelLevels() {
+  // Solo mostrar Child (2), Adult (3), Perfect (4), Ultimate (5)
+  const relevantLevels = [2, 3, 4, 5];
+  $("wheelLevels").innerHTML = relevantLevels.map(lv => {
+    const isSelected = state.selectedWheelLevels.has(lv);
+    return `<button class="chip lv" type="button" data-lv="${lv}" style="--c:${lvColor(lv)}" aria-pressed="${isSelected}">${LEVELS[lv]}</button>`;
+  }).join("");
+}
+
+async function renderPool() {
+  const allDigimon = wheelRoster();
+  const poolSet = state.pool[state.tama] || new Set();
+
+  const cells = await Promise.all(allDigimon.map(async d => {
+    const imgSrc = await getDigimonImage(d.name);
+    const poolKey = `${d.tama}:${d.name}`;
+    const isInPool = poolSet.has(poolKey);
+    return `<button type="button" data-tama="${d.tama}" data-name="${d.name}" aria-pressed="${isInPool}" title="${d.name} (${d.tama})" aria-label="${d.name}">
+      <img src="${imgSrc}" alt="">
+    </button>`;
+  }));
+  $("pool").innerHTML = cells.join("");
+}
+
+async function renderResult() {
+  const box = $("result");
+  const n = poolList().length;
+  $("spin").disabled = state.spinning || n < 2;
+
+  if (state.winner && !state.spinning) {
+    const d = state.winner;
+    const imgSrc = await getDigimonImage(d.name);
+    box.innerHTML = `<div class="won">
+      <img src="${imgSrc}" alt="">
+      <div>
+        <small>${T().nextGoal} · ${d.tama} · ${LEVELS[d.lv]}</small>
+        <strong></strong>
+      </div>
+    </div>`;
+    box.querySelector("strong").textContent = d.name;
+  } else {
+    box.innerHTML = state.spinning ? `<div class="hint">…</div>` : `<div class="hint">${n < 2 ? T().needTwo : T().inWheel(n)}</div>`;
+  }
+}
+
+function setRotation(r) {
+  state.rotation = r;
+  WC.style.transform = `rotate(${r}rad)`;
+}
+
+async function renderWheelUI() {
+  await renderWheelTamas();
+  renderWheelLevels();
+  await renderPool();
+  await drawWheel();
+  await renderResult();
+}
+
+function poolChanged() {
+  state.winner = null;
+  renderWheelUI();
+}
+
+$("openWheel").onclick = () => {
+  $("dlg").showModal();
+  renderWheelUI();
+};
+$("closeDlg").onclick = () => $("dlg").close();
+$("dlg").addEventListener("cancel", e => {
+  if (state.spinning) e.preventDefault();
+});
+$("dlg").addEventListener("click", e => {
+  if (e.target === $("dlg") && !state.spinning) $("dlg").close();
+});
+$("dlg").addEventListener("close", () => {
+  document.body.append($("toast"));
+});
+
+$("wheelTamas").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b || state.spinning) return;
+  const tama = b.dataset.tama;
+  if (state.selectedWheelTamas.has(tama)) {
+    state.selectedWheelTamas.delete(tama);
+  } else {
+    state.selectedWheelTamas.add(tama);
+  }
+  poolChanged();
+});
+
+$("wheelLevels").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b || state.spinning) return;
+  const lv = +b.dataset.lv;
+  if (state.selectedWheelLevels.has(lv)) {
+    state.selectedWheelLevels.delete(lv);
+  } else {
+    state.selectedWheelLevels.add(lv);
+  }
+  poolChanged();
+});
+
+$("pool").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b || state.spinning) return;
+  const name = b.dataset.name;
+  const tama = b.dataset.tama;
+  const poolKey = `${tama}:${name}`;
+  const poolSet = state.pool[state.tama] || new Set();
+
+  if (poolSet.has(poolKey)) {
+    poolSet.delete(poolKey);
+  } else {
+    poolSet.add(poolKey);
+  }
+  state.pool[state.tama] = poolSet;
+  poolChanged();
+});
+
+function setPool(keys) {
+  if (state.spinning) return;
+  state.pool[state.tama] = new Set(keys);
+  poolChanged();
+}
+
+$("poolMissing").onclick = () => {
+  const missing = [];
+  state.selectedWheelTamas.forEach(tama => {
+    const gotSet = state.got[tama] || new Set();
+    if (roster[tama]) {
+      roster[tama].forEach(d => {
+        if (state.selectedWheelLevels.has(d.lv) && !gotSet.has(d.name)) {
+          missing.push(`${tama}:${d.name}`);
+        }
+      });
+    }
+  });
+  setPool(missing);
+};
+
+$("poolAll").onclick = () => {
+  const all = wheelRoster().map(d => `${d.tama}:${d.name}`);
+  setPool(all);
+};
+
+$("poolNone").onclick = () => setPool([]);
+
+$("spin").onclick = () => {
+  const list = poolList();
+  const n = list.length;
+  if (state.spinning || n < 2) return;
+
+  const a = Math.PI * 2 / n;
+  const idx = Math.floor(Math.random() * n);
+  const jitter = (Math.random() - .5) * a * .7;
+  const TAU = Math.PI * 2;
+  const start = state.rotation;
+  const delta = ((-(idx + .5) * a + jitter - start) % TAU + TAU) % TAU;
+  const end = start + TAU * 6 + delta;
+
+  state.spinning = true;
+  state.winner = null;
+  renderResult();
+
+  const finish = () => {
+    setRotation(end % TAU);
+    state.spinning = false;
+    state.winner = list[idx]; // Ahora guarda el objeto completo con tama
+    renderResult();
+  };
+
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return finish();
+
+  const t0 = performance.now();
+  const dur = 4200;
+
+  (function frame(now) {
+    const p = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - p, 4);
+    setRotation(start + (end - start) * e);
+    p < 1 ? requestAnimationFrame(frame) : finish();
+  })(t0);
+};
+
+/* Hamburger menu */
 function toggleNav() {
   const navMenu = document.getElementById('nav-menu');
   const navOverlay = document.getElementById('nav-overlay');
@@ -965,14 +1557,54 @@ function toggleNav() {
   navOverlay.classList.toggle('active');
 }
 
-/** Closes the hamburger navigation menu and hides its overlay. */
 function closeNav() {
   const navMenu = document.getElementById('nav-menu');
   const navOverlay = document.getElementById('nav-overlay');
   navMenu.classList.remove('active');
   navOverlay.classList.remove('active');
 }
-  </script>
+
+/* Initialize */
+document.addEventListener("DOMContentLoaded", () => {
+  // Load from localStorage
+  const saved = localStorage.getItem('digimonChecklist');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      [...allTamas].forEach(t => {
+        if (Array.isArray(data[t])) {
+          state.got[t] = new Set(data[t]);
+        }
+      });
+    } catch (e) {
+      console.error('Failed to load from localStorage:', e);
+    }
+  }
+
+  // Load language preference
+  const savedLang = localStorage.getItem('digidexLang');
+  if (savedLang && I18N[savedLang]) {
+    state.lang = savedLang;
+    $("lang").value = savedLang;
+  }
+
+  // Inicializar currentLang para auth.js
+  window.currentLang = state.lang;
+
+  // Init auth
+  initAuth(
+    async (session) => {
+      state.userId = session.user.id;
+      await loadFromCloud();
+    },
+    () => {
+      state.userId = null;
+    }
+  );
+
+  renderAll();
+});
+</script>
 <script src="nav-translate.js"></script>
 </body>
 </html>

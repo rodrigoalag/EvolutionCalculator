@@ -3523,7 +3523,18 @@ if (!tieneRequisitosOrigen && !specialDigimonConfig[nombre] && datosOriginales?.
           obligFields.push("Error Maximo");
         }
       }
-      const _gruposColumnas = { 'Quota/Key Points': puntosFields, 'Requisitos Obligatorios': obligFields };
+      // Detectar si categorias tiene estructura anidada por origen (keys son nombres de paths)
+      const _pathCategorias = digimon.categorias?.[pathName];
+      const _usarCategoriasPath = _pathCategorias && typeof _pathCategorias === 'object' && !Array.isArray(_pathCategorias);
+      let _gruposColumnas;
+      if (_usarCategoriasPath) {
+        _gruposColumnas = {};
+        Object.entries(_pathCategorias).forEach(([grupo, campos]) => {
+          _gruposColumnas[grupo] = [...campos];
+        });
+      } else {
+        _gruposColumnas = { 'Quota/Key Points': puntosFields, 'Requisitos Obligatorios': obligFields };
+      }
       const _valores = { 'Peso': formatearPeso(_peso) };
       /** Formats a single RC field value using the appropriate formatter for its type. */
       const formatField = (f, v) => {

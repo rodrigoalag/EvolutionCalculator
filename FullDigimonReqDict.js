@@ -889,7 +889,7 @@ const fullDigimonReqDict = {
       }
     },
     "Requisitos": {
-      "Peso": 20, "Error Maximo": 3, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Program": "Puppet",
+      "Peso": 20, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Program": "Puppet",
       "RequisitosCondicionados": {
         "condicion": "Origen",
         "Etemon, WaruMonzaemon, Monzaemon, ExTyranomon": {

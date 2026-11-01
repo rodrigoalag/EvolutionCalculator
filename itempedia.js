@@ -1142,6 +1142,21 @@ const itemData = {
     peso: "",
     vinculo: ""
   },
+  "Puppet Program": {
+    descripcion: "Instala \"Puppet Program\" en tu Digimon.",
+    descripcionEN: "Installs \"Puppet Program\" to your Digimon.",
+    nombreEN: "Puppet Program",
+    efectoFueraDeCombate: "Tu digimon obtiene data del Puppet Program",
+    efectoEntrenamiento: "",
+    efectoBatalla: "Ver guia de efectos variables",
+    precioVenta: "",
+    precioCompra: null,
+    lugarObtencion: "Drops",
+    clasificacion: "Program",
+    hambre: "",
+    peso: "",
+    vinculo: ""
+  },
 
   "Expansión de Drivers A": {
     descripcion: "Artículo desarrollado por el mercader misterioso, capaz de expandir nuestro almacen de drivers.",

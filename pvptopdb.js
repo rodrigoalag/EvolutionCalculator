@@ -620,6 +620,23 @@ const pvpTopDB = {
       { nickname: "Rodrigo",          discord: "Rodrigoalag",      ultimoDigimon: "BlackKingNumemon",    puntaje: 3583, puesto: 9  },
       { nickname: "Mijumaru",         discord: "Mijumaru",         ultimoDigimon: "Grademon",            puntaje: 3571, puesto: 10 }
     ]
+  },
+  "2026-10-T1": {
+    label: "Temporada 32",
+    fechaInicio: "16 Octubre 2026",
+    fechaFin: "31 Octubre 2026",
+    jugadores: [
+      { nickname: "Spookytree",       discord: "Spookytree",       ultimoDigimon: "AeroVDramon",       puntaje: 6243, puesto: 1  },
+      { nickname: "Alazar",           discord: "Alazar",           ultimoDigimon: "Dinomon",           puntaje: 6223, puesto: 2  },
+      { nickname: "Twil",             discord: "Twil",             ultimoDigimon: "Tyumon",            puntaje: 4341, puesto: 3  },
+      { nickname: "Megumi",           discord: "Megumi",           ultimoDigimon: "MonarchLizamon",    puntaje: 4208, puesto: 4  },
+      { nickname: "Styck",            discord: "Styck",            ultimoDigimon: "Kunemon",           puntaje: 3831, puesto: 5  },
+      { nickname: "Amadeo",           discord: "Amadeo",           ultimoDigimon: "Polarbearmon",      puntaje: 3802, puesto: 6  },
+      { nickname: "Sithhus",          discord: "Sithhus",          ultimoDigimon: "Devitamamon",       puntaje: 3569, puesto: 7  },
+      { nickname: "Crimsong247",      discord: "Crimsong247",      ultimoDigimon: "ExTyranomon",       puntaje: 3532, puesto: 8  },
+      { nickname: "Theidiotwithlag",  discord: "Theidiotwithlag",  ultimoDigimon: "BlackKingNumemon",  puntaje: 3477, puesto: 9  },
+      { nickname: "Thobias",          discord: "Thobias",          ultimoDigimon: "Grademon",          puntaje: 3448, puesto: 10 }
+    ]
   }
 };
 

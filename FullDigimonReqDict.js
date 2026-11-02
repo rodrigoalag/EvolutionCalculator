@@ -894,7 +894,7 @@ const fullDigimonReqDict = {
         "condicion": "Origen",
         "Etemon, WaruMonzaemon, Monzaemon, ExTyranomon": {
           "modo": "PuntajeIndividual",
-          "Obligatorios": { "Program": "Puppet" },
+          "Obligatorios": { "Program": "Death" },
           "Puntos": {}
         },
         "DexDorugamon, Bakemon LT, Bakemon MT, Soulmon MT, Soulmon LT, Raremon": {

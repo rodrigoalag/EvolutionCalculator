@@ -534,7 +534,7 @@
     /* Buscador */
     #search-container {
       position: fixed;
-      top: 165px;
+      top: 210px;
       left: 15px;
       z-index: 100;
     }
@@ -1353,7 +1353,7 @@
 
       /* Buscador en móvil */
       #search-container {
-        top: 160px;
+        top: 200px;
         left: 15px;
         right: 15px;
       }
@@ -1489,6 +1489,182 @@
     .xross-method-item { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
     .xross-method-drivers { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
     /* ===== FIN NODE OVERLAYS ===== */
+
+    /* ===== VIEW TOGGLE (Arbol / Digidex) ===== */
+    #view-toggle-container {
+      position: fixed;
+      top: 160px;
+      left: 15px;
+      z-index: 100;
+      background: rgba(30, 30, 50, 0.9);
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .view-toggle {
+      display: flex;
+      background: #0f1521;
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .view-toggle button {
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: #6b7794;
+      transition: all 0.2s ease;
+    }
+    .view-toggle button:hover {
+      color: #e8ecf5;
+    }
+    .view-toggle button.active {
+      background: #2a3550;
+      color: #e8ecf5;
+    }
+
+    /* ===== DIGIDEX VIEW ===== */
+    #digidex-view {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 580px;
+      bottom: 0;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+      overflow-y: auto;
+      z-index: 50;
+      padding-top: 215px;
+    }
+    #digidex-view.active {
+      display: block;
+    }
+    .digidex-wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 16px 20px;
+    }
+    .digidex-levels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .digidex-level {
+      min-width: min(100%, 124px);
+      max-width: 100%;
+      background: #1e2540;
+      border: 1px solid #333d6b;
+      border-radius: 8px;
+    }
+    .digidex-level-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 7px 10px;
+      background: #16213e;
+      border-radius: 7px 7px 0 0;
+      border-bottom: 2px solid var(--level-color, #4ecdc4);
+    }
+    .digidex-level-head h2 {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--level-color, #4ecdc4);
+      white-space: nowrap;
+      margin: 0;
+    }
+    .digidex-level-head span {
+      font-size: 12px;
+      color: #a3acd4;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .digidex-cells {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+      gap: 4px;
+      padding: 6px;
+    }
+    .digidex-cell {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 3px;
+      padding: 7px 3px 5px;
+      background: #232b50;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      color: #a3acd4;
+      font-size: 11px;
+      line-height: 1.2;
+      transition: background 0.15s, border-color 0.15s;
+      cursor: pointer;
+    }
+    .digidex-cell img {
+      width: 66px;
+      height: 66px;
+      image-rendering: pixelated;
+      display: block;
+      transition: transform 0.15s;
+    }
+    .digidex-cell:hover {
+      background: #2d3763;
+    }
+    .digidex-cell:hover img {
+      transform: translateY(-2px);
+    }
+    .digidex-cell.selected {
+      border-color: var(--level-color, #4ecdc4);
+      background: #2d3763;
+    }
+    .digidex-cell .name {
+      min-height: 2.3em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      word-break: break-word;
+      hyphens: auto;
+      padding: 0 2px;
+      width: 100%;
+    }
+
+    @media (max-width: 1024px) {
+      #digidex-view {
+        right: 450px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #view-toggle-container {
+        top: 135px;
+        left: 70px;
+        right: auto;
+      }
+      .view-toggle button {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+      }
+      #digidex-view {
+        right: 0;
+        padding-top: 205px;
+      }
+      .digidex-cells {
+        grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+      }
+      .digidex-cell {
+        font-size: 10px;
+      }
+      .digidex-cell img {
+        width: 56px;
+        height: 56px;
+      }
+    }
+    /* ===== FIN DIGIDEX VIEW ===== */
   </style>
 </head>
 <body>
@@ -1552,6 +1728,14 @@
 
 <div id="tama-selector"></div>
 
+<!-- Toggle Arbol / Digidex -->
+<div id="view-toggle-container">
+  <div class="view-toggle">
+    <button id="btn-view-arbol" class="active" onclick="switchView('arbol')">Árbol</button>
+    <button id="btn-view-digidex" onclick="switchView('digidex')">Digidex</button>
+  </div>
+</div>
+
 <div id="search-container">
   <input type="text" id="digi-search" placeholder="🔍 Buscar Digimon..." autocomplete="off">
   <div id="search-suggestions"></div>
@@ -1566,6 +1750,13 @@
   <div id="cy-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#666;font-size:1.1rem;gap:0.5rem;pointer-events:none;">
     <span style="font-size:2rem;">👆</span>
     <span id="cy-placeholder-text">Selecciona un Tama para ver el árbol</span>
+  </div>
+</div>
+
+<!-- Vista Digidex -->
+<div id="digidex-view">
+  <div class="digidex-wrap">
+    <div class="digidex-levels" id="digidex-levels"></div>
   </div>
 </div>
 
@@ -3381,7 +3572,7 @@ function showInfo(data, evolutions, preEvolutions) {
     'Comida': 'Comida/Item',
     'Xross': 'Xross',
     'Hora': 'Hora',
-    'Tienes registrado a DexDorugamon y Dorugamon?': '¿Registrado DexDoru/Doru?',
+    'Tienes registrado a DexDorugamon y Dorugamon?': '¿Registrado DexDoruga/Doruga?',
     'Tienes registrado a DexDoruguremon y Doruguremon?': '¿Registrado DexDorugure/Dorugure?',
     'Vinculo al momento de evolucionar': 'Vínculo al Evolucionar',
     'Bonus Vinculo al momento de evolucionar': 'Bonus Vínculo',
@@ -4016,6 +4207,166 @@ document.addEventListener('DOMContentLoaded', () => {
   createTamaSelectors();
   initSearch();
 });
+
+/* ===== VIEW TOGGLE (Arbol / Digidex) ===== */
+let currentView = 'arbol';
+let selectedDigidexDigimon = null;
+
+const LEVEL_COLORS = {
+  1: '#ff93b8', // Baby I
+  2: '#ffb25c', // Baby II
+  3: '#a4e05a', // Child
+  4: '#41d9c6', // Adult
+  5: '#6fb4ff', // Perfect
+  6: '#c79bff'  // Ultimate
+};
+
+function switchView(view) {
+  currentView = view;
+
+  // Update toggle buttons
+  document.getElementById('btn-view-arbol').classList.toggle('active', view === 'arbol');
+  document.getElementById('btn-view-digidex').classList.toggle('active', view === 'digidex');
+
+  // Show/hide views
+  const cyContainer = document.getElementById('cy');
+  const digidexView = document.getElementById('digidex-view');
+  const searchContainer = document.getElementById('search-container');
+  const controlsContainer = document.getElementById('controls');
+  const instructionsEl = document.getElementById('instructions');
+
+  if (view === 'arbol') {
+    cyContainer.style.display = 'block';
+    digidexView.classList.remove('active');
+    searchContainer.style.display = 'block';
+    controlsContainer.style.display = 'flex';
+    if (instructionsEl) instructionsEl.style.display = 'block';
+  } else {
+    cyContainer.style.display = 'none';
+    digidexView.classList.add('active');
+    searchContainer.style.display = 'none';
+    controlsContainer.style.display = 'none';
+    if (instructionsEl) instructionsEl.style.display = 'none';
+    renderDigidexView();
+  }
+}
+
+function renderDigidexView() {
+  if (!currentTama) {
+    document.getElementById('digidex-levels').innerHTML = `
+      <div style="width:100%;text-align:center;color:#666;padding:40px;">
+        <p style="font-size:2rem;">👆</p>
+        <p>Selecciona un Tama para ver el Digidex</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Group Digimons by level
+  const byLevel = {};
+  Object.entries(digimonReqDict).forEach(([name, data]) => {
+    if (data.Tama !== currentTama) return;
+    if (name.toLowerCase() === 'burpmon') return;
+    const level = data.Nivel || 0;
+    if (!byLevel[level]) byLevel[level] = [];
+    byLevel[level].push({ name, data });
+  });
+
+  // Sort by ID within each level
+  Object.keys(byLevel).forEach(level => {
+    byLevel[level].sort((a, b) => Number(a.data.ID) - Number(b.data.ID));
+  });
+
+  const sortedLevels = Object.keys(byLevel).sort((a, b) => a - b);
+
+  let html = '';
+  sortedLevels.forEach(level => {
+    const digimons = byLevel[level];
+    const levelColor = LEVEL_COLORS[level] || '#4ecdc4';
+    const levelName = nivelAEtapa[level] || `Nivel ${level}`;
+    const count = digimons.length;
+
+    // Calculate basis for flex
+    const basis = Math.min(count, 8) * 97 + 14;
+
+    html += `
+      <section class="digidex-level" style="--level-color:${levelColor};flex:${count} 1 min(100%, ${basis}px)">
+        <div class="digidex-level-head">
+          <h2>${levelName}</h2>
+          <span>${count}</span>
+        </div>
+        <div class="digidex-cells">
+    `;
+
+    digimons.forEach(({ name, data }) => {
+      const isSelected = selectedDigidexDigimon === name;
+      html += `
+        <div class="digidex-cell${isSelected ? ' selected' : ''}"
+             style="--level-color:${levelColor}"
+             onclick="selectDigidexDigimon('${name.replace(/'/g, "\\'")}')">
+          <img src="${getImagePath(name)}" alt="" onerror="cargarImagenConVariaciones('${name.replace(/'/g, "\\'")}', this)">
+          <span class="name">${name}</span>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </section>
+    `;
+  });
+
+  document.getElementById('digidex-levels').innerHTML = html;
+}
+
+function selectDigidexDigimon(name) {
+  selectedDigidexDigimon = name;
+
+  // Update selection visual
+  document.querySelectorAll('.digidex-cell').forEach(cell => {
+    const cellName = cell.querySelector('.name')?.textContent;
+    cell.classList.toggle('selected', cellName === name);
+  });
+
+  // Show panel with Digimon info (reuse existing showInfo function)
+  const digiData = digimonReqDict[name];
+  if (digiData) {
+    // Build node-like data object that showInfo expects
+    const nivel = digiData.Nivel || 0;
+    const nodeData = {
+      id: name,
+      label: name,
+      nivel: nivel,
+      etapa: nivelAEtapa[nivel] || `Nivel ${nivel}`,
+      atributo: digiData.Atributo || 'Free',
+      tipo: digiData.Tipo || 'Ninguno',
+      tama: digiData.Tama || '',
+      color: nivelColors[nivel] || '#888',
+      image: getImagePath(name)
+    };
+
+    const evolutions = getEvolutions(name);
+    const preEvolutions = getPreEvolutions(name);
+
+    showInfo(nodeData, evolutions, preEvolutions);
+
+    // On mobile, open the panel
+    if (window.innerWidth <= 768) {
+      document.getElementById('side-panel').classList.add('active');
+      document.getElementById('panel-overlay').classList.add('active');
+    }
+  }
+}
+
+// Update Digidex view when Tama changes
+const originalSelectTama = selectTama;
+selectTama = function(tama) {
+  originalSelectTama(tama);
+  if (currentView === 'digidex') {
+    selectedDigidexDigimon = null;
+    renderDigidexView();
+  }
+};
 </script>
 <script src="nav-translate.js"></script>
 </body>

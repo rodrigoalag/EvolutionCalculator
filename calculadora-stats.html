@@ -2273,6 +2273,14 @@ function calcularStatsHeredados() {
 
 function getHPBase() {
   if (!currentDigimon) return 0;
+  // SCUMON_FAMILY: usar computeScumonFamilyStats
+  if (SCUMON_FAMILY.has(currentDigimon)) {
+    const childName = plannedEvolutionLine[3];
+    const babyIIName = plannedEvolutionLine[2];
+    const babyIName = plannedEvolutionLine[1];
+    const computed = computeScumonFamilyStats(currentDigimon, childName, babyIIName, babyIName);
+    return computed?.HP || 0;
+  }
   const data = fullDigimonReqDict[currentDigimon];
   return data?.["Stat Base"]?.HP || 0;
 }
@@ -2334,40 +2342,59 @@ function updatePointsRemaining() {
 function updateStatDisplay() {
   if (!currentDigimon) return;
   const data = fullDigimonReqDict[currentDigimon];
-  const stats = data?.["Stat Base"] || {};
 
-  // Stats base del Digimon actual
-  const hpBase = stats.HP || 0;
-  const atkBase = stats.ATK || 0;
-  const spdBase = stats.Vel || 0;
-  const defBase = stats.DEF || 0;
+  let hpDigiTotal, atkDigiTotal, defDigiTotal, spdDigiTotal;
 
-  // Stats heredados de la línea evolutiva (40% de cada predecesor)
-  const heredados = calcularStatsHeredados();
+  // SCUMON_FAMILY: usar computeScumonFamilyStats (ya incluye base + heredados)
+  if (SCUMON_FAMILY.has(currentDigimon)) {
+    const childName = plannedEvolutionLine[3]; // Child de la línea evolutiva
+    const babyIIName = plannedEvolutionLine[2];
+    const babyIName = plannedEvolutionLine[1];
+    const computed = computeScumonFamilyStats(currentDigimon, childName, babyIIName, babyIName);
+    if (computed) {
+      hpDigiTotal = computed.HP;
+      atkDigiTotal = computed.ATK;
+      defDigiTotal = computed.DEF;
+      spdDigiTotal = computed.Vel;
+    } else {
+      hpDigiTotal = atkDigiTotal = defDigiTotal = spdDigiTotal = 0;
+    }
+  } else {
+    // Evolución normal: Stat Base + heredados
+    const stats = data?.["Stat Base"] || {};
+    const hpBase = stats.HP || 0;
+    const atkBase = stats.ATK || 0;
+    const spdBase = stats.Vel || 0;
+    const defBase = stats.DEF || 0;
+    const heredados = calcularStatsHeredados();
+    hpDigiTotal = hpBase + heredados.HP;
+    atkDigiTotal = atkBase + heredados.ATK;
+    defDigiTotal = defBase + heredados.DEF;
+    spdDigiTotal = spdBase + heredados.Vel;
+  }
 
   // Stats entrenados (input del usuario)
   // Fórmula: HP Entrenado = ((HP Base + Heredado) / 77) * HP Nominal
-  const hpBaseTotal = hpBase + heredados.HP;
-  const hpTrained = calcHPEntrenado(hpBaseTotal, currentDistribution.hpNominal);
+  const hpTrained = calcHPEntrenado(hpDigiTotal, currentDistribution.hpNominal);
   const atkTrained = currentDistribution.atkNominal;
   const spdTrained = currentDistribution.spdNominal;
 
   // Actualizar Stats Digi (Base + Heredado)
-  document.getElementById('hp-digi').textContent = hpBase + heredados.HP;
-  document.getElementById('atk-digi').textContent = atkBase + heredados.ATK;
-  document.getElementById('spd-digi').textContent = spdBase + heredados.Vel;
-  document.getElementById('def-digi').textContent = defBase + heredados.DEF;
+  document.getElementById('hp-digi').textContent = hpDigiTotal;
+  document.getElementById('atk-digi').textContent = atkDigiTotal;
+  document.getElementById('spd-digi').textContent = spdDigiTotal;
+  document.getElementById('def-digi').textContent = defDigiTotal;
 
   // Actualizar Entrenado
   document.getElementById('hp-trained').textContent = hpTrained;
   document.getElementById('atk-trained').textContent = atkTrained;
   document.getElementById('spd-trained').textContent = spdTrained;
 
-  // Actualizar Total = Base + Heredados + Entrenado
-  document.getElementById('hp-total').textContent = hpBase + heredados.HP + hpTrained;
-  document.getElementById('atk-total').textContent = atkBase + heredados.ATK + atkTrained;
-  document.getElementById('spd-total').textContent = spdBase + heredados.Vel + spdTrained;
-  document.getElementById('def-total').textContent = defBase + heredados.DEF;
+  // Actualizar Total = (Base + Heredados) + Entrenado
+  document.getElementById('hp-total').textContent = hpDigiTotal + hpTrained;
+  document.getElementById('atk-total').textContent = atkDigiTotal + atkTrained;
+  document.getElementById('spd-total').textContent = spdDigiTotal + spdTrained;
+  document.getElementById('def-total').textContent = defDigiTotal;
 
   // Actualizar % (porcentaje de los 700 puntos)
   const hpPercent = Math.round((currentDistribution.hpNominal / getMaxPoints()) * 100);
@@ -2795,16 +2822,29 @@ function downloadCard() {
 function downloadCardFallback() {
   // Fallback: create text summary
   const data = fullDigimonReqDict[currentDigimon];
-  const stats = data?.["Stat Base"] || {};
-  const hpBase = stats.HP || 0;
-  const heredados = calcularStatsHeredados();
-  const hpBaseTotal = hpBase + heredados.HP;
-  const hpTrained = calcHPEntrenado(hpBaseTotal, currentDistribution.hpNominal);
 
-  const hpDigi = hpBase + heredados.HP;
-  const atkDigi = (stats.ATK || 0) + heredados.ATK;
-  const spdDigi = (stats.Vel || 0) + heredados.Vel;
-  const defDigi = (stats.DEF || 0) + heredados.DEF;
+  let hpDigi, atkDigi, spdDigi, defDigi;
+
+  // SCUMON_FAMILY: usar computeScumonFamilyStats (ya incluye base + heredados)
+  if (SCUMON_FAMILY.has(currentDigimon)) {
+    const childName = plannedEvolutionLine[3];
+    const babyIIName = plannedEvolutionLine[2];
+    const babyIName = plannedEvolutionLine[1];
+    const computed = computeScumonFamilyStats(currentDigimon, childName, babyIIName, babyIName);
+    hpDigi = computed?.HP || 0;
+    atkDigi = computed?.ATK || 0;
+    spdDigi = computed?.Vel || 0;
+    defDigi = computed?.DEF || 0;
+  } else {
+    const stats = data?.["Stat Base"] || {};
+    const heredados = calcularStatsHeredados();
+    hpDigi = (stats.HP || 0) + heredados.HP;
+    atkDigi = (stats.ATK || 0) + heredados.ATK;
+    spdDigi = (stats.Vel || 0) + heredados.Vel;
+    defDigi = (stats.DEF || 0) + heredados.DEF;
+  }
+
+  const hpTrained = calcHPEntrenado(hpDigi, currentDistribution.hpNominal);
 
   const text = `${currentDigimon} (${data.Tama})
 Nivel: ${nivelAEtapa[data.Nivel]}

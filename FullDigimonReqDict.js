@@ -458,7 +458,6 @@ const fullDigimonReqDict = {
     "ID": 41, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "5 Caca" },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["GreatKingScumon", "Etemon", "PlatinumScumon", "ScumonTyumon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
   },
@@ -490,7 +489,6 @@ const fullDigimonReqDict = {
     "ID": 43, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "Chatarra" },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "PlatinumScumonTyumon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Scumon"] }
   },
@@ -523,14 +521,12 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 20,
       "Xross": { "Scumon": "1 M017 Driver", "Tyumon": "1 M005 Driver" }
     },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "Mercuremon", "Sephirothmon", "Burpmon", "PlatinumScumonTyumon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
   },
   "PlatinumScumonTyumon": {
     "ID": 187, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "Requisitos": { "Peso": 20, "Comida": "Chatarra" },
-    "Stat Base": { "ATK": 79, "DEF": 64, "HP": 665, "Vel": 82 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Etemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["ScumonTyumon"] }
   },

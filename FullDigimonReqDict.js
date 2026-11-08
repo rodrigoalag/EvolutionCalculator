@@ -361,8 +361,8 @@ const fullDigimonReqDict = {
   },
   "V-Dramon": {
     "ID": 7, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dragon",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
-    "Requisitos": { "Peso": 25, "% Entrenamiento": 100, "Bonus WinRate": 70, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100 },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Alcanzó -50 de vinculo?"] },
+    "Requisitos": { "Peso": 25, "% Entrenamiento": 100, "Bonus WinRate": 70, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 100, "DEF": 55, "HP": 1050, "Vel": 90 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "RedVDramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Yuki Agumon", "Agumon (2006)"] }
@@ -390,13 +390,13 @@ const fullDigimonReqDict = {
   },
   "V-Dramon (Black)": {
     "ID": 34, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dragon",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Batallas"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program"] },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus Batallas"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Program", "Alcanzó -50 de vinculo?"] },
     "Requisitos": {
-      "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus",
+      "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus", "Alcanzó -50 de vinculo?": "No",
       "RequisitosCondicionados": {
         "condicion": "Origen",
-        "Agumon, Agumon Hakase, Kokuwamon, Yuki Agumon, Agumon (2006)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus" }, "Puntos": { "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25 } },
-        "Agumon (Black)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "-" }, "Puntos": { "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25 } }
+        "Agumon, Agumon Hakase, Kokuwamon, Yuki Agumon, Agumon (2006)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "Virus", "Alcanzó -50 de vinculo?": "No" }, "Puntos": { "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25 } },
+        "Agumon (Black)": { "modo": "PuntajeIndividual", "Obligatorios": { "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Program": "-", "Alcanzó -50 de vinculo?": "No" }, "Puntos": { "Peso": 25, "% Entrenamiento": 100, "Bonus Batallas": 25 } }
       }
     },
     "Stat Base": { "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75 },
@@ -705,8 +705,8 @@ const fullDigimonReqDict = {
   },
   "Raptordramon": {
     "ID": "153", "Tama": "PR", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Maquina",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDorugamon y Dorugamon?"] },
-    "Requisitos": { "Peso": 25, "% Entrenamiento": 100, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Tienes registrado a DexDorugamon y Dorugamon?": "Si", "Digimon Bonus": "Dorumon" },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Tienes registrado a DexDorugamon y Dorugamon?", "Alcanzó -50 de vinculo?"] },
+    "Requisitos": { "Peso": 25, "% Entrenamiento": 100, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Tienes registrado a DexDorugamon y Dorugamon?": "Si", "Digimon Bonus": "Dorumon", "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 90, "DEF": 70, "HP": 1300, "Vel": 60 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Grademon", "Burpmon"], "Viene": ["Dorumon"] }
@@ -758,16 +758,16 @@ const fullDigimonReqDict = {
   },
   "Aero V-dramon": {
     "ID": 15, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Dragon",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
-    "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25 },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Alcanzó -50 de vinculo?"] },
+    "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 215, "DEF": 110, "HP": 2250, "Vel": 150 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "GoldGuardromon", "Clockmon"] }
   },
   "Aero V-dramon (Black)": {
     "ID": 36, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Dragon",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
-    "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon (Black)", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25 },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Digimon Bonus"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Alcanzó -50 de vinculo?"] },
+    "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon (Black)", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150 },
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["V-Dramon (Black)", "RedVDramon", "Tuskmon", "Dark Tyranomon"] }
@@ -995,8 +995,8 @@ const fullDigimonReqDict = {
   },
   "Omega Shoutmon": {
     "ID": 163, "Tama": "VS", "Nivel": 5, "Atributo": "Data", "Tipo": "Compuesto",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Error Maximo"] },
-    "Requisitos": { "Peso": 35, "% Entrenamiento": 100, "Combates Minimos": 25, "WinRate": 70, "Vinculo Minimo alcanzado": 100 },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Error Maximo", "Alcanzó -50 de vinculo?"] },
+    "Requisitos": { "Peso": 35, "% Entrenamiento": 100, "Combates Minimos": 25, "WinRate": 70, "Vinculo Minimo alcanzado": 100, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 220, "DEF": 140, "HP": 1800, "Vel": 160 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["King Shoutmon"] }
@@ -1047,8 +1047,8 @@ const fullDigimonReqDict = {
   },
   "MonarchLizamon": {
     "ID": 183, "Tama": "BG", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Errores Minimos", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado"] },
-    "Requisitos": { "Peso": 55, "% Entrenamiento": 100, "Errores Minimos": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100 },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Errores Minimos", "WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Alcanzó -50 de vinculo?"] },
+    "Requisitos": { "Peso": 55, "% Entrenamiento": 100, "Errores Minimos": 0, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 150, "DEF": 300, "HP": 2000, "Vel": 50 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["Armalizamon","Wolvemon"] }
@@ -1126,8 +1126,8 @@ const fullDigimonReqDict = {
   },
   "Grademon": {
     "ID": "154", "Tama": "PR", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Guerrero",
-    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Vinculo Minimo alcanzado"] },
-    "Requisitos": { "Peso": 36, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100 },
+    "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento"], "Requisitos Obligatorios": ["Combates Minimos", "WinRate", "Vinculo Minimo alcanzado", "Alcanzó -50 de vinculo?"] },
+    "Requisitos": { "Peso": 36, "% Entrenamiento": 100, "WinRate": 70, "Combates Minimos": 25, "Vinculo Minimo alcanzado": 100, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 210, "DEF": 130, "HP": 2100, "Vel": 150 },
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Grademon VICE", "Burpmon"], "Viene": ["Raptordramon"] }
@@ -1194,9 +1194,9 @@ const fullDigimonReqDict = {
   // ===== ULTIMATE =====
   "Wargreymon": {
     "ID": 170, "Tama": "V0", "Nivel": 6, "Atributo": "Vacuna", "Tipo": "Dragon",
-    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Error Maximo", "% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar"] },
+    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Error Maximo", "% Entrenamiento", "Combates Minimos", "Victorias", "Vinculo al momento de evolucionar", "Alcanzó -50 de vinculo?"] },
     "Requisitos": {
-      "Peso": 30, "% Entrenamiento": 100, "Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias": 175,
+      "Peso": 30, "% Entrenamiento": 100, "Error Maximo": 0, "Vinculo al momento de evolucionar": 100, "Combates Minimos": 300, "Victorias": 175, "Alcanzó -50 de vinculo?": "No",
       "RequisitosCondicionados": {
         "condicion": "Origen",
         "Metal Greymon": { "puntajeOk": 0, "puntajeNo": 0, "Victorias": 140, "Combates Minimos": 250 },

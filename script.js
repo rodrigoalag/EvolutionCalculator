@@ -3638,7 +3638,14 @@ if (nextLevel === 4 || nextLevel === 5) {
      mejoresDigimons = ["GreatKingScumon"];
      console.log("👑 Excepción: GreatKingScumon tiene puntaje >= 1, se selecciona directamente.");
    } else {
-     console.log("🔍 Side Evolutions válidas encontradas:", sideEvosValidas.map(d => `${d.name} (${d.puntaje})`));
+     // Excepción Nanimon: Si vinculo al evolucionar <= -50 y Nanimon cumple requisitos
+     const vinculoEvo = parseFloat(inputValues["Vinculo al momento de evolucionar"]) || 0;
+     const nanimon = puntajes.find(d => d.name === "Nanimon" && d.puntaje >= 0);
+     if (nanimon && vinculoEvo <= -50) {
+       mejoresDigimons = ["Nanimon"];
+       console.log("👑 Excepción: Nanimon - Vínculo al evolucionar <= -50, se selecciona directamente.");
+     } else {
+       console.log("🔍 Side Evolutions válidas encontradas:", sideEvosValidas.map(d => `${d.name} (${d.puntaje})`));
      
      if (sideEvosValidas.length > 0) {
        // const maxPuntajeSide = Math.max(...sideEvosValidas.map(d => d.puntaje));
@@ -3749,6 +3756,7 @@ if (nextLevel === 4 || nextLevel === 5) {
          mejoresDigimons = ["Ninguno"];
          console.log("🚫 No se encontraron evoluciones válidas con puntaje >= 3.");
        }
+     }
      }
    }
  }

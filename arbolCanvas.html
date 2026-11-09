@@ -2050,7 +2050,7 @@ const digimonVariantesPorPreEvo = {
 // Configuración por defecto para Digimons sin configuración especial
 const gruposColumnasDefault = {
   "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus Digimon", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar", "Bonus Victorias", "Bonus Stat Superior"],
-  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Vinculo al momento de evolucionar", "Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname", "Tienes registrado a DexDorugamon y Dorugamon?", "Tienes registrado a DexDoruguremon y Doruguremon?"]
+  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Vinculo al momento de evolucionar", "Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Alcanzó -50 de vinculo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname", "Tienes registrado a DexDorugamon y Dorugamon?", "Tienes registrado a DexDoruguremon y Doruguremon?"]
 };
 
 const tamaIcons = {
@@ -3424,7 +3424,8 @@ function showInfo(data, evolutions, preEvolutions) {
       "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
       "Driver Equipado": { cumple: 0, noCumple: -10 },
       "Victorias": { cumple: 1, noCumple: -10 },
-      "Tienes registrado a DexDorugamon y Dorugamon?": { cumple: 0, noCumple: -10 }
+      "Tienes registrado a DexDorugamon y Dorugamon?": { cumple: 0, noCumple: -10 },
+      "Alcanzó -50 de vinculo?": { cumple: 0, noCumple: -10 }
     },
     5: { // Perfect
       "WinRate": { cumple: 0, noCumple: -10 },
@@ -3438,7 +3439,8 @@ function showInfo(data, evolutions, preEvolutions) {
       "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
       "Driver Equipado": { cumple: 0, noCumple: -10 },
       "Victorias": { cumple: 1, noCumple: -10 },
-      "Tienes registrado a DexDoruguremon y Doruguremon?": { cumple: 0, noCumple: -10 }
+      "Tienes registrado a DexDoruguremon y Doruguremon?": { cumple: 0, noCumple: -10 },
+      "Alcanzó -50 de vinculo?": { cumple: 0, noCumple: -10 }
     },
     6: { // Ultimate
       "WinRate": { cumple: 0, noCumple: -10 },
@@ -3451,7 +3453,8 @@ function showInfo(data, evolutions, preEvolutions) {
       "Vinculo al momento de evolucionar": { cumple: 0, noCumple: -10 },
       "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
       "Driver Equipado": { cumple: 0, noCumple: -10 },
-      "Victorias": { cumple: 1, noCumple: -10 }
+      "Victorias": { cumple: 1, noCumple: -10 },
+      "Alcanzó -50 de vinculo?": { cumple: 0, noCumple: -10 }
     }
   };
 
@@ -3578,6 +3581,7 @@ function showInfo(data, evolutions, preEvolutions) {
     'Bonus Vinculo al momento de evolucionar': 'Bonus Vínculo',
     'Menos de 15 entrenamientos?': '< 15 Entrenamientos?',
     'Alcanzo vinculo negativo?': '¿Vínculo Negativo?',
+    'Alcanzó -50 de vinculo?': '¿Alcanzó -50 de vínculo?',
     'Errores Minimos': 'Errores Mín.',
     'Victorias Minimas': 'Victorias Mín.',
     'Bonus Digimon': 'Bonus Digimon',

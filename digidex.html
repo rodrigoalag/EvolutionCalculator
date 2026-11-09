@@ -1978,7 +1978,7 @@ const specialDigimonConfig = {
 // Configuración por defecto (la original)
 const gruposColumnasDefault = {
   "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento", "Bonus Batallas", "Digimon Bonus", "Bonus WinRate", "Bonus Errores", "Bonus Comida", "Bonus Vinculo al momento de evolucionar", "Bonus Victorias"],
-  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Vinculo al momento de evolucionar","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname"]
+  "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado","Vinculo al momento de evolucionar","Menos de 15 entrenamientos?", "Program", "Stat Superior", "Stat Superior 2", "Xross", "Driver Equipado", "2Ciclos", "Alcanzo vinculo negativo?", "Alcanzó -50 de vinculo?", "Comida", "EntrenamientoHecho", "Victorias", "Nickname"]
 };
 
 /** Flattens a RequisitosCondicionados path object into a single key-value map. */
@@ -2109,7 +2109,8 @@ const puntajesPorNivel = {
     "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
     "Driver Equipado": { cumple: 0, noCumple: -10 },
     "Victorias": { cumple: 1, noCumple: -10 },
-    "Tienes registrado a DexDorugamon y Dorugamon?": { cumple: 0, noCumple: -10 }
+    "Tienes registrado a DexDorugamon y Dorugamon?": { cumple: 0, noCumple: -10 },
+    "Alcanzó -50 de vinculo?": { cumple: 0, noCumple: -10 }
   },
   5: { // Perfect
     "WinRate": { cumple: 0, noCumple: -10 },
@@ -2125,7 +2126,8 @@ const puntajesPorNivel = {
     "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
     "Driver Equipado": { cumple: 0, noCumple: -10 },
     "Victorias": { cumple: 1, noCumple: -10 },
-    "Tienes registrado a DexDoruguremon y Doruguremon?": { cumple: 0, noCumple: -10 }
+    "Tienes registrado a DexDoruguremon y Doruguremon?": { cumple: 0, noCumple: -10 },
+    "Alcanzó -50 de vinculo?": { cumple: 0, noCumple: -10 }
   },
   6: { // Ultimate
     "WinRate": { cumple: 0, noCumple: -10 },
@@ -2140,7 +2142,8 @@ const puntajesPorNivel = {
     "Program / Comida (Asegura evolucion)": { cumple: 3, noCumple: -10 },
     "Alcanzo vinculo negativo?": { cumple: 0, noCumple: -10 },
     "Driver Equipado": { cumple: 0, noCumple: -10 },
-    "Victorias": { cumple: 1, noCumple: -10 }
+    "Victorias": { cumple: 1, noCumple: -10 },
+    "Alcanzó -50 de vinculo?": { cumple: 0, noCumple: -10 }
   }
 };
 
@@ -2587,6 +2590,7 @@ function formatearPuntajeConColor(puntaje) {
 	  "Bonus Vinculo al momento de evolucionar":"Bonus Vinculo al momento de evolucionar",
 	  "Vinculo al momento de evolucionar": "Vínculo al momento de evolucionar",
 	  "Alcanzo vinculo negativo?": "Alcanzo vinculo negativo?",
+	  "Alcanzó -50 de vinculo?": "¿Alcanzó -50 de vínculo?",
 	  "Nickname": "Nickname",
 	  "Tienes registrado a DexDorugamon y Dorugamon?": "¿Tienes registrado a DexDorugamon y Dorugamon?",
 	  "Tienes registrado a DexDoruguremon y Doruguremon?": "¿Tienes registrado a DexDoruguremon y Doruguremon?",
@@ -2704,6 +2708,7 @@ function formatearPuntajeConColor(puntaje) {
 	  "Bonus Vinculo al momento de evolucionar":"Bond at evolution",
 	  "Vinculo al momento de evolucionar": "Bond at evolution",
 	  "Alcanzo vinculo negativo?": "Reached negative bond?",
+	  "Alcanzó -50 de vinculo?": "Reached -50 bond?",
 	  "Nickname": "Nickname",
 	  "Tienes registrado a DexDorugamon y Dorugamon?": "Do you have DexDorugamon and Dorugamon registered?",
 	  "Tienes registrado a DexDoruguremon y Doruguremon?": "Do you have DexDoruguremon and Doruguremon registered?",

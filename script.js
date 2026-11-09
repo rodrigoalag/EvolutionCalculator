@@ -51,6 +51,8 @@
 	'Do you have DexDorugamon and Dorugamon registered?': 'registrodexdoru',
 	'Tienes registrado a DexDoruguremon y Doruguremon?': 'registrodexdorugure',
 	'Do you have DexDoruguremon and Doruguremon registered?': 'registrodexdorugure',
+	'Alcanzó -50 de vinculo?': 'alcanzo50vinculo',
+	'Reached -50 bond?': 'alcanzo50vinculo',
   "HP Entrenado":'trainedhp',
   "HP %":'trainedhp',
 	"Trained HP":'trainedhp',
@@ -1318,6 +1320,8 @@ function generarFormulario() {
         } else if (field === "Tienes registrado a DexDorugamon y Dorugamon?") {
             opciones = ["Si", "No"];
         } else if (field === "Tienes registrado a DexDoruguremon y Doruguremon?") {
+            opciones = ["Si", "No"];
+        } else if (field === "Alcanzó -50 de vinculo?") {
             opciones = ["Si", "No"];
         } else {
             opciones = Array.from(new Set(nextDigimons.map(([_, info]) => info[field]).filter(v => v !== undefined)));

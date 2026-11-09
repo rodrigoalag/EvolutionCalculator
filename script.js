@@ -3071,6 +3071,14 @@ else if (field === "Program") {
 		punto = -10;
 	  }
 	}
+	else if (field === "Alcanzó -50 de vinculo?") {
+	  // Si = -10 (penalización por haber alcanzado -50), No = 0
+	  if (ingresado === "Si") {
+		punto = -10;
+	  } else {
+		punto = 0;
+	  }
+	}
 
 
 // CÓDIGO DE EVALUACIÓN MODIFICADO PARA XROSS

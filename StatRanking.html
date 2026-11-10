@@ -1056,12 +1056,30 @@ function calcularStatsConHerencia(nombreDigimon, lineaEvolutiva) {
       return; // Saltar este predecesor
     }
 
-    const statsPredecesor = digimonstattier[predecesor];
-    if (statsPredecesor) {
-      heredadoTotal.atk += Math.round(statsPredecesor.ATK * 0.4);
-      heredadoTotal.def += Math.round(statsPredecesor.DEF * 0.4);
-      heredadoTotal.hp += Math.round(statsPredecesor.HP * 0.4);
-      heredadoTotal.vel += Math.round(statsPredecesor.Vel * 0.4);
+    // Si el predecesor es SCUMON_FAMILY, usar computeScumonFamilyStats
+    if (SCUMON_FAMILY.has(predecesor)) {
+      // Buscar el Child (nivel 3) en la línea evolutiva para calcular stats de Scumon
+      const childEnLinea = lineaEvolutiva.find(d => digimonReqDict[d]?.Nivel === 3);
+      const babyIIEnLinea = lineaEvolutiva.find(d => digimonReqDict[d]?.Nivel === 2);
+      const babyIEnLinea = lineaEvolutiva.find(d => digimonReqDict[d]?.Nivel === 1);
+
+      if (childEnLinea) {
+        const scumonStats = computeScumonFamilyStats(predecesor, childEnLinea, babyIIEnLinea, babyIEnLinea);
+        if (scumonStats) {
+          heredadoTotal.atk += Math.round(scumonStats.ATK * 0.4);
+          heredadoTotal.def += Math.round(scumonStats.DEF * 0.4);
+          heredadoTotal.hp += Math.round(scumonStats.HP * 0.4);
+          heredadoTotal.vel += Math.round(scumonStats.Vel * 0.4);
+        }
+      }
+    } else {
+      const statsPredecesor = digimonstattier[predecesor];
+      if (statsPredecesor && statsPredecesor.ATK !== undefined) {
+        heredadoTotal.atk += Math.round(statsPredecesor.ATK * 0.4);
+        heredadoTotal.def += Math.round(statsPredecesor.DEF * 0.4);
+        heredadoTotal.hp += Math.round(statsPredecesor.HP * 0.4);
+        heredadoTotal.vel += Math.round(statsPredecesor.Vel * 0.4);
+      }
     }
   });
 

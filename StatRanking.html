@@ -1270,8 +1270,8 @@ function renderDigimonSolo(nombre) {
   return `<div class="linea-evo"><div class="digi-cell"><img src="${imgUrl('icon/' + vars[0] + '.png')}" class="linea-evo-icon linea-evo-icon-self" data-fallbacks="${fb}" onerror="cargarFallbackLineaEvo(this)"><span class="digi-cell-name">${nombre}</span></div></div>`;
 }
 
-// Función para generar variantes de Scumon y GreatKingScumon
-/** Generates all stat variants for Scumon, PlatinumScumon, and GreatKingScumon based on each possible Child predecessor. */
+// Función para generar variantes de la familia Scumon (SCUMON_FAMILY)
+/** Generates all stat variants for SCUMON_FAMILY members based on each possible Child predecessor. */
 function generarVariantesScumon() {
   const variantes = [];
   const variantesUnicas = new Map(); // Para evitar duplicados
@@ -1411,6 +1411,34 @@ function generarVariantesScumon() {
             lineaEvolutiva: lineaEvolutiva,
             lineaRaw: lineaRawChild,
             evolucionAnterior: childNombre, // PlatinumScumon viene de Child
+            atk: scumonStatsFinal.atk,
+            def: scumonStatsFinal.def,
+            hp: scumonStatsFinal.hp,
+            vel: scumonStatsFinal.vel,
+            digipuntos: scumonDigipuntos,
+            nivel: 4
+          });
+
+          // ScumonTyumon usa la misma fórmula que Scumon (Child base × 1.34)
+          variantes.push({
+            nombre: "ScumonTyumon",
+            lineaEvolutiva: lineaEvolutiva,
+            lineaRaw: lineaRawChild,
+            evolucionAnterior: childNombre,
+            atk: scumonStatsFinal.atk,
+            def: scumonStatsFinal.def,
+            hp: scumonStatsFinal.hp,
+            vel: scumonStatsFinal.vel,
+            digipuntos: scumonDigipuntos,
+            nivel: 4
+          });
+
+          // PlatinumScumonTyumon usa la misma fórmula que Scumon (Child base × 1.34)
+          variantes.push({
+            nombre: "PlatinumScumonTyumon",
+            lineaEvolutiva: lineaEvolutiva,
+            lineaRaw: lineaRawChild,
+            evolucionAnterior: childNombre,
             atk: scumonStatsFinal.atk,
             def: scumonStatsFinal.def,
             hp: scumonStatsFinal.hp,
@@ -2633,8 +2661,8 @@ function generarRanking() {
       const statsData = digimonstattier[nombre];
       if (!statsData) return;
 
-      // Excluir Scumon y GreatKingScumon normales (serán reemplazados por variantes)
-      if (nombre === "Scumon" || nombre === "GreatKingScumon" || nombre === "PlatinumScumon") {
+      // Excluir familia Scumon sin Stat Base (serán reemplazados por variantes calculadas)
+      if (SCUMON_FAMILY.has(nombre)) {
         return;
       }
 

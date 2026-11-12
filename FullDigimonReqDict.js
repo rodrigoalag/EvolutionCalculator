@@ -350,7 +350,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 40, "Bonus Stat Superior": "Balanceado", "WinRate": 50, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 65, "DEF": 70, "HP": 1150, "Vel": 50 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Master Tyranomon", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Dark Tyranomon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Master Tyranomon", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Dark Tyranomon", "DarkTyranomon R", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
   },
   "Dark Tyranomon": {
     "ID": 6, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -361,10 +361,10 @@ const fullDigimonReqDict = {
   },
   "DarkTyranomon R": {
     "ID": 237, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
-    "categorias": { "Requisitos Obligatorios": ["Driver Equipado"] },
-    "Requisitos": { "Driver Equipado": "1 EG001 Driver" },
+    "categorias": { "Requisitos Obligatorios": ["Program", "Driver Equipado"] },
+    "Requisitos": { "Program": "Virus", "Driver Equipado": "1 EG001 Driver" },
     "Stat Base": { "ATK": 100, "DEF": 70, "HP": 900, "Vel": 40 },
-    "isProgramEvo": false,
+    "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Tyranomon"] }
   },
   "V-Dramon": {

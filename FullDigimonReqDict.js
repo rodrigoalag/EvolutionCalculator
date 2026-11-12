@@ -359,6 +359,14 @@ const fullDigimonReqDict = {
     "isProgramEvo": true,
     "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Tyranomon"] }
   },
+  "DarkTyranomon R": {
+    "ID": 237, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
+    "categorias": { "Requisitos Obligatorios": ["Driver Equipado"] },
+    "Requisitos": { "Driver Equipado": "1 EG001 Driver" },
+    "Stat Base": { "ATK": 100, "DEF": 70, "HP": 900, "Vel": 40 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Tyranomon"] }
+  },
   "V-Dramon": {
     "ID": 7, "Tama": "V0", "Nivel": 4, "Atributo": "Vacuna", "Tipo": "Dragon",
     "categorias": { "Quota/Key Points": ["Peso", "% Entrenamiento", "Bonus WinRate"], "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Vinculo Minimo alcanzado", "Alcanzó -50 de vinculo?"] },

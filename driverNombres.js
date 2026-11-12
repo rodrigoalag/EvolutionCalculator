@@ -331,4 +331,7 @@ const driverNombres = {
 
   // V4 Series
   "V4000": { nombre: "Kunemon", color: "Verde" },
+
+  // EG Series
+  "EG001": { nombre: "Rootmon", color: "Blanco" },
 };

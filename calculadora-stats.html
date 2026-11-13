@@ -2560,6 +2560,7 @@ function setupInputHandlers() {
     percentInput.addEventListener('input', (e) => {
       let percent = parseInt(e.target.value) || 0;
       percent = Math.max(0, Math.min(100, percent));
+      e.target.value = percent; // Forzar el valor capeado a 0-100
       let nominal = percentToNominal(percent);
 
       const otherStat = stat === 'atk' ? 'spd' : 'atk';

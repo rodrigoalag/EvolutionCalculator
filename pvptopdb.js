@@ -637,6 +637,23 @@ const pvpTopDB = {
       { nickname: "Theidiotwithlag",  discord: "Theidiotwithlag",  ultimoDigimon: "BlackKingNumemon",  puntaje: 3477, puesto: 9  },
       { nickname: "Thobias",          discord: "Thobias",          ultimoDigimon: "Grademon",          puntaje: 3448, puesto: 10 }
     ]
+  },
+  "2026-11-T0": {
+    label: "Temporada 33",
+    fechaInicio: "1 Noviembre 2026",
+    fechaFin: "15 Noviembre 2026",
+    jugadores: [
+      { nickname: "Braian",       discord: "Braian",       ultimoDigimon: "Devitamamon",       puntaje: 7103, puesto: 1  },
+      { nickname: "Rodrigo",      discord: "Rodrigoalag",  ultimoDigimon: "V-Dramon (Black)",  puntaje: 4308, puesto: 2  },
+      { nickname: "Redlizard",    discord: "Gekkolizard",  ultimoDigimon: "Burpmon",           puntaje: 4139, puesto: 3  },
+      { nickname: "Elxrude",      discord: "Elxrude",      ultimoDigimon: "Devitamamon",       puntaje: 3993, puesto: 4  },
+      { nickname: "Bot.l",        discord: "Bot.l",        ultimoDigimon: "Devitamamon",       puntaje: 3879, puesto: 5  },
+      { nickname: "Blueokami",    discord: "Blueokami",    ultimoDigimon: "BlackKingNumemon",  puntaje: 3863, puesto: 6  },
+      { nickname: "Mrvago",       discord: "Mrvago",       ultimoDigimon: "Kokuwamon",         puntaje: 3842, puesto: 7  },
+      { nickname: "Sithhus",      discord: "Sithhus",      ultimoDigimon: "Kokuwamon",         puntaje: 3776, puesto: 8  },
+      { nickname: "Sebastianarm", discord: "Sebastian",    ultimoDigimon: "KaratsukiNumemon",  puntaje: 3772, puesto: 9  },
+      { nickname: "Omegaarg",     discord: "Omegaarg",     ultimoDigimon: "AeroVDramonBlack",  puntaje: 3718, puesto: 10 }
+    ]
   }
 };
 

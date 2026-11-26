@@ -886,11 +886,11 @@ const fullDigimonReqDict = {
     "categorias": {
       "Etemon, WaruMonzaemon, Monzaemon, ExTyranomon": {
         "Requisitos Obligatorios": ["Program"]
-      },
-      "DexDorugamon, Bakemon LT, Bakemon MT, Soulmon MT, Soulmon LT, Raremon": {
+      }
+/*      ,"DexDorugamon, Bakemon LT, Bakemon MT, Soulmon MT, Soulmon LT, Raremon": {
         "Quota/Key Points": ["Peso", "Error Maximo", "% Entrenamiento"],
         "Requisitos Obligatorios": ["WinRate", "Combates Minimos", "Program"]
-      }
+      }*/
     },
     "Requisitos": {
       "Peso": 20, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 60, "Combates Minimos": 25, "Program": "Puppet",
@@ -900,12 +900,12 @@ const fullDigimonReqDict = {
           "modo": "PuntajeIndividual",
           "Obligatorios": { "Program": "Death" },
           "Puntos": {}
-        },
-        "DexDorugamon, Bakemon LT, Bakemon MT, Soulmon MT, Soulmon LT, Raremon": {
+        }
+/*        ,"DexDorugamon, Bakemon LT, Bakemon MT, Soulmon MT, Soulmon LT, Raremon": {
           "modo": "PuntajeIndividual",
           "Obligatorios": { "WinRate": 60, "Combates Minimos": 25, "Program": "Puppet" },
           "Puntos": { "Peso": 20, "Error Maximo": 3, "% Entrenamiento": 80 }
-        }
+        }*/
       }
     },
     "Stat Base": { "ATK": 146, "DEF": 77, "HP": 3000, "Vel": 77 },

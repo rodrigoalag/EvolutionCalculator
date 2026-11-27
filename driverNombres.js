@@ -334,4 +334,13 @@ const driverNombres = {
 
   // EG Series
   "EG001": { nombre: "Rootmon", color: "Blanco" },
+
+  // BU Series (Bushi Agumon Styles)
+  "BU000": { nombre: "Jōdan no Kamae", color: "Rojo" },
+  "BU001": { nombre: "Chūdan no Kamae", color: "Rojo" },
+  "BU002": { nombre: "Battōjutsu", color: "Rojo" },
+  "BU003": { nombre: "Gedan no Kamae", color: "Rojo" },
+  "BU004": { nombre: "Niten Ichi-ryū", color: "Rojo" },
+  "BU005": { nombre: "Waki-gamae", color: "Rojo" },
+  "BU006": { nombre: "Hassō no Kamae", color: "Rojo" },
 };

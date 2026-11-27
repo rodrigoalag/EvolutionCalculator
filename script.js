@@ -3484,6 +3484,23 @@ if (programIngresado && programIngresado.toLowerCase() === "death") {
 }
 // FIN CASO ESPECIAL DEATH PROGRAM
 
+// VERIFICAR CASO ESPECIAL PILLOMON SHINY
+const pillomonResult = puntajes.find(d => d.name === "Pillomon" && d.puntaje === maxPuntaje);
+if (pillomonResult) {
+    const textTranslationsPillomon = {
+        es: "Pillomon tiene una variante Shiny con probabilidad de 1/8192 de aparecer.",
+        en: "Pillomon has a Shiny variant with a 1/8192 chance of appearing."
+    };
+    // Append to existing text if there is one, otherwise set it
+    const existingText = evolucionTexto.textContent;
+    if (existingText && !specialCaseHandled) {
+        evolucionTexto.textContent = existingText + " " + textTranslationsPillomon[currentLanguage];
+    } else if (!specialCaseHandled) {
+        evolucionTexto.textContent = textTranslationsPillomon[currentLanguage];
+    }
+}
+// FIN CASO ESPECIAL PILLOMON SHINY
+
   // Traducciones para los textos a mostrar
 const textTranslations = {
   es: {

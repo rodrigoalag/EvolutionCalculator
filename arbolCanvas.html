@@ -136,6 +136,50 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* --- Variantes/Estilos --- */
+    .variantes-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .variantes-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .variante-chip {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #ccc;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .variante-chip:hover {
+      background: rgba(78, 205, 196, 0.15);
+      color: #fff;
+      border-color: rgba(78,205,196,0.5);
+    }
+    .variante-chip.active {
+      background: rgba(78, 205, 196, 0.25);
+      color: #4ecdc4;
+      border-color: #4ecdc4;
+      box-shadow: 0 0 8px rgba(78,205,196,0.3);
+    }
+    .variante-prob {
+      width: 100%;
+      margin-top: 6px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      color: #ffd700;
+      background: rgba(255,215,0,0.1);
+      border-radius: 6px;
+      text-align: center;
+    }
+
     /* --- Grid de Stats (3 columnas) --- */
     .stats-grid-modern {
       display: grid;
@@ -1432,7 +1476,7 @@
     }
 
     /* ===== DRIVER XROSS ===== */
-    .xross-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .xross-wrapper { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
     .xross-entry { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
     .xross-driver-container { position: relative; width: 26px; height: 26px; flex-shrink: 0; }
     .xross-driver-container .driver-bg { width: 26px; height: 26px; object-fit: contain; }
@@ -1807,6 +1851,12 @@
       </div>
     </div>
 
+    <!-- Variantes (si el Digimon tiene estilos) -->
+    <div id="variantes-section" style="display: none; padding: 6px 8px;">
+      <div class="variantes-label"><span id="variantes-label-text">Variantes</span></div>
+      <div class="variantes-chips" id="variantes-chips"></div>
+    </div>
+
     <!-- Stats Base (siempre visible, debajo del meta) -->
     <div class="stats-grid-modern" id="stats-grid">
       <div class="stat-card">
@@ -2161,7 +2211,8 @@ const uiTranslations = {
     cyPlaceholder: "Selecciona un Tama para ver el árbol",
     herramientas: "Herramientas",
     linksExternos: "Links Externos",
-    creditos: "Créditos"
+    creditos: "Créditos",
+    variantes: "Variantes"
   },
   en: {
     searchPlaceholder: "🔍 Search Digimon...",
@@ -2175,12 +2226,38 @@ const uiTranslations = {
     cyPlaceholder: "Select a Tama to view the tree",
     herramientas: "Tools",
     linksExternos: "External Links",
-    creditos: "Credits"
+    creditos: "Credits",
+    variantes: "Variants"
   }
 };
 
 let currentLanguage = localStorage.getItem('digilang') || 'es';
 let lastShowInfoArgs = null;
+
+// === SISTEMA DE VARIANTES/ESTILOS ===
+let varianteActiva = null;  // Nombre de la variante activa (null = Default o sin variantes)
+let digimonConVariantes = null; // Nombre del Digimon actual con variantes
+
+/** Obtiene el objeto Estilos de un Digimon desde digimonReqDict (FullDigimonReqDict). */
+function obtenerEstilosArbol(nombre) {
+  if (!nombre || typeof digimonReqDict === 'undefined') return null;
+  const estilos = digimonReqDict[nombre]?.Estilos;
+  if (!estilos || typeof estilos !== 'object' || Object.keys(estilos).length === 0) return null;
+  return estilos;
+}
+
+/** Cambia la variante activa y actualiza el panel. */
+function cambiarVariante(nombreVariante) {
+  if (nombreVariante === varianteActiva) return;
+  varianteActiva = nombreVariante;
+  if (lastShowInfoArgs) showInfo(...lastShowInfoArgs);
+}
+
+/** Aplica los datos de la variante seleccionada al objeto de stats y requisitos. */
+function aplicarVariante(nombre, estilos, variante) {
+  if (!estilos || !variante || variante === 'Default' || !estilos[variante]) return null;
+  return estilos[variante];
+}
 
 /** Cambia el idioma de la UI y recarga los textos y el panel de info si hay uno activo. */
 function changeLanguage() {
@@ -3141,6 +3218,16 @@ function showInfo(data, evolutions, preEvolutions) {
   document.getElementById('panel-placeholder').style.display = 'none';
   document.getElementById('digi-info').classList.add('active');
 
+  // Detectar si el Digimon tiene variantes/estilos
+  const estilos = obtenerEstilosArbol(data.label);
+  const tieneVariantes = estilos && Object.keys(estilos).length > 0;
+
+  // Resetear variante si cambió de Digimon
+  if (digimonConVariantes !== data.label) {
+    digimonConVariantes = data.label;
+    varianteActiva = tieneVariantes ? Object.keys(estilos)[0] : null;
+  }
+
   // Resetear a tab "Evolución" cuando se muestra un nuevo Digimon
   switchTab('evolucion');
 
@@ -3148,7 +3235,10 @@ function showInfo(data, evolutions, preEvolutions) {
   openPanel();
   updatePanelToggleState(true);
 
-  cargarImagenConVariaciones(data.label, document.getElementById('info-img'), 'img');
+  // Usar icono personalizado si el estilo lo tiene
+  const customIcon = varianteActiva && estilos?.[varianteActiva]?.Icon;
+  const nombreImagen = customIcon || data.label;
+  cargarImagenConVariaciones(nombreImagen, document.getElementById('info-img'), 'img');
   document.getElementById('info-name').textContent = data.label;
   document.getElementById('info-attr').textContent = data.atributo;
   document.getElementById('info-type').textContent = data.tipo;
@@ -3201,13 +3291,57 @@ function showInfo(data, evolutions, preEvolutions) {
   } else {
     lineageRow.style.display = 'none';
     childSelect.onchange = null;
-    document.getElementById('stat-hp').textContent  = statData?.HP  ?? '-';
-    document.getElementById('stat-atk').textContent = statData?.ATK ?? '-';
-    document.getElementById('stat-def').textContent = statData?.DEF ?? '-';
-    document.getElementById('stat-vel').textContent = statData?.Vel ?? '-';
-    document.getElementById('stat-digipuntos').textContent   = reqEntry?.Digipuntos ?? '-';
+
+    // Obtener stats base o de variante
+    let hp = statData?.HP ?? '-';
+    let atk = statData?.ATK ?? '-';
+    let def = statData?.DEF ?? '-';
+    let vel = statData?.Vel ?? '-';
+    let digipuntos = reqEntry?.Digipuntos ?? '-';
+
+    // Si hay variante activa, aplicar sus stats
+    if (tieneVariantes && varianteActiva && varianteActiva !== 'Default' && estilos[varianteActiva]) {
+      const varStats = estilos[varianteActiva]['Stat Base'];
+      if (varStats) {
+        hp = varStats.HP ?? hp;
+        atk = varStats.ATK ?? atk;
+        def = varStats.DEF ?? def;
+        vel = varStats.Vel ?? vel;
+        // Recalcular digipuntos
+        const baseDP = ((hp / 10) + atk + def + vel) / 10;
+        digipuntos = parseFloat(baseDP.toFixed(1));
+      }
+    }
+
+    document.getElementById('stat-hp').textContent = hp;
+    document.getElementById('stat-atk').textContent = atk;
+    document.getElementById('stat-def').textContent = def;
+    document.getElementById('stat-vel').textContent = vel;
+    document.getElementById('stat-digipuntos').textContent = digipuntos;
     const clasif = reqEntry?.Clasificacion;
     document.getElementById('stat-clasificacion').textContent = clasif ? clasif.nombre : '-';
+  }
+
+  // Mostrar sección de variantes si tiene
+  const variantesSection = document.getElementById('variantes-section');
+  const variantesChips = document.getElementById('variantes-chips');
+  if (tieneVariantes) {
+    const nombresVariantes = Object.keys(estilos);
+    const t = uiTranslations[currentLanguage] || uiTranslations.es;
+    document.getElementById('variantes-label-text').textContent = t.variantes || 'Variantes';
+
+    // Verificar si la variante activa tiene Probabilidad
+    const probabilidad = varianteActiva && estilos[varianteActiva]?.Probabilidad;
+    const probHTML = probabilidad
+      ? `<div class="variante-prob">${currentLanguage === 'en' ? 'Chance' : 'Probabilidad'}: <b>${probabilidad}</b></div>`
+      : '';
+
+    variantesChips.innerHTML = nombresVariantes.map(v =>
+      `<button type="button" class="variante-chip${v === varianteActiva ? ' active' : ''}" onclick="cambiarVariante('${v}')">${v}</button>`
+    ).join('') + probHTML;
+    variantesSection.style.display = 'block';
+  } else {
+    variantesSection.style.display = 'none';
   }
 
   const badge = document.getElementById('info-badge');
@@ -3220,7 +3354,19 @@ function showInfo(data, evolutions, preEvolutions) {
   const sectionFrom = document.getElementById('section-from');
   const listFrom = document.getElementById('list-from');
   const fromTitle = document.querySelector('#section-from h4');
-  if (preEvolutions.length > 0) {
+
+  // Si hay variante activa (no Default), "Viene de" muestra el Digimon base
+  if (tieneVariantes && varianteActiva && varianteActiva !== 'Default') {
+    sectionFrom.style.display = 'block';
+    fromTitle.innerHTML = `${t.vieneTitle} (<span id="count-from">1</span>)`;
+    listFrom.innerHTML = `<div class="evo-chip from" onclick="cambiarVariante('Default')">
+      <img class="evo-chip-icon" data-digimon="${data.label}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
+      <span>${data.label}</span>
+    </div>`;
+    listFrom.querySelectorAll('img[data-digimon]').forEach(img => {
+      cargarImagenConVariaciones(img.dataset.digimon, img);
+    });
+  } else if (preEvolutions.length > 0) {
     sectionFrom.style.display = 'block';
     fromTitle.innerHTML = `${t.vieneTitle} (<span id="count-from">${preEvolutions.length}</span>)`;
     listFrom.innerHTML = preEvolutions.map(name => {
@@ -3259,9 +3405,30 @@ function showInfo(data, evolutions, preEvolutions) {
   }
 
   // Requisitos de digimonReqDict - usando nuevo contenedor de acordeones
-  const reqData = digimonReqDict[data.label] || {};
+  let reqData = digimonReqDict[data.label] || {};
   const reqAccordions = document.getElementById('req-accordions');
   let specialConfig = digimonReqDict[data.label]?.categorias || specialDigimonConfig[data.label];
+
+  // Si hay variante activa (no Default), reemplazar requisitos con solo los de la variante
+  if (tieneVariantes && varianteActiva && varianteActiva !== 'Default' && estilos[varianteActiva]?.Requisitos) {
+    const varReqs = estilos[varianteActiva].Requisitos;
+    // Mantener solo campos básicos (ID, Tama, Nivel, etc.) y agregar requisitos de variante
+    reqData = {
+      ID: reqData.ID,
+      Tama: reqData.Tama,
+      Nivel: reqData.Nivel,
+      Atributo: reqData.Atributo,
+      Tipo: reqData.Tipo,
+      Digipuntos: reqData.Digipuntos,
+      Clasificacion: reqData.Clasificacion,
+      isProgramEvo: reqData.isProgramEvo,
+      ...varReqs
+    };
+    // Reemplazar categorias con solo los campos de la variante
+    specialConfig = {
+      'Requisitos Obligatorios': Object.keys(varReqs)
+    };
+  }
 
   // Campos que usan porcentaje
   const percentFields = ['% Entrenamiento', 'WinRate', 'Bonus WinRate'];

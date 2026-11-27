@@ -165,7 +165,14 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 5, "EntrenamientoHecho": "No", "% Entrenamiento": 0 },
     "Stat Base": { "ATK": 25, "DEF": 40, "HP": 500, "Vel": 35 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Numemon", "Scumon", "Bakemon LT", "Nanimon", "Mercuremon", "Burpmon"], "Viene": [] }
+    "Evoluciones": { "Evoluciona": ["Numemon", "Scumon", "Bakemon LT", "Nanimon", "Mercuremon", "Burpmon"], "Viene": [] },
+    "Estilos": {
+      "Default": {},
+      "Shiny": {
+        "Probabilidad": "1/8192",
+        "Icon": "pillomonshiny"
+      }
+    }
   },
   "Starmons": {
     "ID": 84, "Tama": "VS", "Nivel": 3, "Atributo": "Data", "Tipo": "Compuesto",
@@ -327,6 +334,46 @@ const fullDigimonReqDict = {
     "isProgramEvo": false,
     "Evoluciones": { "Evoluciona": ["Siesamon", "Burpmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon"], "Viene": ["Xiaomon"] }
   },
+  "Bushi Agumon": {
+    "ID": 236, "Tama": "V0", "Nivel": 3, "Atributo": "Vacuna", "Tipo": "Dinosaurio",
+    "EvoNatural": "Numemon",
+    "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
+    "Requisitos": { "Peso": 15, "Comida": "1 Huevo del Este" },
+    "Stat Base": { "ATK": 40, "DEF": 40, "HP": 400, "Vel": 40 },
+    "isProgramEvo": false,
+    "Evoluciones": { "Evoluciona": ["Greymon", "Tyranomon", "V-Dramon", "Deltamon", "V-Dramon (Black)", "Thunderballmon", "Guardromon", "Clockmon", "Numemon", "Scumon", "Bakemon LT", "Nanimon", "Burpmon"], "Viene": ["Koromon"] },
+    "Estilos": {
+      "Default": {},
+      "Jōdan no Kamae": {
+        "Stat Base": { "ATK": 80, "DEF": 20, "HP": 200, "Vel": 40 },
+        "Requisitos": { "Xross": "1 BU000 Driver" }
+      },
+      "Chūdan no Kamae": {
+        "Stat Base": { "ATK": 30, "DEF": 30, "HP": 700, "Vel": 30 },
+        "Requisitos": { "Xross": "1 BU001 Driver" }
+      },
+      "Battōjutsu": {
+        "Stat Base": { "ATK": 40, "DEF": 40, "HP": 200, "Vel": 60 },
+        "Requisitos": { "Xross": "1 BU002 Driver" }
+      },
+      "Gedan no Kamae": {
+        "Stat Base": { "ATK": 30, "DEF": 40, "HP": 600, "Vel": 30 },
+        "Requisitos": { "Xross": "1 BU003 Driver" }
+      },
+      "Niten Ichi-ryū": {
+        "Stat Base": { "ATK": 50, "DEF": 20, "HP": 400, "Vel": 50 },
+        "Requisitos": { "Xross": "1 BU004 Driver" }
+      },
+      "Waki-gamae": {
+        "Stat Base": { "ATK": 60, "DEF": 40, "HP": 400, "Vel": 20 },
+        "Requisitos": { "Xross": "1 BU005 Driver" }
+      },
+      "Hassō no Kamae": {
+        "Stat Base": { "ATK": 50, "DEF": 40, "HP": 500, "Vel": 20 },
+        "Requisitos": { "Xross": "1 BU006 Driver" }
+      }
+    }
+  },
   "Burpmon": {
     "ID": 33, "Tama": "M", "Nivel": 3, "Atributo": "Free", "Tipo": "Mutante",
     "categorias": { "Requisitos Obligatorios": ["Peso"] },
@@ -342,7 +389,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 30, "Error Maximo": 1, "% Entrenamiento": 80, "Digimon Bonus": "Agumon", "Vinculo Minimo alcanzado": 70, "WinRate": 60, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 100, "DEF": 60, "HP": 1000, "Vel": 65 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Bushi Agumon"] }
   },
   "Tyranomon": {
     "ID": 5, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Dinosaurio",
@@ -350,7 +397,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 30, "Error Maximo": 2, "% Entrenamiento": 40, "Bonus Stat Superior": "Balanceado", "WinRate": 50, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 65, "DEF": 70, "HP": 1150, "Vel": 50 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Master Tyranomon", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Dark Tyranomon", "DarkTyranomon R", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Master Tyranomon", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Dark Tyranomon", "DarkTyranomon R", "SkullGreymon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Bushi Agumon"] }
   },
   "Dark Tyranomon": {
     "ID": 6, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -373,28 +420,28 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 25, "% Entrenamiento": 100, "Bonus WinRate": 70, "WinRate": 60, "Combates Minimos": 15, "Vinculo Minimo alcanzado": 100, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 100, "DEF": 55, "HP": 1050, "Vel": 90 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "RedVDramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "RedVDramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Yuki Agumon", "Agumon (2006)", "Bushi Agumon"] }
   },
   "Deltamon": {
     "ID": 8, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Compuesto",
     "Requisitos": { "Peso": 30, "Error Maximo": "3-6", "% Entrenamiento": 60, "Bonus Errores": 5, "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "ATK" },
     "Stat Base": { "ATK": 115, "DEF": 40, "HP": 900, "Vel": 55 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Monodramon"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Monodramon", "Bushi Agumon"] }
   },
   "Thunderballmon": {
     "ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Data", "Tipo": "Mutante",
     "Requisitos": { "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 60, "Digimon Bonus": "Kokuwamon", "WinRate": 50, "Combates Minimos": 15, "Stat Superior": "Vel" },
     "Stat Base": { "ATK": 85, "DEF": 50, "HP": 900, "Vel": 75 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Mametyramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Mametyramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Bushi Agumon"] }
   },
   "Guardromon": {
     "ID": 9, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "Peso": 35, "Error Maximo": 2, "% Entrenamiento": 50, "Bonus Batallas": "15-20", "WinRate": 50, "Combates Minimos": 15 },
     "Stat Base": { "ATK": 50, "DEF": 110, "HP": 1100, "Vel": 30 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "GoldGuardromon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "GoldGuardromon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Bushi Agumon"] }
   },
   "V-Dramon (Black)": {
     "ID": 34, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dragon",
@@ -409,7 +456,7 @@ const fullDigimonReqDict = {
     },
     "Stat Base": { "ATK": 105, "DEF": 65, "HP": 1050, "Vel": 75 },
     "isProgramEvo": true,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon (Black)", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Bushi Agumon"] }
   },
   "RedVDramon": {
     "ID": 35, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dragon",
@@ -438,7 +485,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 18, "Error Maximo": "1-6", "% Entrenamiento": 50, "WinRate": 50, "Combates Minimos": 15, "Bonus Batallas": 0 },
     "Stat Base": { "ATK": 80, "DEF": 50, "HP": 1050, "Vel": 65 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)"] }
+    "Evoluciones": { "Evoluciona": ["Metal Greymon (Virus)", "Andromon", "Aero V-dramon", "Metal Tyranomon", "Metal Greymon", "Mamemon", "Triceramon", "Megadramon", "Burpmon"], "Viene": ["Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (Black)", "Yuki Agumon", "Agumon (2006)", "Bushi Agumon"] }
   },
   "Tuskmon": {
     "ID": 80, "Tama": "V0", "Nivel": 4, "Atributo": "Virus", "Tipo": "Dinosaurio",
@@ -460,14 +507,14 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 10 },
     "Stat Base": { "ATK": 45, "DEF": 40, "HP": 750, "Vel": 40 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon"] }
+    "Evoluciones": { "Evoluciona": ["Monzaemon", "Black King Numemon", "KaratsukiNumemon", "Geremon", "GoldNumemon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Bushi Agumon"] }
   },
   "Scumon": {
     "ID": 41, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
     "categorias": { "No se considera en el puntaje": ["Peso"], "Requisitos Obligatorios": ["Comida"] },
     "Requisitos": { "Peso": 10, "Comida": "5 Caca" },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["GreatKingScumon", "Etemon", "PlatinumScumon", "ScumonTyumon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
+    "Evoluciones": { "Evoluciona": ["GreatKingScumon", "Etemon", "PlatinumScumon", "ScumonTyumon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon", "Bushi Agumon"] }
   },
   "KaratsukiNumemon": {
     "ID": 40, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "Mutante",
@@ -506,7 +553,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 10, "Vinculo al momento de evolucionar": -50 },
     "Stat Base": { "ATK": 50, "DEF": 30, "HP": 650, "Vel": 55 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Digitamamon","Darumamon", "BomberNanimon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
+    "Evoluciones": { "Evoluciona": ["Digitamamon","Darumamon", "BomberNanimon", "Mercuremon", "Sephirothmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon", "Bushi Agumon"] }
   },
   "Raremon": {
     "ID": 194, "Tama": "M", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
@@ -634,7 +681,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 10, "Muerte inducida sin Carne X o Program (30% de salir)": "Si", "Comida": "Carne X", "Program": "Death" },
     "Stat Base": { "ATK": 40, "DEF": 40, "HP": 600, "Vel": 60 },
     "isProgramEvo": true,
-    "Evoluciones": { "Evoluciona": ["Soulmon LT", "Fantomon", "Pumpmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon"] }
+    "Evoluciones": { "Evoluciona": ["Soulmon LT", "Fantomon", "Pumpmon", "Burpmon"], "Viene": ["Ghostmon", "Pillomon", "Agumon", "Agumon Hakase", "Kokuwamon", "Agumon (2006)", "Yuki Agumon", "Agumon (Black)", "Starmons", "Gotsumon", "Shoutmon", "Shoutmon + Star Sword", "Shoutmon SH", "Shoutmon (Black)", "Mushmon", "Penmon", "Dorumon", "Gekkomon", "Pteromon", "Tyumon", "Bushi Agumon"] }
   },
   "Soulmon LT": {
     "ID": 101, "Tama": "D", "Nivel": 4, "Atributo": "Virus", "Tipo": "No Muerto",
@@ -748,14 +795,14 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 65, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 220, "DEF": 110, "HP": 1900, "Vel": 130 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["BlitzGreymon", "Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon"] }
+    "Evoluciones": { "Evoluciona": ["BlitzGreymon", "Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon"] }
   },
   "Andromon": {
     "ID": 13, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
     "Requisitos": { "Peso": 40, "Error Maximo": 2, "% Entrenamiento": 60, "WinRate": 60, "Combates Minimos": 25, "Alcanzo vinculo negativo?": "No" },
     "Stat Base": { "ATK": 100, "DEF": 225, "HP": 2250, "Vel": 50 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
+    "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Mametyramon": {
     "ID": 14, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
@@ -778,14 +825,14 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 50, "% Entrenamiento": 100, "Digimon Bonus": "V-Dramon (Black)", "Vinculo Minimo alcanzado": 100, "WinRate": 70, "Combates Minimos": 25, "Alcanzó -50 de vinculo?": "No" },
     "Stat Base": { "ATK": 235, "DEF": 110, "HP": 2050, "Vel": 150 },
     "isProgramEvo": true,
-    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["V-Dramon (Black)", "RedVDramon", "Tuskmon", "Dark Tyranomon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon"], "Viene": ["V-Dramon (Black)", "RedVDramon", "Tuskmon", "Dark Tyranomon", "DarkTyranomon R"] }
   },
   "Metal Tyranomon": {
     "ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "Peso": 65, "Error Maximo": "3-6", "% Entrenamiento": 60, "Digimon Bonus": "Dark Tyranomon", "WinRate": 60, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 175, "DEF": 125, "HP": 2150, "Vel": 85 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
+    "Evoluciones": { "Evoluciona": ["Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "MetalMamemon": {
     "ID": 17, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
@@ -799,7 +846,7 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 65, "Error Maximo": 1, "% Entrenamiento": 80, "WinRate": 70, "Combates Minimos": 25, "Program": "Vaccine" },
     "Stat Base": { "ATK": 225, "DEF": 120, "HP": 2000, "Vel": 130 },
     "isProgramEvo": true,
-    "Evoluciones": { "Evoluciona": ["MetalGreymon Alterous", "Wargreymon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
+    "Evoluciones": { "Evoluciona": ["MetalGreymon Alterous", "Wargreymon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "MetalGreymon Alterous": {
     "ID": 26, "Tama": "V0", "Nivel": 5, "Atributo": "Vacuna", "Tipo": "Maquina",
@@ -813,21 +860,21 @@ const fullDigimonReqDict = {
     "Requisitos": { "Peso": 5, "Error Maximo": 2, "% Entrenamiento": 50, "WinRate": 60, "Combates Minimos": 25, "Bonus Errores": "1-6" },
     "Stat Base": { "ATK": 185, "DEF": 75, "HP": 2000, "Vel": 140 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["MetalMamemon", "BigMamemon", "PrinceMamemon", "BanchoMamemon", "Sephirothmon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
+    "Evoluciones": { "Evoluciona": ["MetalMamemon", "BigMamemon", "PrinceMamemon", "BanchoMamemon", "Sephirothmon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Triceramon": {
     "ID": 37, "Tama": "V0", "Nivel": 5, "Atributo": "Data", "Tipo": "Dinosaurio",
     "Requisitos": { "Peso": 50, "Error Maximo": 2, "% Entrenamiento": 50, "Digimon Bonus": "Tyranomon", "WinRate": 60, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 125, "DEF": 190, "HP": 2100, "Vel": 75 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Dinomon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
+    "Evoluciones": { "Evoluciona": ["Dinomon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Megadramon": {
     "ID": 18, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
     "Requisitos": { "Peso": 55, "Error Maximo": "1-2", "% Entrenamiento": 75, "Bonus Batallas": 30, "WinRate": 60, "Combates Minimos": 25 },
     "Stat Base": { "ATK": 210, "DEF": 80, "HP": 1750, "Vel": 135 },
     "isProgramEvo": false,
-    "Evoluciones": { "Evoluciona": ["Gigadramon", "Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
+    "Evoluciones": { "Evoluciona": ["Gigadramon", "Mugendramon", "Burpmon"], "Viene": ["Greymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "V-Dramon", "Deltamon", "Thunderballmon", "Guardromon", "V-Dramon (Black)", "GoldGuardromon", "Clockmon", "Tuskmon", "GeoGreymon", "Yukidarumon"] }
   },
   "Gigadramon": {
     "ID": 25, "Tama": "V0", "Nivel": 5, "Atributo": "Virus", "Tipo": "Maquina",
@@ -1051,7 +1098,7 @@ const fullDigimonReqDict = {
     },
     "Stat Base": { "ATK": 270, "DEF": 100, "HP": 1600, "Vel": 70 },
     "isProgramEvo": true,
-    "Evoluciones": { "Evoluciona": ["Burpmon", "BlackWargreymon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "Tuskmon", "Armalizamon"] }
+    "Evoluciones": { "Evoluciona": ["Burpmon", "BlackWargreymon"], "Viene": ["Greymon", "GeoGreymon", "Tyranomon", "Dark Tyranomon", "DarkTyranomon R", "Tuskmon", "Armalizamon"] }
   },
   "MonarchLizamon": {
     "ID": 183, "Tama": "BG", "Nivel": 5, "Atributo": "Data", "Tipo": "Maquina",
@@ -1585,6 +1632,7 @@ Object.entries(fullDigimonReqDict).forEach(([name, data]) => {
     ...(data.EvoNatural ? { EvoNatural: data.EvoNatural } : {}),
     ...(Object.keys(categorias).length > 0 ? { categorias } : {}),
     "isProgramEvo": data.isProgramEvo ?? false,
+    ...(data.Estilos ? { Estilos: data.Estilos } : {}),
     ...(data.Requisitos || {})
   };
 

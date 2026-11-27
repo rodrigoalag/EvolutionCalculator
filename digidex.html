@@ -1467,6 +1467,7 @@ main {
 .xross-wrapper {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 4px;
   row-gap: 6px;
@@ -1539,6 +1540,55 @@ main {
   color: #e0e0e0;
   font-weight: bold;
 }
+
+/* ====================== ESTILOS POR DIGIMON ====================== */
+.estilos-section {
+  margin: 1rem 0;
+  padding: 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.estilos-label {
+  color: #4ecdc4;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.estilos-label small { color: #888; font-weight: 400; font-size: 0.7rem; }
+.estilos-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.estilo-chip {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.estilo-chip:hover { background: rgba(78, 205, 196, 0.15); color: #fff; border-color: rgba(78,205,196,0.5); }
+.estilo-chip.active { background: rgba(78, 205, 196, 0.25); color: #4ecdc4; border-color: #4ecdc4; box-shadow: 0 0 8px rgba(78,205,196,0.3); }
+.estilo-actual {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #4ecdc4;
+}
+#reqs-estilo {
+  display: none;
+  margin: -0.6rem 0 0.4rem 0;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+#reqs-estilo b { color: #4ecdc4; }
+@media (max-width: 600px) {
+  .estilo-chip { padding: 3px 8px; font-size: 0.7rem; }
+}
+/* ====================== FIN ESTILOS ====================== */
   </style>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
@@ -1649,12 +1699,18 @@ main {
       <img id="digimonImage" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/img/placeholder.png" alt="" onerror="this.src='https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/img/placeholder.png'" onclick="openImgModal()" style="cursor: zoom-in;">
       <h2 id="info-name"></h2>
       <span class="badge" id="info-badge"></span>
+      <span class="estilo-actual" id="estilo-actual" style="display: none;"></span>
     </div>
 
     <div class="info-stats" id="info-stats" style="display: none;">
       <p>Atributo: <span id="info-attr"></span></p>
       <p>Tipo: <span id="info-type"></span></p>
       <p>Tama: <span id="info-tama"></span></p>
+    </div>
+
+    <div class="estilos-section" id="estilos-section" style="display: none;">
+      <div class="estilos-label"><span id="estilos-label-text">Estilos</span><small id="estilos-count"></small></div>
+      <div class="estilos-chips" id="estilos-chips"></div>
     </div>
 
     <div id="scumon-lineage-row" style="display: none; padding: 4px 8px; flex-direction: column; gap: 6px;">
@@ -1697,6 +1753,7 @@ main {
   <!-- Columna Derecha: Requisitos -->
   <div class="right-panel" id="right-panel">
     <h3 id="reqs-title" style="color: #4ecdc4; margin: 0 0 1rem 0; display: none;">📋 Requisitos de Evolución</h3>
+    <p id="reqs-estilo"></p>
     <!-- Datos generales ocultos para compatibilidad -->
     <table id="tablaGenerales" style="display: none;">
       <thead><tr><th>ID</th><th>Tama</th><th>Nivel</th><th>Atributo</th><th>Tipo</th><th>Peso</th></tr></thead>
@@ -3229,6 +3286,7 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
   // Event listener mejorado para selectDigimon
   selectDigimon.addEventListener("change", () => {
     const nombre = selectDigimon.value;
+    prepararEstilos(nombre);
     if (!nombre || !dict[nombre]) {
       // Si no hay selección, mostrar placeholder y ocultar panel info
       document.getElementById('panel-placeholder').style.display = 'block';
@@ -3336,13 +3394,16 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
       document.getElementById('stat-clasificacion').textContent = clasif ? clasif.nombre : '-';
     }
 
-    // Cargar imagen
-    console.log(`Digimon seleccionado: ${nombre}`);
-    cargarImagenConVariaciones(nombre, digimonImage, (exito, rutaUsada) => {
+    // Cargar imagen (usar icono personalizado si el estilo lo tiene)
+    const estilos = fullDigimonReqDict[nombre]?.Estilos;
+    const customIcon = estiloActivo && estilos?.[estiloActivo]?.Icon;
+    const nombreImagen = customIcon || nombre;
+    console.log(`Digimon seleccionado: ${nombre}, imagen: ${nombreImagen}`);
+    cargarImagenConVariaciones(nombreImagen, digimonImage, (exito, rutaUsada) => {
       if (exito) {
         console.log(`Imagen cargada exitosamente desde: ${rutaUsada}`);
       } else {
-        console.log(`No se pudo cargar imagen para: ${nombre}`);
+        console.log(`No se pudo cargar imagen para: ${nombreImagen}`);
       }
     });
 
@@ -3400,6 +3461,20 @@ function cargarImagenConVariaciones(nombre, elementoImg, callback) {
 	// Viene de
 	if (nombre === "Burpmon") {
 		listFrom.innerHTML = `<div class="evo-item"><span class="name">${t("todosLosDigimon")}</span></div>`;
+		sectionFrom.style.display = 'block';
+	} else if (estiloActivo && estiloActivo !== "Default" && fullDigimonReqDict[nombre]?.Estilos) {
+		// Si hay un estilo activo (no Default), viene del Digimon base
+		const evoData = fullDigimonReqDict[nombre] || {};
+		const nivel = nivelAEtapa[currentLanguage][evoData.Nivel] || '';
+		listFrom.innerHTML = `
+			<div class="evo-item" onclick="cambiarEstilo('Default')">
+				<img data-digimon="${nombre}" src="https://cdn.jsdelivr.net/gh/rodrigoalag/EvolutionCalculator@dev/icon/placeholder.png" alt="">
+				<span class="name">${nombre}</span>
+				<span class="level">${nivel}</span>
+			</div>`;
+		listFrom.querySelectorAll('img[data-digimon]').forEach(img => {
+			cargarImagenIcono(img.dataset.digimon, img);
+		});
 		sectionFrom.style.display = 'block';
 	} else if (statsDigimon.Viene && statsDigimon.Viene.length > 0) {
 		statsDigimon.Viene.forEach(evoName => {
@@ -4835,6 +4910,161 @@ document.getElementById('selectDigimon').addEventListener('change', function() {
     downloadBtn.style.display = 'none';
   }
 });
+
+// ============================================
+// ESTILOS POR DIGIMON
+// ============================================
+// Los estilos SOLO se muestran si el Digimon tiene el campo "Estilos" en
+// fullDigimonReqDict (FullDigimonReqDict.js). Sin ese campo, la página
+// funciona exactamente igual que antes.
+//
+// Formato en FullDigimonReqDict.js:
+//   "Greymon": {
+//     "ID": 4, "Tama": "V0", ...,            <- datos normales (= estilo "Base")
+//     "Estilos": {
+//       "Base":   {},                        <- vacío = usa los datos normales
+//       "Fuerza": {
+//         "Stat Base":  { "ATK": 118, "DEF": 55, "HP": 980, "Vel": 62 },  <- opcional
+//         "Requisitos": { "Peso": 32, "WinRate": 70, ... },               <- opcional, reemplaza TODOS
+//         "categorias": { "Quota/Key Points": [...], ... }                 <- opcional
+//       }
+//     }
+//   }
+const CAMPO_ESTILOS = "Estilos";
+
+/** Devuelve el objeto de estilos del Digimon desde fullDigimonReqDict, o null si no tiene. */
+function obtenerEstilos(nombre) {
+  if (!nombre || typeof fullDigimonReqDict === 'undefined') return null;
+  const estilos = fullDigimonReqDict[nombre]?.[CAMPO_ESTILOS];
+  if (!estilos || typeof estilos !== 'object' || Object.keys(estilos).length === 0) return null;
+  return estilos;
+}
+
+// Campos del diccionario que NO son requisitos (se mantienen al cambiar de estilo)
+const CAMPOS_META_ESTILO = new Set(["ID", "Tama", "Nivel", "Atributo", "Tipo", "Digipuntos", "Clasificacion", "EvoNatural", "isProgramEvo"]);
+
+let estiloDigimonActual = null; // Digimon al que pertenece el estilo activo
+let estiloActivo = null;        // Nombre del estilo activo
+const _originalesEstilo = {};   // Copia de los datos originales de cada Digimon modificado
+
+/** Devuelve los Digipuntos con la misma fórmula del diccionario. */
+function calcularDigipuntosEstilo(s) {
+  return parseFloat((((s.HP / 10) + s.ATK + s.DEF + s.Vel) / 10).toFixed(1));
+}
+
+/** Restaura los datos originales de todos los Digimon que tuvieron un estilo aplicado. */
+function restaurarOriginalesEstilo() {
+  Object.entries(_originalesEstilo).forEach(([nombre, o]) => {
+    digimonReqDict[nombre] = o.req;
+    digimonstattier[nombre] = o.stat;
+    delete _originalesEstilo[nombre];
+  });
+}
+
+/** Construye los datos (requisitos + stats) de un estilo sin modificar nada. */
+function construirDatosEstilo(nombre, estilo) {
+  const reqO = digimonReqDict[nombre];
+  const statO = digimonstattier[nombre];
+  const req = { ...reqO };
+  const stat = { ...statO };
+  if (estilo["Requisitos"]) {
+    Object.keys(req).forEach(k => { if (!CAMPOS_META_ESTILO.has(k)) delete req[k]; });
+    Object.assign(req, estilo["Requisitos"]);
+    if (estilo["categorias"]) req.categorias = estilo["categorias"];
+  }
+  if (estilo["Stat Base"]) {
+    Object.assign(stat, estilo["Stat Base"]);
+    const dp = calcularDigipuntosEstilo(stat);
+    stat.Digipuntos = dp;
+    req.Digipuntos = dp;
+    if (typeof computeClasificacion === 'function') {
+      try { req.Clasificacion = computeClasificacion(nombre, req.Nivel, stat); } catch (e) { /* se queda la original */ }
+    }
+  }
+  return { req, stat };
+}
+
+/** Aplica el estilo activo del Digimon y dibuja los chips. Se llama al inicio de cada render. */
+function prepararEstilos(nombre) {
+  restaurarOriginalesEstilo();
+  if (nombre !== estiloDigimonActual) {
+    estiloDigimonActual = nombre;
+    estiloActivo = null;
+  }
+
+  const seccion = document.getElementById('estilos-section');
+  const etiqueta = document.getElementById('estilo-actual');
+  const reqsEstilo = document.getElementById('reqs-estilo');
+  const estilos = obtenerEstilos(nombre);
+
+  if (!estilos || !digimonReqDict[nombre]) {
+    document.getElementById('estilos-chips').innerHTML = '';
+    seccion.style.display = 'none';
+    etiqueta.style.display = 'none';
+    reqsEstilo.style.display = 'none';
+    return;
+  }
+
+  const nombresEstilos = Object.keys(estilos);
+  if (!estiloActivo || !estilos[estiloActivo]) estiloActivo = nombresEstilos[0];
+
+  // Digipuntos de cada estilo para mostrarlos en el chip
+  const dpPorEstilo = {};
+  nombresEstilos.forEach(e => { dpPorEstilo[e] = construirDatosEstilo(nombre, estilos[e]).stat.Digipuntos; });
+
+  // Aplicar el estilo activo
+  const activo = estilos[estiloActivo];
+  if (Object.keys(activo).length > 0) {
+    _originalesEstilo[nombre] = { req: digimonReqDict[nombre], stat: digimonstattier[nombre] };
+    const { req, stat } = construirDatosEstilo(nombre, activo);
+    digimonReqDict[nombre] = req;
+    digimonstattier[nombre] = stat;
+  }
+
+  // Chips
+  const es = currentLanguage !== 'en';
+  document.getElementById('estilos-label-text').textContent = es ? 'Variantes' : 'Variants';
+  document.getElementById('estilos-count').textContent = '';
+  const chips = document.getElementById('estilos-chips');
+  chips.innerHTML = '';
+  nombresEstilos.forEach(e => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'estilo-chip' + (e === estiloActivo ? ' active' : '');
+    b.textContent = e;
+    b.onclick = () => {
+      if (e === estiloActivo) return;
+      estiloActivo = e;
+      document.getElementById('selectDigimon').dispatchEvent(new Event('change'));
+    };
+    chips.appendChild(b);
+  });
+  seccion.style.display = 'block';
+
+  // Etiquetas con el estilo activo
+  const textoEstilo = (es ? 'Estilo ' : 'Style ') + estiloActivo;
+  etiqueta.textContent = textoEstilo;
+  etiqueta.style.display = 'block';
+
+  // Verificar si el estilo tiene Probabilidad
+  const probabilidad = activo?.Probabilidad;
+  if (probabilidad) {
+    const textoProb = es
+      ? `Probabilidad de aparecer: <b>${probabilidad}</b>`
+      : `Chance of appearing: <b>${probabilidad}</b>`;
+    reqsEstilo.innerHTML = textoProb;
+  } else {
+    reqsEstilo.innerHTML = (es ? 'Mostrando requisitos del ' : 'Showing requirements for ') + `<b>${textoEstilo}</b>`;
+  }
+  reqsEstilo.style.display = 'block';
+}
+
+/** Cambia al estilo especificado y actualiza la vista */
+function cambiarEstilo(nuevoEstilo) {
+  if (nuevoEstilo === estiloActivo) return;
+  estiloActivo = nuevoEstilo;
+  document.getElementById('selectDigimon').dispatchEvent(new Event('change'));
+}
 
 // Agregar evento click al botón de descarga
 document.getElementById('downloadBtn').addEventListener('click', downloadDigimonImage);

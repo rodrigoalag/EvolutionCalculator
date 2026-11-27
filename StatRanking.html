@@ -581,12 +581,44 @@ h1, h2, h3 { color: #4ecdc4; }
     }
 
     .evo-level-filter .filter-dropdown {
-      min-width: 120px;
+      min-width: 160px;
     }
 
     .evo-level-filter .filter-dropdown-button {
       padding: 0.3rem 0.5rem;
       font-size: 0.8rem;
+    }
+
+    .evo-level-filter .checkbox-container {
+      min-width: 220px;
+      width: max-content;
+      max-width: 300px;
+    }
+
+    .evo-search-input {
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 4px;
+      background: rgba(20, 20, 40, 0.9);
+      color: white;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    .evo-search-input:focus {
+      outline: none;
+      border-color: #4ecdc4;
+    }
+
+    .evo-search-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .evo-options-list {
+      max-height: 200px;
+      overflow-y: auto;
     }
 
     .checkbox-item input[type="checkbox"] {
@@ -699,10 +731,107 @@ h1, h2, h3 { color: #4ecdc4; }
       background-color: #0b7dda;
       border-color: #0b7dda;
     }
+
+/* ====================== VISTA DE TARJETAS ====================== */
+#cardsSection, #vistaBarTabla { width: 100%; box-sizing: border-box; }
+#vistaBar {
+  max-width: 100%; margin: 0.5rem auto 0.8rem; display: flex; flex-wrap: wrap; gap: 0.6rem 1rem;
+  align-items: center; justify-content: space-between;
+}
+.vb-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.vb-label { color: #4ecdc4; font-size: 0.8rem; font-weight: 600; margin-right: 2px; }
+.vb-btn {
+  padding: 5px 11px; font-size: 0.78rem; border-radius: 14px; cursor: pointer;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #ccc;
+}
+.vb-btn:hover { background: rgba(78,205,196,0.15); color: #fff; border-color: rgba(78,205,196,0.5); }
+.vb-btn.on { background: rgba(78,205,196,0.25); color: #4ecdc4; border-color: #4ecdc4; }
+.vb-btn .arr { margin-left: 3px; font-size: 0.85em; }
+#cardsCount { width: 100%; text-align: center; color: #888; font-size: 0.8rem; margin-bottom: 0.6rem; }
+
+#cardsGrid {
+  max-width: 100%; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 1rem;
+}
+.dcard {
+  position: relative; background: rgba(30,30,50,0.6); border: 1px solid rgba(255,255,255,0.1);
+  border-left: 4px solid var(--tier, #4ecdc4);
+  border-radius: 14px; padding: 0.9rem 1rem 0.8rem; transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 0; box-sizing: border-box;
+}
+.dc-chip .nm { overflow-wrap: anywhere; text-align: center; }
+.dcard:hover { border-color: rgba(78,205,196,0.5); border-left-color: var(--tier, #4ecdc4); box-shadow: 0 4px 18px rgba(0,0,0,0.25); }
+.dc-rank { position: absolute; top: 8px; right: 12px; font-size: 0.72rem; color: #666; font-weight: 700; }
+.dc-rank.top { color: #ffd27a; }
+.dc-head { display: flex; align-items: center; gap: 12px; }
+.dc-head img.dc-icon {
+  width: 62px; height: 62px; flex-shrink: 0; object-fit: contain; border: 2px solid var(--tier, #4ecdc4);
+  border-radius: 50%; background: rgba(30,30,50,0.5); padding: 4px;
+}
+.dc-title { flex: 1; min-width: 0; }
+.dc-title h3 { margin: 0; color: #fff; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dc-sub { font-size: 0.76rem; color: #aaa; margin-top: 3px; }
+.dc-variant { font-size: 0.76rem; color: #4ecdc4; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dc-badge {
+  display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: 700;
+  color: #111; background: var(--tier, #4ecdc4); margin-right: 4px; vertical-align: 1px;
+}
+.dc-dp { text-align: right; padding-top: 10px; }
+.dc-dp .lbl { font-size: 0.62rem; color: #888; text-transform: uppercase; letter-spacing: 0.04em; }
+.dc-dp .val { font-size: 1.5rem; font-weight: 700; color: #4ecdc4; line-height: 1.1; }
+
+.dc-line { margin: 10px 0 2px; }
+.dc-line .linea-evo { justify-content: flex-start; }
+.dc-line .linea-evo-tama { width: 26px; height: 26px; }
+.dc-line .linea-evo-icon { width: 32px; height: 32px; }
+.dc-line .linea-evo-icon-self { width: 34px; height: 34px; }
+
+.dc-chips-wrap { margin: 10px 0 8px; }
+.dc-chips-lbl { font-size: 0.68rem; color: #888; margin-bottom: 5px; }
+.dc-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.dc-chips.collapsed .dc-chip:nth-child(n+7) { display: none; }
+.dc-chip {
+  padding: 3px 9px; font-size: 0.7rem; border-radius: 12px; cursor: pointer; line-height: 1.25;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #bbb;
+  display: inline-flex; flex-direction: column; align-items: center;
+}
+.dc-chip .dp { font-size: 0.62rem; color: #888; }
+.dc-chip:hover { background: rgba(78,205,196,0.15); color: #fff; border-color: rgba(78,205,196,0.5); }
+.dc-chip.on { background: rgba(78,205,196,0.25); color: #4ecdc4; border-color: #4ecdc4; }
+.dc-chip.on .dp { color: #4ecdc4; }
+.dc-chip.best .nm::after { content: ' ★'; color: #ffd27a; }
+.dc-linea-txt { font-size: 0.7rem; color: #888; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dc-prob { color: #888; }
+.dcard.con-estilos { box-shadow: inset 0 0 0 1px rgba(78,205,196,0.18); }
+
+.dc-stats { display: flex; flex-direction: column; gap: 6px; padding: 9px 11px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-top: 8px; }
+.dc-stat .p { text-align: right; color: #888; font-size: 0.7rem; }
+.dc-stat { display: grid; grid-template-columns: 36px 1fr 44px 42px; align-items: center; gap: 8px; font-size: 0.78rem; }
+.dc-stat .k { color: #888; font-weight: 600; }
+.dc-stat.sorted .k { color: #4ecdc4; }
+.dc-stat .n { text-align: right; font-weight: 700; color: #fff; }
+.dc-stat .n.max { color: #69db7c; }
+.dc-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.dc-track .v { height: 8px; border-radius: 4px; transition: width 0.3s ease; }
+
+#cardsMore { display: block; margin: 1.5rem auto; }
+.dc-empty { grid-column: 1 / -1; text-align: center; color: #888; padding: 3rem 1rem; }
+
+body.vista-tarjetas #rankingContainer { display: none; }
+body.vista-tabla #cardsSection { display: none; }
+
+@media (max-width: 600px) {
+  #vistaBar { justify-content: center; }
+  .vb-group { justify-content: center; }
+  #cardsGrid { grid-template-columns: 1fr; gap: 0.8rem; }
+  .dc-head img.dc-icon { width: 50px; height: 50px; }
+  .dc-dp .val { font-size: 1.25rem; }
+}
+/* ====================== FIN VISTA DE TARJETAS ====================== */
   </style>
 </head>
 
-<body>
+<body class="vista-tarjetas">
   <!-- Librería para exportar a XLSX -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -863,6 +992,18 @@ h1, h2, h3 { color: #4ecdc4; }
         <div id="search-ranking-suggestions"></div>
       </div>
 
+      <!-- Vista de tarjetas -->
+      <div id="cardsSection">
+        <div id="vistaBar">
+          <div class="vb-group" id="vbSort"><span class="vb-label" id="vbSortLabel">Ordenar:</span></div>
+          <div class="vb-group" id="vbView"><span class="vb-label" id="vbViewLabel">Vista:</span></div>
+        </div>
+        <div id="cardsCount"></div>
+        <div id="cardsGrid"></div>
+        <button type="button" class="vb-btn" id="cardsMore" style="display:none;"></button>
+      </div>
+      <div id="vistaBarTabla" style="display:none;"></div>
+
       <div id="rankingContainer">
         <div class="table-wrapper">
           <table id="rankingTable" class="ranking-table" style="display: table;">
@@ -923,6 +1064,175 @@ function calcularStatsHeredados(babyIStats, babyIIStats, childBaseStats) {
     heredadoBabyI,
     heredadoBabyII
   };
+}
+
+// Función para obtener stats de un Digimon considerando su estilo
+/** Returns the Stat Base for a Digimon, using estilo-specific stats if provided. */
+function getStatsConEstilo(nombreDigimon, estiloNombre = null) {
+  const statsBase = digimonstattier[nombreDigimon];
+  if (!statsBase) return null;
+
+  // Si no hay estilo especificado o es Default, usar stats base
+  if (!estiloNombre || estiloNombre === 'Default') {
+    return {
+      ATK: statsBase.ATK,
+      DEF: statsBase.DEF,
+      HP: statsBase.HP,
+      Vel: statsBase.Vel
+    };
+  }
+
+  // Buscar el estilo específico
+  const estilosData = fullDigimonReqDict[nombreDigimon]?.Estilos;
+  if (estilosData && estilosData[estiloNombre] && estilosData[estiloNombre]['Stat Base']) {
+    const estiloStats = estilosData[estiloNombre]['Stat Base'];
+    return {
+      ATK: estiloStats.ATK,
+      DEF: estiloStats.DEF,
+      HP: estiloStats.HP,
+      Vel: estiloStats.Vel
+    };
+  }
+
+  // Fallback a stats base
+  return {
+    ATK: statsBase.ATK,
+    DEF: statsBase.DEF,
+    HP: statsBase.HP,
+    Vel: statsBase.Vel
+  };
+}
+
+// Función para expandir una línea evolutiva con todas las combinaciones de estilos
+/** Expands an evolution line to include all estilo combinations for predecessors with different stats. */
+function expandirLineaConEstilos(lineaEvolutiva) {
+  // Primero, identificar cuáles predecesores tienen estilos con stats diferentes
+  const predecesoresConEstilos = [];
+
+  lineaEvolutiva.forEach(predecesor => {
+    const estilosData = fullDigimonReqDict[predecesor]?.Estilos;
+    if (estilosData && typeof estilosData === 'object') {
+      const tieneEstilosConStats = Object.entries(estilosData).some(([nombre, data]) =>
+        nombre !== 'Default' && data && data['Stat Base']
+      );
+      if (tieneEstilosConStats) {
+        // Obtener todos los estilos (incluyendo Default)
+        const estilos = Object.keys(estilosData);
+        predecesoresConEstilos.push({ nombre: predecesor, estilos });
+      }
+    }
+  });
+
+  // Si no hay predecesores con estilos, retornar la línea original
+  if (predecesoresConEstilos.length === 0) {
+    return [{ lineaEvolutiva, estilosMap: {} }];
+  }
+
+  // Generar el producto cartesiano de todas las combinaciones de estilos
+  function generarCombinaciones(predecesores, index = 0, combinacionActual = {}) {
+    if (index >= predecesores.length) {
+      return [{ ...combinacionActual }];
+    }
+
+    const predecesor = predecesores[index];
+    const combinaciones = [];
+
+    predecesor.estilos.forEach(estilo => {
+      const nuevaCombinacion = { ...combinacionActual, [predecesor.nombre]: estilo };
+      combinaciones.push(...generarCombinaciones(predecesores, index + 1, nuevaCombinacion));
+    });
+
+    return combinaciones;
+  }
+
+  const todasCombinaciones = generarCombinaciones(predecesoresConEstilos);
+
+  return todasCombinaciones.map(estilosMap => ({
+    lineaEvolutiva,
+    estilosMap
+  }));
+}
+
+// Función para calcular stats con herencia usando estilos específicos
+/** Returns the fully inherited stats for a Digimon using estilo-specific stats for predecessors. */
+function calcularStatsConHerenciaYEstilos(nombreDigimon, lineaEvolutiva, estilosMap = {}) {
+  const statsBase = digimonstattier[nombreDigimon];
+  if (!statsBase) return null;
+
+  const nivel = digimonReqDict[nombreDigimon]?.Nivel || 0;
+
+  // Baby I no tiene herencia
+  if (nivel === 1) {
+    return {
+      atk: statsBase.ATK,
+      def: statsBase.DEF,
+      hp: statsBase.HP,
+      vel: statsBase.Vel
+    };
+  }
+
+  // Calcular herencias basadas en la línea evolutiva con estilos
+  let heredadoTotal = { atk: 0, def: 0, hp: 0, vel: 0 };
+
+  lineaEvolutiva.forEach(predecesor => {
+    const nivelPredecesor = digimonReqDict[predecesor]?.Nivel || 0;
+
+    // Si el predecesor es del mismo nivel, es un SLIDE - no sumar heredados
+    if (nivelPredecesor >= nivel) {
+      return;
+    }
+
+    // Si el predecesor es SCUMON_FAMILY, usar computeScumonFamilyStats
+    if (SCUMON_FAMILY.has(predecesor)) {
+      const childEnLinea = lineaEvolutiva.find(d => digimonReqDict[d]?.Nivel === 3);
+      const babyIIEnLinea = lineaEvolutiva.find(d => digimonReqDict[d]?.Nivel === 2);
+      const babyIEnLinea = lineaEvolutiva.find(d => digimonReqDict[d]?.Nivel === 1);
+
+      if (childEnLinea) {
+        const scumonStats = computeScumonFamilyStats(predecesor, childEnLinea, babyIIEnLinea, babyIEnLinea);
+        if (scumonStats) {
+          heredadoTotal.atk += Math.round(scumonStats.ATK * 0.4);
+          heredadoTotal.def += Math.round(scumonStats.DEF * 0.4);
+          heredadoTotal.hp += Math.round(scumonStats.HP * 0.4);
+          heredadoTotal.vel += Math.round(scumonStats.Vel * 0.4);
+        }
+      }
+    } else {
+      // Usar stats con estilo si está especificado
+      const estiloDelPredecesor = estilosMap[predecesor] || null;
+      const statsPredecesor = getStatsConEstilo(predecesor, estiloDelPredecesor);
+
+      if (statsPredecesor && statsPredecesor.ATK !== undefined) {
+        heredadoTotal.atk += Math.round(statsPredecesor.ATK * 0.4);
+        heredadoTotal.def += Math.round(statsPredecesor.DEF * 0.4);
+        heredadoTotal.hp += Math.round(statsPredecesor.HP * 0.4);
+        heredadoTotal.vel += Math.round(statsPredecesor.Vel * 0.4);
+      }
+    }
+  });
+
+  return {
+    atk: statsBase.ATK + heredadoTotal.atk,
+    def: statsBase.DEF + heredadoTotal.def,
+    hp: statsBase.HP + heredadoTotal.hp,
+    vel: statsBase.Vel + heredadoTotal.vel
+  };
+}
+
+// Función para formatear la línea evolutiva incluyendo estilos
+/** Formats the evolution line string including estilo names for predecessors. */
+function formatearLineaEvolutivaConEstilos(nombre, lineaEvolutiva, estilosMap = {}) {
+  if (!lineaEvolutiva || lineaEvolutiva.length === 0) return nombre;
+
+  // Construir la línea con estilos incluidos
+  const partes = lineaEvolutiva.map(predecesor => {
+    if (estilosMap[predecesor] && estilosMap[predecesor] !== 'Default') {
+      return `${predecesor} (${estilosMap[predecesor]})`;
+    }
+    return predecesor;
+  });
+
+  return partes.join(' < ');
 }
 
 // Función para calcular stats con herencia completa para cualquier Digimon
@@ -1282,10 +1592,15 @@ function renderLineaEvolutivaIconos(nombre, lineaRaw) {
 }
 
 /** Renders a standalone Digimon icon with a name tooltip, used when no evolution line is available. */
-function renderDigimonSolo(nombre) {
-  const vars = generarVariacionesNombre(nombre);
+function renderDigimonSolo(nombre, nombreBase = null, iconEstilo = null) {
+  // Para entradas expandidas, usar nombreBase para el icono
+  const nombreParaIcono = nombreBase || nombre;
+  const vars = generarVariacionesNombre(nombreParaIcono);
   const fb = vars.slice(1).map(v => imgUrl('icon/' + v + '.png')).join('|');
-  return `<div class="linea-evo"><div class="digi-cell"><img src="${imgUrl('icon/' + vars[0] + '.png')}" class="linea-evo-icon linea-evo-icon-self" data-fallbacks="${fb}" onerror="cargarFallbackLineaEvo(this)"><span class="digi-cell-name">${nombre}</span></div></div>`;
+  // Si hay un icono de estilo, agregarlo al principio de los fallbacks
+  const iconSrc = iconEstilo ? imgUrl('icon/' + iconEstilo + '.png') : imgUrl('icon/' + vars[0] + '.png');
+  const allFallbacks = iconEstilo ? [imgUrl('icon/' + vars[0] + '.png'), ...fb.split('|').filter(x => x)] : fb.split('|').filter(x => x);
+  return `<div class="linea-evo"><div class="digi-cell"><img src="${iconSrc}" class="linea-evo-icon linea-evo-icon-self" data-fallbacks="${allFallbacks.join('|')}" onerror="cargarFallbackLineaEvo(this)"><span class="digi-cell-name">${nombre}</span></div></div>`;
 }
 
 // Función para generar variantes de la familia Scumon (SCUMON_FAMILY)
@@ -1771,7 +2086,9 @@ function generarTablaRankingSegura(data, tbody) {
     if (item.lineaRaw) {
       tdDigimon.innerHTML = renderLineaEvolutivaIconos(item.nombre, item.lineaRaw);
     } else {
-      tdDigimon.innerHTML = renderDigimonSolo(item.nombre);
+      // Para entradas expandidas, usar nombreBase e iconEstilo
+      const iconEstilo = item.estiloData?.Icon || null;
+      tdDigimon.innerHTML = renderDigimonSolo(item.nombre, item.nombreBase, iconEstilo);
     }
     fila.appendChild(tdDigimon);
 
@@ -1966,8 +2283,11 @@ function aplicarFiltros() {
 
   if (nivelesConSeleccion.length > 0) {
     datosFiltrados = datosFiltrados.filter(item => {
-      // Obtener toda la línea evolutiva del Digimon
+      // Obtener toda la línea evolutiva del Digimon (array de nombres base)
       const lineaEvolutiva = item.todasLasEvolucionesAnteriores || [];
+      // Obtener nombre base del item (para entradas expandidas con estilos)
+      const itemNombreBase = item.nombreBase || item.nombre;
+      const itemEstilo = item.estiloNombre || null;
 
       // Para cada nivel con filtro, verificar que al menos uno de los seleccionados
       // esté en la línea evolutiva del Digimon
@@ -1975,15 +2295,30 @@ function aplicarFiltros() {
         // Si el nivel seleccionado es el mismo nivel del Digimon actual,
         // verificar si el Digimon está en la selección
         const nivelNum = parseInt(nivel);
-        const nivelDigimon = digimonReqDict[item.nombre]?.Nivel || 0;
+        // Usar nombreBase para buscar el nivel en el dict
+        const nivelDigimon = digimonReqDict[itemNombreBase]?.Nivel || 0;
 
         if (nivelNum === nivelDigimon) {
-          return seleccionados.includes(item.nombre);
+          // Comparar el item con cada filtro seleccionado
+          return seleccionados.some(sel => {
+            const { baseName: selBaseName, estilo: selEstilo } = parseEvoValue(sel);
+            // Si el filtro tiene estilo, debe coincidir exactamente
+            if (selEstilo) {
+              return itemNombreBase === selBaseName && itemEstilo === selEstilo;
+            }
+            // Si no tiene estilo (Default), solo debe coincidir el nombre base
+            // y el item no debe tener estilo o ser Default
+            return itemNombreBase === selBaseName && (!itemEstilo || itemEstilo === 'Default');
+          });
         }
 
         // Si el nivel es inferior, verificar en la línea evolutiva
         if (nivelNum < nivelDigimon) {
-          return seleccionados.some(sel => lineaEvolutiva.includes(sel));
+          // Extraer nombres base de los filtros seleccionados para comparar con la línea
+          return seleccionados.some(sel => {
+            const { baseName: selBaseName } = parseEvoValue(sel);
+            return lineaEvolutiva.includes(selBaseName);
+          });
         }
 
         return true; // Niveles superiores no aplican
@@ -2427,7 +2762,69 @@ function actualizarFiltrosEvolutivos(nivelSeleccionado) {
 // Digimons a ignorar en los filtros evolutivos
 const DIGIMONS_IGNORADOS = ['Burpmon'];
 
-// Obtener todos los Digimon de un nivel específico
+/**
+ * Parsea un valor que puede contener estilo (formato: "nombre|||estilo").
+ * @param {string} value - Valor a parsear
+ * @returns {{ baseName: string|null, estilo: string|null }}
+ */
+function parseEvoValue(value) {
+  if (!value) return { baseName: null, estilo: null };
+  if (value.includes('|||')) {
+    const parts = value.split('|||');
+    return { baseName: parts[0], estilo: parts[1] };
+  }
+  return { baseName: value, estilo: null };
+}
+
+/**
+ * Obtiene el nombre para mostrar de un valor de evolución.
+ * @param {string} value - Valor en formato "nombre" o "nombre|||estilo"
+ * @returns {string}
+ */
+function getEvoDisplayName(value) {
+  const { baseName, estilo } = parseEvoValue(value);
+  if (!baseName) return '';
+  return estilo ? `${baseName} (${estilo})` : baseName;
+}
+
+/**
+ * Expande una lista de nombres de Digimon para incluir variantes de estilos.
+ * @param {string[]} digimonNames - Array con nombres de Digimon
+ * @returns {string[]} - Array expandido con variantes de estilos
+ */
+function expandEstilos(digimonNames) {
+  const result = [];
+
+  for (const name of digimonNames) {
+    const data = digimonReqDict[name];
+    if (!data) {
+      result.push(name);
+      continue;
+    }
+
+    const estilos = data.Estilos;
+    const tieneEstilosConStats = estilos && typeof estilos === 'object' &&
+      Object.keys(estilos).some(k => estilos[k]?.['Stat Base']);
+
+    if (tieneEstilosConStats) {
+      // Expandir cada estilo como entrada separada
+      Object.keys(estilos).forEach(estiloNombre => {
+        const esDefault = estiloNombre === 'Default' || !estilos[estiloNombre] || Object.keys(estilos[estiloNombre]).length === 0;
+        if (esDefault) {
+          result.push(name);
+        } else {
+          result.push(`${name}|||${estiloNombre}`);
+        }
+      });
+    } else {
+      result.push(name);
+    }
+  }
+
+  return result;
+}
+
+// Obtener todos los Digimon de un nivel específico (con estilos expandidos)
 function obtenerDigimonsPorNivel(nivel) {
   const digimons = [];
   for (const [nombre, data] of Object.entries(digimonReqDict)) {
@@ -2435,25 +2832,44 @@ function obtenerDigimonsPorNivel(nivel) {
       digimons.push(nombre);
     }
   }
-  return digimons.sort();
+  // Expandir estilos y ordenar
+  return expandEstilos(digimons).sort((a, b) => {
+    // Ordenar por nombre base primero, luego por estilo
+    const aDisplay = getEvoDisplayName(a);
+    const bDisplay = getEvoDisplayName(b);
+    return aDisplay.localeCompare(bDisplay);
+  });
 }
 
 // Obtener predecesores de un Digimon (de quién viene - campo Viene en digimonstattier)
-function obtenerPredecesores(nombreDigimon) {
-  const data = digimonstattier[nombreDigimon];
+// Acepta valores con estilo (ej: "Greymon|||estilo") y retorna predecesores expandidos con estilos
+function obtenerPredecesores(nombreDigimonOValor) {
+  // Parsear para obtener nombre base
+  const { baseName } = parseEvoValue(nombreDigimonOValor);
+  if (!baseName) return [];
+
+  const data = digimonstattier[baseName];
   const predecesores = data?.Viene || [];
-  return predecesores.filter(p => !DIGIMONS_IGNORADOS.includes(p));
+  const filtrados = predecesores.filter(p => !DIGIMONS_IGNORADOS.includes(p));
+  // Expandir estilos en los predecesores
+  return expandEstilos(filtrados);
 }
 
 // Obtener sucesores de un Digimon (a quién puede evolucionar - quién lo tiene en su Viene)
-function obtenerSucesores(nombreDigimon) {
+// Acepta valores con estilo y busca sucesores del nombre base
+function obtenerSucesores(nombreDigimonOValor) {
+  // Parsear para obtener nombre base
+  const { baseName } = parseEvoValue(nombreDigimonOValor);
+  if (!baseName) return [];
+
   const sucesores = [];
   for (const [nombre, data] of Object.entries(digimonstattier)) {
-    if (data.Viene && data.Viene.includes(nombreDigimon) && !DIGIMONS_IGNORADOS.includes(nombre)) {
+    if (data.Viene && data.Viene.includes(baseName) && !DIGIMONS_IGNORADOS.includes(nombre)) {
       sucesores.push(nombre);
     }
   }
-  return sucesores;
+  // Expandir estilos en los sucesores
+  return expandEstilos(sucesores);
 }
 
 // Actualizar opciones de todos los dropdowns evolutivos de forma reactiva
@@ -2498,7 +2914,9 @@ function actualizarOpcionesEvolutivas(nivelSeleccionado) {
         const sucesoresValidos = new Set();
         seleccionados.forEach(sel => {
           obtenerSucesores(sel).forEach(suc => {
-            const nivelSuc = digimonReqDict[suc]?.Nivel || 0;
+            // Parsear para obtener nivel correctamente
+            const { baseName: sucBaseName } = parseEvoValue(suc);
+            const nivelSuc = digimonReqDict[sucBaseName]?.Nivel || 0;
             if (nivelSuc === n.level) {
               sucesoresValidos.add(suc);
             } else if (nivelSuc < n.level) {
@@ -2523,27 +2941,63 @@ function actualizarOpcionesEvolutivas(nivelSeleccionado) {
     // Regenerar opciones
     container.innerHTML = '';
 
+    // Input de búsqueda
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.className = 'evo-search-input';
+    searchInput.placeholder = idiomaActual === 'en' ? 'Search...' : 'Buscar...';
+    searchInput.id = `evoSearch${n.id}`;
+    container.appendChild(searchInput);
+
+    // Contenedor de opciones (para filtrar)
+    const optionsList = document.createElement('div');
+    optionsList.className = 'evo-options-list';
+
     // Checkbox "Todos"
     const todasDiv = document.createElement('div');
     todasDiv.className = 'checkbox-item';
+    todasDiv.dataset.name = 'todos';
     const todasChecked = evoLevelFilters[n.level].length === 0;
     todasDiv.innerHTML = `
       <input type="checkbox" id="evo${n.id}-todas" value="" ${todasChecked ? 'checked' : ''}>
       <label for="evo${n.id}-todas">${t.todos || 'Todos'}</label>
     `;
-    container.appendChild(todasDiv);
+    optionsList.appendChild(todasDiv);
 
     // Opciones de digimons
-    digimonsValidos.forEach(digimon => {
+    digimonsValidos.forEach(digimonValue => {
+      const displayName = getEvoDisplayName(digimonValue);
       const div = document.createElement('div');
       div.className = 'checkbox-item';
-      const isChecked = evoLevelFilters[n.level].includes(digimon);
-      const safeId = digimon.replace(/\s+/g, '-').replace(/[()]/g, '');
+      div.dataset.name = displayName.toLowerCase();
+      const isChecked = evoLevelFilters[n.level].includes(digimonValue);
+      const safeId = digimonValue.replace(/\s+/g, '-').replace(/[()|||]/g, '');
       div.innerHTML = `
-        <input type="checkbox" id="evo${n.id}-${safeId}" value="${digimon}" ${isChecked ? 'checked' : ''}>
-        <label for="evo${n.id}-${safeId}">${digimon}</label>
+        <input type="checkbox" id="evo${n.id}-${safeId}" value="${digimonValue}" ${isChecked ? 'checked' : ''}>
+        <label for="evo${n.id}-${safeId}">${displayName}</label>
       `;
-      container.appendChild(div);
+      optionsList.appendChild(div);
+    });
+
+    container.appendChild(optionsList);
+
+    // Event listener para búsqueda
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      const items = optionsList.querySelectorAll('.checkbox-item');
+      items.forEach(item => {
+        const name = item.dataset.name || '';
+        if (name === 'todos' || name.includes(query)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // Evitar que el input cierre el dropdown
+    searchInput.addEventListener('click', function(e) {
+      e.stopPropagation();
     });
 
     // Event listeners
@@ -2576,7 +3030,7 @@ function actualizarOpcionesEvolutivas(nivelSeleccionado) {
           }
         }
         actualizarTextoDropdownEvo(n.id, evoLevelFilters[n.level].length > 0 ?
-          evoLevelFilters[n.level].join(', ') : (t.todos || 'Todos'));
+          evoLevelFilters[n.level].map(v => getEvoDisplayName(v)).join(', ') : (t.todos || 'Todos'));
         actualizarOpcionesEvolutivas(nivelSeleccionado);
         aplicarFiltros();
       });
@@ -2584,22 +3038,26 @@ function actualizarOpcionesEvolutivas(nivelSeleccionado) {
 
     // Actualizar texto del botón
     actualizarTextoDropdownEvo(n.id, evoLevelFilters[n.level].length > 0 ?
-      evoLevelFilters[n.level].join(', ') : (t.todos || 'Todos'));
+      evoLevelFilters[n.level].map(v => getEvoDisplayName(v)).join(', ') : (t.todos || 'Todos'));
   });
 }
 
 // Obtener sucesores en un nivel específico (recursivo)
-function obtenerSucesoresPorNivel(nombreDigimon, nivelObjetivo) {
+function obtenerSucesoresPorNivel(nombreDigimonOValor, nivelObjetivo) {
   const resultado = new Set();
   const visitados = new Set();
 
-  function buscar(nombre) {
-    if (visitados.has(nombre)) return;
-    visitados.add(nombre);
+  function buscar(nombreOValor) {
+    // Parsear para obtener nombre base (para evitar duplicados)
+    const { baseName } = parseEvoValue(nombreOValor);
+    if (!baseName || visitados.has(baseName)) return;
+    visitados.add(baseName);
 
-    const sucesores = obtenerSucesores(nombre);
+    const sucesores = obtenerSucesores(nombreOValor);
     sucesores.forEach(suc => {
-      const nivel = digimonReqDict[suc]?.Nivel || 0;
+      // Parsear el sucesor para buscar en el dict
+      const { baseName: sucBaseName } = parseEvoValue(suc);
+      const nivel = digimonReqDict[sucBaseName]?.Nivel || 0;
       if (nivel === nivelObjetivo) {
         resultado.add(suc);
       } else if (nivel < nivelObjetivo) {
@@ -2608,22 +3066,26 @@ function obtenerSucesoresPorNivel(nombreDigimon, nivelObjetivo) {
     });
   }
 
-  buscar(nombreDigimon);
+  buscar(nombreDigimonOValor);
   return [...resultado];
 }
 
 // Obtener predecesores en un nivel específico (recursivo)
-function obtenerPredecesoresPorNivel(nombreDigimon, nivelObjetivo) {
+function obtenerPredecesoresPorNivel(nombreDigimonOValor, nivelObjetivo) {
   const resultado = new Set();
   const visitados = new Set();
 
-  function buscar(nombre) {
-    if (visitados.has(nombre)) return;
-    visitados.add(nombre);
+  function buscar(nombreOValor) {
+    // Parsear para obtener nombre base (para evitar duplicados)
+    const { baseName } = parseEvoValue(nombreOValor);
+    if (!baseName || visitados.has(baseName)) return;
+    visitados.add(baseName);
 
-    const predecesores = obtenerPredecesores(nombre);
+    const predecesores = obtenerPredecesores(nombreOValor);
     predecesores.forEach(pred => {
-      const nivel = digimonReqDict[pred]?.Nivel || 0;
+      // Parsear el predecesor para buscar en el dict
+      const { baseName: predBaseName } = parseEvoValue(pred);
+      const nivel = digimonReqDict[predBaseName]?.Nivel || 0;
       if (nivel === nivelObjetivo) {
         resultado.add(pred);
       } else if (nivel > nivelObjetivo) {
@@ -2632,7 +3094,7 @@ function obtenerPredecesoresPorNivel(nombreDigimon, nivelObjetivo) {
     });
   }
 
-  buscar(nombreDigimon);
+  buscar(nombreDigimonOValor);
   return [...resultado];
 }
 
@@ -2709,26 +3171,111 @@ function generarRanking() {
         });
 
         // Generar una entrada por cada combinación ÚNICA de stats
+        // También expandir con estilos si algún predecesor tiene estilos con stats diferentes
         lineasPorStats.forEach((lineaEvolutiva, claveStats) => {
-          const statsHeredados = calcularStatsConHerencia(nombre, lineaEvolutiva);
+          // Expandir la línea con todas las combinaciones de estilos
+          const lineasExpandidas = expandirLineaConEstilos(lineaEvolutiva);
 
-          if (!statsHeredados) return;
+          lineasExpandidas.forEach(({ lineaEvolutiva: linea, estilosMap }) => {
+            // Usar función que soporta estilos
+            const statsHeredados = calcularStatsConHerenciaYEstilos(nombre, linea, estilosMap);
 
-          const stats = statsHeredados;
-          const lineaEvo = formatearLineaEvolutiva(nombre, lineaEvolutiva);
+            if (!statsHeredados) return;
 
-          // Calcular digipuntos
+            const stats = statsHeredados;
+
+            // Crear clave única incluyendo estilos para evitar duplicados
+            const estilosSufijo = Object.entries(estilosMap)
+              .filter(([_, estilo]) => estilo !== 'Default')
+              .map(([predecesor, estilo]) => `${predecesor}:${estilo}`)
+              .join('|');
+            const claveUnicaConEstilos = estilosSufijo ? `${claveStats}|${estilosSufijo}` : claveStats;
+
+            // Formatear línea evolutiva con estilos
+            const lineaEvo = formatearLineaEvolutivaConEstilos(nombre, linea, estilosMap);
+
+            // Calcular digipuntos
+            const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
+
+            // Obtener evolución anterior (un nivel atrás)
+            const evolucionAnterior = obtenerEvolucionAnterior(nombre, linea);
+
+            datosActuales.push({
+              nombre,
+              lineaEvolutiva: lineaEvo,
+              lineaRaw: linea,
+              estilosMap: estilosMap, // Guardar mapa de estilos para referencia
+              evolucionAnterior: evolucionAnterior,
+              todasLasEvolucionesAnteriores: linea.filter(d => d !== nombre), // Toda la línea excepto el digimon actual
+              atributo: digimonReqDict[nombre]?.Atributo || "-",
+              tipo: digimonReqDict[nombre]?.Tipo || "-",
+              atk: stats.atk,
+              def: stats.def,
+              hp: stats.hp,
+              vel: stats.vel,
+              digipuntos: digipuntos,
+              clasificacion: obtenerClasificacion(nivelSeleccionado, nombre)
+            });
+          });
+        });
+      } else {
+        // Stats base - verificar si tiene Estilos con stats diferentes
+        const estilosData = fullDigimonReqDict[nombre]?.Estilos;
+        const tieneEstilosConStats = estilosData && typeof estilosData === 'object' &&
+          Object.values(estilosData).some(e => e && e['Stat Base']);
+
+        if (tieneEstilosConStats) {
+          // Expandir cada estilo como entrada separada
+          Object.entries(estilosData).forEach(([estiloNombre, estiloData]) => {
+            const esDefault = estiloNombre === 'Default' || !estiloData || Object.keys(estiloData).length === 0;
+            const statBase = esDefault ? statsData : (estiloData['Stat Base'] || statsData);
+
+            const stats = {
+              atk: statBase.ATK || 0,
+              def: statBase.DEF || 0,
+              hp: statBase.HP || 0,
+              vel: statBase.Vel || 0
+            };
+
+            const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
+            const evolucionAnterior = obtenerEvolucionAnterior(nombre, null);
+            const nombreDisplay = esDefault ? nombre : `${nombre} (${estiloNombre})`;
+
+            datosActuales.push({
+              nombre: nombreDisplay,
+              nombreBase: nombre,
+              estiloNombre: estiloNombre,
+              estiloData: estiloData,
+              lineaEvolutiva: null,
+              evolucionAnterior: evolucionAnterior,
+              todasLasEvolucionesAnteriores: obtenerTodasLasEvolucionesAnteriores(nombre),
+              atributo: digimonReqDict[nombre]?.Atributo || "-",
+              tipo: digimonReqDict[nombre]?.Tipo || "-",
+              atk: stats.atk,
+              def: stats.def,
+              hp: stats.hp,
+              vel: stats.vel,
+              digipuntos: digipuntos,
+              clasificacion: computeClasificacion(nombre, digimonReqDict[nombre]?.Nivel, stats)
+            });
+          });
+        } else {
+          // Sin estilos - una sola entrada
+          const stats = {
+            atk: statsData.ATK || 0,
+            def: statsData.DEF || 0,
+            hp: statsData.HP || 0,
+            vel: statsData.Vel || 0
+          };
+
           const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
-
-          // Obtener evolución anterior (un nivel atrás)
-          const evolucionAnterior = obtenerEvolucionAnterior(nombre, lineaEvolutiva);
+          const evolucionAnterior = obtenerEvolucionAnterior(nombre, null);
 
           datosActuales.push({
             nombre,
-            lineaEvolutiva: lineaEvo,
-            lineaRaw: lineaEvolutiva,
+            lineaEvolutiva: null,
             evolucionAnterior: evolucionAnterior,
-            todasLasEvolucionesAnteriores: lineaEvolutiva.filter(d => d !== nombre), // Toda la línea excepto el digimon actual
+            todasLasEvolucionesAnteriores: obtenerTodasLasEvolucionesAnteriores(nombre),
             atributo: digimonReqDict[nombre]?.Atributo || "-",
             tipo: digimonReqDict[nombre]?.Tipo || "-",
             atk: stats.atk,
@@ -2738,36 +3285,7 @@ function generarRanking() {
             digipuntos: digipuntos,
             clasificacion: obtenerClasificacion(nivelSeleccionado, nombre)
           });
-        });
-      } else {
-        // Stats base - una sola entrada
-        const stats = {
-          atk: statsData.ATK || 0,
-          def: statsData.DEF || 0,
-          hp: statsData.HP || 0,
-          vel: statsData.Vel || 0
-        };
-
-        // Calcular digipuntos
-        const digipuntos = parseFloat((((stats.hp / 10) + stats.atk + stats.def + stats.vel) / 10).toFixed(1));
-
-        // Obtener evolución anterior (un nivel atrás) - solo la primera para mostrar
-        const evolucionAnterior = obtenerEvolucionAnterior(nombre, null);
-
-        datosActuales.push({
-          nombre,
-          lineaEvolutiva: null,
-          evolucionAnterior: evolucionAnterior,
-          todasLasEvolucionesAnteriores: obtenerTodasLasEvolucionesAnteriores(nombre), // Todas las opciones para el filtro
-          atributo: digimonReqDict[nombre]?.Atributo || "-",
-          tipo: digimonReqDict[nombre]?.Tipo || "-",
-          atk: stats.atk,
-          def: stats.def,
-          hp: stats.hp,
-          vel: stats.vel,
-          digipuntos: digipuntos,
-          clasificacion: obtenerClasificacion(nivelSeleccionado, nombre)
-        });
+        }
       }
     });
 
@@ -3263,6 +3781,280 @@ document.addEventListener('keydown', (e) => {
 function updateNavMenuLanguage() {
   if (typeof translateNavMenu === 'function') translateNavMenu(idiomaActual);
 }
+</script>
+<script>
+// ============================================
+// VISTA DE TARJETAS
+// ============================================
+// Envuelve generarTablaRankingSegura(): la tabla se sigue generando igual (export/CSV
+// no cambian) y además se dibujan las tarjetas con los mismos datos ya filtrados y ordenados.
+
+const TIER_COLORES = {
+  'tier-mutant': '#b197fc', 'tier-low': '#ff6b6b', 'tier-mid-low': '#ffa94d', 'tier-mid': '#ffd43b',
+  'tier-mid-high': '#a9e34b', 'tier-high': '#69db7c', 'tier-high-plus': '#4ecdc4'
+};
+const COLOR_STAT = { hp: '#51cf66', atk: '#ff6b6b', def: '#f1f3f5', vel: '#4dabf7' };
+const CLAVE_STAT = { hp: 'HP', atk: 'ATK', def: 'DEF', vel: 'Vel' };
+const TXT_TARJETAS = {
+  es: { ordenar: 'Ordenar:', vista: 'Vista:', tarjetas: 'Tarjetas', tabla: 'Tabla',
+        resultado: n => `${n} entradas`, estilos: n => `${n} estilos`, mejor: 'mejor DP',
+        verMas: n => `Ver más (${n} restantes)`, vacio: 'Ningún Digimon coincide con los filtros.',
+        elegir: 'Elige un nivel arriba para ver el ranking.', estilo: 'Estilo', prob: 'Probabilidad' },
+  en: { ordenar: 'Sort:', vista: 'View:', tarjetas: 'Cards', tabla: 'Table',
+        resultado: n => `${n} entries`, estilos: n => `${n} styles`, mejor: 'best DP',
+        verMas: n => `Show more (${n} left)`, vacio: 'No Digimon match the filters.',
+        elegir: 'Pick a level above to see the ranking.', estilo: 'Style', prob: 'Chance' }
+};
+const CAMPOS_ORDEN = [
+  ['digipuntos', 'DP'], ['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['vel', 'SPD'], ['atributo', null], ['tipo', null]
+];
+const POR_PAGINA = 48;
+
+let vistaActual = 'tarjetas';
+let filasTarjetas = [];       // una entrada por fila del ranking (igual que la tabla)
+let tarjetasVisibles = POR_PAGINA;
+const estiloElegido = {};     // clave de tarjeta -> nombre del estilo elegido
+
+const ttxt = () => TXT_TARJETAS[idiomaActual] || TXT_TARJETAS.es;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const calcDP = s => parseFloat((((s.hp / 10) + s.atk + s.def + s.vel) / 10).toFixed(1));
+
+/** Clave estable de una fila (nombre + línea), para recordar el estilo elegido en esa tarjeta. */
+function claveTarjeta(item) {
+  return item.nombre + '|' + ((item.lineaRaw && item.lineaRaw.join('>')) || item.lineaEvolutiva || 'base');
+}
+
+/** Línea de la fila en texto (Baby I › Baby II › Child …), sin el propio Digimon. */
+function textoLinea(item) {
+  if (item.lineaRaw && item.lineaRaw.length) {
+    const previos = item.lineaRaw.filter(d => d !== item.nombre);
+    if (previos.length) {
+      // Si hay estilosMap, agregar el sufijo del estilo a los nombres correspondientes
+      if (item.estilosMap && Object.keys(item.estilosMap).length > 0) {
+        return previos.map(d => {
+          const estilo = item.estilosMap[d];
+          if (estilo && estilo !== 'Default') {
+            return `${d} (${estilo})`;
+          }
+          return d;
+        }).join(' › ');
+      }
+      return previos.join(' › ');
+    }
+  }
+  return typeof item.lineaEvolutiva === 'string' ? item.lineaEvolutiva : '';
+}
+
+/** Estilos definidos en el diccionario ("Estilos"), solo si hay más de uno. */
+function estilosDe(nombre) {
+  const e = (typeof fullDigimonReqDict !== 'undefined' && fullDigimonReqDict[nombre]?.Estilos) || digimonReqDict[nombre]?.Estilos;
+  return e && typeof e === 'object' && Object.keys(e).length > 1 ? e : null;
+}
+
+/**
+ * Aplica un estilo a una fila. Si el estilo trae "Stat Base", se cambian los stats base del
+ * Digimon y se conserva lo heredado (fila - base original + base del estilo).
+ */
+function aplicarEstilo(item, estilo) {
+  if (!estilo || !estilo['Stat Base']) return item;
+  const base = digimonstattier[item.nombre] || {};
+  const sb = estilo['Stat Base'];
+  const r = { ...item };
+  Object.entries(CLAVE_STAT).forEach(([k, K]) => { r[k] = (item[k] || 0) - (base[K] || 0) + (sb[K] || 0); });
+  r.digipuntos = calcDP(r);
+  if (typeof computeClasificacion === 'function') {
+    try { r.clasificacion = computeClasificacion(item.nombre, digimonReqDict[item.nombre]?.Nivel, sb); } catch (e) { /* se queda la original */ }
+  }
+  return r;
+}
+
+/** Máximos de cada stat en el nivel (sin filtros) para escalar las barras. */
+function maximosStats() {
+  const base = (typeof datosSinFiltrar !== 'undefined' && datosSinFiltrar.length) ? datosSinFiltrar : datosActuales;
+  const m = { hp: 1, atk: 1, def: 1, vel: 1 };
+  base.forEach(d => Object.keys(m).forEach(k => { if ((d[k] || 0) > m[k]) m[k] = d[k]; }));
+  return m;
+}
+
+function iconoDigimon(nombre, iconEstilo) {
+  const vars = generarVariacionesNombre(nombre);
+  const urls = vars.map(v => imgUrl('icon/' + v + '.png'));
+  if (iconEstilo) urls.unshift(imgUrl('icon/' + iconEstilo + '.png'));
+  return `<img class="dc-icon" src="${urls[0]}" data-fallbacks="${urls.slice(1).join('|')}" onerror="cargarFallbackLineaEvo(this)" alt="${esc(nombre)}">`;
+}
+
+function htmlTarjeta(fila, rank, maxs) {
+  const t = ttxt();
+  const nombre = fila.nombre;
+  const clave = claveTarjeta(fila);
+
+  // Para entradas expandidas (como "Bushi Agumon (Jōdan no Kamae)" o "Bushi Agumon" Default de un grupo expandido)
+  // Si tiene estiloNombre definido, es parte de un grupo expandido (incluyendo Default)
+  const esEntradaExpandida = !!fila.estiloNombre || !!fila.nombreBase;
+  const nombreParaEstilos = fila.nombreBase || nombre;
+  const nombreParaIcono = fila.nombreBase || nombre;
+
+  // No mostrar chips de estilos para entradas ya expandidas
+  const estilos = esEntradaExpandida ? null : estilosDe(nombreParaEstilos);
+  const nombresEstilos = estilos ? Object.keys(estilos) : [];
+  const estiloNombre = estilos ? (estilos[estiloElegido[clave]] ? estiloElegido[clave] : nombresEstilos[0]) : null;
+  const estilo = estilos ? estilos[estiloNombre] : null;
+  const item = aplicarEstilo(fila, estilo);
+
+  // Para entradas expandidas, usar el icono del estilo si existe
+  const iconEstilo = esEntradaExpandida && fila.estiloData?.Icon ? fila.estiloData.Icon : estilo?.Icon;
+
+  const cls = item.clasificacion || { nombre: 'Unknown', clase: 'tier-low' };
+  const tierColor = TIER_COLORES[cls.clase] || '#4ecdc4';
+  const tierNombre = traducciones[idiomaActual]?.[cls.nombre] || cls.nombre;
+  const tipo = traducciones[idiomaActual]?.[item.tipo] || item.tipo || '-';
+  const linea = textoLinea(item);
+
+  // Cada barra = cuánto aporta ese stat a los Digipuntos (HP cuenta /10, igual que la fórmula).
+  // Ej.: DP 35 -> total 350; HP 1050 aporta 105 = 30%. Las cuatro suman 100%.
+  const aporte = { hp: (item.hp || 0) / 10, atk: item.atk || 0, def: item.def || 0, vel: item.vel || 0 };
+  const total = aporte.hp + aporte.atk + aporte.def + aporte.vel || 1;
+  const statsHtml = ['hp', 'atk', 'def', 'vel'].map(k => {
+    const lbl = k === 'vel' ? 'SPD' : k.toUpperCase();
+    const pct = Math.round(aporte[k] / total * 1000) / 10;
+    return `<div class="dc-stat${campoOrdenamiento === k ? ' sorted' : ''}"><span class="k" style="color:${COLOR_STAT[k]}">${lbl}</span>
+      <div class="dc-track"><div class="v" style="width:${Math.max(1, pct)}%;background:${COLOR_STAT[k]};"></div></div>
+      <span class="n">${item[k] || 0}</span><span class="p">${pct}%</span></div>`;
+  }).join('');
+
+  let chipsHtml = '';
+  if (estilos) {
+    const dps = nombresEstilos.map(e => aplicarEstilo(fila, estilos[e]).digipuntos);
+    const conStats = nombresEstilos.some(e => estilos[e]['Stat Base']);
+    const mejor = Math.max(...dps);
+    const chips = nombresEstilos.map((e, i) => {
+      const on = e === estiloNombre;
+      const best = conStats && dps[i] === mejor && dps.filter(d => d === mejor).length === 1;
+      const sub = estilos[e]['Stat Base'] ? `${dps[i]} DP` : (estilos[e].Probabilidad ? esc(estilos[e].Probabilidad) : '');
+      return `<button type="button" class="dc-chip${on ? ' on' : ''}${best ? ' best' : ''}" data-clave="${esc(clave)}" data-estilo="${esc(e)}">
+        <span class="nm">${esc(e)}</span>${sub ? `<span class="dp">${sub}</span>` : ''}</button>`;
+    }).join('');
+    chipsHtml = `<div class="dc-chips-wrap"><div class="dc-chips-lbl">${t.estilos(nombresEstilos.length)}${conStats ? ` · ★ ${t.mejor}` : ''}</div>
+      <div class="dc-chips">${chips}</div></div>`;
+  }
+
+  const estiloHtml = estilos ? `<div class="dc-variant">${t.estilo} ${esc(estiloNombre)}${estilo?.Probabilidad ? ` <span class="dc-prob">· ${t.prob} ${esc(estilo.Probabilidad)}</span>` : ''}</div>` : '';
+  const lineaTxt = linea ? `<div class="dc-linea-txt" title="${esc(linea)}">${esc(linea)}</div>` : '';
+  const lineaHtml = item.lineaRaw ? `<div class="dc-line">${renderLineaEvolutivaIconos(nombre, item.lineaRaw)}</div>` : '';
+
+  return `<div class="dcard${estilos ? ' con-estilos' : ''}" style="--tier:${tierColor}">
+    <span class="dc-rank${rank <= 3 ? ' top' : ''}">#${rank}</span>
+    <div class="dc-head">
+      ${iconoDigimon(nombreParaIcono, iconEstilo)}
+      <div class="dc-title">
+        <h3 title="${esc(nombre)}">${esc(nombre)}</h3>
+        <div class="dc-sub"><span class="dc-badge">${esc(tierNombre)}</span>${esc(item.atributo || '-')} · ${esc(tipo)}</div>
+        ${estiloHtml}
+      </div>
+      <div class="dc-dp"><div class="lbl">Digipuntos</div><div class="val">${item.digipuntos}</div></div>
+    </div>
+    ${lineaHtml}${lineaTxt}
+    ${chipsHtml}
+    <div class="dc-stats">${statsHtml}</div>
+  </div>`;
+}
+
+function renderTarjetas() {
+  const t = ttxt();
+  const grid = document.getElementById('cardsGrid');
+  const count = document.getElementById('cardsCount');
+  const more = document.getElementById('cardsMore');
+  if (!grid) return;
+
+  if (!selectNivel.value || !filasTarjetas.length) {
+    grid.innerHTML = `<div class="dc-empty">${selectNivel.value ? t.vacio : t.elegir}</div>`;
+    count.textContent = '';
+    more.style.display = 'none';
+    return;
+  }
+
+  const maxs = maximosStats();
+  count.textContent = t.resultado(filasTarjetas.length);
+  grid.innerHTML = filasTarjetas.slice(0, tarjetasVisibles).map((f, i) => htmlTarjeta(f, i + 1, maxs)).join('');
+  const restantes = filasTarjetas.length - tarjetasVisibles;
+  more.style.display = restantes > 0 ? 'block' : 'none';
+  more.textContent = t.verMas(restantes);
+}
+
+/** Barra de orden y de vista (Tarjetas / Tabla). */
+function renderBarraVista() {
+  const t = ttxt();
+  const sort = document.getElementById('vbSort');
+  const view = document.getElementById('vbView');
+  const etiquetas = { atributo: traducciones[idiomaActual]?.atributo || (idiomaActual === 'en' ? 'Attribute' : 'Atributo'),
+                      tipo: traducciones[idiomaActual]?.tipo || (idiomaActual === 'en' ? 'Type' : 'Tipo') };
+  sort.innerHTML = `<span class="vb-label">${t.ordenar}</span>` + CAMPOS_ORDEN.map(([campo, lbl]) => {
+    const on = campoOrdenamiento === campo;
+    const arr = on ? `<span class="arr">${ordenDescendente ? '↓' : '↑'}</span>` : '';
+    return `<button type="button" class="vb-btn${on ? ' on' : ''}" data-sort-card="${campo}">${lbl || etiquetas[campo]}${arr}</button>`;
+  }).join('');
+  view.innerHTML = `<span class="vb-label">${t.vista}</span>
+    <button type="button" class="vb-btn${vistaActual === 'tarjetas' ? ' on' : ''}" data-vista="tarjetas">${t.tarjetas}</button>
+    <button type="button" class="vb-btn${vistaActual === 'tabla' ? ' on' : ''}" data-vista="tabla">${t.tabla}</button>`;
+}
+
+// Envolver la función que dibuja la tabla
+const _generarTablaOriginal = generarTablaRankingSegura;
+generarTablaRankingSegura = function (data, tbody) {
+  _generarTablaOriginal(data, tbody);
+  filasTarjetas = data;
+  tarjetasVisibles = POR_PAGINA;
+  renderBarraVista();
+  renderTarjetas();
+};
+
+// Mantener la barra sincronizada cuando se ordena desde los headers de la tabla
+const _actualizarHeadersOriginal = actualizarHeadersActivos;
+actualizarHeadersActivos = function () {
+  _actualizarHeadersOriginal();
+  renderBarraVista();
+};
+
+document.addEventListener('click', e => {
+  const chip = e.target.closest('.dc-chip');
+  if (chip) {
+    estiloElegido[chip.dataset.clave] = chip.dataset.estilo;
+    renderTarjetas();
+    return;
+  }
+  const sortBtn = e.target.closest('[data-sort-card]');
+  if (sortBtn) {
+    const campo = sortBtn.dataset.sortCard;
+    if (campoOrdenamiento === campo) ordenDescendente = !ordenDescendente;
+    else { campoOrdenamiento = campo; ordenDescendente = !['atributo', 'tipo'].includes(campo); }
+    if (selectNivel.value) aplicarFiltros(); else renderBarraVista();
+    return;
+  }
+  const vistaBtn = e.target.closest('[data-vista]');
+  if (vistaBtn) {
+    vistaActual = vistaBtn.dataset.vista;
+    document.body.classList.toggle('vista-tarjetas', vistaActual === 'tarjetas');
+    document.body.classList.toggle('vista-tabla', vistaActual === 'tabla');
+    // En vista tabla la barra se mueve arriba de la tabla para poder volver
+    const bar = document.getElementById('vistaBar');
+    const destino = vistaActual === 'tabla' ? document.getElementById('vistaBarTabla') : document.getElementById('cardsSection');
+    if (vistaActual === 'tabla') { destino.style.display = 'block'; destino.appendChild(bar); }
+    else { document.getElementById('vistaBarTabla').style.display = 'none'; destino.insertBefore(bar, document.getElementById('cardsCount')); }
+    renderBarraVista();
+    return;
+  }
+  if (e.target.id === 'cardsMore') {
+    tarjetasVisibles += POR_PAGINA;
+    renderTarjetas();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('selectIdioma')?.addEventListener('change', () => { renderBarraVista(); renderTarjetas(); });
+  renderBarraVista();
+  renderTarjetas();
+});
+// ============================================ FIN VISTA DE TARJETAS
 </script>
 <script src="nav-translate.js"></script>
 </body>

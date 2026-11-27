@@ -1074,6 +1074,7 @@ const LEVEL_CAPS = {
 // ===== ESTADO =====
 let currentTama = null;
 let currentDigimon = null;
+let currentEstilo = null; // Estilo actual del Digimon (ej: "Jōdan no Kamae" para Bushi Agumon)
 let currentDistribution = { hpNominal: 0, atkNominal: 0, spdNominal: 0 };
 let trainingCapPercent = 100; // Porcentaje del cap de entrenamiento (0-100)
 
@@ -1088,6 +1089,20 @@ function getLevelCap() {
   if (!currentDigimon) return 700;
   const data = fullDigimonReqDict[currentDigimon];
   return data ? (LEVEL_CAPS[data.Nivel] || 700) : 700;
+}
+
+// Obtiene los stats base del Digimon actual considerando el estilo seleccionado
+function getCurrentStatBase() {
+  if (!currentDigimon) return { HP: 0, ATK: 0, DEF: 0, Vel: 0 };
+  const data = fullDigimonReqDict[currentDigimon];
+  if (!data) return { HP: 0, ATK: 0, DEF: 0, Vel: 0 };
+
+  // Si hay estilo seleccionado, usar los stats del estilo
+  if (currentEstilo && data.Estilos?.[currentEstilo]?.['Stat Base']) {
+    return data.Estilos[currentEstilo]['Stat Base'];
+  }
+
+  return data["Stat Base"] || { HP: 0, ATK: 0, DEF: 0, Vel: 0 };
 }
 let savedLineageDistribution = null;
 let currentUser = null;
@@ -1478,17 +1493,35 @@ function populateDigimonSelect(nivel) {
 
   if (!currentTama || !nivel) return;
 
-  const digimons = [];
+  const entries = []; // { value, label, sortKey }
   for (const [name, data] of Object.entries(fullDigimonReqDict)) {
     if (data.Tama === currentTama && data.Nivel === nivel) {
-      digimons.push(name);
+      // Verificar si tiene estilos con stats diferentes
+      const estilos = data.Estilos;
+      const tieneEstilosConStats = estilos && typeof estilos === 'object' &&
+        Object.values(estilos).some(e => e && e['Stat Base']);
+
+      if (tieneEstilosConStats) {
+        // Expandir cada estilo como entrada separada
+        Object.keys(estilos).forEach(estiloNombre => {
+          const esDefault = estiloNombre === 'Default' || !estilos[estiloNombre] || Object.keys(estilos[estiloNombre]).length === 0;
+          const label = esDefault ? name : `${name} (${estiloNombre})`;
+          const value = esDefault ? name : `${name}|||${estiloNombre}`; // Usar ||| como separador
+          entries.push({ value, label, sortKey: label.toLowerCase() });
+        });
+      } else {
+        entries.push({ value: name, label: name, sortKey: name.toLowerCase() });
+      }
     }
   }
 
-  digimons.sort().forEach(name => {
+  // Ordenar por nombre
+  entries.sort((a, b) => a.sortKey.localeCompare(b.sortKey));
+
+  entries.forEach(entry => {
     const option = document.createElement('option');
-    option.value = name;
-    option.textContent = name;
+    option.value = entry.value;
+    option.textContent = entry.label;
     select.appendChild(option);
   });
 }
@@ -1512,10 +1545,28 @@ function initSearch() {
 
     const matches = [];
     for (const [name, data] of Object.entries(fullDigimonReqDict)) {
-      if (name.toLowerCase().includes(query)) {
-        matches.push({ name, data });
-        if (matches.length >= 8) break;
+      // Verificar si tiene estilos con stats diferentes
+      const estilos = data.Estilos;
+      const tieneEstilosConStats = estilos && typeof estilos === 'object' &&
+        Object.values(estilos).some(e => e && e['Stat Base']);
+
+      if (tieneEstilosConStats) {
+        // Agregar cada estilo como resultado separado
+        Object.keys(estilos).forEach(estiloNombre => {
+          const esDefault = estiloNombre === 'Default' || !estilos[estiloNombre] || Object.keys(estilos[estiloNombre]).length === 0;
+          const displayName = esDefault ? name : `${name} (${estiloNombre})`;
+          const value = esDefault ? name : `${name}|||${estiloNombre}`;
+
+          if (displayName.toLowerCase().includes(query)) {
+            matches.push({ name, displayName, value, data, estilo: esDefault ? null : estiloNombre });
+            if (matches.length >= 10) return;
+          }
+        });
+      } else if (name.toLowerCase().includes(query)) {
+        matches.push({ name, displayName: name, value: name, data, estilo: null });
       }
+
+      if (matches.length >= 10) break;
     }
 
     if (matches.length === 0) {
@@ -1523,21 +1574,26 @@ function initSearch() {
       return;
     }
 
-    suggestions.innerHTML = matches.map(m => `
-      <div class="search-item" data-name="${m.name}">
-        <img src="${imgUrl('icon/' + m.name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
+    suggestions.innerHTML = matches.map(m => {
+      const iconName = m.estilo && m.data.Estilos?.[m.estilo]?.Icon
+        ? m.data.Estilos[m.estilo].Icon
+        : m.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return `
+      <div class="search-item" data-value="${m.value}" data-name="${m.name}">
+        <img src="${imgUrl('icon/' + iconName + '.png')}"
              onerror="this.style.display='none'" alt="">
         <div class="search-item-info">
-          <div class="search-item-name">${m.name}</div>
+          <div class="search-item-name">${m.displayName}</div>
           <div class="search-item-meta">${m.data.Tama} • ${nivelAEtapa[m.data.Nivel]}</div>
         </div>
       </div>
-    `).join('');
+    `}).join('');
 
     suggestions.classList.add('show');
 
     suggestions.querySelectorAll('.search-item').forEach(item => {
       item.addEventListener('click', () => {
+        const value = item.dataset.value;
         const name = item.dataset.name;
         const data = fullDigimonReqDict[name];
 
@@ -1550,8 +1606,8 @@ function initSearch() {
           populateDigimonSelect(data.Nivel);
 
           setTimeout(() => {
-            document.getElementById('digimonSelect').value = name;
-            selectDigimon(name);
+            document.getElementById('digimonSelect').value = value;
+            selectDigimon(value);
           }, 50);
         }, 50);
 
@@ -1570,18 +1626,29 @@ function initSearch() {
 }
 
 // ===== SELECT DIGIMON =====
-function selectDigimon(name) {
-  const data = fullDigimonReqDict[name];
+function selectDigimon(nameOrValue) {
+  // Parsear el valor para extraer nombre base y estilo
+  let baseName = nameOrValue;
+  let estilo = null;
+
+  if (nameOrValue.includes('|||')) {
+    const parts = nameOrValue.split('|||');
+    baseName = parts[0];
+    estilo = parts[1];
+  }
+
+  const data = fullDigimonReqDict[baseName];
   if (!data) return;
 
-  currentDigimon = name;
+  currentDigimon = baseName;
+  currentEstilo = estilo;
 
-  // Update card
-  updateDigimonCard(name, data);
+  // Update card (con estilo si aplica)
+  updateDigimonCard(baseName, data, estilo);
 
   // Reset y render evolution line
   resetEvolutionLine();
-  renderEvolutionLine(name);
+  renderEvolutionLine(baseName);
   updateEvoLineMini();
   updateStatsLock();
 
@@ -1592,17 +1659,23 @@ function selectDigimon(name) {
 }
 
 // ===== UPDATE DIGIMON CARD =====
-function updateDigimonCard(name, data) {
-  const stats = data["Stat Base"] || {};
+function updateDigimonCard(name, data, estilo = null) {
+  // Obtener stats del estilo si aplica
+  const estiloData = estilo && data.Estilos?.[estilo];
+  const stats = (estiloData?.['Stat Base']) || data["Stat Base"] || {};
+
+  // Determinar icono (puede ser específico del estilo)
+  const iconName = estiloData?.Icon || name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
   // Portrait
   const portrait = document.getElementById('portrait');
   const noImageText = t('noImage');
-  portrait.innerHTML = `<img src="${imgUrl('icon/' + name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
+  portrait.innerHTML = `<img src="${imgUrl('icon/' + iconName + '.png')}"
                              onerror="this.outerHTML='<span class=portrait-placeholder>${noImageText}</span>'" alt="${name}">`;
 
-  // Name & Badge
-  document.getElementById('digi-name').textContent = name;
+  // Name & Badge - mostrar nombre con estilo si aplica
+  const displayName = estilo ? `${name} (${estilo})` : name;
+  document.getElementById('digi-name').textContent = displayName;
   document.getElementById('digi-badge').textContent = nivelAEtapa[data.Nivel] || '---';
 
   // Meta
@@ -1726,6 +1799,96 @@ function getPredecessors(digimonName) {
   }
 
   return [...result];
+}
+
+/**
+ * Expande una lista de nombres de Digimon para incluir variantes de estilos.
+ *
+ * Si un Digimon tiene múltiples estilos con stats diferentes, se expande en
+ * entradas separadas usando el formato "nombre|||estilo".
+ *
+ * @param {string[]} digimonNames - Array con nombres de Digimon
+ * @returns {string[]} - Array expandido con variantes de estilos
+ *
+ * @example
+ * expandEstilos(["Bushi Agumon"])
+ * // → ["Bushi Agumon", "Bushi Agumon|||Jōdan no Kamae", "Bushi Agumon|||Chūdan no Kamae", ...]
+ */
+function expandEstilos(digimonNames) {
+  const result = [];
+
+  for (const name of digimonNames) {
+    const data = fullDigimonReqDict[name];
+    if (!data) {
+      result.push(name);
+      continue;
+    }
+
+    const estilos = data.Estilos;
+    const tieneEstilosConStats = estilos && typeof estilos === 'object' &&
+      Object.keys(estilos).some(k => estilos[k]?.['Stat Base']);
+
+    if (tieneEstilosConStats) {
+      // Expandir cada estilo como entrada separada
+      Object.keys(estilos).forEach(estiloNombre => {
+        const esDefault = estiloNombre === 'Default' || !estilos[estiloNombre] || Object.keys(estilos[estiloNombre]).length === 0;
+        if (esDefault) {
+          result.push(name);
+        } else {
+          result.push(`${name}|||${estiloNombre}`);
+        }
+      });
+    } else {
+      result.push(name);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Parsea un valor de evolución que puede contener estilo.
+ *
+ * @param {string} value - Valor en formato "nombre" o "nombre|||estilo"
+ * @returns {{ baseName: string, estilo: string|null }}
+ */
+function parseEvoValue(value) {
+  if (!value) return { baseName: null, estilo: null };
+
+  if (value.includes('|||')) {
+    const parts = value.split('|||');
+    return { baseName: parts[0], estilo: parts[1] };
+  }
+  return { baseName: value, estilo: null };
+}
+
+/**
+ * Obtiene el nombre para mostrar de un valor de evolución.
+ *
+ * @param {string} value - Valor en formato "nombre" o "nombre|||estilo"
+ * @returns {string} - Nombre para mostrar (ej: "Bushi Agumon (Jōdan no Kamae)")
+ */
+function getEvoDisplayName(value) {
+  const { baseName, estilo } = parseEvoValue(value);
+  if (!baseName) return '';
+  return estilo ? `${baseName} (${estilo})` : baseName;
+}
+
+/**
+ * Obtiene el nombre del icono para un valor de evolución.
+ *
+ * @param {string} value - Valor en formato "nombre" o "nombre|||estilo"
+ * @returns {string} - Nombre del archivo de icono (sin extensión)
+ */
+function getEvoIconName(value) {
+  const { baseName, estilo } = parseEvoValue(value);
+  if (!baseName) return '';
+
+  const data = fullDigimonReqDict[baseName];
+  if (estilo && data?.Estilos?.[estilo]?.Icon) {
+    return data.Estilos[estilo].Icon;
+  }
+  return baseName.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
 /**
@@ -1871,22 +2034,26 @@ function getValidAdultsForLine() {
 
   const mainLevel = mainData.Nivel;
 
-  // Si el Digimon principal es Adult, está bloqueado
+  // Si el Digimon principal es Adult, está bloqueado (incluir estilo si aplica)
   if (mainLevel === 4) {
-    return [currentDigimon];
+    return currentEstilo ? [`${currentDigimon}|||${currentEstilo}`] : [currentDigimon];
   }
 
   // Si hay Perfect seleccionado en la línea, buscar Adults que llegan a él
   // Usa getPredecessorsAtLevel para manejar Perfect sides (ej: GigaWaruMonzaemon → Monzaemon → Adults)
   const selectedPerfect = plannedEvolutionLine[5];
   if (selectedPerfect) {
-    return getPredecessorsAtLevel(selectedPerfect, 4).sort();
+    // Parsear el Perfect seleccionado (puede contener estilo)
+    const { baseName: perfectBaseName } = parseEvoValue(selectedPerfect);
+    const adults = getPredecessorsAtLevel(perfectBaseName, 4).sort();
+    return expandEstilos(adults);
   }
 
   // Si el Digimon principal es Perfect, buscar Adults
   // Usa getPredecessorsAtLevel para manejar Perfect sides
   if (mainLevel === 5) {
-    return getPredecessorsAtLevel(currentDigimon, 4).sort();
+    const adults = getPredecessorsAtLevel(currentDigimon, 4).sort();
+    return expandEstilos(adults);
   }
 
   // Si el Digimon principal es Ultimate, ver Perfect seleccionado
@@ -1912,15 +2079,16 @@ function getValidPerfectsForLine() {
 
   const mainLevel = mainData.Nivel;
 
-  // Si el Digimon principal es Perfect, está bloqueado
+  // Si el Digimon principal es Perfect, está bloqueado (incluir estilo si aplica)
   if (mainLevel === 5) {
-    return [currentDigimon];
+    return currentEstilo ? [`${currentDigimon}|||${currentEstilo}`] : [currentDigimon];
   }
 
   // Si el Digimon principal es Ultimate, buscar Perfects
   // Usa getPredecessorsAtLevel para manejar Ultimate sides (si existen)
   if (mainLevel === 6) {
-    return getPredecessorsAtLevel(currentDigimon, 5).sort();
+    const perfects = getPredecessorsAtLevel(currentDigimon, 5).sort();
+    return expandEstilos(perfects);
   }
 
   return [];
@@ -1943,8 +2111,11 @@ function getValidChildrenForLine() {
     return [];
   }
 
+  // Parsear el Adult seleccionado (puede contener estilo)
+  const { baseName: adultBaseName } = parseEvoValue(selectedAdult);
+
   // Obtener Adults raíz (para side evolutions)
-  const rootAdults = getRootAdults(selectedAdult);
+  const rootAdults = getRootAdults(adultBaseName);
 
   // Buscar todos los Children que pueden evolucionar a estos Adults raíz
   const allChildren = new Set();
@@ -1953,7 +2124,9 @@ function getValidChildrenForLine() {
     children.forEach(c => allChildren.add(c));
   }
 
-  return [...allChildren].sort();
+  // Expandir Children con estilos (ej: Bushi Agumon → múltiples variantes)
+  const childrenArray = [...allChildren].sort();
+  return expandEstilos(childrenArray);
 }
 
 /**
@@ -1971,9 +2144,13 @@ function getValidBabyIIForLine() {
     return [];
   }
 
+  // Parsear el Child seleccionado (puede contener estilo)
+  const { baseName: childBaseName } = parseEvoValue(selectedChild);
+
   // Usa getPredecessorsAtLevel para manejar Child sides
   // (ej: Shoutmon + Star Sword → Shoutmon → Baby II)
-  return getPredecessorsAtLevel(selectedChild, 2).sort();
+  const babyIIs = getPredecessorsAtLevel(childBaseName, 2).sort();
+  return expandEstilos(babyIIs);
 }
 
 /**
@@ -1991,8 +2168,12 @@ function getValidBabyIForLine() {
     return [];
   }
 
+  // Parsear el Baby II seleccionado (puede contener estilo)
+  const { baseName: babyIIBaseName } = parseEvoValue(selectedBabyII);
+
   // Usa getPredecessorsAtLevel para manejar Baby II sides (si existen)
-  return getPredecessorsAtLevel(selectedBabyII, 1).sort();
+  const babyIs = getPredecessorsAtLevel(babyIIBaseName, 1).sort();
+  return expandEstilos(babyIs);
 }
 
 /**
@@ -2061,36 +2242,45 @@ function renderEvolutionLine(digimonName) {
 
   // Inicializar línea con el Digimon actual si está vacía
   if (Object.keys(plannedEvolutionLine).length === 0) {
-    plannedEvolutionLine[currentLevel] = currentDigimon;
+    // Incluir estilo si está seleccionado
+    plannedEvolutionLine[currentLevel] = currentEstilo
+      ? `${currentDigimon}|||${currentEstilo}`
+      : currentDigimon;
   }
 
   container.innerHTML = levelsToShow.map((nivel, i) => {
-    const selectedName = plannedEvolutionLine[nivel];
+    const selectedValue = plannedEvolutionLine[nivel];
     const options = getOptionsForLevel(nivel);
     const hasOptions = options.length > 0;
     const isCurrentLevel = nivel === currentLevel;
 
-    if (selectedName) {
-      const data = fullDigimonReqDict[selectedName];
+    if (selectedValue) {
+      // Parsear el valor seleccionado (puede contener estilo)
+      const displayName = getEvoDisplayName(selectedValue);
+      const iconName = getEvoIconName(selectedValue);
+
       return `
         ${i > 0 ? '<span class="evo-arrow">→</span>' : ''}
         <div class="evo-level-wrapper">
           <div class="evo-line-item ${isCurrentLevel ? 'current' : ''}" data-nivel="${nivel}">
-            <img src="${imgUrl('icon/' + selectedName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
-                 onerror="this.style.display='none'" alt="${selectedName}">
-            <span class="name">${selectedName}</span>
+            <img src="${imgUrl('icon/' + iconName + '.png')}"
+                 onerror="this.style.display='none'" alt="${displayName}">
+            <span class="name">${displayName}</span>
             <span class="stage">${nivelAEtapa[nivel]}</span>
             ${hasOptions && options.length > 1 ? '<span class="expand-icon">▼</span>' : ''}
           </div>
           ${hasOptions && options.length > 1 ? `
             <div class="evo-level-dropdown" data-nivel="${nivel}">
-              ${options.map(altName => `
-                <div class="evo-dropdown-item ${altName === selectedName ? 'selected' : ''}" data-name="${altName}" data-nivel="${nivel}">
-                  <img src="${imgUrl('icon/' + altName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
-                       onerror="this.style.display='none'" alt="${altName}">
-                  <span class="dname">${altName}</span>
+              ${options.map(optValue => {
+                const optDisplayName = getEvoDisplayName(optValue);
+                const optIconName = getEvoIconName(optValue);
+                return `
+                <div class="evo-dropdown-item ${optValue === selectedValue ? 'selected' : ''}" data-name="${optValue}" data-nivel="${nivel}">
+                  <img src="${imgUrl('icon/' + optIconName + '.png')}"
+                       onerror="this.style.display='none'" alt="${optDisplayName}">
+                  <span class="dname">${optDisplayName}</span>
                 </div>
-              `).join('')}
+              `}).join('')}
             </div>
           ` : ''}
         </div>
@@ -2107,13 +2297,16 @@ function renderEvolutionLine(digimonName) {
           </div>
           ${hasOptions ? `
             <div class="evo-level-dropdown" data-nivel="${nivel}">
-              ${options.map(altName => `
-                <div class="evo-dropdown-item" data-name="${altName}" data-nivel="${nivel}">
-                  <img src="${imgUrl('icon/' + altName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.png')}"
-                       onerror="this.style.display='none'" alt="${altName}">
-                  <span class="dname">${altName}</span>
+              ${options.map(optValue => {
+                const optDisplayName = getEvoDisplayName(optValue);
+                const optIconName = getEvoIconName(optValue);
+                return `
+                <div class="evo-dropdown-item" data-name="${optValue}" data-nivel="${nivel}">
+                  <img src="${imgUrl('icon/' + optIconName + '.png')}"
+                       onerror="this.style.display='none'" alt="${optDisplayName}">
+                  <span class="dname">${optDisplayName}</span>
                 </div>
-              `).join('')}
+              `}).join('')}
             </div>
           ` : ''}
         </div>
@@ -2252,15 +2445,26 @@ function calcularStatsHeredados() {
 
   // Recorrer cada nivel de la línea evolutiva planificada
   for (let nivel = 1; nivel < nivelActual; nivel++) {
-    const predecesor = plannedEvolutionLine[nivel];
-    if (!predecesor) continue;
+    const predecesorValue = plannedEvolutionLine[nivel];
+    if (!predecesorValue) continue;
 
-    const predData = fullDigimonReqDict[predecesor];
+    // Parsear el valor del predecesor (puede contener estilo)
+    const { baseName, estilo } = parseEvoValue(predecesorValue);
+    if (!baseName) continue;
+
+    const predData = fullDigimonReqDict[baseName];
     if (!predData) continue;
 
     // Solo sumar si el predecesor es de un nivel INFERIOR (no slides)
     if (predData.Nivel < nivelActual) {
-      const statBase = predData["Stat Base"] || {};
+      // Usar stats del estilo si está presente, sino stats base
+      let statBase;
+      if (estilo && predData.Estilos?.[estilo]?.['Stat Base']) {
+        statBase = predData.Estilos[estilo]['Stat Base'];
+      } else {
+        statBase = predData["Stat Base"] || {};
+      }
+
       heredado.HP  += Math.round((statBase.HP  || 0) * 0.4);
       heredado.ATK += Math.round((statBase.ATK || 0) * 0.4);
       heredado.DEF += Math.round((statBase.DEF || 0) * 0.4);
@@ -2275,9 +2479,10 @@ function getHPBase() {
   if (!currentDigimon) return 0;
   // SCUMON_FAMILY: usar computeScumonFamilyStats
   if (SCUMON_FAMILY.has(currentDigimon)) {
-    const childName = plannedEvolutionLine[3];
-    const babyIIName = plannedEvolutionLine[2];
-    const babyIName = plannedEvolutionLine[1];
+    // Parsear valores (pueden contener estilo)
+    const { baseName: childName } = parseEvoValue(plannedEvolutionLine[3]);
+    const { baseName: babyIIName } = parseEvoValue(plannedEvolutionLine[2]);
+    const { baseName: babyIName } = parseEvoValue(plannedEvolutionLine[1]);
     const computed = computeScumonFamilyStats(currentDigimon, childName, babyIIName, babyIName);
     return computed?.HP || 0;
   }
@@ -2347,9 +2552,10 @@ function updateStatDisplay() {
 
   // SCUMON_FAMILY: usar computeScumonFamilyStats (ya incluye base + heredados)
   if (SCUMON_FAMILY.has(currentDigimon)) {
-    const childName = plannedEvolutionLine[3]; // Child de la línea evolutiva
-    const babyIIName = plannedEvolutionLine[2];
-    const babyIName = plannedEvolutionLine[1];
+    // Parsear valores (pueden contener estilo)
+    const { baseName: childName } = parseEvoValue(plannedEvolutionLine[3]);
+    const { baseName: babyIIName } = parseEvoValue(plannedEvolutionLine[2]);
+    const { baseName: babyIName } = parseEvoValue(plannedEvolutionLine[1]);
     const computed = computeScumonFamilyStats(currentDigimon, childName, babyIIName, babyIName);
     if (computed) {
       hpDigiTotal = computed.HP;
@@ -2361,7 +2567,8 @@ function updateStatDisplay() {
     }
   } else {
     // Evolución normal: Stat Base + heredados
-    const stats = data?.["Stat Base"] || {};
+    // Usar getCurrentStatBase() para considerar el estilo actual
+    const stats = getCurrentStatBase();
     const hpBase = stats.HP || 0;
     const atkBase = stats.ATK || 0;
     const spdBase = stats.Vel || 0;
@@ -2426,11 +2633,14 @@ function updateEvoLineMini() {
 
   // Recorrer niveles de menor a mayor
   for (let nivel = 1; nivel <= currentLevel; nivel++) {
-    const name = plannedEvolutionLine[nivel];
-    if (name) {
-      const iconName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const isCurrent = (name === currentDigimon) ? 'current' : '';
-      elements.push(`<img class="evo-mini-icon ${isCurrent}" src="${imgUrl('icon/' + iconName + '.png')}" alt="${name}" title="${name}" onerror="this.style.display='none'">`);
+    const value = plannedEvolutionLine[nivel];
+    if (value) {
+      // Parsear el valor (puede contener estilo)
+      const { baseName } = parseEvoValue(value);
+      const iconName = getEvoIconName(value);
+      const displayName = getEvoDisplayName(value);
+      const isCurrent = (baseName === currentDigimon) ? 'current' : '';
+      elements.push(`<img class="evo-mini-icon ${isCurrent}" src="${imgUrl('icon/' + iconName + '.png')}" alt="${displayName}" title="${displayName}" onerror="this.style.display='none'">`);
     }
   }
 
@@ -2828,16 +3038,17 @@ function downloadCardFallback() {
 
   // SCUMON_FAMILY: usar computeScumonFamilyStats (ya incluye base + heredados)
   if (SCUMON_FAMILY.has(currentDigimon)) {
-    const childName = plannedEvolutionLine[3];
-    const babyIIName = plannedEvolutionLine[2];
-    const babyIName = plannedEvolutionLine[1];
+    // Parsear valores (pueden contener estilo)
+    const { baseName: childName } = parseEvoValue(plannedEvolutionLine[3]);
+    const { baseName: babyIIName } = parseEvoValue(plannedEvolutionLine[2]);
+    const { baseName: babyIName } = parseEvoValue(plannedEvolutionLine[1]);
     const computed = computeScumonFamilyStats(currentDigimon, childName, babyIIName, babyIName);
     hpDigi = computed?.HP || 0;
     atkDigi = computed?.ATK || 0;
     spdDigi = computed?.Vel || 0;
     defDigi = computed?.DEF || 0;
   } else {
-    const stats = data?.["Stat Base"] || {};
+    const stats = getCurrentStatBase();
     const heredados = calcularStatsHeredados();
     hpDigi = (stats.HP || 0) + heredados.HP;
     atkDigi = (stats.ATK || 0) + heredados.ATK;
@@ -2847,7 +3058,9 @@ function downloadCardFallback() {
 
   const hpTrained = calcHPEntrenado(hpDigi, currentDistribution.hpNominal);
 
-  const text = `${currentDigimon} (${data.Tama})
+  // Nombre para mostrar (incluye estilo si aplica)
+  const displayName = currentEstilo ? `${currentDigimon} (${currentEstilo})` : currentDigimon;
+  const text = `${displayName} (${data.Tama})
 Nivel: ${nivelAEtapa[data.Nivel]}
 ================================
 HP:  Digi ${hpDigi} + Entren ${hpTrained} = ${hpDigi + hpTrained}
@@ -2860,7 +3073,8 @@ Total: ${getTotalPoints()} / ${getMaxPoints()}`;
 
   const blob = new Blob([text], { type: 'text/plain' });
   const link = document.createElement('a');
-  link.download = `${currentDigimon}_stats.txt`;
+  const fileName = currentEstilo ? `${currentDigimon}_${currentEstilo}_stats.txt` : `${currentDigimon}_stats.txt`;
+  link.download = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
   link.href = URL.createObjectURL(blob);
   link.click();
   showToast(t('textDownloaded'), 'success');

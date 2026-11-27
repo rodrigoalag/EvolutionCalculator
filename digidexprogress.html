@@ -897,6 +897,7 @@ const lvColor = i => `var(--lv${i})`;
 // Build roster from FullDigimonReqDict
 const roster = {};
 const allTamas = new Set();
+const variantBaseMap = {}; // Maps variant name to base Digimon name for icons
 Object.entries(digimonReqDict).forEach(([name, data]) => {
   if (name.toLowerCase() === "burpmon") return;
   const tama = data.Tama;
@@ -904,6 +905,16 @@ Object.entries(digimonReqDict).forEach(([name, data]) => {
   allTamas.add(tama);
   if (!roster[tama]) roster[tama] = [];
   roster[tama].push({ name, lv });
+
+  // Add variants from Estilos
+  if (data.Estilos && typeof data.Estilos === 'object') {
+    Object.keys(data.Estilos).forEach(estilo => {
+      if (estilo === 'Default') return;
+      const variantName = `${name} (${estilo})`;
+      roster[tama].push({ name: variantName, lv });
+      variantBaseMap[variantName] = name;
+    });
+  }
 });
 
 // Sort by level
@@ -959,11 +970,19 @@ function generarVariacionesNombre(nombre) {
 }
 
 const imageCache = {};
+// Variants with their own icon (not using base Digimon's icon)
+const variantIconMap = {
+  "Pillomon (Shiny)": "pillomonshiny"
+};
+
 function getDigimonImage(name) {
   if (imageCache[name]) return Promise.resolve(imageCache[name]);
 
+  // Check if variant has its own icon, otherwise use base Digimon's icon
+  const iconName = variantIconMap[name] || variantBaseMap[name] || name;
+
   return new Promise(resolve => {
-    const variaciones = generarVariacionesNombre(name);
+    const variaciones = generarVariacionesNombre(iconName);
     let indice = 0;
 
     function intentarCargar() {
